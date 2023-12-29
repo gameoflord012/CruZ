@@ -1,0 +1,49 @@
+﻿1. Transform component
+	Some component may need properties from other component. For example:
+		-Sprite renderer may need transform component
+		-Godot body need box collider from child component
+
+	General rules or should be no rule at all :)
+		-The child behaviour depend on the property of parent
+		-There're can be exception ...
+		-There may be component constraints
+
+	TODO:
+		*Seperate game logic from the core
+			*Allow to add multiple game component
+
+		*Vector3 namespace clash between XNA framework and System numeric
+
+		Animation system
+			*Fix Sprite Atlas
+				Problem is: it find .xnb file in the root Content directory
+					Nah problem fixed, get newest version
+				
+		*AnimatedSpriteComponent
+
+		*Scaleable Transform
+
+		*Serialization System
+			Serialize Entity
+				When entity is serialize
+					Output all component data
+						Get all components from an entity
+
+				When entity is deserilize
+					read all component data and loaded to entity
+						
+		*Scene Serialization system
+			Load data from scene file
+			save scene to data
+
+		Save view state
+		simple transform and rect manipulation
+		inspector?
+
+		Box2D intergration - dont need it yet
+			PhysicBody Component
+			PhysicSystem
+
+		Child and parent Transform
+
+2. Transform editor

@@ -1,0 +1,14 @@
+{
+  "textureAtlas": {
+    "texture": "player sword atk 64x64.png",
+    "regionWidth": 64,
+    "regionHeight": 64
+  },
+  "cycles": {
+    "sword-attack": {
+      "frames": [0,1,2,3,4,5],
+      "isLooping": false,
+      "frameDuration": 0.067
+    }
+  }
+}

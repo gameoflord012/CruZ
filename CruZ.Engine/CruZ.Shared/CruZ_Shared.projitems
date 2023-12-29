@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>6efba8a9-a407-4029-bdd0-651d22a87386</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>CruZ_Shared</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <MonoGameContentReference Include="$(MSBuildThisFileDirectory)Content\Content.mgcb" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Component\AnimatedSpriteComponent.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Component\Extension\ECS_Extension.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Component\FunMath.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Component\Interface\IComponentAddedCallback.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Component\Interface\ISpriteBatchDrawable.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Component\Interface\IUpdatable.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Component\PhysicBody.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Component\SpriteComponent.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Component\Transform.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Component\TransformEntity.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Core\Camera.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Core\CruZ.cs" />
+    <Compile Include="..\CruZ.Shared\Core\CruZGame.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Core\CruZ_ECS.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Core\CruZ_Input.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Core\CruZ_Static.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Core\GameScene.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Core\Resource.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)System\AnimatedSystem.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)System\Entities_Extension.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)System\PhysicSystem.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)System\Serialization\ISerializable.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)System\Serialization\SerializableJsonConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)System\Serialization\Serialization_SpriteComponent.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)System\Serialization\Serialization_TransformEntity.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)System\Serialization\TransformEntityCreationConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)System\Serialization\TransformEntityJsonConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)System\Serialization\TransformJsonConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)System\SpriteSystem.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Types\Vector3.cs" />
+  </ItemGroup>
+</Project>

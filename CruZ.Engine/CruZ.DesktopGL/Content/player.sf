@@ -1,0 +1,14 @@
+{
+  "textureAtlas": {
+    "texture": "Asset Packs 1-3 (final)\\Asset Packs 1-3 (final)\\Asset Pack-V3\\Basic Sword Attack 1\\player sword atk 64x64.png",
+    "regionWidth": 64,
+    "regionHeight": 64
+  },
+  "cycles": {
+    "attack": {
+      "frames": [0,1,2,3,4,5],
+      "isLooping": true,
+      "frameDuration": 0.06666
+    }
+  }
+}

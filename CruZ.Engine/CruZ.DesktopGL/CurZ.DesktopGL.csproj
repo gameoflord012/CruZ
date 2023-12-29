@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<OutputType>WinExe</OutputType>
+		<TargetFramework>net8.0</TargetFramework>
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+
+		<RollForward>Major</RollForward>
+		<PublishReadyToRun>false</PublishReadyToRun>
+		<TieredCompilation>false</TieredCompilation>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Box2D.NetStandard" Version="2.4.7-alpha" />
+	</ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\..\ThirdParty\MonoGame.Extended\src\cs\MonoGame.Extended.Animations\MonoGame.Extended.Animations.csproj" />
+		<ProjectReference Include="..\..\ThirdParty\MonoGame.Extended\src\cs\MonoGame.Extended.Entities\MonoGame.Extended.Entities.csproj" />
+		<ProjectReference Include="..\..\ThirdParty\MonoGameModified\MonoGame.Framework\MonoGame.Framework.DesktopGL.csproj" />
+	</ItemGroup>
+	
+	<Import Project="..\CruZ.Shared\CruZ_Shared.projitems" Label="Shared" />
+</Project>
