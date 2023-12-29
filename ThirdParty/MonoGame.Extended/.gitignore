@@ -1,0 +1,14 @@
+# Build artifacts
+[Bb]in/
+[Oo]bj/
+
+# Rider
+.idea/
+*.user
+
+# macOS
+.DS_Store
+*.user
+
+# cake build output
+artifacts

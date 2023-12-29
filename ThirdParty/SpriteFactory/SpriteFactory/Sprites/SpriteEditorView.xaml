@@ -1,0 +1,212 @@
+﻿<UserControl x:Class="SpriteFactory.Sprites.SpriteEditorView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:sprites="clr-namespace:SpriteFactory.Sprites"
+             xmlns:controls="clr-namespace:SpriteFactory.Controls"
+             xmlns:monoGameControls="clr-namespace:SpriteFactory.MonoGameControls"
+             xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+             mc:Ignorable="d" 
+             d:DesignWidth="800"
+             d:DesignHeight="600" 
+             d:DataContext="{d:DesignInstance sprites:SpriteEditorViewModel, IsDesignTimeCreatable=False}">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="3*" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="1*" />
+        </Grid.ColumnDefinitions>
+
+        <DockPanel LastChildFill="True" Grid.Column="0">
+            <StackPanel Orientation="Horizontal" DockPanel.Dock="Top" HorizontalAlignment="Right">
+                <Label Content="Preview Zoom" />
+                <ComboBox ItemsSource="{Binding PreviewZoomOptions}" SelectedItem="{Binding SelectedPreviewZoom}" />
+            </StackPanel>
+
+            <ListBox DataContext="{Binding SelectedAnimation}" ItemsSource="{Binding KeyFrames}" SelectedItem="{Binding SelectedKeyFrame}" 
+                     MinHeight="64" HorizontalAlignment="Center" Margin="4" DockPanel.Dock="Bottom">
+                <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Horizontal" />
+                    </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+                <ListBox.ItemTemplate>
+                    <DataTemplate DataType="sprites:KeyFrameViewModel">
+                        <Image Width="64" Height="64" SnapsToDevicePixels="True" Stretch="Uniform" StretchDirection="DownOnly">
+                            <Image.Source>
+                                <CroppedBitmap Source="{Binding ImagePath}" SourceRect="{Binding Region}" />
+                            </Image.Source>
+                        </Image>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+
+            <ToolBarPanel DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Center">
+                <ToolBar ToolBarTray.IsLocked="True">
+                    <StackPanel Orientation="Horizontal" >
+                        <Button Command="{Binding GoToFirstFrameCommand}" Style="{StaticResource ChromelessButtonStyle}" ToolTip="Jump to the first frame">
+                            <Canvas Width="24" Height="24">
+                                <Path Data="M20,5V19L13,12M6,5V19H4V5M13,5V19L6,12" Fill="White" />
+                            </Canvas>
+                        </Button>
+                        <Button Command="{Binding BackOneFrameCommand}" Style="{StaticResource ChromelessButtonStyle}" ToolTip="Go back one frame">
+                            <Canvas Width="24" Height="24">
+                                <Path Data="M6,18V6H8V18H6M9.5,12L18,6V18L9.5,12Z" Fill="White" />
+                            </Canvas>
+                        </Button>
+                        <Button Command="{Binding PlayCommand}" ToolTip="Play / pause animation">
+                            <Button.Style>
+                                <Style TargetType="Button" BasedOn="{StaticResource ChromelessButtonStyle}">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsPlaying}" Value="True">
+                                            <Setter Property="Content">
+                                                <Setter.Value>
+                                                    <Canvas Width="24" Height="24">
+                                                        <Path Data="M14,19H18V5H14M6,19H10V5H6V19Z" Fill="White" />
+                                                    </Canvas>
+                                                </Setter.Value>
+                                            </Setter>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding IsPlaying}" Value="False">
+                                            <Setter Property="Content">
+                                                <Setter.Value>
+                                                    <Canvas Width="24" Height="24">
+                                                        <Path Data="M8,5.14V19.14L19,12.14L8,5.14Z" Fill="White" />
+                                                    </Canvas>
+                                                </Setter.Value>
+                                            </Setter>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+                        </Button>
+                        <Button Command="{Binding ForwardOneFrameCommand}" Style="{StaticResource ChromelessButtonStyle}" ToolTip="Go forward one frame">
+                            <Canvas Width="24" Height="24">
+                                <Path Data="M16,18H18V6H16M6,18L14.5,12L6,6V18Z" Fill="White" />
+                            </Canvas>
+                        </Button>
+                        <Button Command="{Binding GoToLastFrameCommand}" Style="{StaticResource ChromelessButtonStyle}" ToolTip="Jump to the last frame">
+                            <Canvas Width="24" Height="24">
+                                <Path Data="M4,5V19L11,12M18,5V19H20V5M11,5V19L18,12" Fill="White" />
+                            </Canvas>
+                        </Button>
+
+                    </StackPanel>
+                </ToolBar>
+
+                <Rectangle VerticalAlignment="Stretch" Fill="Transparent" Width="8"/>
+
+                <ToolBar ToolBarTray.IsLocked="True">
+                    <Button Command="{Binding AddSelectedFramesCommand}" Style="{StaticResource ChromelessButtonStyle}" ToolTip="Add the selected frames to current animation">
+                        <Canvas Width="24" Height="24">
+                            <Path Data="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z" Fill="White" />
+                        </Canvas>
+                    </Button>
+                    <Button Command="{Binding MoveFrameLeftCommand}" Style="{StaticResource ChromelessButtonStyle}" ToolTip="Move the selected frame to the left">
+                        <Canvas Width="24" Height="24">
+                            <Path Data="M20,9V15H12V19.84L4.16,12L12,4.16V9H20Z" Fill="White" />
+                        </Canvas>
+                    </Button>
+                    <Button Command="{Binding MoveFrameRightCommand}" Style="{StaticResource ChromelessButtonStyle}" ToolTip="Move the selected frame to the right">
+                        <Canvas Width="24" Height="24">
+                            <Path Data="M4,15V9H12V4.16L19.84,12L12,19.84V15H4Z" Fill="White" />
+                        </Canvas>
+                    </Button>
+                    <Button Command="{Binding DuplicateFrameCommand}" Style="{StaticResource ChromelessButtonStyle}" ToolTip="Duplicate the selected frame">
+                        <Canvas Width="24" Height="24">
+                            <Path Data="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z" Fill="White" />
+                        </Canvas>
+                    </Button>
+                    <Button Command="{Binding DeleteFrameCommand}" Style="{StaticResource ChromelessButtonStyle}" ToolTip="Delete the selected frame">
+                        <Canvas Width="24" Height="24">
+                            <Path Data="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z" Fill="White" />
+                        </Canvas>
+                    </Button>
+                </ToolBar>
+            </ToolBarPanel>
+
+            <monoGameControls:MonoGameContentControl 
+                x:Name="MonoGameContent"
+                Cursor="{Binding Cursor}"
+                AllowDrop="True" />
+        </DockPanel>
+
+        <GridSplitter Width="8" Grid.Column="1" VerticalAlignment="Stretch"  ResizeBehavior="PreviousAndNext" ShowsPreview="False"  />
+
+        <StackPanel Margin="5" DockPanel.Dock="Right" Grid.Column="2">
+
+            <Label Content="Texture" />
+            <DockPanel>
+                <Button DockPanel.Dock="Right" Content="..." ToolTip="Select Texture..." Command="{Binding SelectTextureCommand}" MinWidth="32" />
+                <TextBox Text="{Binding TextureName, Mode=OneWay}" IsReadOnly="True" />
+            </DockPanel>
+
+            <Label Content="Tile Size" />
+            <StackPanel Orientation="Horizontal">
+                <TextBox Text="{Binding TileWidth, UpdateSourceTrigger=PropertyChanged}" MinWidth="50" />
+                <Label Content="x" />
+                <TextBox Text="{Binding TileHeight, UpdateSourceTrigger=PropertyChanged}" MinWidth="50" />
+            </StackPanel>
+
+            <Label Content="Animations" />
+            <Border BorderThickness="1" BorderBrush="White">
+                <ToolBarPanel>
+                    <ToolBar ToolBarTray.IsLocked="True">
+                        <Button Command="{Binding AddAnimationCommand}" ToolTip="Add a new animation">
+                            <StackPanel Orientation="Horizontal">
+                                <Canvas Width="24" Height="24">
+                                    <Path Data="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z" Fill="White" />
+                                </Canvas>
+                                <TextBlock Text="Add" VerticalAlignment="Center" />
+                            </StackPanel>
+                        </Button>
+                        <Button Command="{Binding RemoveAnimationCommand}" ToolTip="Remove the selected animation">
+                            <StackPanel Orientation="Horizontal">
+                                <Canvas Width="24" Height="24">
+                                    <Path Data="M19,13H5V11H19V13Z" Fill="White" />
+                                </Canvas>
+                                <TextBlock Text="Remove" VerticalAlignment="Center" />
+                            </StackPanel>
+                        </Button>
+                        <Button Command="{Binding MoveAnimationUpCommand}" ToolTip="Move the selected animation up">
+                            <Canvas Width="24" Height="24">
+                                <Path Data="M15,20H9V12H4.16L12,4.16L19.84,12H15V20Z" Fill="White" />
+                            </Canvas>
+                        </Button>
+                        <Button Command="{Binding MoveAnimationDownCommand}" ToolTip="Move the selected animation down">
+                            <Canvas Width="24" Height="24">
+                                <Path Data="M9,4H15V12H19.84L12,19.84L4.16,12H9V4Z" Fill="White" />
+                            </Canvas>
+                        </Button>
+                    </ToolBar>
+                    <ListBox ItemsSource="{Binding Animations}" SelectedItem="{Binding SelectedAnimation}" MinHeight="200">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate DataType="sprites:KeyFrameAnimationViewModel">
+                                <controls:EditableTextBlock Text="{Binding Name}" />
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </ToolBarPanel>
+            </Border>
+
+            <Grid DataContext="{Binding SelectedAnimation}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+
+                <Grid.RowDefinitions>
+                    <RowDefinition></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                </Grid.RowDefinitions>
+
+                <TextBlock Margin="5" VerticalAlignment="Center" Grid.Column="0" Grid.Row="0" Text="Is Looping" Foreground="White" />
+                <CheckBox Grid.Column="1" Grid.Row="0" IsChecked="{Binding IsLooping}" />
+
+                <TextBlock Margin="5" VerticalAlignment="Center" Grid.Column="0" Grid.Row="1" Text="Frame duration" Foreground="White" />
+                <mah:NumericUpDown StringFormat="N2" Grid.Column="1" Grid.Row="1" NumericInputMode="Decimal" Interval="0.01" Minimum="0.01" HorizontalContentAlignment="Left" Value="{Binding FrameDuration}"/>
+            </Grid>
+        </StackPanel>
+    </Grid>
+</UserControl>
