@@ -13,6 +13,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)Component\AnimatedSpriteComponent.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Component\EntityEventComponent.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Component\EntityTemplate.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Component\Extension\ECS_Extension.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Component\FunMath.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Component\Interface\IComponentAddedCallback.cs" />
@@ -25,7 +27,9 @@
     <Compile Include="$(MSBuildThisFileDirectory)Core\Camera.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Core\Core.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SceneManager.cs" />
+    <Compile Include="..\CruZ.Shared\System\EntityEventSystem.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System\Logging.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Types\IRunnable.cs" />
     <Compile Include="..\CruZ.Shared\Core\GameApplication.cs" />
     <Compile Include="..\CruZ.Shared\Core\ECS.cs" />
     <Compile Include="..\CruZ.Shared\Core\MainInput.cs" />
@@ -33,7 +37,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Core\GameScene.cs" />
     <Compile Include="..\CruZ.Shared\Core\Content.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System\AnimatedSystem.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)System\Entities_Extension.cs" />
+    <Compile Include="..\CruZ.Shared\System\EntityExtension.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System\PhysicSystem.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System\Serialization\ISerializable.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System\Serialization\SerializableJsonConverter.cs" />

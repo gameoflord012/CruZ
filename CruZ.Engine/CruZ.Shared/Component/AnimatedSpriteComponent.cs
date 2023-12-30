@@ -14,12 +14,6 @@ namespace CruZ.Components
             _animatedSprite = new AnimatedSprite(_spriteSheet);
         }
 
-        private Microsoft.Xna.Framework.Vector3 GetRenderPosition()
-        {
-            var e = TransformEntity.GetEntity(this);
-            return e.Transform.Position;
-        }
-
         public void Draw(SpriteBatch spriteBatch, Matrix transformMatrix)
         {
             Trace.Assert(_attachedEntity != null);

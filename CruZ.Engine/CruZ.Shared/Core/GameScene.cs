@@ -16,12 +16,14 @@ namespace CruZ
         {
             if (_entities.Contains(e)) return;
             _entities.Add(e);
+            OnEntityAdded?.Invoke(e);
         }
 
         public void RemoveEntity(TransformEntity e)
         {
             if (_entities.Contains(e)) return;
             _entities.Remove(e);
+            OnEntityRemoved?.Invoke(e);
         }
 
         string _name = "";

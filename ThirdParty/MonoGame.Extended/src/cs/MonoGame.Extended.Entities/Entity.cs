@@ -43,11 +43,16 @@ namespace MonoGame.Extended.Entities
             return mapper.Get(Id);
         }
 
-
         public bool Has<T>() 
             where T : class
         {
             return _componentManager.GetMapper<T>().Has(Id);
+        }
+
+        //Extension
+        public bool Has(Type ty)
+        {
+            return _componentManager.GetMapper(ty).Has(Id);
         }
 
         public void Destroy()

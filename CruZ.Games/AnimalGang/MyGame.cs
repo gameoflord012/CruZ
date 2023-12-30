@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework.Graphics;
+﻿using CruZ.Components;
+using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Entities;
 
 namespace CruZ.Game
@@ -8,14 +9,12 @@ namespace CruZ.Game
         public override void Initialize()
         {
             base.Initialize();
-
-            var im = Content.Load<Texture2D>("image");
-
-            var e1 = ECS.CreateEntity();
-            e1.AddComponent(im);
-
             CreateScene();
-            _scene.AddEntity(e1);
+
+            _char = new MainCharacter();
+            _char.Apply(ECS.CreateEntity());
+
+            _scene.AddEntity(_char.AppliedEntity);
         }
 
         public void CreateScene()
@@ -25,6 +24,7 @@ namespace CruZ.Game
         }
 
         GameScene _scene;
+        MainCharacter _char;
 
         public static void Main(string[] args)
         {

@@ -3,6 +3,7 @@ using MonoGame.Extended;
 using MonoGame.Extended.Entities;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
@@ -10,70 +11,34 @@ using System.Security.Cryptography.X509Certificates;
 
 namespace CruZ.Components
 {
-    //public class RectTransform
-    //{
-    //    public void SetWidth(float x)
-    //    {
-    //        Size = new Vector3(x, Size.Y);
-    //    }
-
-    //    public void SetHeight(float y)
-    //    {
-    //        Size = new Vector3(Size.X, y);
-    //    }
-
-    //    public Vector3 GetUpperLeft()
-    //    {
-    //        return new Vector3(-Size.X / 2f, -Size.Y / 2f);
-    //    }
-
-    //    public Matrix GetOffsetMatrix()
-    //    {
-    //        return Matrix.CreateTranslation(
-    //                CenterOffset.X,
-    //                CenterOffset.Y, 0);
-    //    }
-
-    //    public Vector3 CenterOffset = Vector3.Zero;
-    //    public Vector3 Size = Vector3.One;
-    //}
-
-    //public struct RectCoord
-    //{
-    //    public float X;
-    //    public float Y;
-
-    //    public float Width;
-    //    public float Height;
-
-    //    public Vector3 TopLeft { get => new Vector3(X, Y); set { X = value.X; Y = value.Y; } }
-    //    public Vector3 BottomRight { get => new Vector3(X + Width, Y - Height); }
-    //    public Vector3 Center { get => new Vector3(X + Width / 2f, Y - Height / 2f); }
-    //    public Vector3 Size { get => new Vector3(Width, Height); set { Width = value.X; Height = value.Y; } }
-    //}
-
     public partial class TransformEntity : IEquatable<TransformEntity>
     {
         public TransformEntity(Entity e)
         {
             _entity = e;
-            _transform = new();
-            _transformEntityDict[e.Id] = this;
+            _idToTransformEntity[_entity.Id] = this;
         }
 
-        #region Entities
-        public TransformEntity AddComponent<T>(T component) where T : class
+        public void AddComponent<T>(T component) where T : class
         {
             AddComponent(component, typeof(T));
-
-            return this;
         }
 
-        public TransformEntity AddComponent(object component, Type ty)
+        public object GetComponent(Type ty)
         {
-            Entity.Attach(component, ty);
+            return _addedComponents[ty];
+        }
 
-            _entityDict[component] = this;
+        public T GetComponent<T>()
+        {
+            return (T)GetComponent(typeof(T));
+        }
+
+        public void AddComponent(object component, Type ty)
+        {
+            _entity.Attach(component, ty);
+
+            _comToEntity[component] = this;
             _addedComponents.Add(ty, component);
 
             if (component is IComponentAddedCallback)
@@ -81,19 +46,48 @@ namespace CruZ.Components
                 var callback = (IComponentAddedCallback)component;
                 callback.OnComponentAdded(this);
             }
-
-            return this;
         }
+
+        public bool HasComponent(Type ty)
+        {
+            return _entity.Has(ty);
+        }
+
+        public void RemoveFromWorld()
+        {
+            IsActive = false;
+            ECS.World.DestroyEntity(_entity);
+        }
+
+#pragma warning disable CS8767 // Nullability of reference types in type of parameter doesn't match implicitly implemented member (possibly because of nullability attributes).
+        public bool Equals(TransformEntity other)
+        {
+            if (_entity == null || other._entity == null) return _entity == other._entity;
+            return other._entity.Id == _entity.Id;
+        }
+#pragma warning restore CS8767 // Nullability of reference types in type of parameter doesn't match implicitly implemented member (possibly because of nullability attributes).
+
+        public Transform Transform  { get => _transform; set => _transform = value; }
+        public Entity Entity        { get => _entity; }
+        public bool IsActive        { get => _isActive; set => _isActive = value; }
+
+        Entity _entity;
+        bool _isActive = false;
+        Transform _transform = new();
+        Dictionary<Type, object> _addedComponents = new();
+
+        private static Dictionary<int, TransformEntity> _idToTransformEntity = new();
+        private static Dictionary<object, TransformEntity> _comToEntity = new();
 
         public static TransformEntity GetEntity(object component)
         {
-            if (!_entityDict.ContainsKey(component))
+            if (!_comToEntity.ContainsKey(component))
             {
                 throw new Exception("Im tired of this shit");
             }
             else
             {
-                return _entityDict[component];
+                return _comToEntity[component];
             }
         }
 
@@ -104,50 +98,8 @@ namespace CruZ.Components
 
         public static TransformEntity GetTransformEntity(int eId)
         {
-            Trace.Assert(_transformEntityDict.ContainsKey(eId));
-            return _transformEntityDict[eId];
+            Trace.Assert(_idToTransformEntity.ContainsKey(eId));
+            return _idToTransformEntity[eId];
         }
-        #endregion
-
-        public void RemoveFromWorld()
-        {
-            IsActive = false;
-            ECS.World.DestroyEntity(Entity);
-        }
-
-#pragma warning disable CS8767 // Nullability of reference types in type of parameter doesn't match implicitly implemented member (possibly because of nullability attributes).
-        public bool Equals(TransformEntity other)
-        {
-            return other != null && other.Entity.Id == Entity.Id;
-        }
-#pragma warning restore CS8767 // Nullability of reference types in type of parameter doesn't match implicitly implemented member (possibly because of nullability attributes).
-
-
-        //public RectCoord GetRectCoord()
-        //{
-        //    RectCoord rectCoord;
-
-        //    rectCoord.Width = RectTransform.Size.X * Transform.Scale.X;
-        //    rectCoord.Height = RectTransform.Size.Y * Transform.Scale.Y;
-
-        //    rectCoord.X = Transform.Position.X - rectCoord.Width / 2f - RectTransform.CenterOffset.X;
-        //    rectCoord.Y = Transform.Position.Y + rectCoord.Height / 2f - RectTransform.CenterOffset.Y;
-
-        //    return rectCoord;
-        //}
-
-        private static Dictionary<object, TransformEntity> _entityDict = new();
-        private static Dictionary<int, TransformEntity> _transformEntityDict = new();
-
-        public Transform Transform { get => _transform; set => _transform = value; }
-        public Entity Entity { get => _entity; set => _entity = value; }
-        public bool IsActive { get => _isActive; set => _isActive = value; }
-        //public RectTransform RectTransform { get => _rectTransform; set => _rectTransform = value; }
-
-        bool _isActive;
-        Entity _entity;
-        Transform _transform;
-        //RectTransform _rectTransform;
-        Dictionary<Type, object> _addedComponents = new();
     }
 }
