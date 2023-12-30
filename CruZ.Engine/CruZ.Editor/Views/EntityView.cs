@@ -1,11 +1,11 @@
-﻿using CruZ_Engine.Components;
+﻿using CruZ.Components;
 using CurZ.Editor;
 using ImGuiNET;
 using Microsoft.Xna.Framework;
 using Newtonsoft.Json;
 using System.Numerics;
 
-namespace CruZ_Engine.Editor
+namespace CruZ.Editor
 {
     public class EntityView : IViewDrawCallback
     {
@@ -19,10 +19,10 @@ namespace CruZ_Engine.Editor
 
             //var rectCoord = _binding.GetRectCoord();
 
-            //var pMin = CruZ_Engine.CoordinateToPoint(rectCoord.TopLeft);
-            //var pMax = CruZ_Engine.CoordinateToPoint(rectCoord.BottomRight);
+            //var pMin = CruZ.CoordinateToPoint(rectCoord.TopLeft);
+            //var pMax = CruZ.CoordinateToPoint(rectCoord.BottomRight);
 
-            //var center = CruZ_Engine.CoordinateToPoint(rectCoord.Center);
+            //var center = CruZ.CoordinateToPoint(rectCoord.Center);
             //var col = ImGui.ColorConvertFloat4ToU32(new Vector4(1, 0, 0, 1));
 
             //drawList.AddRect(new(pMin.X, pMin.Y), new(pMax.X, pMax.Y), col);

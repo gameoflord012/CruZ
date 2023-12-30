@@ -1,0 +1,5 @@
+﻿
+using FirstDesktopGame;
+
+new MyGame();
+

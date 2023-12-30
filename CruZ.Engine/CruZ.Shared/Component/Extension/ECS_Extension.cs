@@ -4,7 +4,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
-using CruZ_Engine.Components;
+using CruZ.Components;
 using MonoGame.Extended.Entities.Systems;
 
 namespace MonoGame.Extended.Entities

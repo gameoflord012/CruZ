@@ -1,0 +1,29 @@
+{
+  "Entities": [
+    {
+      "position": "10, 10, 0",
+      "scale": "1, 1, 1",
+      "components": [
+        {
+          "CruZ.Components.SpriteComponent, CurZ_Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": {
+            "_resourceName": "image"
+          }
+        },
+        {
+          "System.String, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e": "halloboys"
+        }
+      ]
+    },
+    {
+      "position": "-100, -100, 0",
+      "scale": "5, 5, 1",
+      "components": [
+        {
+          "CruZ.Components.SpriteComponent, CurZ_Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": {
+            "_resourceName": "homelander"
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,9 +1,9 @@
-﻿using CruZ_Engine.Serialization;
+﻿using CruZ.Serialization;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 
-namespace CruZ_Engine.Components
+namespace CruZ.Components
 {
     public partial class SpriteComponent : ISerializable
     {

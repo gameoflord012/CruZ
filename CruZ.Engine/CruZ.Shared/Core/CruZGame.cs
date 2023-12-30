@@ -1,11 +1,11 @@
-﻿using CruZ_Engine.Components;
+﻿using CruZ.Components;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Entities;
 using System;
 
-namespace CruZ_Engine
+namespace CruZ
 {
     public abstract class CruZGame
     {

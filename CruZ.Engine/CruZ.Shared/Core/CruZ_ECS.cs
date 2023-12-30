@@ -1,8 +1,8 @@
-﻿using CruZ_Engine.Systems;
+﻿using CruZ.Systems;
 using Microsoft.Xna.Framework;
 using MonoGame.Extended.Entities;
 
-namespace CruZ_Engine
+namespace CruZ
 {
     class CruZ_ECS
     {

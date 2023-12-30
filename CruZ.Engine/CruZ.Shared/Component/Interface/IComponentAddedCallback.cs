@@ -1,4 +1,4 @@
-﻿namespace CruZ_Engine.Components
+﻿namespace CruZ.Components
 {
     interface IComponentAddedCallback
     {

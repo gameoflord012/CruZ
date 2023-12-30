@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace CruZ_Engine.Components
+namespace CruZ.Components
 {
 	interface ISpriteBatchDrawable
 	{

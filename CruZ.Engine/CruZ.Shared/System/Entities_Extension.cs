@@ -4,7 +4,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace CruZ_Engine.Components
+namespace CruZ.Components
 {
     static class Entities_Extension
     {

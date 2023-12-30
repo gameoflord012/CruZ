@@ -2,7 +2,7 @@
 using Newtonsoft.Json.Linq;
 using System;
 
-namespace CruZ_Engine.Serialization
+namespace CruZ.Serialization
 {
     interface ISerializable
     {

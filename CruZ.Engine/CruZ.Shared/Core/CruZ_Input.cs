@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 
-namespace CruZ_Engine
+namespace CruZ
 {
     public class CruZ_Input
     {

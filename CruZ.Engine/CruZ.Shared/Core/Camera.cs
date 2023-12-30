@@ -1,8 +1,8 @@
-﻿using CruZ_Engine.Utility;
+﻿using CruZ.Utility;
 using Microsoft.Xna.Framework.Graphics;
 using System.Numerics;
 
-namespace CruZ_Engine
+namespace CruZ
 {
     public class Camera
     {

@@ -1,11 +1,11 @@
-﻿using CruZ_Engine.Components;
+﻿using CruZ.Components;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
 using MonoGame.Extended.Entities;
 using MonoGame.Extended.Entities.Systems;
 
-namespace CruZ_Engine.Systems
+namespace CruZ.Systems
 {
     internal class SpriteSystem : EntitySystem, IUpdateSystem, IDrawSystem
     {

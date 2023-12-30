@@ -1,10 +1,10 @@
 ﻿using Box2D.NetStandard.Dynamics.World;
-using CruZ_Engine.Components;
+using CruZ.Components;
 using Microsoft.Xna.Framework;
 using MonoGame.Extended.Entities;
 using MonoGame.Extended.Entities.Systems;
 
-namespace CruZ_Engine.Systems
+namespace CruZ.Systems
 {
     class PhysicSystem : EntityUpdateSystem
     {

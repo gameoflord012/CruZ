@@ -2,7 +2,7 @@
 using Newtonsoft.Json;
 using System.Xml.Serialization;
 
-namespace CruZ_Engine.Components
+namespace CruZ.Components
 {
     public class Transform
     {

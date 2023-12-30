@@ -1,6 +1,6 @@
 ﻿using System.Numerics;
 
-namespace CruZ_Engine.Utility
+namespace CruZ.Utility
 {
     public static class FunMath
     {

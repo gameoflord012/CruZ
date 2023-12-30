@@ -1,8 +1,8 @@
-﻿using CruZ_Engine.Components;
+﻿using CruZ.Components;
 using Newtonsoft.Json;
 using System;
 
-namespace CruZ_Engine.Serialization
+namespace CruZ.Serialization
 {
     public class TransformJsonConverter : JsonConverter
     {

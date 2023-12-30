@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace CruZ_Engine
+namespace CruZ
 {
     public struct Vector3
     {

@@ -4,7 +4,7 @@ using System;
 using System.Data;
 using System.Runtime.Serialization;
 
-namespace CruZ_Engine.Serialization
+namespace CruZ.Serialization
 {
     public class SerializableJsonConverter : JsonConverter
     {

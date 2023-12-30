@@ -5,7 +5,7 @@ using System;
 using System.IO;
 using Num = System.Numerics;
 
-namespace CruZ_Engine.UI
+namespace CruZ.UI
 {
     /// <summary>
     /// Simple FNA + ImGui example

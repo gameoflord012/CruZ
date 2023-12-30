@@ -1,9 +1,9 @@
 ﻿using Box2D.NetStandard.Dynamics.Bodies;
 using Box2D.NetStandard.Dynamics.Fixtures;
 using Box2D.NetStandard.Dynamics.World;
-using CruZ_Engine.Systems;
+using CruZ.Systems;
 
-namespace CruZ_Engine.Components
+namespace CruZ.Components
 {
     class PhysicBody
     {

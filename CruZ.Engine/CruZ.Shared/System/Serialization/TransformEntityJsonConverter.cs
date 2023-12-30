@@ -1,10 +1,10 @@
-﻿using CruZ_Engine.Components;
+﻿using CruZ.Components;
 using Microsoft.Xna.Framework;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 
-namespace CruZ_Engine.Serialization
+namespace CruZ.Serialization
 {
     public class TransformEntityJsonConverter : JsonConverter
     {

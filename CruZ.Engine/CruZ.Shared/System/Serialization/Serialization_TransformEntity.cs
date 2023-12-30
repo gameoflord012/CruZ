@@ -1,5 +1,5 @@
 ﻿using Box2D.NetStandard.Dynamics.World;
-using CruZ_Engine.Serialization;
+using CruZ.Serialization;
 using Microsoft.Xna.Framework;
 using MonoGame.Extended.Entities;
 using Newtonsoft.Json;
@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.AccessControl;
 
-namespace CruZ_Engine.Components
+namespace CruZ.Components
 {
     public partial class TransformEntity : ISerializable
     {

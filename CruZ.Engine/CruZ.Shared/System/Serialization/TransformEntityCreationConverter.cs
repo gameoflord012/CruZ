@@ -1,9 +1,9 @@
-﻿using CruZ_Engine.Components;
+﻿using CruZ.Components;
 using MonoGame.Extended.Entities;
 using Newtonsoft.Json.Converters;
 using System;
 
-namespace CruZ_Engine.Serialization
+namespace CruZ.Serialization
 {
     class TransformEntityCreationConverter : CustomCreationConverter<TransformEntity>
     {

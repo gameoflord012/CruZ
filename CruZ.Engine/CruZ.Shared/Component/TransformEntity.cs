@@ -8,7 +8,7 @@ using System.Drawing;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 
-namespace CruZ_Engine.Components
+namespace CruZ.Components
 {
     //public class RectTransform
     //{

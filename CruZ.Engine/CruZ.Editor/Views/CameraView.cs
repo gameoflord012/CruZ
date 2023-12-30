@@ -2,7 +2,7 @@
 using ImGuiNET;
 using Microsoft.Xna.Framework;
 
-namespace CruZ_Engine.Editor
+namespace CruZ.Editor
 {
     public class CameraView : IViewDrawCallback
     {

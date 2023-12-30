@@ -6,7 +6,7 @@ using MonoGame.Extended.Entities;
 using MonoGame.Extended.ViewportAdapters;
 using System;
 
-namespace CruZ_Engine
+namespace CruZ
 {
     public delegate void CruZ_UpdateDelegate(GameTime gameTime);
     public delegate void ActionDelegate();

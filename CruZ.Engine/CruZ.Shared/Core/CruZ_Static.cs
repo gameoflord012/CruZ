@@ -1,4 +1,4 @@
-﻿using CruZ_Engine.Utility;
+﻿using CruZ.Utility;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CruZ_Engine
+namespace CruZ
 {
     public partial class CruZ
     {

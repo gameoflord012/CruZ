@@ -1,6 +1,6 @@
 ﻿using System.Windows.Forms;
 
-namespace CruZ_Engine.Editor
+namespace CruZ.Editor
 {
     class Dialog
     {

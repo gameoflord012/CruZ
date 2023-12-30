@@ -9,9 +9,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\CruZ.DesktopGL\CurZ.DesktopGL.csproj" />
+    <ProjectReference Include="..\CruZ.Desktop.Template\CurZ.Desktop.Template.csproj" />
     <ProjectReference Include="..\CruZ.Wrapper.ImGui\CruZ.UI.csproj" />
-    <!--<ProjectReference Include="..\ImguiWrapper\CruZ_UI.csproj" />-->
   </ItemGroup>
 
 </Project>

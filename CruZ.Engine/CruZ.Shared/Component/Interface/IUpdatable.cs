@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 
-namespace CruZ_Engine.Components
+namespace CruZ.Components
 {
     interface IUpdateable
     {

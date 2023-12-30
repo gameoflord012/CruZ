@@ -1,4 +1,4 @@
-﻿using CruZ_Engine.Utility;
+﻿using CruZ.Utility;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Diagnostics;
@@ -6,7 +6,7 @@ using System.Reflection.Metadata;
 using System.Xml.Serialization;
 using static System.Formats.Asn1.AsnWriter;
 
-namespace CruZ_Engine.Components
+namespace CruZ.Components
 {
     public partial class SpriteComponent : ISpriteBatchDrawable, IComponentAddedCallback
     {
@@ -27,8 +27,8 @@ namespace CruZ_Engine.Components
         //{
         //    if (_e == null) return;
 
-        //    _e.RectTransform.SetWidth((float)Texture.Width / CruZ_Engine.Viewport.Width * CruZ_Engine.VIRTUAL_WIDTH);
-        //    _e.RectTransform.SetHeight((float)Texture.Height / CruZ_Engine.Viewport.Height * CruZ_Engine.VIRTUAL_HEIGHT);
+        //    _e.RectTransform.SetWidth((float)Texture.Width / CruZ.Viewport.Width * CruZ.VIRTUAL_WIDTH);
+        //    _e.RectTransform.SetHeight((float)Texture.Height / CruZ.Viewport.Height * CruZ.VIRTUAL_HEIGHT);
         //}
 
         public virtual void Draw(SpriteBatch spriteBatch, Matrix viewMatrix)

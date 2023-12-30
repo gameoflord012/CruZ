@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CruZ_Engine
+namespace CruZ
 {
     internal class Resource
     {

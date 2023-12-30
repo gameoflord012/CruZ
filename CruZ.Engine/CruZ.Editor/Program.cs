@@ -1,11 +1,11 @@
-﻿namespace CruZ_Engine.Editor
+﻿namespace CruZ.Editor
 {
     public class Program
     {
         [STAThread]
         public static void Main(string[] args)
         {
-            var editor = new CruZ_Editor();
+            var editor = new Editor();
         }
     }
 }
