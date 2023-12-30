@@ -15,7 +15,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Component\AnimatedSpriteComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Component\EntityEventComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Component\EntityTemplate.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Component\Extension\ECS_Extension.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Component\FunMath.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Component\Interface\IComponentAddedCallback.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Component\Interface\ISpriteBatchDrawable.cs" />

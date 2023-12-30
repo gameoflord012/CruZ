@@ -86,7 +86,7 @@ namespace CruZ.Editor
             _viewsToAdd.Add(view);
         }
 
-        protected override void OnExit(object sender, EventArgs args)
+        protected override void Exit(object sender, EventArgs args)
         {
             for (int i = 0; i < _views.Count; i++)
             {

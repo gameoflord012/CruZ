@@ -3,6 +3,7 @@ using MonoGame.Extended.Entities.Systems;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace CruZ.Components
 {
@@ -22,6 +23,20 @@ namespace CruZ.Components
         {
             var mapper = e.ComponentManager.GetMapper(ty);
             mapper.Put(e.Id, component);
+        }
+
+        public static TransformEntity CreateTransformEntity(this World world)
+        {
+            var e = world.CreateEntity();
+            TransformEntity t_e = new(e);
+            return t_e;
+        }
+
+        public static int[] GetActiveEntities(this EntitySystem es)
+        {
+            return es.ActiveEntities.
+                Where(e => TransformEntity.GetTransformEntity(e).IsActive).
+                ToArray();
         }
     }
 }

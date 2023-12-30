@@ -6,13 +6,15 @@ using Microsoft.Xna.Framework;
 
 namespace CruZ.Components
 {
-    public class EntityTemplate
+    public abstract class EntityTemplate
     {
+        public abstract object[] InitialComponents();
+
         public virtual void Initialize(TransformEntity e) { }
         public virtual void Update(GameTime gameTime) { }
         public virtual void Draw(GameTime gameTime) { }
 
-        public void Apply(TransformEntity e)
+        public void ApplyTo(TransformEntity e)
         {
             _entity = e;
 

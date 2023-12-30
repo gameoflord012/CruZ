@@ -12,9 +12,15 @@ namespace CruZ.Game
             CreateScene();
 
             _char = new MainCharacter();
-            _char.Apply(ECS.CreateEntity());
 
-            _scene.AddEntity(_char.AppliedEntity);
+            var e = ECS.CreateEntity();
+            foreach(var c in _char.InitialComponents())
+            {
+                e.AddComponent(c, c.GetType());
+            }
+
+            _char.ApplyTo(e);
+            _scene.AddEntity(e);
         }
 
         public void CreateScene()

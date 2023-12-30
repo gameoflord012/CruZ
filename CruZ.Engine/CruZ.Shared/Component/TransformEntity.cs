@@ -19,19 +19,22 @@ namespace CruZ.Components
             _idToTransformEntity[_entity.Id] = this;
         }
 
-        public void AddComponent<T>(T component) where T : class
-        {
-            AddComponent(component, typeof(T));
-        }
-
         public object GetComponent(Type ty)
         {
+            if (!_addedComponents.ContainsKey(ty))
+                throw new(string.Format("Entity doesn't contain {0}", ty));
+
             return _addedComponents[ty];
         }
 
         public T GetComponent<T>()
         {
             return (T)GetComponent(typeof(T));
+        }
+
+        public void AddComponent<T>(T component) where T : class
+        {
+            AddComponent(component, typeof(T));
         }
 
         public void AddComponent(object component, Type ty)
@@ -59,13 +62,13 @@ namespace CruZ.Components
             ECS.World.DestroyEntity(_entity);
         }
 
-#pragma warning disable CS8767 // Nullability of reference types in type of parameter doesn't match implicitly implemented member (possibly because of nullability attributes).
+#pragma warning disable CS8767 
         public bool Equals(TransformEntity other)
         {
             if (_entity == null || other._entity == null) return _entity == other._entity;
             return other._entity.Id == _entity.Id;
         }
-#pragma warning restore CS8767 // Nullability of reference types in type of parameter doesn't match implicitly implemented member (possibly because of nullability attributes).
+#pragma warning restore CS8767 
 
         public Transform Transform  { get => _transform; set => _transform = value; }
         public Entity Entity        { get => _entity; }
