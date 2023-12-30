@@ -11,16 +11,14 @@ namespace CruZ
     {
         public GameApplication()
         {
-            _core = MGWrapper.Instance();
+            Core.OnInitialize += Initialize;
+            Core.OnUpdate += Update;
+            Core.OnLoadContent += LoadContent;
+            Core.OnEndRun += EndRun;
+            Core.OnExit += OnExit;
+            Core.OnDraw += Draw;
 
-            _core.OnInitialize += Initialize;
-            _core.OnUpdate += Update;
-            _core.OnLoadContent += LoadContent;
-            _core.OnEndRun += EndRun;
-            _core.OnExit += OnExit;
-            _core.OnDraw += Draw;
-
-            _core.Run();
+            Core.Instance.Run();
         }
 
         protected virtual void Draw(GameTime gameTime) { }
@@ -30,11 +28,7 @@ namespace CruZ
         public virtual void Initialize() { }
         public virtual void Update(GameTime gameTime) { }
 
-        public MGWrapper Core { get => _core; }
-        public World World { get => _core.World; }
-        public ContentManager Content { get => _core.Content; }
-        public GraphicsDevice GraphicsDevice { get => _core.GraphicsDevice; }
-
-        MGWrapper _core;
+        public ContentManager Content { get => Core.Instance.Content; }
+        public GraphicsDevice GraphicsDevice { get => Core.Instance.GraphicsDevice; }
     }
 }

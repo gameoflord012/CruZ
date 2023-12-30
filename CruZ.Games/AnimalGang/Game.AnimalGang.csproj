@@ -3,8 +3,16 @@
 		<OutputType>WinExe</OutputType>
 		<TargetFramework>net8.0</TargetFramework>
 	</PropertyGroup>
+
+	<ItemGroup>
+		<None Update="Content\bin\*">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
 	
 	<ItemGroup>
 	  <ProjectReference Include="..\..\CruZ.Engine\CruZ.Desktop.Template\CurZ.Desktop.Template.csproj" />
 	</ItemGroup>
+	
+	
 </Project>

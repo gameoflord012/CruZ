@@ -5,11 +5,9 @@ namespace CruZ
 {
     public class MainInput
     {
-        MGWrapper _core;
-        public MainInput(MGWrapper core)
+        public MainInput()
         {
-            _core = core;
-            _core.OnUpdate += InputUpdate;
+            Core.OnUpdate += InputUpdate;
         }
 
         public void InputUpdate(GameTime gameTime)

@@ -56,9 +56,8 @@ namespace CruZ.Components
     {
         public TransformEntity(Entity e)
         {
-            Entity = e;
-            Transform = new();
-            //RectTransform = new();
+            _entity = e;
+            _transform = new();
             _transformEntityDict[e.Id] = this;
         }
 
@@ -79,7 +78,7 @@ namespace CruZ.Components
 
             if (component is IComponentAddedCallback)
             {
-                var callback = component as IComponentAddedCallback;
+                var callback = (IComponentAddedCallback)component;
                 callback.OnComponentAdded(this);
             }
 
@@ -113,14 +112,16 @@ namespace CruZ.Components
         public void RemoveFromWorld()
         {
             IsActive = false;
-            MGWrapper.Instance().World.DestroyEntity(Entity);
-            Entity = null;
+            ECS.World.DestroyEntity(Entity);
         }
 
+#pragma warning disable CS8767 // Nullability of reference types in type of parameter doesn't match implicitly implemented member (possibly because of nullability attributes).
         public bool Equals(TransformEntity other)
         {
-            return other.Entity.Id == Entity.Id;
+            return other != null && other.Entity.Id == Entity.Id;
         }
+#pragma warning restore CS8767 // Nullability of reference types in type of parameter doesn't match implicitly implemented member (possibly because of nullability attributes).
+
 
         //public RectCoord GetRectCoord()
         //{

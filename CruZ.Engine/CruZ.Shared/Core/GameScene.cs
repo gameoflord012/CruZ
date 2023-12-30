@@ -1,13 +1,16 @@
 ﻿using CruZ.Components;
+using System;
 using System.Collections.Generic;
 
-namespace CurZ
+namespace CruZ
 {
     public class GameScene
     {
-        List<TransformEntity> _entities = new();
-        public List<TransformEntity> Entities { get => _entities; set => _entities = value; }
-        public string Name { get => _name; set => _name = value; }
+        public event Action<TransformEntity>? OnEntityAdded;
+        public event Action<TransformEntity>? OnEntityRemoved;
+
+        public string Name                      { get => _name; set => _name = value; }
+        public List<TransformEntity> Entities   { get => _entities; set => _entities = value; }
 
         public void AddEntity(TransformEntity e)
         {
@@ -21,6 +24,7 @@ namespace CurZ
             _entities.Remove(e);
         }
 
-        string _name;
+        string _name = "";
+        List<TransformEntity> _entities = new();
     }
 }

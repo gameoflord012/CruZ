@@ -9,7 +9,7 @@ namespace CruZ.Serialization
     {
         public override TransformEntity Create(Type objectType)
         {
-            return MGWrapper.Instance().World.CreateTransformEntity();
+            return ECS.World.CreateTransformEntity();
         }
     }
 }

@@ -19,14 +19,16 @@ namespace CruZ.Components
 
             Transform.Position = jObject["position"].ToObject<Microsoft.Xna.Framework.Vector3>(serializer);
             Transform.Scale = jObject["scale"].ToObject<Microsoft.Xna.Framework.Vector3>(serializer);
+            IEnumerable<JObject> components = jObject["components"].Cast<JObject>();
 
-            foreach (var comObj in jObject["components"].Cast<JObject>())
+            foreach (var comObj in components)
             {
                 var comProp = comObj.Properties().First();
-                var comTy = Type.GetType(comProp.Name);
-                var comValue = comProp.Value.ToObject(comTy, serializer);
+                Type comTy = Type.GetType(comProp.Name);
+                object comValue = comProp.Value.ToObject(comTy, serializer);
 
                 AddComponent(comValue, comTy);
+
             }
         }
 
@@ -58,7 +60,7 @@ namespace CruZ.Components
 
         ISerializable ISerializable.CreateDefault()
         {
-            return new TransformEntity(MGWrapper.Instance().World.CreateEntity());
+            return new TransformEntity(ECS.World.CreateEntity());
         }
     }
 }

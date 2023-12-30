@@ -17,4 +17,8 @@
   <ItemGroup>
     <Folder Include="SpriteSheets\" />
   </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\..\..\..\.editorconfig" Link=".editorconfig" />
+  </ItemGroup>
 </Project>

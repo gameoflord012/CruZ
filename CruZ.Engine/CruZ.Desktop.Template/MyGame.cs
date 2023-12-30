@@ -2,7 +2,7 @@
 
 namespace FirstDesktopGame
 {
-    class MyGame : GameApplication
+    public class MyGame : GameApplication
     {
         public override void Initialize()
         {

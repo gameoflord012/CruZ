@@ -11,18 +11,18 @@ namespace CruZ
             _viewport = viewport;
         }
 
-        private static Camera _mainCamera;
+        private static Camera? _mainCamera;
 
         public static Camera GetMain()
         {
             if (_mainCamera == null)
             {
-                _mainCamera = new(MGWrapper.Viewport);
+                _mainCamera = new(Core.Viewport);
             }
             return _mainCamera;
         }
 
-        public static Camera Main
+        public static Camera? Main
         {
             get => GetMain();
             set => _mainCamera = value;

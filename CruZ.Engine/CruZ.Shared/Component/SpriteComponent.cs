@@ -13,7 +13,7 @@ namespace CruZ.Components
         public SpriteComponent() { }
         public SpriteComponent(string resourceName) { LoadTexture(resourceName); }
 
-        public Texture2D Texture { get => _texture; set => _texture = value; }
+        public Texture2D? Texture { get => _texture; set => _texture = value; }
 
         public void LoadTexture(string resourceName)
         {
@@ -43,6 +43,8 @@ namespace CruZ.Components
             //    _e.RectTransform.Size.X / Texture.Width,
             //    _e.RectTransform.Size.Y / Texture.Height);
 
+            Trace.Assert(_e != null);
+
             spriteBatch.Begin(transformMatrix: 
                 _e.Transform.TotalMatrix * viewMatrix);
 
@@ -68,8 +70,8 @@ namespace CruZ.Components
             //UpdateRectTransform();
         }
 
-        private Texture2D _texture;
-        private string _resourceName;
-        private TransformEntity _e;
+        private Texture2D? _texture;
+        private string _resourceName = "";
+        private TransformEntity? _e;
     }
 }

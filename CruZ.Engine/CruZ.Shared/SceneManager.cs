@@ -1,8 +1,12 @@
-﻿using CruZ.Serialization;
+﻿using Assimp;
+using CruZ.Components;
+using CruZ.Serialization;
 using CruZ.Utility;
 using Newtonsoft.Json;
+using System;
+using System.IO;
 
-namespace CruZ.Editor
+namespace CruZ
 {
     public static class SceneManager
     {
@@ -29,13 +33,49 @@ namespace CruZ.Editor
 
             _currentScene = scene;
 
-            foreach(var e in scene.Entities)
+            foreach (var e in scene.Entities)
             {
-                e.IsActive = true;
+                LoadEntity(e);
             }
 
+            scene.OnEntityAdded += LoadEntity;
+            scene.OnEntityRemoved += UnloadEntity;
+
             OnSceneLoaded?.Invoke(_currentScene);
-            Logging.PushMsg(String.Format("Scene {0} Loaded", scene.Name));
+            Logging.PushMsg(string.Format("Scene {0} Loaded", scene.Name));
+        }
+
+        public static void UnloadCurrentScene()
+        {
+            if (_currentScene == null)
+            {
+                Logging.PushMsg("Scene no scene Unloaded");
+                return;
+            }
+
+            var unloadScene = _currentScene;
+            _currentScene = null;
+
+            foreach (var e in unloadScene.Entities)
+            {
+                UnloadEntity(e);
+            }
+
+            unloadScene.OnEntityAdded -= LoadEntity;
+            unloadScene.OnEntityRemoved -= UnloadEntity;
+
+            OnCurrentSceneUnLoaded?.Invoke(unloadScene);
+            Logging.PushMsg(string.Format("Scene {0} Unloaded", unloadScene.Name));
+        }
+
+        private static void LoadEntity(TransformEntity e)
+        {
+            e.IsActive = true;
+        }
+
+        private static void UnloadEntity(TransformEntity e)
+        {
+            e.RemoveFromWorld();
         }
 
         public static void SaveScene(GameScene? scene, string savePath)
@@ -51,22 +91,6 @@ namespace CruZ.Editor
             writer.Flush();
 
             Logging.PushMsg("Scene {0} saved", scene.Name);
-        }
-
-        public static void UnloadCurrentScene()
-        {
-            if (_currentScene == null) return;
-
-            foreach (var e in _currentScene.Entities)
-            {
-                e.RemoveFromWorld();
-            }
-
-            var unloadScene = _currentScene;
-            _currentScene = null;
-
-            OnCurrentSceneUnLoaded?.Invoke(unloadScene);
-            Logging.PushMsg(String.Format("Scene {0} Unloaded", unloadScene.Name));
         }
 
         static SceneManager()

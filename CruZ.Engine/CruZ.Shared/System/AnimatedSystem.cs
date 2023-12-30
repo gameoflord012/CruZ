@@ -9,17 +9,17 @@ namespace CruZ.Systems
 {
     class AnimatedSystem : EntitySystem, IDrawSystem, IUpdateSystem
     {
+#pragma warning disable CS8618
         public AnimatedSystem() : base(Aspect.All(typeof(AnimatedSpriteComponent)))
         {
         }
+#pragma warning restore CS8618
 
         public override void Initialize(IComponentMapperService mapperService)
         {
             _spriteRendererMapper = mapperService.GetMapper<AnimatedSpriteComponent>();
-            _spriteBatch = new SpriteBatch(MGWrapper.Instance().GraphicsDevice);
-            _core = MGWrapper.Instance();
+            _spriteBatch = new SpriteBatch(Core.Instance.GraphicsDevice);
         }
-
 
         public void Draw(GameTime gameTime)
         {
@@ -39,6 +39,5 @@ namespace CruZ.Systems
 
         SpriteBatch _spriteBatch;
         ComponentMapper<AnimatedSpriteComponent> _spriteRendererMapper;
-        MGWrapper _core;
     }
 }

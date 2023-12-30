@@ -6,7 +6,7 @@ namespace CruZ
     {
         public static ContentManager GetManager()
         {
-            return MGWrapper.Instance().Content;
+            return Core.Instance.Content;
         }
 
         public static T Load<T>(string resourceName)

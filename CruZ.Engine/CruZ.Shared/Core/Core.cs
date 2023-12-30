@@ -12,15 +12,13 @@ namespace CruZ
     public delegate void ActionDelegate();
     public delegate void OnExitingDelegate(object sender, EventArgs args);
 
-    public partial class MGWrapper : Game
+    public partial class Core : Game
     {
-        private MGWrapper()
+        private Core()
         {
             Content.RootDirectory = CONTENT_ROOT;
             IsMouseVisible = true;
 
-            _input = new MainInput(this);
-            _ecs = new ECS(this);
             _graphics = new GraphicsDeviceManager(this);
         }
 
@@ -33,13 +31,13 @@ namespace CruZ
         protected override void OnExiting(object sender, EventArgs args)
         {
             base.OnExiting(sender, args);
-            OnExit.Invoke(sender, args);
+            OnExit?.Invoke(sender, args);
         }
 
         protected override void LoadContent()
         {
             base.LoadContent();
-            OnLoadContent.Invoke();
+            OnLoadContent?.Invoke();
         }
 
         protected override void Initialize()
@@ -65,20 +63,6 @@ namespace CruZ
             OnDraw?.Invoke(gameTime);
         }
 
-        public event ActionDelegate OnInitialize;
-        public event ActionDelegate OnLoadContent;
-        public event ActionDelegate OnEndRun;
-        public event OnExitingDelegate OnExit;
-        public event CruZ_UpdateDelegate OnUpdate;
-        public event CruZ_UpdateDelegate OnDraw;
-
-        public ViewportAdapter ViewportAdapter { get => _viewportAdapter; set => _viewportAdapter = value; }
-        public MainInput Input { get => _input; }
-        public World World { get => _ecs.World; }
-
-        private ECS _ecs;
-        private MainInput _input;
         private GraphicsDeviceManager _graphics;
-        private ViewportAdapter _viewportAdapter;
     }
 }

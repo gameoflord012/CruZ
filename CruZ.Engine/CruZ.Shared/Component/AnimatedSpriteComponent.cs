@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
 using MonoGame.Extended.Sprites;
+using System.Diagnostics;
 
 namespace CruZ.Components
 {
@@ -21,6 +22,8 @@ namespace CruZ.Components
 
         public void Draw(SpriteBatch spriteBatch, Matrix transformMatrix)
         {
+            Trace.Assert(_attachedEntity != null);
+
             spriteBatch.Begin(transformMatrix: _attachedEntity.Transform.TotalMatrix * transformMatrix);
             spriteBatch.Draw(_animatedSprite, Vector2.Zero);
             spriteBatch.End();
@@ -36,11 +39,10 @@ namespace CruZ.Components
             _attachedEntity = entity;
         }
 
-        MonoGame.Extended.Sprites.AnimatedSprite _animatedSprite;
+        AnimatedSprite _animatedSprite;
         SpriteSheet _spriteSheet;
         public SpriteSheet SpriteSheed { get => _spriteSheet; set => _spriteSheet = value; }
         public AnimatedSprite AnimatedSprite { get => _animatedSprite; }
-
-        private TransformEntity _attachedEntity;
+        private TransformEntity? _attachedEntity;
     }
 }

@@ -13,8 +13,9 @@ namespace CruZ.Components
             _fixture = _body.CreateFixture(new FixtureDef());
         }
 
-        Fixture _fixture;
-        Body _body;
+        Fixture? _fixture;
+        Body? _body;
+
         public bool IsInitialize { get => _body != null; }
     }
 }

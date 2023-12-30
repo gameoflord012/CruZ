@@ -2,6 +2,7 @@
 using Newtonsoft.Json.Linq;
 using System;
 using System.Data;
+using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
 
 namespace CruZ.Serialization
@@ -15,7 +16,7 @@ namespace CruZ.Serialization
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
-            var uninitialObject = (ISerializable)FormatterServices.GetUninitializedObject(objectType);
+            var uninitialObject = (ISerializable)RuntimeHelpers.GetUninitializedObject(objectType);
             ISerializable value = uninitialObject.CreateDefault() ?? uninitialObject;
 
             value.ReadJson(reader, serializer);

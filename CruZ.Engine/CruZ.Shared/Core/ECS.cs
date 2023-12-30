@@ -1,20 +1,20 @@
-﻿using CruZ.Systems;
+﻿using CruZ.Components;
+using CruZ.Systems;
 using Microsoft.Xna.Framework;
 using MonoGame.Extended.Entities;
 
 namespace CruZ
 {
-    class ECS
+    public class ECS
     {
-        public ECS(MGWrapper core)
-        {
-            core.OnInitialize += Initialize;
-            core.OnUpdate += Update;
-            core.OnDraw += Draw;
-        }
+        private static ECS? _instance;
+        public static ECS Instance { get => _instance ??= new ECS(); }
 
-        private void Initialize()
+        private ECS()
         {
+            Core.OnUpdate += Update;
+            Core.OnDraw += Draw;
+
             _world = new WorldBuilder().
                 AddSystem(new SpriteSystem()).
                 AddSystem(new AnimatedSystem()).
@@ -34,6 +34,11 @@ namespace CruZ
 
         World _world;
 
-        public World World { get => _world; }
+        public static World World { get => Instance._world; }
+        
+        public static TransformEntity CreateEntity()
+        {
+            return World.CreateTransformEntity();
+        }
     }
 }

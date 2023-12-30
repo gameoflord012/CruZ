@@ -4,6 +4,7 @@
 		<TargetFramework>net8.0</TargetFramework>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 
+		<Nullable>enable</Nullable>
 		<RollForward>Major</RollForward>
 		<PublishReadyToRun>false</PublishReadyToRun>
 		<TieredCompilation>false</TieredCompilation>
