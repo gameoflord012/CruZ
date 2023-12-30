@@ -17,7 +17,7 @@ namespace CruZ
         {
             if (_mainCamera == null)
             {
-                _mainCamera = new(CruZ.Viewport);
+                _mainCamera = new(MGWrapper.Viewport);
             }
             return _mainCamera;
         }

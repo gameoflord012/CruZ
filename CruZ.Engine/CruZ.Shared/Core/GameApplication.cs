@@ -7,11 +7,11 @@ using System;
 
 namespace CruZ
 {
-    public abstract class CruZGame
+    public abstract class GameApplication
     {
-        public CruZGame()
+        public GameApplication()
         {
-            _core = CruZ.Instance();
+            _core = MGWrapper.Instance();
 
             _core.OnInitialize += Initialize;
             _core.OnUpdate += Update;
@@ -30,11 +30,11 @@ namespace CruZ
         public virtual void Initialize() { }
         public virtual void Update(GameTime gameTime) { }
 
-        public CruZ Core { get => _core; }
+        public MGWrapper Core { get => _core; }
         public World World { get => _core.World; }
         public ContentManager Content { get => _core.Content; }
         public GraphicsDevice GraphicsDevice { get => _core.GraphicsDevice; }
 
-        CruZ _core;
+        MGWrapper _core;
     }
 }

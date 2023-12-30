@@ -12,15 +12,15 @@ namespace CruZ
     public delegate void ActionDelegate();
     public delegate void OnExitingDelegate(object sender, EventArgs args);
 
-    public partial class CruZ : Game
+    public partial class MGWrapper : Game
     {
-        private CruZ()
+        private MGWrapper()
         {
             Content.RootDirectory = CONTENT_ROOT;
             IsMouseVisible = true;
 
-            _input = new CruZ_Input(this);
-            _ecs = new CruZ_ECS(this);
+            _input = new MainInput(this);
+            _ecs = new ECS(this);
             _graphics = new GraphicsDeviceManager(this);
         }
 
@@ -73,11 +73,11 @@ namespace CruZ
         public event CruZ_UpdateDelegate OnDraw;
 
         public ViewportAdapter ViewportAdapter { get => _viewportAdapter; set => _viewportAdapter = value; }
-        public CruZ_Input Input { get => _input; }
+        public MainInput Input { get => _input; }
         public World World { get => _ecs.World; }
 
-        private CruZ_ECS _ecs;
-        private CruZ_Input _input;
+        private ECS _ecs;
+        private MainInput _input;
         private GraphicsDeviceManager _graphics;
         private ViewportAdapter _viewportAdapter;
     }

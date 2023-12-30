@@ -18,7 +18,7 @@ namespace CruZ.Components
         public void LoadTexture(string resourceName)
         {
             _resourceName = resourceName;
-            Texture = Resource.Instance().LoadResource<Texture2D>(resourceName);
+            Texture = Content.Load<Texture2D>(resourceName);
 
             //UpdateRectTransform();
         }
@@ -27,8 +27,8 @@ namespace CruZ.Components
         //{
         //    if (_e == null) return;
 
-        //    _e.RectTransform.SetWidth((float)Texture.Width / CruZ.Viewport.Width * CruZ.VIRTUAL_WIDTH);
-        //    _e.RectTransform.SetHeight((float)Texture.Height / CruZ.Viewport.Height * CruZ.VIRTUAL_HEIGHT);
+        //    _e.RectTransform.SetWidth((float)Texture.Width / MGWrapper.Viewport.Width * MGWrapper.VIRTUAL_WIDTH);
+        //    _e.RectTransform.SetHeight((float)Texture.Height / MGWrapper.Viewport.Height * MGWrapper.VIRTUAL_HEIGHT);
         //}
 
         public virtual void Draw(SpriteBatch spriteBatch, Matrix viewMatrix)

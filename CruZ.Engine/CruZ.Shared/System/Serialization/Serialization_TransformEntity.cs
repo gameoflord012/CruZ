@@ -58,7 +58,7 @@ namespace CruZ.Components
 
         ISerializable ISerializable.CreateDefault()
         {
-            return new TransformEntity(CruZ.Instance().World.CreateEntity());
+            return new TransformEntity(MGWrapper.Instance().World.CreateEntity());
         }
     }
 }

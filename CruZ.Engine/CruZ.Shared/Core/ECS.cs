@@ -4,9 +4,9 @@ using MonoGame.Extended.Entities;
 
 namespace CruZ
 {
-    class CruZ_ECS
+    class ECS
     {
-        public CruZ_ECS(MGWrapper core)
+        public ECS(MGWrapper core)
         {
             core.OnInitialize += Initialize;
             core.OnUpdate += Update;

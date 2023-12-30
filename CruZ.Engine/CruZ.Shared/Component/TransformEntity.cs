@@ -113,7 +113,7 @@ namespace CruZ.Components
         public void RemoveFromWorld()
         {
             IsActive = false;
-            CruZ.Instance().World.DestroyEntity(Entity);
+            MGWrapper.Instance().World.DestroyEntity(Entity);
             Entity = null;
         }
 

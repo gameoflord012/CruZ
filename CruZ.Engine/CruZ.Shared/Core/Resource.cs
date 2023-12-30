@@ -7,28 +7,28 @@ using System.Threading.Tasks;
 
 namespace CruZ
 {
-    internal class Resource
+    public static class Content
     {
-        private Resource() {}
-        private static Resource _instance;
+        private Content() {}
+        private static Content _instance;
 
-        public static Resource Instance()
+        public static Content Instance()
         {
             if(_instance == null)
             {
-                _instance = new Resource();
+                _instance = new Content();
             }
             return _instance;
         }
 
-        private ContentManager ContentManager()
+        public static ContentManager GetManager()
         {
-            return CruZ.Instance().Content;
+            return MGWrapper.Instance().Content;
         }
 
-        public T LoadResource<T>(string resourceName)
+        public static T LoadResource<T>(string resourceName)
         {
-            return ContentManager().Load<T>(resourceName);
+            return GetManager()().Load<T>(resourceName);
         }
     }
 }

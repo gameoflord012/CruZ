@@ -10,18 +10,17 @@ using System.Threading.Tasks;
 
 namespace CruZ
 {
-    public partial class CruZ
+    public partial class MGWrapper
     {
-        private static CruZ _instance;
-        public static CruZ Instance()
+        private static MGWrapper _instance;
+        public static MGWrapper Instance()
         {
             if (_instance == null)
-                _instance = new CruZ();
+                _instance = new MGWrapper();
             return _instance;
         }
 
         public static readonly string CONTENT_ROOT = "Content";
-        public static Viewport Viewport { get => Instance().GraphicsDevice.Viewport; }
     
         public static void ChangeWindowSize(int width, int height)
         {
@@ -30,5 +29,7 @@ namespace CruZ
             Instance()._graphics.PreferredBackBufferHeight = height;
             Instance()._graphics.ApplyChanges();
         }
+
+        public static Viewport Viewport { get => Instance().GraphicsDevice.Viewport; }
     }
 }

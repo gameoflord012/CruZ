@@ -3,10 +3,10 @@ using Microsoft.Xna.Framework.Input;
 
 namespace CruZ
 {
-    public class CruZ_Input
+    public class MainInput
     {
-        CruZ _core;
-        public CruZ_Input(CruZ core)
+        MGWrapper _core;
+        public MainInput(MGWrapper core)
         {
             _core = core;
             _core.OnUpdate += InputUpdate;

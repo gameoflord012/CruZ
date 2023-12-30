@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework;
 
 namespace CruZ.Editor
 {
-    class Editor : CruZGame
+    class Editor : GameApplication
     {
         public override void Initialize()
         {

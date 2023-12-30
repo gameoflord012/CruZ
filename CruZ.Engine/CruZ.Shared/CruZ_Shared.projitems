@@ -24,12 +24,12 @@
     <Compile Include="$(MSBuildThisFileDirectory)Component\TransformEntity.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Core\Camera.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Core\CruZ.cs" />
-    <Compile Include="..\CruZ.Shared\Core\CruZGame.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Core\CruZ_ECS.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Core\CruZ_Input.cs" />
+    <Compile Include="..\CruZ.Shared\Core\GameApplication.cs" />
+    <Compile Include="..\CruZ.Shared\Core\ECS.cs" />
+    <Compile Include="..\CruZ.Shared\Core\MainInput.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Core\CruZ_Static.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Core\GameScene.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Core\Resource.cs" />
+    <Compile Include="..\CruZ.Shared\Core\Content.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System\AnimatedSystem.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System\Entities_Extension.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System\PhysicSystem.cs" />

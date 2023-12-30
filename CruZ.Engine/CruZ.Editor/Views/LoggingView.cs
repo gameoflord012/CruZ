@@ -8,7 +8,7 @@ namespace CruZ.Editor
     {
         public void DrawView(GameTime gameTime)
         {
-            var bound = CruZ.Instance().GraphicsDevice.Viewport.Bounds;
+            var bound = MGWrapper.Instance().GraphicsDevice.Viewport.Bounds;
 
             ImGui.SetNextWindowSize(new System.Numerics.Vector2(bound.Width, bound.Height));
             ImGui.SetNextWindowPos(new System.Numerics.Vector2(0, 0));

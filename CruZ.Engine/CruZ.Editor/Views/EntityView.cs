@@ -19,10 +19,10 @@ namespace CruZ.Editor
 
             //var rectCoord = _binding.GetRectCoord();
 
-            //var pMin = CruZ.CoordinateToPoint(rectCoord.TopLeft);
-            //var pMax = CruZ.CoordinateToPoint(rectCoord.BottomRight);
+            //var pMin = MGWrapper.CoordinateToPoint(rectCoord.TopLeft);
+            //var pMax = MGWrapper.CoordinateToPoint(rectCoord.BottomRight);
 
-            //var center = CruZ.CoordinateToPoint(rectCoord.Center);
+            //var center = MGWrapper.CoordinateToPoint(rectCoord.Center);
             //var col = ImGui.ColorConvertFloat4ToU32(new Vector4(1, 0, 0, 1));
 
             //drawList.AddRect(new(pMin.X, pMin.Y), new(pMax.X, pMax.Y), col);

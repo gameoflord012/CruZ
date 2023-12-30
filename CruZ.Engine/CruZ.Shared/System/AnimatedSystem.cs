@@ -16,8 +16,8 @@ namespace CruZ.Systems
         public override void Initialize(IComponentMapperService mapperService)
         {
             _spriteRendererMapper = mapperService.GetMapper<AnimatedSpriteComponent>();
-            _spriteBatch = new SpriteBatch(CruZ.Instance().GraphicsDevice);
-            _core = CruZ.Instance();
+            _spriteBatch = new SpriteBatch(MGWrapper.Instance().GraphicsDevice);
+            _core = MGWrapper.Instance();
         }
 
 
@@ -39,6 +39,6 @@ namespace CruZ.Systems
 
         SpriteBatch _spriteBatch;
         ComponentMapper<AnimatedSpriteComponent> _spriteRendererMapper;
-        CruZ _core;
+        MGWrapper _core;
     }
 }
