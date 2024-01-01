@@ -7,17 +7,18 @@ namespace CruZ.Game
 {
     public class MainCharacter : EntityTemplate
     {
-        public override object[] InitialComponents()
+        public override void GetInstruction(IBuildInstruction instruction)
         {
-            return
-                [
-                    new SpriteComponent(),
-                ];
+            instruction.RequireComponent(typeof(SpriteComponent));
         }
 
-        public override void Initialize(TransformEntity e)
+        public override void Initialize(TransformEntity relativeRoot)
         {
-            _sprite = AppliedEntity.GetComponent<SpriteComponent>();
+            base.Initialize(relativeRoot);
+
+            Entity.IsActive = true;
+
+            _sprite = Entity.GetComponent<SpriteComponent>();
             _sprite.LoadTexture("image");
         }
 
@@ -25,7 +26,7 @@ namespace CruZ.Game
         {
             base.Update(gameTime);
 
-            AppliedEntity.Transform.Position += Microsoft.Xna.Framework.Vector3.Up * 6;
+            Entity.Transform.Position += Microsoft.Xna.Framework.Vector3.Up * 6;
         }
 
         SpriteComponent _sprite;

@@ -2,6 +2,7 @@
 using CruZ.Systems;
 using Microsoft.Xna.Framework;
 using MonoGame.Extended.Entities;
+using System.Collections.Generic;
 
 namespace CruZ
 {
@@ -21,6 +22,8 @@ namespace CruZ
                 AddSystem(new PhysicSystem()).
                 AddSystem(new EntityEventSystem()).
                 Build();
+
+            _entityBuilder = new(_world);
         }
 
         private void Update(GameTime gameTime)
@@ -34,12 +37,18 @@ namespace CruZ
         }
 
         World _world;
+        EntityBuilder _entityBuilder;
 
         public static World World { get => Instance._world; }
         
         public static TransformEntity CreateEntity()
         {
             return World.CreateTransformEntity();
+        }
+
+        public static Dictionary<EntityTemplate, TransformEntity> BuildTemplate(EntityTemplate template)
+        {
+            return Instance._entityBuilder.BuildFrom(template);
         }
     }
 }

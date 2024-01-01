@@ -13,9 +13,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)Component\AnimatedSpriteComponent.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Helper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ResourceManager.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)System\Serialization\GlobalSerializer.cs" />
+    <Compile Include="..\CruZ.Shared\Component\BuildInstruction.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Component\EntityBuilder.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Component\EntityEventComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Component\EntityTemplate.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Component\FunMath.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)FunMath.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Component\Interface\IComponentAddedCallback.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Component\Interface\ISpriteBatchDrawable.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Component\Interface\IUpdatable.cs" />
@@ -40,8 +45,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)System\PhysicSystem.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System\Serialization\ISerializable.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System\Serialization\SerializableJsonConverter.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)System\Serialization\Serialization_SpriteComponent.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)System\Serialization\Serialization_TransformEntity.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)System\Serialization\Serialization.SpriteComponent.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)System\Serialization\Serialization.TransformEntity.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System\Serialization\TransformEntityCreationConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System\Serialization\TransformEntityJsonConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System\Serialization\TransformJsonConverter.cs" />

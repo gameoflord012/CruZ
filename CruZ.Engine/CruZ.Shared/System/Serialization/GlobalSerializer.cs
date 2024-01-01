@@ -1,7 +1,10 @@
-﻿using Newtonsoft.Json;
+﻿using CruZ.Serialization;
+using CruZ.Utility;
+using Newtonsoft.Json;
+using System;
 using System.IO;
 
-namespace CurZ.Editor
+namespace CurZ.Serialization
 {
     public static class GlobalSerializer
     {
@@ -10,21 +13,17 @@ namespace CurZ.Editor
             _settings = new();
             _settings.Formatting = Formatting.Indented;
             _settings.ReferenceLoopHandling = ReferenceLoopHandling.Serialize;
+
+            _settings.Converters.Add(new SerializableJsonConverter());
         }
 
-        public static string SerializeToFile(object o, string filePath)
+        public static void SerializeToFile(object o, string filePath)
         {
             var json = JsonConvert.SerializeObject(o, _settings);
-            var dir = Path.GetDirectoryName(filePath);
+            var writer = Helper.CreateOrOpenFilePath(filePath);
 
-            if (!Directory.Exists(dir))
-            {
-                Directory.CreateDirectory(dir);
-            }
-
-            File.WriteAllText(filePath, json);
-
-            return json;
+            writer.WriteLine(json);
+            writer.Flush();
         }
 
         public static object? DeserializeFromFile(string filePath, Type ty)

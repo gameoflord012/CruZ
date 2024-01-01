@@ -12,7 +12,7 @@ namespace CruZ.Editor
         {
             base.Initialize();
 
-            _imgui = new(Core);
+            _imgui = new(Core.Instance);
             _imgui.RebuildFontAtlas();
 
             CreateViews();

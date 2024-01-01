@@ -13,6 +13,12 @@ namespace CruZ.Components
 {
     public partial class TransformEntity : IEquatable<TransformEntity>
     {
+        public Transform        Transform   { get => _transform;    set => _transform = value; }
+        public Entity           Entity      { get => _entity; }
+        public TransformEntity? Parent      { get => _parent;       set => _parent = value; }
+        public bool             IsActive    { get => _isActive;     set => _isActive = value; }
+        public string           NameId = "";
+
         public TransformEntity(Entity e)
         {
             _entity = e;
@@ -51,6 +57,12 @@ namespace CruZ.Components
             }
         }
 
+        public void RequireComponent(Type ty)
+        {
+            if (HasComponent(ty)) return;
+            AddComponent(Activator.CreateInstance(ty), ty);
+        }
+
         public bool HasComponent(Type ty)
         {
             return _entity.Has(ty);
@@ -70,12 +82,10 @@ namespace CruZ.Components
         }
 #pragma warning restore CS8767 
 
-        public Transform Transform  { get => _transform; set => _transform = value; }
-        public Entity Entity        { get => _entity; }
-        public bool IsActive        { get => _isActive; set => _isActive = value; }
-
         Entity _entity;
+        TransformEntity? _parent;
         bool _isActive = false;
+
         Transform _transform = new();
         Dictionary<Type, object> _addedComponents = new();
 

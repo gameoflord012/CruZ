@@ -16,7 +16,7 @@ namespace CruZ
     {
         private Core()
         {
-            Content.RootDirectory = CONTENT_ROOT;
+            Content.RootDirectory = ResourceManager.CONTENT_ROOT;
             IsMouseVisible = true;
 
             _graphics = new GraphicsDeviceManager(this);

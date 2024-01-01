@@ -3,42 +3,36 @@ using System.Collections.Generic;
 using System;
 using System.Diagnostics;
 using Microsoft.Xna.Framework;
+using CruZ.Serialization;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace CruZ.Components
 {
-    public abstract class EntityTemplate
+    public class EntityTemplate
     {
-        public abstract object[] InitialComponents();
+        public  TransformEntity Entity  { get => _entity; }
+        public  string          NameId  { get => _name; }
 
-        public virtual void Initialize(TransformEntity e) { }
+        public EntityTemplate(string name) { _name = name; }
+
+        public virtual void GetInstruction(IBuildInstruction buildInstruction) { }
+
+        public virtual void Initialize(TransformEntity relativeRoot) 
+        {
+            _entity = relativeRoot;
+
+            _entity.RequireComponent(typeof(EntityEventComponent));
+            var evComp = _entity.GetComponent<EntityEventComponent>();
+
+            evComp.OnDraw += Draw;
+            evComp.OnUpdate += Update;
+        }
+
         public virtual void Update(GameTime gameTime) { }
         public virtual void Draw(GameTime gameTime) { }
 
-        public void ApplyTo(TransformEntity e)
-        {
-            _entity = e;
-
-            Initialize(e);
-
-            if (!e.HasComponent(typeof(EntityEventComponent)))
-            {
-                e.AddComponent(new EntityEventComponent());
-            }
-
-            var entityEvent = e.GetComponent<EntityEventComponent>();
-
-            entityEvent.OnDraw += Draw;
-            entityEvent.OnDraw += Update;
-        }
-
         TransformEntity? _entity;
-        public TransformEntity AppliedEntity
-        {
-            get 
-            {
-                Trace.Assert(_entity != null);
-                return _entity;
-            }
-        }
+        private string _name;
     }
 }

@@ -18,7 +18,7 @@ namespace CruZ.Components
         public void LoadTexture(string resourceName)
         {
             _resourceName = resourceName;
-            Texture = Content.Load<Texture2D>(resourceName);
+            Texture = ResourceManager.LoadContent<Texture2D>(resourceName);
 
             //UpdateRectTransform();
         }

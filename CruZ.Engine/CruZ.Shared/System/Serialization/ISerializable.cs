@@ -6,9 +6,8 @@ namespace CruZ.Serialization
 {
     interface ISerializable
     {
-        public ISerializable CreateDefault();
+        public ISerializable? CreateDefault();
         public void ReadJson(JsonReader reader, JsonSerializer serializer);
         public void WriteJson(JsonWriter writer, JsonSerializer serializer);
-
     }
 }

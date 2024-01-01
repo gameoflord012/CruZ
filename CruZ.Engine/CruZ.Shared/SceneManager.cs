@@ -24,11 +24,11 @@ namespace CruZ
             }
         }
 
-        public static void LoadScene(GameScene scene)
+        public static void SetSceneActive(GameScene scene)
         {
             if (_currentScene != null)
             {
-                UnloadCurrentScene();
+                UnactivateCurrent();
             }
 
             _currentScene = scene;
@@ -45,7 +45,7 @@ namespace CruZ
             Logging.PushMsg(string.Format("Scene {0} Loaded", scene.Name));
         }
 
-        public static void UnloadCurrentScene()
+        public static void UnactivateCurrent()
         {
             if (_currentScene == null)
             {

@@ -15,8 +15,6 @@ namespace CruZ
         private static Core? _instance;
         public static Core Instance { get => _instance ??= new Core(); }
 
-        public static readonly string CONTENT_ROOT = "Content\\bin";
-
         public static event ActionDelegate? OnInitialize;
         public static event ActionDelegate? OnLoadContent;
         public static event ActionDelegate? OnEndRun;
