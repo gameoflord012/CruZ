@@ -8,6 +8,8 @@ namespace CruZ.Components
 {
     public class AnimatedSpriteComponent : ISpriteBatchDrawable, IUpdateable, IComponentAddedCallback
     {
+        public AnimatedSpriteComponent() { }
+
         public AnimatedSpriteComponent(SpriteSheet spriteShit)
         {
             _spriteSheet = spriteShit;

@@ -60,7 +60,15 @@ namespace CruZ.Components
         public void RequireComponent(Type ty)
         {
             if (HasComponent(ty)) return;
-            AddComponent(Activator.CreateInstance(ty), ty);
+
+            try
+            {
+                AddComponent(Activator.CreateInstance(ty), ty);
+            }
+            catch (MissingMethodException e)
+            {
+                throw new Exception(string.Format("Please provide default constructor for {0}", ty));
+            }
         }
 
         public bool HasComponent(Type ty)

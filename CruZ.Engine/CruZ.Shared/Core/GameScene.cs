@@ -61,10 +61,11 @@ namespace CruZ
         public void WriteJson(JsonWriter writer, JsonSerializer serializer)
         {
             writer.WriteStartObject();
-            foreach (var e in _entities)
-            {
-                if (string.IsNullOrEmpty(e.NameId)) continue;
-                writer.WritePropertyName(e.NameId);
+            foreach(var template in _templates) 
+            { 
+                var e = template.Entity;
+
+                writer.WritePropertyName(template.NameId);
                 serializer.Serialize(writer, e);
             }
             writer.WriteEnd();

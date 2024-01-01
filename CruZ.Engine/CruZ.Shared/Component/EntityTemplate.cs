@@ -27,6 +27,8 @@ namespace CruZ.Components
 
             evComp.OnDraw += Draw;
             evComp.OnUpdate += Update;
+
+            _entity.NameId = NameId;
         }
 
         public virtual void Update(GameTime gameTime) { }

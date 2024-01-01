@@ -9,6 +9,8 @@ namespace CruZ.Test
     {
         class Template1 : EntityTemplate
         {
+            public Template1(string name) : base(name) { }
+
             public override void GetInstruction(IBuildInstruction buildInstruction)
             {
                 buildInstruction.RequireComponent(typeof(SpriteComponent));
@@ -17,46 +19,72 @@ namespace CruZ.Test
 
         class TemplateParent : EntityTemplate
         {
+            public TemplateParent(string name) : base(name) { }
+
             public override void GetInstruction(IBuildInstruction buildInstruction)
             {
-                buildInstruction.AddChildTemplate(new Template1());
-                buildInstruction.AddChildTemplate(new Template1());
+                buildInstruction.AddChildTemplate(new Template1("child1"));
+
+                var c2 = new Template1("child2");
+                buildInstruction.AddChildTemplate(c2);
+
+                buildInstruction.SetTarget(c2);
+                buildInstruction.RequireComponent(typeof(AnimatedSpriteComponent));
+
+                buildInstruction.AddChildTemplate(new Template1("child3"));
             }
         }
 
         [TestMethod]
-        public void TemplateBuiderTest()
+        public void TestRequireComponentInstruction()
         {
             World world = new WorldBuilder().Build();
 
             var builder = new EntityBuilder(world);
 
-            var root = new Template1();
+            var root = new Template1("root");
             var d = builder.BuildFrom(root);
 
             Assert.IsTrue(d[root].HasComponent(typeof(SpriteComponent)));
         }
 
         [TestMethod]
-        public void TemplateBuiderParentTest()
+        public void TestParentAndChild()
         {
             World world = new WorldBuilder().Build();
 
             var builder = new EntityBuilder(world);
 
-            var root = new TemplateParent();
+            var root = new TemplateParent("root");
             var d = builder.BuildFrom(root);
 
-            Assert.IsTrue(d.Count == 3);
+            Assert.IsTrue(d.Count == 4);
 
-            Assert.IsTrue(d[root].Parent == null);
+            foreach (var template in d.Keys)
+            {
+                var e = d[template];
 
-            var rootEntity = d[root];
-            d.Remove(root);
+                if(template.NameId == "root")
+                {
+                    Assert.IsTrue(e.Parent == null);
+                }
 
-            var child = d.First().Value;
-            Assert.IsTrue(child.Parent == rootEntity);
-            Assert.IsTrue(child.HasComponent(typeof(SpriteComponent)));
+                List<string> c = ["child1", "child2"];
+                if (c.Contains(template.NameId))
+                {
+                    Assert.IsTrue(e.Parent.NameId == "root");
+                }
+
+                if(template.NameId == "child2")
+                {
+                    Assert.IsTrue(e.HasComponent(typeof(AnimatedSpriteComponent)));
+                }
+
+                if(template.NameId == "child3")
+                {
+                    Assert.IsTrue(e.Parent.NameId == "child2");
+                }
+            }
         }
     }
 }
