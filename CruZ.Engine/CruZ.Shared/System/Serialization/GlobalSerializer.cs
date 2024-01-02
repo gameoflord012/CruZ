@@ -20,21 +20,42 @@ namespace CurZ.Serialization
         public static void SerializeToFile(object o, string filePath)
         {
             var json = JsonConvert.SerializeObject(o, _settings);
-            var writer = Helper.CreateOrOpenFilePath(filePath);
-
-            writer.WriteLine(json);
-            writer.Flush();
+            using (var writer = Helper.CreateOrOpenFilePath(filePath, false))
+            {
+                writer.WriteLine(json);
+                writer.Flush();
+            }
         }
 
-        public static object? DeserializeFromFile(string filePath, Type ty)
+        public static T? DeserializeFromFile<T>(string uri) where T : class
+        {
+            return DeserializeFromFile(uri, typeof(T)) as T;
+        }
+
+        public static object? DeserializeFromFile(string uri, Type ty)
         {
 
-            if (!File.Exists(filePath)) return default;
+            if (!File.Exists(uri)) return null;
 
-            using (var reader = new StreamReader(filePath))
+            string json;
+
+            using (var reader = new StreamReader(uri))
             {
-                var json = reader.ReadToEnd();
+                json = reader.ReadToEnd();
+            }
+
+            return Deserialize(json, ty);
+        }
+
+        public static object? Deserialize(string json, Type ty)
+        {
+            try
+            {
                 return JsonConvert.DeserializeObject(json, ty, _settings);
+            }
+            catch
+            {
+                return null;
             }
         }
 

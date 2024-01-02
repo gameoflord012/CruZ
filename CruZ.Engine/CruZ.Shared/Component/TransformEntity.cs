@@ -1,13 +1,12 @@
-﻿using Microsoft.Xna.Framework;
+﻿using CruZ.Utility;
+using Microsoft.Xna.Framework;
 using MonoGame.Extended;
 using MonoGame.Extended.Entities;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Drawing;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
 
 namespace CruZ.Components
 {
@@ -17,7 +16,7 @@ namespace CruZ.Components
         public Entity           Entity      { get => _entity; }
         public TransformEntity? Parent      { get => _parent;       set => _parent = value; }
         public bool             IsActive    { get => _isActive;     set => _isActive = value; }
-        public string           NameId = "";
+        public string           NameId      = "";
 
         public TransformEntity(Entity e)
         {
@@ -25,61 +24,61 @@ namespace CruZ.Components
             _idToTransformEntity[_entity.Id] = this;
         }
 
-        public object GetComponent(Type ty)
-        {
-            if (!_addedComponents.ContainsKey(ty))
-                throw new(string.Format("Entity doesn't contain {0}", ty));
-
-            return _addedComponents[ty];
-        }
-
         public T GetComponent<T>()
         {
+            
             return (T)GetComponent(typeof(T));
         }
 
-        public void AddComponent<T>(T component) where T : class
+        public object GetComponent(Type ty)
         {
-            AddComponent(component, typeof(T));
+            if (!ComponentManager.IsComponent(ty))
+                throw new(string.Format("Type {0} is not component type", ty));
+
+            IComponent com = CreateInstanceFrom(ty);
+
+            if (!_addedComponents.ContainsKey(com.ComponentType))
+                throw new(string.Format("Entity doesn't contain {0}", ty));
+
+            return _addedComponents[com.ComponentType];
         }
 
-        public void AddComponent(object component, Type ty)
+        public void AddComponent(IComponent component)
         {
-            _entity.Attach(component, ty);
+            _entity.Attach(component, component.ComponentType);
 
             _comToEntity[component] = this;
-            _addedComponents.Add(ty, component);
+            _addedComponents[component.ComponentType] = component;
 
-            if (component is IComponentAddedCallback)
-            {
-                var callback = (IComponentAddedCallback)component;
-                callback.OnComponentAdded(this);
-            }
+            ProcessCallback(component);
         }
 
         public void RequireComponent(Type ty)
         {
             if (HasComponent(ty)) return;
 
-            try
-            {
-                AddComponent(Activator.CreateInstance(ty), ty);
-            }
-            catch (MissingMethodException e)
-            {
-                throw new Exception(string.Format("Please provide default constructor for {0}", ty));
-            }
+            var comInstance = CreateInstanceFrom(ty);
+            AddComponent(comInstance);
         }
 
         public bool HasComponent(Type ty)
         {
-            return _entity.Has(ty);
+            return _entity.Has(CreateInstanceFrom(ty).ComponentType);
         }
 
         public void RemoveFromWorld()
         {
             IsActive = false;
             ECS.World.DestroyEntity(_entity);
+        }
+
+        private void ProcessCallback(IComponent component)
+        {
+            if (component is IComponentReceivedCallback)
+            {
+                var callback = (IComponentReceivedCallback)component;
+                callback.OnComponentAdded(this);
+            }
         }
 
 #pragma warning disable CS8767 
@@ -90,15 +89,16 @@ namespace CruZ.Components
         }
 #pragma warning restore CS8767 
 
-        Entity _entity;
-        TransformEntity? _parent;
-        bool _isActive = false;
+        Entity                      _entity;
+        TransformEntity?            _parent;
+        bool                        _isActive = false;
+        Transform                   _transform = new();
+        Dictionary<Type, object>    _addedComponents = new();
 
-        Transform _transform = new();
-        Dictionary<Type, object> _addedComponents = new();
-
-        private static Dictionary<int, TransformEntity> _idToTransformEntity = new();
-        private static Dictionary<object, TransformEntity> _comToEntity = new();
+        private static IComponent CreateInstanceFrom(Type ty)
+        {
+            return (IComponent)Helper.GetUnitializeObject(ty);
+        }
 
         public static TransformEntity GetEntity(object component)
         {
@@ -112,9 +112,9 @@ namespace CruZ.Components
             }
         }
 
-        public static KeyValuePair<Type, object>[] GetAllComponents(TransformEntity e)
+        public static object[] GetAllComponents(TransformEntity e)
         {
-            return e._addedComponents.ToArray();
+            return e._addedComponents.Values.ToArray();
         }
 
         public static TransformEntity GetTransformEntity(int eId)
@@ -122,5 +122,9 @@ namespace CruZ.Components
             Trace.Assert(_idToTransformEntity.ContainsKey(eId));
             return _idToTransformEntity[eId];
         }
+
+        private static Dictionary<int, TransformEntity>     _idToTransformEntity = new();
+        private static Dictionary<object, TransformEntity>  _comToEntity = new();
+
     }
 }

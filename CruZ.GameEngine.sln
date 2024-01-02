@@ -37,7 +37,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CruZ", "CruZ", "{06F0198E-A
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpriteFactory", "ThirdParty\SpriteFactory\SpriteFactory\SpriteFactory.csproj", "{8E0B6D2E-40D6-401F-8D4C-BB1EDEBE2CE5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CruZ.Test", "CruZ.Engine\CruZ.Test\CruZ.Test.csproj", "{ED9250E7-68A6-4288-A6C4-9122AC9BC2D0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CruZ.Test", "CruZ.Engine\CruZ.Test\CruZ.Test.csproj", "{ED9250E7-68A6-4288-A6C4-9122AC9BC2D0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -2,12 +2,17 @@
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
 using MonoGame.Extended.Sprites;
+using System;
 using System.Diagnostics;
 
 namespace CruZ.Components
 {
-    public class AnimatedSpriteComponent : ISpriteBatchDrawable, IUpdateable, IComponentAddedCallback
+    public class AnimatedSpriteComponent : IComponent, ISpriteBatchDrawable, IComponentReceivedCallback
     {
+        public SpriteSheet      SpriteSheed     { get => _spriteSheet; set => _spriteSheet = value; }
+        public AnimatedSprite   AnimatedSprite  { get => _animatedSprite; }
+        public Type             ComponentType   => throw new NotImplementedException();
+
         public AnimatedSpriteComponent() { }
 
         public AnimatedSpriteComponent(SpriteSheet spriteShit)
@@ -37,8 +42,7 @@ namespace CruZ.Components
 
         AnimatedSprite _animatedSprite;
         SpriteSheet _spriteSheet;
-        public SpriteSheet SpriteSheed { get => _spriteSheet; set => _spriteSheet = value; }
-        public AnimatedSprite AnimatedSprite { get => _animatedSprite; }
+
         private TransformEntity? _attachedEntity;
     }
 }

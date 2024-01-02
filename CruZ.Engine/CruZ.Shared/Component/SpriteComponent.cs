@@ -1,6 +1,8 @@
-﻿using CruZ.Utility;
+﻿using CruZ.Resource;
+using CruZ.Utility;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 using System.Diagnostics;
 using System.Reflection.Metadata;
 using System.Xml.Serialization;
@@ -8,12 +10,13 @@ using static System.Formats.Asn1.AsnWriter;
 
 namespace CruZ.Components
 {
-    public partial class SpriteComponent : ISpriteBatchDrawable, IComponentAddedCallback
+    public partial class SpriteComponent : IComponent, ISpriteBatchDrawable, IComponentReceivedCallback
     {
         public SpriteComponent() { }
         public SpriteComponent(string resourceName) { LoadTexture(resourceName); }
 
-        public Texture2D? Texture { get => _texture; set => _texture = value; }
+        public Type         ComponentType   => typeof(SpriteComponent);
+        public Texture2D?   Texture         { get => _texture; set => _texture = value; }
 
         public void LoadTexture(string resourceName)
         {

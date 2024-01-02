@@ -1,6 +1,6 @@
 ﻿namespace CruZ.Components
 {
-    interface IComponentAddedCallback
+    public interface IComponentReceivedCallback
     {
         public void OnComponentAdded(TransformEntity entity);
     }

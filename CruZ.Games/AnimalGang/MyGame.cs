@@ -1,7 +1,5 @@
 ﻿using CruZ.Components;
-using Microsoft.Xna.Framework.Graphics;
-using MonoGame.Extended.Entities;
-
+using CruZ.Resource;
 namespace CruZ.Game
 {
     class MyGame : GameApplication
@@ -10,8 +8,15 @@ namespace CruZ.Game
         {
             base.Initialize();
 
-            _charTemplate = new MainCharacter();
-            ECS.BuildTemplate(_charTemplate);
+            var scene = new GameScene();
+            var e = ECS.CreateEntity();
+            e.AddComponent(new MainCharacter());
+            scene.AddEntity(e);
+            ResourceManager.CreateResource("scene1.uri", scene, true);
+            e.RemoveFromWorld();
+
+            scene = ResourceManager.LoadResource<GameScene>("scene1.uri");
+            SceneManager.SetActive(scene);
         }
 
         MainCharacter _charTemplate;

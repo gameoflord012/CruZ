@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace CruZ.Components
 {
-    static class EntityExtension
+    public static class EntityExtension
     {
         public static IEnumerable<T> GetAllComponents<T>(this EntitySystem system, ComponentMapper<T> mapper) where T : class
         {

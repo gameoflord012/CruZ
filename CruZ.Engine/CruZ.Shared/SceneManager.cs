@@ -1,30 +1,30 @@
-﻿using Assimp;
-using CruZ.Components;
-using CruZ.Serialization;
+﻿using CruZ.Components;
 using CruZ.Utility;
-using Newtonsoft.Json;
 using System;
-using System.IO;
+using System.Collections.Generic;
 
 namespace CruZ
 {
     public static class SceneManager
     {
-        public static GameScene? GetSceneFromFile(string scenePath)
-        {
-            using(var fileReader = new StreamReader(scenePath))
-            {
-                var json = fileReader.ReadToEnd();
-                GameScene? scene = JsonConvert.DeserializeObject<GameScene>(json, _settings);
+        public static event Action<GameScene>? OnSceneLoaded;
+        public static event Action<GameScene>? OnCurrentSceneUnLoaded;
 
-                if (scene == null) return null;
+        public static GameScene? CurrentScene { get => _currentScene; }
 
-                scene.Name = Path.GetFileName(scenePath);
-                return scene;
-            }
-        }
+        //public static GameScene GetSceneResource(string uri)
+        //{
+        //    var scene = ResourceManager.LoadResource<GameScene>(uri);
+        //    if (scene == null)
+        //    {
+        //        scene = _avaiableScene[uri];
+        //        ResourceManager.CreateResource(uri, scene);
+        //    }
 
-        public static void SetSceneActive(GameScene scene)
+        //    return scene;
+        //}
+
+        public static void SetActive(GameScene scene)
         {
             if (_currentScene != null)
             {
@@ -33,16 +33,16 @@ namespace CruZ
 
             _currentScene = scene;
 
-            foreach (var e in scene.Entities)
+            foreach (var e in _currentScene.Entities)
             {
                 LoadEntity(e);
             }
 
-            scene.OnEntityAdded += LoadEntity;
-            scene.OnEntityRemoved += UnloadEntity;
+            _currentScene.OnEntityAdded += LoadEntity;
+            _currentScene.OnEntityRemoved += UnloadEntity;
 
             OnSceneLoaded?.Invoke(_currentScene);
-            Logging.PushMsg(string.Format("Scene {0} Loaded", scene.Name));
+            Logging.PushMsg(string.Format("Scene {0} Loaded", _currentScene.Name));
         }
 
         public static void UnactivateCurrent()
@@ -78,34 +78,6 @@ namespace CruZ
             e.RemoveFromWorld();
         }
 
-        public static void SaveScene(GameScene? scene, string savePath)
-        {
-            if(scene == null)
-            {
-                Logging.PushMsg("No scene to save");
-                return;
-            }
-            using var writer = new StreamWriter(savePath, false);
-            var json = JsonConvert.SerializeObject(scene, _settings);
-            writer.Write(json);
-            writer.Flush();
-
-            Logging.PushMsg("Scene {0} saved", scene.Name);
-        }
-
-        static SceneManager()
-        {
-            _settings = new();
-            _settings.Converters.Add(new SerializableJsonConverter());
-            _settings.Formatting = Newtonsoft.Json.Formatting.Indented;
-        }
-
-        static JsonSerializerSettings _settings;
         static GameScene? _currentScene;
-         
-        public static GameScene? CurrentScene { get => _currentScene; }
-
-        public static event Action<GameScene>? OnSceneLoaded;
-        public static event Action<GameScene>? OnCurrentSceneUnLoaded;
     }
 }

@@ -21,9 +21,10 @@ namespace CruZ
                 AddSystem(new AnimatedSystem()).
                 AddSystem(new PhysicSystem()).
                 AddSystem(new EntityEventSystem()).
+                AddSystem(new EntityScriptSystem()).
                 Build();
 
-            _entityBuilder = new(_world);
+            //_entityBuilder = new(_world);
         }
 
         private void Update(GameTime gameTime)
@@ -37,7 +38,7 @@ namespace CruZ
         }
 
         World _world;
-        EntityBuilder _entityBuilder;
+        //EntityBuilder _entityBuilder;
 
         public static World World { get => Instance._world; }
         
@@ -46,9 +47,9 @@ namespace CruZ
             return World.CreateTransformEntity();
         }
 
-        public static Dictionary<EntityTemplate, TransformEntity> BuildTemplate(EntityTemplate template)
-        {
-            return Instance._entityBuilder.BuildFrom(template);
-        }
+        //public static Dictionary<EntityTemplate, TransformEntity> BuildTemplate(EntityTemplate template)
+        //{
+        //    return Instance._entityBuilder.BuildFrom(template);
+        //}
     }
 }

@@ -4,7 +4,7 @@ using System;
 
 namespace CruZ.Serialization
 {
-    interface ISerializable
+    public interface ISerializable
     {
         public ISerializable? CreateDefault();
         public void ReadJson(JsonReader reader, JsonSerializer serializer);

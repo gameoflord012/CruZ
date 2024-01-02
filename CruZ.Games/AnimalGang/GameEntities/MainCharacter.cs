@@ -5,30 +5,24 @@ using System.Collections.Generic;
 
 namespace CruZ.Game
 {
-    public class MainCharacter : EntityTemplate
+    public class MainCharacter : EntityScript, IComponentReceivedCallback
     {
-        public override void GetInstruction(IBuildInstruction instruction)
+        public void OnComponentAdded(TransformEntity entity)
         {
-            instruction.RequireComponent(typeof(SpriteComponent));
-        }
+            _e = entity;
+            _e.RequireComponent(typeof(SpriteComponent));
+            _sprite = _e.GetComponent<SpriteComponent>();
 
-        public override void Initialize(TransformEntity relativeRoot)
-        {
-            base.Initialize(relativeRoot);
-
-            Entity.IsActive = true;
-
-            _sprite = Entity.GetComponent<SpriteComponent>();
             _sprite.LoadTexture("image");
         }
 
-        public override void Update(GameTime gameTime)
+        protected override void OnUpdate(GameTime gameTime)
         {
-            base.Update(gameTime);
+            _e.Transform.Position += Microsoft.Xna.Framework.Vector3.Up * 6;
 
-            Entity.Transform.Position += Microsoft.Xna.Framework.Vector3.Up * 6;
         }
 
         SpriteComponent _sprite;
+        TransformEntity _e;
     }
 }

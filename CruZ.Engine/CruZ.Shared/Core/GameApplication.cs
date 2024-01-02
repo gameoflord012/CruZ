@@ -33,20 +33,20 @@ namespace CruZ
         protected virtual void  EndRun() { }
         protected virtual void  LoadContent() { }
 
-        public void SetActiveTemplate(string templateFilePath)
-        {
-            if (!_avaiableTemplates.ContainsKey(templateFilePath))
-                throw new(string.Format("There is is {0} template", templateFilePath));
+        //public void SetActiveTemplate(string templateFilePath)
+        //{
+        //    if (!_avaiableTemplates.ContainsKey(templateFilePath))
+        //        throw new(string.Format("There is is {0} template", templateFilePath));
 
-            _activeTemplate = _avaiableTemplates[templateFilePath];
-        }
+        //    _activeTemplate = _avaiableTemplates[templateFilePath];
+        //}
 
-        public void AddAvaiableTemplate(string filePath, EntityTemplate template)
-        {
-            _avaiableTemplates[filePath] = template;
-        }
+        //public void AddAvaiableTemplate(string filePath, EntityTemplate template)
+        //{
+        //    _avaiableTemplates[filePath] = template;
+        //}
 
-        private EntityTemplate                      _activeTemplate;
-        private Dictionary<string, EntityTemplate>  _avaiableTemplates;
+        //private EntityTemplate                      _activeTemplate;
+        //private Dictionary<string, GameScene>  _sceneCaches;
     }
 }

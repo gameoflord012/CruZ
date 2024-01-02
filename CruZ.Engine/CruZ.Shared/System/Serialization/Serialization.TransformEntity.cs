@@ -13,9 +13,11 @@ namespace CruZ.Components
 {
     public partial class TransformEntity : ISerializable
     {
-        public void ReadJson(JsonReader reader, JsonSerializer serializer)
+        public void ReadJson(JsonReader reader, JsonSerializer serializer) 
         {
-            var jObject = JObject.Load(reader);
+            JObject jObject;
+
+            jObject = JObject.Load(reader);
 
             Transform.Position = jObject["position"].ToObject<Microsoft.Xna.Framework.Vector3>(serializer);
             Transform.Scale = jObject["scale"].ToObject<Microsoft.Xna.Framework.Vector3>(serializer);
@@ -27,8 +29,7 @@ namespace CruZ.Components
                 Type comTy = Type.GetType(comProp.Name);
                 object comValue = comProp.Value.ToObject(comTy, serializer);
 
-                AddComponent(comValue, comTy);
-
+                AddComponent((IComponent)comValue);
             }
         }
 
@@ -45,11 +46,11 @@ namespace CruZ.Components
                 writer.WritePropertyName("components");
                 writer.WriteStartArray();
                 {
-                    foreach (var pair in GetAllComponents(this))
+                    foreach (var com in GetAllComponents(this))
                     {
                         writer.WriteStartObject();
-                        writer.WritePropertyName(pair.Key.AssemblyQualifiedName);
-                        serializer.Serialize(writer, pair.Value, pair.Key);
+                        writer.WritePropertyName(com.GetType().AssemblyQualifiedName);
+                        serializer.Serialize(writer, com, com.GetType());
                         writer.WriteEnd();
                     }
                 }
