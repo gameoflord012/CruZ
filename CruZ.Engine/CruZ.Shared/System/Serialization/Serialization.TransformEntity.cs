@@ -21,13 +21,11 @@ namespace CruZ.Components
 
             Transform.Position = jObject["position"].ToObject<Vector3>(serializer);
             Transform.Scale = jObject["scale"].ToObject<Vector3>(serializer);
-            IEnumerable<JObject> components = jObject["components"].Cast<JObject>();
 
-            foreach (var comObj in components)
+            foreach (var com in jObject["components"])
             {
-                var comProp = comObj.Properties().First();
-                Type comTy = Type.GetType(comProp.Name);
-                object comValue = comProp.Value.ToObject(comTy, serializer);
+                var comTy = Type.GetType(com["com-type"].Value<string>()) ?? throw new("Incorrect type or can't find it"); ;
+                object comValue = com["com-data"].ToObject(comTy, serializer);
 
                 AddComponent((IComponent)comValue);
             }
@@ -49,7 +47,10 @@ namespace CruZ.Components
                     foreach (var com in GetAllComponents(this))
                     {
                         writer.WriteStartObject();
-                        writer.WritePropertyName(com.GetType().AssemblyQualifiedName);
+                        writer.WritePropertyName("com-type");
+                        writer.WriteValue(com.GetType().AssemblyQualifiedName);
+
+                        writer.WritePropertyName("com-data");
                         serializer.Serialize(writer, com, com.GetType());
                         writer.WriteEnd();
                     }

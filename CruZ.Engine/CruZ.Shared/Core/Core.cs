@@ -60,8 +60,14 @@ namespace CruZ
         protected override void Draw(GameTime gameTime)
         {
             base.Draw(gameTime);
+            InternalDraw(gameTime);
+        }
+
+        private void InternalDraw(GameTime gameTime)
+        {
             GraphicsDevice.Clear(Color.Gray);
             OnDraw?.Invoke(gameTime);
+            OnLateDraw?.Invoke(gameTime);
         }
 
         private GraphicsDeviceManager _graphics;

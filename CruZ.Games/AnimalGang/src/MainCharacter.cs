@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 
-namespace CruZ.Game
+namespace CruZ.Games.AnimalGang
 {
     public class MainCharacter : EntityScript, IComponentReceivedCallback
     {

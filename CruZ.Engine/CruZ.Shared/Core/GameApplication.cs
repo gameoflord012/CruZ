@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Entities;
 using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace CruZ
 {
@@ -21,6 +22,7 @@ namespace CruZ
             Core.OnEndRun       += EndRun;
             Core.OnExit         += Exit;
             Core.OnDraw         += Draw;
+            Core.OnLateDraw     += LateDraw;
 
             Core.Instance.Run();
         }
@@ -29,6 +31,7 @@ namespace CruZ
         public virtual void Update(GameTime gameTime) { }
 
         protected virtual void  Draw(GameTime gameTime) { }
+        protected virtual void  LateDraw(GameTime gameTime) { }
         protected virtual void  Exit(object sender, EventArgs args) { }
         protected virtual void  EndRun() { }
         protected virtual void  LoadContent() { }

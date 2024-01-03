@@ -1,6 +1,7 @@
 ﻿using CruZ.UI;
 using CurZ;
 using CurZ.Editor;
+using CurZ.Serialization;
 using ImGuiNET;
 using Microsoft.Xna.Framework;
 
@@ -55,7 +56,7 @@ namespace CruZ.Editor
             }
         }
 
-        protected override void Draw(GameTime gameTime)
+        protected override void LateDraw(GameTime gameTime)
         {
             _imgui.BeforeLayout(gameTime);
 

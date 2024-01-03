@@ -15,12 +15,13 @@ namespace CruZ
         private static Core? _instance;
         public static Core Instance { get => _instance ??= new Core(); }
 
-        public static event ActionDelegate? OnInitialize;
-        public static event ActionDelegate? OnLoadContent;
-        public static event ActionDelegate? OnEndRun;
-        public static event OnExitingDelegate? OnExit;
-        public static event CruZ_UpdateDelegate? OnUpdate;
-        public static event CruZ_UpdateDelegate? OnDraw;
+        public static event Action? OnInitialize;
+        public static event Action? OnLoadContent;
+        public static event Action? OnEndRun;
+        public static event Action<Object, EventArgs>? OnExit;
+        public static event Action<GameTime>? OnUpdate;
+        public static event Action<GameTime>? OnDraw;
+        public static event Action<GameTime>? OnLateDraw;
 
         public static void ChangeWindowSize(int width, int height)
         {

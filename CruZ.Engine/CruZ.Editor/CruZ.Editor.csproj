@@ -9,6 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\CruZ.Games\AnimalGang\Game.AnimalGang.csproj" />
     <ProjectReference Include="..\CruZ.Desktop.Template\CurZ.Desktop.Template.csproj" />
     <ProjectReference Include="..\CruZ.Wrapper.ImGui\CruZ.UI.csproj" />
   </ItemGroup>
