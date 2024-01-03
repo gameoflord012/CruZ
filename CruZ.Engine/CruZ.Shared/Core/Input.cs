@@ -1,11 +1,15 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+using System.ComponentModel;
 
 namespace CruZ
 {
-    public class MainInput
+    public class Input
     {
-        public MainInput()
+        static Input? _instance;
+        public static Input Instance { get => _instance ??= new Input(); }
+
+        public Input()
         {
             Core.OnUpdate += InputUpdate;
         }
@@ -26,6 +30,6 @@ namespace CruZ
         MouseState _curMouseState;
         KeyboardState _keyboardState;
 
-        public KeyboardState KeyboardState { get => _keyboardState; }
+        public static KeyboardState KeyboardState { get => Instance._keyboardState; }
     }
 }

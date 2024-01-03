@@ -1,7 +1,6 @@
 ﻿using CruZ.Components;
 using Microsoft.Xna.Framework;
-using System;
-using System.Collections.Generic;
+using Microsoft.Xna.Framework.Input;
 
 namespace CruZ.Game
 {
@@ -18,11 +17,30 @@ namespace CruZ.Game
 
         protected override void OnUpdate(GameTime gameTime)
         {
-            _e.Transform.Position += Microsoft.Xna.Framework.Vector3.Up * 6;
+            Vector3 dir = Vector3.Zero;
 
+            if(Input.KeyboardState.IsKeyDown(Keys.A))
+            {
+                dir += new Vector3(-1, 0);
+            }
+            if (Input.KeyboardState.IsKeyDown(Keys.D))
+            {
+                dir += new Vector3(1, 0);
+            }
+            if (Input.KeyboardState.IsKeyDown(Keys.S))
+            {
+                dir += new Vector3(0, 1);
+            }
+            if (Input.KeyboardState.IsKeyDown(Keys.W))
+            {
+                dir += new Vector3(0, -1);
+            }
+
+            _e.Transform.Position += dir * speed;
         }
 
         SpriteComponent _sprite;
         TransformEntity _e;
+        float speed = 6;
     }
 }

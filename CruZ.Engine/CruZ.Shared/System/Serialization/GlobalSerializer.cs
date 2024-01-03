@@ -27,15 +27,18 @@ namespace CurZ.Serialization
             }
         }
 
-        public static T? DeserializeFromFile<T>(string uri) where T : class
+        public static T DeserializeFromFile<T>(string uri) where T : class
         {
-            return DeserializeFromFile(uri, typeof(T)) as T;
+            return (T)DeserializeFromFile(uri, typeof(T));
         }
 
-        public static object? DeserializeFromFile(string uri, Type ty)
+        public static object DeserializeFromFile(string uri, Type ty)
         {
 
-            if (!File.Exists(uri)) return null;
+            if (!File.Exists(uri))
+            {
+                throw new(string.Format("deserialize file {0} not exist", uri));
+            }
 
             string json;
 
@@ -45,18 +48,12 @@ namespace CurZ.Serialization
             }
 
             return Deserialize(json, ty);
+
         }
 
-        public static object? Deserialize(string json, Type ty)
+        public static object Deserialize(string json, Type ty)
         {
-            try
-            {
-                return JsonConvert.DeserializeObject(json, ty, _settings);
-            }
-            catch
-            {
-                return null;
-            }
+            return JsonConvert.DeserializeObject(json, ty, _settings);
         }
 
         static JsonSerializerSettings _settings;

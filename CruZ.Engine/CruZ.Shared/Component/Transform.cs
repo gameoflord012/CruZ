@@ -8,8 +8,8 @@ namespace CruZ.Components
     {
         public Transform()
         {
-            _position = Microsoft.Xna.Framework.Vector3.Zero;
-            _scale = Microsoft.Xna.Framework.Vector3.One;
+            _position = Vector3.Zero;
+            _scale = Vector3.One;
         }
 
         [JsonIgnore]
@@ -18,10 +18,10 @@ namespace CruZ.Components
         public Matrix TranslateMatrix { get => Matrix.CreateTranslation(_position); }
         [JsonIgnore]
         public Matrix ScaleMatrix { get => Matrix.CreateScale(_scale); }
-        public Microsoft.Xna.Framework.Vector3 Position { get => _position; set => _position = value; }
-        public Microsoft.Xna.Framework.Vector3 Scale { get => _scale; set => _scale = value; }
+        public Vector3 Position { get => _position; set => _position = value; }
+        public Vector3 Scale { get => _scale; set => _scale = value; }
 
-        Microsoft.Xna.Framework.Vector3 _position;
-        Microsoft.Xna.Framework.Vector3 _scale;
+        Vector3 _position;
+        Vector3 _scale;
     }
 }

@@ -20,6 +20,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)System\EntityScriptSystem.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System\Serialization\GlobalSerializer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System\Serialization\IAmResource.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Types\Vector3.cs" />
     <Compile Include="..\CruZ.Shared\Component\BuildInstruction.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Component\EntityBuilder.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Component\EntityEventComponent.cs" />
@@ -40,7 +41,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Types\IRunnable.cs" />
     <Compile Include="..\CruZ.Shared\Core\GameApplication.cs" />
     <Compile Include="..\CruZ.Shared\Core\ECS.cs" />
-    <Compile Include="..\CruZ.Shared\Core\MainInput.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Core\Input.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Core\Core.Static.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Core\GameScene.cs" />
     <Compile Include="..\CruZ.Shared\Core\Content.cs" />
@@ -55,6 +56,5 @@
     <Compile Include="$(MSBuildThisFileDirectory)System\Serialization\TransformEntityJsonConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System\Serialization\TransformJsonConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System\SpriteSystem.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Types\Vector3.cs" />
   </ItemGroup>
 </Project>
