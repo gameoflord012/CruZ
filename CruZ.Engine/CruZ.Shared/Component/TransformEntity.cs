@@ -26,11 +26,10 @@ namespace CruZ.Components
 
         public T GetComponent<T>()
         {
-            
             return (T)GetComponent(typeof(T));
         }
 
-        public object GetComponent(Type ty)
+        public object GetComponent(Type ty, bool createIfNotExist = false)
         {
             if (!ComponentManager.IsComponent(ty))
                 throw new(string.Format("Type {0} is not component type", ty));
@@ -38,13 +37,19 @@ namespace CruZ.Components
             IComponent com = CreateInstanceFrom(ty);
 
             if (!_addedComponents.ContainsKey(com.ComponentType))
+            {
                 throw new(string.Format("Entity doesn't contain {0}", ty));
+            }
 
             return _addedComponents[com.ComponentType];
+
         }
 
         public void AddComponent(IComponent component)
         {
+            if (HasComponent(component.ComponentType))
+                throw new Exception(string.Format("Component {0} already added", component));
+
             _entity.Attach(component, component.ComponentType);
 
             _comToEntity[component] = this;
@@ -53,13 +58,13 @@ namespace CruZ.Components
             ProcessCallback(component);
         }
 
-        public void RequireComponent(Type ty)
-        {
-            if (HasComponent(ty)) return;
+        //public void RequireComponent(Type ty)
+        //{
+        //    if (HasComponent(ty)) return;
 
-            var comInstance = CreateInstanceFrom(ty);
-            AddComponent(comInstance);
-        }
+        //    var comInstance = CreateInstanceFrom(ty);
+        //    AddComponent(comInstance);
+        //}
 
         public bool HasComponent(Type ty)
         {
@@ -74,10 +79,10 @@ namespace CruZ.Components
 
         private void ProcessCallback(IComponent component)
         {
-            if (component is IComponentReceivedCallback)
+            if (component is IComponentCallback)
             {
-                var callback = (IComponentReceivedCallback)component;
-                callback.OnComponentAdded(this);
+                var callback = (IComponentCallback)component;
+                callback.OnEntityChanged(this);
             }
         }
 

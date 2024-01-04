@@ -1,10 +1,10 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
+﻿//using Microsoft.Xna.Framework;
+//using Microsoft.Xna.Framework.Graphics;
 
-namespace CruZ.Components
-{
-	interface ISpriteBatchDrawable
-	{
-        public void Draw(SpriteBatch spriteBatch, Matrix transformMatrix);
-    }
-}
+//namespace CruZ.Components
+//{
+//	interface ISpriteBatchDrawable
+//	{
+//        public void Draw(SpriteBatch spriteBatch, Matrix transformMatrix);
+//    }
+//}

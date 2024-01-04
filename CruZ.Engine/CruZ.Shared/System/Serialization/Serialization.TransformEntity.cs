@@ -13,6 +13,8 @@ namespace CruZ.Components
 {
     public partial class TransformEntity : ISerializable
     {
+        public event Action OnDeserializationCompleted;
+
         public void ReadJson(JsonReader reader, JsonSerializer serializer) 
         {
             JObject jObject;
@@ -25,10 +27,13 @@ namespace CruZ.Components
             foreach (var com in jObject["components"])
             {
                 var comTy = Type.GetType(com["com-type"].Value<string>()) ?? throw new("Incorrect type or can't find it"); ;
-                object comValue = com["com-data"].ToObject(comTy, serializer);
+                object comData = com["com-data"].ToObject(comTy, serializer);
+                var iCom = (IComponent)comData;
 
-                AddComponent((IComponent)comValue);
+                AddComponent(iCom);
             }
+
+            OnDeserializationCompleted?.Invoke();
         }
 
         public void WriteJson(JsonWriter writer, JsonSerializer serializer)

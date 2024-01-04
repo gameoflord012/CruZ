@@ -1,5 +1,6 @@
 ﻿using CruZ.Serialization;
 using CruZ.Utility;
+using CurZ.Serialization;
 using Newtonsoft.Json;
 
 namespace CruZ.Editor
@@ -45,10 +46,13 @@ namespace CruZ.Editor
                 Logging.PushMsg("No scene to save");
                 return;
             }
-            using var writer = new StreamWriter(savePath, false);
-            var json = JsonConvert.SerializeObject(scene, _settings);
-            writer.Write(json);
-            writer.Flush();
+
+            //using var writer = new StreamWriter(savePath, false);
+            //var json = JsonConvert.SerializeObject(scene, _settings);
+            //writer.Write(json);
+            //writer.Flush();
+
+            GlobalSerializer.SerializeToFile(scene, savePath);
 
             Logging.PushMsg("Scene {0} saved", scene.Name);
         }

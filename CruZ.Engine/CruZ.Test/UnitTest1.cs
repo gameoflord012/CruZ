@@ -29,7 +29,7 @@
 //                buildInstruction.AddChildTemplate(c2);
 
 //                buildInstruction.SetTarget(c2);
-//                buildInstruction.RequireComponent(typeof(AnimatedSpriteComponent));
+//                buildInstruction.RequireComponent(typeof(AnimationComponent));
 
 //                buildInstruction.AddChildTemplate(new Template1("child3"));
 //            }
@@ -77,7 +77,7 @@
 
 //                if(template.AttachedEntity.NameId == "child2")
 //                {
-//                    Assert.IsTrue(e.HasComponent(typeof(AnimatedSpriteComponent)));
+//                    Assert.IsTrue(e.HasComponent(typeof(AnimationComponent)));
 //                }
 
 //                if(template.AttachedEntity.NameId == "child3")

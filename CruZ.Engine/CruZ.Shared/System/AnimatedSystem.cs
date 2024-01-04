@@ -7,27 +7,27 @@ using System;
 
 namespace CruZ.Systems
 {
-    class AnimatedSystem : EntitySystem, IDrawSystem, IUpdateSystem
+    class AnimatedSystem : EntitySystem, IUpdateSystem
     {
 #pragma warning disable CS8618
-        public AnimatedSystem() : base(Aspect.All(typeof(AnimatedSpriteComponent)))
+        public AnimatedSystem() : base(Aspect.All(typeof(AnimationComponent)))
         {
         }
 #pragma warning restore CS8618
 
         public override void Initialize(IComponentMapperService mapperService)
         {
-            _spriteRendererMapper = mapperService.GetMapper<AnimatedSpriteComponent>();
+            _spriteRendererMapper = mapperService.GetMapper<AnimationComponent>();
             _spriteBatch = new SpriteBatch(Core.Instance.GraphicsDevice);
         }
 
-        public void Draw(GameTime gameTime)
-        {
-            foreach (var animatedSprite in this.GetAllComponents(_spriteRendererMapper))
-            {
-                animatedSprite.Draw(_spriteBatch, Camera.Main.ViewMatrix());
-            }
-        }
+        //public void Draw(GameTime gameTime)
+        //{
+        //    foreach (var animatedSprite in this.GetAllComponents(_spriteRendererMapper))
+        //    {
+        //        animatedSprite.Draw(_spriteBatch, Camera.Main.ViewMatrix());
+        //    }
+        //}
 
         public virtual void Update(GameTime gameTime) 
         {
@@ -38,6 +38,6 @@ namespace CruZ.Systems
         }
 
         SpriteBatch _spriteBatch;
-        ComponentMapper<AnimatedSpriteComponent> _spriteRendererMapper;
+        ComponentMapper<AnimationComponent> _spriteRendererMapper;
     }
 }

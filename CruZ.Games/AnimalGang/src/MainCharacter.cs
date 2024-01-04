@@ -1,18 +1,27 @@
 ﻿using CruZ.Components;
+using CruZ.Resource;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+using MonoGame.Extended.Sprites;
+using System;
 
 namespace CruZ.Games.AnimalGang
 {
-    public class MainCharacter : EntityScript, IComponentReceivedCallback
+    public class MainCharacter : EntityScript, IComponentCallback
     {
-        public void OnComponentAdded(TransformEntity entity)
+        public void OnEntityChanged(TransformEntity entity)
         {
             _e = entity;
-            _e.RequireComponent(typeof(SpriteComponent));
-            _sprite = _e.GetComponent<SpriteComponent>();
+            _e.OnDeserializationCompleted += Initialize;
+        }
 
-            _sprite.LoadTexture("image");
+        private void Initialize()
+        {
+            _sprite = _e.GetComponent<SpriteComponent>();
+            _animatedSprite = _e.GetComponent<AnimationComponent>();
+
+            _animatedSprite.LoadSpriteSheet("PlayerWalk.sf");
+            _animatedSprite.Play("walking");
         }
 
         protected override void OnUpdate(GameTime gameTime)
@@ -36,9 +45,12 @@ namespace CruZ.Games.AnimalGang
                 dir += new Vector3(0, -1);
             }
 
+            _sprite.Flip = dir.X < 0;
+
             _e.Transform.Position += dir * speed;
         }
 
+        AnimationComponent _animatedSprite;
         SpriteComponent _sprite;
         TransformEntity _e;
         float speed = 6;

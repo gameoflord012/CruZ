@@ -12,7 +12,7 @@
     <MonoGameContentReference Include="$(MSBuildThisFileDirectory)Content\Content.mgcb" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="$(MSBuildThisFileDirectory)Component\AnimatedSpriteComponent.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Component\AnimationComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Component\ComponentManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Component\IComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helper.cs" />
@@ -26,7 +26,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Component\EntityEventComponent.cs" />
     <Compile Include="..\CruZ.Shared\Component\EntityScript.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)FunMath.cs" />
-    <Compile Include="..\CruZ.Shared\Component\Interface\IComponentReceivedCallback.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Component\Interface\IComponentCallback.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Component\Interface\ISpriteBatchDrawable.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Component\Interface\IUpdatable.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Component\PhysicBody.cs" />

@@ -1,4 +1,5 @@
-﻿using CruZ.Resource;
+﻿using CruZ.Components;
+using CruZ.Resource;
 namespace CruZ.Games.AnimalGang
 {
     class MyGame : GameApplication
@@ -9,6 +10,7 @@ namespace CruZ.Games.AnimalGang
 
             var scene = new GameScene();
             var e = ECS.CreateEntity();
+            e.AddComponent(new SpriteComponent());
             e.AddComponent(new MainCharacter());
             scene.AddEntity(e);
             ResourceManager.CreateResource("scene1.scene", scene, true);

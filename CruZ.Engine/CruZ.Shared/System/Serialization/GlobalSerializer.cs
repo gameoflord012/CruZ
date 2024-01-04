@@ -12,7 +12,7 @@ namespace CurZ.Serialization
         {
             _settings = new();
             _settings.Formatting = Formatting.Indented;
-            _settings.ReferenceLoopHandling = ReferenceLoopHandling.Serialize;
+            _settings.ReferenceLoopHandling = ReferenceLoopHandling.Error;
 
             _settings.Converters.Add(new SerializableJsonConverter());
         }
@@ -53,7 +53,14 @@ namespace CurZ.Serialization
 
         public static object Deserialize(string json, Type ty)
         {
-            return JsonConvert.DeserializeObject(json, ty, _settings);
+            var o = JsonConvert.DeserializeObject(json, ty, _settings);
+
+            if(o == null)
+            {
+                throw new(string.Format("Problem to deserialize \"{0}\" to type {1}", json, ty));
+            }
+
+            return o;
         }
 
         static JsonSerializerSettings _settings;

@@ -17,10 +17,10 @@ namespace CruZ
             Core.OnDraw += Draw;
 
             _world = new WorldBuilder().
+                AddSystem(new EntityEventSystem()).
                 AddSystem(new SpriteSystem()).
                 AddSystem(new AnimatedSystem()).
                 AddSystem(new PhysicSystem()).
-                AddSystem(new EntityEventSystem()).
                 AddSystem(new EntityScriptSystem()).
                 Build();
 

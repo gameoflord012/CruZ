@@ -1,6 +1,9 @@
 ﻿using CruZ.Resource;
 using CruZ.Utility;
 using CurZ.Serialization;
+using MonoGame.Extended.Content;
+using MonoGame.Extended.Serialization;
+using MonoGame.Extended.Sprites;
 using Newtonsoft.Json;
 using System;
 using System.IO;
@@ -45,6 +48,11 @@ namespace CruZ.Resource
 
         public static T LoadContent<T>(URI uri)
         {
+            if(typeof(T) == typeof(SpriteSheet))
+            {
+                return Core.Instance.Content.Load<T>(uri, new JsonContentLoader());
+            }
+
             return Core.Instance.Content.Load<T>(uri);
         }
 

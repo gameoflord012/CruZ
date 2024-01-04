@@ -18,6 +18,8 @@ namespace CruZ.Components
 
         public void Draw(GameTime gameTime)
         {
+            ProcessStartEvent();
+
             foreach (var entityEvent in this.GetAllComponents(_entityEventComponentMapper))
             {
                 entityEvent.InvokeOnDraw(gameTime);
@@ -26,12 +28,26 @@ namespace CruZ.Components
 
         public void Update(GameTime gameTime)
         {
+            ProcessStartEvent();
+
             foreach (var entityEvent in this.GetAllComponents(_entityEventComponentMapper))
             {
                 entityEvent.InvokeOnUpdate(gameTime);
             }
         }
 
+        public void ProcessStartEvent()
+        {
+            if (_isStartEventCalled) return;
+            _isStartEventCalled = true;
+
+            foreach (var entityEvent in this.GetAllComponents(_entityEventComponentMapper))
+            {
+                entityEvent.InvokeOnStart();
+            }
+        }
+
         private ComponentMapper<EntityEventComponent> _entityEventComponentMapper;
+        bool _isStartEventCalled = false;
     }
 }

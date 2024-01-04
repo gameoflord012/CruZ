@@ -1,38 +1,35 @@
 ﻿using CruZ.Resource;
-using CruZ.Utility;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Newtonsoft.Json;
 using System;
 using System.Diagnostics;
-using System.Reflection.Metadata;
-using System.Xml.Serialization;
-using static System.Formats.Asn1.AsnWriter;
 
 namespace CruZ.Components
 {
-    public partial class SpriteComponent : IComponent, ISpriteBatchDrawable, IComponentReceivedCallback
+    public partial class SpriteComponent : IComponent, IComponentCallback
     {
         public SpriteComponent() { }
         public SpriteComponent(string resourceName) { LoadTexture(resourceName); }
 
         public Type         ComponentType   => typeof(SpriteComponent);
+        [JsonIgnore]
         public Texture2D?   Texture         { get => _texture; set => _texture = value; }
+        
+        public Rectangle    SourceRectangle;
+        public Vector2      Origin;
+        public bool         Flip;
 
         public void LoadTexture(string resourceName)
         {
             _resourceName = resourceName;
-            Texture = ResourceManager.LoadContent<Texture2D>(resourceName);
 
-            //UpdateRectTransform();
+            if(!string.IsNullOrEmpty(resourceName))
+            {
+                SourceRectangle = Texture.Bounds;
+                Texture = ResourceManager.LoadContent<Texture2D>(resourceName);
+            }
         }
-
-        //private void UpdateRectTransform()
-        //{
-        //    if (_e == null) return;
-
-        //    _e.RectTransform.SetWidth((float)Texture.Width / MGWrapper.Viewport.Width * MGWrapper.VIRTUAL_WIDTH);
-        //    _e.RectTransform.SetHeight((float)Texture.Height / MGWrapper.Viewport.Height * MGWrapper.VIRTUAL_HEIGHT);
-        //}
 
         public virtual void Draw(SpriteBatch spriteBatch, Matrix viewMatrix)
         {
@@ -42,35 +39,31 @@ namespace CruZ.Components
                 return;
             }
 
-            //var scale = new Vector3(
-            //    _e.RectTransform.Size.X / Texture.Width,
-            //    _e.RectTransform.Size.Y / Texture.Height);
-
             Trace.Assert(_e != null);
 
-            spriteBatch.Begin(transformMatrix: 
-                _e.Transform.TotalMatrix * viewMatrix);
+            spriteBatch.Begin(
+                transformMatrix: _e.Transform.TotalMatrix * viewMatrix,
+                samplerState: SamplerState.PointClamp);
 
             spriteBatch.Draw(
                 Texture,
                 new Vector2(
-                    -Texture.Width / 2f * _e.Transform.Scale.X, 
-                    -Texture.Height / 2f * _e.Transform.Scale.Y),
-                sourceRectangle: null,
+                    -SourceRectangle.Width / 2f * _e.Transform.Scale.X, 
+                    -SourceRectangle.Height / 2f * _e.Transform.Scale.Y),
+                sourceRectangle: SourceRectangle,
                 Color.White,
                 rotation: 0,
-                origin: Vector2.Zero,
+                origin: Origin,
                 scale: new Vector2(_e.Transform.Scale.X, _e.Transform.Scale.Y),
-                effects: SpriteEffects.None,
+                effects: Flip ? SpriteEffects.FlipHorizontally : SpriteEffects.None,
                 layerDepth: 0);
 
             spriteBatch.End();
         }
 
-        public void OnComponentAdded(TransformEntity entity)
+        public void OnEntityChanged(TransformEntity entity)
         {
             _e = entity;
-            //UpdateRectTransform();
         }
 
         private Texture2D? _texture;
