@@ -29,7 +29,7 @@ namespace CruZ.Components
             return (T)GetComponent(typeof(T));
         }
 
-        public object GetComponent(Type ty, bool createIfNotExist = false)
+        public object GetComponent(Type ty)
         {
             if (!ComponentManager.IsComponent(ty))
                 throw new(string.Format("Type {0} is not component type", ty));

@@ -1,68 +1,78 @@
-﻿using CruZ.Serialization;
-using CruZ.Utility;
-using Newtonsoft.Json;
-using System;
-using System.IO;
+﻿//using CruZ.Serialization;
+//using CruZ.Utility;
+//using MonoGame.Extended.TextureAtlases;
+//using Newtonsoft.Json;
+//using System;
+//using System.IO;
 
-namespace CurZ.Serialization
-{
-    public static class GlobalSerializer
-    {
-        static GlobalSerializer()
-        {
-            _settings = new();
-            _settings.Formatting = Formatting.Indented;
-            _settings.ReferenceLoopHandling = ReferenceLoopHandling.Error;
+//namespace CurZ.Serialization
+//{
+//    public class GlobalSerializer : Serializer
+//    {
+//        //static GlobalSerializer()
+//        //{
+//        //    _settings = new();
+//        //    _settings.Formatting = Formatting.Indented;
+//        //    _settings.ReferenceLoopHandling = ReferenceLoopHandling.Error;
 
-            _settings.Converters.Add(new SerializableJsonConverter());
-        }
+//        //    _settings.Converters.Add(new SerializableJsonConverter());
+//        //}
 
-        public static void SerializeToFile(object o, string filePath)
-        {
-            var json = JsonConvert.SerializeObject(o, _settings);
-            using (var writer = Helper.CreateOrOpenFilePath(filePath, false))
-            {
-                writer.WriteLine(json);
-                writer.Flush();
-            }
-        }
+//        //public static void SerializeToFile(object o, string filePath)
+//        //{
+//        //    var json = JsonConvert.SerializeObject(o, _settings);
+//        //    using (var writer = Helper.CreateOrOpenFilePath(filePath, false))
+//        //    {
+//        //        writer.WriteLine(json);
+//        //        writer.Flush();
+//        //    }
+//        //}
 
-        public static T DeserializeFromFile<T>(string uri) where T : class
-        {
-            return (T)DeserializeFromFile(uri, typeof(T));
-        }
+//        //public static T DeserializeFromFile<T>(string uri) where T : class
+//        //{
+//        //    return (T)DeserializeFromFile(uri, typeof(T));
+//        //}
 
-        public static object DeserializeFromFile(string uri, Type ty)
-        {
+//        //public static object DeserializeFromFile(string uri, Type ty)
+//        //{
 
-            if (!File.Exists(uri))
-            {
-                throw new(string.Format("deserialize file {0} not exist", uri));
-            }
+//        //    if (!File.Exists(uri))
+//        //    {
+//        //        throw new(string.Format("deserialize file {0} not exist", uri));
+//        //    }
 
-            string json;
+//        //    string json;
 
-            using (var reader = new StreamReader(uri))
-            {
-                json = reader.ReadToEnd();
-            }
+//        //    using (var reader = new StreamReader(uri))
+//        //    {
+//        //        json = reader.ReadToEnd();
+//        //    }
 
-            return Deserialize(json, ty);
+//        //    return Deserialize(json, ty);
 
-        }
+//        //}
 
-        public static object Deserialize(string json, Type ty)
-        {
-            var o = JsonConvert.DeserializeObject(json, ty, _settings);
+//        //public static object Deserialize(string json, Type ty)
+//        //{
+//        //    object o;
 
-            if(o == null)
-            {
-                throw new(string.Format("Problem to deserialize \"{0}\" to type {1}", json, ty));
-            }
+//        //    try
+//        //    {
+//        //        o = JsonConvert.DeserializeObject(json, ty, _settings);
+//        //    }
+//        //    catch (JsonSerializationException e)
+//        //    {
+//        //        throw new JsonSerializationException(string.Format("can't deserialize data \"{0}\" to type {1}", json, ty), e);
+//        //    }
 
-            return o;
-        }
+//        //    if(o == null)
+//        //    {
+//        //        throw new(string.Format("Problem to deserialize \"{0}\" to type {1}", json, ty));
+//        //    }
 
-        static JsonSerializerSettings _settings;
-    }
-}
+//        //    return o;
+//        //}
+
+//        //static JsonSerializerSettings _settings;
+//    }
+//}

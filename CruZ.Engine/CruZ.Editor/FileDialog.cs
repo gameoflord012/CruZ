@@ -12,7 +12,7 @@ namespace CruZ.Editor
             OpenFileDialog openFileDialog = new();
 
             // Set properties for the OpenFileDialog
-            openFileDialog.InitialDirectory = ResourceManager.CONTENT_ROOT;
+            openFileDialog.InitialDirectory = ResourceManager.RESOURCE_ROOT;
             openFileDialog.Title = "Select a Scene";
             openFileDialog.Filter = "Scene File (*.scene)|*.scene"; // You can customize the file types allowed
             openFileDialog.Multiselect = true; // Set to true if you want to allow multiple file selection

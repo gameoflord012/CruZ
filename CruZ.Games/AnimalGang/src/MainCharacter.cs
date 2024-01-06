@@ -1,9 +1,6 @@
 ﻿using CruZ.Components;
-using CruZ.Resource;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
-using MonoGame.Extended.Sprites;
-using System;
 
 namespace CruZ.Games.AnimalGang
 {
@@ -20,8 +17,8 @@ namespace CruZ.Games.AnimalGang
             _sprite = _e.GetComponent<SpriteComponent>();
             _animatedSprite = _e.GetComponent<AnimationComponent>();
 
-            _animatedSprite.LoadSpriteSheet("PlayerWalk.sf");
-            _animatedSprite.Play("walking");
+            _animatedSprite.LoadSpriteSheet("anims/player-walk.sf");
+            _animatedSprite.Play("walk");
         }
 
         protected override void OnUpdate(GameTime gameTime)

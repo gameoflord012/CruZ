@@ -20,7 +20,10 @@
     <Compile Include="$(MSBuildThisFileDirectory)System\EntityScriptSystem.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System\Serialization\GlobalSerializer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System\Serialization\IAmResource.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)System\Serialization\Serializer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)System\Serialization\TextureAtlasJsonConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Types\Vector3.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)URI.cs" />
     <Compile Include="..\CruZ.Shared\Component\BuildInstruction.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Component\EntityBuilder.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Component\EntityEventComponent.cs" />

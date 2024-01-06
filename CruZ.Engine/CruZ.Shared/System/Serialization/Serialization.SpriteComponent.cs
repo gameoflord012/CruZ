@@ -10,15 +10,15 @@ namespace CruZ.Components
         public void ReadJson(JsonReader reader, JsonSerializer serializer)
         {
             var jObject = JObject.Load(reader);
-            _resourceName = jObject["_resourceName"].Value<string>();
-            LoadTexture(_resourceName);
+            _textureURI = jObject["_resourceName"].Value<string>();
+            LoadTexture(_textureURI);
         }
 
         public void WriteJson(JsonWriter writer, JsonSerializer serializer)
         {
             writer.WriteStartObject();
             writer.WritePropertyName("_resourceName");
-            writer.WriteValue(_resourceName);
+            writer.WriteValue(_textureURI);
             writer.WriteEnd();
         }
 

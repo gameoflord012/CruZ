@@ -5,6 +5,7 @@ using MonoGame.Extended.Sprites;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
+using System.Collections.Generic;
 
 namespace CruZ.Components
 {
@@ -14,14 +15,21 @@ namespace CruZ.Components
 
         public void LoadSpriteSheet(URI uri)
         {
-            _spriteSheet = ResourceManager.LoadContent<SpriteSheet>(uri);
+            _spriteSheet = ResourceManager.LoadResource<SpriteSheet>(uri);
             _animatedSprite = new AnimatedSprite(_spriteSheet);
-            _spriteSheetURI = uri;
+            _spriteSheetURI = uri.ToString();
         }
 
         public void Play(string animationName)
         {
-            _animatedSprite.Play(animationName);
+            try
+            {
+                _animatedSprite.Play(animationName);
+            }
+            catch (KeyNotFoundException e)
+            {
+                throw new(string.Format("Cant found animation with key {0}", animationName), e);
+            }
         }
 
         public void Update(GameTime gameTime)
@@ -47,8 +55,11 @@ namespace CruZ.Components
         public void ReadJson(JsonReader reader, JsonSerializer serializer)
         {
             var jObject = JObject.Load(reader);
-            string uri = jObject["sprite-sheet-uri"].Value<string>();
-            LoadSpriteSheet(uri);
+            string? uri = jObject["sprite-sheet-uri"].Value<string>();
+
+            if (string.IsNullOrEmpty(uri)) return;
+
+            LoadSpriteSheet(new(uri));
         }
 
         public void WriteJson(JsonWriter writer, JsonSerializer serializer)

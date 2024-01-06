@@ -10,13 +10,16 @@ namespace CruZ.Games.AnimalGang
 
             var scene = new GameScene();
             var e = ECS.CreateEntity();
+
             e.AddComponent(new SpriteComponent());
             e.AddComponent(new MainCharacter());
+            e.AddComponent(new AnimationComponent());
+
             scene.AddEntity(e);
-            ResourceManager.CreateResource("scene1.scene", scene, true);
+            ResourceManager.CreateResource("scenes\\scene1.scene", scene, true);
             e.RemoveFromWorld();
 
-            scene = ResourceManager.LoadResource<GameScene>("scene1.scene");
+            scene = ResourceManager.LoadResource<GameScene>("scenes\\scene1.scene");
             SceneManager.SetActive(scene);
         }
 

@@ -429,7 +429,8 @@ namespace SpriteFactory.Sprites
             {
                 TextureAtlas = new TextureAtlas
                 {
-                    Texture = document.GetRelativePath(TexturePath),
+                    //Texture = document.GetRelativePath(TexturePath), //MODIFIED
+                    Texture = TexturePath,
                     RegionWidth = TileWidth,
                     RegionHeight = TileHeight
                 },

@@ -1,70 +1,62 @@
-﻿using CruZ.Resource;
+﻿using CruZ.Serialization;
 using CruZ.Utility;
-using CurZ.Serialization;
+using Microsoft.Xna.Framework.Content;
 using MonoGame.Extended.Content;
 using MonoGame.Extended.Serialization;
 using MonoGame.Extended.Sprites;
 using Newtonsoft.Json;
 using System;
 using System.IO;
+using System.Reflection;
+
 namespace CruZ.Resource
 {
-    public class URI
-    {
-        public static implicit operator string(URI uri)
-        {
-            return uri._uri;
-        }
-
-        public static implicit operator URI(string uri)
-        {
-            return new URI(uri);
-        }
-
-        public URI(string uri)
-        {
-            _uri = uri;
-
-            ValidateURI(this);
-        }
-
-        private string _uri = "";
-
-        public static void ValidateURI(string uri)
-        {
-            bool isValid = !string.IsNullOrEmpty(uri);
-
-            if (!isValid)
-            {
-                throw new(string.Format("Resource URI {0} is invalid", uri));
-            }
-        }
-    }
-
     public static class ResourceManager
     {
-        public const string RESOURCE_ROOT = "Resource\\bin";
-        public const string CONTENT_ROOT = "Resource\\bin";
+        public const string RESOURCE_ROOT = "res";
+        public const string CONTENT_ROOT = "res\\Content\\bin";
+
+        static ResourceManager()
+        {
+            _serializer = new Serializer();
+            _serializer.Converters.Add(new TextureAtlasJsonConverter());
+            _serializer.Converters.Add(new SerializableJsonConverter());
+        }
 
         public static T LoadContent<T>(URI uri)
         {
-            if(typeof(T) == typeof(SpriteSheet))
+            try
             {
-                return Core.Instance.Content.Load<T>(uri, new JsonContentLoader());
+                if (typeof(T) == typeof(SpriteSheet))
+                {
+                    return Core.Instance.Content.Load<T>(
+                        CONTENT_ROOT + "\\" + uri, new JsonContentLoader());
+                }
+
+                return Core.Instance.Content.Load<T>(
+                    CONTENT_ROOT + "\\" + uri);
             }
-
-            return Core.Instance.Content.Load<T>(uri);
-        }
-
-        public static T LoadResource<T>(URI uri) where T : class
-        {
-            return (T)LoadResource(uri, typeof(T));
+            catch(FileNotFoundException)
+            {
+                throw new ContentLoadException();
+            }
+            catch(ContentLoadException)
+            {
+                throw;
+            }
+            
         }
 
         public static object LoadResource(URI uri, Type ty)
         {
-            uri = RESOURCE_ROOT + "\\" + uri;
-            return GlobalSerializer.DeserializeFromFile(uri, ty);
+            try
+            {
+                return LoadContent(uri, ty);
+            }
+            catch(ContentLoadException)
+            {
+                return _serializer.DeserializeFromFile(uri.GetFullPath(RESOURCE_ROOT), ty); //TODO: the path shouldn't be RESOURCE_ROOT//URI because URI maybe a full path :p
+            }
         }
 
         public static void CreateResource(URI uri, object res, bool renew = false)
@@ -75,9 +67,40 @@ namespace CruZ.Resource
             }
             catch
             {
-                uri = RESOURCE_ROOT + "\\" + uri;
-                GlobalSerializer.SerializeToFile(res, uri);
+                _serializer.SerializeToFile(res, uri.GetFullPath(RESOURCE_ROOT));
             }
         }
+
+        private static object LoadContent(URI uri, Type ty)
+        {
+            try
+            {
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
+#pragma warning disable CS8603 // Possible null reference return.
+                return typeof(ResourceManager).
+                    GetMethod("LoadContent", System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.Public).
+                    MakeGenericMethod(ty).
+                    Invoke(null, [uri]);
+#pragma warning restore CS8603 // Possible null reference return.
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
+            }
+            catch (TargetInvocationException e)
+            {
+                if (e.InnerException == null) throw;
+                throw e.InnerException;
+            }
+        }
+
+        public static string GetFullPath()
+        {
+            return Path.GetFullPath(RESOURCE_ROOT);
+        }
+
+        public static T LoadResource<T>(URI uri)
+        {
+            return (T)LoadResource(uri, typeof(T));
+        }
+
+        private static Serializer _serializer;
     }
 }

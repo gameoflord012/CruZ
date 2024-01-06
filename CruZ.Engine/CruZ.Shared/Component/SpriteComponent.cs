@@ -20,14 +20,15 @@ namespace CruZ.Components
         public Vector2      Origin;
         public bool         Flip;
 
-        public void LoadTexture(string resourceName)
+        public void LoadTexture(string TextureURI)
         {
-            _resourceName = resourceName;
+            _textureURI = TextureURI;
 
-            if(!string.IsNullOrEmpty(resourceName))
+            if(!string.IsNullOrEmpty(TextureURI))
             {
                 SourceRectangle = Texture.Bounds;
-                Texture = ResourceManager.LoadContent<Texture2D>(resourceName);
+                Texture = ResourceManager.LoadContent<Texture2D>(TextureURI);
+                Origin = new(SourceRectangle.Width / 2f, SourceRectangle.Height / 2f);
             }
         }
 
@@ -47,9 +48,7 @@ namespace CruZ.Components
 
             spriteBatch.Draw(
                 Texture,
-                new Vector2(
-                    -SourceRectangle.Width / 2f * _e.Transform.Scale.X, 
-                    -SourceRectangle.Height / 2f * _e.Transform.Scale.Y),
+                Vector2.Zero,
                 sourceRectangle: SourceRectangle,
                 Color.White,
                 rotation: 0,
@@ -67,7 +66,7 @@ namespace CruZ.Components
         }
 
         private Texture2D? _texture;
-        private string _resourceName = "";
+        private string _textureURI = "";
         private TransformEntity? _e;
     }
 }
