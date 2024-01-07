@@ -17,7 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\CruZ.Desktop.Template\CurZ.Desktop.Template.csproj" />
+    <ProjectReference Include="..\CruZ.Desktop.Template\CruZ.WindowsDX.csproj" />
   </ItemGroup>
 
 </Project>

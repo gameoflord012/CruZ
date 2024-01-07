@@ -10,8 +10,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\CruZ.Games\AnimalGang\Game.AnimalGang.csproj" />
-    <ProjectReference Include="..\CruZ.Desktop.Template\CurZ.Desktop.Template.csproj" />
-    <ProjectReference Include="..\CruZ.Wrapper.ImGui\CruZ.UI.csproj" />
+    <ProjectReference Include="..\CruZ.WindowsDX\CruZ.WindowsDX.csproj" />
   </ItemGroup>
 
 </Project>

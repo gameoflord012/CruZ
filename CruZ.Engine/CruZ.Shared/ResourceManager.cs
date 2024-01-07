@@ -55,7 +55,7 @@ namespace CruZ.Resource
             }
             catch(ContentLoadException)
             {
-                return _serializer.DeserializeFromFile(uri.GetFullPath(RESOURCE_ROOT), ty); //TODO: the path shouldn't be RESOURCE_ROOT//URI because URI maybe a full path :p
+                return _serializer.DeserializeFromFile(uri.GetFullPath(RESOURCE_ROOT), ty);
             }
         }
 

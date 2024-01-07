@@ -1,8 +1,7 @@
-﻿using CruZ.UI;
-using CruZ.Utility;
-using ImGuiNET;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 
+
+// TODO - change imgui to winform application
 namespace CruZ.Editor
 {
     class Editor : GameApplication
