@@ -9,15 +9,16 @@ namespace CruZ.Games.AnimalGang
             base.Initialize();
 
             var scene = new GameScene();
-            var e = ECS.CreateEntity();
 
-            e.AddComponent(new SpriteComponent());
-            e.AddComponent(new MainCharacter());
-            e.AddComponent(new AnimationComponent());
+            //var e = ECS.CreateEntity();
 
-            scene.AddEntity(e);
-            ResourceManager.CreateResource("scenes\\scene1.scene", scene, true);
-            e.RemoveFromWorld();
+            //e.AddComponent(new SpriteComponent());
+            //e.AddComponent(new MainCharacter());
+            //e.AddComponent(new AnimationComponent());
+
+            //scene.AddEntity(e);
+            //ResourceManager.CreateResource("scenes\\scene1.scene", scene, true);
+            //e.RemoveFromWorld();
 
             scene = ResourceManager.LoadResource<GameScene>("scenes\\scene1.scene");
             SceneManager.SetActive(scene);

@@ -16,8 +16,6 @@ namespace CruZ.Games.AnimalGang
         {
             _sprite = _e.GetComponent<SpriteComponent>();
             _animatedSprite = _e.GetComponent<AnimationComponent>();
-
-            _animatedSprite.LoadSpriteSheet("anims/player-walk.sf");
             _animatedSprite.Play("walk");
         }
 

@@ -38,7 +38,7 @@ namespace CruZ.Serialization
 
             if (!File.Exists(filePath))
             {
-                throw new(string.Format("deserialize file {0} not exist", filePath));
+                throw new FileNotFoundException(string.Format("deserialize file {0} not exist", filePath));
             }
 
             string json;

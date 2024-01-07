@@ -1,9 +1,7 @@
 ﻿using CruZ.Components;
-using CurZ.Editor;
 using ImGuiNET;
 using Microsoft.Xna.Framework;
 using Newtonsoft.Json;
-using System.Numerics;
 
 namespace CruZ.Editor
 {

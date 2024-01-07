@@ -1,7 +1,5 @@
 ﻿using CruZ.UI;
-using CurZ;
-using CurZ.Editor;
-using CurZ.Serialization;
+using CruZ.Utility;
 using ImGuiNET;
 using Microsoft.Xna.Framework;
 
@@ -48,7 +46,7 @@ namespace CruZ.Editor
         {
             for (int i = 0; i < viewsToLoad.Count; i++)
             {
-                var loadedView = GlobalSerializer.DeserializeFromFile(
+                var loadedView = Helper.Serializer.DeserializeFromFile(
                     GetSerializePath(viewsToLoad[i]), viewsToLoad[i].GetType());
 
                 if (loadedView == null) continue;
@@ -91,7 +89,7 @@ namespace CruZ.Editor
         {
             for (int i = 0; i < _views.Count; i++)
             {
-                GlobalSerializer.SerializeToFile(_views[i], GetSerializePath(_views[i]));
+                Helper.Serializer.SerializeToFile(_views[i], GetSerializePath(_views[i]));
             }
         }
 

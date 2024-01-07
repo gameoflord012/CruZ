@@ -1,5 +1,4 @@
-﻿using CurZ.Editor;
-using ImGuiNET;
+﻿using ImGuiNET;
 using Microsoft.Xna.Framework;
 
 namespace CruZ.Editor

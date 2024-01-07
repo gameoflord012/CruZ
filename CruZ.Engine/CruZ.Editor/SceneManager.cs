@@ -1,6 +1,5 @@
 ﻿using CruZ.Serialization;
 using CruZ.Utility;
-using CurZ.Serialization;
 using Newtonsoft.Json;
 
 namespace CruZ.Editor
@@ -52,7 +51,7 @@ namespace CruZ.Editor
             //writer.Write(json);
             //writer.Flush();
 
-            GlobalSerializer.SerializeToFile(scene, savePath);
+            Helper.Serializer.SerializeToFile(scene, savePath);
 
             Logging.PushMsg("Scene {0} saved", scene.Name);
         }
