@@ -1,10 +1,12 @@
-﻿using Microsoft.Xna.Framework;
+﻿using CruZ.Utility;
+using Microsoft.Xna.Framework;
+using MonoGame.Forms.NET.Controls;
 
 
 // TODO - change imgui to winform application
 namespace CruZ.Editor
 {
-    class Editor : GameApplication
+    class Editor : MonoGameControl
     {
         public override void Initialize()
         {

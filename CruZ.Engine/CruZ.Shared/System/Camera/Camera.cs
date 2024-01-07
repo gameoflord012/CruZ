@@ -2,30 +2,13 @@
 using Microsoft.Xna.Framework.Graphics;
 using System.Numerics;
 
-namespace CruZ
+namespace CruZ.Systems
 {
-    public class Camera
+    public partial class Camera
     {
         public Camera(Viewport viewport)
         {
             _viewport = viewport;
-        }
-
-        private static Camera? _mainCamera;
-
-        public static Camera GetMain()
-        {
-            if (_mainCamera == null)
-            {
-                _mainCamera = new(Core.Viewport);
-            }
-            return _mainCamera;
-        }
-
-        public static Camera? Main
-        {
-            get => GetMain();
-            set => _mainCamera = value;
         }
 
         public Vector3 PointToCoordinate(Vector3 p)

@@ -2,13 +2,10 @@
 using Microsoft.Xna.Framework.Input;
 using System.ComponentModel;
 
-namespace CruZ
+namespace CruZ.Systems
 {
-    public class Input
+    public partial class Input
     {
-        static Input? _instance;
-        public static Input Instance { get => _instance ??= new Input(); }
-
         public Input()
         {
             Core.OnUpdate += InputUpdate;
