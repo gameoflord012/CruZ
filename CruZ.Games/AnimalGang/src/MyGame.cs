@@ -1,6 +1,8 @@
 ﻿using CruZ.Components;
 using CruZ.Resource;
+using CruZ.Scene;
 using CruZ.Systems;
+using System.Linq;
 namespace CruZ.Games.AnimalGang
 {
     class MyGame : GameApplication
@@ -9,20 +11,9 @@ namespace CruZ.Games.AnimalGang
         {
             base.Initialize();
 
-            var scene = new GameScene();
-
-            var e = ECS.CreateEntity();
-
-            var anim = new AnimationComponent();
-            anim.LoadSpriteSheet("anims/player-walk.sf");
-
-            e.AddComponent(new SpriteComponent());
-            e.AddComponent(new MainCharacter());
-            e.AddComponent(anim);
-
-            scene.AddEntity(e);
+            var scene = SceneManager.SceneAssets.Values.First();
+            
             ResourceManager.CreateResource("scenes\\scene1.scene", scene);
-            e.RemoveFromWorld();
 
             scene = ResourceManager.LoadResource<GameScene>("scenes\\scene1.scene");
             SceneManager.SetActive(scene);

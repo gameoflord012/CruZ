@@ -16,12 +16,16 @@
     <Compile Include="$(MSBuildThisFileDirectory)Core\ApplicationContext.Static.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Exceptions\MissingContextException.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System\Animation\AnimationComponent.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Component\ComponentManager.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)System\Entity\Utils\ComponentManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System\Camera\Camera.Static.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System\EntityScript.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)System\Entity\IECSContextProvider.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)System\Entity\IComponent.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)System\Entity\Interface\IECSContextProvider.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)System\Entity\Interface\IComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System\Input\Input.Static.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)System\Entity\TransformEntity.Disposable.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)System\Scene\GameScene.Disposable.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)System\Scene\SceneAssetMethodAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)System\Scene\SceneAssetClassAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\Helper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\ResourceManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System\EntityScriptSystem.cs" />
@@ -33,14 +37,11 @@
     <Compile Include="$(MSBuildThisFileDirectory)System\Serialization\Serializer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System\Serialization\TextureAtlasJsonConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Types\Vector3.cs" />
+    <Compile Include="..\CruZ.Shared\System\Scene\SceneManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\URI.cs" />
-    <Compile Include="..\CruZ.Shared\Component\BuildInstruction.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Component\EntityBuilder.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Component\EntityEventComponent.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)System\Entity\EntityEventComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\FunMath.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Component\Interface\IComponentCallback.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Component\Interface\ISpriteBatchDrawable.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Component\Interface\IUpdatable.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)System\Entity\Interface\IComponentCallback.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System\PhysicBody.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System\Sprite\SpriteComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System\Entity\Transform.cs" />
@@ -54,7 +55,7 @@
     <Compile Include="..\CruZ.Shared\Core\GameApplication.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System\Input\Input.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Core\GameCore.Static.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)System\GameScene.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)System\Scene\GameScene.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System\Animation\AnimatedSystem.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System\PhysicSystem.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System\Serialization\ISerializable.cs" />
@@ -67,9 +68,10 @@
     <Compile Include="$(MSBuildThisFileDirectory)System\Sprite\SpriteSystem.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="$(MSBuildThisFileDirectory)System\Entity\Interface\" />
+    <Folder Include="$(MSBuildThisFileDirectory)System\Entity\Utils\" />
     <Folder Include="$(MSBuildThisFileDirectory)System\Input\" />
     <Folder Include="$(MSBuildThisFileDirectory)System\Camera\" />
-    <Folder Include="$(MSBuildThisFileDirectory)Utils\" />
     <Folder Include="$(MSBuildThisFileDirectory)System\Animation\" />
     <Folder Include="$(MSBuildThisFileDirectory)System\Sprite\" />
   </ItemGroup>

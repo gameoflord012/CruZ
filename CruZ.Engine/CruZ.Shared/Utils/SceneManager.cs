@@ -3,9 +3,9 @@ using CruZ.Utility;
 using System;
 using System.Collections.Generic;
 
-namespace CruZ
+namespace CruZ.Scene
 {
-    public static class SceneManager
+    public static partial class SceneManager
     {
         public static event Action<GameScene>? OnSceneLoaded;
         public static event Action<GameScene>? OnCurrentSceneUnLoaded;

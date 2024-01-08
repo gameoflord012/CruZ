@@ -8,7 +8,7 @@ using System.Collections.Generic;
 
 namespace CruZ
 {
-    public class GameScene
+    public partial class GameScene
     {
         public event Action<TransformEntity>? OnEntityAdded;
         public event Action<TransformEntity>? OnEntityRemoved;
