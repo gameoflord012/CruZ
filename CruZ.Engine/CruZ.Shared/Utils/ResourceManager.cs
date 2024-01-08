@@ -55,7 +55,14 @@ namespace CruZ.Resource
             }
             catch(ContentLoadException)
             {
-                return _serializer.DeserializeFromFile(uri.GetFullPath(RESOURCE_ROOT), ty);
+                try
+                {
+                    return _serializer.DeserializeFromFile(uri.GetFullPath(RESOURCE_ROOT), ty);
+                }
+                catch(FileNotFoundException)
+                {
+                    throw new(string.Format("Can't find resource file with uri {0}", uri));
+                }
             }
         }
 

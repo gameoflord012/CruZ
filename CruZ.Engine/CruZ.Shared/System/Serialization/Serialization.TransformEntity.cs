@@ -27,7 +27,9 @@ namespace CruZ.Components
 
             foreach (var com in jObject["components"])
             {
-                var comTy = Type.GetType(com["com-type"].Value<string>()) ?? throw new("Incorrect type or can't find it"); ;
+                var tyStr = com["com-type"].Value<string>();
+                var comTy = Type.GetType(tyStr) ?? throw new(string.Format("Can't get Type from string \"{0}\"", tyStr));
+
                 object comData = com["com-data"].ToObject(comTy, serializer);
                 var iCom = (IComponent)comData;
 
