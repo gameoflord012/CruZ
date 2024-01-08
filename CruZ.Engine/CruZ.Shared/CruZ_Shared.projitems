@@ -12,10 +12,14 @@
     <MonoGameContentReference Include="$(MSBuildThisFileDirectory)Content\Content.mgcb" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Core\ApplicationContext.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Core\ApplicationContext.Static.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Exceptions\MissingContextException.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System\Animation\AnimationComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Component\ComponentManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System\Camera\Camera.Static.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System\EntityScript.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)System\Entity\IECSContextProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System\Entity\IComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System\Input\Input.Static.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\Helper.cs" />
@@ -23,7 +27,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)System\EntityScriptSystem.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System\Entity\ECS.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System\Entity\EntityExtension.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)System\Entity\ESC.Static.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)System\Entity\ECS.Static.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System\Serialization\GlobalSerializer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System\Serialization\IAmResource.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System\Serialization\Serializer.cs" />
@@ -42,14 +46,14 @@
     <Compile Include="$(MSBuildThisFileDirectory)System\Entity\Transform.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System\Entity\TransformEntity.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System\Camera\Camera.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Core\Core.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Core\GameCore.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\SceneManager.cs" />
     <Compile Include="..\CruZ.Shared\System\EntityEventSystem.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System\Logging.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Types\IRunnable.cs" />
     <Compile Include="..\CruZ.Shared\Core\GameApplication.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System\Input\Input.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Core\Core.Static.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Core\GameCore.Static.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System\GameScene.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System\Animation\AnimatedSystem.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System\PhysicSystem.cs" />

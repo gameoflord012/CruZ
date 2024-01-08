@@ -1,14 +1,13 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
-using System.ComponentModel;
 
 namespace CruZ.Systems
 {
     public partial class Input
     {
-        public Input()
+        public Input(IInputContextProvider contextProvider)
         {
-            Core.OnUpdate += InputUpdate;
+            contextProvider.UpdateInputEvent += InputUpdate;
         }
 
         public void InputUpdate(GameTime gameTime)
@@ -26,7 +25,5 @@ namespace CruZ.Systems
         MouseState _prevMouseState;
         MouseState _curMouseState;
         KeyboardState _keyboardState;
-
-        public static KeyboardState KeyboardState { get => Instance._keyboardState; }
     }
 }

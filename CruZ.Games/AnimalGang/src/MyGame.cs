@@ -4,7 +4,7 @@ namespace CruZ.Games.AnimalGang
 {
     class MyGame : GameApplication
     {
-        public override void Initialize()
+        protected override void Initialize()
         {
             base.Initialize();
 

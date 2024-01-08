@@ -9,7 +9,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\CruZ.Games\AnimalGang\Game.AnimalGang.csproj" />
     <ProjectReference Include="..\CruZ.WindowsDX\CruZ.WindowsDX.csproj" />
     <ProjectReference Include="..\CruZ.WinForm\CruZ.WinForm.csproj" />
   </ItemGroup>

@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MonoGame.Framework.DesktopGL", "ThirdParty\MonoGameModified\MonoGame.Framework\MonoGame.Framework.DesktopGL.csproj", "{F56B35AB-4332-4BE4-A1B4-FFDBE676722D}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MonoGame.Extended", "ThirdParty\MonoGame.Extended\src\cs\MonoGame.Extended\MonoGame.Extended.csproj", "{B849B5F5-C456-4D0D-A1C0-D021ACF0477E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MonoGame.Extended.Animations", "ThirdParty\MonoGame.Extended\src\cs\MonoGame.Extended.Animations\MonoGame.Extended.Animations.csproj", "{5E3E3478-3224-4A4B-95FB-7625451793FB}"
@@ -20,8 +18,6 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MonoGame.Framework.Content.Pipeline", "ThirdParty\MonoGameModified\MonoGame.Framework.Content.Pipeline\MonoGame.Framework.Content.Pipeline.csproj", "{EED80EA9-25D8-4F69-BC7F-87B15998570B}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MonoGame.Content.Builder.Editor.Windows", "ThirdParty\MonoGameModified\Tools\MonoGame.Content.Builder.Editor\MonoGame.Content.Builder.Editor.Windows.csproj", "{C123B1CD-1CDB-4F38-A4AD-41081079B114}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CruZ.Editor", "CruZ.Engine\CruZ.Editor\CruZ.Editor.csproj", "{CB6CBCE0-6BD8-4FAB-9ED5-74A52A52027E}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Others", "Others", "{B2EFD66A-EF07-46F2-A89E-AE5C6917319E}"
 EndProject
@@ -39,7 +35,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CruZ.WinForm", "CruZ.Engine
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MonoGame.Framework.WindowsDX", "ThirdParty\MonoGameModified\MonoGame.Framework\MonoGame.Framework.WindowsDX.csproj", "{55DD46AD-CE2B-4938-B093-2E0E95D60958}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CruZ.WindowsDX", "CruZ.Engine\CruZ.WindowsDX\CruZ.WindowsDX.csproj", "{BDF7CA7B-51F6-457B-B498-2DFD5BC7B889}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MonoGame.Framework.DesktopGL", "ThirdParty\MonoGameModified\MonoGame.Framework\MonoGame.Framework.DesktopGL.csproj", "{66BF2A0F-3E12-4ED1-B12B-EF076786CB5A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CruZ.DesktopGL", "CruZ.Engine\CruZ.DesktopGL\CruZ.DesktopGL.csproj", "{24E815FD-5155-4F49-9C43-68AC3C75BB93}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,18 +49,6 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{F56B35AB-4332-4BE4-A1B4-FFDBE676722D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F56B35AB-4332-4BE4-A1B4-FFDBE676722D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F56B35AB-4332-4BE4-A1B4-FFDBE676722D}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{F56B35AB-4332-4BE4-A1B4-FFDBE676722D}.Debug|x64.Build.0 = Debug|Any CPU
-		{F56B35AB-4332-4BE4-A1B4-FFDBE676722D}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{F56B35AB-4332-4BE4-A1B4-FFDBE676722D}.Debug|x86.Build.0 = Debug|Any CPU
-		{F56B35AB-4332-4BE4-A1B4-FFDBE676722D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F56B35AB-4332-4BE4-A1B4-FFDBE676722D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F56B35AB-4332-4BE4-A1B4-FFDBE676722D}.Release|x64.ActiveCfg = Release|Any CPU
-		{F56B35AB-4332-4BE4-A1B4-FFDBE676722D}.Release|x64.Build.0 = Release|Any CPU
-		{F56B35AB-4332-4BE4-A1B4-FFDBE676722D}.Release|x86.ActiveCfg = Release|Any CPU
-		{F56B35AB-4332-4BE4-A1B4-FFDBE676722D}.Release|x86.Build.0 = Release|Any CPU
 		{B849B5F5-C456-4D0D-A1C0-D021ACF0477E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B849B5F5-C456-4D0D-A1C0-D021ACF0477E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B849B5F5-C456-4D0D-A1C0-D021ACF0477E}.Debug|x64.ActiveCfg = Debug|x64
@@ -123,18 +109,6 @@ Global
 		{C123B1CD-1CDB-4F38-A4AD-41081079B114}.Release|x64.Build.0 = Release|Any CPU
 		{C123B1CD-1CDB-4F38-A4AD-41081079B114}.Release|x86.ActiveCfg = Release|Any CPU
 		{C123B1CD-1CDB-4F38-A4AD-41081079B114}.Release|x86.Build.0 = Release|Any CPU
-		{CB6CBCE0-6BD8-4FAB-9ED5-74A52A52027E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CB6CBCE0-6BD8-4FAB-9ED5-74A52A52027E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CB6CBCE0-6BD8-4FAB-9ED5-74A52A52027E}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{CB6CBCE0-6BD8-4FAB-9ED5-74A52A52027E}.Debug|x64.Build.0 = Debug|Any CPU
-		{CB6CBCE0-6BD8-4FAB-9ED5-74A52A52027E}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{CB6CBCE0-6BD8-4FAB-9ED5-74A52A52027E}.Debug|x86.Build.0 = Debug|Any CPU
-		{CB6CBCE0-6BD8-4FAB-9ED5-74A52A52027E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CB6CBCE0-6BD8-4FAB-9ED5-74A52A52027E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{CB6CBCE0-6BD8-4FAB-9ED5-74A52A52027E}.Release|x64.ActiveCfg = Release|Any CPU
-		{CB6CBCE0-6BD8-4FAB-9ED5-74A52A52027E}.Release|x64.Build.0 = Release|Any CPU
-		{CB6CBCE0-6BD8-4FAB-9ED5-74A52A52027E}.Release|x86.ActiveCfg = Release|Any CPU
-		{CB6CBCE0-6BD8-4FAB-9ED5-74A52A52027E}.Release|x86.Build.0 = Release|Any CPU
 		{DFEAD40C-CEF0-47FA-ACA4-0FA52D5CF60A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{DFEAD40C-CEF0-47FA-ACA4-0FA52D5CF60A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DFEAD40C-CEF0-47FA-ACA4-0FA52D5CF60A}.Debug|x64.ActiveCfg = Debug|Any CPU
@@ -207,24 +181,35 @@ Global
 		{55DD46AD-CE2B-4938-B093-2E0E95D60958}.Release|x64.Build.0 = Release|Any CPU
 		{55DD46AD-CE2B-4938-B093-2E0E95D60958}.Release|x86.ActiveCfg = Release|Any CPU
 		{55DD46AD-CE2B-4938-B093-2E0E95D60958}.Release|x86.Build.0 = Release|Any CPU
-		{BDF7CA7B-51F6-457B-B498-2DFD5BC7B889}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BDF7CA7B-51F6-457B-B498-2DFD5BC7B889}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BDF7CA7B-51F6-457B-B498-2DFD5BC7B889}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{BDF7CA7B-51F6-457B-B498-2DFD5BC7B889}.Debug|x64.Build.0 = Debug|Any CPU
-		{BDF7CA7B-51F6-457B-B498-2DFD5BC7B889}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{BDF7CA7B-51F6-457B-B498-2DFD5BC7B889}.Debug|x86.Build.0 = Debug|Any CPU
-		{BDF7CA7B-51F6-457B-B498-2DFD5BC7B889}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BDF7CA7B-51F6-457B-B498-2DFD5BC7B889}.Release|Any CPU.Build.0 = Release|Any CPU
-		{BDF7CA7B-51F6-457B-B498-2DFD5BC7B889}.Release|x64.ActiveCfg = Release|Any CPU
-		{BDF7CA7B-51F6-457B-B498-2DFD5BC7B889}.Release|x64.Build.0 = Release|Any CPU
-		{BDF7CA7B-51F6-457B-B498-2DFD5BC7B889}.Release|x86.ActiveCfg = Release|Any CPU
-		{BDF7CA7B-51F6-457B-B498-2DFD5BC7B889}.Release|x86.Build.0 = Release|Any CPU
+		{66BF2A0F-3E12-4ED1-B12B-EF076786CB5A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{66BF2A0F-3E12-4ED1-B12B-EF076786CB5A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{66BF2A0F-3E12-4ED1-B12B-EF076786CB5A}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{66BF2A0F-3E12-4ED1-B12B-EF076786CB5A}.Debug|x64.Build.0 = Debug|Any CPU
+		{66BF2A0F-3E12-4ED1-B12B-EF076786CB5A}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{66BF2A0F-3E12-4ED1-B12B-EF076786CB5A}.Debug|x86.Build.0 = Debug|Any CPU
+		{66BF2A0F-3E12-4ED1-B12B-EF076786CB5A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{66BF2A0F-3E12-4ED1-B12B-EF076786CB5A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{66BF2A0F-3E12-4ED1-B12B-EF076786CB5A}.Release|x64.ActiveCfg = Release|Any CPU
+		{66BF2A0F-3E12-4ED1-B12B-EF076786CB5A}.Release|x64.Build.0 = Release|Any CPU
+		{66BF2A0F-3E12-4ED1-B12B-EF076786CB5A}.Release|x86.ActiveCfg = Release|Any CPU
+		{66BF2A0F-3E12-4ED1-B12B-EF076786CB5A}.Release|x86.Build.0 = Release|Any CPU
+		{24E815FD-5155-4F49-9C43-68AC3C75BB93}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{24E815FD-5155-4F49-9C43-68AC3C75BB93}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{24E815FD-5155-4F49-9C43-68AC3C75BB93}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{24E815FD-5155-4F49-9C43-68AC3C75BB93}.Debug|x64.Build.0 = Debug|Any CPU
+		{24E815FD-5155-4F49-9C43-68AC3C75BB93}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{24E815FD-5155-4F49-9C43-68AC3C75BB93}.Debug|x86.Build.0 = Debug|Any CPU
+		{24E815FD-5155-4F49-9C43-68AC3C75BB93}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{24E815FD-5155-4F49-9C43-68AC3C75BB93}.Release|Any CPU.Build.0 = Release|Any CPU
+		{24E815FD-5155-4F49-9C43-68AC3C75BB93}.Release|x64.ActiveCfg = Release|Any CPU
+		{24E815FD-5155-4F49-9C43-68AC3C75BB93}.Release|x64.Build.0 = Release|Any CPU
+		{24E815FD-5155-4F49-9C43-68AC3C75BB93}.Release|x86.ActiveCfg = Release|Any CPU
+		{24E815FD-5155-4F49-9C43-68AC3C75BB93}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{F56B35AB-4332-4BE4-A1B4-FFDBE676722D} = {F67C7BE7-F474-4B9B-A17F-1AAAF5D564F4}
 		{B849B5F5-C456-4D0D-A1C0-D021ACF0477E} = {AADF9D08-3C4F-4C12-9417-AC5E3DCAD41C}
 		{5E3E3478-3224-4A4B-95FB-7625451793FB} = {AADF9D08-3C4F-4C12-9417-AC5E3DCAD41C}
 		{1B04E9CB-B105-42A2-A8F0-9DCDEC8025AB} = {AADF9D08-3C4F-4C12-9417-AC5E3DCAD41C}
@@ -232,19 +217,19 @@ Global
 		{AADF9D08-3C4F-4C12-9417-AC5E3DCAD41C} = {F67C7BE7-F474-4B9B-A17F-1AAAF5D564F4}
 		{EED80EA9-25D8-4F69-BC7F-87B15998570B} = {F67C7BE7-F474-4B9B-A17F-1AAAF5D564F4}
 		{C123B1CD-1CDB-4F38-A4AD-41081079B114} = {F67C7BE7-F474-4B9B-A17F-1AAAF5D564F4}
-		{CB6CBCE0-6BD8-4FAB-9ED5-74A52A52027E} = {06F0198E-A6EA-4165-9D3B-38A6B36D6687}
 		{8E0B6D2E-40D6-401F-8D4C-BB1EDEBE2CE5} = {B2EFD66A-EF07-46F2-A89E-AE5C6917319E}
 		{ED9250E7-68A6-4288-A6C4-9122AC9BC2D0} = {06F0198E-A6EA-4165-9D3B-38A6B36D6687}
 		{99D7E3BF-A8E6-4D6D-91D2-465709497D10} = {F67C7BE7-F474-4B9B-A17F-1AAAF5D564F4}
 		{F1647604-2D2B-48E9-B6E6-8BEBAC249BC1} = {06F0198E-A6EA-4165-9D3B-38A6B36D6687}
 		{55DD46AD-CE2B-4938-B093-2E0E95D60958} = {F67C7BE7-F474-4B9B-A17F-1AAAF5D564F4}
-		{BDF7CA7B-51F6-457B-B498-2DFD5BC7B889} = {06F0198E-A6EA-4165-9D3B-38A6B36D6687}
+		{66BF2A0F-3E12-4ED1-B12B-EF076786CB5A} = {F67C7BE7-F474-4B9B-A17F-1AAAF5D564F4}
+		{24E815FD-5155-4F49-9C43-68AC3C75BB93} = {06F0198E-A6EA-4165-9D3B-38A6B36D6687}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7F9F8BC8-0847-4E84-9AA8-0677A7EED2BA}
 	EndGlobalSection
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		CruZ.Engine\CruZ.Shared\CruZ_Shared.projitems*{24e815fd-5155-4f49-9c43-68ac3c75bb93}*SharedItemsImports = 5
 		CruZ.Engine\CruZ.Shared\CruZ_Shared.projitems*{a0cdbd0e-3a41-42b7-9425-a838bc2c7383}*SharedItemsImports = 13
-		CruZ.Engine\CruZ.Shared\CruZ_Shared.projitems*{bdf7ca7b-51f6-457b-b498-2dfd5bc7b889}*SharedItemsImports = 5
 	EndGlobalSection
 EndGlobal

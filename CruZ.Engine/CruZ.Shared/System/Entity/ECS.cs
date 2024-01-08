@@ -1,17 +1,20 @@
 ﻿using CruZ.Components;
 using Microsoft.Xna.Framework;
 using MonoGame.Extended.Entities;
-using System.Collections.Generic;
 
 namespace CruZ.Systems
 {
     public partial class ECS
     {
-        private ECS()
+        private ECS(IECSContextProvider contextProvider)
         {
-            Core.OnUpdate += Update;
-            Core.OnDraw += Draw;
+            contextProvider.DrawEvent += Draw;
+            contextProvider.UpdateEvent += Update;
+            contextProvider.InitializeSystemEvent += InitializeSystem;
+        }
 
+        private void InitializeSystem()
+        {
             _world = new WorldBuilder().
                 AddSystem(new EntityEventSystem()).
                 AddSystem(new SpriteSystem()).
@@ -19,8 +22,6 @@ namespace CruZ.Systems
                 AddSystem(new PhysicSystem()).
                 AddSystem(new EntityScriptSystem()).
                 Build();
-
-            //_entityBuilder = new(_world);
         }
 
         private void Update(GameTime gameTime)

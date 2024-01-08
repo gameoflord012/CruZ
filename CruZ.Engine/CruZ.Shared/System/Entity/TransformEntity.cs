@@ -49,7 +49,7 @@ namespace CruZ.Components
         public void AddComponent(IComponent component)
         {
             if (HasComponent(component.ComponentType))
-                throw new Exception(string.Format("Component {0} already added", component));
+                throw new(string.Format("Component {0} already added", component));
 
             _entity.Attach(component, component.ComponentType);
 
@@ -110,7 +110,7 @@ namespace CruZ.Components
         {
             if (!_comToEntity.ContainsKey(component))
             {
-                throw new Exception("Im tired of this shit");
+                throw new("Im tired of this shit");
             }
             else
             {

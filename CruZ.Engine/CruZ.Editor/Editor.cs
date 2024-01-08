@@ -8,10 +8,8 @@ namespace CruZ.Editor
 {
     class Editor : MonoGameControl
     {
-        public override void Initialize()
+        protected override void Initialize()
         {
-            base.Initialize();
-
             _imgui = new(Core.Instance);
             _imgui.RebuildFontAtlas();
 
@@ -57,9 +55,6 @@ namespace CruZ.Editor
 
         protected override void LateDraw(GameTime gameTime)
         {
-            _imgui.BeforeLayout(gameTime);
-
-            ImGui.DockSpaceOverViewport(ImGui.GetMainViewport(), ImGuiDockNodeFlags.PassthruCentralNode);
             EntityView.InitializeWindow();
 
             foreach (var view in _views)
@@ -97,6 +92,16 @@ namespace CruZ.Editor
         private string GetSerializePath(object o)
         {
             return string.Format("Editor\\{0}.json", o.GetType().ToString());
+        }
+
+        protected override void Update(GameTime gameTime)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override void Draw()
+        {
+            throw new NotImplementedException();
         }
 
         private ImGuiRenderer _imgui;

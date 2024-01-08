@@ -8,7 +8,7 @@
         {
             if (_mainCamera == null)
             {
-                _mainCamera = new(Core.Viewport);
+                _mainCamera = new(ApplicationContext.GraphicsDevice.Viewport);
             }
             return _mainCamera;
         }

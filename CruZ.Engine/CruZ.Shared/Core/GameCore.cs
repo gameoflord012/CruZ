@@ -1,21 +1,25 @@
 ﻿using CruZ.Resource;
+using CruZ.Systems;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using MonoGame.Extended;
-using MonoGame.Extended.Entities;
-using MonoGame.Extended.ViewportAdapters;
 using System;
 
 namespace CruZ
 {
-    public delegate void CruZ_UpdateDelegate(GameTime gameTime);
-    public delegate void ActionDelegate();
-    public delegate void OnExitingDelegate(object sender, EventArgs args);
-
-    public partial class Core : Game
+    public partial class GameCore : Game
     {
-        private Core()
+        public event Action?                    InitializeEvent;
+        public event Action?                    InitializeSystemEvent;
+        public event Action?                    LoadContentEvent;
+        public event Action?                    EndRunEvent;
+        public event Action<object, EventArgs>? ExitEvent;
+        public event Action<GameTime>?          UpdateEvent;
+        public event Action<GameTime>?          DrawEvent;
+        public event Action<GameTime>?          LateDrawEvent;
+        
+
+        public GameCore()
         {
             Content.RootDirectory = ".";
             IsMouseVisible = true;
@@ -26,25 +30,32 @@ namespace CruZ
         protected override void EndRun()
         {
             base.EndRun();
-            OnEndRun?.Invoke();
+            EndRunEvent?.Invoke();
         }
 
         protected override void OnExiting(object sender, EventArgs args)
         {
             base.OnExiting(sender, args);
-            OnExit?.Invoke(sender, args);
+            ExitEvent?.Invoke(sender, args);
         }
 
         protected override void LoadContent()
         {
             base.LoadContent();
-            OnLoadContent?.Invoke();
+            LoadContentEvent?.Invoke();
         }
 
         protected override void Initialize()
         {
             base.Initialize();
-            OnInitialize?.Invoke();
+
+            InitalizeSystem();
+            InitializeEvent?.Invoke();
+        }
+
+        private void InitalizeSystem()
+        {
+            InitializeSystemEvent?.Invoke();
         }
 
         protected override void Update(GameTime gameTime)
@@ -52,7 +63,7 @@ namespace CruZ
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            OnUpdate?.Invoke(gameTime);
+            UpdateEvent?.Invoke(gameTime);
             base.Update(gameTime);
 
         }
@@ -66,8 +77,16 @@ namespace CruZ
         private void InternalDraw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.Gray);
-            OnDraw?.Invoke(gameTime);
-            OnLateDraw?.Invoke(gameTime);
+            DrawEvent?.Invoke(gameTime);
+            LateDrawEvent?.Invoke(gameTime);
+        }
+
+        public void ChangeWindowSize(int width, int height)
+        {
+            _graphics.IsFullScreen = false;
+            _graphics.PreferredBackBufferWidth = width;
+            _graphics.PreferredBackBufferHeight = height;
+            _graphics.ApplyChanges();
         }
 
         private GraphicsDeviceManager _graphics;

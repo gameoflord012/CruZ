@@ -16,7 +16,7 @@ namespace CruZ.Systems
         public override void Initialize(IComponentMapperService mapperService)
         {
             _spriteRendererMapper = mapperService.GetMapper<SpriteComponent>();
-            _spriteBatch = new SpriteBatch(Core.Instance.GraphicsDevice);
+            _spriteBatch = new SpriteBatch(ApplicationContext.GraphicsDevice);
         }
 
         public void Draw(GameTime gameTime)

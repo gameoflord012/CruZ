@@ -29,11 +29,11 @@ namespace CruZ.Resource
             {
                 if (typeof(T) == typeof(SpriteSheet))
                 {
-                    return Core.Instance.Content.Load<T>(
+                    return ApplicationContext.Content.Load<T>(
                         CONTENT_ROOT + "\\" + uri, new JsonContentLoader());
                 }
 
-                return Core.Instance.Content.Load<T>(
+                return ApplicationContext.Content.Load<T>(
                     CONTENT_ROOT + "\\" + uri);
             }
             catch(FileNotFoundException)
