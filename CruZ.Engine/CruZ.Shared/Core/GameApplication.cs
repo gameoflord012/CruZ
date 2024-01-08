@@ -1,12 +1,8 @@
-﻿using CruZ.Components;
-using CruZ.Systems;
+﻿using CruZ.Systems;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using MonoGame.Extended.Entities;
 using System;
-using System.Collections.Generic;
-using System.IO;
 
 namespace CruZ
 {

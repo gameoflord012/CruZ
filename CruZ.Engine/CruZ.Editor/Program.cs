@@ -5,7 +5,7 @@
         [STAThread]
         public static void Main(string[] args)
         {
-            var editor = new Editor();
+            Application.Run(new EditorForm());
         }
     }
 }

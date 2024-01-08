@@ -1,14 +1,17 @@
 ﻿using CruZ.Resource;
 using CruZ.Systems;
 using Microsoft.Xna.Framework;
+
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 using System;
 
 namespace CruZ
 {
+    using Microsoft.Xna.Framework;
+
     public partial class GameCore : Game
     {
+
         public event Action?                    InitializeEvent;
         public event Action?                    InitializeSystemEvent;
         public event Action?                    LoadContentEvent;
@@ -60,8 +63,8 @@ namespace CruZ
 
         protected override void Update(GameTime gameTime)
         {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-                Exit();
+            //if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+            //    Exit();
 
             UpdateEvent?.Invoke(gameTime);
             base.Update(gameTime);

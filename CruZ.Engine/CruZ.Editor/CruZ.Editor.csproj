@@ -9,8 +9,29 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\CruZ.WindowsDX\CruZ.WindowsDX.csproj" />
+    <Compile Remove="Views\**" />
+    <EmbeddedResource Remove="Views\**" />
+    <None Remove="Views\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Box2D.NetStandard" Version="2.4.7-alpha" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\ThirdParty\MonoGame.Extended\src\cs\MonoGame.Extended.Animations\MonoGame.Extended.Animations.csproj" />
+    <ProjectReference Include="..\..\ThirdParty\MonoGame.Extended\src\cs\MonoGame.Extended.Entities\MonoGame.Extended.Entities.csproj" />
+    <ProjectReference Include="..\..\ThirdParty\MonoGame.Extended\src\cs\MonoGame.Extended\MonoGame.Extended.csproj" />
     <ProjectReference Include="..\CruZ.WinForm\CruZ.WinForm.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="DrawTest.cs">
+      <SubType>Component</SubType>
+    </Compile>
+  </ItemGroup>
+
+  <Import Project="..\CruZ.Shared\CruZ_Shared.projitems" Label="Shared" />
 
 </Project>

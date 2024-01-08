@@ -21,7 +21,7 @@ namespace CruZ.Games.AnimalGang
             e.AddComponent(anim);
 
             scene.AddEntity(e);
-            ResourceManager.CreateResource("scenes\\scene1.scene", scene, true);
+            ResourceManager.CreateResource("scenes\\scene1.scene", scene);
             e.RemoveFromWorld();
 
             scene = ResourceManager.LoadResource<GameScene>("scenes\\scene1.scene");

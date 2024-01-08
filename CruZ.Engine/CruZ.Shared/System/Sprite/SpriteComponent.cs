@@ -7,6 +7,8 @@ using System.Diagnostics;
 
 namespace CruZ.Components
 {
+    using Microsoft.Xna.Framework;
+
     public partial class SpriteComponent : IComponent, IComponentCallback
     {
         public SpriteComponent() { }
@@ -16,7 +18,7 @@ namespace CruZ.Components
         [JsonIgnore]
         public Texture2D?   Texture         { get => _texture; set => _texture = value; }
         
-        public Rectangle    SourceRectangle;
+        public Microsoft.Xna.Framework.Rectangle    SourceRectangle;
         public Vector2      Origin;
         public bool         Flip;
 
