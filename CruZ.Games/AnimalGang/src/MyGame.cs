@@ -12,11 +12,11 @@ namespace CruZ.Games.AnimalGang
             base.Initialize();
 
             var scene = SceneManager.SceneAssets.Values.First();
-            
-            ResourceManager.CreateResource("scenes\\scene1.scene", scene);
+            ResourceManager.CreateResource("scenes\\scene1.scene", scene, true);
+            scene.Dispose();
 
             scene = ResourceManager.LoadResource<GameScene>("scenes\\scene1.scene");
-            SceneManager.SetActive(scene);
+            scene.SetActive(true);
         }
 
         MainCharacter _charTemplate;

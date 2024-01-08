@@ -19,7 +19,7 @@ namespace CruZ.System
             e.AddComponent(new MainCharacter());
             e.AddComponent(anim);
 
-            scene.AddEntity(e);
+            scene.AddToScene(e);
 
             return scene;
         }

@@ -7,77 +7,66 @@ namespace CruZ.Scene
 {
     public static partial class SceneManager
     {
-        public static event Action<GameScene>? OnSceneLoaded;
-        public static event Action<GameScene>? OnCurrentSceneUnLoaded;
+        //public static event Action<GameScene>? OnSceneLoaded;
+        //public static event Action<GameScene>? OnCurrentSceneUnLoaded;
 
-        public static GameScene? CurrentScene { get => _currentScene; }
+        public static void LoadScene(GameScene scene)
+        {
+            //if (_currentScene != null)
+            //{
+            //    UnloadCurrent();
+            //}
 
-        //public static GameScene GetSceneResource(string uri)
+            //_currentScene = scene;
+
+            //foreach (var e in _currentScene.Entities)
+            //{
+            //    LoadEntity(e);
+            //}
+
+            //_currentScene.OnEntityAdded += LoadEntity;
+            //_currentScene.OnEntityRemoved += UnloadEntity;
+
+            //OnSceneLoaded?.Invoke(_currentScene);
+            //Logging.PushMsg(string.Format("Scene {0} Loaded", _currentScene.Name));
+
+            throw new NotImplementedException();
+        }
+
+        public static void UnloadCurrent()
+        {
+            //if (_currentScene == null)
+            //{
+            //    Logging.PushMsg("Scene no scene Unloaded");
+            //    return;
+            //}
+
+            //var unloadScene = _currentScene;
+            //_currentScene = null;
+
+            //foreach (var e in unloadScene.Entities)
+            //{
+            //    UnloadEntity(e);
+            //}
+
+            //unloadScene.OnEntityAdded -= LoadEntity;
+            //unloadScene.OnEntityRemoved -= UnloadEntity;
+
+            //OnCurrentSceneUnLoaded?.Invoke(unloadScene);
+            //Logging.PushMsg(string.Format("Scene {0} Unloaded", unloadScene.Name));
+            throw new NotImplementedException();
+        }
+
+        //private static void LoadEntity(TransformEntity e)
         //{
-        //    var scene = ResourceManager.LoadResource<GameScene>(uri);
-        //    if (scene == null)
-        //    {
-        //        scene = _avaiableScene[uri];
-        //        ResourceManager.CreateResource(uri, scene);
-        //    }
-
-        //    return scene;
+        //    e.IsActive = true;
         //}
 
-        public static void SetActive(GameScene scene)
-        {
-            if (_currentScene != null)
-            {
-                UnactivateCurrent();
-            }
+        //private static void UnloadEntity(TransformEntity e)
+        //{
+        //    e.IsActive = false;
+        //}
 
-            _currentScene = scene;
-
-            foreach (var e in _currentScene.Entities)
-            {
-                LoadEntity(e);
-            }
-
-            _currentScene.OnEntityAdded += LoadEntity;
-            _currentScene.OnEntityRemoved += UnloadEntity;
-
-            OnSceneLoaded?.Invoke(_currentScene);
-            Logging.PushMsg(string.Format("Scene {0} Loaded", _currentScene.Name));
-        }
-
-        public static void UnactivateCurrent()
-        {
-            if (_currentScene == null)
-            {
-                Logging.PushMsg("Scene no scene Unloaded");
-                return;
-            }
-
-            var unloadScene = _currentScene;
-            _currentScene = null;
-
-            foreach (var e in unloadScene.Entities)
-            {
-                UnloadEntity(e);
-            }
-
-            unloadScene.OnEntityAdded -= LoadEntity;
-            unloadScene.OnEntityRemoved -= UnloadEntity;
-
-            OnCurrentSceneUnLoaded?.Invoke(unloadScene);
-            Logging.PushMsg(string.Format("Scene {0} Unloaded", unloadScene.Name));
-        }
-
-        private static void LoadEntity(TransformEntity e)
-        {
-            e.IsActive = true;
-        }
-
-        private static void UnloadEntity(TransformEntity e)
-        {
-            e.RemoveFromWorld();
-        }
-
-        static GameScene? _currentScene;
+        //static GameScene? _currentScene;
     }
 }
