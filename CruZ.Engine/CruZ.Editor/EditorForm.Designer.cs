@@ -55,18 +55,19 @@ namespace CruZ.Editor
             ((System.ComponentModel.ISupportInitialize)splitContainer1).EndInit();
             splitContainer1.ResumeLayout(false);
             ResumeLayout(false);
-
+            //
             // MonoGameControl
-            testControl = new TestControl();
-            testControl.Dock = DockStyle.Fill;
-            testControl.BackColor = Color.LightSeaGreen;
+            //
+            worldViewControl = new WorldViewControl();
+            worldViewControl.Dock = DockStyle.Fill;
+            worldViewControl.BackColor = Color.LightSeaGreen;
 
-            splitContainer1.Panel1.Controls.Add(testControl);
+            splitContainer1.Panel1.Controls.Add(worldViewControl);
         }
 
         #endregion
 
         private SplitContainer splitContainer1;
-        private TestControl testControl;
+        private WorldViewControl worldViewControl;
     }
 }

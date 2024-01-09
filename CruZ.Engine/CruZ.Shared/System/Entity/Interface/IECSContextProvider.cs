@@ -5,8 +5,8 @@ namespace CruZ.Systems
 {
     public interface IECSContextProvider
     {
-        public event Action<GameTime> DrawEvent;
-        public event Action<GameTime> UpdateEvent;
-        public event Action InitializeSystemEvent;
+        event Action<GameTime> DrawEvent;
+        event Action<GameTime> UpdateEvent;
+        event Action InitializeSystemEvent;
     }
 }

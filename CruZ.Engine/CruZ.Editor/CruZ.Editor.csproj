@@ -27,7 +27,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="DrawTest.cs">
+    <Compile Update="WorldViewControl.cs">
       <SubType>Component</SubType>
     </Compile>
   </ItemGroup>
