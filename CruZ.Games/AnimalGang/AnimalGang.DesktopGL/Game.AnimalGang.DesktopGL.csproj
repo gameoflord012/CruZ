@@ -1,0 +1,10 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<OutputType>WinExe</OutputType>
+		<TargetFramework>net8.0</TargetFramework>
+	</PropertyGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\..\..\CruZ.Engine\CruZ.DesktopGL\CruZ.DesktopGL.csproj" />
+	</ItemGroup>
+	<Import Project="..\AnimalGang.Shared\AnimalGang.Shared.projitems" Label="Shared" />
+</Project>

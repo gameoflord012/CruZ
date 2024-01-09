@@ -49,7 +49,6 @@ namespace CruZ.Serialization
             }
 
             return Deserialize(json, ty);
-
         }
 
         public object Deserialize(string json, Type ty)
