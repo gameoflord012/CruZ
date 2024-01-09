@@ -15,6 +15,18 @@ namespace CruZ.Games.AnimalGang
 
         protected override void OnUpdate(GameTime gameTime)
         {
+            if (Input.KeyboardState.IsKeyDown(Keys.Space))
+            {
+                _attackTimer = 0;
+                _animation.SelectPlayer("player-sword-attack").Play("attack");
+            }
+
+            if (_attackTimer < _attackDuration)
+            {
+                _attackTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
+                return;
+            }
+
             Vector3 dir = Vector3.Zero;
 
             if(Input.KeyboardState.IsKeyDown(Keys.A))
@@ -36,19 +48,22 @@ namespace CruZ.Games.AnimalGang
 
             if (dir.SqrMagnitude() > 0.1)
             {
-                _animation.SelectPlayer("normal-player").Play("walk");
+                _animation.SelectPlayer("player-normal").Play("walk");
                 _sprite.Flip = dir.X < 0;
             }
             else
             {
-                _animation.SelectPlayer("sword-player").Play("idle");
+                _animation.SelectPlayer("player-sword-idle").Play("idle");
             }   
 
-            AttachedEntity.Transform.Position += dir * speed;
+            AttachedEntity.Transform.Position += dir * _speed;
         }
 
         AnimationComponent _animation;
         SpriteComponent _sprite;
-        float speed = 6;
+
+        float _attackDuration = 0.2f;
+        float _attackTimer = 9999999f;
+        float _speed = 6;
     }
 }
