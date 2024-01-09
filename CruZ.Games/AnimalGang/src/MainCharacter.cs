@@ -5,19 +5,12 @@ using Microsoft.Xna.Framework.Input;
 
 namespace CruZ.Games.AnimalGang
 {
-    public class MainCharacter : EntityScript, IComponentCallback
+    public class MainCharacter : EntityScript 
     {
-        public void OnEntityChanged(TransformEntity entity)
+        protected override void OnInit()
         {
-            _e = entity;
-            _e.OnDeserializationCompleted += Initialize;
-        }
-
-        private void Initialize()
-        {
-            _sprite = _e.GetComponent<SpriteComponent>();
-            _animation = _e.GetComponent<AnimationComponent>();
-            _animation.SelectPlayer("normal-player").Play("walk");
+            _sprite = AttachedEntity.GetComponent<SpriteComponent>();
+            _animation = AttachedEntity.GetComponent<AnimationComponent>();
         }
 
         protected override void OnUpdate(GameTime gameTime)
@@ -41,14 +34,21 @@ namespace CruZ.Games.AnimalGang
                 dir += new Vector3(0, -1);
             }
 
-            _sprite.Flip = dir.X < 0;
+            if (dir.SqrMagnitude() > 0.1)
+            {
+                _animation.SelectPlayer("normal-player").Play("walk");
+                _sprite.Flip = dir.X < 0;
+            }
+            else
+            {
+                _animation.SelectPlayer("sword-player").Play("idle");
+            }   
 
-            _e.Transform.Position += dir * speed;
+            AttachedEntity.Transform.Position += dir * speed;
         }
 
         AnimationComponent _animation;
         SpriteComponent _sprite;
-        TransformEntity _e;
         float speed = 6;
     }
 }

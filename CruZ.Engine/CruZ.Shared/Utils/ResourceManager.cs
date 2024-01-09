@@ -87,7 +87,6 @@ namespace CruZ.Resource
             {
                 _serializer.SerializeToFile(res, uri.GetFullPath(RESOURCE_ROOT));
             }
-
         }
 
         private static object LoadContent(URI uri, Type ty)

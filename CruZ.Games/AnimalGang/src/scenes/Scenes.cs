@@ -16,10 +16,13 @@ namespace CruZ.Scene
 
             var anim = new AnimationComponent();
             anim.LoadSpriteSheet("anims/player-walk.sf", "normal-player");
+            anim.LoadSpriteSheet("anims/player-sword.sf", "sword-player");
 
             e.AddComponent(new SpriteComponent());
             e.AddComponent(new MainCharacter());
             e.AddComponent(anim);
+
+            e.Transform.Scale = new(2, 2);
 
             scene.AddToScene(e);
 

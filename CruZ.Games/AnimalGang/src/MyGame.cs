@@ -13,7 +13,7 @@ namespace CruZ.Games.AnimalGang
             base.Initialize();
 
             var scene = SceneManager.SceneAssets.Values.First();
-            ResourceManager.InitResource("scenes\\scene1.scene", scene);
+            ResourceManager.InitResource("scenes\\scene1.scene", scene, true);
             scene.Dispose();
 
             scene = ResourceManager.LoadResource<GameScene>("scenes\\scene1.scene");
@@ -26,8 +26,6 @@ namespace CruZ.Games.AnimalGang
 
             Logging.FlushToDebug();
         }
-
-        MainCharacter _charTemplate;
 
         public static void Main(string[] args)
         {

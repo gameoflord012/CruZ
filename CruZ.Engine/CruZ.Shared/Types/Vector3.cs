@@ -14,6 +14,11 @@ namespace CruZ
             Z = z;
         }
 
+        public float SqrMagnitude()
+        {
+            return X * X + Y * Y + Z * Z;
+        }
+
         public static implicit operator Vector3(System.Numerics.Vector2 v)
         {
             return new(v.X, v.Y, 0);
@@ -60,6 +65,7 @@ namespace CruZ
         {
             return new(v.X * s, v.Y * s, v.Z * s);
         }
+
 
         public float X, Y, Z;
 

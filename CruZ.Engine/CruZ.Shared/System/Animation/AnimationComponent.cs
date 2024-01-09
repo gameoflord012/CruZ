@@ -11,7 +11,6 @@ using System.Diagnostics;
 namespace CruZ.Components
 {
     public class AnimationPlayer
-
     {
         public AnimationPlayer(SpriteSheet spriteSheet)
         {
@@ -58,7 +57,7 @@ namespace CruZ.Components
 
         public void Update(GameTime gameTime)
         {
-            _currentAnimationPlayer.Update(gameTime, _sprite);
+            _currentAnimationPlayer?.Update(gameTime, _sprite);
         }
 
         public AnimationPlayer SelectPlayer(string key)

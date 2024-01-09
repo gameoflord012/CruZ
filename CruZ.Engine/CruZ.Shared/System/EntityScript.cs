@@ -9,14 +9,15 @@ using Newtonsoft.Json.Linq;
 
 namespace CruZ.Components
 {
-    public class EntityScript : IComponent
+    public class EntityScript : IComponent, IComponentCallback
     {
         [JsonIgnore]
         public Type ComponentType => typeof(EntityScript);
 
-        public EntityScript()
+        public void OnEntityChanged(TransformEntity entity)
         {
-            InternalInit();
+            _e = entity;
+            _e.OnDeserializationCompleted += InternalInit;
         }
 
         public void InternalInit()
@@ -34,9 +35,12 @@ namespace CruZ.Components
             OnUpdate(gameTime);
         }
 
-
         protected virtual void OnInit() { }
         protected virtual void OnUpdate(GameTime gameTime) { }
         protected virtual void OnDraw(GameTime gameTime) { }
+
+        protected TransformEntity AttachedEntity { get => _e; }
+
+        TransformEntity _e;
     }
 }
