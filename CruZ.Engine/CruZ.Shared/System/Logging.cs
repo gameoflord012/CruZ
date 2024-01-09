@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.Runtime.Serialization;
 
 namespace CruZ.Utility
@@ -23,6 +25,16 @@ namespace CruZ.Utility
         public static string[] GetMsgs()
         {
             return Main._msgs.ToArray();
+        }
+
+        public static void FlushToDebug()
+        {
+            Debug.WriteLine("===========================CRUZ_LOGGING===========================");
+            foreach (var msg in Main._msgs)
+            {
+                Debug.WriteLine(msg);
+            }
+            Debug.WriteLine("===========================END_LOG============================");
         }
 
         List<string> _msgs = new();

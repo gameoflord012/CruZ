@@ -6,18 +6,17 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace CruZ.Components
 {
-    public class AnimationComponent : IComponent, IComponentCallback, ISerializable
-    {
-        public Type ComponentType   => typeof(AnimationComponent);
+    public class AnimationPlayer
 
-        public void LoadSpriteSheet(URI uri)
+    {
+        public AnimationPlayer(SpriteSheet spriteSheet)
         {
-            _spriteSheet = ResourceManager.LoadResource<SpriteSheet>(uri);
-            _animatedSprite = new AnimatedSprite(_spriteSheet);
-            _spriteSheetURI = uri.ToString();
+            _spriteSheet = spriteSheet;
+            _animatedSprite = new AnimatedSprite(spriteSheet);
         }
 
         public void Play(string animationName)
@@ -32,13 +31,40 @@ namespace CruZ.Components
             }
         }
 
-        public void Update(GameTime gameTime)
+        public void Update(GameTime gameTime, SpriteComponent sprite)
         {
             _animatedSprite.Update(gameTime);
 
-            _sprite.Texture = _animatedSprite.TextureRegion.Texture;
-            _sprite.SourceRectangle = _animatedSprite.TextureRegion.Bounds;
-            _sprite.Origin = _animatedSprite.Origin;
+            sprite.Texture = _animatedSprite.TextureRegion.Texture;
+            sprite.SourceRectangle = _animatedSprite.TextureRegion.Bounds;
+            sprite.Origin = _animatedSprite.Origin;
+        }
+
+        AnimatedSprite _animatedSprite;
+        SpriteSheet _spriteSheet;
+    }
+
+    public class AnimationComponent : IComponent, IComponentCallback, ISerializable
+    {
+        public Type ComponentType   => typeof(AnimationComponent);
+
+        public void LoadSpriteSheet(URI uri, string animationPlayerKey)
+        {
+            var spriteSheet = ResourceManager.LoadResource<SpriteSheet>(uri);
+
+            _getAnimationPlayer[animationPlayerKey] = new AnimationPlayer(spriteSheet);
+            _loadedResources.Add(new(uri.ToString(), animationPlayerKey));
+        }
+
+        public void Update(GameTime gameTime)
+        {
+            _currentAnimationPlayer.Update(gameTime, _sprite);
+        }
+
+        public AnimationPlayer SelectPlayer(string key)
+        {
+            _currentAnimationPlayer = _getAnimationPlayer[key];
+            return _currentAnimationPlayer;
         }
 
         public void OnEntityChanged(TransformEntity entity)
@@ -55,26 +81,43 @@ namespace CruZ.Components
         public void ReadJson(JsonReader reader, JsonSerializer serializer)
         {
             var jObject = JObject.Load(reader);
-            string? uri = jObject["sprite-sheet-uri"].Value<string>();
 
-            if (string.IsNullOrEmpty(uri)) return;
+            foreach (var player in jObject["animation-players"])
+            {
+                string? uri = player["resource-uri"].Value<string>();
+                string? playerKey = player["animation-player-key"].Value<string>();
 
-            LoadSpriteSheet(new(uri));
+                if (string.IsNullOrEmpty(uri)) continue;
+                Trace.Assert(playerKey != null);
+
+                LoadSpriteSheet(uri, playerKey);
+            }
         }
 
         public void WriteJson(JsonWriter writer, JsonSerializer serializer)
         {
             writer.WriteStartObject();
-            writer.WritePropertyName("sprite-sheet-uri");
-            writer.WriteValue(_spriteSheetURI);
+
+            writer.WritePropertyName("animation-players");
+            writer.WriteStartArray();
+            foreach (var resource in _loadedResources)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("resource-uri");
+                writer.WriteValue(resource.Key);
+                writer.WritePropertyName("animation-player-key");
+                writer.WriteValue(resource.Value);
+                writer.WriteEndObject();
+            }
+            writer.WriteEnd();
             writer.WriteEnd();
         }
 
-        string _spriteSheetURI;
+        AnimationPlayer?                    _currentAnimationPlayer;
+        Dictionary<string, AnimationPlayer> _getAnimationPlayer = new();
+        SpriteComponent                     _sprite;
+        TransformEntity?                    _e;
 
-        AnimatedSprite _animatedSprite;
-        SpriteSheet _spriteSheet;
-        SpriteComponent _sprite;
-        TransformEntity? _e;
+        List<KeyValuePair<string, string>> _loadedResources = [];
     }
 }

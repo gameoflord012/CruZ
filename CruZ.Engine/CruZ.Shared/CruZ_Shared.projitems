@@ -27,6 +27,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)System\Scene\SceneAssetMethodAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System\Scene\SceneAssetClassAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\Helper.cs" />
+    <Compile Include="..\CruZ.Shared\Utils\IResourceInjection.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\ResourceManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System\EntityScriptSystem.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System\Entity\ECS.cs" />

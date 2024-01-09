@@ -16,8 +16,8 @@ namespace CruZ.Games.AnimalGang
         private void Initialize()
         {
             _sprite = _e.GetComponent<SpriteComponent>();
-            _animatedSprite = _e.GetComponent<AnimationComponent>();
-            _animatedSprite.Play("walk");
+            _animation = _e.GetComponent<AnimationComponent>();
+            _animation.SelectPlayer("normal-player").Play("walk");
         }
 
         protected override void OnUpdate(GameTime gameTime)
@@ -46,7 +46,7 @@ namespace CruZ.Games.AnimalGang
             _e.Transform.Position += dir * speed;
         }
 
-        AnimationComponent _animatedSprite;
+        AnimationComponent _animation;
         SpriteComponent _sprite;
         TransformEntity _e;
         float speed = 6;

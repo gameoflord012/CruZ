@@ -15,7 +15,7 @@ namespace CruZ.Scene
             var e = ECS.CreateEntity();
 
             var anim = new AnimationComponent();
-            anim.LoadSpriteSheet("anims/player-walk.sf");
+            anim.LoadSpriteSheet("anims/player-walk.sf", "normal-player");
 
             e.AddComponent(new SpriteComponent());
             e.AddComponent(new MainCharacter());

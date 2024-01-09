@@ -1,4 +1,5 @@
-﻿using CruZ.Serialization;
+﻿using Assimp.Configs;
+using CruZ.Serialization;
 using CruZ.Utility;
 using Microsoft.Xna.Framework.Content;
 using MonoGame.Extended.Content;
@@ -66,16 +67,27 @@ namespace CruZ.Resource
             }
         }
 
-        public static void CreateResource(URI uri, object res, bool renew = false)
+        public static void InitResource(URI uri, object res, bool renew = false)
         {
-            try
+            object? existedResource = null;
+
+            if (!renew)
             {
-                if (LoadResource(uri, res.GetType()) != null && !renew) return;
+                try
+                {
+                    existedResource = LoadResource(uri, res.GetType());
+                }
+                catch
+                {
+                    Logging.PushMsg("Failed to load resource \"{0}\", new one will be created", uri);
+                }
             }
-            catch
+
+            if (existedResource == null)
             {
                 _serializer.SerializeToFile(res, uri.GetFullPath(RESOURCE_ROOT));
             }
+
         }
 
         private static object LoadContent(URI uri, Type ty)
