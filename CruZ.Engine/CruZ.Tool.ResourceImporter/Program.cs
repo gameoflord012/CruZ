@@ -9,8 +9,8 @@ namespace CruZ.Tool.ResourceImporter
     {
         static void Main(string[] args)
         {
-            ReadDotResourceImporter();
             ParseCommandArgs(args);
+            ReadDotResourceImporter();
             InitImportItems();
             DoBuild();
         }
@@ -19,7 +19,10 @@ namespace CruZ.Tool.ResourceImporter
         {
             if (_isBuild)
             {
-                Console.WriteLine("Build processing ...");
+                Console.WriteLine("Start build...");
+                RemoveExcessDotImport();
+
+                Console.WriteLine("Process import item...");
 
                 foreach (var import in _importItems)
                 {
@@ -57,14 +60,37 @@ namespace CruZ.Tool.ResourceImporter
                     }
                 }
 
-                _jObject["build-result"] = JObject.FromObject(_getPathFromGuid);
-                var json = JsonConvert.SerializeObject(_jObject, _serializerSettings);
+                ExportResult();
+            }
+        }
 
-                using (var writer = new StreamWriter(IMPORTER_DATA_PATH, false))
+        private static void RemoveExcessDotImport()
+        {
+            var option = new EnumerationOptions
+            {
+                RecurseSubdirectories = true
+            };
+
+            foreach (var dotImport in Directory.EnumerateFiles(_resourceRoot, "*.import", option))
+            {
+                var import = dotImport.Remove(dotImport.Length - ".import".Length);
+                if (!File.Exists(import))
                 {
-                    writer.WriteLine(json);
-                    writer.Flush();
+                    File.Delete(dotImport);
+                    Console.WriteLine("Remove " + dotImport);
                 }
+            }
+        }
+
+        private static void ExportResult()
+        {
+            _jObject["build-result"] = JObject.FromObject(_getPathFromGuid);
+            var json = JsonConvert.SerializeObject(_jObject, _serializerSettings);
+
+            using (var writer = new StreamWriter(ResourceImporterPath, false))
+            {
+                writer.WriteLine(json);
+                writer.Flush();
             }
         }
 
@@ -95,19 +121,25 @@ namespace CruZ.Tool.ResourceImporter
                     _isBuild = o.IsBuild;
                     _resourceRoot = o.ResourceRoot;
                 });
-
-            Console.WriteLine(string.Format("ResourceRoot: {0}", Path.GetFullPath(_resourceRoot)));
-
         }
 
         private static void ReadDotResourceImporter()
         {
-            if (File.Exists(".resourceimporter"))
+            if (File.Exists(ResourceImporterPath))
             {
-                using (StreamReader reader = new(".resourceimporter"))
+                Console.WriteLine("Found .resourceimporter");
+
+                using (StreamReader reader = new(ResourceImporterPath))
                 {
                     var json = reader.ReadToEnd();
-                    _jObject = JObject.Parse(json);
+                    try
+                    {
+                        _jObject = JObject.Parse(json);
+                    }
+                    catch (JsonReaderException)
+                    {
+                        Console.WriteLine("Failed to read json file, default settings is used");
+                    }
 
                     if (_jObject["resource-root"] != null)
                     {
@@ -121,10 +153,8 @@ namespace CruZ.Tool.ResourceImporter
                     }
                 }
             }
-            else
-            {
-                File.Create(IMPORTER_DATA_PATH).Close();
-            }
+
+            Console.WriteLine(string.Format("ResourceRoot: {0}", Path.GetFullPath(_resourceRoot)));
         }
 
         public static string GetUniqueGuid()
@@ -148,6 +178,6 @@ namespace CruZ.Tool.ResourceImporter
         static JObject                      _jObject = new();
         static JsonSerializerSettings       _serializerSettings = new JsonSerializerSettings { Formatting = Formatting.Indented };
 
-        static readonly string IMPORTER_DATA_PATH = ".resourceimporter";
+        static string ResourceImporterPath { get => _resourceRoot + "\\" + ".resourceImporter"; }
     }
 }

@@ -1,0 +1,14 @@
+{
+  "textureAtlas": {
+    "texture": "D:\\monogame-projects\\CruZ_GameEngine\\CruZ.Games\\AnimalGang\\res\\imgs\\player-walk.png",
+    "regionWidth": 48,
+    "regionHeight": 48
+  },
+  "cycles": {
+    "walk": {
+      "frames": [0,1,2,3,4,5,6,7],
+      "isLooping": true,
+      "frameDuration": 0.1
+    }
+  }
+}

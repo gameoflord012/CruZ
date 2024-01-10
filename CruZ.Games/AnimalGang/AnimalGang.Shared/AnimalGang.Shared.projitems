@@ -15,8 +15,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)src\scenes\Scenes.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="$(MSBuildThisFileDirectory)res\**">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    <Folder Include="$(MSBuildThisFileDirectory)res\" />
   </ItemGroup>
 </Project>
