@@ -1,12 +1,12 @@
 {
-  "import-pattern": [
+  "import-patterns": [
     "*.png"
   ],
   "build-result": {
-    "b1c72815-7ce6-4fea-91e8-4f4e970f8993": "D:\\monogame-projects\\CruZ_GameEngine\\CruZ.Games\\AnimalGang\\AnimalGang.DesktopGL\\..\\AnimalGang.Shared\\res\\imgs\\image.png",
-    "aa9e40f2-4de2-4bd2-a58c-3344b46ea2f9": "D:\\monogame-projects\\CruZ_GameEngine\\CruZ.Games\\AnimalGang\\AnimalGang.DesktopGL\\..\\AnimalGang.Shared\\res\\imgs\\player-sword-attack.png",
-    "4687491b-bbc6-4147-ab38-6f2a5dcaa63b": "D:\\monogame-projects\\CruZ_GameEngine\\CruZ.Games\\AnimalGang\\AnimalGang.DesktopGL\\..\\AnimalGang.Shared\\res\\imgs\\player-sword-idle.png",
-    "508ca71d-e5ea-42ec-b424-c0c003ff374b": "D:\\monogame-projects\\CruZ_GameEngine\\CruZ.Games\\AnimalGang\\AnimalGang.DesktopGL\\..\\AnimalGang.Shared\\res\\imgs\\player-walk.png",
+    "5f34ad42-034e-43c5-a62b-c1ac0314c7af": "D:\\monogame-projects\\CruZ_GameEngine\\CruZ.Games\\AnimalGang\\AnimalGang.DesktopGL\\..\\AnimalGang.Shared\\res\\imgs\\image.png",
+    "864cf6ce-ab99-4ed7-b20f-33979cfda686": "D:\\monogame-projects\\CruZ_GameEngine\\CruZ.Games\\AnimalGang\\AnimalGang.DesktopGL\\..\\AnimalGang.Shared\\res\\imgs\\player-sword-attack.png",
+    "605aea17-daca-42cb-84c8-8efea0d2da54": "D:\\monogame-projects\\CruZ_GameEngine\\CruZ.Games\\AnimalGang\\AnimalGang.DesktopGL\\..\\AnimalGang.Shared\\res\\imgs\\player-sword-idle.png",
+    "053ab54c-b565-49ee-a390-953192c7ca01": "D:\\monogame-projects\\CruZ_GameEngine\\CruZ.Games\\AnimalGang\\AnimalGang.DesktopGL\\..\\AnimalGang.Shared\\res\\imgs\\player-walk.png",
     "0edc027d-91f9-4131-b492-54d9ee6eb5da": "D:\\monogame-projects\\CruZ_GameEngine\\CruZ.Games\\AnimalGang\\AnimalGang.DesktopGL\\..\\AnimalGang.Shared\\res\\imgs\\Asset Packs 1-3 (final)\\Asset Packs 1-3 (final)\\Asset Pack-V1\\Sprite Sheets\\Character Idle 48x48.png",
     "01508227-ef9f-45ee-a214-a34e0562a95c": "D:\\monogame-projects\\CruZ_GameEngine\\CruZ.Games\\AnimalGang\\AnimalGang.DesktopGL\\..\\AnimalGang.Shared\\res\\imgs\\Asset Packs 1-3 (final)\\Asset Packs 1-3 (final)\\Asset Pack-V1\\Sprite Sheets\\player jump 48x48.png",
     "c5212ee8-ea34-43b1-8509-3550ea45ae4f": "D:\\monogame-projects\\CruZ_GameEngine\\CruZ.Games\\AnimalGang\\AnimalGang.DesktopGL\\..\\AnimalGang.Shared\\res\\imgs\\Asset Packs 1-3 (final)\\Asset Packs 1-3 (final)\\Asset Pack-V1\\Sprite Sheets\\player land 48x48.png",

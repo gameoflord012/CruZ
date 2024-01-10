@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "CruZ.Tool.ResourceImporter": {
+      "commandName": "Project",
+      "commandLineArgs": "-build"
+    }
+  }
+}
