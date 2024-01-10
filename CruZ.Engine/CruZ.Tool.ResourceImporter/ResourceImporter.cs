@@ -65,9 +65,14 @@ namespace CruZ.Tool.ResourceImporter
             }
         }
 
+        public static void SetImporterObject(ResourceImporterObject importerObject)
+        {
+            _ImporterObject = importerObject;
+        }
+
         public static ResourceImporterObject ReadImporterObject(string filePath)
         {
-            _ImporterObject = new ResourceImporterObject();
+            var importerObject = new ResourceImporterObject();
 
             if (File.Exists(filePath))
             {
@@ -84,12 +89,12 @@ namespace CruZ.Tool.ResourceImporter
                     }
                     else
                     {
-                        _ImporterObject = deserialize;
+                        importerObject = deserialize;
                     }
                 }
             }
 
-            return _ImporterObject;
+            return importerObject;
         }
 
         private static string[] GetImportItems()

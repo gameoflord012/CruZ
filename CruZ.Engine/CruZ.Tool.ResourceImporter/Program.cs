@@ -10,7 +10,7 @@ namespace CruZ.Tool.ResourceImporter
             bool isBuild = false;
 
             Parser.Default.ParseArguments<Options>(args)
-                .WithParsed<Options>(o =>
+                .WithParsed(o =>
                 {
                     isBuild = o.IsBuild;
                     ResourceImporter.ResourceRoot = o.ResourceRoot;
@@ -19,7 +19,8 @@ namespace CruZ.Tool.ResourceImporter
             Console.WriteLine(string.Format("ResourceRoot: {0}", Path.GetFullPath(ResourceImporter.ResourceRoot)));
             string resourceImporterPath = ResourceImporter.ResourceRoot + "\\.resourceImporter";
 
-            ResourceImporter.ReadImporterObject(resourceImporterPath);
+            ResourceImporter.SetImporterObject(
+                ResourceImporter.ReadImporterObject(resourceImporterPath));
 
             if (isBuild)
             {
