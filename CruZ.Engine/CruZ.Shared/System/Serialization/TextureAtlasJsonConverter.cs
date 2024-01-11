@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using CruZ.Resource;
+using CruZ.Tool.ResourceImporter;
 using CruZ.Utility;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Content;
@@ -17,7 +18,12 @@ namespace CruZ.Serialization
             public string Texture { get; set; }
             public int RegionWidth { get; set; }
             public int RegionHeight { get; set; }
-            public Guid TextureGuid { get; set; }
+
+            [JsonIgnore]
+            public Guid TextureGuid => new Guid(_textureGuid);
+
+            [JsonProperty(PropertyName = "textureGuid")]
+            private string _textureGuid { get; set; }
         }
 
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
@@ -38,16 +44,8 @@ namespace CruZ.Serialization
             else
             {
                 var inlineAtlas = serializer.Deserialize<InlineTextureAtlas>(reader);
-
-                var dir = Path.GetDirectoryName(inlineAtlas.Texture);
-                var fileName = Path.GetFileNameWithoutExtension(inlineAtlas.Texture);
-
-                var textureProjectPath = Path.Combine(dir, fileName);
-                
-
-                Texture2D texture;
-                texture = ResourceManager.LoadResource<Texture2D>(inlineAtlas.TextureGuid);
-                return TextureAtlas.Create(textureProjectPath, texture, inlineAtlas.RegionWidth, inlineAtlas.RegionHeight);
+                var texture = ResourceManager.LoadResource<Texture2D>(inlineAtlas.TextureGuid);
+                return TextureAtlas.Create(texture, inlineAtlas.RegionWidth, inlineAtlas.RegionHeight);
             }
         }
 

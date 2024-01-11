@@ -27,7 +27,14 @@ namespace CruZ.Scene
                                     methodAttribute.AssetMethodId + "\\" +
                                     method.Name;
 
-                    SceneAssets[assetPath] = (GameScene)method.Invoke(null, null);
+                    try
+                    {
+                        SceneAssets[assetPath] = (GameScene)method.Invoke(null, BindingFlags.DoNotWrapExceptions, null, null, null);
+                    }
+                    catch
+                    {
+                        throw;
+                    }
                 }
             }
 

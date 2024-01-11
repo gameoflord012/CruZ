@@ -32,7 +32,8 @@ namespace MonoGame.Extended.TextureAtlases
         /// <param name="texture">Source <see cref="Texture2D " /> image used to draw on screen.</param>
         public TextureAtlas(string name, Texture2D texture)
         {
-            Name = name;
+            //MODIFIED: uncomment
+            //Name = name;
             Texture = texture;
 
             _regionsByName = new Dictionary<string, TextureRegion2D>();
@@ -56,7 +57,7 @@ namespace MonoGame.Extended.TextureAtlases
         private readonly Dictionary<string, TextureRegion2D> _regionsByName;
         private readonly List<TextureRegion2D> _regionsByIndex;
 
-        public string Name { get; }
+        public string Name { get => throw new NotImplementedException(); }
 
         /// <summary>
         ///     Gets a source <see cref="Texture2D" /> image.
@@ -253,6 +254,14 @@ namespace MonoGame.Extended.TextureAtlases
             }
 
             return textureAtlas;
+        }
+
+
+        //MODIFIED: create with no name innit
+        public static TextureAtlas Create(Texture2D texture, int regionWidth, int regionHeight,
+            int maxRegionCount = int.MaxValue, int margin = 0, int spacing = 0)
+        {
+            return Create("", texture, regionWidth, regionHeight, maxRegionCount, margin, spacing);
         }
     }
 }

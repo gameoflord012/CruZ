@@ -12,9 +12,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)src\MainCharacter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)src\MyGame.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)src\SceneCreation.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)src\scenes\Scenes.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="$(MSBuildThisFileDirectory)res\" />
+    <Compile Include="$(MSBuildThisFileDirectory)src\Scenes.cs" />
   </ItemGroup>
 </Project>

@@ -25,6 +25,7 @@ namespace CruZ.Tool.ResourceImporter
             foreach (var import in GetImportItems())
             {
                 string dotImport = import + ".import";
+                string relImport = GetRelativePath(ResourceRoot, import);
 
                 if (File.Exists(dotImport))
                 {
@@ -33,7 +34,7 @@ namespace CruZ.Tool.ResourceImporter
                     if (!usedGuid.Contains(guid))
                     {
                         usedGuid.Add(guid);
-                        getPathFromGuid[guid] = import;
+                        getPathFromGuid[guid] = relImport;
                         continue;
                     }
 
@@ -47,7 +48,7 @@ namespace CruZ.Tool.ResourceImporter
                 using (var writer = new StreamWriter(dotImport, false))
                 {
                     var guid = GetUniqueGuid(usedGuid);
-                    getPathFromGuid[guid] = import;
+                    getPathFromGuid[guid] = relImport;
 
                     writer.WriteLine(guid);
                     writer.Flush();
@@ -57,6 +58,18 @@ namespace CruZ.Tool.ResourceImporter
             }
 
             _ImporterObject.BuildResult = getPathFromGuid;
+        }
+
+        private static string GetRelativePath(string relativeFolder, string destinationFile)
+        {
+            Uri folder = new Uri(Path.GetFullPath(relativeFolder) + "\\");
+            Uri file = new Uri(Path.GetFullPath(destinationFile));
+
+            return Uri.UnescapeDataString(
+                folder.MakeRelativeUri(file)
+                    .ToString()
+                    .Replace('/', Path.DirectorySeparatorChar)
+                );
         }
 
         public static void ExportResult(string filePath)

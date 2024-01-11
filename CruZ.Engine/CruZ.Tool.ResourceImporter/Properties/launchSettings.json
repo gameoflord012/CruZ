@@ -2,7 +2,7 @@
   "profiles": {
     "CruZ.Tool.ResourceImporter": {
       "commandName": "Project",
-      "commandLineArgs": "-build"
+      "commandLineArgs": "-build -r D:\\monogame-projects\\CruZ_GameEngine\\CruZ.Games\\AnimalGang\\AnimalGang.Shared\\res"
     }
   }
 }

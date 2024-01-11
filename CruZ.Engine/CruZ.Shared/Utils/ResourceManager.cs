@@ -10,6 +10,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq.Expressions;
 using System.Reflection;
 
 namespace CruZ.Resource
@@ -33,7 +34,9 @@ namespace CruZ.Resource
         {
             try
             {
-                return LoadContent(resourcePath, ty);
+                var dir = Path.GetDirectoryName(resourcePath);
+                var file = Path.GetFileNameWithoutExtension(resourcePath);
+                return LoadContent(Path.Combine(dir, file), ty);
             }
             catch(ContentLoadException)
             {
@@ -43,7 +46,7 @@ namespace CruZ.Resource
                 }
                 catch(FileNotFoundException)
                 {
-                    throw new(string.Format("Can't find resource file with uri {0}", resourcePath));
+                    throw new(string.Format("Can't find resource file {0}", resourcePath));
                 }
             }
         }
@@ -72,11 +75,19 @@ namespace CruZ.Resource
 
         public static T LoadResource<T>(Guid guid)
         {
-            var fullPath = _GetResourcePathFromGuid[guid.ToString()];
-            var relPath = Path.GetRelativePath(RESOURCE_ROOT, fullPath);
-            return LoadResource<T>(relPath);
+            return LoadResource<T>(GetResourcePath(guid));
         }
 
+        private static string GetResourcePath(Guid guid)
+        {
+            try { 
+                return _GetResourcePathFromGuid[guid.ToString()];
+            }
+            catch (KeyNotFoundException)
+            {
+                throw new KeyNotFoundException("Can't find resource with guid " + guid);
+            }
+        }
 
         public static T LoadContent<T>(string resourcePath)
         {
@@ -111,14 +122,13 @@ namespace CruZ.Resource
                 return typeof(ResourceManager).
                     GetMethod("LoadContent", System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.Public).
                     MakeGenericMethod(ty).
-                    Invoke(null, [resourcePath]);
+                    Invoke(null, BindingFlags.DoNotWrapExceptions, null,[resourcePath], null);
 #pragma warning restore CS8603 // Possible null reference return.
 #pragma warning restore CS8602 // Dereference of a possibly null reference.
             }
-            catch (TargetInvocationException e)
+            catch
             {
-                if (e.InnerException == null) throw;
-                throw e.InnerException;
+                throw;
             }
         }
 
