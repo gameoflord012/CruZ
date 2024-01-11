@@ -23,6 +23,7 @@
     <ProjectReference Include="..\..\ThirdParty\MonoGame.Extended\src\cs\MonoGame.Extended.Animations\MonoGame.Extended.Animations.csproj" />
     <ProjectReference Include="..\..\ThirdParty\MonoGame.Extended\src\cs\MonoGame.Extended.Entities\MonoGame.Extended.Entities.csproj" />
     <ProjectReference Include="..\..\ThirdParty\MonoGame.Extended\src\cs\MonoGame.Extended\MonoGame.Extended.csproj" />
+    <ProjectReference Include="..\CruZ.Tool.ResourceImporter\CruZ.Tool.ResourceImporter.csproj" />
     <ProjectReference Include="..\CruZ.WinForm\CruZ.WinForm.csproj" />
   </ItemGroup>
 

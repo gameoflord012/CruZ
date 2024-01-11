@@ -1,5 +1,6 @@
 ﻿using Assimp.Configs;
 using CruZ.Serialization;
+using CruZ.Tool.ResourceImporter;
 using CruZ.Utility;
 using Microsoft.Xna.Framework.Content;
 using MonoGame.Extended.Content;
@@ -7,6 +8,7 @@ using MonoGame.Extended.Serialization;
 using MonoGame.Extended.Sprites;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 
@@ -19,9 +21,12 @@ namespace CruZ.Resource
 
         static ResourceManager()
         {
-            _serializer = new Serializer();
-            _serializer.Converters.Add(new TextureAtlasJsonConverter());
-            _serializer.Converters.Add(new SerializableJsonConverter());
+            _Serializer = new Serializer();
+            _Serializer.Converters.Add(new TextureAtlasJsonConverter());
+            _Serializer.Converters.Add(new SerializableJsonConverter());
+
+            _ResourceImporterObject = ResourceImporter.ReadImporterObject(RESOURCE_ROOT + "\\.resourceImporter");
+            _GetResourcePathFromGuid = _ResourceImporterObject.BuildResult;
         }
 
         public static T LoadContent<T>(URI uri)
@@ -58,7 +63,7 @@ namespace CruZ.Resource
             {
                 try
                 {
-                    return _serializer.DeserializeFromFile(uri.GetFullPath(RESOURCE_ROOT), ty);
+                    return _Serializer.DeserializeFromFile(uri.GetFullPath(RESOURCE_ROOT), ty);
                 }
                 catch(FileNotFoundException)
                 {
@@ -85,7 +90,7 @@ namespace CruZ.Resource
 
             if (existedResource == null)
             {
-                _serializer.SerializeToFile(res, uri.GetFullPath(RESOURCE_ROOT));
+                _Serializer.SerializeToFile(res, uri.GetFullPath(RESOURCE_ROOT));
             }
         }
 
@@ -119,6 +124,8 @@ namespace CruZ.Resource
             return (T)LoadResource(uri, typeof(T));
         }
 
-        private static Serializer _serializer;
+        private static Serializer _Serializer;
+        private static ResourceImporterObject _ResourceImporterObject;
+        private static Dictionary<string, string> _GetResourcePathFromGuid = [];
     }
 }

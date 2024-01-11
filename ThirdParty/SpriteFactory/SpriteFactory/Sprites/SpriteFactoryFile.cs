@@ -7,6 +7,7 @@ namespace SpriteFactory.Sprites
         public string Texture { get; set; }
         public int RegionWidth { get; set; } = 32;
         public int RegionHeight { get; set; } = 32;
+        public string TextureGuid { get; set; }
     }
 
     public class SpriteFactoryFile

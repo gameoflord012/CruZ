@@ -7,6 +7,7 @@ using Catel.Collections;
 using Catel.IoC;
 using Catel.MVVM;
 using Catel.Services;
+using CruZ.Tool.ResourceImporter;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -425,6 +426,18 @@ namespace SpriteFactory.Sprites
 
         public SpriteFactoryFile GetDocumentContent(Document<SpriteFactoryFile> document)
         {
+
+            string guid;
+            
+            try
+            {
+                guid = ResourceImporter.ReadResourceGuid(TexturePath);
+            }
+            catch(FileNotFoundException)
+            {
+                throw new FileNotFoundException("File " + TexturePath + " is not imported.");
+            }
+
             return new SpriteFactoryFile
             {
                 TextureAtlas = new TextureAtlas
@@ -432,7 +445,8 @@ namespace SpriteFactory.Sprites
                     //Texture = document.GetRelativePath(TexturePath), //MODIFIED
                     Texture = TexturePath,
                     RegionWidth = TileWidth,
-                    RegionHeight = TileHeight
+                    RegionHeight = TileHeight,
+                    TextureGuid = guid
                 },
                 Cycles = Animations.ToDictionary(a => a.Name, a => a.ToAnimationCycle())
             };

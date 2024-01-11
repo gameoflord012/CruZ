@@ -1,8 +1,11 @@
 {
   "import-patterns": [
+    "*.jpg",
     "*.png"
   ],
   "build-result": {
+    "b791c3fb-defa-4a78-86fc-236c7d6e6725": "D:\\monogame-projects\\CruZ_GameEngine\\CruZ.Games\\AnimalGang\\AnimalGang.DesktopGL\\..\\AnimalGang.Shared\\res\\Content\\homelander.jpg",
+    "085974f4-213c-4302-9b1a-fa7f98eb7f2f": "D:\\monogame-projects\\CruZ_GameEngine\\CruZ.Games\\AnimalGang\\AnimalGang.DesktopGL\\..\\AnimalGang.Shared\\res\\imgs\\homelander.jpg",
     "5f34ad42-034e-43c5-a62b-c1ac0314c7af": "D:\\monogame-projects\\CruZ_GameEngine\\CruZ.Games\\AnimalGang\\AnimalGang.DesktopGL\\..\\AnimalGang.Shared\\res\\imgs\\image.png",
     "864cf6ce-ab99-4ed7-b20f-33979cfda686": "D:\\monogame-projects\\CruZ_GameEngine\\CruZ.Games\\AnimalGang\\AnimalGang.DesktopGL\\..\\AnimalGang.Shared\\res\\imgs\\player-sword-attack.png",
     "605aea17-daca-42cb-84c8-8efea0d2da54": "D:\\monogame-projects\\CruZ_GameEngine\\CruZ.Games\\AnimalGang\\AnimalGang.DesktopGL\\..\\AnimalGang.Shared\\res\\imgs\\player-sword-idle.png",

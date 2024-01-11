@@ -1,5 +1,7 @@
 ﻿using CommandLine;
 using Newtonsoft.Json;
+using System;
+using System.IO;
 
 namespace CruZ.Tool.ResourceImporter
 {

@@ -1,0 +1,15 @@
+{
+  "textureAtlas": {
+    "texture": "D:\\monogame-projects\\CruZ_GameEngine\\CruZ.Games\\AnimalGang\\AnimalGang.DesktopGL\\res\\imgs\\player-sword-attack.png",
+    "regionWidth": 32,
+    "regionHeight": 32,
+    "textureGuid": "aa9e40f2-4de2-4bd2-a58c-3344b46ea2f9"
+  },
+  "cycles": {
+    "animation0": {
+      "frames": [],
+      "isLooping": false,
+      "frameDuration": 0.2
+    }
+  }
+}

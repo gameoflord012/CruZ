@@ -1,6 +1,11 @@
 ﻿using CommandLine;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Runtime.Remoting.Messaging;
 using System.Text.RegularExpressions;
 
 namespace CruZ.Tool.ResourceImporter
@@ -8,12 +13,12 @@ namespace CruZ.Tool.ResourceImporter
     public static class ResourceImporter
     {
         public static string ResourceRoot = ".";
-        private static ResourceImporterObject _ImporterObject = new();
+        private static ResourceImporterObject _ImporterObject = new ResourceImporterObject();
 
         public static void DoBuild()
         {
-            HashSet<string> usedGuid = [];
-            Dictionary<string, string> getPathFromGuid = [];
+            HashSet<string> usedGuid = new HashSet<string>();
+            Dictionary<string, string> getPathFromGuid = new Dictionary<string, string>();
 
             RemoveExcessDotImport();
 
@@ -23,17 +28,15 @@ namespace CruZ.Tool.ResourceImporter
 
                 if (File.Exists(dotImport))
                 {
-                    using (var reader = new StreamReader(dotImport))
-                    {
-                        var guid = reader.ReadToEnd().Replace("\r\n", "");
+                    var guid = ReadGuidFrom(dotImport);
 
-                        if (!usedGuid.Contains(guid))
-                        {
-                            usedGuid.Add(guid);
-                            getPathFromGuid[guid] = import;
-                            continue;
-                        }
+                    if (!usedGuid.Contains(guid))
+                    {
+                        usedGuid.Add(guid);
+                        getPathFromGuid[guid] = import;
+                        continue;
                     }
+
                 }
                 else
                 {
@@ -78,7 +81,7 @@ namespace CruZ.Tool.ResourceImporter
             {
                 Console.WriteLine("Reading " + Path.GetFullPath(filePath));
 
-                using (StreamReader reader = new(filePath))
+                using (StreamReader reader = new StreamReader(filePath))
                 {
                     var json = reader.ReadToEnd();
                     var deserialize = JsonConvert.DeserializeObject<ResourceImporterObject>(json, _SerializerSettings);
@@ -99,16 +102,11 @@ namespace CruZ.Tool.ResourceImporter
 
         private static string[] GetImportItems()
         {
-            HashSet<string> importItems = [];
+            HashSet<string> importItems = new HashSet<string>();
 
             foreach (var pattern in _ImporterObject.ImportPatterns)
             {
-                var option = new EnumerationOptions
-                {
-                    RecurseSubdirectories = true
-                };
-
-                foreach (var match in Directory.EnumerateFiles(ResourceRoot, pattern, option))
+                foreach (var match in Directory.EnumerateFiles(ResourceRoot, pattern, SearchOption.AllDirectories))
                 {
                     importItems.Add(match);
                     Console.WriteLine("Matches found: " + match);
@@ -120,12 +118,7 @@ namespace CruZ.Tool.ResourceImporter
 
         private static void RemoveExcessDotImport()
         {
-            var option = new EnumerationOptions
-            {
-                RecurseSubdirectories = true
-            };
-
-            foreach (var dotImport in Directory.EnumerateFiles(ResourceRoot, "*.import", option))
+            foreach (var dotImport in Directory.EnumerateFiles(ResourceRoot, "*.import", SearchOption.AllDirectories))
             {
                 var import = dotImport.Remove(dotImport.Length - ".import".Length);
                 if (!File.Exists(import))
@@ -133,6 +126,20 @@ namespace CruZ.Tool.ResourceImporter
                     File.Delete(dotImport);
                     Console.WriteLine("Removed " + dotImport);
                 }
+            }
+        }
+
+        public static string ReadResourceGuid(string resourcePath)
+        {
+            return ReadGuidFrom(resourcePath + ".import");
+        }
+
+        private static string ReadGuidFrom(string filePath)
+        {
+            if (!File.Exists(filePath)) throw new FileNotFoundException(filePath);
+            using (var reader = new StreamReader(filePath))
+            {
+                return reader.ReadToEnd().Replace("\r\n", "");
             }
         }
 

@@ -29,6 +29,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\CruZ.Engine\CruZ.Tool.ResourceImporter\CruZ.Tool.ResourceImporter.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Update="About\AboutWindow.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
