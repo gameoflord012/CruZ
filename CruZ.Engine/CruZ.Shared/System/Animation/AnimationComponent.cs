@@ -47,12 +47,12 @@ namespace CruZ.Components
     {
         public Type ComponentType   => typeof(AnimationComponent);
 
-        public void LoadSpriteSheet(URI uri, string animationPlayerKey)
+        public void LoadSpriteSheet(string resourcePath, string animationPlayerKey)
         {
-            var spriteSheet = ResourceManager.LoadResource<SpriteSheet>(uri);
+            var spriteSheet = ResourceManager.LoadResource<SpriteSheet>(resourcePath);
 
             _getAnimationPlayer[animationPlayerKey] = new AnimationPlayer(spriteSheet);
-            _loadedResources.Add(new(uri.ToString(), animationPlayerKey));
+            _loadedResources.Add(new(resourcePath, animationPlayerKey));
         }
 
         public void Update(GameTime gameTime)

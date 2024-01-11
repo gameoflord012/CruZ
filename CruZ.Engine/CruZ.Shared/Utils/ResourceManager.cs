@@ -29,50 +29,26 @@ namespace CruZ.Resource
             _GetResourcePathFromGuid = _ResourceImporterObject.BuildResult;
         }
 
-        public static T LoadContent<T>(URI uri)
+        public static object LoadResource(string resourcePath, Type ty)
         {
             try
             {
-                if (typeof(T) == typeof(SpriteSheet))
-                {
-                    return ApplicationContext.Content.Load<T>(
-                        CONTENT_ROOT + "\\" + uri, new JsonContentLoader());
-                }
-
-                return ApplicationContext.Content.Load<T>(
-                    CONTENT_ROOT + "\\" + uri);
-            }
-            catch(FileNotFoundException)
-            {
-                throw new ContentLoadException();
-            }
-            catch(ContentLoadException)
-            {
-                throw;
-            }
-            
-        }
-
-        public static object LoadResource(URI uri, Type ty)
-        {
-            try
-            {
-                return LoadContent(uri, ty);
+                return LoadContent(resourcePath, ty);
             }
             catch(ContentLoadException)
             {
                 try
                 {
-                    return _Serializer.DeserializeFromFile(uri.GetFullPath(RESOURCE_ROOT), ty);
+                    return _Serializer.DeserializeFromFile(Path.Combine(RESOURCE_ROOT, resourcePath), ty);
                 }
                 catch(FileNotFoundException)
                 {
-                    throw new(string.Format("Can't find resource file with uri {0}", uri));
+                    throw new(string.Format("Can't find resource file with uri {0}", resourcePath));
                 }
             }
         }
 
-        public static void InitResource(URI uri, object res, bool renew = false)
+        public static void InitResource(string resourcePath, object res, bool renew = false)
         {
             object? existedResource = null;
 
@@ -80,21 +56,53 @@ namespace CruZ.Resource
             {
                 try
                 {
-                    existedResource = LoadResource(uri, res.GetType());
+                    existedResource = LoadResource(resourcePath, res.GetType());
                 }
                 catch
                 {
-                    Logging.PushMsg("Failed to load resource \"{0}\", new one will be created", uri);
+                    Logging.PushMsg("Failed to load resource \"{0}\", new one will be created", resourcePath);
                 }
             }
 
             if (existedResource == null)
             {
-                _Serializer.SerializeToFile(res, uri.GetFullPath(RESOURCE_ROOT));
+                _Serializer.SerializeToFile(res, Path.Combine(RESOURCE_ROOT, resourcePath));
             }
         }
 
-        private static object LoadContent(URI uri, Type ty)
+        public static T LoadResource<T>(Guid guid)
+        {
+            var fullPath = _GetResourcePathFromGuid[guid.ToString()];
+            var relPath = Path.GetRelativePath(RESOURCE_ROOT, fullPath);
+            return LoadResource<T>(relPath);
+        }
+
+
+        public static T LoadContent<T>(string resourcePath)
+        {
+            try
+            {
+                if (typeof(T) == typeof(SpriteSheet))
+                {
+                    return ApplicationContext.Content.Load<T>(
+                        CONTENT_ROOT + "\\" + resourcePath, new JsonContentLoader());
+                }
+
+                return ApplicationContext.Content.Load<T>(
+                    CONTENT_ROOT + "\\" + resourcePath);
+            }
+            catch (FileNotFoundException)
+            {
+                throw new ContentLoadException();
+            }
+            catch (ContentLoadException)
+            {
+                throw;
+            }
+
+        }
+
+        private static object LoadContent(string resourcePath, Type ty)
         {
             try
             {
@@ -103,7 +111,7 @@ namespace CruZ.Resource
                 return typeof(ResourceManager).
                     GetMethod("LoadContent", System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.Public).
                     MakeGenericMethod(ty).
-                    Invoke(null, [uri]);
+                    Invoke(null, [resourcePath]);
 #pragma warning restore CS8603 // Possible null reference return.
 #pragma warning restore CS8602 // Dereference of a possibly null reference.
             }
@@ -119,9 +127,9 @@ namespace CruZ.Resource
             return Path.GetFullPath(RESOURCE_ROOT);
         }
 
-        public static T LoadResource<T>(URI uri)
+        public static T LoadResource<T>(string resourcePath)
         {
-            return (T)LoadResource(uri, typeof(T));
+            return (T)LoadResource(resourcePath, typeof(T));
         }
 
         private static Serializer _Serializer;

@@ -17,6 +17,7 @@ namespace CruZ.Serialization
             public string Texture { get; set; }
             public int RegionWidth { get; set; }
             public int RegionHeight { get; set; }
+            public Guid TextureGuid { get; set; }
         }
 
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
@@ -36,44 +37,19 @@ namespace CruZ.Serialization
             }
             else
             {
-                var metadata = serializer.Deserialize<InlineTextureAtlas>(reader);
+                var inlineAtlas = serializer.Deserialize<InlineTextureAtlas>(reader);
 
-                // NOTODO: When we get to .NET Standard 2.1 it would be more robust to use
-                // [Path.GetRelativePath](https://docs.microsoft.com/en-us/dotnet/api/system.io.path.getrelativepath?view=netstandard-2.1)
-                //var directory = Path.GetDirectoryName(_path);
-
-                var dir = Path.GetDirectoryName(metadata.Texture);
-                var fileName = Path.GetFileNameWithoutExtension(metadata.Texture);
+                var dir = Path.GetDirectoryName(inlineAtlas.Texture);
+                var fileName = Path.GetFileNameWithoutExtension(inlineAtlas.Texture);
 
                 var textureProjectPath = Path.Combine(dir, fileName);
                 
 
                 Texture2D texture;
-                texture = ResourceManager.LoadResource<Texture2D>(
-                        Path.GetRelativePath(ResourceManager.GetFullPath(),
-                        Helper.ConvertToBinPath(textureProjectPath)));
-
-                return TextureAtlas.Create(textureProjectPath, texture, metadata.RegionWidth, metadata.RegionHeight);
-
-                //try
-                //{
-                //    texture = ResourceManager.LoadResource<Texture2D>(
-                //        Path.GetRelativePath(resolvedAssetName, ResourceManager.GetFullPath()));
-                //}
-                //catch (Exception ex) {
-                //    if (textureDirectory == null || textureDirectory == "") 
-                //        texture = ResourceManager.LoadResource<Texture2D>(textureName);
-                //    else
-                //        texture = ResourceManager.LoadResource<Texture2D>(textureDirectory + "/" + textureName);
-                //}
+                texture = ResourceManager.LoadResource<Texture2D>(inlineAtlas.TextureGuid);
+                return TextureAtlas.Create(textureProjectPath, texture, inlineAtlas.RegionWidth, inlineAtlas.RegionHeight);
             }
         }
-
-        //private string GetContentPath(string relativePath)
-        //{
-        //    var directory = Path.GetDirectoryName(_path);
-        //    return Path.Combine(directory, relativePath);
-        //}
 
         public override bool CanConvert(Type objectType)
         {
