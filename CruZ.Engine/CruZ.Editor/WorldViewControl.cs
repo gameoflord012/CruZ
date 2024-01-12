@@ -4,7 +4,9 @@ using CruZ.Systems;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 using System.Diagnostics;
+using System.Linq;
 
 namespace CruZ.Editor
 {
@@ -18,6 +20,8 @@ namespace CruZ.Editor
 
         protected override void Initialize()
         {
+            InitializeSystemEvent.Invoke();
+
             _timer = new();
             _timer.Start();
             _elapsed = _timer.Elapsed;
@@ -28,8 +32,6 @@ namespace CruZ.Editor
 
             scene = ResourceManager.LoadResource<GameScene>("scenes\\scene1.scene");
             scene.SetActive(true);
-
-            InitializeSystemEvent.Invoke();
         }
 
         protected override void Update(GameTime gameTime)

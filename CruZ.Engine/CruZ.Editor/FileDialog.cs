@@ -1,6 +1,8 @@
 ﻿
 
 using CruZ.Resource;
+using System;
+using System.Windows.Forms;
 
 namespace CruZ.Editor
 {
@@ -11,13 +13,11 @@ namespace CruZ.Editor
         {
             OpenFileDialog openFileDialog = new();
 
-            // Set properties for the OpenFileDialog
             openFileDialog.InitialDirectory = ResourceManager.RESOURCE_ROOT;
             openFileDialog.Title = "Select a Scene";
-            openFileDialog.Filter = "Scene File (*.scene)|*.scene"; // You can customize the file types allowed
-            openFileDialog.Multiselect = true; // Set to true if you want to allow multiple file selection
+            openFileDialog.Filter = "Scene File (*.scene)|*.scene";
+            openFileDialog.Multiselect = true;
 
-            // Show the dialog and check if the user clicked OK
             if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
                 return openFileDialog.FileNames;

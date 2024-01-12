@@ -43,7 +43,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Game.AnimalGang.DesktopGL",
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "AnimalGang.Shared", "CruZ.Games\AnimalGang\AnimalGang.Shared\AnimalGang.Shared.shproj", "{42E114A9-8162-4FC3-8301-3CB19FB37EAD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CruZ.Tool.ResourceImporter", "CruZ.Engine\CruZ.Tool.ResourceImporter\CruZ.Tool.ResourceImporter.csproj", "{9EC79CEF-7615-4AC8-8414-75732C0A3235}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CruZ.Tool.ResourceImporter", "CruZ.Engine\CruZ.Tool.ResourceImporter\CruZ.Tool.ResourceImporter.csproj", "{9EC79CEF-7615-4AC8-8414-75732C0A3235}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -263,6 +263,7 @@ Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		CruZ.Engine\CruZ.Shared\CruZ_Shared.projitems*{24e815fd-5155-4f49-9c43-68ac3c75bb93}*SharedItemsImports = 5
 		CruZ.Engine\CruZ.Shared\CruZ_Shared.projitems*{2ce4266c-1256-479d-88a3-9de60a23bfab}*SharedItemsImports = 5
+		CruZ.Games\AnimalGang\AnimalGang.Shared\AnimalGang.Shared.projitems*{2ce4266c-1256-479d-88a3-9de60a23bfab}*SharedItemsImports = 5
 		CruZ.Games\AnimalGang\AnimalGang.Shared\AnimalGang.Shared.projitems*{42e114a9-8162-4fc3-8301-3cb19fb37ead}*SharedItemsImports = 13
 		CruZ.Games\AnimalGang\AnimalGang.Shared\AnimalGang.Shared.projitems*{71a920b5-0157-4107-b967-d8171b698f92}*SharedItemsImports = 5
 		CruZ.Engine\CruZ.Shared\CruZ_Shared.projitems*{a0cdbd0e-3a41-42b7-9425-a838bc2c7383}*SharedItemsImports = 13

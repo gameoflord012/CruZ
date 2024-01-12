@@ -1,4 +1,6 @@
 ﻿using MonoGame.Forms.NET.Controls;
+using System.Drawing;
+using System.Windows.Forms;
 
 namespace CruZ.Editor
 {

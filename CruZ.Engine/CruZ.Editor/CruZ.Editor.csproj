@@ -4,7 +4,6 @@
 	<OutputType>WinExe</OutputType>
     <TargetFramework>net8.0-windows</TargetFramework>
 	<UseWindowsForms>true</UseWindowsForms>
-    <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
@@ -28,11 +27,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="WorldViewControl.cs">
-      <SubType>Component</SubType>
-    </Compile>
+    <Compile Update="WorldViewControl.cs" />
   </ItemGroup>
 
   <Import Project="..\CruZ.Shared\CruZ_Shared.projitems" Label="Shared" />
+
+  <Import Project="..\..\CruZ.Games\AnimalGang\AnimalGang.Shared\AnimalGang.Shared.projitems" Label="Shared" />
 
 </Project>

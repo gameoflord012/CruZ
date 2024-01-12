@@ -8,18 +8,10 @@
 		<ProjectReference Include="..\..\..\CruZ.Engine\CruZ.DesktopGL\CruZ.DesktopGL.csproj" />
 	</ItemGroup>
 
-	<ItemGroup>
-		<_ResItems Include="..\AnimalGang.Shared\res\**\*.*"/>
-	</ItemGroup>
+	<PropertyGroup>
+		<_ResFolder>..\AnimalGang.Shared\res</_ResFolder>
+	</PropertyGroup>
 
-	<Target Name="PreBuild" BeforeTargets="PreBuildEvent">
-		<Exec Command="CruZ.Tool.ResourceImporter.exe -r $(ProjectDir)..\AnimalGang.Shared\res -build" />
-
-		<Copy
-			SourceFiles="@(_ResItems)"
-			DestinationFolder="$(OutputPath)\res\%(RecursiveDir)"
-			SkipUnchangedFiles="true"/>
-	</Target>
-
+	<Import Project="..\..\..\CruZ.Engine\CruZ.Tool.ResourceImporter\CruZ.Tool.ResourceImporter.targets"/>
 	<Import Project="..\AnimalGang.Shared\AnimalGang.Shared.projitems" Label="Shared" />
 </Project>

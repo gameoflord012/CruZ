@@ -1,4 +1,7 @@
-﻿namespace CruZ.Editor
+﻿using System;
+using System.Windows.Forms;
+
+namespace CruZ.Editor
 {
     public class Program
     {
