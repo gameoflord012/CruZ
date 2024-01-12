@@ -63,6 +63,10 @@ namespace CruZ.Serialization
             {
                 throw new JsonSerializationException(string.Format("can't deserialize data \"{0}\" to type {1}", json, ty), e);
             }
+            catch (JsonReaderException e)
+            {
+                throw new JsonReaderException(string.Format("can't deserialize data \"{0}\" to type {1}", json, ty), e);
+            }
 
             if (o == null)
             {

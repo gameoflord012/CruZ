@@ -10,16 +10,18 @@ using System.Linq;
 
 namespace CruZ.Editor
 {
-    internal class WorldViewControl : MonoGame.Forms.NET.Controls.MonoGameControl, IECSContextProvider, IApplicationContextProvider
+    internal class WorldViewControl : MonoGame.Forms.NET.Controls.MonoGameControl, IECSContextProvider, IApplicationContextProvider, IInputContextProvider
     {
         public WorldViewControl()
         {
             ECS.CreateContext(this);
             ApplicationContext.CreateContext(this);
+            Input.CreateContext(this);
         }
 
         protected override void Initialize()
         {
+            Editor.Content.RootDirectory = ".";
             InitializeSystemEvent.Invoke();
 
             _timer = new();
@@ -53,6 +55,7 @@ namespace CruZ.Editor
         public event Action<GameTime>   DrawEvent;
         public event Action<GameTime>   UpdateEvent;
         public event Action             InitializeSystemEvent;
+        public event Action<GameTime>   UpdateInputEvent { add { UpdateEvent += value; } remove { UpdateEvent -= value; } }
 
         public GraphicsDevice GraphicsDevice    => Editor.GraphicsDevice;
         public ContentManager Content           => Editor.Content;

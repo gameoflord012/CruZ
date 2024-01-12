@@ -62,7 +62,7 @@ namespace CruZ.Tool.ResourceImporter
 
         private static string GetRelativePath(string relativeFolder, string destinationFile)
         {
-            Uri folder = new Uri(Path.GetFullPath(relativeFolder) + "\\");
+            Uri folder = new Uri(Path.GetFullPath(relativeFolder).TrimEnd('\\') + "\\");
             Uri file = new Uri(Path.GetFullPath(destinationFile));
 
             return Uri.UnescapeDataString(

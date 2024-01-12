@@ -1,6 +1,6 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 	<PropertyGroup>
-		<_ResFolder>$(MSBuildThisFileDirectory)\AnimalGang.Shared\res</_ResFolder>
+		<_ResFolder>$(MSBuildThisFileDirectory)\AnimalGang.Shared\res\</_ResFolder>
 	</PropertyGroup>
 
 	<Target Name="ResourceImporter" BeforeTargets="PreBuildEvent">
@@ -12,7 +12,7 @@
 			<_ResItems Include="$(_ResFolder)\**\*.*"></_ResItems>
 		</ItemGroup>
 
-		<Exec Command="CruZ.Tool.ResourceImporter.exe -r $(_ResFolder)\ -build"/>
+		<Exec Command="CruZ.Tool.ResourceImporter.exe -r $(_ResFolder) -build"/>
 
 		<Copy
 			SourceFiles="@(_ResItems)"
