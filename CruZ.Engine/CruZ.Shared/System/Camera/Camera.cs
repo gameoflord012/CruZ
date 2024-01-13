@@ -8,7 +8,8 @@ namespace CruZ.Systems
     {
         public Camera(Viewport viewport)
         {
-            _viewport = viewport;
+            _viewPortWidth = viewport.Width;
+            _viewPortHeight = viewport.Height;
         }
 
         public Camera(int vpWidth, int vpHeight) : this(new(0, 0, vpWidth, vpHeight))
@@ -18,8 +19,8 @@ namespace CruZ.Systems
 
         public Vector3 PointToCoordinate(Vector3 p)
         {
-            var normalize_x = (p.X / _viewport.Width - 0.5f);
-            var normalize_y = (p.Y / _viewport.Height - 0.5f);
+            var normalize_x = (p.X / _viewPortWidth - 0.5f);
+            var normalize_y = (p.Y / _viewPortHeight - 0.5f);
 
             var coord = new Vector3(normalize_x * VirtualWidth, normalize_y * VirtualHeight, 0);
             coord -= Position;
@@ -35,8 +36,8 @@ namespace CruZ.Systems
             var normalize_y = 0.5f + coord.Y / VirtualHeight;
 
             return new(
-                FunMath.RoundInt(normalize_x * _viewport.Width),
-                FunMath.RoundInt(normalize_y * _viewport.Height));
+                FunMath.RoundInt(normalize_x * _viewPortWidth),
+                FunMath.RoundInt(normalize_y * _viewPortHeight));
         }
 
         public Matrix4x4 ViewMatrix()
@@ -50,25 +51,33 @@ namespace CruZ.Systems
                     0f) *
 
                 Matrix4x4.CreateScale(
-                    _viewport.Width / VirtualWidth,
-                    _viewport.Height / VirtualHeight, 1);
+                    _viewPortWidth / VirtualWidth,
+                    _viewPortHeight / VirtualHeight, 1);
         }
 
         public Vector2 ScreenToSpaceScale()
         {
             return new(
-                VirtualWidth / _viewport.Width,
-                VirtualHeight / _viewport.Height);
+                VirtualWidth / _viewPortWidth,
+                VirtualHeight / _viewPortHeight);
         }
 
-        public float VirtualWidth = 1980;
-        public float VirtualHeight = 1080;
+        public float VirtualWidth { get => _virtualWidth; set => _virtualWidth = value; }
+        public float VirtualHeight { 
+            get => PreserveRatio ? _virtualWidth / Ratio : _virtualHeight; 
+            set => _virtualHeight = value; }
 
-        public int ViewPortWidth    { get => _viewport.Width; set => _viewport.Width = value; }
-        public int ViewPortHeight   { get => _viewport.Height; set => _viewport.Height = value; }
+        public float ViewPortWidth    { get => _viewPortWidth; set => _viewPortWidth = value; }
+        public float ViewPortHeight   { get => _viewPortHeight; set => _viewPortHeight = value; }
+
+        private float _viewPortWidth;
+        private float _viewPortHeight;
+        private float _virtualWidth = 1980;
+        private float _virtualHeight = 1080;
 
         public Vector3 Position = Vector3.Zero;
 
-        Viewport _viewport;
+        public bool PreserveRatio = true;
+        public float Ratio => ViewPortWidth / ViewPortHeight;
     }
 }

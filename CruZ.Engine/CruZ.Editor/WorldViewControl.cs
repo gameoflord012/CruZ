@@ -64,7 +64,6 @@ namespace CruZ.Editor
             base.OnPaint(e);
 
             Pen pen = new Pen(System.Drawing.Color.FromArgb(255, 0, 0, 0));
-            e.Graphics.DrawLine(pen, 0, 0, 50, 50);
         }
 
         Stopwatch _timer;
