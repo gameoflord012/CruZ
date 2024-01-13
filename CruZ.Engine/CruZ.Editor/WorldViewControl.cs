@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Diagnostics;
+using System.Drawing;
 using System.Linq;
 
 namespace CruZ.Editor
@@ -17,6 +18,7 @@ namespace CruZ.Editor
             ECS.CreateContext(this);
             ApplicationContext.CreateContext(this);
             Input.CreateContext(this);
+            Camera.Main = new Camera(Width, Height);
         }
 
         protected override void Initialize()
@@ -47,6 +49,22 @@ namespace CruZ.Editor
             _elapsed = _timer.Elapsed;
 
             DrawEvent?.Invoke(gameTime);
+        }
+
+        protected override void OnResize(EventArgs e)
+        {
+            base.OnResize(e);
+
+            Camera.Main.ViewPortWidth = Width;
+            Camera.Main.ViewPortHeight = Height;
+        }
+
+        protected override void OnPaint(System.Windows.Forms.PaintEventArgs e)
+        {
+            base.OnPaint(e);
+
+            Pen pen = new Pen(System.Drawing.Color.FromArgb(255, 0, 0, 0));
+            e.Graphics.DrawLine(pen, 0, 0, 50, 50);
         }
 
         Stopwatch _timer;

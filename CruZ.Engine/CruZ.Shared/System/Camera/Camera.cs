@@ -11,6 +11,11 @@ namespace CruZ.Systems
             _viewport = viewport;
         }
 
+        public Camera(int vpWidth, int vpHeight) : this(new(0, 0, vpWidth, vpHeight))
+        {
+            
+        }
+
         public Vector3 PointToCoordinate(Vector3 p)
         {
             var normalize_x = (p.X / _viewport.Width - 0.5f);
@@ -58,6 +63,9 @@ namespace CruZ.Systems
 
         public float VirtualWidth = 1980;
         public float VirtualHeight = 1080;
+
+        public int ViewPortWidth    { get => _viewport.Width; set => _viewport.Width = value; }
+        public int ViewPortHeight   { get => _viewport.Height; set => _viewport.Height = value; }
 
         public Vector3 Position = Vector3.Zero;
 
