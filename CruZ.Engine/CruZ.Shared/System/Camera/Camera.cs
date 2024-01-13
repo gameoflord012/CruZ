@@ -23,7 +23,6 @@ namespace CruZ.Systems
             var normalize_y = (p.Y / _viewPortHeight - 0.5f);
 
             var coord = new Vector3(normalize_x * VirtualWidth, normalize_y * VirtualHeight, 0);
-            coord -= Position;
 
             return coord;
         }
@@ -62,22 +61,24 @@ namespace CruZ.Systems
                 VirtualHeight / _viewPortHeight);
         }
 
-        public float VirtualWidth { get => _virtualWidth; set => _virtualWidth = value; }
+        public float VirtualWidth { get => _virtualWidth * Zoom.X; set => _virtualWidth = value; }
         public float VirtualHeight { 
-            get => PreserveRatio ? _virtualWidth / Ratio : _virtualHeight; 
+            get => (PreserveRatio ? VirtualWidth / Ratio : _virtualHeight) * Zoom.Y;
             set => _virtualHeight = value; }
 
         public float ViewPortWidth    { get => _viewPortWidth; set => _viewPortWidth = value; }
         public float ViewPortHeight   { get => _viewPortHeight; set => _viewPortHeight = value; }
 
-        private float _viewPortWidth;
-        private float _viewPortHeight;
-        private float _virtualWidth = 1980;
-        private float _virtualHeight = 1080;
-
         public Vector3 Position = Vector3.Zero;
 
         public bool PreserveRatio = true;
         public float Ratio => ViewPortWidth / ViewPortHeight;
+
+        public Vector3 Zoom = new(1, 1);
+
+        private float _viewPortWidth;
+        private float _viewPortHeight;
+        private float _virtualWidth = 1980;
+        private float _virtualHeight = 1080;
     }
 }
