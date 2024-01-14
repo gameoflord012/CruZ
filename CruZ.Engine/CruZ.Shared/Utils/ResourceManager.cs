@@ -57,7 +57,7 @@ namespace CruZ.Resource
             }
         }
 
-        public static void InitResource(string resourcePath, object res, bool renew = false)
+        public static void CreateResource(string resourcePath, object res, bool renew = false)
         {
             object? existedResource = null;
 

@@ -13,7 +13,7 @@ namespace CruZ.Games.AnimalGang
             base.Initialize();
 
             var scene = SceneManager.SceneAssets.Values.First();
-            ResourceManager.InitResource("scenes\\scene1.scene", scene, true);
+            ResourceManager.CreateResource("scenes\\scene1.scene", scene, true);
             scene.Dispose();
 
             scene = ResourceManager.LoadResource<GameScene>("scenes\\scene1.scene");

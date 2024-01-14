@@ -22,6 +22,7 @@ namespace CruZ.Editor
 
         public GraphicsDevice GraphicsDevice => Editor.GraphicsDevice;
         public ContentManager Content => Editor.Content;
+        public GameScene? CurrentGameScene => _currentScene;
 
         public WorldViewControl()
         {
@@ -44,7 +45,7 @@ namespace CruZ.Editor
         public void LoadScene(GameScene scene)
         {
             //var scene = SceneManager.SceneAssets.Values.First();
-            //ResourceManager.InitResource("scenes\\scene1.scene", scene, true);
+            //ResourceManager.CreateResource("scenes\\scene1.scene", scene, true);
             //scene.Dispose();
 
             //scene = ResourceManager.LoadResource<GameScene>("scenes\\scene1.scene");

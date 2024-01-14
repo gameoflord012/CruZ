@@ -89,20 +89,21 @@ namespace CruZ.Editor
             // openSceneToolStripMenuItem
             // 
             openSceneToolStripMenuItem.Name = "openSceneToolStripMenuItem";
-            openSceneToolStripMenuItem.Size = new Size(171, 26);
+            openSceneToolStripMenuItem.Size = new Size(224, 26);
             openSceneToolStripMenuItem.Text = "Open Scene";
             openSceneToolStripMenuItem.Click += openSceneToolStripMenuItem_Click;
             // 
             // saveSceneToolStripMenuItem
             // 
             saveSceneToolStripMenuItem.Name = "saveSceneToolStripMenuItem";
-            saveSceneToolStripMenuItem.Size = new Size(171, 26);
+            saveSceneToolStripMenuItem.Size = new Size(224, 26);
             saveSceneToolStripMenuItem.Text = "Save Scene";
+            saveSceneToolStripMenuItem.Click += saveSceneToolStripMenuItem_Click;
             // 
             // saveAsToolStripMenuItem
             // 
             saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
-            saveAsToolStripMenuItem.Size = new Size(171, 26);
+            saveAsToolStripMenuItem.Size = new Size(224, 26);
             saveAsToolStripMenuItem.Text = "Save As ...";
             saveAsToolStripMenuItem.Click += saveAsToolStripMenuItem_Click;
             // 

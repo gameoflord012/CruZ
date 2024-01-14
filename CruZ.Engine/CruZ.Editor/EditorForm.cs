@@ -29,6 +29,7 @@ namespace CruZ.Editor
             if (files.Count() == 0) return;
 
             string sceneFile = files[0];
+            _currentOpenningSceneFile = sceneFile;
             var scene = ResourceManager.LoadResource<GameScene>(sceneFile);
             worldViewControl.LoadScene(scene);
         }
@@ -37,5 +38,15 @@ namespace CruZ.Editor
         {
 
         }
+
+        private void saveSceneToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ResourceManager.CreateResource(
+                _currentOpenningSceneFile, 
+                worldViewControl.CurrentGameScene,
+                true);
+        }
+
+        private string _currentOpenningSceneFile;
     }
 }
