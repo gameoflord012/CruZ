@@ -14,7 +14,7 @@ namespace CruZ.Scene
         {
             //if (_currentScene != null)
             //{
-            //    UnloadCurrent();
+            //    UnloadCurrentScene();
             //}
 
             //_currentScene = scene;

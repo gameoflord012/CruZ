@@ -6,17 +6,18 @@ using System.Windows.Forms;
 
 namespace CruZ.Editor
 {
-    class Dialog
+    class DialogHelper
     {
         [STAThread]
-        public static string[] SelectSceneFiles()
+        public static string[] SelectSceneFile(bool multiselect)
         {
-            OpenFileDialog openFileDialog = new();
-
-            openFileDialog.InitialDirectory = ResourceManager.RESOURCE_ROOT;
-            openFileDialog.Title = "Select a Scene";
-            openFileDialog.Filter = "Scene File (*.scene)|*.scene";
-            openFileDialog.Multiselect = true;
+            OpenFileDialog openFileDialog = new()
+            {
+                InitialDirectory = ResourceManager.RESOURCE_ROOT,
+                Title = "Select a Scene",
+                Filter = "Scene File (*.scene)|*.scene",
+                Multiselect = multiselect,
+            };
 
             if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
@@ -25,7 +26,7 @@ namespace CruZ.Editor
             else
             {
                 Console.WriteLine("File selection canceled.");
-                return new string[] { };
+                return [];
             }
         }
     }

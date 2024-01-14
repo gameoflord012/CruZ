@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CruZ.Resource;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -15,6 +16,26 @@ namespace CruZ.Editor
         public EditorForm()
         {
             InitializeComponent();
+        }
+
+        private void fileToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void openSceneToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var files = DialogHelper.SelectSceneFile(false);
+            if (files.Count() == 0) return;
+
+            string sceneFile = files[0];
+            var scene = ResourceManager.LoadResource<GameScene>(sceneFile);
+            worldViewControl.LoadScene(scene);
+        }
+
+        private void saveAsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

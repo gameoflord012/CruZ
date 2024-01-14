@@ -30,6 +30,12 @@ namespace CruZ.Resource
             _GetResourcePathFromGuid = _ResourceImporterObject.BuildResult;
         }
 
+        /// <summary>
+        /// Load resource with relative or full path, the resource file should within the .res folder
+        /// </summary>
+        /// <param name="resourcePath"></param>
+        /// <param name="ty"></param>
+        /// <returns></returns>
         public static object LoadResource(string resourcePath, Type ty)
         {
             try

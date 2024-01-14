@@ -39,13 +39,25 @@ namespace CruZ.Editor
             _timer = new();
             _timer.Start();
             _elapsed = _timer.Elapsed;
+        }
 
-            var scene = SceneManager.SceneAssets.Values.First();
-            ResourceManager.InitResource("scenes\\scene1.scene", scene, true);
-            scene.Dispose();
+        public void LoadScene(GameScene scene)
+        {
+            //var scene = SceneManager.SceneAssets.Values.First();
+            //ResourceManager.InitResource("scenes\\scene1.scene", scene, true);
+            //scene.Dispose();
 
-            scene = ResourceManager.LoadResource<GameScene>("scenes\\scene1.scene");
-            scene.SetActive(true);
+            //scene = ResourceManager.LoadResource<GameScene>("scenes\\scene1.scene");
+            UnloadCurrentScene();
+            _currentScene = scene;
+            _currentScene.SetActive(true);
+        }
+
+        public void UnloadCurrentScene()
+        {
+            if (_currentScene == null) return;
+
+            _currentScene.SetActive(false);
         }
 
         protected override void Update(GameTime gameTime)
@@ -118,18 +130,26 @@ namespace CruZ.Editor
 
         private void DrawAxis(System.Windows.Forms.PaintEventArgs e)
         {
-            Pen pen = new Pen(System.Drawing.Color.FromArgb(100, 0, 0, 0));
-            var yTop = Camera.Main.CoordinateToPoint(new Vector3(0, -5000));
-            var yBot = Camera.Main.CoordinateToPoint(new Vector3(0, 5000));
-            e.Graphics.DrawLine(pen, yTop.X, yTop.Y, yBot.X, yBot.Y);
+            try
+            {
+                Pen pen = new Pen(System.Drawing.Color.FromArgb(100, 0, 0, 0));
+                var yTop = Camera.Main.CoordinateToPoint(new Vector3(0, -5000));
+                var yBot = Camera.Main.CoordinateToPoint(new Vector3(0, 5000));
+                e.Graphics.DrawLine(pen, yTop.X, yTop.Y, yBot.X, yBot.Y);
 
-            var xTop = Camera.Main.CoordinateToPoint(new Vector3(-5000, 0));
-            var xBot = Camera.Main.CoordinateToPoint(new Vector3(5000, 0));
-            e.Graphics.DrawLine(pen, xTop.X, xTop.Y, xBot.X, xBot.Y);
+                var xTop = Camera.Main.CoordinateToPoint(new Vector3(-5000, 0));
+                var xBot = Camera.Main.CoordinateToPoint(new Vector3(5000, 0));
+                e.Graphics.DrawLine(pen, xTop.X, xTop.Y, xBot.X, xBot.Y);
 
-            var center = new PointF(Width / 2f, Height / 2f);
-            e.Graphics.DrawLine(pen, center.X, center.Y - 10, center.X, center.Y + 10);
-            e.Graphics.DrawLine(pen, center.X - 10, center.Y, center.X + 10, center.Y);
+                var center = new PointF(Width / 2f, Height / 2f);
+                e.Graphics.DrawLine(pen, center.X, center.Y - 10, center.X, center.Y + 10);
+                e.Graphics.DrawLine(pen, center.X - 10, center.Y, center.X + 10, center.Y);
+            }
+            catch(OverflowException)
+            {
+                Console.WriteLine("Axis won't be draw");
+            }
+            
         }
 
         readonly MouseButtons _cameraMouseDragButton = MouseButtons.Middle;
@@ -140,5 +160,7 @@ namespace CruZ.Editor
         bool _isMouseDragging;
         Vector3 _mouseStartDragCoord;
         Vector3 _cameraStartDragCoord;
+
+        GameScene? _currentScene;
     }
 }
