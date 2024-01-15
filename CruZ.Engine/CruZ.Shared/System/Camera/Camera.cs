@@ -1,5 +1,6 @@
 ﻿using CruZ.Utility;
 using Microsoft.Xna.Framework.Graphics;
+using System.Drawing;
 using System.Numerics;
 
 namespace CruZ.Systems
@@ -23,11 +24,17 @@ namespace CruZ.Systems
             var normalize_y = (p.Y / _viewPortHeight - 0.5f);
 
             var coord = new Vector3(normalize_x * VirtualWidth, normalize_y * VirtualHeight, 0);
+            coord -= Position;
 
             return coord;
         }
 
-        public Vector2 CoordinateToPoint(Vector3 coord)
+        public Vector3 PointToCoordinate(Point p)
+        {
+            return PointToCoordinate(new Vector3(p.X, p.Y));
+        }
+
+        public Point CoordinateToPoint(Vector3 coord)
         {
             coord += Position;
 

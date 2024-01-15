@@ -10,7 +10,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)src\MainCharacter.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)src\SceneCreation.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)src\Scenes.cs" />
   </ItemGroup>
 </Project>

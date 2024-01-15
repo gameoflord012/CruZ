@@ -23,6 +23,7 @@
 	
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\MonoGameModified\MonoGame.Framework.Content.Pipeline\MonoGame.Framework.Content.Pipeline.csproj" />
+	<!--TODO: protential directx in monogame editor-->
     <ProjectReference Include="..\..\..\..\MonoGameModified\MonoGame.Framework\MonoGame.Framework.DesktopGL.csproj" />
   </ItemGroup>
 

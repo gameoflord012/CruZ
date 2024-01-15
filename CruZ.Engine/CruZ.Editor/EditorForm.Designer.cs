@@ -63,7 +63,6 @@ namespace CruZ.Editor
             worldViewControl.BackColor = Color.LightSeaGreen;
             worldViewControl.Dock = DockStyle.Fill;
             worldViewControl.Location = new Point(0, 0);
-            worldViewControl.MouseHoverUpdatesOnly = false;
             worldViewControl.Name = "worldViewControl";
             worldViewControl.Size = new Size(481, 422);
             worldViewControl.TabIndex = 0;

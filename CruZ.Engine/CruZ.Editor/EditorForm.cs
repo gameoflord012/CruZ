@@ -30,6 +30,7 @@ namespace CruZ.Editor
 
             string sceneFile = files[0];
             _currentOpenningSceneFile = sceneFile;
+
             var scene = ResourceManager.LoadResource<GameScene>(sceneFile);
             worldViewControl.LoadScene(scene);
         }

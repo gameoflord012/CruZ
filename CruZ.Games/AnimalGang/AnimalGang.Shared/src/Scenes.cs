@@ -4,10 +4,10 @@ using CruZ.Systems;
 
 namespace CruZ.Scene
 {
-    [SceneAssetClass("Class")]
+    [SceneAssetClass("Scenes")]
     public class Scenes
     {
-        [SceneAssetMethod("method")]
+        [SceneAssetMethod("Scene1")]
         public static GameScene Scene1()
         {
             var scene = new GameScene();

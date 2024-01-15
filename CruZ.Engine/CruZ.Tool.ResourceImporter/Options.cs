@@ -9,5 +9,8 @@ namespace CruZ.Tool.ResourceImporter
 
         [Option('b', "build", Default = false)]
         public bool IsBuild { get; set; }
+
+        //[Option('o', "output", Default = false)]
+        //public bool IsOutput { get; set; }
     }
 }

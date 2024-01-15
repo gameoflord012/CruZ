@@ -3,6 +3,7 @@ using CruZ.Resource;
 using CruZ.Scene;
 using CruZ.Systems;
 using CruZ.Utility;
+using Microsoft.Xna.Framework;
 using System.Linq;
 namespace CruZ.Games.AnimalGang
 {
@@ -18,6 +19,11 @@ namespace CruZ.Games.AnimalGang
 
             scene = ResourceManager.LoadResource<GameScene>("scenes\\scene1.scene");
             scene.SetActive(true);
+        }
+
+        protected override void Draw(GameTime gameTime)
+        {
+            base.Draw(gameTime);
         }
 
         protected override void EndRun()

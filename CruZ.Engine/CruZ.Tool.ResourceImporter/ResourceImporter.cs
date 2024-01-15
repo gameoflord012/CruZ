@@ -3,10 +3,10 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Runtime.Remoting.Messaging;
-using System.Text.RegularExpressions;
 
 namespace CruZ.Tool.ResourceImporter
 {
@@ -42,7 +42,7 @@ namespace CruZ.Tool.ResourceImporter
                 else
                 {
                     File.Create(dotImport).Close();
-                    Console.WriteLine(string.Format("Created new file {0}", dotImport));
+                    Debug.WriteLine(string.Format("Created new file {0}", dotImport));
                 }
 
                 using (var writer = new StreamWriter(dotImport, false))
@@ -53,7 +53,7 @@ namespace CruZ.Tool.ResourceImporter
                     writer.WriteLine(guid);
                     writer.Flush();
 
-                    Console.WriteLine(string.Format("Guid for {0} generated", dotImport));
+                    Debug.WriteLine(string.Format("Guid for {0} generated", dotImport));
                 }
             }
 
@@ -81,6 +81,11 @@ namespace CruZ.Tool.ResourceImporter
             }
         }
 
+        public static Dictionary<string, string> GetResults()
+        {
+            return new Dictionary<string, string>(_ImporterObject.BuildResult);
+        }
+
         public static void SetImporterObject(ResourceImporterObject importerObject)
         {
             _ImporterObject = importerObject;
@@ -92,7 +97,7 @@ namespace CruZ.Tool.ResourceImporter
 
             if (File.Exists(filePath))
             {
-                Console.WriteLine("Reading " + Path.GetFullPath(filePath));
+                Debug.WriteLine("Reading " + Path.GetFullPath(filePath));
 
                 using (StreamReader reader = new StreamReader(filePath))
                 {
@@ -101,7 +106,7 @@ namespace CruZ.Tool.ResourceImporter
 
                     if(deserialize == null)
                     {
-                        Console.WriteLine("Failed to read json file, default settings is used");
+                        Debug.WriteLine("Failed to read json file, default settings is used");
                     }
                     else
                     {
@@ -122,7 +127,7 @@ namespace CruZ.Tool.ResourceImporter
                 foreach (var match in Directory.EnumerateFiles(ResourceRoot, pattern, SearchOption.AllDirectories))
                 {
                     importItems.Add(match);
-                    Console.WriteLine("Matches found: " + match);
+                    Debug.WriteLine("Matches found: " + match);
                 }
             }
 
@@ -137,7 +142,7 @@ namespace CruZ.Tool.ResourceImporter
                 if (!File.Exists(import))
                 {
                     File.Delete(dotImport);
-                    Console.WriteLine("Removed " + dotImport);
+                    Debug.WriteLine("Removed " + dotImport);
                 }
             }
         }

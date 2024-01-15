@@ -1,6 +1,7 @@
 ﻿using CommandLine;
 using Newtonsoft.Json;
 using System;
+using System.Diagnostics;
 using System.IO;
 
 namespace CruZ.Tool.ResourceImporter
@@ -18,7 +19,7 @@ namespace CruZ.Tool.ResourceImporter
                     ResourceImporter.ResourceRoot = o.ResourceRoot;
                 });
 
-            Console.WriteLine(string.Format("ResourceRoot: {0}", Path.GetFullPath(ResourceImporter.ResourceRoot)));
+            Debug.WriteLine(string.Format("ResourceRoot: {0}", Path.GetFullPath(ResourceImporter.ResourceRoot)));
             string resourceImporterPath = ResourceImporter.ResourceRoot + "\\.resourceImporter";
 
             ResourceImporter.SetImporterObject(
@@ -28,7 +29,46 @@ namespace CruZ.Tool.ResourceImporter
             {
                 ResourceImporter.DoBuild();
                 ResourceImporter.ExportResult(resourceImporterPath);
+
+                BuildContent();
             }
         }
+
+        private static void BuildContent()
+        {
+            Console.WriteLine("Build content...");
+
+            var resourceDir = Path.GetFullPath(ResourceImporter.ResourceRoot);
+
+            string args = string.Format("/outputDir:{0}\\bin\n/intermediateDir:{0}\\obj\n/platform:Windows\n", CONTENT_ROOT);
+            foreach (var res in ResourceImporter.GetResults())
+            {
+                args += string.Format("/build:{0}\n", resourceDir + "\\" + res.Value);
+            }
+
+            var tempFile = "resourceImporter.temp";
+            File.WriteAllText(tempFile, args);
+
+            Process p = new Process();
+            p.StartInfo.FileName = "mgcb.exe";
+            p.StartInfo.Arguments = "/@:" + tempFile;
+            p.StartInfo.UseShellExecute = false;
+            p.StartInfo.CreateNoWindow = true;
+            p.StartInfo.RedirectStandardOutput = true;
+            p.StartInfo.RedirectStandardError = true;
+            p.StartInfo.WorkingDirectory = resourceDir;
+
+            p.Start();
+            string output = p.StandardOutput.ReadToEnd();
+            string error = p.StandardError.ReadToEnd();
+            p.WaitForExit();
+
+            Console.WriteLine(output);
+            Console.WriteLine(error);
+
+            File.Delete(tempFile);
+        }
+
+        static readonly string CONTENT_ROOT = "Content";
     }
 }
