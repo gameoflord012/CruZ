@@ -8,6 +8,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Security.AccessControl;
 
 namespace CruZ.Components
@@ -16,7 +17,7 @@ namespace CruZ.Components
     {
         public event Action OnDeserializationCompleted;
 
-        public void ReadJson(JsonReader reader, JsonSerializer serializer) 
+        public void ReadJson(JsonReader reader, JsonSerializer serializer)
         {
             JObject jObject;
 
@@ -28,7 +29,15 @@ namespace CruZ.Components
             foreach (var com in jObject["components"])
             {
                 var tyStr = com["com-type"].Value<string>();
-                var comTy = Type.GetType(tyStr) ?? throw new(string.Format("Can't get Type from string \"{0}\"", tyStr));
+
+                var comTy = Type.GetType(tyStr, (assName) =>
+                {
+#if CRUZ_EDITOR
+                    return Assembly.Load("CruZ.Editor");
+#else
+                    return Assembly.Load(assName);
+#endif
+                }, null) ?? throw new(string.Format("Can't get Type from string \"{0}\"", tyStr));
 
                 object comData = com["com-data"].ToObject(comTy, serializer);
                 var iCom = (IComponent)comData;

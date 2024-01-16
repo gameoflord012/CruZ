@@ -7,6 +7,10 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <DefineConstants>$(DefineConstants);CRUZ_EDITOR</DefineConstants>
+  </PropertyGroup>
+
   <ItemGroup>
     <Compile Remove="Views\**" />
     <EmbeddedResource Remove="Views\**" />
@@ -32,7 +36,7 @@
 	
   <Import Project="..\..\CruZ.Games\AnimalGang\CruZ.Games.AnimalGang.targets" />
 
-  <Import Project="..\CruZ.Shared\CruZ_Shared.projitems" Label="Shared" />
+  <Import Project="..\CruZ.Shared\CruZ.Shared.projitems" Label="Shared" />
   <Import Project="..\..\CruZ.Games\AnimalGang\AnimalGang.Shared\AnimalGang.Shared.projitems" Label="Shared" />
 
 </Project>

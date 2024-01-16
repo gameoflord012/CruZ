@@ -261,11 +261,11 @@ Global
 		SolutionGuid = {7F9F8BC8-0847-4E84-9AA8-0677A7EED2BA}
 	EndGlobalSection
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
-		CruZ.Engine\CruZ.Shared\CruZ_Shared.projitems*{24e815fd-5155-4f49-9c43-68ac3c75bb93}*SharedItemsImports = 5
-		CruZ.Engine\CruZ.Shared\CruZ_Shared.projitems*{2ce4266c-1256-479d-88a3-9de60a23bfab}*SharedItemsImports = 5
+		CruZ.Engine\CruZ.Shared\CruZ.Shared.projitems*{24e815fd-5155-4f49-9c43-68ac3c75bb93}*SharedItemsImports = 5
+		CruZ.Engine\CruZ.Shared\CruZ.Shared.projitems*{2ce4266c-1256-479d-88a3-9de60a23bfab}*SharedItemsImports = 5
 		CruZ.Games\AnimalGang\AnimalGang.Shared\AnimalGang.Shared.projitems*{2ce4266c-1256-479d-88a3-9de60a23bfab}*SharedItemsImports = 5
 		CruZ.Games\AnimalGang\AnimalGang.Shared\AnimalGang.Shared.projitems*{42e114a9-8162-4fc3-8301-3cb19fb37ead}*SharedItemsImports = 13
 		CruZ.Games\AnimalGang\AnimalGang.Shared\AnimalGang.Shared.projitems*{71a920b5-0157-4107-b967-d8171b698f92}*SharedItemsImports = 5
-		CruZ.Engine\CruZ.Shared\CruZ_Shared.projitems*{a0cdbd0e-3a41-42b7-9425-a838bc2c7383}*SharedItemsImports = 13
+		CruZ.Engine\CruZ.Shared\CruZ.Shared.projitems*{a0cdbd0e-3a41-42b7-9425-a838bc2c7383}*SharedItemsImports = 13
 	EndGlobalSection
 EndGlobal

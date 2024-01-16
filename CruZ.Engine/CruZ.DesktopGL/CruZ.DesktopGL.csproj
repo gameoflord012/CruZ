@@ -20,5 +20,5 @@
 		<ProjectReference Include="..\CruZ.Tool.ResourceImporter\CruZ.Tool.ResourceImporter.csproj" />
 	</ItemGroup>
 	
-	<Import Project="..\CruZ.Shared\CruZ_Shared.projitems" Label="Shared" />
+	<Import Project="..\CruZ.Shared\CruZ.Shared.projitems" Label="Shared" />
 </Project>
