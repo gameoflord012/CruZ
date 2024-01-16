@@ -21,11 +21,18 @@ namespace CruZ.Systems
 
         public void Draw(GameTime gameTime)
         {
+            _spriteBatch.Begin(
+                sortMode: SpriteSortMode.FrontToBack,
+                transformMatrix: Camera.Main.ViewMatrix(),
+                samplerState: SamplerState.PointClamp);
+
             foreach (var entityId in this.GetActiveEntities())
             {
                 var spriteRenderer = _spriteRendererMapper.Get(entityId);
                 spriteRenderer.Draw(_spriteBatch, Camera.Main.ViewMatrix()); 
             }
+
+            _spriteBatch.End();
         }
 
         public virtual void Update(GameTime gameTime) {}

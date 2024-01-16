@@ -21,13 +21,14 @@ namespace CruZ.Scene
 
             e.AddComponent(new SpriteComponent());
             e.AddComponent(new MainCharacter());
+            e.GetComponent<SpriteComponent>().LayerDepth = 0.2f;
             e.AddComponent(anim);
-
-            e.Transform.Scale = new(2, 2);
+            e.Transform.Scale = new(5, 5);
 
             var backGround = ECS.CreateEntity();
             backGround.AddComponent(new SpriteComponent());
             var sp = backGround.GetComponent<SpriteComponent>();
+            sp.LayerDepth = 0.1f;
             sp.LoadTexture("tiles\\tile.png");
 
             scene.AddToScene(e);

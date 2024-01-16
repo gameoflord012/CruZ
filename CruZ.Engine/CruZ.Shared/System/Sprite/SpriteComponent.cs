@@ -21,6 +21,7 @@ namespace CruZ.Components
         public Microsoft.Xna.Framework.Rectangle    SourceRectangle;
         public Vector2      Origin;
         public bool         Flip;
+        public float        LayerDepth { get; set; } = 0;
 
         public void LoadTexture(string resourcePath)
         {
@@ -44,22 +45,16 @@ namespace CruZ.Components
 
             Trace.Assert(_e != null);
 
-            spriteBatch.Begin(
-                transformMatrix: _e.Transform.TotalMatrix * viewMatrix,
-                samplerState: SamplerState.PointClamp);
-
             spriteBatch.Draw(
                 Texture,
-                Vector2.Zero,
-                sourceRectangle: SourceRectangle,
-                Color.White,
-                rotation: 0,
-                origin: Origin,
-                scale: new Vector2(_e.Transform.Scale.X, _e.Transform.Scale.Y),
-                effects: Flip ? SpriteEffects.FlipHorizontally : SpriteEffects.None,
-                layerDepth: 0);
-
-            spriteBatch.End();
+                position:           new Vector2(_e.Transform.Position.X, _e.Transform.Position.Y),
+                sourceRectangle:    SourceRectangle,
+                color:              Color.White,
+                rotation:           0,
+                origin:             Origin,
+                scale:              new Vector2(_e.Transform.Scale.X, _e.Transform.Scale.Y),
+                effects:            Flip ? SpriteEffects.FlipHorizontally : SpriteEffects.None,
+                layerDepth:         LayerDepth);
         }
 
         public void OnEntityChanged(TransformEntity entity)
