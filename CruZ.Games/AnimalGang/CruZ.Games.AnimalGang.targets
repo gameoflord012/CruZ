@@ -13,13 +13,11 @@
 		</ItemGroup>
 
 		<Exec Command="CruZ.Tool.ResourceImporter.exe -r $(_ResFolder) -build"/>
-
-		<!--TODO: Auto compile content-->
-		<Exec Command="mgcb /@:$(_ResFolder)\Content\Content.mgcb /workingDir:$(_ResFolder)\Content\ /outputDir:bin /intermediateDir:obj"/>
+		<Exec Command="mgcb /@:$(_ResFolder)\Content\Content.mgcb /workingDir:$(_ResFolder)\ /outputDir:Content\bin /intermediateDir:Content\obj\.obj"/>
 
 		<Copy
 			SourceFiles="@(_ResItems)"
-			DestinationFolder="$(OutputPath)\res%(RecursiveDir)"
+			DestinationFolder="$(OutputPath)\res\%(RecursiveDir)"
 			SkipUnchangedFiles="true"/>
 	</Target>
 </Project>
