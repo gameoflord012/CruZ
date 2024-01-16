@@ -1,0 +1,70 @@
+{
+  "Name": "",
+  "_entities": [
+    {
+      "position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "scale": {
+        "X": 5.0,
+        "Y": 5.0,
+        "Z": 0.0
+      },
+      "components": [
+        {
+          "com-type": "CruZ.Components.SpriteComponent, CruZ.DesktopGL, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+          "com-data": {
+            "_resourceName": "",
+            "LayerDepth": 0.2
+          }
+        },
+        {
+          "com-type": "CruZ.Games.AnimalGang.MainCharacter, Game.AnimalGang.DesktopGL, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+          "com-data": {}
+        },
+        {
+          "com-type": "CruZ.Components.AnimationComponent, CruZ.DesktopGL, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+          "com-data": {
+            "animation-players": [
+              {
+                "resource-uri": "anims/player-walk.sf",
+                "animation-player-key": "player-normal"
+              },
+              {
+                "resource-uri": "anims/player-sword-idle.sf",
+                "animation-player-key": "player-sword-idle"
+              },
+              {
+                "resource-uri": "anims/player-sword-attack.sf",
+                "animation-player-key": "player-sword-attack"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "scale": {
+        "X": 1.0,
+        "Y": 1.0,
+        "Z": 1.0
+      },
+      "components": [
+        {
+          "com-type": "CruZ.Components.SpriteComponent, CruZ.DesktopGL, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+          "com-data": {
+            "_resourceName": "tiles\\tile.png",
+            "LayerDepth": 0.1
+          }
+        }
+      ]
+    }
+  ]
+}
