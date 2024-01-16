@@ -38,15 +38,15 @@ namespace CruZ.Tool.ResourceImporter
         {
             Console.WriteLine("Build content...");
 
-            var resourceDir = Path.GetFullPath(ResourceImporter.ResourceRoot);
+            var resFullDir = Path.GetFullPath(ResourceImporter.ResourceRoot);
 
-            string args = string.Format("/outputDir:{0}\\bin\n/intermediateDir:{0}\\obj\n/platform:Windows\n", CONTENT_ROOT);
+            string args = string.Format("/outputDir:{0}\\bin\n/intermediateDir:{0}\\obj\n/platform:Windows\n/incremental\n", CONTENT_ROOT);
             foreach (var res in ResourceImporter.GetResults())
             {
-                args += string.Format("/build:{0}\n", resourceDir + "\\" + res.Value);
+                args += string.Format("/build:{0}\n", resFullDir + "\\" + res.Value);
             }
 
-            var tempFile = "resourceImporter.temp";
+            var tempFile = resFullDir + "\\resourceImporter.temp";
             File.WriteAllText(tempFile, args);
 
             Process p = new Process();
@@ -56,7 +56,7 @@ namespace CruZ.Tool.ResourceImporter
             p.StartInfo.CreateNoWindow = true;
             p.StartInfo.RedirectStandardOutput = true;
             p.StartInfo.RedirectStandardError = true;
-            p.StartInfo.WorkingDirectory = resourceDir;
+            p.StartInfo.WorkingDirectory = resFullDir;
 
             p.Start();
             string output = p.StandardOutput.ReadToEnd();
