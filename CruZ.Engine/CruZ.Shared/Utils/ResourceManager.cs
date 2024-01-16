@@ -42,7 +42,7 @@ namespace CruZ.Resource
             {
                 var dir = Path.GetDirectoryName(resourcePath);
                 var file = Path.GetFileNameWithoutExtension(resourcePath);
-                return LoadContent(Path.Combine(dir, file), ty);
+                return LoadContentNonGeneric(Path.Combine(dir, file), ty);
             }
             catch(ContentLoadException)
             {
@@ -95,7 +95,7 @@ namespace CruZ.Resource
             }
         }
 
-        public static T LoadContent<T>(string resourcePath)
+        private static T LoadContent<T>(string resourcePath)
         {
             try
             {
@@ -119,14 +119,14 @@ namespace CruZ.Resource
 
         }
 
-        private static object LoadContent(string resourcePath, Type ty)
+        private static object LoadContentNonGeneric(string resourcePath, Type ty)
         {
             try
             {
 #pragma warning disable CS8602 // Dereference of a possibly null reference.
 #pragma warning disable CS8603 // Possible null reference return.
                 return typeof(ResourceManager).
-                    GetMethod("LoadContent", System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.Public).
+                    GetMethod("LoadContent", System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.NonPublic).
                     MakeGenericMethod(ty).
                     Invoke(null, BindingFlags.DoNotWrapExceptions, null,[resourcePath], null);
 #pragma warning restore CS8603 // Possible null reference return.

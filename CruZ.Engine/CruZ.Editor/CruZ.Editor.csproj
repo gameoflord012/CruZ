@@ -27,7 +27,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="WorldViewControl.cs" />
+    <Compile Update="controls\WorldViewControl.cs" />
   </ItemGroup>
 	
   <Import Project="..\..\CruZ.Games\AnimalGang\CruZ.Games.AnimalGang.targets" />

@@ -25,7 +25,13 @@ namespace CruZ.Scene
 
             e.Transform.Scale = new(2, 2);
 
+            var backGround = ECS.CreateEntity();
+            backGround.AddComponent(new SpriteComponent());
+            var sp = backGround.GetComponent<SpriteComponent>();
+            sp.LoadTexture("tiles\\tile.png");
+
             scene.AddToScene(e);
+            scene.AddToScene(backGround);
 
             return scene;
         }

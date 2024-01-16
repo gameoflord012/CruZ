@@ -22,14 +22,14 @@ namespace CruZ.Components
         public Vector2      Origin;
         public bool         Flip;
 
-        public void LoadTexture(string TextureURI)
+        public void LoadTexture(string resourcePath)
         {
-            _textureURI = TextureURI;
+            _textureURI = resourcePath;
 
-            if(!string.IsNullOrEmpty(TextureURI))
+            if(!string.IsNullOrEmpty(resourcePath))
             {
+                Texture = ResourceManager.LoadResource<Texture2D>(resourcePath);
                 SourceRectangle = Texture.Bounds;
-                Texture = ResourceManager.LoadContent<Texture2D>(TextureURI);
                 Origin = new(SourceRectangle.Width / 2f, SourceRectangle.Height / 2f);
             }
         }

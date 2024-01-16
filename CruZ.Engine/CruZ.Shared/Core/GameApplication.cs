@@ -15,7 +15,7 @@ namespace CruZ
         {
             _core = new();
 
-            _core.InitializeEvent   += Initialize;
+            _core.InitializeEvent   += InternalInitialize;
             _core.UpdateEvent       += Update;
             _core.LoadContentEvent  += LoadContent;
             _core.EndRunEvent       += EndRun;
@@ -28,6 +28,12 @@ namespace CruZ
             Input               .CreateContext(this);
 
             _core.Run();
+        }
+
+        private void InternalInitialize()
+        {
+            Camera.Main = new Camera(GraphicsDevice.Viewport);
+            Initialize();
         }
 
         protected virtual void  Initialize() { }
