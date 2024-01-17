@@ -53,7 +53,7 @@ namespace CruZ.Editor
             _updateElapsed = _gameLoopTimer.Elapsed;
 
             UpdateEvent.Invoke(gameTime);
-            Invalidate();
+            Invalidate(true);
         }
 
         protected override void Draw()
@@ -99,7 +99,7 @@ namespace CruZ.Editor
         {
             base.OnMouseWheel(e);
 
-            Camera.Main.Zoom.X -= e.Delta * 0.001f * Camera.Main.Zoom.X;
+            Camera.Main.Zoom = new (Camera.Main.Zoom.X - e.Delta * 0.001f * Camera.Main.Zoom.X, Camera.Main.Zoom.Y);
             Debug.WriteLine(Camera.Main.Zoom.X);
         }
 

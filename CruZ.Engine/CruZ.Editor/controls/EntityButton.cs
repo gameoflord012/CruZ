@@ -1,6 +1,7 @@
 ﻿using CruZ.Components;
 using CruZ.Systems;
 using System;
+using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
@@ -14,14 +15,17 @@ namespace CruZ.Editor
             SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
 
             this._attachedEntity = attachedEntity;
-            _attachedEntity.Transform.OnPositionChanged += EntityTransform_OnPositionChanged;
+            Camera.Main.OnCameraValueChanged += () => UpdateButtonPosition();
+            _attachedEntity.Transform.OnPositionChanged += (p) => UpdateButtonPosition();
+
+            UpdateButtonPosition();
 
             Size = new(ButtonSize, ButtonSize);
         }
 
-        private void EntityTransform_OnPositionChanged(Vector3 p)
+        private void UpdateButtonPosition()
         {
-            var ePoint = Camera.Main.CoordinateToPoint(p);
+            var ePoint = Camera.Main.CoordinateToPoint(_attachedEntity.Transform.Position);
             SetCenter(ePoint);
         }
 
