@@ -23,12 +23,12 @@
     <Compile Include="$(MSBuildThisFileDirectory)System\Entity\Interface\IComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System\Input\Input.Static.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System\Entity\TransformEntity.Disposable.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)System\Resource\IHasResourcePath.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System\Scene\GameScene.Disposable.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System\Scene\SceneAssetMethodAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System\Scene\SceneAssetClassAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\Helper.cs" />
-    <Compile Include="..\CruZ.Shared\Utils\IResourceInjection.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Utils\ResourceManager.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)System\Resource\ResourceManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System\EntityScriptSystem.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System\Entity\ECS.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System\Entity\EntityExtension.cs" />

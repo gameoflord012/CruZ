@@ -8,7 +8,7 @@ using System.Collections.Generic;
 
 namespace CruZ
 {
-    public partial class GameScene
+    public partial class GameScene : IHasResourcePath
     {
         public event Action<TransformEntity>? OnEntityAdded;
         public event Action<TransformEntity>? OnEntityRemoved;
@@ -17,6 +17,7 @@ namespace CruZ
 
         [JsonIgnore]
         public TransformEntity[]    Entities    { get => _entities.ToArray(); }
+        public string               ResourcePath { get; set; }
 
         public void AddToScene(TransformEntity e)
         {

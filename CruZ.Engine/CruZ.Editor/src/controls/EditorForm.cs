@@ -1,12 +1,6 @@
 ﻿using CruZ.Resource;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace CruZ.Editor
@@ -18,9 +12,9 @@ namespace CruZ.Editor
             InitializeComponent();
         }
 
-        private void fileToolStripMenuItem_Click(object sender, EventArgs e)
+        protected override void OnFormClosing(FormClosingEventArgs e)
         {
-
+            CacheService.CallWriteCaches();
         }
 
         private void openSceneToolStripMenuItem_Click(object sender, EventArgs e)
@@ -35,17 +29,21 @@ namespace CruZ.Editor
             worldViewControl.LoadScene(scene);
         }
 
-        private void saveAsToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private void saveSceneToolStripMenuItem_Click(object sender, EventArgs e)
         {
             ResourceManager.CreateResource(
-                _currentOpenningSceneFile, 
+                _currentOpenningSceneFile,
                 worldViewControl.CurrentGameScene,
                 true);
+        }
+
+        private void fileToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+        }
+
+        private void saveAsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
         }
 
         private string _currentOpenningSceneFile;

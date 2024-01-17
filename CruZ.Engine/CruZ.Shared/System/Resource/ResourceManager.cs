@@ -38,23 +38,31 @@ namespace CruZ.Resource
         /// <returns></returns>
         public static object LoadResource(string resourcePath, Type ty)
         {
+            object resObj;
+
             try
             {
                 var dir = Path.GetDirectoryName(resourcePath);
                 var file = Path.GetFileNameWithoutExtension(resourcePath);
-                return LoadContentNonGeneric(Path.Combine(dir, file), ty);
+
+                resObj = LoadContentNonGeneric(Path.Combine(dir, file), ty);
             }
             catch(ContentLoadException)
             {
                 try
                 {
-                    return _Serializer.DeserializeFromFile(Path.Combine(RESOURCE_ROOT, resourcePath), ty);
+                    resObj = _Serializer.DeserializeFromFile(Path.Combine(RESOURCE_ROOT, resourcePath), ty);
                 }
                 catch(FileNotFoundException)
                 {
                     throw new(string.Format("Can't find resource file {0}", resourcePath));
                 }
             }
+
+            var hasResourcePath = resObj as IHasResourcePath;
+            if(hasResourcePath != null) hasResourcePath.ResourcePath = resourcePath;
+
+            return resObj;
         }
 
         public static void CreateResource(string resourcePath, object res, bool renew = false)

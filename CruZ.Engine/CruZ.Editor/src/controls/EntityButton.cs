@@ -6,7 +6,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace CruZ.Editor
+namespace CruZ.Editor.Controls
 {
     public class EntityButton : Button
     {
@@ -15,12 +15,14 @@ namespace CruZ.Editor
             SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
 
             this._attachedEntity = attachedEntity;
-            Camera.Main.OnCameraValueChanged += () => UpdateButtonPosition();
-            _attachedEntity.Transform.OnPositionChanged += (p) => UpdateButtonPosition();
-
-            UpdateButtonPosition();
 
             Size = new(ButtonSize, ButtonSize);
+        }
+
+        protected override void OnParentChanged(EventArgs e)
+        {
+            base.OnParentChanged(e);
+            Parent.Invalidated += (sender, args) => UpdateButtonPosition();
         }
 
         private void UpdateButtonPosition()

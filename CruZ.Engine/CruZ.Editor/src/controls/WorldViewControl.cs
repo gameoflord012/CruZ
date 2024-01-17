@@ -11,9 +11,9 @@ using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 
-namespace CruZ.Editor
+namespace CruZ.Editor.Controls
 {
-    internal class WorldViewControl : MonoGame.Forms.NET.Controls.InvalidationControl, IECSContextProvider, IApplicationContextProvider, IInputContextProvider
+    internal partial class WorldViewControl : MonoGame.Forms.NET.Controls.InvalidationControl, IECSContextProvider, IApplicationContextProvider, IInputContextProvider
     {
         public event Action<GameTime>   DrawEvent;
         public event Action<GameTime>   UpdateEvent;
@@ -26,10 +26,14 @@ namespace CruZ.Editor
 
         public WorldViewControl()
         {
-            ECS.CreateContext(this);
-            ApplicationContext.CreateContext(this);
-            Input.CreateContext(this);
+            ECS                 .CreateContext(this);
+            ApplicationContext  .CreateContext(this);
+            Input               .CreateContext(this);
+
             Camera.Main = new Camera(Width, Height);
+
+            CacheService.RegisterCacheControl(this);
+            CanReadCacheChanged?.Invoke(this, false);
         }
 
         protected override void Initialize()
@@ -45,6 +49,8 @@ namespace CruZ.Editor
 
             Application.Idle -= Update;
             Application.Idle += Update;
+
+            CanReadCacheChanged?.Invoke(this, true);
         }
 
         private void Update(object? sender, EventArgs e)
@@ -98,9 +104,7 @@ namespace CruZ.Editor
         protected override void OnMouseWheel(MouseEventArgs e)
         {
             base.OnMouseWheel(e);
-
             Camera.Main.Zoom = new (Camera.Main.Zoom.X - e.Delta * 0.001f * Camera.Main.Zoom.X, Camera.Main.Zoom.Y);
-            Debug.WriteLine(Camera.Main.Zoom.X);
         }
 
         protected override void OnMouseMove(System.Windows.Forms.MouseEventArgs e)

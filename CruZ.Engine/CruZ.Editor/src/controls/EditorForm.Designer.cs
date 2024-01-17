@@ -1,4 +1,5 @@
-﻿using MonoGame.Forms.NET.Controls;
+﻿using CruZ.Editor.Controls;
+using MonoGame.Forms.NET.Controls;
 using System.Drawing;
 using System.Windows.Forms;
 

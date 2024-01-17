@@ -8,7 +8,7 @@ namespace CruZ.Systems
 {
     public partial class Camera
     {
-        public event Action OnCameraValueChanged;
+        //public event Action OnCameraValueChanged;
 
         public Camera(Viewport viewport)
         {
@@ -73,23 +73,23 @@ namespace CruZ.Systems
 
         public float VirtualWidth { 
             get => _virtualWidth * Zoom.X; 
-            set { _virtualWidth = value; OnCameraValueChanged?.Invoke(); } }
+            set { _virtualWidth = value; } }
 
         public float VirtualHeight { 
             get => (PreserveRatio ? VirtualWidth / Ratio : _virtualHeight) * Zoom.Y;
-            set { _virtualHeight = value; OnCameraValueChanged?.Invoke(); } }
+            set { _virtualHeight = value; } }
 
         public float ViewPortWidth { 
             get => _viewPortWidth; 
-            set { _viewPortWidth = value; OnCameraValueChanged?.Invoke(); } }
+            set { _viewPortWidth = value; } }
 
         public float ViewPortHeight { 
             get => _viewPortHeight; 
-            set { _viewPortHeight = value; OnCameraValueChanged?.Invoke(); } }
+            set { _viewPortHeight = value; } }
 
         public Vector3 Position { 
             get => _position; 
-            set { _position = value; OnCameraValueChanged?.Invoke(); } }
+            set { _position = value; } }
 
         private Vector3 _position = Vector3.Zero;
 
@@ -98,7 +98,7 @@ namespace CruZ.Systems
 
         public Vector3 Zoom { 
             get => _zoom; 
-            set { _zoom = value; OnCameraValueChanged?.Invoke(); } }
+            set { _zoom = value; } }
 
         private Vector3 _zoom = new(1, 1);
         private float _viewPortWidth;
