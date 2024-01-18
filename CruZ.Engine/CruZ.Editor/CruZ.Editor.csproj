@@ -1,42 +1,44 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-	<OutputType>WinExe</OutputType>
-    <TargetFramework>net8.0-windows</TargetFramework>
-	<UseWindowsForms>true</UseWindowsForms>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
+	<PropertyGroup>
+		<OutputType>WinExe</OutputType>
+		<TargetFramework>net8.0-windows</TargetFramework>
+		<UseWindowsForms>true</UseWindowsForms>
+		<Nullable>enable</Nullable>
+		<ApplicationHighDpiMode>SystemAware</ApplicationHighDpiMode>
+		<ForceDesignerDpiUnaware>true</ForceDesignerDpiUnaware>
+	</PropertyGroup>
 
-  <PropertyGroup>
-    <DefineConstants>$(DefineConstants);CRUZ_EDITOR</DefineConstants>
-  </PropertyGroup>
+	<PropertyGroup>
+		<DefineConstants>$(DefineConstants);CRUZ_EDITOR</DefineConstants>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <Compile Remove="Views\**" />
-    <EmbeddedResource Remove="Views\**" />
-    <None Remove="Views\**" />
-  </ItemGroup>
+	<ItemGroup>
+		<Compile Remove="Views\**" />
+		<EmbeddedResource Remove="Views\**" />
+		<None Remove="Views\**" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Box2D.NetStandard" Version="2.4.7-alpha" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Box2D.NetStandard" Version="2.4.7-alpha" />
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\..\ThirdParty\MonoGame.Extended\src\cs\MonoGame.Extended.Animations\MonoGame.Extended.Animations.csproj" />
-    <ProjectReference Include="..\..\ThirdParty\MonoGame.Extended\src\cs\MonoGame.Extended.Entities\MonoGame.Extended.Entities.csproj" />
-    <ProjectReference Include="..\..\ThirdParty\MonoGame.Extended\src\cs\MonoGame.Extended\MonoGame.Extended.csproj" />
-    <ProjectReference Include="..\CruZ.Tool.ResourceImporter\CruZ.Tool.ResourceImporter.csproj" />
-    <ProjectReference Include="..\CruZ.WinForm\CruZ.WinForm.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\..\ThirdParty\MonoGame.Extended\src\cs\MonoGame.Extended.Animations\MonoGame.Extended.Animations.csproj" />
+		<ProjectReference Include="..\..\ThirdParty\MonoGame.Extended\src\cs\MonoGame.Extended.Entities\MonoGame.Extended.Entities.csproj" />
+		<ProjectReference Include="..\..\ThirdParty\MonoGame.Extended\src\cs\MonoGame.Extended\MonoGame.Extended.csproj" />
+		<ProjectReference Include="..\CruZ.Tool.ResourceImporter\CruZ.Tool.ResourceImporter.csproj" />
+		<ProjectReference Include="..\CruZ.WinForm\CruZ.WinForm.csproj" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <Compile Update="src\controls\WorldViewControl.cs" />
-  </ItemGroup>
-	
-  <Import Project="..\..\CruZ.Games\AnimalGang\CruZ.Games.AnimalGang.targets" />
+	<ItemGroup>
+		<Compile Update="src\controls\WorldViewControl.cs" />
+	</ItemGroup>
 
-  <Import Project="..\CruZ.Shared\CruZ.Shared.projitems" Label="Shared" />
-  <Import Project="..\..\CruZ.Games\AnimalGang\AnimalGang.Shared\AnimalGang.Shared.projitems" Label="Shared" />
+	<Import Project="..\..\CruZ.Games\AnimalGang\CruZ.Games.AnimalGang.targets" />
+
+	<Import Project="..\CruZ.Shared\CruZ.Shared.projitems" Label="Shared" />
+	<Import Project="..\..\CruZ.Games\AnimalGang\AnimalGang.Shared\AnimalGang.Shared.projitems" Label="Shared" />
 
 </Project>

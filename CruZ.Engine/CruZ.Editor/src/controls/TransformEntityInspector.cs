@@ -8,8 +8,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace CruZ.Editor.src.controls
-{
+namespace CruZ.Editor.Controls 
+{ 
     public partial class TransformEntityInspector : UserControl
     {
         public TransformEntityInspector()

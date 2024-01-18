@@ -35,24 +35,28 @@ namespace CruZ.Editor
         {
             splitContainer1 = new SplitContainer();
             worldViewControl = new WorldViewControl();
+            inspectorPanel = new FlowLayoutPanel();
+            transformEntityInspector1 = new TransformEntityInspector();
             menuStrip1 = new MenuStrip();
             fileToolStripMenuItem = new ToolStripMenuItem();
             openSceneToolStripMenuItem = new ToolStripMenuItem();
             saveSceneToolStripMenuItem = new ToolStripMenuItem();
             saveAsToolStripMenuItem = new ToolStripMenuItem();
-            inspectorPanel = new FlowLayoutPanel();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
             splitContainer1.Panel2.SuspendLayout();
             splitContainer1.SuspendLayout();
-            menuStrip1.SuspendLayout();
             inspectorPanel.SuspendLayout();
+            menuStrip1.SuspendLayout();
             SuspendLayout();
             // 
             // splitContainer1
             // 
             splitContainer1.Dock = DockStyle.Fill;
-            splitContainer1.Location = new Point(0, 28);
+            splitContainer1.FixedPanel = FixedPanel.Panel2;
+            splitContainer1.IsSplitterFixed = true;
+            splitContainer1.Location = new Point(0, 24);
+            splitContainer1.Margin = new Padding(3, 2, 3, 2);
             splitContainer1.Name = "splitContainer1";
             // 
             // splitContainer1.Panel1
@@ -62,8 +66,8 @@ namespace CruZ.Editor
             // splitContainer1.Panel2
             // 
             splitContainer1.Panel2.Controls.Add(inspectorPanel);
-            splitContainer1.Size = new Size(800, 422);
-            splitContainer1.SplitterDistance = 481;
+            splitContainer1.Size = new Size(700, 314);
+            splitContainer1.SplitterDistance = 419;
             splitContainer1.TabIndex = 0;
             // 
             // worldViewControl
@@ -71,17 +75,39 @@ namespace CruZ.Editor
             worldViewControl.BackColor = Color.LightSeaGreen;
             worldViewControl.Dock = DockStyle.Fill;
             worldViewControl.Location = new Point(0, 0);
+            worldViewControl.Margin = new Padding(3, 2, 3, 2);
             worldViewControl.Name = "worldViewControl";
-            worldViewControl.Size = new Size(481, 422);
+            worldViewControl.Size = new Size(419, 314);
             worldViewControl.TabIndex = 0;
+            // 
+            // inspectorPanel
+            // 
+            inspectorPanel.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            inspectorPanel.AutoScroll = true;
+            inspectorPanel.Controls.Add(transformEntityInspector1);
+            inspectorPanel.FlowDirection = FlowDirection.TopDown;
+            inspectorPanel.Location = new Point(2, 0);
+            inspectorPanel.Name = "inspectorPanel";
+            inspectorPanel.Size = new Size(275, 314);
+            inspectorPanel.TabIndex = 0;
+            // 
+            // transformEntityInspector1
+            // 
+            transformEntityInspector1.Location = new Point(3, 2);
+            transformEntityInspector1.Margin = new Padding(3, 2, 3, 2);
+            transformEntityInspector1.Name = "transformEntityInspector1";
+            transformEntityInspector1.Size = new Size(265, 123);
+            transformEntityInspector1.TabIndex = 0;
             // 
             // menuStrip1
             // 
+            menuStrip1.BackColor = SystemColors.Control;
             menuStrip1.ImageScalingSize = new Size(20, 20);
             menuStrip1.Items.AddRange(new ToolStripItem[] { fileToolStripMenuItem });
             menuStrip1.Location = new Point(0, 0);
             menuStrip1.Name = "menuStrip1";
-            menuStrip1.Size = new Size(800, 28);
+            menuStrip1.Padding = new Padding(5, 2, 0, 2);
+            menuStrip1.Size = new Size(700, 24);
             menuStrip1.TabIndex = 1;
             menuStrip1.Text = "menuStrip1";
             // 
@@ -89,57 +115,49 @@ namespace CruZ.Editor
             // 
             fileToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { openSceneToolStripMenuItem, saveSceneToolStripMenuItem, saveAsToolStripMenuItem });
             fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-            fileToolStripMenuItem.Size = new Size(46, 24);
+            fileToolStripMenuItem.Size = new Size(37, 20);
             fileToolStripMenuItem.Text = "File";
             fileToolStripMenuItem.Click += fileToolStripMenuItem_Click;
             // 
             // openSceneToolStripMenuItem
             // 
             openSceneToolStripMenuItem.Name = "openSceneToolStripMenuItem";
-            openSceneToolStripMenuItem.Size = new Size(171, 26);
+            openSceneToolStripMenuItem.Size = new Size(137, 22);
             openSceneToolStripMenuItem.Text = "Open Scene";
             openSceneToolStripMenuItem.Click += openSceneToolStripMenuItem_Click;
             // 
             // saveSceneToolStripMenuItem
             // 
             saveSceneToolStripMenuItem.Name = "saveSceneToolStripMenuItem";
-            saveSceneToolStripMenuItem.Size = new Size(171, 26);
+            saveSceneToolStripMenuItem.Size = new Size(137, 22);
             saveSceneToolStripMenuItem.Text = "Save Scene";
             saveSceneToolStripMenuItem.Click += saveSceneToolStripMenuItem_Click;
             // 
             // saveAsToolStripMenuItem
             // 
             saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
-            saveAsToolStripMenuItem.Size = new Size(171, 26);
+            saveAsToolStripMenuItem.Size = new Size(137, 22);
             saveAsToolStripMenuItem.Text = "Save As ...";
             saveAsToolStripMenuItem.Click += saveAsToolStripMenuItem_Click;
             // 
-            // inspectorPanel
-            // 
-            inspectorPanel.Name = "flowLayoutPanel1";
-            inspectorPanel.Dock = DockStyle.Fill;
-            inspectorPanel.AutoScroll = true;
-            inspectorPanel.WrapContents = false;
-            inspectorPanel.TabIndex = 0;
-            inspectorPanel.FlowDirection = FlowDirection.TopDown;
-            // 
             // EditorForm
             // 
-            AutoScaleDimensions = new SizeF(8F, 20F);
+            AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 450);
+            ClientSize = new Size(700, 338);
             Controls.Add(splitContainer1);
             Controls.Add(menuStrip1);
             MainMenuStrip = menuStrip1;
+            Margin = new Padding(3, 2, 3, 2);
             Name = "EditorForm";
             Text = "EditorForm";
             splitContainer1.Panel1.ResumeLayout(false);
             splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)splitContainer1).EndInit();
             splitContainer1.ResumeLayout(false);
+            inspectorPanel.ResumeLayout(false);
             menuStrip1.ResumeLayout(false);
             menuStrip1.PerformLayout();
-            inspectorPanel.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
         }
@@ -154,5 +172,6 @@ namespace CruZ.Editor
         private ToolStripMenuItem saveSceneToolStripMenuItem;
         private ToolStripMenuItem saveAsToolStripMenuItem;
         private FlowLayoutPanel inspectorPanel;
+        private TransformEntityInspector transformEntityInspector1;
     }
 }
