@@ -14,7 +14,8 @@ namespace CruZ.Editor.Controls
 
         public EntityButton(TransformEntity attachedEntity)
         {
-            SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
+            //SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
+            //SetStyle(ControlStyles.AllPaintingInWmPaint, true);
 
             this._attachedEntity = attachedEntity;
             _attachedEntity.OnActiveStateChanged += attachedEntity_OnActiveStateChanged;

@@ -1,6 +1,6 @@
 ﻿namespace CruZ.Editor.Controls
 {
-    partial class TransformEntityInspector
+    partial class Vector3InspectorControl
     {
         /// <summary> 
         /// Required designer variable.
@@ -33,7 +33,7 @@
             yValue = new System.Windows.Forms.TextBox();
             zText = new System.Windows.Forms.TextBox();
             yText = new System.Windows.Forms.TextBox();
-            PropertyName_TextBox = new System.Windows.Forms.TextBox();
+            propertyName_TextBox = new System.Windows.Forms.TextBox();
             xText = new System.Windows.Forms.TextBox();
             xValue = new System.Windows.Forms.TextBox();
             tableLayoutPanel1.SuspendLayout();
@@ -49,7 +49,7 @@
             tableLayoutPanel1.Controls.Add(yValue, 1, 2);
             tableLayoutPanel1.Controls.Add(zText, 0, 3);
             tableLayoutPanel1.Controls.Add(yText, 0, 2);
-            tableLayoutPanel1.Controls.Add(PropertyName_TextBox, 0, 0);
+            tableLayoutPanel1.Controls.Add(propertyName_TextBox, 0, 0);
             tableLayoutPanel1.Controls.Add(xText, 0, 1);
             tableLayoutPanel1.Controls.Add(xValue, 1, 1);
             tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
@@ -108,20 +108,20 @@
             yText.Text = "Y";
             yText.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
-            // PropertyName_TextBox
+            // propertyName_TextBox
             // 
-            PropertyName_TextBox.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
-            PropertyName_TextBox.BackColor = System.Drawing.SystemColors.Menu;
-            tableLayoutPanel1.SetColumnSpan(PropertyName_TextBox, 2);
-            PropertyName_TextBox.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
-            PropertyName_TextBox.ForeColor = System.Drawing.SystemColors.MenuText;
-            PropertyName_TextBox.Location = new System.Drawing.Point(3, 2);
-            PropertyName_TextBox.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            PropertyName_TextBox.Name = "PropertyName_TextBox";
-            PropertyName_TextBox.ReadOnly = true;
-            PropertyName_TextBox.Size = new System.Drawing.Size(260, 23);
-            PropertyName_TextBox.TabIndex = 0;
-            PropertyName_TextBox.Text = "PropertyName";
+            propertyName_TextBox.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
+            propertyName_TextBox.BackColor = System.Drawing.SystemColors.Menu;
+            tableLayoutPanel1.SetColumnSpan(propertyName_TextBox, 2);
+            propertyName_TextBox.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
+            propertyName_TextBox.ForeColor = System.Drawing.SystemColors.MenuText;
+            propertyName_TextBox.Location = new System.Drawing.Point(3, 2);
+            propertyName_TextBox.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            propertyName_TextBox.Name = "propertyName_TextBox";
+            propertyName_TextBox.ReadOnly = true;
+            propertyName_TextBox.Size = new System.Drawing.Size(260, 23);
+            propertyName_TextBox.TabIndex = 0;
+            propertyName_TextBox.Text = "PropertyName";
             // 
             // xText
             // 
@@ -145,13 +145,13 @@
             xValue.Size = new System.Drawing.Size(172, 23);
             xValue.TabIndex = 4;
             // 
-            // TransformEntityInspector
+            // Vector3InspectorControl
             // 
             AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             Controls.Add(tableLayoutPanel1);
             Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            Name = "TransformEntityInspector";
+            Name = "Vector3InspectorControl";
             Size = new System.Drawing.Size(266, 123);
             tableLayoutPanel1.ResumeLayout(false);
             tableLayoutPanel1.PerformLayout();
@@ -161,12 +161,12 @@
         #endregion
 
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
-        private System.Windows.Forms.TextBox PropertyName_TextBox;
+        private System.Windows.Forms.TextBox propertyName_TextBox;
         private System.Windows.Forms.TextBox xText;
-        private System.Windows.Forms.TextBox zText;
         private System.Windows.Forms.TextBox yText;
         private System.Windows.Forms.TextBox xValue;
-        private System.Windows.Forms.TextBox zValue;
         private System.Windows.Forms.TextBox yValue;
+        private System.Windows.Forms.TextBox zValue;
+        private System.Windows.Forms.TextBox zText;
     }
 }

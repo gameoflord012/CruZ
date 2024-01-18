@@ -36,7 +36,7 @@ namespace CruZ.Editor
             splitContainer1 = new SplitContainer();
             worldViewControl = new WorldViewControl();
             inspectorPanel = new FlowLayoutPanel();
-            transformEntityInspector1 = new TransformEntityInspector();
+            positionInspectorControl = new Vector3InspectorControl();
             menuStrip1 = new MenuStrip();
             fileToolStripMenuItem = new ToolStripMenuItem();
             openSceneToolStripMenuItem = new ToolStripMenuItem();
@@ -84,20 +84,20 @@ namespace CruZ.Editor
             // 
             inspectorPanel.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             inspectorPanel.AutoScroll = true;
-            inspectorPanel.Controls.Add(transformEntityInspector1);
+            inspectorPanel.Controls.Add(positionInspectorControl);
             inspectorPanel.FlowDirection = FlowDirection.TopDown;
             inspectorPanel.Location = new Point(2, 0);
             inspectorPanel.Name = "inspectorPanel";
             inspectorPanel.Size = new Size(275, 314);
             inspectorPanel.TabIndex = 0;
             // 
-            // transformEntityInspector1
+            // positionInspectorControl
             // 
-            transformEntityInspector1.Location = new Point(3, 2);
-            transformEntityInspector1.Margin = new Padding(3, 2, 3, 2);
-            transformEntityInspector1.Name = "transformEntityInspector1";
-            transformEntityInspector1.Size = new Size(265, 123);
-            transformEntityInspector1.TabIndex = 0;
+            positionInspectorControl.Location = new Point(3, 2);
+            positionInspectorControl.Margin = new Padding(3, 2, 3, 2);
+            positionInspectorControl.Name = "transformEntityInspector1";
+            positionInspectorControl.Size = new Size(265, 123);
+            positionInspectorControl.TabIndex = 0;
             // 
             // menuStrip1
             // 
@@ -172,6 +172,6 @@ namespace CruZ.Editor
         private ToolStripMenuItem saveSceneToolStripMenuItem;
         private ToolStripMenuItem saveAsToolStripMenuItem;
         private FlowLayoutPanel inspectorPanel;
-        private TransformEntityInspector transformEntityInspector1;
+        private Vector3InspectorControl positionInspectorControl;
     }
 }

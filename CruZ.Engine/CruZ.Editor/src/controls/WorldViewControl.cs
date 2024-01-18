@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
 using MonoGame.Extended.Timers;
+using MonoGame.Forms.NET.Components;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -43,6 +44,8 @@ namespace CruZ.Editor.Controls
             Editor.Content.RootDirectory = ".";
             InitializeSystemEvent.Invoke();
 
+            Editor.FPSCounter.Enabled = true;
+
             _gameLoopTimer = new();
             _gameLoopTimer.Start();
 
@@ -59,9 +62,11 @@ namespace CruZ.Editor.Controls
         {
             GameTime gameTime = new(_gameLoopTimer.Elapsed, _gameLoopTimer.Elapsed - _updateElapsed);
             _updateElapsed = _gameLoopTimer.Elapsed;
-
+            
+            Editor.FPSCounter.Update(gameTime);
             UpdateEvent.Invoke(gameTime);
-            Invalidate(true);
+
+            Invalidate();
         }
 
         protected override void Draw()
@@ -69,8 +74,12 @@ namespace CruZ.Editor.Controls
             GameTime gameTime = new(_gameLoopTimer.Elapsed, _gameLoopTimer.Elapsed - _drawElapsed);
             _drawElapsed = _gameLoopTimer.Elapsed;
 
+            Editor.FPSCounter.UpdateFrameCounter();
+
             DrawEvent?.Invoke(gameTime);
             DrawAxis();
+
+            Update();
         }
 
         public void LoadScene(GameScene scene)
@@ -154,18 +163,20 @@ namespace CruZ.Editor.Controls
                 var btn = new EntityButton(e);
 
                 _entityBtns.Add(btn);
-                btn.Click += EntityBtn_Clicked;
+                btn.MouseDown += EntityBtn_MouseDown;
                 Controls.Add(btn);
             }
         }
 
         private void SelectEntity(TransformEntity e)
         {
+            if(e == _currentSelectedEntity) return;
+
             _currentSelectedEntity = e;
             OnSelectedEntityChanged?.Invoke(this, _currentSelectedEntity);
         }
 
-        private void EntityBtn_Clicked(object? sender, EventArgs e)
+        private void EntityBtn_MouseDown(object? sender, EventArgs e)
         {
             SelectEntity(((EntityButton)sender).AttachedEntity);
         }
