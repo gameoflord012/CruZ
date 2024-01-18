@@ -9,8 +9,6 @@ namespace CruZ.Editor
 {
     class CacheService
     {
-        //private static List<ICacheControl> CacheControls = [];
-
         public static void RegisterCacheControl(ICacheControl control)
         {
             _registedCacheControls.Add(control);

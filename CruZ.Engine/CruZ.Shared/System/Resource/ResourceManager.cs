@@ -87,6 +87,11 @@ namespace CruZ.Resource
             }
         }
 
+        public static void CreateResource(IHasResourcePath res, bool renew = false)
+        {
+            CreateResource(res.ResourcePath, res, renew);
+        }
+
         public static T LoadResource<T>(Guid guid)
         {
             return LoadResource<T>(GetResourcePath(guid));
