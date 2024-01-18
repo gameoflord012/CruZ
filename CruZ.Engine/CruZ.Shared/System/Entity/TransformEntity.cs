@@ -20,7 +20,7 @@ namespace CruZ.Components
         public Entity           Entity      { get => _entity; }
         public TransformEntity? Parent      { get => _parent;       set => _parent = value; }
         public bool             IsActive    { get => _isActive;     set => SetIsActive(value); }
-        public string           NameId      = "";
+        public string           Name        = "";
 
         public TransformEntity(Entity e)
         {

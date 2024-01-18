@@ -1,4 +1,5 @@
-﻿using CruZ.Systems;
+﻿using CruZ.Components;
+using CruZ.Systems;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -15,10 +16,11 @@ namespace CruZ.Editor.Controls
 {
     internal partial class WorldViewControl : MonoGame.Forms.NET.Controls.InvalidationControl, IECSContextProvider, IApplicationContextProvider, IInputContextProvider
     {
-        public event Action<GameTime>   DrawEvent;
-        public event Action<GameTime>   UpdateEvent;
-        public event Action             InitializeSystemEvent;
-        public event Action<GameTime>   UpdateInputEvent { add { UpdateEvent += value; } remove { UpdateEvent -= value; } }
+        public event Action<GameTime>               DrawEvent;
+        public event Action<GameTime>               UpdateEvent;
+        public event Action                         InitializeSystemEvent;
+        public event Action<GameTime>               UpdateInputEvent { add { UpdateEvent += value; } remove { UpdateEvent -= value; } }
+        public event EventHandler<TransformEntity>  OnSelectedEntityChanged; 
 
         public GraphicsDevice GraphicsDevice => Editor.GraphicsDevice;
         public ContentManager Content => Editor.Content;
@@ -150,8 +152,24 @@ namespace CruZ.Editor.Controls
             foreach(var e in _currentScene.Entities)
             {
                 var btn = new EntityButton(e);
+
+                _entityBtns.Add(btn);
+                btn.Click += EntityBtn_Clicked;
                 Controls.Add(btn);
             }
+        }
+
+        private void SelectEntity(TransformEntity e)
+        {
+            _currentSelectedEntity = e;
+            OnSelectedEntityChanged?.Invoke(this, _currentSelectedEntity);
+
+            Debug.WriteLine(_currentSelectedEntity.Name);
+        }
+
+        private void EntityBtn_Clicked(object? sender, EventArgs e)
+        {
+            SelectEntity(((EntityButton)sender).AttachedEntity);
         }
 
         private void DrawAxis()
@@ -184,8 +202,7 @@ namespace CruZ.Editor.Controls
         System.Drawing.Point _mouseStartDragPoint;
 
         GameScene? _currentScene;
-
-        
+        TransformEntity _currentSelectedEntity;
 
         List<Button> _entityBtns = new();
     }

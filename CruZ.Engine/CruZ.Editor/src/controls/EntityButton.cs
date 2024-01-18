@@ -10,6 +10,8 @@ namespace CruZ.Editor.Controls
 {
     public class EntityButton : Button
     {
+        public TransformEntity AttachedEntity { get => _attachedEntity; }
+
         public EntityButton(TransformEntity attachedEntity)
         {
             SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
@@ -61,7 +63,7 @@ namespace CruZ.Editor.Controls
         {
             base.OnMouseDown(mevent);
 
-            if(mevent.Button == MouseButtons.Left && _isMouseEntered)
+            if (mevent.Button == MouseButtons.Left && _isMouseEntered)
             {
                 _isDragging = true;
             }
@@ -71,7 +73,7 @@ namespace CruZ.Editor.Controls
         {
             base.OnMouseUp(mevent);
 
-            if(mevent.Button == MouseButtons.Left)
+            if (mevent.Button == MouseButtons.Left)
             {
                 _isDragging = false;
             }

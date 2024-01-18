@@ -13,6 +13,7 @@ namespace CruZ.Scene
             var scene = new GameScene();
 
             var e = ECS.CreateEntity();
+            e.Name = "Player";
 
             var anim = new AnimationComponent();
             anim.LoadSpriteSheet("anims/player-walk.sf",            "player-normal");
@@ -26,6 +27,7 @@ namespace CruZ.Scene
             e.Transform.Scale = new(5, 5);
 
             var backGround = ECS.CreateEntity();
+            backGround.Name = "Background";
             backGround.AddComponent(new SpriteComponent());
             var sp = backGround.GetComponent<SpriteComponent>();
             sp.LayerDepth = 0.1f;
