@@ -22,9 +22,9 @@ namespace CruZ.Editor.Controls
         public event Action<GameTime>               UpdateInputEvent { add { UpdateEvent += value; } remove { UpdateEvent -= value; } }
         public event EventHandler<TransformEntity>  OnSelectedEntityChanged; 
 
-        public GraphicsDevice GraphicsDevice => Editor.GraphicsDevice;
-        public ContentManager Content => Editor.Content;
-        public GameScene? CurrentGameScene => _currentScene;
+        public GraphicsDevice   GraphicsDevice => Editor.GraphicsDevice;
+        public ContentManager   Content => Editor.Content;
+        public GameScene?       CurrentGameScene => _currentScene;
 
         public WorldViewControl()
         {
@@ -163,8 +163,6 @@ namespace CruZ.Editor.Controls
         {
             _currentSelectedEntity = e;
             OnSelectedEntityChanged?.Invoke(this, _currentSelectedEntity);
-
-            Debug.WriteLine(_currentSelectedEntity.Name);
         }
 
         private void EntityBtn_Clicked(object? sender, EventArgs e)
@@ -191,19 +189,19 @@ namespace CruZ.Editor.Controls
             Editor.spriteBatch.End();
         }
 
-        readonly MouseButtons _cameraMouseDragButton = MouseButtons.Middle;
+        readonly MouseButtons   _cameraMouseDragButton = MouseButtons.Middle;
 
-        Stopwatch _gameLoopTimer;
-        TimeSpan _drawElapsed;
-        TimeSpan _updateElapsed;
+        Stopwatch               _gameLoopTimer;
+        TimeSpan                _drawElapsed;
+        TimeSpan                _updateElapsed;
 
-        bool _isMouseDragging;
-        Vector3 _cameraStartDragCoord;
-        System.Drawing.Point _mouseStartDragPoint;
+        bool                    _isMouseDragging;
+        Vector3                 _cameraStartDragCoord;
+        System.Drawing.Point    _mouseStartDragPoint;
 
-        GameScene? _currentScene;
-        TransformEntity _currentSelectedEntity;
+        GameScene?              _currentScene;
+        TransformEntity         _currentSelectedEntity;
 
-        List<Button> _entityBtns = new();
+        List<Button>            _entityBtns = new();
     }
 }
