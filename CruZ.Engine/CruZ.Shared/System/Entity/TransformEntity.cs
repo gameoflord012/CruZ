@@ -13,10 +13,13 @@ namespace CruZ.Components
 {
     public partial class TransformEntity : IEquatable<TransformEntity>
     {
+        public event EventHandler<bool> OnActiveStateChanged;
+        public event EventHandler OnRemoveFromWorld;
+
         public Transform        Transform   { get => _transform;    set => _transform = value; }
         public Entity           Entity      { get => _entity; }
         public TransformEntity? Parent      { get => _parent;       set => _parent = value; }
-        public bool             IsActive    { get => _isActive;     set => _isActive = value; }
+        public bool             IsActive    { get => _isActive;     set => SetIsActive(value); }
         public string           NameId      = "";
 
         public TransformEntity(Entity e)
@@ -59,14 +62,6 @@ namespace CruZ.Components
             ProcessCallback(component);
         }
 
-        //public void RequireComponent(Type ty)
-        //{
-        //    if (HasComponent(ty)) return;
-
-        //    var comInstance = CreateInstanceFrom(ty);
-        //    AddComponent(comInstance);
-        //}
-
         public bool HasComponent(Type ty)
         {
             return _entity.Has(CreateInstanceFrom(ty).ComponentType);
@@ -74,7 +69,8 @@ namespace CruZ.Components
 
         public void RemoveFromWorld()
         {
-            IsActive = false;
+            SetIsActive(false);
+            OnRemoveFromWorld.Invoke(this, EventArgs.Empty);
             ECS.World.DestroyEntity(_entity);
         }
 
@@ -87,6 +83,11 @@ namespace CruZ.Components
             }
         }
 
+        private void SetIsActive(bool value)
+        {
+            _isActive = value;
+            OnActiveStateChanged?.Invoke(this, value);
+        }
 #pragma warning disable CS8767 
         public bool Equals(TransformEntity other)
         {

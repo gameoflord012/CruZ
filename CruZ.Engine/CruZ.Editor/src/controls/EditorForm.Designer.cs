@@ -40,10 +40,13 @@ namespace CruZ.Editor
             openSceneToolStripMenuItem = new ToolStripMenuItem();
             saveSceneToolStripMenuItem = new ToolStripMenuItem();
             saveAsToolStripMenuItem = new ToolStripMenuItem();
+            inspectorPanel = new FlowLayoutPanel();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
+            splitContainer1.Panel2.SuspendLayout();
             splitContainer1.SuspendLayout();
             menuStrip1.SuspendLayout();
+            inspectorPanel.SuspendLayout();
             SuspendLayout();
             // 
             // splitContainer1
@@ -55,6 +58,10 @@ namespace CruZ.Editor
             // splitContainer1.Panel1
             // 
             splitContainer1.Panel1.Controls.Add(worldViewControl);
+            // 
+            // splitContainer1.Panel2
+            // 
+            splitContainer1.Panel2.Controls.Add(inspectorPanel);
             splitContainer1.Size = new Size(800, 422);
             splitContainer1.SplitterDistance = 481;
             splitContainer1.TabIndex = 0;
@@ -89,23 +96,32 @@ namespace CruZ.Editor
             // openSceneToolStripMenuItem
             // 
             openSceneToolStripMenuItem.Name = "openSceneToolStripMenuItem";
-            openSceneToolStripMenuItem.Size = new Size(224, 26);
+            openSceneToolStripMenuItem.Size = new Size(171, 26);
             openSceneToolStripMenuItem.Text = "Open Scene";
             openSceneToolStripMenuItem.Click += openSceneToolStripMenuItem_Click;
             // 
             // saveSceneToolStripMenuItem
             // 
             saveSceneToolStripMenuItem.Name = "saveSceneToolStripMenuItem";
-            saveSceneToolStripMenuItem.Size = new Size(224, 26);
+            saveSceneToolStripMenuItem.Size = new Size(171, 26);
             saveSceneToolStripMenuItem.Text = "Save Scene";
             saveSceneToolStripMenuItem.Click += saveSceneToolStripMenuItem_Click;
             // 
             // saveAsToolStripMenuItem
             // 
             saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
-            saveAsToolStripMenuItem.Size = new Size(224, 26);
+            saveAsToolStripMenuItem.Size = new Size(171, 26);
             saveAsToolStripMenuItem.Text = "Save As ...";
             saveAsToolStripMenuItem.Click += saveAsToolStripMenuItem_Click;
+            // 
+            // inspectorPanel
+            // 
+            inspectorPanel.Name = "flowLayoutPanel1";
+            inspectorPanel.Dock = DockStyle.Fill;
+            inspectorPanel.AutoScroll = true;
+            inspectorPanel.WrapContents = false;
+            inspectorPanel.TabIndex = 0;
+            inspectorPanel.FlowDirection = FlowDirection.TopDown;
             // 
             // EditorForm
             // 
@@ -118,10 +134,12 @@ namespace CruZ.Editor
             Name = "EditorForm";
             Text = "EditorForm";
             splitContainer1.Panel1.ResumeLayout(false);
+            splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)splitContainer1).EndInit();
             splitContainer1.ResumeLayout(false);
             menuStrip1.ResumeLayout(false);
             menuStrip1.PerformLayout();
+            inspectorPanel.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
         }
@@ -135,5 +153,6 @@ namespace CruZ.Editor
         private ToolStripMenuItem openSceneToolStripMenuItem;
         private ToolStripMenuItem saveSceneToolStripMenuItem;
         private ToolStripMenuItem saveAsToolStripMenuItem;
+        private FlowLayoutPanel inspectorPanel;
     }
 }

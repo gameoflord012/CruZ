@@ -149,7 +149,8 @@ namespace CruZ.Editor.Controls
             if (_currentScene == null) return;
             foreach(var e in _currentScene.Entities)
             {
-                Controls.Add(new EntityButton(e));
+                var btn = new EntityButton(e);
+                Controls.Add(btn);
             }
         }
 
@@ -183,6 +184,8 @@ namespace CruZ.Editor.Controls
         System.Drawing.Point _mouseStartDragPoint;
 
         GameScene? _currentScene;
+
+        
 
         List<Button> _entityBtns = new();
     }
