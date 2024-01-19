@@ -8,7 +8,7 @@ namespace CruZ.Editor
         [STAThread]
         public static void Main(string[] args)
         {
-            Application.Run(new EditorForm());
+            Application.Run(EditorForm.Instance);
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using CruZ.Components;
 using CruZ.Resource;
 using System;
+using System.ComponentModel;
 using System.Drawing.Design;
 using System.Linq;
 using System.Security.Cryptography.Xml;
@@ -10,10 +11,11 @@ namespace CruZ.Editor
 {
     public partial class EditorForm : Form
     {
-        public EditorForm()
+        public FlowLayoutPanel InspectorPanel => inspectorPanel;
+        
+        private EditorForm()
         {
             InitializeComponent();
-
             worldViewControl.OnSelectedEntityChanged += WorldViewControl_OnSelectedEntityChanged;
         }
 
@@ -80,5 +82,8 @@ namespace CruZ.Editor
         }
 
         TransformEntity? _currentSelectedEntity;
+
+        static EditorForm? _instance;
+        public static EditorForm Instance => _instance ??= new EditorForm();
     }
 }
