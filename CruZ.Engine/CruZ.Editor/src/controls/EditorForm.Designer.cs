@@ -36,7 +36,6 @@ namespace CruZ.Editor
             splitContainer1 = new SplitContainer();
             worldViewControl = new WorldViewControl();
             inspectorPanel = new FlowLayoutPanel();
-            positionInspectorControl = new Vector3InspectorControl();
             menuStrip1 = new MenuStrip();
             fileToolStripMenuItem = new ToolStripMenuItem();
             openSceneToolStripMenuItem = new ToolStripMenuItem();
@@ -46,7 +45,6 @@ namespace CruZ.Editor
             splitContainer1.Panel1.SuspendLayout();
             splitContainer1.Panel2.SuspendLayout();
             splitContainer1.SuspendLayout();
-            inspectorPanel.SuspendLayout();
             menuStrip1.SuspendLayout();
             SuspendLayout();
             // 
@@ -84,20 +82,11 @@ namespace CruZ.Editor
             // 
             inspectorPanel.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             inspectorPanel.AutoScroll = true;
-            inspectorPanel.Controls.Add(positionInspectorControl);
             inspectorPanel.FlowDirection = FlowDirection.TopDown;
             inspectorPanel.Location = new Point(2, 0);
             inspectorPanel.Name = "inspectorPanel";
             inspectorPanel.Size = new Size(275, 314);
             inspectorPanel.TabIndex = 0;
-            // 
-            // positionInspectorControl
-            // 
-            positionInspectorControl.Location = new Point(3, 2);
-            positionInspectorControl.Margin = new Padding(3, 2, 3, 2);
-            positionInspectorControl.Name = "transformEntityInspector1";
-            positionInspectorControl.Size = new Size(265, 123);
-            positionInspectorControl.TabIndex = 0;
             // 
             // menuStrip1
             // 
@@ -155,7 +144,6 @@ namespace CruZ.Editor
             splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)splitContainer1).EndInit();
             splitContainer1.ResumeLayout(false);
-            inspectorPanel.ResumeLayout(false);
             menuStrip1.ResumeLayout(false);
             menuStrip1.PerformLayout();
             ResumeLayout(false);
@@ -172,6 +160,5 @@ namespace CruZ.Editor
         private ToolStripMenuItem saveSceneToolStripMenuItem;
         private ToolStripMenuItem saveAsToolStripMenuItem;
         private FlowLayoutPanel inspectorPanel;
-        private Vector3InspectorControl positionInspectorControl;
     }
 }

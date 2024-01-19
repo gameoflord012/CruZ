@@ -21,30 +21,7 @@ namespace CruZ.Editor
 
         private void WorldViewControl_OnSelectedEntityChanged(object? sender, Components.TransformEntity e)
         {
-            // TODO: Extract class this function's logic
-            if(_currentSelectedEntity != null)
-            {
-                _currentSelectedEntity.Transform.OnPositionChanged  -= UpdatePositionPropertyText;
-                positionInspectorControl.OnInputValueChanged        -= UpdateEntityPosition;
-            }
-
-            _currentSelectedEntity = e;
-
-            positionInspectorControl.SetPropertyName(e.Name);
-            positionInspectorControl.SetValueText(e.Transform.Position);
-            
-            e.Transform.OnPositionChanged                   += UpdatePositionPropertyText;
-            positionInspectorControl.OnInputValueChanged    += UpdateEntityPosition;
-        }
-
-        private void UpdateEntityPosition(object? sender, Vector3 e)
-        {
-             _currentSelectedEntity.Transform.Position = e;
-        }
-
-        private void UpdatePositionPropertyText(Vector3 p)
-        {
-            positionInspectorControl.SetValueText(p);
+            Inspector.Instance.DisplayEntity(e);
         }
 
         protected override void OnFormClosing(FormClosingEventArgs e)
@@ -80,8 +57,6 @@ namespace CruZ.Editor
         {
 
         }
-
-        TransformEntity? _currentSelectedEntity;
 
         static EditorForm? _instance;
         public static EditorForm Instance => _instance ??= new EditorForm();
