@@ -35,21 +35,21 @@ namespace CruZ.Editor.Controls
             if (!float.TryParse(xValue.Text, out v3.X))
             {
                 xValue.Text = _vector3.X.ToString();
-                Update();
+                xValue.Update();
                 return;
             }
 
             if (!float.TryParse(yValue.Text, out v3.Y))
             {
                 yValue.Text = _vector3.Y.ToString();
-                Update();
+                yValue.Update();
                 return;
             }
 
             if (!float.TryParse(zValue.Text, out v3.Z))
             {
                 zValue.Text = _vector3.Z.ToString();
-                Update();
+                zValue.Update();
                 return;
             }
 
