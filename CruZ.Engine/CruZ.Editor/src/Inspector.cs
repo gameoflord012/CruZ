@@ -12,38 +12,21 @@ namespace CruZ.Editor
         {
             InspectorPanel.Controls.Clear();
 
-            _positionControl = new();
-            InspectorPanel.Controls.Add(_positionControl);
+            var positionControl = new Vector3InspectorControl();
+            positionControl.SetPropertyName("Postition");
+            
+            var scaleControl    = new Vector3InspectorControl();
+            scaleControl.SetPropertyName("Scale");
 
-            if (_currentEntity == e) return;
+            InspectorPanel.Controls.Add(positionControl);
+            InspectorPanel.Controls.Add(scaleControl);
 
-            if (_currentEntity != null)
-            {
-                _currentEntity.Transform.OnPositionChanged -= UpdatePositionPropertyText;
-                _positionControl.OnInputValueChanged -= UpdateEntityPosition;
-            }
-
-            _currentEntity = e;
-
-            _positionControl.SetPropertyName(e.Name);
-            _positionControl.SetValueText(e.Transform.Position);
-
-            e.Transform.OnPositionChanged += UpdatePositionPropertyText;
-            _positionControl.OnInputValueChanged += UpdateEntityPosition;
+            var positionBinding = new Binding.Binding(e.Transform).Property<Vector3>("Position");
+            var scaleBinding    = new Binding.Binding(e.Transform).Property<Vector3>("Scale");
+            
+            positionControl .SetBinding(positionBinding);
+            scaleControl    .SetBinding(scaleBinding);
         }
-
-        private void UpdateEntityPosition(object? sender, Vector3 e)
-        {
-            _currentEntity.Transform.Position = e;
-        }
-
-        private void UpdatePositionPropertyText(Vector3 p)
-        {
-            _positionControl.SetValueText(p);
-        }
-
-        TransformEntity?        _currentEntity;
-        Vector3InspectorControl _positionControl;
 
         static Inspector? _instance;
         static public Inspector Instance => _instance ??= new Inspector();

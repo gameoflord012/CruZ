@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Accessibility;
+using CruZ.Editor.Binding;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -10,9 +12,9 @@ using System.Windows.Forms;
 
 namespace CruZ.Editor.Controls
 {
-    public partial class Vector3InspectorControl : UserControl
+    partial class Vector3InspectorControl : UserControl
     {
-        public event EventHandler<Vector3> OnInputValueChanged;
+        //public event EventHandler<Vector3> OnInputValueChanged;
 
         public Vector3InspectorControl()
         {
@@ -54,7 +56,7 @@ namespace CruZ.Editor.Controls
             }
 
             _vector3 = v3;
-            OnInputValueChanged?.Invoke(this, _vector3);
+            _binding?.Set(_vector3);
         }
 
         public void SetValueText(Vector3 v3)
@@ -76,6 +78,23 @@ namespace CruZ.Editor.Controls
             propertyName_TextBox.Text = name;
         }
 
+        public void SetBinding(Binding.PropertyBinding<Vector3> propertyBinding)
+        {
+            if(_binding != null) 
+                _binding.UnregisterChangeEvent(Binding_OnDataChanged);
+
+            _binding = propertyBinding;
+            _binding.RegisterChangeEvent(Binding_OnDataChanged);
+
+            SetValueText(_binding.Get());
+        }
+
+        private void Binding_OnDataChanged(object v)
+        {
+            SetValueText(_binding.Get());
+        }
+
+        PropertyBinding<Vector3>? _binding;
         Vector3 _vector3;
     }
 }

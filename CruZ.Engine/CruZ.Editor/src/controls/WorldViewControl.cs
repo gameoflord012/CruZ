@@ -1,37 +1,37 @@
 ﻿using CruZ.Components;
 using CruZ.Systems;
+using CruZ.Utility;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
-using MonoGame.Extended.Timers;
-using MonoGame.Forms.NET.Components;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
-using System.Linq;
 using System.Windows.Forms;
 
 namespace CruZ.Editor.Controls
 {
+    using XNA = Microsoft.Xna.Framework;
+
     internal partial class WorldViewControl : MonoGame.Forms.NET.Controls.InvalidationControl, IECSContextProvider, IApplicationContextProvider, IInputContextProvider
     {
-        public event Action<GameTime>               DrawEvent;
-        public event Action<GameTime>               UpdateEvent;
-        public event Action                         InitializeSystemEvent;
-        public event Action<GameTime>               UpdateInputEvent { add { UpdateEvent += value; } remove { UpdateEvent -= value; } }
-        public event EventHandler<TransformEntity>  OnSelectedEntityChanged; 
+        public event Action<GameTime> DrawEvent;
+        public event Action<GameTime> UpdateEvent;
+        public event Action InitializeSystemEvent;
+        public event Action<GameTime> UpdateInputEvent { add { UpdateEvent += value; } remove { UpdateEvent -= value; } }
+        public event EventHandler<TransformEntity> OnSelectedEntityChanged;
 
-        public GraphicsDevice   GraphicsDevice => Editor.GraphicsDevice;
-        public ContentManager   Content => Editor.Content;
-        public GameScene?       CurrentGameScene => _currentScene;
+        public GraphicsDevice GraphicsDevice => Editor.GraphicsDevice;
+        public ContentManager Content => Editor.Content;
+        public GameScene? CurrentGameScene => _currentScene;
 
         public WorldViewControl()
         {
-            ECS                 .CreateContext(this);
-            ApplicationContext  .CreateContext(this);
-            Input               .CreateContext(this);
+            ECS.CreateContext(this);
+            ApplicationContext.CreateContext(this);
+            Input.CreateContext(this);
 
             Camera.Main = new Camera(Width, Height);
 
@@ -62,7 +62,7 @@ namespace CruZ.Editor.Controls
         {
             GameTime gameTime = new(_gameLoopTimer.Elapsed, _gameLoopTimer.Elapsed - _updateElapsed);
             _updateElapsed = _gameLoopTimer.Elapsed;
-            
+
             Editor.FPSCounter.Update(gameTime);
             UpdateEvent.Invoke(gameTime);
 
@@ -115,21 +115,21 @@ namespace CruZ.Editor.Controls
         protected override void OnMouseWheel(MouseEventArgs e)
         {
             base.OnMouseWheel(e);
-            Camera.Main.Zoom = new (Camera.Main.Zoom.X - e.Delta * 0.001f * Camera.Main.Zoom.X, Camera.Main.Zoom.Y);
+            Camera.Main.Zoom = new(Camera.Main.Zoom.X - e.Delta * 0.001f * Camera.Main.Zoom.X, Camera.Main.Zoom.Y);
         }
 
         protected override void OnMouseMove(System.Windows.Forms.MouseEventArgs e)
         {
             base.OnMouseMove(e);
 
-            if(_isMouseDragging)
+            if (_isMouseDragging)
             {
-                var scale = Camera.Main.ScreenToSpaceScale();
+                var scale = Camera.Main.ScreenToWorldScale();
                 var delt = new Vector3(
                     (e.X - _mouseStartDragPoint.X) * scale.X,
                     (e.Y - _mouseStartDragPoint.Y) * scale.Y);
 
-                Camera.Main.Position = _cameraStartDragCoord + delt;
+                Camera.Main.Position = _cameraStartDragCoord - delt;
             }
         }
 
@@ -137,7 +137,7 @@ namespace CruZ.Editor.Controls
         {
             base.OnMouseDown(e);
 
-            if(e.Button == _cameraMouseDragButton && !_isMouseDragging)
+            if (e.Button == _cameraMouseDragButton && !_isMouseDragging)
             {
                 _isMouseDragging = true;
                 _mouseStartDragPoint = e.Location;
@@ -149,7 +149,7 @@ namespace CruZ.Editor.Controls
         {
             base.OnMouseUp(e);
 
-            if(e.Button == _cameraMouseDragButton)
+            if (e.Button == _cameraMouseDragButton)
             {
                 _isMouseDragging = false;
             }
@@ -158,7 +158,7 @@ namespace CruZ.Editor.Controls
         private void InitEntityControl()
         {
             if (_currentScene == null) return;
-            foreach(var e in _currentScene.Entities)
+            foreach (var e in _currentScene.Entities)
             {
                 var btn = new EntityButton(e);
 
@@ -170,7 +170,7 @@ namespace CruZ.Editor.Controls
 
         private void SelectEntity(TransformEntity e)
         {
-            if(e == _currentSelectedEntity) return;
+            if (e == _currentSelectedEntity) return;
 
             _currentSelectedEntity = e;
             OnSelectedEntityChanged?.Invoke(this, _currentSelectedEntity);
@@ -183,15 +183,24 @@ namespace CruZ.Editor.Controls
 
         private void DrawAxis()
         {
+            const int MAX_X_LINE = 25;
+
             Editor.spriteBatch.Begin();
-            var yTop = Camera.Main.CoordinateToPoint(new Vector3(0, -5000));
-            var yBot = Camera.Main.CoordinateToPoint(new Vector3(0, 5000));
-            Editor.spriteBatch.DrawLine(yTop.X, yTop.Y, yBot.X, yBot.Y, Microsoft.Xna.Framework.Color.Black);
 
+            float maxLineDistance = Camera.Main.ViewPortWidth / MAX_X_LINE;
+            int lineDis = 1;
 
-            var xTop = Camera.Main.CoordinateToPoint(new Vector3(-5000, 0));
-            var xBot = Camera.Main.CoordinateToPoint(new Vector3(5000, 0));
-            Editor.spriteBatch.DrawLine(xTop.X, xTop.Y, xBot.X, xBot.Y, Microsoft.Xna.Framework.Color.Black);
+            while(
+                (float)lineDis * 2f * 
+                Camera.Main.WorldToScreenScale().X < maxLineDistance)
+            {
+                lineDis *= 2;
+            }
+
+            var col = Microsoft.Xna.Framework.Color.DarkGray;
+            if(lineDis == 1) col = XNA.Color.Orange;
+            
+            DrawBoard(FunMath.RoundInt(lineDis), col);
 
             var center = new PointF(Width / 2f, Height / 2f);
             Editor.spriteBatch.DrawLine(center.X, center.Y - 10, center.X, center.Y + 10, Microsoft.Xna.Framework.Color.Black);
@@ -200,19 +209,49 @@ namespace CruZ.Editor.Controls
             Editor.spriteBatch.End();
         }
 
-        readonly MouseButtons   _cameraMouseDragButton = MouseButtons.Middle;
+        private void DrawBoard(int lineDis, Microsoft.Xna.Framework.Color col)
+        {
+            var center = Camera.Main.Position;
 
-        Stopwatch               _gameLoopTimer;
-        TimeSpan                _drawElapsed;
-        TimeSpan                _updateElapsed;
+            var x_distance = Camera.Main.VirtualWidth;
+            var y_distance = Camera.Main.VirtualHeight;
 
-        bool                    _isMouseDragging;
-        Vector3                 _cameraStartDragCoord;
-        System.Drawing.Point    _mouseStartDragPoint;
+            var min_x = center.X - x_distance;
+            var max_x = center.X + x_distance;
 
-        GameScene?              _currentScene;
-        TransformEntity         _currentSelectedEntity;
+            var min_y = center.Y - y_distance;
+            var max_y = center.Y + y_distance;
+            
+            for(float x = (int)min_x / lineDis * lineDis; x < max_x; x += lineDis)
+            {
+                var p1 = Camera.Main.CoordinateToPoint(new Vector3(x, min_y));
+                var p2 = Camera.Main.CoordinateToPoint(new Vector3(x, max_y));
 
-        List<Button>            _entityBtns = new();
+                Editor.spriteBatch.DrawLine(p1.X, p1.Y, p2.X, p2.Y, col);
+            }
+
+            for(float y = (int)min_y / lineDis * lineDis; y < max_y; y += lineDis)
+            {
+                var p1 = Camera.Main.CoordinateToPoint(new(min_x, y));
+                var p2 = Camera.Main.CoordinateToPoint(new(max_x, y));
+
+                Editor.spriteBatch.DrawLine(p1.X, p1.Y, p2.X, p2.Y, col);
+            }
+        }
+
+        readonly MouseButtons _cameraMouseDragButton = MouseButtons.Middle;
+
+        Stopwatch _gameLoopTimer;
+        TimeSpan _drawElapsed;
+        TimeSpan _updateElapsed;
+
+        bool _isMouseDragging;
+        Vector3 _cameraStartDragCoord;
+        System.Drawing.Point _mouseStartDragPoint;
+
+        GameScene? _currentScene;
+        TransformEntity _currentSelectedEntity;
+
+        List<Button> _entityBtns = new();
     }
 }

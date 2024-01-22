@@ -27,7 +27,7 @@ namespace CruZ.Systems
             var normalize_y = (p.Y / ViewPortHeight - 0.5f);
 
             var coord = new Vector3(normalize_x * VirtualWidth, normalize_y * VirtualHeight, 0);
-            coord -= Position;
+            coord += Position;
 
             return coord;
         }
@@ -39,7 +39,7 @@ namespace CruZ.Systems
 
         public Point CoordinateToPoint(Vector3 coord)
         {
-            coord += Position;
+            coord -= Position;
 
             var normalize_x = 0.5f + coord.X / VirtualWidth;
             var normalize_y = 0.5f + coord.Y / VirtualHeight;
@@ -52,7 +52,7 @@ namespace CruZ.Systems
         public Matrix4x4 ViewMatrix()
         {
             return
-                Matrix4x4.CreateTranslation(Position) *
+                Matrix4x4.CreateTranslation(-Position.X, -Position.Y, -Position.Z) *
 
                 Matrix4x4.CreateTranslation(
                     VirtualWidth / 2f,
@@ -64,11 +64,18 @@ namespace CruZ.Systems
                     ViewPortHeight / VirtualHeight, 1);
         }
 
-        public Vector2 ScreenToSpaceScale()
+        public Vector2 ScreenToWorldScale()
         {
             return new(
                 VirtualWidth / ViewPortWidth,
                 VirtualHeight / ViewPortHeight);
+        }
+
+        public Vector2 WorldToScreenScale()
+        {
+            return new(
+                ViewPortWidth / VirtualWidth,
+                ViewPortHeight / VirtualHeight);
         }
 
         public float VirtualWidth { 
@@ -103,7 +110,7 @@ namespace CruZ.Systems
         private Vector3 _zoom = new(1, 1);
         private float _viewPortWidth;
         private float _viewPortHeight;
-        private float _virtualWidth = 1980;
-        private float _virtualHeight = 1080;
+        private float _virtualWidth = 19;
+        private float _virtualHeight = 10;
     }
 }

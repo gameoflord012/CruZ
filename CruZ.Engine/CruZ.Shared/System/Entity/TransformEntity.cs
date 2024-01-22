@@ -16,11 +16,13 @@ namespace CruZ.Components
         public event EventHandler<bool> OnActiveStateChanged;
         public event EventHandler OnRemoveFromWorld;
 
-        public Transform        Transform   { get => _transform;    set => _transform = value; }
+        public string           Name        = "";
         public Entity           Entity      { get => _entity; }
         public TransformEntity? Parent      { get => _parent;       set => _parent = value; }
         public bool             IsActive    { get => _isActive;     set => SetIsActive(value); }
-        public string           Name        = "";
+        public Transform        Transform   { get => _transform;    set => _transform = value; }
+        
+        public Vector3          Position { get => Transform.Position; set => Transform.Position = value; }
 
         public TransformEntity(Entity e)
         {

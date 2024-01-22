@@ -3,29 +3,29 @@
   "_entities": [
     {
       "position": {
-        "X": 0.0,
-        "Y": 0.0,
+        "X": 2.4357986,
+        "Y": -1.8385628,
         "Z": 0.0
       },
       "scale": {
-        "X": 5.0,
-        "Y": 5.0,
+        "X": 0.05,
+        "Y": 0.05,
         "Z": 0.0
       },
       "components": [
         {
-          "com-type": "CruZ.Components.SpriteComponent, CruZ.DesktopGL, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+          "com-type": "CruZ.Components.SpriteComponent, CruZ.Editor, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
           "com-data": {
             "_resourceName": "",
             "LayerDepth": 0.2
           }
         },
         {
-          "com-type": "CruZ.Games.AnimalGang.MainCharacter, Game.AnimalGang.DesktopGL, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+          "com-type": "CruZ.Games.AnimalGang.MainCharacter, CruZ.Editor, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
           "com-data": {}
         },
         {
-          "com-type": "CruZ.Components.AnimationComponent, CruZ.DesktopGL, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+          "com-type": "CruZ.Components.AnimationComponent, CruZ.Editor, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
           "com-data": {
             "animation-players": [
               {
@@ -47,18 +47,18 @@
     },
     {
       "position": {
-        "X": 0.0,
-        "Y": 0.0,
+        "X": 0.11336547,
+        "Y": -0.045345955,
         "Z": 0.0
       },
       "scale": {
-        "X": 1.0,
-        "Y": 1.0,
+        "X": 0.1,
+        "Y": 0.1,
         "Z": 1.0
       },
       "components": [
         {
-          "com-type": "CruZ.Components.SpriteComponent, CruZ.DesktopGL, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+          "com-type": "CruZ.Components.SpriteComponent, CruZ.Editor, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
           "com-data": {
             "_resourceName": "tiles\\tile.png",
             "LayerDepth": 0.1
@@ -66,5 +66,6 @@
         }
       ]
     }
-  ]
+  ],
+  "ResourcePath": "D:\\monogame-projects\\CruZ_GameEngine\\CruZ.Games\\AnimalGang\\AnimalGang.Shared\\res\\scenes\\scene1.scene"
 }
