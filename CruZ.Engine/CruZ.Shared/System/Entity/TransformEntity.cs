@@ -72,7 +72,7 @@ namespace CruZ.Components
         public void RemoveFromWorld()
         {
             SetIsActive(false);
-            OnRemoveFromWorld.Invoke(this, EventArgs.Empty);
+            OnRemoveFromWorld?.Invoke(this, EventArgs.Empty);
             ECS.World.DestroyEntity(_entity);
         }
 

@@ -1,0 +1,52 @@
+{
+    "Map/SizeTest": {
+        "height": 4300,
+        "width": 2
+    },
+    "activeFile": "dungeon-map.tmx",
+    "expandedProjectPaths": [
+    ],
+    "file.lastUsedOpenFilter": "All Files (*)",
+    "fileStates": {
+        "dungeon-map.tmx": {
+            "scale": 1.6565625,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 239.6528956800604,
+                "y": 113.18619128466327
+            }
+        },
+        "dungeon-tileset.tsx": {
+            "dynamicWrapping": false,
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "tileset.tsx": {
+            "dynamicWrapping": true,
+            "scaleInDock": 1.5,
+            "scaleInEditor": 1.5
+        }
+    },
+    "last.exportedFilePath": "D:/monogame-projects/CruZ_GameEngine/CruZ.Games/AnimalGang/AnimalGang.Shared/res/tiles/map",
+    "last.imagePath": "D:/monogame-projects/CruZ_GameEngine/CruZ.Games/AnimalGang/AnimalGang.Shared/res/tiles/map",
+    "map.lastUsedExportFilter": "All Files (*)",
+    "map.lastUsedFormat": "tmx",
+    "map.tileHeight": 16,
+    "map.tileWidth": 16,
+    "openFiles": [
+        "dungeon-map.tmx",
+        "dungeon-tileset.tsx"
+    ],
+    "project": "dungeon.tiled-project",
+    "recentFiles": [
+        "dungeon-tileset.tsx",
+        "dungeon-map.tmx",
+        "tileset.tsx"
+    ],
+    "tileset.lastUsedFormat": "tsx",
+    "tileset.tileSize": {
+        "height": 16,
+        "width": 16
+    },
+    "tileset.type": 0
+}

@@ -9,19 +9,27 @@ namespace CruZ.Components
 {
     using Microsoft.Xna.Framework;
 
+    public class DrawEndEventArgs : EventArgs
+    {
+        public bool KeepDrawing = false;
+    }
+
     public partial class SpriteComponent : IComponent, IComponentCallback
     {
-        public SpriteComponent() { }
-        public SpriteComponent(string resourceName) { LoadTexture(resourceName); }
+        public event EventHandler OnDrawBegin;
+        public event EventHandler<DrawEndEventArgs> OnDrawEnd;
 
         public Type         ComponentType   => typeof(SpriteComponent);
+
         [JsonIgnore]
         public Texture2D?   Texture         { get => _texture; set => _texture = value; }
-        
-        public Microsoft.Xna.Framework.Rectangle    SourceRectangle;
+        public Rectangle    SourceRectangle;
         public Vector2      Origin;
         public bool         Flip;
         public float        LayerDepth { get; set; } = 0;
+
+        public SpriteComponent() { }
+        public SpriteComponent(string resourceName) { LoadTexture(resourceName); }
 
         public void LoadTexture(string resourcePath)
         {
@@ -45,7 +53,11 @@ namespace CruZ.Components
 
             Trace.Assert(_e != null);
 
-            spriteBatch.Draw(
+            while(true)
+            {
+                OnDrawBegin?.Invoke(this, EventArgs.Empty);
+
+                spriteBatch.Draw(
                 Texture,
                 position:           new Vector2(_e.Transform.Position.X, _e.Transform.Position.Y),
                 sourceRectangle:    SourceRectangle,
@@ -55,6 +67,11 @@ namespace CruZ.Components
                 scale:              new Vector2(_e.Transform.Scale.X, _e.Transform.Scale.Y),
                 effects:            Flip ? SpriteEffects.FlipHorizontally : SpriteEffects.None,
                 layerDepth:         LayerDepth);
+
+                var evArgs = new DrawEndEventArgs();
+                OnDrawEnd?.Invoke(this, evArgs);
+                if(!evArgs.KeepDrawing) break;
+            } 
         }
 
         public void OnEntityChanged(TransformEntity entity)
