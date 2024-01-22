@@ -97,6 +97,7 @@ namespace CruZ.Editor.Controls
             if (_currentScene == null) return;
 
             _currentScene.SetActive(false);
+            _currentScene.Dispose();
         }
 
         protected override void OnResize(EventArgs e)

@@ -1,5 +1,6 @@
 ﻿using CruZ.Components;
 using CruZ.Resource;
+using CruZ.Scene;
 using System;
 using System.ComponentModel;
 using System.Drawing.Design;
@@ -12,7 +13,7 @@ namespace CruZ.Editor
     public partial class EditorForm : Form
     {
         public FlowLayoutPanel InspectorPanel => inspectorPanel;
-        
+
         private EditorForm()
         {
             InitializeComponent();
@@ -42,7 +43,7 @@ namespace CruZ.Editor
 
         private void saveSceneToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if(worldViewControl.CurrentGameScene == null) return;
+            if (worldViewControl.CurrentGameScene == null) return;
 
             ResourceManager.CreateResource(
                 worldViewControl.CurrentGameScene,
@@ -59,6 +60,28 @@ namespace CruZ.Editor
         }
 
         static EditorForm? _instance;
+
+        private void loadSceneToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string input = Microsoft.VisualBasic.Interaction.InputBox(
+                "Enter Scene name to load", "Load scene Prompt");
+
+            try
+            {
+                worldViewControl.LoadScene(SceneManager.GetSceneAssets(input));
+            }
+            catch (System.Exception ex)
+            {
+
+                MessageBox.Show(
+                    $"{ex.Message}",
+                    "Error", 
+                    MessageBoxButtons.OK, 
+                    MessageBoxIcon.Error
+                );
+            }
+        }
+
         public static EditorForm Instance => _instance ??= new EditorForm();
     }
 }

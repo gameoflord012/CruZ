@@ -40,6 +40,14 @@ namespace CruZ.Scene
 
         }
 
+        public static GameScene GetSceneAssets(string assetName)
+        {
+            if (!SceneAssets.ContainsKey(assetName)) 
+                throw new KeyNotFoundException($"Asset {assetName} not available");
+
+            return SceneAssets[assetName];
+        }
+
         public static Dictionary<string, GameScene> SceneAssets = [];
     }
 }

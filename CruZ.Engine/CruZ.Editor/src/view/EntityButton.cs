@@ -38,7 +38,15 @@ namespace CruZ.Editor.Controls
         protected override void OnParentChanged(EventArgs e)
         {
             base.OnParentChanged(e);
-            Parent.Invalidated += (sender, args) => UpdateButtonPosition();
+
+            if(_parent != null) _parent.Invalidated -= Parent_Invalidated;
+            _parent = Parent;
+            if(_parent != null) _parent.Invalidated += Parent_Invalidated;
+        }
+
+        private void Parent_Invalidated(object? sender, InvalidateEventArgs e)
+        {
+            UpdateButtonPosition();
         }
 
         private void UpdateButtonPosition()
@@ -116,5 +124,6 @@ namespace CruZ.Editor.Controls
         private bool _isDragging = false;
 
         private readonly int ButtonSize = 10;
+        Control? _parent;
     }
 }

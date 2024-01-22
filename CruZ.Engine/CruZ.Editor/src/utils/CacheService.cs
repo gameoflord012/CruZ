@@ -72,7 +72,15 @@ namespace CruZ.Editor
             }
 
             var cacheString = File.ReadAllText(cachePath);
-            cacheControl.ReadCache(cacheString);
+
+            try
+            {
+                cacheControl.ReadCache(cacheString);
+            }
+            catch
+            {
+
+            }
         }
 
         private static void WriteCache(ICacheControl cacheControl)

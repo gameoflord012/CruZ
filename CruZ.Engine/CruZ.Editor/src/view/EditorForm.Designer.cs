@@ -39,10 +39,10 @@ namespace CruZ.Editor
             menuStrip1 = new MenuStrip();
             fileToolStripMenuItem = new ToolStripMenuItem();
             sceneToolStripMenuItem = new ToolStripMenuItem();
-            saveSceneToolStripMenuItem = new ToolStripMenuItem();
-            loadSceneToolStripMenuItem = new ToolStripMenuItem();
-            saveAsToolStripMenuItem = new ToolStripMenuItem();
             openSceneToolStripMenuItem = new ToolStripMenuItem();
+            saveSceneToolStripMenuItem = new ToolStripMenuItem();
+            saveAsToolStripMenuItem = new ToolStripMenuItem();
+            loadSceneToolStripMenuItem = new ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
             splitContainer1.Panel2.SuspendLayout();
@@ -117,18 +117,19 @@ namespace CruZ.Editor
             sceneToolStripMenuItem.Size = new Size(180, 22);
             sceneToolStripMenuItem.Text = "Scene";
             // 
+            // openSceneToolStripMenuItem
+            // 
+            openSceneToolStripMenuItem.Name = "openSceneToolStripMenuItem";
+            openSceneToolStripMenuItem.Size = new Size(180, 22);
+            openSceneToolStripMenuItem.Text = "Open Scene";
+            openSceneToolStripMenuItem.Click += openSceneToolStripMenuItem_Click;
+            // 
             // saveSceneToolStripMenuItem
             // 
             saveSceneToolStripMenuItem.Name = "saveSceneToolStripMenuItem";
             saveSceneToolStripMenuItem.Size = new Size(180, 22);
             saveSceneToolStripMenuItem.Text = "Save Scene";
             saveSceneToolStripMenuItem.Click += saveSceneToolStripMenuItem_Click;
-            // 
-            // loadSceneToolStripMenuItem
-            // 
-            loadSceneToolStripMenuItem.Name = "loadSceneToolStripMenuItem";
-            loadSceneToolStripMenuItem.Size = new Size(180, 22);
-            loadSceneToolStripMenuItem.Text = "Load Scene";
             // 
             // saveAsToolStripMenuItem
             // 
@@ -137,12 +138,12 @@ namespace CruZ.Editor
             saveAsToolStripMenuItem.Text = "Save As ...";
             saveAsToolStripMenuItem.Click += saveAsToolStripMenuItem_Click;
             // 
-            // openSceneToolStripMenuItem
+            // loadSceneToolStripMenuItem
             // 
-            openSceneToolStripMenuItem.Name = "openSceneToolStripMenuItem";
-            openSceneToolStripMenuItem.Size = new Size(180, 22);
-            openSceneToolStripMenuItem.Text = "Open Scene";
-            openSceneToolStripMenuItem.Click += openSceneToolStripMenuItem_Click;
+            loadSceneToolStripMenuItem.Name = "loadSceneToolStripMenuItem";
+            loadSceneToolStripMenuItem.Size = new Size(180, 22);
+            loadSceneToolStripMenuItem.Text = "Load Scene";
+            loadSceneToolStripMenuItem.Click += loadSceneToolStripMenuItem_Click;
             // 
             // EditorForm
             // 
