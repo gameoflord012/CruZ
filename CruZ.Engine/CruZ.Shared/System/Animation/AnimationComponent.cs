@@ -57,7 +57,6 @@ namespace CruZ.Components
         {
             e.Texture = _animatedSprite.TextureRegion.Texture;
             e.SourceRectangle = _animatedSprite.TextureRegion.Bounds;
-            e.Origin = _animatedSprite.Origin;
         }
         
         private void Sprite_OnDrawEnd(object? sender, DrawEndEventArgs e)

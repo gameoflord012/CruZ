@@ -44,7 +44,6 @@ namespace CruZ
             return new(v.X, v.Y, v.Z);
         }
 
-
         public static implicit operator Vector3(Microsoft.Xna.Framework.Vector3 v)
         {
             return new(v.X, v.Y, v.Z);

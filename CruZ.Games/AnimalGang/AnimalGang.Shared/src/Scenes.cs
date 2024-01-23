@@ -35,7 +35,7 @@ namespace CruZ.Scene
             sp.LoadTexture("tiles\\tile.png");
             backGround.Transform.Scale = new(0.1f, 0.1f);
 
-            scene.AddToScene(player);
+            //scene.AddToScene(player);
             scene.AddToScene(backGround);
 
             return scene;

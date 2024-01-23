@@ -8,6 +8,7 @@ using System.Diagnostics;
 namespace CruZ.Components
 {
     using Microsoft.Xna.Framework;
+    using MonoGame.Extended;
 
     public class DrawBeginEventArgs : EventArgs
     {
@@ -15,6 +16,8 @@ namespace CruZ.Components
         public Rectangle SourceRectangle;
         public Vector2 Origin;
         public Texture2D Texture;
+        public bool Skip = false;
+        public Matrix ViewMatrix;
     }
 
     public class DrawEndEventArgs : EventArgs
@@ -54,35 +57,46 @@ namespace CruZ.Components
             while (true)
             {
                 DrawBeginEventArgs beginArgs = new();
-
                 beginArgs.Position = new Vector2(_e.Transform.Position.X, _e.Transform.Position.Y);
+                beginArgs.ViewMatrix = viewMatrix;
 
                 if (Texture != null)
                 {
                     beginArgs.SourceRectangle = Texture.Bounds;
-                    beginArgs.Origin = new(Texture.Bounds.Width / 2f, Texture.Bounds.Height / 2f);
+                    beginArgs.Origin = new(0.5f, 0.5f);
                     beginArgs.Texture = Texture;
                 }
 
-
                 OnDrawBegin?.Invoke(this, beginArgs);
 
-                if (beginArgs.Texture != null)
+                if (beginArgs.Skip)
                 {
-                    spriteBatch.Draw(
-                    texture: beginArgs.Texture,
-                    position: beginArgs.Position,
-                    sourceRectangle: beginArgs.SourceRectangle,
-                    color: Color.White,
-                    rotation: 0,
-                    origin: beginArgs.Origin,
-                    scale: new Vector2(_e.Transform.Scale.X, _e.Transform.Scale.Y),
-                    effects: Flip ? SpriteEffects.FlipHorizontally : SpriteEffects.None,
-                    layerDepth: LayerDepth);
+
+                }
+                else if(beginArgs.Texture == null)
+                {
+                    Trace.TraceWarning("Texture is null, can't draw");
                 }
                 else
                 {
-                    Trace.TraceWarning("Texture is null, can't draw");
+                    spriteBatch.Draw(
+                    texture:            beginArgs.Texture,
+                    position:           beginArgs.Position,
+
+                    sourceRectangle:    beginArgs.SourceRectangle,
+
+                    color: Color.White,
+                    rotation: 0,
+
+                    origin:             new(beginArgs.Origin.X * beginArgs.SourceRectangle.Width, 
+                                            beginArgs.Origin.Y * beginArgs.SourceRectangle.Height),
+
+                    scale: new Vector2(
+                        _e.Transform.Scale.X,
+                        _e.Transform.Scale.Y),
+
+                    effects: Flip ? SpriteEffects.FlipHorizontally : SpriteEffects.None,
+                    layerDepth: LayerDepth);
                 }
 
                 var endArgs = new DrawEndEventArgs();

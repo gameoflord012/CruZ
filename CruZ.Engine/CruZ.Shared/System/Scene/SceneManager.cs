@@ -49,6 +49,7 @@ namespace CruZ.Scene
             return SceneAssets[assetName];
         }
 
+        //TODO: Current scene asset maybe dispose if new scene is loaded
         public static Dictionary<string, GameScene> SceneAssets = [];
     }
 }

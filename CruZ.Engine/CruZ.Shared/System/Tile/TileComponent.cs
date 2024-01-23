@@ -6,10 +6,13 @@ using System.Text;
 
 namespace CruZ.Components
 {
+    using XNA = Microsoft.Xna.Framework;
+
     public class TileComponent : IComponent, IComponentCallback
     {
         public Type ComponentType => typeof(TileComponent);
 
+        public bool Debug = false;
         public int TileSize = 16;
 
         public void OnAttached(TransformEntity entity)
@@ -35,16 +38,20 @@ namespace CruZ.Components
             }
         }
 
-        private void Sprite_OnDrawBegin(object? sender, DrawBeginEventArgs e)
+        private void Sprite_OnDrawBegin(object? sender, DrawBeginEventArgs args)
         {
-            if((_idX + _idY) % 2 == 0) return;
-            e.SourceRectangle = new(_idX * TileSize, _idY * TileSize, TileSize, TileSize);
+            if(Debug && (_idX + _idY) % 2 == 0)
+            {
+                args.Skip = true;
+                return;
+            }
 
-            e.Origin = new (
-                (float)e.SourceRectangle.Width / 2, 
-                (float)e.SourceRectangle.Height / 2);
+            args.SourceRectangle = new(_idX * TileSize, _idY * TileSize, TileSize, TileSize);
 
-
+            var delt = args.SourceRectangle.Center - args.Texture.Bounds.Center;
+            args.Position += new Vector2(
+                delt.X * _e.Transform.Scale.X, 
+                delt.Y * _e.Transform.Scale.Y);
         }
 
         private void Sprite_OnDrawEnd(object? sender, DrawEndEventArgs e)
@@ -62,6 +69,10 @@ namespace CruZ.Components
             }
             else
             {
+                _idX = 0;
+                _idY = 0;
+                e.KeepDrawing = false;
+                
                 return;
             }
 
