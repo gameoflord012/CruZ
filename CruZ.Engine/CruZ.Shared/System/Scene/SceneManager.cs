@@ -44,7 +44,7 @@ namespace CruZ.Scene
         public static GameScene GetSceneAssets(string assetName)
         {
             if (!SceneAssets.ContainsKey(assetName)) 
-                throw new KeyNotFoundException($"Asset {assetName} not available");
+                throw new SceneAssetNotFoundException($"Asset {assetName} not available");
 
             return SceneAssets[assetName];
         }

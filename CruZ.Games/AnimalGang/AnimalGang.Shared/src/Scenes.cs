@@ -29,7 +29,7 @@ namespace CruZ.Scene
             var backGround = ECS.CreateEntity();
             backGround.Name = "Background";
             backGround.AddComponent(new SpriteComponent());
-            //backGround.AddComponent(new TileComponent());
+            backGround.AddComponent(new TileComponent());
             var sp = backGround.GetComponent<SpriteComponent>();
             sp.LayerDepth = 0.1f;
             sp.LoadTexture("tiles\\tile.png");

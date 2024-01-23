@@ -14,7 +14,7 @@ namespace CruZ.Components
         [JsonIgnore]
         public Type ComponentType => typeof(EntityScript);
 
-        public virtual void OnComponentAdded(TransformEntity entity)
+        public virtual void OnAttached(TransformEntity entity)
         {
             _e = entity;
         }

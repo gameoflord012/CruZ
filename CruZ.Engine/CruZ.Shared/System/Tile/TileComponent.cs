@@ -12,7 +12,13 @@ namespace CruZ.Components
 
         public int TileSize = 16;
 
-        public void OnComponentAdded(TransformEntity entity)
+        public void OnAttached(TransformEntity entity)
+        {
+            _e = entity;
+            _e.OnComponentAdded += Entity_OnComponentAdded;
+        }
+
+        private void Entity_OnComponentAdded(object? sender, IComponent e)
         {
             if(_sp != null)
             {
@@ -20,17 +26,25 @@ namespace CruZ.Components
                 _sp.OnDrawEnd -= Sprite_OnDrawEnd;
             }
 
-            _e = entity;
-            _sp = entity.GetComponent<SpriteComponent>();
+            _e.TryGetComponent(ref _sp);
 
-            _sp.OnDrawBegin += Sprite_OnDrawBegin;
-            _sp.OnDrawEnd += Sprite_OnDrawEnd;
+            if(_sp != null)
+            {
+                _sp.OnDrawBegin += Sprite_OnDrawBegin;
+                _sp.OnDrawEnd += Sprite_OnDrawEnd;
+            }
         }
 
-        private void Sprite_OnDrawBegin(object? sender, EventArgs e)
+        private void Sprite_OnDrawBegin(object? sender, DrawBeginEventArgs e)
         {
             if((_idX + _idY) % 2 == 0) return;
-            _sp.SourceRectangle = new(_idX * TileSize, _idY * TileSize, TileSize, TileSize);
+            e.SourceRectangle = new(_idX * TileSize, _idY * TileSize, TileSize, TileSize);
+
+            e.Origin = new (
+                (float)e.SourceRectangle.Width / 2, 
+                (float)e.SourceRectangle.Height / 2);
+
+
         }
 
         private void Sprite_OnDrawEnd(object? sender, DrawEndEventArgs e)

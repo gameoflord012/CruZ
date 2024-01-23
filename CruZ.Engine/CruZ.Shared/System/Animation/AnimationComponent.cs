@@ -33,14 +33,41 @@ namespace CruZ.Components
         public void Update(GameTime gameTime, SpriteComponent sprite)
         {
             _animatedSprite.Update(gameTime);
+        }
 
-            sprite.Texture = _animatedSprite.TextureRegion.Texture;
-            sprite.SourceRectangle = _animatedSprite.TextureRegion.Bounds;
-            sprite.Origin = _animatedSprite.Origin;
+        public void Load(SpriteComponent sprite)
+        {
+            UnLoad();
+            _sprite = sprite;
+
+            _sprite.OnDrawBegin  += Sprite_OnDrawBegin;
+            _sprite.OnDrawEnd    += Sprite_OnDrawEnd;
+        }
+
+        public void UnLoad()
+        {
+            if(_sprite != null)
+            {
+                _sprite.OnDrawBegin  -= Sprite_OnDrawBegin;
+                _sprite.OnDrawEnd    -= Sprite_OnDrawEnd;
+            }
+        }
+
+        private void Sprite_OnDrawBegin(object? sender, DrawBeginEventArgs e)
+        {
+            e.Texture = _animatedSprite.TextureRegion.Texture;
+            e.SourceRectangle = _animatedSprite.TextureRegion.Bounds;
+            e.Origin = _animatedSprite.Origin;
+        }
+        
+        private void Sprite_OnDrawEnd(object? sender, DrawEndEventArgs e)
+        {
+            
         }
 
         AnimatedSprite _animatedSprite;
         SpriteSheet _spriteSheet;
+        SpriteComponent? _sprite;
     }
 
     public class AnimationComponent : IComponent, IComponentCallback, ISerializable
@@ -62,14 +89,22 @@ namespace CruZ.Components
 
         public AnimationPlayer SelectPlayer(string key)
         {
+            _currentAnimationPlayer?.UnLoad();
             _currentAnimationPlayer = _getAnimationPlayer[key];
+            _currentAnimationPlayer.Load(_sprite);
+
             return _currentAnimationPlayer;
         }
 
-        public void OnComponentAdded(TransformEntity entity)
+        public void OnAttached(TransformEntity entity)
         {
             _e = entity;
-            _sprite = _e.GetComponent<SpriteComponent>();
+            _e.OnComponentAdded += Entity_OnComponentAdded;
+        }
+
+        private void Entity_OnComponentAdded(object? sender, IComponent e)
+        {
+            _e.TryGetComponent(ref _sprite);
         }
 
         public ISerializable? CreateDefault()
@@ -114,7 +149,7 @@ namespace CruZ.Components
 
         AnimationPlayer?                    _currentAnimationPlayer;
         Dictionary<string, AnimationPlayer> _getAnimationPlayer = new();
-        SpriteComponent                     _sprite;
+        SpriteComponent?                    _sprite;
         TransformEntity?                    _e;
 
         List<KeyValuePair<string, string>> _loadedResources = [];

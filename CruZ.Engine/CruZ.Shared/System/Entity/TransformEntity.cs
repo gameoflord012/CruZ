@@ -36,7 +36,7 @@ namespace CruZ.Components
             return (T)GetComponent(typeof(T));
         }
 
-        public void TryGetComponent<T>(ref T com) where T : IComponent
+        public void TryGetComponent<T>(ref T? com) where T : IComponent
         {
             if(HasComponent(typeof(T))) 
                 com = GetComponent<T>();
@@ -88,7 +88,7 @@ namespace CruZ.Components
             if (component is IComponentCallback)
             {
                 var callback = (IComponentCallback)component;
-                callback.OnComponentAdded(this);
+                callback.OnAttached(this);
             }
 
             OnComponentAdded?.Invoke(this, component);

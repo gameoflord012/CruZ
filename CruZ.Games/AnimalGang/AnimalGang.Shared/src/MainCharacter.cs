@@ -9,9 +9,9 @@ namespace CruZ.Games.AnimalGang
 {
     public class MainCharacter : EntityScript
     {
-        public override void OnComponentAdded(TransformEntity entity)
+        public override void OnAttached(TransformEntity entity)
         {
-            base.OnComponentAdded(entity);
+            base.OnAttached(entity);
             entity.OnComponentAdded += Entity_OnComponentAdded;
         }
 

@@ -70,9 +70,8 @@ namespace CruZ.Editor
             {
                 worldViewControl.LoadScene(SceneManager.GetSceneAssets(input));
             }
-            catch (System.Exception ex)
+            catch (SceneAssetNotFoundException ex)
             {
-
                 MessageBox.Show(
                     $"{ex}\nInner Error: {ex.InnerException}",
                     "Error", 
