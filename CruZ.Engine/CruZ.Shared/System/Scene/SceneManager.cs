@@ -30,6 +30,7 @@ namespace CruZ.Scene
                     try
                     {
                         SceneAssets[assetPath] = (GameScene)method.Invoke(null, BindingFlags.DoNotWrapExceptions, null, null, null);
+                        SceneAssets[assetPath].ResourcePath = assetPath;
                     }
                     catch
                     {

@@ -14,15 +14,9 @@ namespace CruZ.Components
         [JsonIgnore]
         public Type ComponentType => typeof(EntityScript);
 
-        public void OnEntityChanged(TransformEntity entity)
+        public virtual void OnComponentAdded(TransformEntity entity)
         {
             _e = entity;
-            _e.OnDeserializationCompleted += InternalInit;
-        }
-
-        public void InternalInit()
-        {
-            OnInit();
         }
 
         public void InternalDraw(GameTime gameTime)
@@ -35,7 +29,6 @@ namespace CruZ.Components
             OnUpdate(gameTime);
         }
 
-        protected virtual void OnInit() { }
         protected virtual void OnUpdate(GameTime gameTime) { }
         protected virtual void OnDraw(GameTime gameTime) { }
 

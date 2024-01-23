@@ -24,7 +24,7 @@ namespace CruZ.Scene
             player.AddComponent(new MainCharacter());
             player.GetComponent<SpriteComponent>().LayerDepth = 0.2f;
             player.AddComponent(anim);
-            player.Transform.Scale = new(5, 5);
+            player.Transform.Scale = new(0.1f, 0.1f);
 
             var backGround = ECS.CreateEntity();
             backGround.Name = "Background";

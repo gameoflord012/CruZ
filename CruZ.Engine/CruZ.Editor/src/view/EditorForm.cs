@@ -74,7 +74,7 @@ namespace CruZ.Editor
             {
 
                 MessageBox.Show(
-                    $"{ex.Message}",
+                    $"{ex}\nInner Error: {ex.InnerException}",
                     "Error", 
                     MessageBoxButtons.OK, 
                     MessageBoxIcon.Error

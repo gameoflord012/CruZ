@@ -1,4 +1,5 @@
 ﻿using CruZ.Resource;
+using CruZ.Scene;
 using System;
 using System.IO;
 using System.Windows.Forms;
@@ -17,10 +18,21 @@ namespace CruZ.Editor.Controls
             using (StringReader reader = new(cacheString))
             {
                 var lastScenePath = reader.ReadLine();
-
+                
                 try
                 {
-                    LoadScene(ResourceManager.LoadResource<GameScene>(lastScenePath));
+                    GameScene toLoad;
+
+                    if(Path.GetExtension(lastScenePath) != "scene")
+                    {
+                        toLoad = SceneManager.GetSceneAssets(lastScenePath);
+                    }
+                    else
+                    {
+                        toLoad = ResourceManager.LoadResource<GameScene>(lastScenePath);
+                    }
+
+                    LoadScene(toLoad);
                 }
                 catch 
                 {

@@ -12,7 +12,7 @@ namespace CruZ.Components
 
         public int TileSize = 16;
 
-        public void OnEntityChanged(TransformEntity entity)
+        public void OnComponentAdded(TransformEntity entity)
         {
             if(_sp != null)
             {

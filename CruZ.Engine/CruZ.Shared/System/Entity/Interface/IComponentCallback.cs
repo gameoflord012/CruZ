@@ -2,6 +2,6 @@
 {
     public interface IComponentCallback
     {
-        public void OnEntityChanged(TransformEntity entity);
+        public void OnComponentAdded(TransformEntity entity);
     }
 }

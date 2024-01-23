@@ -66,7 +66,7 @@ namespace CruZ.Components
             return _currentAnimationPlayer;
         }
 
-        public void OnEntityChanged(TransformEntity entity)
+        public void OnComponentAdded(TransformEntity entity)
         {
             _e = entity;
             _sprite = _e.GetComponent<SpriteComponent>();

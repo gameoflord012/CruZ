@@ -74,7 +74,7 @@ namespace CruZ.Components
             } 
         }
 
-        public void OnEntityChanged(TransformEntity entity)
+        public void OnComponentAdded(TransformEntity entity)
         {
             _e = entity;
         }

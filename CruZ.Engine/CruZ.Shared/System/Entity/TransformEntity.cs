@@ -13,8 +13,9 @@ namespace CruZ.Components
 {
     public partial class TransformEntity : IEquatable<TransformEntity>
     {
-        public event EventHandler<bool> OnActiveStateChanged;
-        public event EventHandler OnRemoveFromWorld;
+        public event EventHandler<bool>         OnActiveStateChanged;
+        public event EventHandler               OnRemoveFromWorld;
+        public event EventHandler<IComponent>   OnComponentAdded;
 
         public string           Name        = "";
         public Entity           Entity      { get => _entity; }
@@ -33,6 +34,12 @@ namespace CruZ.Components
         public T GetComponent<T>()
         {
             return (T)GetComponent(typeof(T));
+        }
+
+        public void TryGetComponent<T>(ref T com) where T : IComponent
+        {
+            if(HasComponent(typeof(T))) 
+                com = GetComponent<T>();
         }
 
         public object GetComponent(Type ty)
@@ -81,8 +88,10 @@ namespace CruZ.Components
             if (component is IComponentCallback)
             {
                 var callback = (IComponentCallback)component;
-                callback.OnEntityChanged(this);
+                callback.OnComponentAdded(this);
             }
+
+            OnComponentAdded?.Invoke(this, component);
         }
 
         private void SetIsActive(bool value)

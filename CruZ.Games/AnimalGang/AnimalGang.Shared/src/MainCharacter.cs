@@ -9,10 +9,16 @@ namespace CruZ.Games.AnimalGang
 {
     public class MainCharacter : EntityScript
     {
-        protected override void OnInit()
+        public override void OnComponentAdded(TransformEntity entity)
         {
-            _sprite = AttachedEntity.GetComponent<SpriteComponent>();
-            _animation = AttachedEntity.GetComponent<AnimationComponent>();
+            base.OnComponentAdded(entity);
+            entity.OnComponentAdded += Entity_OnComponentAdded;
+        }
+
+        private void Entity_OnComponentAdded(object? sender, IComponent e)
+        {
+            AttachedEntity.TryGetComponent(ref _sprite);
+            AttachedEntity.TryGetComponent(ref _animation);
         }
 
         protected override void OnUpdate(GameTime gameTime)
