@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Newtonsoft.Json;
 using System;
+using System.ComponentModel;
 using System.Xml.Serialization;
 
 namespace CruZ.Components
@@ -19,6 +20,8 @@ namespace CruZ.Components
         }
     }
 
+    
+    [TypeConverter(typeof(ExpandableObjectConverter))]
     public partial class Transform
     {
         public event EventHandler<TransformEventArgs> OnPositionChanged;
@@ -29,11 +32,11 @@ namespace CruZ.Components
             _scale = Vector3.One;
         }
 
-        [JsonIgnore]
+        [JsonIgnore, Browsable(false)]
         public Matrix TotalMatrix { get => ScaleMatrix * TranslateMatrix; }
-        [JsonIgnore]
+        [JsonIgnore, Browsable(false)]
         public Matrix TranslateMatrix { get => Matrix.CreateTranslation(_position); }
-        [JsonIgnore]
+        [JsonIgnore, Browsable(false)]
         public Matrix ScaleMatrix { get => Matrix.CreateScale(_scale); }
         
         public Vector3 Scale { 

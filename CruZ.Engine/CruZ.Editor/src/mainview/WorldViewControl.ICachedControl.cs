@@ -23,7 +23,7 @@ namespace CruZ.Editor.Controls
                 {
                     GameScene toLoad;
 
-                    if(Path.GetExtension(lastScenePath) != "scene")
+                    if(!IsSceneFromFile(lastScenePath))
                     {
                         toLoad = SceneManager.GetSceneAssets(lastScenePath);
                     }
@@ -43,8 +43,31 @@ namespace CruZ.Editor.Controls
 
         public string WriteCache()
         {
-            return CurrentGameScene != null ? CurrentGameScene.ResourcePath : "";
+            if(CurrentGameScene == null) return "";
+            return CurrentGameScene.ResourcePath;
+
+
+            if(IsSceneFromFile(CurrentGameScene))
+                return CurrentGameScene.ResourcePath;
+            else
+            {
+                CurrentGameScene.ResourcePath = Path.Combine(
+                    CacheService.CACHE_ROOT, "scenes", CurrentGameScene.ResourcePath + ".scene");
+
+                ResourceManager.CreateResource(CurrentGameScene.ResourcePath, false);
+
+                return CurrentGameScene.ResourcePath;
+            }
         }
 
+        private bool IsSceneFromFile(GameScene scene)
+        {
+            return IsSceneFromFile(scene.ResourcePath);
+        }
+
+        private bool IsSceneFromFile(string scenePath)
+        {
+            return Path.GetExtension(scenePath) == "scene";
+        }
     }
 }

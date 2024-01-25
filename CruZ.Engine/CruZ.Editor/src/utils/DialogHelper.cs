@@ -29,5 +29,26 @@ namespace CruZ.Editor
                 return [];
             }
         }
+
+        [STAThread]
+        public static string? GetSaveScenePath()
+        {
+            using (SaveFileDialog saveFileDialog = new SaveFileDialog())
+            {
+                saveFileDialog.DefaultExt = "scene";
+                saveFileDialog.Filter = "Scene files (*.scene)|*.scene|All files (*.*)|*.*";
+
+                DialogResult result = saveFileDialog.ShowDialog();
+
+                if (result == DialogResult.OK)
+                {
+                    return saveFileDialog.FileName;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+        }
     }
 }

@@ -1,0 +1,48 @@
+{
+  "Name": "",
+  "_entities": [
+    {
+      "position": "0.47234318, -0.18893631, 0",
+      "scale": "0.05, 0.05, 1",
+      "components": [
+        {
+          "com-type": "CruZ.Components.SpriteComponent, CruZ.Editor, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+          "com-data": {
+            "_resourceName": "tiles\\dungeon-floor",
+            "LayerDepth": 0.1
+          }
+        },
+        {
+          "com-type": "CruZ.Components.TileComponent, CruZ.Editor, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+          "com-data": {
+            "ComponentType": "CruZ.Components.TileComponent, CruZ.Editor, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+            "Debug": false,
+            "TileSize": 16
+          }
+        }
+      ]
+    },
+    {
+      "position": "0, 0, 0",
+      "scale": "1, 1, 1",
+      "components": [
+        {
+          "com-type": "CruZ.Components.SpriteComponent, CruZ.Editor, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+          "com-data": {
+            "_resourceName": "tiles\\dungeon-wall",
+            "LayerDepth": 0.0
+          }
+        },
+        {
+          "com-type": "CruZ.Components.TileComponent, CruZ.Editor, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+          "com-data": {
+            "ComponentType": "CruZ.Components.TileComponent, CruZ.Editor, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+            "Debug": false,
+            "TileSize": 16
+          }
+        }
+      ]
+    }
+  ],
+  "ResourcePath": "D:\\monogame-projects\\CruZ_GameEngine\\CruZ.Games\\AnimalGang\\AnimalGang.Shared\\res\\scenes\\scene2.scene"
+}

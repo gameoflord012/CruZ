@@ -38,7 +38,7 @@
 		  <AutoGen>True</AutoGen>
 		  <DependentUpon>Resources.resx</DependentUpon>
 		</Compile>
-		<Compile Update="src\view\WorldViewControl.cs" />
+		<Compile Update="src\mainview\WorldViewControl.cs" />
 	</ItemGroup>
 
 	<ItemGroup>

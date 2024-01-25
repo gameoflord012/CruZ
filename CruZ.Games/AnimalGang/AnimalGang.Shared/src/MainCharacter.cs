@@ -35,21 +35,6 @@ namespace CruZ.Games.AnimalGang
                 return;
             }
 
-            //_isArrvied = Arrived();
-
-            //if (_isArrvied)
-            //{
-            //    _moveDir = GetMovingInput();
-            //    _animation.SelectPlayer("player-sword-idle").Play("idle");
-            //}
-            //else
-            //{
-            //    _animation.SelectPlayer("player-normal").Play("walk");
-            //    _sprite.Flip = _moveDir.X < 0;
-            
-            //    AttachedEntity.Transform.Position += _moveDir * _speed;
-            //}
-
             _moveDir = GetMovingInput();
 
             if(_moveDir.SqrMagnitude() > 0.1f)

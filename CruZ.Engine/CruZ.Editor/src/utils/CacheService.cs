@@ -9,6 +9,8 @@ namespace CruZ.Editor
 {
     class CacheService
     {
+        public const string CACHE_ROOT = "Control Caches";
+
         public static void RegisterCacheControl(ICacheControl control)
         {
             _registedCacheControls.Add(control);
@@ -89,9 +91,9 @@ namespace CruZ.Editor
             File.WriteAllText(GetCachePath(cacheControl), cachedString);
         }
 
-        private static string GetCachePath(ICacheControl cachedControl)
+        public static string GetCachePath(ICacheControl cachedControl)
         {
-            return $"Control Caches\\{cachedControl.UniquedCachedPath}";
+            return Path.Combine(CACHE_ROOT, cachedControl.UniquedCachedPath);
         }
 
         private static bool CanRead(ICacheControl cache)

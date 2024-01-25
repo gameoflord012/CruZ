@@ -26,17 +26,22 @@ namespace CruZ.Scene
             player.AddComponent(anim);
             player.Transform.Scale = new(0.1f, 0.1f);
 
-            var backGround = ECS.CreateEntity();
-            backGround.Name = "Background";
-            backGround.AddComponent(new SpriteComponent());
-            backGround.AddComponent(new TileComponent());
-            var sp = backGround.GetComponent<SpriteComponent>();
-            sp.LayerDepth = 0.1f;
-            sp.LoadTexture("tiles\\tile.png");
-            backGround.Transform.Scale = new(0.1f, 0.1f);
+            var dungegonFloor = ECS.CreateEntity();
+            dungegonFloor.Name = "dungeonFloor";
+            dungegonFloor.AddComponent(new SpriteComponent());
+            dungegonFloor.AddComponent(new TileComponent());
+            var dungeonFloor_sp = dungegonFloor.GetComponent<SpriteComponent>();
+            dungeonFloor_sp.LayerDepth = 0.1f;
+            dungeonFloor_sp.LoadTexture("tiles\\dungeon-floor");
 
-            //scene.AddToScene(player);
-            scene.AddToScene(backGround);
+            var dungeonWall = ECS.CreateEntity();
+            dungeonWall.AddComponent(new SpriteComponent());
+            dungeonWall.AddComponent(new TileComponent());
+            var dungeonWall_sp = dungeonWall.GetComponent<SpriteComponent>();
+            dungeonWall_sp.LoadTexture("tiles\\dungeon-wall");
+
+            scene.AddToScene(dungegonFloor);
+            scene.AddToScene(dungeonWall);
 
             return scene;
         }

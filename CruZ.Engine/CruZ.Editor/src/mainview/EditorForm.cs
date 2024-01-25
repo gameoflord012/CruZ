@@ -1,4 +1,5 @@
 ﻿using CruZ.Components;
+using CruZ.Editor.Controls;
 using CruZ.Resource;
 using CruZ.Scene;
 using System;
@@ -12,8 +13,7 @@ namespace CruZ.Editor
 {
     public partial class EditorForm : Form
     {
-        public FlowLayoutPanel InspectorPanel => inspectorPanel;
-
+        public PropertyGrid Inspector_PropertyGrid { get => propertyGrid1; }
         private EditorForm()
         {
             InitializeComponent();
@@ -56,7 +56,14 @@ namespace CruZ.Editor
 
         private void saveAsToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            var savePath = DialogHelper.GetSaveScenePath();
+            if(savePath == null) return;
 
+            worldViewControl.CurrentGameScene.ResourcePath = savePath;
+
+            ResourceManager.CreateResource(
+                worldViewControl.CurrentGameScene, 
+                true);
         }
 
         static EditorForm? _instance;

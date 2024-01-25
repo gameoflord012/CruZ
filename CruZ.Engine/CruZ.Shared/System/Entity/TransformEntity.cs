@@ -1,7 +1,5 @@
 ﻿using CruZ.Systems;
 using CruZ.Utility;
-using Microsoft.Xna.Framework;
-using MonoGame.Extended;
 using MonoGame.Extended.Entities;
 using System;
 using System.Collections.Generic;
@@ -18,12 +16,15 @@ namespace CruZ.Components
         public event EventHandler<IComponent>   OnComponentAdded;
 
         public string           Name        = "";
+        [Browsable(false)]
         public Entity           Entity      { get => _entity; }
         public TransformEntity? Parent      { get => _parent;       set => _parent = value; }
         public bool             IsActive    { get => _isActive;     set => SetIsActive(value); }
         public Transform        Transform   { get => _transform;    set => _transform = value; }
-        
-        public Vector3          Position { get => Transform.Position; set => Transform.Position = value; }
+        public Vector3          Position    { get => Transform.Position; set => Transform.Position = value; }
+
+        [Browsable(false)]
+        public IComponent[]     Components  => GetAllComponents(this);
 
         public TransformEntity(Entity e)
         {
@@ -55,7 +56,6 @@ namespace CruZ.Components
             }
 
             return _addedComponents[com.ComponentType];
-
         }
 
         public void AddComponent(IComponent component)
@@ -107,11 +107,11 @@ namespace CruZ.Components
         }
 #pragma warning restore CS8767 
 
-        Entity                      _entity;
-        TransformEntity?            _parent;
-        bool                        _isActive = false;
-        Transform                   _transform = new();
-        Dictionary<Type, object>    _addedComponents = new();
+        Entity                          _entity;
+        TransformEntity?                _parent;
+        bool                            _isActive = false;
+        Transform                       _transform = new();
+        Dictionary<Type, IComponent>    _addedComponents = new();
 
         private static IComponent CreateInstanceFrom(Type ty)
         {
@@ -130,7 +130,7 @@ namespace CruZ.Components
             }
         }
 
-        public static object[] GetAllComponents(TransformEntity e)
+        public static IComponent[] GetAllComponents(TransformEntity e)
         {
             return e._addedComponents.Values.ToArray();
         }

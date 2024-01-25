@@ -9,13 +9,14 @@ namespace CruZ.Components
 {
     using Microsoft.Xna.Framework;
     using MonoGame.Extended;
+    using System.ComponentModel;
 
     public class DrawBeginEventArgs : EventArgs
     {
         public Vector2 Position;
         public Rectangle SourceRectangle;
         public Vector2 Origin;
-        public Texture2D Texture;
+        public Texture2D? Texture;
         public bool Skip = false;
         public Matrix ViewMatrix;
     }
@@ -25,11 +26,13 @@ namespace CruZ.Components
         public bool KeepDrawing = false;
     }
 
+    [TypeConverter(typeof(ExpandableObjectConverter))]
     public partial class SpriteComponent : IComponent, IComponentCallback
     {
         public event EventHandler<DrawBeginEventArgs> OnDrawBegin;
         public event EventHandler<DrawEndEventArgs> OnDrawEnd;
 
+        [Browsable(false)]
         public Type ComponentType => typeof(SpriteComponent);
 
         [JsonIgnore]

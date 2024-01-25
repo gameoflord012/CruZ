@@ -35,7 +35,7 @@ namespace CruZ.Editor
         {
             splitContainer1 = new SplitContainer();
             worldViewControl = new WorldViewControl();
-            inspectorPanel = new FlowLayoutPanel();
+            propertyGrid1 = new PropertyGrid();
             menuStrip1 = new MenuStrip();
             fileToolStripMenuItem = new ToolStripMenuItem();
             sceneToolStripMenuItem = new ToolStripMenuItem();
@@ -53,8 +53,6 @@ namespace CruZ.Editor
             // splitContainer1
             // 
             splitContainer1.Dock = DockStyle.Fill;
-            splitContainer1.FixedPanel = FixedPanel.Panel2;
-            splitContainer1.IsSplitterFixed = true;
             splitContainer1.Location = new Point(0, 24);
             splitContainer1.Margin = new Padding(3, 2, 3, 2);
             splitContainer1.Name = "splitContainer1";
@@ -65,7 +63,7 @@ namespace CruZ.Editor
             // 
             // splitContainer1.Panel2
             // 
-            splitContainer1.Panel2.Controls.Add(inspectorPanel);
+            splitContainer1.Panel2.Controls.Add(propertyGrid1);
             splitContainer1.Size = new Size(700, 314);
             splitContainer1.SplitterDistance = 419;
             splitContainer1.TabIndex = 0;
@@ -80,15 +78,13 @@ namespace CruZ.Editor
             worldViewControl.Size = new Size(419, 314);
             worldViewControl.TabIndex = 0;
             // 
-            // inspectorPanel
+            // propertyGrid1
             // 
-            inspectorPanel.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            inspectorPanel.AutoScroll = true;
-            inspectorPanel.FlowDirection = FlowDirection.TopDown;
-            inspectorPanel.Location = new Point(2, 0);
-            inspectorPanel.Name = "inspectorPanel";
-            inspectorPanel.Size = new Size(275, 314);
-            inspectorPanel.TabIndex = 0;
+            propertyGrid1.Dock = DockStyle.Fill;
+            propertyGrid1.Location = new Point(0, 0);
+            propertyGrid1.Name = "propertyGrid1";
+            propertyGrid1.Size = new Size(277, 314);
+            propertyGrid1.TabIndex = 0;
             // 
             // menuStrip1
             // 
@@ -114,34 +110,34 @@ namespace CruZ.Editor
             // 
             sceneToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { openSceneToolStripMenuItem, saveSceneToolStripMenuItem, saveAsToolStripMenuItem, loadSceneToolStripMenuItem });
             sceneToolStripMenuItem.Name = "sceneToolStripMenuItem";
-            sceneToolStripMenuItem.Size = new Size(180, 22);
+            sceneToolStripMenuItem.Size = new Size(105, 22);
             sceneToolStripMenuItem.Text = "Scene";
             // 
             // openSceneToolStripMenuItem
             // 
             openSceneToolStripMenuItem.Name = "openSceneToolStripMenuItem";
-            openSceneToolStripMenuItem.Size = new Size(180, 22);
+            openSceneToolStripMenuItem.Size = new Size(137, 22);
             openSceneToolStripMenuItem.Text = "Open Scene";
             openSceneToolStripMenuItem.Click += openSceneToolStripMenuItem_Click;
             // 
             // saveSceneToolStripMenuItem
             // 
             saveSceneToolStripMenuItem.Name = "saveSceneToolStripMenuItem";
-            saveSceneToolStripMenuItem.Size = new Size(180, 22);
+            saveSceneToolStripMenuItem.Size = new Size(137, 22);
             saveSceneToolStripMenuItem.Text = "Save Scene";
             saveSceneToolStripMenuItem.Click += saveSceneToolStripMenuItem_Click;
             // 
             // saveAsToolStripMenuItem
             // 
             saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
-            saveAsToolStripMenuItem.Size = new Size(180, 22);
+            saveAsToolStripMenuItem.Size = new Size(137, 22);
             saveAsToolStripMenuItem.Text = "Save As ...";
             saveAsToolStripMenuItem.Click += saveAsToolStripMenuItem_Click;
             // 
             // loadSceneToolStripMenuItem
             // 
             loadSceneToolStripMenuItem.Name = "loadSceneToolStripMenuItem";
-            loadSceneToolStripMenuItem.Size = new Size(180, 22);
+            loadSceneToolStripMenuItem.Size = new Size(137, 22);
             loadSceneToolStripMenuItem.Text = "Load Scene";
             loadSceneToolStripMenuItem.Click += loadSceneToolStripMenuItem_Click;
             // 
@@ -172,11 +168,11 @@ namespace CruZ.Editor
         private WorldViewControl worldViewControl;
         private MenuStrip menuStrip1;
         private ToolStripMenuItem fileToolStripMenuItem;
-        private FlowLayoutPanel inspectorPanel;
         private ToolStripMenuItem sceneToolStripMenuItem;
         private ToolStripMenuItem saveSceneToolStripMenuItem;
         private ToolStripMenuItem loadSceneToolStripMenuItem;
         private ToolStripMenuItem saveAsToolStripMenuItem;
         private ToolStripMenuItem openSceneToolStripMenuItem;
+        private PropertyGrid propertyGrid1;
     }
 }

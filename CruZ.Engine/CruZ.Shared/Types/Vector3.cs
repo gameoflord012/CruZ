@@ -1,10 +1,13 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
+using System.ComponentModel;
 using System.Globalization;
 using System.Runtime.CompilerServices;
 using System.Text;
 
 namespace CruZ
 {
+    [TypeConverter(typeof(Vector3TypeConverter))]
     public partial struct Vector3
     {
         public Vector3(float x = 0, float y = 0, float z = 0)
@@ -18,6 +21,12 @@ namespace CruZ
         {
             return X * X + Y * Y + Z * Z;
         }
+
+        public float X { get => _x; set => _x = value; }
+        public float Y { get => _y; set => _y = value; }
+        public float Z { get => _z; set => _z = value; }
+
+        private float _x = 0, _y = 0, _z = 0;
 
         public static implicit operator Vector3(System.Numerics.Vector2 v)
         {
@@ -65,12 +74,7 @@ namespace CruZ
             return new(v.X * s, v.Y * s, v.Z * s);
         }
 
-
-        public float X, Y, Z;
-
-
         public static Vector3 Zero => new(0, 0, 0);
-
         public static Vector3 One => new(1, 1, 1);
     }
 }

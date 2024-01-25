@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
 using System.Numerics;
 using System.Text;
@@ -10,10 +11,11 @@ namespace CruZ.Components
 
     public class TileComponent : IComponent, IComponentCallback
     {
+        [Browsable(false)]
         public Type ComponentType => typeof(TileComponent);
 
-        public bool Debug = false;
-        public int TileSize = 16;
+        public bool Debug       { get; set; } = false;
+        public int  TileSize    { get; set; } = 16;
 
         public void OnAttached(TransformEntity entity)
         {

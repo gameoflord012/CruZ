@@ -199,7 +199,7 @@ namespace CruZ.Editor.Controls
             }
 
             var col = Microsoft.Xna.Framework.Color.DarkGray;
-            if(lineDis == 1) col = XNA.Color.Orange;
+            if(lineDis == 1) col = GlobalVariables.UNIT_BOARD_COLOR;
             
             DrawBoard(FunMath.RoundInt(lineDis), col);
 
