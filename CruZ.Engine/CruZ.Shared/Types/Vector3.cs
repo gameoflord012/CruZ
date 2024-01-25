@@ -1,9 +1,4 @@
-﻿using Newtonsoft.Json;
-using System;
-using System.ComponentModel;
-using System.Globalization;
-using System.Runtime.CompilerServices;
-using System.Text;
+﻿using System.ComponentModel;
 
 namespace CruZ
 {

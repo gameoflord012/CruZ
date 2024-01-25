@@ -2,8 +2,8 @@
   "Name": "",
   "_entities": [
     {
-      "position": "0.47234318, -0.18893631, 0",
-      "scale": "0.05, 0.05, 1",
+      "position": "0, 0, 0",
+      "scale": "1, 1, 1",
       "components": [
         {
           "com-type": "CruZ.Components.SpriteComponent, CruZ.Editor, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
@@ -39,6 +39,42 @@
             "ComponentType": "CruZ.Components.TileComponent, CruZ.Editor, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
             "Debug": false,
             "TileSize": 16
+          }
+        }
+      ]
+    },
+    {
+      "position": "0, 0, 0",
+      "scale": "0.1, 0.1, 0",
+      "components": [
+        {
+          "com-type": "CruZ.Components.SpriteComponent, CruZ.Editor, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+          "com-data": {
+            "_resourceName": "",
+            "LayerDepth": 0.2
+          }
+        },
+        {
+          "com-type": "CruZ.Games.AnimalGang.MainCharacter, CruZ.Editor, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+          "com-data": {}
+        },
+        {
+          "com-type": "CruZ.Components.AnimationComponent, CruZ.Editor, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+          "com-data": {
+            "animation-players": [
+              {
+                "resource-uri": "anims/player-walk.sf",
+                "animation-player-key": "player-normal"
+              },
+              {
+                "resource-uri": "anims/player-sword-idle.sf",
+                "animation-player-key": "player-sword-idle"
+              },
+              {
+                "resource-uri": "anims/player-sword-attack.sf",
+                "animation-player-key": "player-sword-attack"
+              }
+            ]
           }
         }
       ]

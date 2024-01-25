@@ -29,6 +29,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)System\Scene\SceneAssetMethodAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System\Scene\SceneAssetClassAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System\Tile\TileComponent.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Types\ValueTypeConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Types\Vector3TypeConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\GlobalUsing.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\Helper.cs" />

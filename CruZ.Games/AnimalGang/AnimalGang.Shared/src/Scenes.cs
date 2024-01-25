@@ -40,8 +40,9 @@ namespace CruZ.Scene
             var dungeonWall_sp = dungeonWall.GetComponent<SpriteComponent>();
             dungeonWall_sp.LoadTexture("tiles\\dungeon-wall");
 
-            scene.AddToScene(dungegonFloor);
-            scene.AddToScene(dungeonWall);
+            scene.AddEntity(dungegonFloor);
+            scene.AddEntity(dungeonWall);
+            scene.AddEntity(player);
 
             return scene;
         }

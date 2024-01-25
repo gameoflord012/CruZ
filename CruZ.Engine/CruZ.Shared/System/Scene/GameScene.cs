@@ -19,7 +19,7 @@ namespace CruZ
         public TransformEntity[]    Entities    { get => _entities.ToArray(); }
         public string               ResourcePath { get; set; }
 
-        public void AddToScene(TransformEntity e)
+        public void AddEntity(TransformEntity e)
         {
             if (_entities.Contains(e)) return;
             _entities.Add(e);

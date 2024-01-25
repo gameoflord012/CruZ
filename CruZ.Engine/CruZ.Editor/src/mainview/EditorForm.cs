@@ -1,12 +1,7 @@
-﻿using CruZ.Components;
-using CruZ.Editor.Controls;
-using CruZ.Resource;
+﻿using CruZ.Resource;
 using CruZ.Scene;
 using System;
-using System.ComponentModel;
-using System.Drawing.Design;
 using System.Linq;
-using System.Security.Cryptography.Xml;
 using System.Windows.Forms;
 
 namespace CruZ.Editor
