@@ -5,10 +5,11 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace CruZ
 {
-    public partial class GameScene : IHasResourcePath
+    public partial class GameScene : IHostResource
     {
         public event Action<TransformEntity>? OnEntityAdded;
         public event Action<TransformEntity>? OnEntityRemoved;
@@ -16,8 +17,8 @@ namespace CruZ
         public string               Name = "";
 
         [JsonIgnore]
-        public TransformEntity[]    Entities    { get => _entities.ToArray(); }
-        public string               ResourcePath { get; set; }
+        public TransformEntity[]        Entities        { get => _entities.ToArray(); }
+        public ResourceInfo?            ResourceInfo    { get; set; }
 
         public void AddEntity(TransformEntity e)
         {

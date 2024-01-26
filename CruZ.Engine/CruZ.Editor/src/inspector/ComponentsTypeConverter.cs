@@ -16,7 +16,7 @@ namespace CruZ.Editor
                 props.Add(
                     new ComponentsPropertyDescriptor(
                         comps.Components, i, 
-                        comps.Components[i].ComponentType.ToString(), 
+                        comps.Components[i].GetType().ToString(), 
                         [new TypeConverterAttribute(typeof(ExpandableObjectConverter))]
                     )
                 );

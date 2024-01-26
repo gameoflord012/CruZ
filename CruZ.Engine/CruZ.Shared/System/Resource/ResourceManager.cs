@@ -10,6 +10,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 
@@ -31,9 +32,9 @@ namespace CruZ.Resource
         }
 
         /// <summary>
-        /// Load resource with relative or full path, the resource file should within the .res folder
+        /// Load resource with relative or full path, the resource file should within the .resObj folder
         /// </summary>
-        /// <param name="resourcePath"></param>
+        /// <param name="resourcePath">May be fullpath or relative path to resource root</param>
         /// <param name="ty"></param>
         /// <returns></returns>
         public static object LoadResource(string resourcePath, Type ty)
@@ -47,25 +48,24 @@ namespace CruZ.Resource
 
                 resObj = LoadContentNonGeneric(Path.Combine(dir, file), ty);
             }
-            catch(ContentLoadException)
+            catch (ContentLoadException)
             {
                 try
                 {
                     resObj = _Serializer.DeserializeFromFile(Path.Combine(RESOURCE_ROOT, resourcePath), ty);
                 }
-                catch(FileNotFoundException)
+                catch (FileNotFoundException)
                 {
-                    throw new(string.Format("Can't find resource file {0}", resourcePath));
+                    throw new FileNotFoundException(string.Format("Can't find resource file {0}", resourcePath));
                 }
             }
 
-            var hasResourcePath = resObj as IHasResourcePath;
-            if(hasResourcePath != null) hasResourcePath.ResourcePath = resourcePath;
+            InitResourceHost(resObj, resourcePath);
 
             return resObj;
         }
 
-        public static void CreateResource(string resourcePath, object res, bool renew = false)
+        public static void CreateResource(string resourcePath, object resObj, bool renew = false)
         {
             object? existedResource = null;
 
@@ -73,7 +73,7 @@ namespace CruZ.Resource
             {
                 try
                 {
-                    existedResource = LoadResource(resourcePath, res.GetType());
+                    existedResource = LoadResource(resourcePath, resObj.GetType());
                 }
                 catch
                 {
@@ -81,15 +81,31 @@ namespace CruZ.Resource
                 }
             }
 
-            if (existedResource == null)
+            if(existedResource == null)
             {
-                _Serializer.SerializeToFile(res, Path.Combine(RESOURCE_ROOT, resourcePath));
+                _Serializer.SerializeToFile(resObj, Path.Combine(RESOURCE_ROOT, resourcePath));
             }
+
+            InitResourceHost(resObj, resourcePath);
         }
 
-        public static void CreateResource(IHasResourcePath res, bool renew = false)
+        public static void SaveResource(IHostResource hostRes)
         {
-            CreateResource(res.ResourcePath, res, renew);
+            if(hostRes.ResourceInfo.IsRuntime) 
+                throw new ArgumentException($"Can't save runtime {hostRes} resource, use create resource instead");
+            
+            CreateResource(hostRes.ResourceInfo.ResourceName, hostRes, true);
+        }
+
+        public static T LoadResource<T>(string resourcePath)
+        {
+            return (T)LoadResource(resourcePath, typeof(T));
+        }
+
+        public static T LoadResource<T>(string resPath, out ResourceInfo resInfo)
+        {
+            resInfo = CreateResourceInfo(resPath);
+            return (T)LoadResource(resPath, typeof(T));
         }
 
         public static T LoadResource<T>(Guid guid)
@@ -97,16 +113,16 @@ namespace CruZ.Resource
             return LoadResource<T>(GetResourcePath(guid));
         }
 
-        private static string GetResourcePath(Guid guid)
+        public static string GetFullResPath()
         {
-            try { 
-                return _GetResourcePathFromGuid[guid.ToString()];
-            }
-            catch (KeyNotFoundException)
-            {
-                throw new KeyNotFoundException("Can't find resource with guid " + guid);
-            }
+            return Path.GetFullPath(RESOURCE_ROOT);
         }
+
+        //public static bool IsResourceInfoValid(IResourceInfo r)
+        //{
+        //    if(r.ResourceName == null) return false;
+        //    return Path.IsPathRooted(r.ResourceName) || r.ResourceName.StartsWith("resObj:");
+        //}
 
         private static T LoadContent<T>(string resourcePath)
         {
@@ -129,7 +145,6 @@ namespace CruZ.Resource
             {
                 throw;
             }
-
         }
 
         private static object LoadContentNonGeneric(string resourcePath, Type ty)
@@ -141,7 +156,7 @@ namespace CruZ.Resource
                 return typeof(ResourceManager).
                     GetMethod("LoadContent", System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.NonPublic).
                     MakeGenericMethod(ty).
-                    Invoke(null, BindingFlags.DoNotWrapExceptions, null,[resourcePath], null);
+                    Invoke(null, BindingFlags.DoNotWrapExceptions, null, [resourcePath], null);
 #pragma warning restore CS8603 // Possible null reference return.
 #pragma warning restore CS8602 // Dereference of a possibly null reference.
             }
@@ -151,14 +166,27 @@ namespace CruZ.Resource
             }
         }
 
-        public static string GetFullPath()
+        private static string GetResourcePath(Guid guid)
         {
-            return Path.GetFullPath(RESOURCE_ROOT);
+            try
+            {
+                return _GetResourcePathFromGuid[guid.ToString()];
+            }
+            catch (KeyNotFoundException)
+            {
+                throw new KeyNotFoundException("Can't find resource with guid " + guid);
+            }
         }
 
-        public static T LoadResource<T>(string resourcePath)
+        private static void InitResourceHost(object resObj, string resourcePath)
         {
-            return (T)LoadResource(resourcePath, typeof(T));
+            if (resObj is IHostResource host)
+                host.ResourceInfo = CreateResourceInfo(resourcePath);
+        }
+
+        private static ResourceInfo CreateResourceInfo(string resPath)
+        {
+            return ResourceInfo.Create(resPath, false);
         }
 
         private static Serializer _Serializer;

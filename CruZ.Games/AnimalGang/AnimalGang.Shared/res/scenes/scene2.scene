@@ -2,14 +2,20 @@
   "Name": "",
   "_entities": [
     {
-      "position": "0, 0, 0",
+      "position": "21.507046, -15.612524, 0",
       "scale": "1, 1, 1",
       "components": [
         {
           "com-type": "CruZ.Components.SpriteComponent, CruZ.Editor, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
           "com-data": {
-            "_resourceName": "tiles\\dungeon-floor",
-            "LayerDepth": 0.1
+            "_spriteResInfo": {
+              "ResourceName": "tiles\\dungeon-floor",
+              "IsRuntime": false
+            },
+            "LayerDepth": 0.0,
+            "SortingLayer": 0,
+            "YLayerDepth": false,
+            "Flip": false
           }
         },
         {
@@ -23,14 +29,20 @@
       ]
     },
     {
-      "position": "0, 0, 0",
+      "position": "8.534555, 1.1012336, 0",
       "scale": "1, 1, 1",
       "components": [
         {
           "com-type": "CruZ.Components.SpriteComponent, CruZ.Editor, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
           "com-data": {
-            "_resourceName": "tiles\\dungeon-wall",
-            "LayerDepth": 0.0
+            "_spriteResInfo": {
+              "ResourceName": "tiles\\dungeon-wall",
+              "IsRuntime": false
+            },
+            "LayerDepth": 0.0,
+            "SortingLayer": 1,
+            "YLayerDepth": true,
+            "Flip": false
           }
         },
         {
@@ -44,19 +56,24 @@
       ]
     },
     {
-      "position": "0, 0, 0",
-      "scale": "0.1, 0.1, 0",
+      "position": "-36.29906, -13.091184, 0",
+      "scale": "0.5, 0.5, 0",
       "components": [
         {
           "com-type": "CruZ.Components.SpriteComponent, CruZ.Editor, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
           "com-data": {
-            "_resourceName": "",
-            "LayerDepth": 0.2
+            "_spriteResInfo": null,
+            "LayerDepth": 0.2,
+            "SortingLayer": 1,
+            "YLayerDepth": true,
+            "Flip": false
           }
         },
         {
           "com-type": "CruZ.Games.AnimalGang.MainCharacter, CruZ.Editor, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
-          "com-data": {}
+          "com-data": {
+            "Speed": 25.0
+          }
         },
         {
           "com-type": "CruZ.Components.AnimationComponent, CruZ.Editor, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
@@ -80,5 +97,8 @@
       ]
     }
   ],
-  "ResourcePath": "D:\\monogame-projects\\CruZ_GameEngine\\CruZ.Games\\AnimalGang\\AnimalGang.Shared\\res\\scenes\\scene2.scene"
+  "ResourceInfo": {
+    "ResourceName": "D:\\monogame-projects\\CruZ_GameEngine\\CruZ.Games\\AnimalGang\\AnimalGang.Shared\\res\\scenes\\scene2.scene",
+    "IsRuntime": false
+  }
 }

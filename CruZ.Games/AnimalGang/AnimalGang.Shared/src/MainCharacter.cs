@@ -9,6 +9,8 @@ namespace CruZ.Games.AnimalGang
 {
     public class MainCharacter : EntityScript
     {
+        public float Speed { get => _speed; set => _speed = value; }
+
         public override void OnAttached(TransformEntity entity)
         {
             base.OnAttached(entity);

@@ -9,11 +9,11 @@
     "file.lastUsedOpenFilter": "All Files (*)",
     "fileStates": {
         "dungeon-map.tmx": {
-            "scale": 1.6565625,
-            "selectedLayer": 0,
+            "scale": 4,
+            "selectedLayer": 4,
             "viewCenter": {
-                "x": 239.6528956800604,
-                "y": 113.18619128466327
+                "x": 54.5,
+                "y": 103.875
             }
         },
         "dungeon-tileset.tsx": {

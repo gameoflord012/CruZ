@@ -7,18 +7,21 @@ using System.Diagnostics;
 
 namespace CruZ.Components
 {
+    using Box2D.NetStandard.Dynamics.World;
     using Microsoft.Xna.Framework;
     using MonoGame.Extended;
     using System.ComponentModel;
+    using System.IO;
 
     public class DrawBeginEventArgs : EventArgs
     {
-        public Vector2 Position;
-        public Rectangle SourceRectangle;
-        public Vector2 Origin;
-        public Texture2D? Texture;
-        public bool Skip = false;
-        public Matrix ViewMatrix;
+        public Rectangle    SourceRectangle;
+        public Vector2      Origin;
+        public Vector2      Position;
+        public Texture2D?   Texture;
+        public Matrix       ViewMatrix;
+        public float        LayerDepth = 0;
+        public bool         Skip = false;
     }
 
     public class DrawEndEventArgs : EventArgs
@@ -26,30 +29,29 @@ namespace CruZ.Components
         public bool KeepDrawing = false;
     }
 
-    [TypeConverter(typeof(ExpandableObjectConverter))]
     public partial class SpriteComponent : IComponent, IComponentCallback
     {
-        public event EventHandler<DrawBeginEventArgs> OnDrawBegin;
-        public event EventHandler<DrawEndEventArgs> OnDrawEnd;
+        public event EventHandler<DrawBeginEventArgs>   OnDrawBegin;
+        public event EventHandler<DrawEndEventArgs>     OnDrawEnd;
 
-        [Browsable(false)]
-        public Type ComponentType => typeof(SpriteComponent);
+        [Browsable(false), JsonIgnore]
+        public Type             ComponentType => typeof(SpriteComponent);
 
-        [JsonIgnore]
-        public Texture2D? Texture { get => _texture; set => _texture = value; }
-        public float LayerDepth { get; set; } = 0;
-        public bool Flip;
+        [JsonIgnore, Browsable(false)]
+        public Texture2D?       Texture         { get => _texture; set => _texture = value; }
+        public float            LayerDepth      { get; set; } = 0;
+        public int              SortingLayer    { get; set; } = 0;
+        public bool             YLayerDepth     { get; set; } = false;
+        public bool             Flip            { get; set; }
 
         public SpriteComponent() { }
         public SpriteComponent(string resourceName) { LoadTexture(resourceName); }
 
         public void LoadTexture(string resourcePath)
         {
-            _textureURI = resourcePath;
-
             if (!string.IsNullOrEmpty(resourcePath))
             {
-                Texture = ResourceManager.LoadResource<Texture2D>(resourcePath);
+                Texture = ResourceManager.LoadResource<Texture2D>(resourcePath, out _spriteResInfo);
             }
         }
 
@@ -60,16 +62,17 @@ namespace CruZ.Components
             while (true)
             {
                 DrawBeginEventArgs beginArgs = new();
-                beginArgs.Position = new Vector2(_e.Transform.Position.X, _e.Transform.Position.Y);
-                beginArgs.ViewMatrix = viewMatrix;
-
-                if (Texture != null)
+                beginArgs.Position          = new Vector2(_e.Transform.Position.X, _e.Transform.Position.Y);
+                beginArgs.ViewMatrix        = viewMatrix;
+                beginArgs.LayerDepth        = YLayerDepth ? (beginArgs.Position.Y / 1000 + 1) / 2 : LayerDepth;
+                beginArgs.Origin            = new(0.5f, 0.5f);
+                
+                if(Texture != null)
                 {
-                    beginArgs.SourceRectangle = Texture.Bounds;
-                    beginArgs.Origin = new(0.5f, 0.5f);
-                    beginArgs.Texture = Texture;
+                    beginArgs.SourceRectangle   = Texture.Bounds;
+                    beginArgs.Texture           = Texture;
                 }
-
+                
                 OnDrawBegin?.Invoke(this, beginArgs);
 
                 if (beginArgs.Skip)
@@ -78,7 +81,7 @@ namespace CruZ.Components
                 }
                 else if(beginArgs.Texture == null)
                 {
-                    Trace.TraceWarning("Texture is null, can't draw");
+                    
                 }
                 else
                 {
@@ -88,7 +91,7 @@ namespace CruZ.Components
 
                     sourceRectangle:    beginArgs.SourceRectangle,
 
-                    color: Color.White,
+                    color: XNA.Color.White,
                     rotation: 0,
 
                     origin:             new(beginArgs.Origin.X * beginArgs.SourceRectangle.Width, 
@@ -99,7 +102,7 @@ namespace CruZ.Components
                         _e.Transform.Scale.Y),
 
                     effects: Flip ? SpriteEffects.FlipHorizontally : SpriteEffects.None,
-                    layerDepth: LayerDepth);
+                    layerDepth:         beginArgs.LayerDepth);
                 }
 
                 var endArgs = new DrawEndEventArgs();
@@ -113,8 +116,10 @@ namespace CruZ.Components
             _e = entity;
         }
 
-        private Texture2D? _texture;
-        private string _textureURI = "";
-        private TransformEntity? _e;
+        private Texture2D?          _texture;
+        private TransformEntity?    _e;
+
+        [JsonProperty]
+        private ResourceInfo?       _spriteResInfo;
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CruZ.Resource;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -30,7 +31,7 @@ namespace CruZ.Scene
                     try
                     {
                         SceneAssets[assetPath] = (GameScene)method.Invoke(null, BindingFlags.DoNotWrapExceptions, null, null, null);
-                        SceneAssets[assetPath].ResourcePath = assetPath;
+                        SceneAssets[assetPath].ResourceInfo = ResourceInfo.Create(assetPath, true);
                     }
                     catch
                     {
@@ -43,7 +44,7 @@ namespace CruZ.Scene
 
         public static GameScene GetSceneAssets(string assetName)
         {
-            if (!SceneAssets.ContainsKey(assetName)) 
+            if (!SceneAssets.ContainsKey(assetName))
                 throw new SceneAssetNotFoundException($"Asset {assetName} not available");
 
             return SceneAssets[assetName];

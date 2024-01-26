@@ -1,33 +1,19 @@
-﻿using CruZ.Serialization;
+﻿using CruZ.Resource;
+using CruZ.Serialization;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
+using System.Runtime.Serialization;
 
 namespace CruZ.Components
 {
-    public partial class SpriteComponent : ISerializable
+    public partial class SpriteComponent
     {
-        public void ReadJson(JsonReader reader, JsonSerializer serializer)
+        [OnDeserialized]
+        void OnDeserialized(StreamingContext context)
         {
-            var jObject = JObject.Load(reader);
-            _textureURI = jObject["_resourceName"].Value<string>();
-            LayerDepth = jObject["LayerDepth"].Value<float>();
-            LoadTexture(_textureURI);
-        }
-
-        public void WriteJson(JsonWriter writer, JsonSerializer serializer)
-        {
-            writer.WriteStartObject();
-            writer.WritePropertyName("_resourceName");
-            writer.WriteValue(_textureURI);
-            writer.WritePropertyName("LayerDepth");
-            writer.WriteValue(LayerDepth);
-            writer.WriteEnd();
-        }
-
-        ISerializable ISerializable.CreateDefault()
-        {
-            return new SpriteComponent();
+            if(_spriteResInfo != null)
+                LoadTexture(_spriteResInfo.ResourceName);
         }
     }
 }

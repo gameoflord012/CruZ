@@ -32,17 +32,23 @@ namespace CruZ.Editor
 
             string sceneFile = files[0];
 
-            var scene = ResourceManager.LoadResource<GameScene>(sceneFile);
+            var scene = ResourceManager.LoadResource<GameScene>(sceneFile, out _);
             worldViewControl.LoadScene(scene);
         }
 
-        private void saveSceneToolStripMenuItem_Click(object sender, EventArgs e)
+        private void saveSceneToolStripMenuItem_Click(object sender, EventArgs args)
         {
             if (worldViewControl.CurrentGameScene == null) return;
 
-            ResourceManager.CreateResource(
-                worldViewControl.CurrentGameScene,
-                true);
+            try
+            {
+                ResourceManager.SaveResource(worldViewControl.CurrentGameScene);
+            }
+            catch(System.Exception e)
+            {
+                ShowExceptionDialog(e);
+            }
+
         }
 
         private void fileToolStripMenuItem_Click(object sender, EventArgs e)
@@ -52,11 +58,10 @@ namespace CruZ.Editor
         private void saveAsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var savePath = DialogHelper.GetSaveScenePath();
-            if(savePath == null) return;
-
-            worldViewControl.CurrentGameScene.ResourcePath = savePath;
+            if (savePath == null) return;
 
             ResourceManager.CreateResource(
+                savePath,
                 worldViewControl.CurrentGameScene, 
                 true);
         }
@@ -74,13 +79,18 @@ namespace CruZ.Editor
             }
             catch (SceneAssetNotFoundException ex)
             {
-                MessageBox.Show(
-                    $"{ex}\nInner Error: {ex.InnerException}",
-                    "Error", 
-                    MessageBoxButtons.OK, 
-                    MessageBoxIcon.Error
-                );
+                ShowExceptionDialog(ex);
             }
+        }
+
+        private static void ShowExceptionDialog(System.Exception ex)
+        {
+            MessageBox.Show(
+                $"{ex}\nInner Error: {ex.InnerException}",
+                "Error",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Error
+            );
         }
 
         public static EditorForm Instance => _instance ??= new EditorForm();

@@ -51,9 +51,15 @@ namespace CruZ.Components
             args.SourceRectangle = new(_idX * TileSize, _idY * TileSize, TileSize, TileSize);
 
             var delt = args.SourceRectangle.Center - args.Texture.Bounds.Center;
+
             args.Position += new Vector2(
                 delt.X * _e.Transform.Scale.X, 
                 delt.Y * _e.Transform.Scale.Y);
+
+            if(_sp.YLayerDepth)
+            {
+                args.LayerDepth = (args.Position.Y / 1000 + 1) / 2;
+            }
         }
 
         private void Sprite_OnDrawEnd(object? sender, DrawEndEventArgs e)

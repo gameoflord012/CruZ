@@ -25,13 +25,16 @@ namespace CruZ.Scene
             player.GetComponent<SpriteComponent>().LayerDepth = 0.2f;
             player.AddComponent(anim);
             player.Transform.Scale = new(0.1f, 0.1f);
+            var player_sp = player.GetComponent<SpriteComponent>();
+            player_sp.SortingLayer = 1;
+            player_sp.YLayerDepth = true;
 
-            var dungegonFloor = ECS.CreateEntity();
-            dungegonFloor.Name = "dungeonFloor";
-            dungegonFloor.AddComponent(new SpriteComponent());
-            dungegonFloor.AddComponent(new TileComponent());
-            var dungeonFloor_sp = dungegonFloor.GetComponent<SpriteComponent>();
-            dungeonFloor_sp.LayerDepth = 0.1f;
+            var dungeonFloor = ECS.CreateEntity();
+            dungeonFloor.Name = "dungeonFloor";
+            dungeonFloor.AddComponent(new SpriteComponent());
+            dungeonFloor.AddComponent(new TileComponent());
+            var dungeonFloor_sp = dungeonFloor.GetComponent<SpriteComponent>();
+            dungeonFloor_sp.SortingLayer = 0;
             dungeonFloor_sp.LoadTexture("tiles\\dungeon-floor");
 
             var dungeonWall = ECS.CreateEntity();
@@ -39,8 +42,10 @@ namespace CruZ.Scene
             dungeonWall.AddComponent(new TileComponent());
             var dungeonWall_sp = dungeonWall.GetComponent<SpriteComponent>();
             dungeonWall_sp.LoadTexture("tiles\\dungeon-wall");
+            dungeonWall_sp.SortingLayer = 1;
+            dungeonWall_sp.YLayerDepth = true;
 
-            scene.AddEntity(dungegonFloor);
+            scene.AddEntity(dungeonFloor);
             scene.AddEntity(dungeonWall);
             scene.AddEntity(player);
 

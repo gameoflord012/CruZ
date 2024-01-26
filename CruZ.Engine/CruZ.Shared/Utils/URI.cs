@@ -11,10 +11,10 @@
 //            ValidateURI(_uri);
 //        }
 
-//        public string GetFullPath(string sourcePrefix)
+//        public string GetFullResPath(string sourcePrefix)
 //        {
 //            return Path.Combine(
-//                Path.GetFullPath(sourcePrefix), _uri);
+//                Path.GetFullResPath(sourcePrefix), _uri);
 //        }
 
 //        public static void ValidateURI(string uri)

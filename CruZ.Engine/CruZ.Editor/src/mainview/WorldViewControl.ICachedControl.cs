@@ -21,7 +21,7 @@ namespace CruZ.Editor.Controls
                 
                 try
                 {
-                    GameScene toLoad = ResourceManager.LoadResource<GameScene>(lastScenePath);
+                    var toLoad = ResourceManager.LoadResource<GameScene>(lastScenePath);
                     LoadScene(toLoad);
                 }
                 catch 
@@ -34,17 +34,8 @@ namespace CruZ.Editor.Controls
         public string WriteCache()
         {
             if(CurrentGameScene == null) return "";
-            return CurrentGameScene.ResourcePath;
-        }
-
-        private bool IsSceneFromFile(GameScene scene)
-        {
-            return IsSceneFromFile(scene.ResourcePath);
-        }
-
-        private bool IsSceneFromFile(string scenePath)
-        {
-            return Path.GetExtension(scenePath) == "scene";
+            ResourceManager.SaveResource(CurrentGameScene);
+            return CurrentGameScene.ResourceInfo.ResourceName;
         }
     }
 }

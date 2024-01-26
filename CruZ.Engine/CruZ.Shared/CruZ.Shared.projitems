@@ -24,7 +24,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)System\Entity\Interface\IComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System\Input\Input.Static.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System\Entity\TransformEntity.Disposable.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)System\Resource\IHasResourcePath.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)System\Resource\ResourceInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System\Scene\GameScene.Disposable.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System\Scene\SceneAssetMethodAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System\Scene\SceneAssetClassAttribute.cs" />

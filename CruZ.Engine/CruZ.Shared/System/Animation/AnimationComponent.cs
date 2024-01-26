@@ -37,6 +37,8 @@ namespace CruZ.Components
 
         public void Load(SpriteComponent sprite)
         {
+            if(_sprite == sprite) return;
+
             UnLoad();
             _sprite = sprite;
 
@@ -51,6 +53,8 @@ namespace CruZ.Components
                 _sprite.OnDrawBegin  -= Sprite_OnDrawBegin;
                 _sprite.OnDrawEnd    -= Sprite_OnDrawEnd;
             }
+
+            _sprite = null;
         }
 
         private void Sprite_OnDrawBegin(object? sender, DrawBeginEventArgs e)
@@ -89,6 +93,9 @@ namespace CruZ.Components
 
         public AnimationPlayer SelectPlayer(string key)
         {
+            if(_currentAnimationPlayer == _getAnimationPlayer[key]) 
+                return _currentAnimationPlayer;
+
             _currentAnimationPlayer?.UnLoad();
             _currentAnimationPlayer = _getAnimationPlayer[key];
             _currentAnimationPlayer.Load(_sprite);
