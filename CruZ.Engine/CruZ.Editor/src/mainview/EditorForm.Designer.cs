@@ -35,19 +35,19 @@ namespace CruZ.Editor
         {
             splitContainer1 = new SplitContainer();
             worldViewControl = new WorldViewControl();
-            propertyGrid1 = new PropertyGrid();
-            menuStrip1 = new MenuStrip();
-            fileToolStripMenuItem = new ToolStripMenuItem();
-            sceneToolStripMenuItem = new ToolStripMenuItem();
-            openSceneToolStripMenuItem = new ToolStripMenuItem();
-            saveSceneToolStripMenuItem = new ToolStripMenuItem();
-            saveAsToolStripMenuItem = new ToolStripMenuItem();
-            loadSceneToolStripMenuItem = new ToolStripMenuItem();
+            inspector_PropertyGrid = new PropertyGrid();
+            menuStrip = new MenuStrip();
+            file_Menu = new ToolStripMenuItem();
+            scene_Menu = new ToolStripMenuItem();
+            openScene_MenuButton = new ToolStripMenuItem();
+            saveScene_MenuButton = new ToolStripMenuItem();
+            saveAsScene_MenuButton = new ToolStripMenuItem();
+            loadScene_MenuButton = new ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
             splitContainer1.Panel2.SuspendLayout();
             splitContainer1.SuspendLayout();
-            menuStrip1.SuspendLayout();
+            menuStrip.SuspendLayout();
             SuspendLayout();
             // 
             // splitContainer1
@@ -63,7 +63,7 @@ namespace CruZ.Editor
             // 
             // splitContainer1.Panel2
             // 
-            splitContainer1.Panel2.Controls.Add(propertyGrid1);
+            splitContainer1.Panel2.Controls.Add(inspector_PropertyGrid);
             splitContainer1.Size = new Size(700, 314);
             splitContainer1.SplitterDistance = 419;
             splitContainer1.TabIndex = 0;
@@ -78,68 +78,68 @@ namespace CruZ.Editor
             worldViewControl.Size = new Size(419, 314);
             worldViewControl.TabIndex = 0;
             // 
-            // propertyGrid1
+            // inspector_PropertyGrid
             // 
-            propertyGrid1.Dock = DockStyle.Fill;
-            propertyGrid1.Location = new Point(0, 0);
-            propertyGrid1.Name = "propertyGrid1";
-            propertyGrid1.Size = new Size(277, 314);
-            propertyGrid1.TabIndex = 0;
+            inspector_PropertyGrid.Dock = DockStyle.Fill;
+            inspector_PropertyGrid.Location = new Point(0, 0);
+            inspector_PropertyGrid.Name = "inspector_PropertyGrid";
+            inspector_PropertyGrid.Size = new Size(277, 314);
+            inspector_PropertyGrid.TabIndex = 0;
             // 
-            // menuStrip1
+            // menuStrip
             // 
-            menuStrip1.BackColor = SystemColors.Control;
-            menuStrip1.ImageScalingSize = new Size(20, 20);
-            menuStrip1.Items.AddRange(new ToolStripItem[] { fileToolStripMenuItem });
-            menuStrip1.Location = new Point(0, 0);
-            menuStrip1.Name = "menuStrip1";
-            menuStrip1.Padding = new Padding(5, 2, 0, 2);
-            menuStrip1.Size = new Size(700, 24);
-            menuStrip1.TabIndex = 1;
-            menuStrip1.Text = "menuStrip1";
+            menuStrip.BackColor = SystemColors.Control;
+            menuStrip.ImageScalingSize = new Size(20, 20);
+            menuStrip.Items.AddRange(new ToolStripItem[] { file_Menu });
+            menuStrip.Location = new Point(0, 0);
+            menuStrip.Name = "menuStrip";
+            menuStrip.Padding = new Padding(5, 2, 0, 2);
+            menuStrip.Size = new Size(700, 24);
+            menuStrip.TabIndex = 1;
+            menuStrip.Text = "menuStrip1";
             // 
-            // fileToolStripMenuItem
+            // file_Menu
             // 
-            fileToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { sceneToolStripMenuItem });
-            fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-            fileToolStripMenuItem.Size = new Size(37, 20);
-            fileToolStripMenuItem.Text = "File";
-            fileToolStripMenuItem.Click += fileToolStripMenuItem_Click;
+            file_Menu.DropDownItems.AddRange(new ToolStripItem[] { scene_Menu });
+            file_Menu.Name = "file_Menu";
+            file_Menu.Size = new Size(37, 20);
+            file_Menu.Text = "File";
+            file_Menu.Click += File_Menu_Clicked;
             // 
-            // sceneToolStripMenuItem
+            // scene_Menu
             // 
-            sceneToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { openSceneToolStripMenuItem, saveSceneToolStripMenuItem, saveAsToolStripMenuItem, loadSceneToolStripMenuItem });
-            sceneToolStripMenuItem.Name = "sceneToolStripMenuItem";
-            sceneToolStripMenuItem.Size = new Size(105, 22);
-            sceneToolStripMenuItem.Text = "Scene";
+            scene_Menu.DropDownItems.AddRange(new ToolStripItem[] { openScene_MenuButton, saveScene_MenuButton, saveAsScene_MenuButton, loadScene_MenuButton });
+            scene_Menu.Name = "scene_Menu";
+            scene_Menu.Size = new Size(180, 22);
+            scene_Menu.Text = "Scene";
             // 
-            // openSceneToolStripMenuItem
+            // openScene_MenuButton
             // 
-            openSceneToolStripMenuItem.Name = "openSceneToolStripMenuItem";
-            openSceneToolStripMenuItem.Size = new Size(137, 22);
-            openSceneToolStripMenuItem.Text = "Open Scene";
-            openSceneToolStripMenuItem.Click += openSceneToolStripMenuItem_Click;
+            openScene_MenuButton.Name = "openScene_MenuButton";
+            openScene_MenuButton.Size = new Size(180, 22);
+            openScene_MenuButton.Text = "Open Scene";
+            openScene_MenuButton.Click += OpenScene_Clicked;
             // 
-            // saveSceneToolStripMenuItem
+            // saveScene_MenuButton
             // 
-            saveSceneToolStripMenuItem.Name = "saveSceneToolStripMenuItem";
-            saveSceneToolStripMenuItem.Size = new Size(137, 22);
-            saveSceneToolStripMenuItem.Text = "Save Scene";
-            saveSceneToolStripMenuItem.Click += saveSceneToolStripMenuItem_Click;
+            saveScene_MenuButton.Name = "saveScene_MenuButton";
+            saveScene_MenuButton.Size = new Size(180, 22);
+            saveScene_MenuButton.Text = "Save Scene";
+            saveScene_MenuButton.Click += SaveScene_Clicked;
             // 
-            // saveAsToolStripMenuItem
+            // saveAsScene_MenuButton
             // 
-            saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
-            saveAsToolStripMenuItem.Size = new Size(137, 22);
-            saveAsToolStripMenuItem.Text = "Save As ...";
-            saveAsToolStripMenuItem.Click += saveAsToolStripMenuItem_Click;
+            saveAsScene_MenuButton.Name = "saveAsScene_MenuButton";
+            saveAsScene_MenuButton.Size = new Size(180, 22);
+            saveAsScene_MenuButton.Text = "Save As ...";
+            saveAsScene_MenuButton.Click += SaveAsScene_Clicked;
             // 
-            // loadSceneToolStripMenuItem
+            // loadScene_MenuButton
             // 
-            loadSceneToolStripMenuItem.Name = "loadSceneToolStripMenuItem";
-            loadSceneToolStripMenuItem.Size = new Size(137, 22);
-            loadSceneToolStripMenuItem.Text = "Load Scene";
-            loadSceneToolStripMenuItem.Click += loadSceneToolStripMenuItem_Click;
+            loadScene_MenuButton.Name = "loadScene_MenuButton";
+            loadScene_MenuButton.Size = new Size(180, 22);
+            loadScene_MenuButton.Text = "Load Scene";
+            loadScene_MenuButton.Click += LoadScene_Clicked;
             // 
             // EditorForm
             // 
@@ -147,8 +147,8 @@ namespace CruZ.Editor
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(700, 338);
             Controls.Add(splitContainer1);
-            Controls.Add(menuStrip1);
-            MainMenuStrip = menuStrip1;
+            Controls.Add(menuStrip);
+            MainMenuStrip = menuStrip;
             Margin = new Padding(3, 2, 3, 2);
             Name = "EditorForm";
             Text = "EditorForm";
@@ -156,8 +156,8 @@ namespace CruZ.Editor
             splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)splitContainer1).EndInit();
             splitContainer1.ResumeLayout(false);
-            menuStrip1.ResumeLayout(false);
-            menuStrip1.PerformLayout();
+            menuStrip.ResumeLayout(false);
+            menuStrip.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -166,13 +166,13 @@ namespace CruZ.Editor
 
         private SplitContainer splitContainer1;
         private WorldViewControl worldViewControl;
-        private MenuStrip menuStrip1;
-        private ToolStripMenuItem fileToolStripMenuItem;
-        private ToolStripMenuItem sceneToolStripMenuItem;
-        private ToolStripMenuItem saveSceneToolStripMenuItem;
-        private ToolStripMenuItem loadSceneToolStripMenuItem;
-        private ToolStripMenuItem saveAsToolStripMenuItem;
-        private ToolStripMenuItem openSceneToolStripMenuItem;
-        private PropertyGrid propertyGrid1;
+        private MenuStrip menuStrip;
+        private ToolStripMenuItem file_Menu;
+        private ToolStripMenuItem scene_Menu;
+        private ToolStripMenuItem saveScene_MenuButton;
+        private ToolStripMenuItem loadScene_MenuButton;
+        private ToolStripMenuItem saveAsScene_MenuButton;
+        private ToolStripMenuItem openScene_MenuButton;
+        private PropertyGrid inspector_PropertyGrid;
     }
 }

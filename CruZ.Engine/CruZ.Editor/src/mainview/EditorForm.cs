@@ -8,7 +8,7 @@ namespace CruZ.Editor
 {
     public partial class EditorForm : Form
     {
-        public PropertyGrid Inspector_PropertyGrid { get => propertyGrid1; }
+        public PropertyGrid Inspector_PropertyGrid { get => inspector_PropertyGrid; }
         private EditorForm()
         {
             InitializeComponent();
@@ -25,7 +25,7 @@ namespace CruZ.Editor
             CacheService.CallWriteCaches();
         }
 
-        private void openSceneToolStripMenuItem_Click(object sender, EventArgs e)
+        private void OpenScene_Clicked(object sender, EventArgs e)
         {
             var files = DialogHelper.SelectSceneFile(false);
             if (files.Count() == 0) return;
@@ -36,7 +36,7 @@ namespace CruZ.Editor
             worldViewControl.LoadScene(scene);
         }
 
-        private void saveSceneToolStripMenuItem_Click(object sender, EventArgs args)
+        private void SaveScene_Clicked(object sender, EventArgs args)
         {
             if (worldViewControl.CurrentGameScene == null) return;
 
@@ -51,11 +51,11 @@ namespace CruZ.Editor
 
         }
 
-        private void fileToolStripMenuItem_Click(object sender, EventArgs e)
+        private void File_Menu_Clicked(object sender, EventArgs e)
         {
         }
 
-        private void saveAsToolStripMenuItem_Click(object sender, EventArgs e)
+        private void SaveAsScene_Clicked(object sender, EventArgs e)
         {
             var savePath = DialogHelper.GetSaveScenePath();
             if (savePath == null) return;
@@ -66,12 +66,12 @@ namespace CruZ.Editor
                 true);
         }
 
-        static EditorForm? _instance;
-
-        private void loadSceneToolStripMenuItem_Click(object sender, EventArgs e)
+        private void LoadScene_Clicked(object sender, EventArgs e)
         {
             string input = Microsoft.VisualBasic.Interaction.InputBox(
                 "Enter Scene name to load", "Load scene Prompt");
+
+            if(string.IsNullOrWhiteSpace(input)) return;
 
             try
             {
@@ -83,7 +83,7 @@ namespace CruZ.Editor
             }
         }
 
-        private static void ShowExceptionDialog(System.Exception ex)
+        private void ShowExceptionDialog(System.Exception ex)
         {
             MessageBox.Show(
                 $"{ex}\nInner Error: {ex.InnerException}",
@@ -92,7 +92,8 @@ namespace CruZ.Editor
                 MessageBoxIcon.Error
             );
         }
-
+        
+        static EditorForm? _instance;
         public static EditorForm Instance => _instance ??= new EditorForm();
     }
 }
