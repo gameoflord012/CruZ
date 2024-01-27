@@ -1,5 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.Linq;
 
 namespace CruZ.Editor
@@ -23,6 +25,17 @@ namespace CruZ.Editor
             }
 
             return props;
+        }
+
+        public override object? ConvertTo(ITypeDescriptorContext? context, CultureInfo? culture, object? value, Type destinationType)
+        {
+            if(destinationType == typeof(string))
+            {
+                var wrapper = (ComponentsWrapper)value;
+                return $"{wrapper.Components.Count()} Components";
+            }
+
+            return base.ConvertTo(context, culture, value, destinationType);
         }
     }
 }

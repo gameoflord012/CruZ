@@ -13,6 +13,12 @@ namespace CruZ.Editor
         public void DisplayEntity(TransformEntity e)
         {
             PropertyGrid.SelectedObject = new EntityWrapper(e);
+            EditorForm.Instance.WorldViewControl.DrawEvent += WorldViewControl_DrawEvent;
+        }
+
+        private void WorldViewControl_DrawEvent(XNA.GameTime obj)
+        {
+            PropertyGrid.Refresh();
         }
 
         static Inspector? _instance;

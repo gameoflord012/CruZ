@@ -7,7 +7,7 @@ using System.Windows.Forms;
 
 namespace CruZ.Editor.Controls
 {
-    internal partial class WorldViewControl : ICacheControl
+    public partial class WorldViewControl : ICacheControl
     {
         public Control Control => this;
         public event    EventHandler<bool> CanReadCacheChanged;

@@ -10,7 +10,7 @@ using System.Windows.Forms;
 
 namespace CruZ.Editor.Controls
 {
-    internal partial class WorldViewControl : MonoGame.Forms.NET.Controls.InvalidationControl, IECSContextProvider, IApplicationContextProvider, IInputContextProvider
+    public partial class WorldViewControl : MonoGame.Forms.NET.Controls.InvalidationControl, IECSContextProvider, IApplicationContextProvider, IInputContextProvider
     {
         public event Action<GameTime> DrawEvent;
         public event Action<GameTime> UpdateEvent;

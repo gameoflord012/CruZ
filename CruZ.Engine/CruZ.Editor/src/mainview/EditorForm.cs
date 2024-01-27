@@ -1,4 +1,5 @@
-﻿using CruZ.Resource;
+﻿using CruZ.Editor.Controls;
+using CruZ.Resource;
 using CruZ.Scene;
 using System;
 using System.Linq;
@@ -8,7 +9,9 @@ namespace CruZ.Editor
 {
     public partial class EditorForm : Form
     {
-        public PropertyGrid Inspector_PropertyGrid { get => inspector_PropertyGrid; }
+        public PropertyGrid Inspector_PropertyGrid  { get => inspector_PropertyGrid; }
+        public WorldViewControl WorldViewControl    { get => worldViewControl; }
+
         private EditorForm()
         {
             InitializeComponent();

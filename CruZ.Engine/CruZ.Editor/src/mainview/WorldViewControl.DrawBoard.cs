@@ -5,7 +5,7 @@ using MonoGame.Extended;
 
 namespace CruZ.Editor.Controls
 {
-    partial class WorldViewControl
+    public partial class WorldViewControl
     {
         private void DrawAxis()
         {

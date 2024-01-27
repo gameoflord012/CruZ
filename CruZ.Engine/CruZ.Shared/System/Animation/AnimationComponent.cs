@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 
 namespace CruZ.Components
@@ -76,7 +77,8 @@ namespace CruZ.Components
 
     public class AnimationComponent : IComponent, IComponentCallback, ISerializable
     {
-        public Type ComponentType   => typeof(AnimationComponent);
+        [Browsable(false)]
+        public Type ComponentType => typeof(AnimationComponent);
 
         public void LoadSpriteSheet(string resourcePath, string animationPlayerKey)
         {

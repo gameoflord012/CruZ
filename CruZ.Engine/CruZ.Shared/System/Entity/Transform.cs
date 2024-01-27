@@ -22,10 +22,12 @@ namespace CruZ.Components
 
     
     [TypeConverter(typeof(ExpandableObjectConverter))]
-    public partial class Transform
+    public partial class Transform : INotifyPropertyChanged
     {
         public event EventHandler<TransformEventArgs> OnPositionChanged;
         public event EventHandler<TransformEventArgs> OnScaleChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
+
         public Transform()
         {
             _position = Vector3.Zero;
@@ -41,13 +43,27 @@ namespace CruZ.Components
         
         public Vector3 Scale { 
             get => _scale; 
-            set { _scale = value; OnScaleChanged?.Invoke(this, TransformEventArgs.Create(this)); } 
+            set { 
+                _scale = value; 
+                OnScaleChanged?.Invoke(this, TransformEventArgs.Create(this)); 
+                //InvokeChanged(nameof(Scale));
+            } 
         }
         
         public Vector3 Position 
         { 
             get => _position;
-            set { _position = value; OnPositionChanged?.Invoke(this, TransformEventArgs.Create(this)); }
+            set 
+            { 
+                _position = value; 
+                OnPositionChanged?.Invoke(this, TransformEventArgs.Create(this)); 
+                //InvokeChanged(nameof(Position));
+            }
+        }
+
+        private void InvokeChanged(string propName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propName));
         }
 
         Vector3 _position;
