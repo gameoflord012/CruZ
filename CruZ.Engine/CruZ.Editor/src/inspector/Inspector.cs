@@ -19,7 +19,6 @@ namespace CruZ.Editor
         private void WorldViewControl_DrawEvent(XNA.GameTime obj)
         {
             if(PropertyGrid.ContainsFocus) return;
-
             PropertyGrid.Refresh();
         }
 

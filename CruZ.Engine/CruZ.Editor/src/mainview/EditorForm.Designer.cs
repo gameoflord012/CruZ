@@ -35,6 +35,7 @@ namespace CruZ.Editor
         {
             splitContainer1 = new SplitContainer();
             worldViewControl = new WorldViewControl();
+            entities_ComboBox = new ComboBox();
             inspector_PropertyGrid = new PropertyGrid();
             menuStrip = new MenuStrip();
             file_Menu = new ToolStripMenuItem();
@@ -63,6 +64,7 @@ namespace CruZ.Editor
             // 
             // splitContainer1.Panel2
             // 
+            splitContainer1.Panel2.Controls.Add(entities_ComboBox);
             splitContainer1.Panel2.Controls.Add(inspector_PropertyGrid);
             splitContainer1.Size = new Size(700, 314);
             splitContainer1.SplitterDistance = 419;
@@ -78,12 +80,21 @@ namespace CruZ.Editor
             worldViewControl.Size = new Size(419, 314);
             worldViewControl.TabIndex = 0;
             // 
+            // entities_ComboBox
+            // 
+            entities_ComboBox.Dock = DockStyle.Top;
+            entities_ComboBox.FormattingEnabled = true;
+            entities_ComboBox.Location = new Point(0, 0);
+            entities_ComboBox.Name = "entities_ComboBox";
+            entities_ComboBox.Size = new Size(277, 23);
+            entities_ComboBox.TabIndex = 1;
+            // 
             // inspector_PropertyGrid
             // 
-            inspector_PropertyGrid.Dock = DockStyle.Fill;
-            inspector_PropertyGrid.Location = new Point(0, 0);
+            inspector_PropertyGrid.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            inspector_PropertyGrid.Location = new Point(0, 29);
             inspector_PropertyGrid.Name = "inspector_PropertyGrid";
-            inspector_PropertyGrid.Size = new Size(277, 314);
+            inspector_PropertyGrid.Size = new Size(277, 285);
             inspector_PropertyGrid.TabIndex = 0;
             // 
             // menuStrip
@@ -110,34 +121,34 @@ namespace CruZ.Editor
             // 
             scene_Menu.DropDownItems.AddRange(new ToolStripItem[] { openScene_MenuButton, saveScene_MenuButton, saveAsScene_MenuButton, loadScene_MenuButton });
             scene_Menu.Name = "scene_Menu";
-            scene_Menu.Size = new Size(180, 22);
+            scene_Menu.Size = new Size(105, 22);
             scene_Menu.Text = "Scene";
             // 
             // openScene_MenuButton
             // 
             openScene_MenuButton.Name = "openScene_MenuButton";
-            openScene_MenuButton.Size = new Size(180, 22);
+            openScene_MenuButton.Size = new Size(137, 22);
             openScene_MenuButton.Text = "Open Scene";
             openScene_MenuButton.Click += OpenScene_Clicked;
             // 
             // saveScene_MenuButton
             // 
             saveScene_MenuButton.Name = "saveScene_MenuButton";
-            saveScene_MenuButton.Size = new Size(180, 22);
+            saveScene_MenuButton.Size = new Size(137, 22);
             saveScene_MenuButton.Text = "Save Scene";
             saveScene_MenuButton.Click += SaveScene_Clicked;
             // 
             // saveAsScene_MenuButton
             // 
             saveAsScene_MenuButton.Name = "saveAsScene_MenuButton";
-            saveAsScene_MenuButton.Size = new Size(180, 22);
+            saveAsScene_MenuButton.Size = new Size(137, 22);
             saveAsScene_MenuButton.Text = "Save As ...";
             saveAsScene_MenuButton.Click += SaveAsScene_Clicked;
             // 
             // loadScene_MenuButton
             // 
             loadScene_MenuButton.Name = "loadScene_MenuButton";
-            loadScene_MenuButton.Size = new Size(180, 22);
+            loadScene_MenuButton.Size = new Size(137, 22);
             loadScene_MenuButton.Text = "Load Scene";
             loadScene_MenuButton.Click += LoadScene_Clicked;
             // 
@@ -174,5 +185,6 @@ namespace CruZ.Editor
         private ToolStripMenuItem saveAsScene_MenuButton;
         private ToolStripMenuItem openScene_MenuButton;
         private PropertyGrid inspector_PropertyGrid;
+        private ComboBox entities_ComboBox;
     }
 }
