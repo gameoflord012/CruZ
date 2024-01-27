@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Windows.Forms;
 
 namespace CruZ.Editor.Controls
@@ -10,8 +11,8 @@ namespace CruZ.Editor.Controls
         event EventHandler<bool> CanReadCacheChanged;
 
         string UniquedCachedPath { get; }
-        string WriteCache();
-
-        void ReadCache(string cacheString);
+        
+        void WriteCache(Stream stream);
+        void ReadCache(Stream stream);
     }
 }

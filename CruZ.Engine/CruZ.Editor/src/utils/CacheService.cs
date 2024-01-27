@@ -73,11 +73,10 @@ namespace CruZ.Editor
                 File.Create(cachePath).Close();
             }
 
-            var cacheString = File.ReadAllText(cachePath);
-
             try
             {
-                cacheControl.ReadCache(cacheString);
+                using var file = File.OpenRead(cachePath);
+                cacheControl.ReadCache(file);
             }
             catch
             {
@@ -87,8 +86,9 @@ namespace CruZ.Editor
 
         private static void WriteCache(ICacheControl cacheControl)
         {
-            var cachedString = cacheControl.WriteCache();
-            File.WriteAllText(GetCachePath(cacheControl), cachedString);
+            var cachePath = GetCachePath(cacheControl);
+            using var file = File.OpenWrite(cachePath);
+            cacheControl.WriteCache(file);
         }
 
         public static string GetCachePath(ICacheControl cachedControl)
