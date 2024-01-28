@@ -23,8 +23,6 @@ namespace CruZ.Editor.Controls
             _attachedEntity.OnRemoveFromWorld += attachedEntity_OnRemoveFromWorld;
 
             Size = new(ButtonSize, ButtonSize);
-
-            UndoService.Registers.Add(this);
         }
 
         private void attachedEntity_OnRemoveFromWorld(object? sender, EventArgs e)
@@ -84,7 +82,6 @@ namespace CruZ.Editor.Controls
             if (mevent.Button == MouseButtons.Left && _isMouseEntered)
             {
                 _isDragging = true;
-                UndoService.Capture();
             }
         }
 
@@ -95,6 +92,7 @@ namespace CruZ.Editor.Controls
             if (mevent.Button == MouseButtons.Left)
             {
                 _isDragging = false;
+                UndoService.Capture(this);
             }
         }
 
@@ -138,6 +136,14 @@ namespace CruZ.Editor.Controls
             Location = (Point)state;
             UpdateEntityPosition();
             Invalidate();
+        }
+
+        public bool StatesIdentical(object stateA, object stateB)
+        {
+            var locA = (Point)stateA;
+            var locB = (Point)stateB;
+
+            return locA.Equals(locB);
         }
 
         private TransformEntity _attachedEntity;

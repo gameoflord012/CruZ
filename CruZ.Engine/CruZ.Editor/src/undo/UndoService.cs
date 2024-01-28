@@ -1,5 +1,8 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
 
 namespace CruZ.Editor.Systems
 {
@@ -7,38 +10,36 @@ namespace CruZ.Editor.Systems
     { 
         object CaptureState();
         void RestoreState(object state);
+        bool StatesIdentical(object stateA, object stateB);
     }
 
     public static class UndoService
     {
         public static List<ICanUndo> Registers = [];
-        public static List<Dictionary<ICanUndo, object>> stateStack = [];
+        public static List<KeyValuePair<ICanUndo, object>> stateStack = [];
         private static int _stackInd = -1;
 
-        public static void Capture()
+        public static void Capture(ICanUndo register)
         {
-            return;
-            if(_stackInd < stateStack.Count - 1)
+            if (_stackInd < stateStack.Count - 1)
                 stateStack.RemoveRange(_stackInd + 1, stateStack.Count - _stackInd - 1);
 
-            var state = new Dictionary<ICanUndo, object>();
-            
-            foreach (var register in Registers)
-            {
-                state[register] = register.CaptureState();
-            }
+            var capture = register.CaptureState();
 
-            stateStack.Add(state);
-            _stackInd++;
+            if (!Identical(register, capture))
+            {
+                Push(register, capture);
+            }
         }
 
         public static void Undo()
         {
-            if(_stackInd >= 0)
+            while(_stackInd > 0 && Unchanged())
             {
-                Restore();
-                _stackInd--;
+                Pop();
             }
+
+            Restore();
         }
 
         public static void Redo()
@@ -50,12 +51,57 @@ namespace CruZ.Editor.Systems
             }
         }
 
+        public static bool Unchanged()
+        {
+            return Identical(
+                PeakRegister(),
+                PeakRegister().CaptureState());
+        }
+
         private static void Restore()
         {
-            foreach (var register in Registers)
-            {
-                register.RestoreState(stateStack[_stackInd][register]);
-            }
+            PeakRegister().RestoreState(PeakStateObj());
+        }
+
+        private static bool Identical(ICanUndo register, object state)
+        {
+            if(_stackInd < 0)               return false;
+            if(register != PeakRegister())  return false;
+
+            return register.StatesIdentical(PeakStateObj(), state);
+        }
+
+        private static void Push(ICanUndo register, object state)
+        {
+            stateStack.Add(new(register, state));
+            _stackInd++;
+        }
+
+        private static void Pop()
+        {
+            if(_stackInd < 0) return;
+            _stackInd--;
+        }
+
+        private static KeyValuePair<ICanUndo, object> Peak()
+        {
+            Trace.Assert(_stackInd >= 0);
+            return stateStack[_stackInd];
+        }
+
+        private static ICanUndo PeakRegister()
+        {
+            return Peak().Key;
+        }
+
+        private static object PeakStateObj()
+        {
+            return Peak().Value;
+        }
+
+        private static bool StackEmpty()
+        {
+            return _stackInd < 0;
         }
     }
 }
