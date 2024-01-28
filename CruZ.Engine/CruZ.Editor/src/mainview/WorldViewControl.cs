@@ -1,4 +1,5 @@
 ﻿using CruZ.Components;
+using CruZ.Editor.Systems;
 using CruZ.Systems;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
@@ -16,6 +17,7 @@ namespace CruZ.Editor.Controls
         public event Action<GameTime> UpdateEvent;
         public event Action InitializeSystemEvent;
         public event Action<GameTime> UpdateInputEvent { add { UpdateEvent += value; } remove { UpdateEvent -= value; } }
+        public event EventHandler<GameScene> SceneLoadEvent;
         public event EventHandler<TransformEntity> OnSelectedEntityChanged;
 
         public GraphicsDevice GraphicsDevice => Editor.GraphicsDevice;
@@ -84,6 +86,7 @@ namespace CruZ.Editor.Controls
 
             _currentScene = scene;
             _currentScene.SetActive(true);
+            SceneLoadEvent.Invoke(this, _currentScene);
 
             InitEntityControl();
         }
@@ -96,6 +99,14 @@ namespace CruZ.Editor.Controls
             _currentScene.Dispose();
         }
 
+        public void SelectEntity(TransformEntity e)
+        {
+            if (e == _currentSelectedEntity) return;
+
+            _currentSelectedEntity = e;
+            OnSelectedEntityChanged?.Invoke(this, _currentSelectedEntity);
+        }
+        
         protected override void OnResize(EventArgs e)
         {
             base.OnResize(e);
@@ -119,7 +130,7 @@ namespace CruZ.Editor.Controls
         {
             base.OnMouseMove(e);
 
-            if (_isMouseDragging)
+            if (_isMouseDraggingCamera)
             {
                 var scale = Camera.Main.ScreenToWorldScale();
                 var delt = new Vector3(
@@ -134,9 +145,9 @@ namespace CruZ.Editor.Controls
         {
             base.OnMouseDown(e);
 
-            if (e.Button == _cameraMouseDragButton && !_isMouseDragging)
+            if (e.Button == _cameraMouseDragButton && !_isMouseDraggingCamera)
             {
-                _isMouseDragging = true;
+                _isMouseDraggingCamera = true;
                 _mouseStartDragPoint = e.Location;
                 _cameraStartDragCoord = Camera.Main.Position;
             }
@@ -148,7 +159,7 @@ namespace CruZ.Editor.Controls
 
             if (e.Button == _cameraMouseDragButton)
             {
-                _isMouseDragging = false;
+                _isMouseDraggingCamera = false;
             }
         }
 
@@ -165,14 +176,6 @@ namespace CruZ.Editor.Controls
             }
         }
 
-        private void SelectEntity(TransformEntity e)
-        {
-            if (e == _currentSelectedEntity) return;
-
-            _currentSelectedEntity = e;
-            OnSelectedEntityChanged?.Invoke(this, _currentSelectedEntity);
-        }
-
         private void EntityBtn_MouseDown(object? sender, EventArgs e)
         {
             SelectEntity(((EntityButton)sender).AttachedEntity);
@@ -184,7 +187,7 @@ namespace CruZ.Editor.Controls
         TimeSpan    _drawElapsed;
         TimeSpan    _updateElapsed;
 
-        bool                    _isMouseDragging;
+        bool                    _isMouseDraggingCamera;
         Vector3                 _cameraStartDragCoord;
         System.Drawing.Point    _mouseStartDragPoint;
 

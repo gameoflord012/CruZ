@@ -2,7 +2,7 @@
   "Name": "",
   "_entities": [
     {
-      "position": "24.653442, -24.518253, 0",
+      "position": "-27.780506, -43.68939, 0",
       "scale": "1, 1, 1",
       "components": [
         {
@@ -23,13 +23,13 @@
           "com-data": {
             "ComponentType": "CruZ.Components.TileComponent, CruZ.Editor, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
             "Debug": true,
-            "TileSize": 16
+            "TileSize": 12
           }
         }
       ]
     },
     {
-      "position": "10.049744, 1.3915384, 0",
+      "position": "-31.065598, -38.57924, 0",
       "scale": "1, 1, 1",
       "components": [
         {
@@ -56,7 +56,7 @@
       ]
     },
     {
-      "position": "-32.63878, -10.418654, 0",
+      "position": "-53.9396, -40.647633, 0",
       "scale": "0.5, 0.5, 0",
       "components": [
         {
@@ -66,7 +66,7 @@
             "LayerDepth": 0.2,
             "SortingLayer": 1,
             "YLayerDepth": true,
-            "Flip": false
+            "Flip": true
           }
         },
         {

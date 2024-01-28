@@ -1,4 +1,5 @@
 ﻿using CruZ.Components;
+using CruZ.Editor.Systems;
 using CruZ.Systems;
 using System;
 using System.ComponentModel.DataAnnotations;
@@ -8,7 +9,7 @@ using System.Windows.Forms;
 
 namespace CruZ.Editor.Controls
 {
-    public class EntityButton : Button
+    public class EntityButton : Button, ICanUndo
     {
         public TransformEntity AttachedEntity { get => _attachedEntity; }
 
@@ -22,6 +23,8 @@ namespace CruZ.Editor.Controls
             _attachedEntity.OnRemoveFromWorld += attachedEntity_OnRemoveFromWorld;
 
             Size = new(ButtonSize, ButtonSize);
+
+            UndoService.Registers.Add(this);
         }
 
         private void attachedEntity_OnRemoveFromWorld(object? sender, EventArgs e)
@@ -65,9 +68,15 @@ namespace CruZ.Editor.Controls
                 var mouseClient = Parent.PointToClient(mouseScreen);
 
                 SetCenter(mouseClient);
-                _attachedEntity.Transform.Position = Camera.Main.PointToCoordinate(mouseClient);
+                UpdateEntityPosition();
             }
         }
+
+        private void UpdateEntityPosition()
+        {
+            _attachedEntity.Transform.Position = Camera.Main.PointToCoordinate(GetCenter());
+        }
+
         protected override void OnMouseDown(MouseEventArgs mevent)
         {
             base.OnMouseDown(mevent);
@@ -75,6 +84,7 @@ namespace CruZ.Editor.Controls
             if (mevent.Button == MouseButtons.Left && _isMouseEntered)
             {
                 _isDragging = true;
+                UndoService.Capture();
             }
         }
 
@@ -116,6 +126,18 @@ namespace CruZ.Editor.Controls
             base.OnMouseLeave(e);
 
             _isMouseEntered = false;
+        }
+
+        public object CaptureState()
+        {
+            return Location;
+        }
+
+        public void RestoreState(object state)
+        {
+            Location = (Point)state;
+            UpdateEntityPosition();
+            Invalidate();
         }
 
         private TransformEntity _attachedEntity;

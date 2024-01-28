@@ -76,6 +76,11 @@ namespace CruZ.Components
             return _entity.Has(CreateInstanceFrom(ty).ComponentType);
         }
 
+        public override string ToString()
+        {
+            return string.IsNullOrEmpty(Name) ? $"Entity({Entity.Id})" : Name;
+        }
+
         public void RemoveFromWorld()
         {
             SetIsActive(false);
