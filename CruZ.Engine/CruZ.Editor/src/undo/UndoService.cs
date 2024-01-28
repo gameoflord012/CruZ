@@ -15,7 +15,6 @@ namespace CruZ.Editor.Systems
 
     public static class UndoService
     {
-        public static List<ICanUndo> Registers = [];
         public static List<KeyValuePair<ICanUndo, object>> stateStack = [];
         private static int _stackInd = -1;
 
@@ -60,6 +59,7 @@ namespace CruZ.Editor.Systems
 
         private static void Restore()
         {
+            if(StackEmpty()) return;
             PeakRegister().RestoreState(PeakStateObj());
         }
 
