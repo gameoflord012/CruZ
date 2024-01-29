@@ -22,6 +22,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)System\EntityScript.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System\Entity\Interface\IECSContextProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System\Entity\Interface\IComponent.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)System\Input\EntityControl.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System\Input\Input.Static.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System\Entity\TransformEntity.Disposable.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System\Resource\ResourceInfo.cs" />
@@ -31,6 +32,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)System\Tile\TileComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Types\ValueTypeConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Types\Vector3TypeConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UI\UIControl.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UI\UIManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\GlobalUsing.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\Helper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System\Resource\ResourceManager.cs" />
@@ -76,7 +79,6 @@
   <ItemGroup>
     <Folder Include="$(MSBuildThisFileDirectory)System\Entity\Interface\" />
     <Folder Include="$(MSBuildThisFileDirectory)System\Entity\Utils\" />
-    <Folder Include="$(MSBuildThisFileDirectory)System\Input\" />
     <Folder Include="$(MSBuildThisFileDirectory)System\Camera\" />
     <Folder Include="$(MSBuildThisFileDirectory)System\Animation\" />
     <Folder Include="$(MSBuildThisFileDirectory)System\Sprite\" />

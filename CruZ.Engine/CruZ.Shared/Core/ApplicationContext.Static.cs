@@ -10,7 +10,7 @@ namespace CruZ
         private static ApplicationContext _instance;
         public static ApplicationContext Instance { get => _instance ?? throw new MissingContextException(typeof(ApplicationContext)); }
 
-        public static void CreateContext(IApplicationContextProvider contextProvider)
+        public static void SetContext(IApplicationContextProvider contextProvider)
         {
             _instance = new(contextProvider);
         }

@@ -17,7 +17,7 @@ namespace CruZ.Systems
         static Input? _instance;
         public static Input Instance { get => _instance ?? throw new MissingContextException(typeof(Input)); }
 
-        public static void CreateContext(IInputContextProvider contextProvider)
+        public static void SetContext(IInputContextProvider contextProvider)
         {
             _instance = new(contextProvider);
         }

@@ -39,7 +39,7 @@
 
 //            //Width = (int)(rect.Width * Camera.Main.WorldToScreenScale().X);
 //            //Height = (int)(rect.Height * Camera.Main.WorldToScreenScale().Y);
-//            //Location = new(point.X - Width / 2, point.Y - Height / 2);
+//            //_location = new(point.X - Width / 2, point.Y - Height / 2);
 
 //            //Invalidate();
 //        }

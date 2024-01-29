@@ -1,6 +1,7 @@
 ﻿using CruZ.Components;
 using CruZ.Editor.Systems;
 using CruZ.Systems;
+using CruZ.UI;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -11,24 +12,32 @@ using System.Windows.Forms;
 
 namespace CruZ.Editor.Controls
 {
-    public partial class WorldViewControl : MonoGame.Forms.NET.Controls.InvalidationControl, IECSContextProvider, IApplicationContextProvider, IInputContextProvider
+    public partial class WorldViewControl : MonoGame.Forms.NET.Controls.InvalidationControl, 
+        IECSContextProvider, IApplicationContextProvider, IInputContextProvider, UIContext
     {
-        public event Action<GameTime> DrawEvent;
-        public event Action<GameTime> UpdateEvent;
-        public event Action InitializeSystemEvent;
-        public event Action<GameTime> UpdateInputEvent { add { UpdateEvent += value; } remove { UpdateEvent -= value; } }
-        public event EventHandler<GameScene> SceneLoadEvent;
-        public event EventHandler<TransformEntity> OnSelectedEntityChanged;
+        public event Action<GameTime>   DrawEvent;
+        public event Action<GameTime>   UpdateEvent;
 
-        public GraphicsDevice GraphicsDevice => Editor.GraphicsDevice;
-        public ContentManager Content => Editor.Content;
-        public GameScene? CurrentGameScene => _currentScene;
+        public event Action<GameTime>   UpdateUI;
+        public event Action<GameTime>   DrawUI;
+
+        public event Action<GameTime>   UpdateInputEvent;
+        public event Action             InitializeSystemEvent;
+        
+        public event EventHandler<GameScene>        SceneLoadEvent;
+        public event EventHandler<TransformEntity>  OnSelectedEntityChanged;
+
+        public GraphicsDevice   GraphicsDevice      => Editor.GraphicsDevice;
+        public ContentManager   Content             => Editor.Content;
+        public GameScene?       CurrentGameScene    => _currentScene;
+        public SpriteBatch      SpriteBatch         => Editor.spriteBatch;
 
         public WorldViewControl()
         {
-            ECS.CreateContext(this);
-            ApplicationContext.CreateContext(this);
-            Input.CreateContext(this);
+            ECS                 .SetContext(this);
+            ApplicationContext  .SetContext(this);
+            Input               .SetContext(this);
+            UIManager           .SetContext(this);
 
             _camera = new Camera(Width, Height);
             Camera.Main = _camera;
@@ -62,7 +71,10 @@ namespace CruZ.Editor.Controls
             _updateElapsed = _gameLoopTimer.Elapsed;
 
             Editor.FPSCounter.Update(gameTime);
-            UpdateEvent.Invoke(gameTime);
+
+            UpdateInputEvent?   .Invoke(gameTime);
+            UpdateEvent?        .Invoke(gameTime);
+            UpdateUI            .Invoke(gameTime);
 
             Invalidate();
         }
@@ -75,9 +87,9 @@ namespace CruZ.Editor.Controls
             Editor.FPSCounter.UpdateFrameCounter();
 
             DrawEvent?.Invoke(gameTime);
-            DrawAxis();
+            DrawUI?.Invoke(gameTime);
 
-            Update();
+            DrawAxis();
         }
 
         public void LoadScene(GameScene scene)
@@ -113,11 +125,6 @@ namespace CruZ.Editor.Controls
 
             Camera.Main.ViewPortWidth = Width;
             Camera.Main.ViewPortHeight = Height;
-        }
-
-        protected override void OnPaint(System.Windows.Forms.PaintEventArgs e)
-        {
-            base.OnPaint(e);
         }
 
         protected override void OnMouseWheel(MouseEventArgs e)
@@ -173,8 +180,8 @@ namespace CruZ.Editor.Controls
                 _entityBtns.Add(btn);
                 btn.MouseDown += EntityBtn_MouseDown;
                 Controls.Add(btn);
-
                 //Controls.Add(new EntityControl(e));
+                UIManager.Controls.Add(new EntityControl(e));
             }
         }
 

@@ -6,7 +6,7 @@ namespace CruZ.Systems
 {
     public partial class ECS
     {
-        public static void CreateContext(IECSContextProvider contextProvider)
+        public static void SetContext(IECSContextProvider contextProvider)
         {
             _instance = new ECS(contextProvider);
         }

@@ -23,9 +23,9 @@ namespace CruZ
             _core.DrawEvent         += Draw;
             _core.LateDrawEvent     += LateDraw;
 
-            ApplicationContext  .CreateContext(this);
-            ECS                 .CreateContext(this);
-            Input               .CreateContext(this);
+            ApplicationContext  .SetContext(this);
+            ECS                 .SetContext(this);
+            Input               .SetContext(this);
 
             _core.Run();
         }
