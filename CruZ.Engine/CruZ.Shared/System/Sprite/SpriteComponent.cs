@@ -91,17 +91,17 @@ namespace CruZ.Components
 
                     sourceRectangle:    beginArgs.SourceRectangle,
 
-                    color: XNA.Color.White,
-                    rotation: 0,
+                    color:              XNA.Color.White,
+                    rotation:           0,
 
                     origin:             new(beginArgs.Origin.X * beginArgs.SourceRectangle.Width, 
                                             beginArgs.Origin.Y * beginArgs.SourceRectangle.Height),
 
-                    scale: new Vector2(
-                        _e.Transform.Scale.X,
-                        _e.Transform.Scale.Y),
+                    scale:              new Vector2(
+                                            _e.Transform.Scale.X,
+                                            _e.Transform.Scale.Y),
 
-                    effects: Flip ? SpriteEffects.FlipHorizontally : SpriteEffects.None,
+                    effects:            Flip ? SpriteEffects.FlipHorizontally : SpriteEffects.None,
                     layerDepth:         beginArgs.LayerDepth);
                 }
 

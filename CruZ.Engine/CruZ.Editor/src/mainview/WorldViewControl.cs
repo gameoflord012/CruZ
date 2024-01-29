@@ -173,6 +173,8 @@ namespace CruZ.Editor.Controls
                 _entityBtns.Add(btn);
                 btn.MouseDown += EntityBtn_MouseDown;
                 Controls.Add(btn);
+
+                //Controls.Add(new EntityControl(e));
             }
         }
 

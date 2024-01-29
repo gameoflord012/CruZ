@@ -19,19 +19,19 @@ namespace CruZ.Editor.Controls
             SetStyle(ControlStyles.AllPaintingInWmPaint, true);
 
             this._attachedEntity = attachedEntity;
-            _attachedEntity.OnActiveStateChanged += attachedEntity_OnActiveStateChanged;
-            _attachedEntity.OnRemoveFromWorld += attachedEntity_OnRemoveFromWorld;
+            _attachedEntity.OnActiveStateChanged += AttachedEntity_OnActiveStateChanged;
+            _attachedEntity.OnRemoveFromWorld += AttachedEntity_OnRemoveFromWorld;
 
             Size = new(ButtonSize, ButtonSize);
         }
 
-        private void attachedEntity_OnRemoveFromWorld(object? sender, EventArgs e)
+        private void AttachedEntity_OnRemoveFromWorld(object? sender, EventArgs e)
         {
             Parent?.Controls.Remove(this);
             Dispose();
         }
 
-        private void attachedEntity_OnActiveStateChanged(object? sender, bool e)
+        private void AttachedEntity_OnActiveStateChanged(object? sender, bool e)
         {
             Visible = e;
         }
