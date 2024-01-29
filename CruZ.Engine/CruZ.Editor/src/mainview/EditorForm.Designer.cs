@@ -34,7 +34,6 @@ namespace CruZ.Editor
         private void InitializeComponent()
         {
             splitContainer1 = new SplitContainer();
-            worldViewControl = new WorldViewControl();
             entities_ComboBox = new ComboBox();
             inspector_PropertyGrid = new PropertyGrid();
             menuStrip = new MenuStrip();
@@ -60,7 +59,7 @@ namespace CruZ.Editor
             // 
             // splitContainer1.Panel1
             // 
-            splitContainer1.Panel1.Controls.Add(worldViewControl);
+            
             // 
             // splitContainer1.Panel2
             // 
@@ -72,13 +71,7 @@ namespace CruZ.Editor
             // 
             // worldViewControl
             // 
-            worldViewControl.BackColor = Color.LightSeaGreen;
-            worldViewControl.Dock = DockStyle.Fill;
-            worldViewControl.Location = new Point(0, 0);
-            worldViewControl.Margin = new Padding(3, 2, 3, 2);
-            worldViewControl.Name = "worldViewControl";
-            worldViewControl.Size = new Size(419, 314);
-            worldViewControl.TabIndex = 0;
+            
             // 
             // entities_ComboBox
             // 
@@ -176,7 +169,7 @@ namespace CruZ.Editor
         #endregion
 
         private SplitContainer splitContainer1;
-        private WorldViewControl worldViewControl;
+        //TODO: private WorldViewControl worldViewControl;
         private MenuStrip menuStrip;
         private ToolStripMenuItem file_Menu;
         private ToolStripMenuItem scene_Menu;
@@ -186,5 +179,21 @@ namespace CruZ.Editor
         private ToolStripMenuItem openScene_MenuButton;
         private PropertyGrid inspector_PropertyGrid;
         private ComboBox entities_ComboBox;
+
+        #region WORLDVIEW_COMMENT
+        //TODO:
+        //worldViewControl = new WorldViewControl();
+
+
+        //splitContainer1.Panel1.Controls.Add(worldViewControl);
+
+        //worldViewControl.BackColor = Color.LightSeaGreen;
+        //worldViewControl.Dock = DockStyle.Fill;
+        //worldViewControl.Location = new Point(0, 0);
+        //worldViewControl.Margin = new Padding(3, 2, 3, 2);
+        //worldViewControl.Name = "worldViewControl";
+        //worldViewControl.Size = new Size(419, 314);
+        //worldViewControl.TabIndex = 0;
+        #endregion
     }
 }

@@ -14,15 +14,15 @@ namespace CruZ.Editor
     public partial class EditorForm : Form
     {
         public PropertyGrid Inspector_PropertyGrid  { get => inspector_PropertyGrid; }
-        public WorldViewControl WorldViewControl    { get => worldViewControl; }
+        //TODO: public WorldViewControl WorldViewControl    { get => worldViewControl; }
 
         private EditorForm()
         {
             KeyPreview = true;
 
             InitializeComponent();
-            worldViewControl.OnSelectedEntityChanged += WorldViewControl_OnSelectedEntityChanged;
-            worldViewControl.SceneLoadEvent += WorldViewControl_SceneLoadEvent;
+            //TODO: worldViewControl.OnSelectedEntityChanged += WorldViewControl_OnSelectedEntityChanged;
+            //TODO: worldViewControl.SceneLoadEvent += WorldViewControl_SceneLoadEvent;
             entities_ComboBox.SelectedIndexChanged += Entities_ComboBox_SelectedIndexChanged;
             entities_ComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
         }
@@ -46,7 +46,7 @@ namespace CruZ.Editor
 
         private void Entities_ComboBox_SelectedIndexChanged(object? sender, EventArgs e)
         {
-                worldViewControl.SelectEntity((TransformEntity)entities_ComboBox.SelectedItem);
+            //TODO: worldViewControl.SelectEntity((TransformEntity)entities_ComboBox.SelectedItem);
         }
 
         private void WorldViewControl_SceneLoadEvent(object? sender, GameScene e)
@@ -79,16 +79,16 @@ namespace CruZ.Editor
             string sceneFile = files[0];
 
             var scene = ResourceManager.LoadResource<GameScene>(sceneFile, out _);
-            worldViewControl.LoadScene(scene);
+            //TODO: worldViewControl.LoadScene(scene);
         }
 
         private void SaveScene_Clicked(object sender, EventArgs args)
         {
-            if (worldViewControl.CurrentGameScene == null) return;
+            //TODO: if (worldViewControl.CurrentGameScene == null) return;
 
             try
             {
-                ResourceManager.SaveResource(worldViewControl.CurrentGameScene);
+                //TODO: ResourceManager.SaveResource(worldViewControl.CurrentGameScene);
             }
             catch(System.Exception e)
             {
@@ -108,7 +108,7 @@ namespace CruZ.Editor
 
             ResourceManager.CreateResource(
                 savePath,
-                worldViewControl.CurrentGameScene, 
+                //TODO: worldViewControl.CurrentGameScene, 
                 true);
         }
 
@@ -121,7 +121,7 @@ namespace CruZ.Editor
 
             try
             {
-                worldViewControl.LoadScene(SceneManager.GetSceneAssets(input));
+                //TODO: worldViewControl.LoadScene(SceneManager.GetSceneAssets(input));
             }
             catch (SceneAssetNotFoundException ex)
             {
