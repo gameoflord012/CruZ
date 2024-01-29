@@ -1,8 +1,9 @@
 ﻿using CruZ.Components;
 using CruZ.Systems;
+using CruZ.UI;
 using MonoGame.Extended;
 
-namespace CruZ.UI
+namespace CruZ.Editor.UI
 {
     public class EntityControl : UIControl
     {
@@ -39,19 +40,36 @@ namespace CruZ.UI
         {
             base.Update(args);
 
+            CalcBounds();
+
+            if(args.InputInfo.CurMouseState.LeftButton == XNA.Input.ButtonState.Pressed)
+            {
+                _showBorder ^= true;
+            }
+        }
+
+        private void CalcBounds()
+        {
             Location = Camera.Main.CoordinateToPoint(new(_bounds.X, _bounds.Y));
-            
+
             var size = new Size2
-                (_bounds.Width * Camera.Main.WorldToScreenScale().X, 
+                (_bounds.Width * Camera.Main.WorldToScreenScale().X,
                 _bounds.Height * Camera.Main.WorldToScreenScale().Y);
 
-            Width   = (int)size.Width;
-            Height  = (int)size.Height;
+            Width = (int)size.Width;
+            Height = (int)size.Height;
+        }
+
+        public override void Draw(UIArgs args)
+        {
+            if(_showBorder)
+                base.Draw(args);
         }
 
         TransformEntity _e;
         SpriteComponent _sp;
         DrawBeginEventArgs _args;
         RectangleF _bounds;
+        bool _showBorder = false;
     }
 }

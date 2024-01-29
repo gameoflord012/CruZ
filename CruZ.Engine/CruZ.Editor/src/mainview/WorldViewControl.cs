@@ -1,5 +1,6 @@
 ﻿using CruZ.Components;
 using CruZ.Editor.Systems;
+using CruZ.Editor.UI;
 using CruZ.Systems;
 using CruZ.UI;
 using Microsoft.Xna.Framework;

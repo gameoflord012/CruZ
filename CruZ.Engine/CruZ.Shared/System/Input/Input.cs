@@ -1,5 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+using System;
+using System.Diagnostics;
 
 namespace CruZ.Systems
 {
@@ -14,7 +16,10 @@ namespace CruZ.Systems
         {
             _prevMouseState =   _curMouseState;
             _curMouseState =    Mouse.GetState();
+
             _keyboardState =    Keyboard.GetState();
+
+            Debug.WriteLine(_keyboardState.IsKeyDown(Keys.A));
         }
 
         public int ScrollDeltaValue()
