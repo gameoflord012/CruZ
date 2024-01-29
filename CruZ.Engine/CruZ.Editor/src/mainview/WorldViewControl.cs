@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Timers;
 using System.Windows.Forms;
 
 namespace CruZ.Editor.Controls
@@ -59,13 +60,16 @@ namespace CruZ.Editor.Controls
             _drawElapsed = _gameLoopTimer.Elapsed;
             _updateElapsed = _gameLoopTimer.Elapsed;
 
-            Application.Idle -= Update;
-            Application.Idle += Update;
+            _updateTimer = new();
+            _updateTimer.SynchronizingObject = this;
+            _updateTimer.Interval = 1f / GlobalVariables.TARGET_FPS * 1000;
+            _updateTimer.Enabled = true;
+            _updateTimer.Elapsed += Update;
 
             CanReadCacheChanged?.Invoke(this, true);
         }
 
-        private void Update(object? sender, EventArgs e)
+        private void Update(object? sender, ElapsedEventArgs e)
         {
             GameTime gameTime = new(_gameLoopTimer.Elapsed, _gameLoopTimer.Elapsed - _updateElapsed);
             _updateElapsed = _gameLoopTimer.Elapsed;
@@ -202,6 +206,7 @@ namespace CruZ.Editor.Controls
 
         GameScene?      _currentScene;
         TransformEntity _currentSelectedEntity;
+        System.Timers.Timer _updateTimer;
 
         List<Button> _entityBtns = new();
 

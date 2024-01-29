@@ -18,10 +18,20 @@ namespace CruZ.Components
         public Rectangle    SourceRectangle;
         public Vector2      Origin;
         public Vector2      Position;
+        public Vector2      Scale;
         public Texture2D?   Texture;
         public Matrix       ViewMatrix;
         public float        LayerDepth = 0;
         public bool         Skip = false;
+
+        public RectangleF BoundRect()
+        {
+            RectangleF rect = new();
+            rect.Width = SourceRectangle.Width * Scale.X;
+            rect.Height = SourceRectangle.Height * Scale.Y;
+            rect.Position = new Vector2(Position.X - rect.Width * Origin.X, Position.Y - rect.Height * Origin.Y);
+            return rect;
+        }
     }
 
     public class DrawEndEventArgs : EventArgs
@@ -31,8 +41,8 @@ namespace CruZ.Components
 
     public partial class SpriteComponent : IComponent, IComponentCallback
     {
-        public event EventHandler<DrawBeginEventArgs>   OnDrawBegin;
-        public event EventHandler<DrawEndEventArgs>     OnDrawEnd;
+        public event EventHandler<DrawBeginEventArgs>   DrawBegin;
+        public event EventHandler<DrawEndEventArgs>     DrawEnd;
 
         [Browsable(false), JsonIgnore]
         public Type             ComponentType => typeof(SpriteComponent);
@@ -66,6 +76,7 @@ namespace CruZ.Components
                 beginArgs.ViewMatrix        = viewMatrix;
                 beginArgs.LayerDepth        = YLayerDepth ? (beginArgs.Position.Y / 1000 + 1) / 2 : LayerDepth;
                 beginArgs.Origin            = new(0.5f, 0.5f);
+                beginArgs.Scale             = new Vector2(_e.Transform.Scale.X, _e.Transform.Scale.Y);
                 
                 if(Texture != null)
                 {
@@ -73,7 +84,7 @@ namespace CruZ.Components
                     beginArgs.Texture           = Texture;
                 }
                 
-                OnDrawBegin?.Invoke(this, beginArgs);
+                DrawBegin?.Invoke(this, beginArgs);
 
                 if (beginArgs.Skip)
                 {
@@ -97,16 +108,14 @@ namespace CruZ.Components
                     origin:             new(beginArgs.Origin.X * beginArgs.SourceRectangle.Width, 
                                             beginArgs.Origin.Y * beginArgs.SourceRectangle.Height),
 
-                    scale:              new Vector2(
-                                            _e.Transform.Scale.X,
-                                            _e.Transform.Scale.Y),
+                    scale:              beginArgs.Scale,
 
                     effects:            Flip ? SpriteEffects.FlipHorizontally : SpriteEffects.None,
                     layerDepth:         beginArgs.LayerDepth);
                 }
 
                 var endArgs = new DrawEndEventArgs();
-                OnDrawEnd?.Invoke(this, endArgs);
+                DrawEnd?.Invoke(this, endArgs);
                 if (!endArgs.KeepDrawing) break;
             }
         }

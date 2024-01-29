@@ -43,16 +43,16 @@ namespace CruZ.Components
             UnLoad();
             _sprite = sprite;
 
-            _sprite.OnDrawBegin  += Sprite_OnDrawBegin;
-            _sprite.OnDrawEnd    += Sprite_OnDrawEnd;
+            _sprite.DrawBegin  += Sprite_OnDrawBegin;
+            _sprite.DrawEnd    += Sprite_OnDrawEnd;
         }
 
         public void UnLoad()
         {
             if(_sprite != null)
             {
-                _sprite.OnDrawBegin  -= Sprite_OnDrawBegin;
-                _sprite.OnDrawEnd    -= Sprite_OnDrawEnd;
+                _sprite.DrawBegin  -= Sprite_OnDrawBegin;
+                _sprite.DrawEnd    -= Sprite_OnDrawEnd;
             }
 
             _sprite = null;

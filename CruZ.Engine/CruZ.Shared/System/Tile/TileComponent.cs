@@ -27,16 +27,16 @@ namespace CruZ.Components
         {
             if(_sp != null)
             {
-                _sp.OnDrawBegin -= Sprite_OnDrawBegin;
-                _sp.OnDrawEnd -= Sprite_OnDrawEnd;
+                _sp.DrawBegin -= Sprite_OnDrawBegin;
+                _sp.DrawEnd -= Sprite_OnDrawEnd;
             }
 
             _e.TryGetComponent(ref _sp);
 
             if(_sp != null)
             {
-                _sp.OnDrawBegin += Sprite_OnDrawBegin;
-                _sp.OnDrawEnd += Sprite_OnDrawEnd;
+                _sp.DrawBegin += Sprite_OnDrawBegin;
+                _sp.DrawEnd += Sprite_OnDrawEnd;
             }
         }
 

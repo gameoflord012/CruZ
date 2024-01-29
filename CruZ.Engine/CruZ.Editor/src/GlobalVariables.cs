@@ -12,5 +12,6 @@ namespace CruZ.Editor
     static class GlobalVariables
     {
         public static XNA.Color UNIT_BOARD_COLOR = XNA.Color.SlateGray;
+        public static int TARGET_FPS = 60;
     }
 }
