@@ -15,7 +15,7 @@ namespace CruZ.Editor
     public partial class EditorForm : Form
     {
         public PropertyGrid Inspector_PropertyGrid { get => inspector_PropertyGrid; }
-        //TODO: public WorldViewControl WorldViewControl    { get => _worldViewControl; }
+        //TODO: public EditorApplication EditorApplication    { get => _worldViewControl; }
 
         private EditorForm()
         {
@@ -150,11 +150,11 @@ namespace CruZ.Editor
 
         private void InitializeWorldViewControl()
         {
-            _worldViewControl = new WorldViewControl();
+            _worldViewControl = new EditorApplication();
             _worldViewControl.Run();
         }
 
-        WorldViewControl _worldViewControl;
+        EditorApplication _worldViewControl;
         Thread _worldViewControl_Thread;
     }
 

@@ -12,7 +12,7 @@ namespace CruZ.Editor
 
         public Inspector()
         {
-            //TODO: EditorForm.Instance.WorldViewControl.ECSDraw += WorldViewControl_DrawEvent;
+            //TODO: EditorForm.Instance.EditorApplication.ECSDraw += WorldViewControl_DrawEvent;
         }
 
         public void DisplayEntity(TransformEntity e)

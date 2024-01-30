@@ -164,7 +164,7 @@ namespace CruZ.Editor
 
         #region WORLDVIEW_COMMENT
         //TODO:
-        //_worldViewControl = new WorldViewControl();
+        //_worldViewControl = new EditorApplication();
 
 
         //splitContainer1.Panel1.Controls.Add(_worldViewControl);

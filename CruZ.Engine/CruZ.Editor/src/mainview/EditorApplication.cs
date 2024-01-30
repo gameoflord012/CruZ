@@ -6,7 +6,7 @@ using System.Windows.Forms;
 
 namespace CruZ.Editor.Controls
 {
-    public partial class WorldViewControl
+    public partial class EditorApplication
     {
         //public event Action<GameTime>   ECSDraw;
         //public event Action<GameTime>   ECSUpdate;
@@ -27,7 +27,7 @@ namespace CruZ.Editor.Controls
         
         public GameScene? CurrentGameScene => _currentScene;
 
-        public WorldViewControl()
+        public EditorApplication()
         {
             //ECS                 .SetContext(this);
             //ApplicationContext  .SetContext(this);
