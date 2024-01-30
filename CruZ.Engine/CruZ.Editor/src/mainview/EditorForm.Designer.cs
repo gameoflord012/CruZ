@@ -164,18 +164,18 @@ namespace CruZ.Editor
 
         #region WORLDVIEW_COMMENT
         //TODO:
-        //worldViewControl = new WorldViewControl();
+        //_worldViewControl = new WorldViewControl();
 
 
-        //splitContainer1.Panel1.Controls.Add(worldViewControl);
+        //splitContainer1.Panel1.Controls.Add(_worldViewControl);
 
-        //worldViewControl.BackColor = Color.LightSeaGreen;
-        //worldViewControl.Dock = DockStyle.Fill;
-        //worldViewControl.Location = new Point(0, 0);
-        //worldViewControl.Margin = new Padding(3, 2, 3, 2);
-        //worldViewControl.Name = "worldViewControl";
-        //worldViewControl.Size = new Size(419, 314);
-        //worldViewControl.TabIndex = 0;
+        //_worldViewControl.BackColor = Color.LightSeaGreen;
+        //_worldViewControl.Dock = DockStyle.Fill;
+        //_worldViewControl.Location = new Point(0, 0);
+        //_worldViewControl.Margin = new Padding(3, 2, 3, 2);
+        //_worldViewControl.Name = "_worldViewControl";
+        //_worldViewControl.Size = new Size(419, 314);
+        //_worldViewControl.TabIndex = 0;
         #endregion
 
         private ToolStripMenuItem file_Menu;

@@ -60,7 +60,7 @@ namespace CruZ.UI
         {
             UIArgs args = new();
             args.GameTime = gameTime;
-            args.InputInfo = Input.Instance.GetInfo();
+            args.InputInfo = Input.Instance.GetInputInfo();
             return args;
         }
 

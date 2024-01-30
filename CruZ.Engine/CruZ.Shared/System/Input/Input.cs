@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.Diagnostics;
+using System.Numerics;
 
 namespace CruZ.Systems
 {
@@ -9,44 +10,72 @@ namespace CruZ.Systems
     {
         public Input(IInputContextProvider contextProvider)
         {
-            contextProvider.UpdateInputEvent += InputUpdate;
+            contextProvider.InputUpdate += InputUpdate;
         }
 
         public void InputUpdate(GameTime gameTime)
         {
-            _prevMouseState =   _curMouseState;
-            _curMouseState =    Mouse.GetState();
-
+            _prevMouse =   _curMouse;
+            _curMouse =    Mouse.GetState();
             _keyboardState =    Keyboard.GetState();
 
-            Debug.WriteLine(_keyboardState.IsKeyDown(Keys.A));
+            if(ScrollDelta() != 0)
+            {
+                MouseScroll?.Invoke(GetInputInfo());
+            }
+
+            if(MouseMoveDelta() != Point.Zero)
+            {
+                MouseMove?.Invoke(GetInputInfo());
+            }
+
+            if(
+                _curMouse.LeftButton    == ButtonState.Pressed && _prevMouse.LeftButton     != ButtonState.Pressed ||
+                _curMouse.RightButton   == ButtonState.Pressed && _prevMouse.RightButton    != ButtonState.Pressed||
+                _curMouse.MiddleButton  == ButtonState.Pressed && _prevMouse.MiddleButton   != ButtonState.Pressed)
+            {
+                MouseDown?.Invoke(GetInputInfo());
+            }
+
+            if(
+                _curMouse.LeftButton    == ButtonState.Released && _prevMouse.LeftButton     != ButtonState.Released ||
+                _curMouse.RightButton   == ButtonState.Released && _prevMouse.RightButton    != ButtonState.Released||
+                _curMouse.MiddleButton  == ButtonState.Released && _prevMouse.MiddleButton   != ButtonState.Released)
+            {
+                MouseUp?.Invoke(GetInputInfo());
+            }
         }
 
-        public int ScrollDeltaValue()
+        public int ScrollDelta()
         {
-            return _curMouseState.ScrollWheelValue - _prevMouseState.ScrollWheelValue;
+            return _curMouse.ScrollWheelValue - _prevMouse.ScrollWheelValue;
         }
 
-        public InputInfo GetInfo()
+        public Point MouseMoveDelta()
+        {
+            return _curMouse.Position - _prevMouse.Position;
+        }
+
+        public InputInfo GetInputInfo()
         {
             InputInfo info = new();
-            info.SrollDelta = ScrollDeltaValue();
-            info.PrevMouseState = _prevMouseState;
-            info.CurMouseState = _curMouseState;
-            info.KeyboardState = _keyboardState;
+            info.SrollDelta = ScrollDelta();
+            info.PrevMouse = _prevMouse;
+            info.CurMouse = _curMouse;
+            info.Keyboard = _keyboardState;
             return info;
         }
 
-        MouseState      _prevMouseState;
-        MouseState      _curMouseState;
+        MouseState      _prevMouse;
+        MouseState      _curMouse;
         KeyboardState   _keyboardState;
     }
 
     public struct InputInfo
     {
         public int              SrollDelta;
-        public MouseState       PrevMouseState;
-        public MouseState       CurMouseState;
-        public KeyboardState    KeyboardState;
+        public MouseState       PrevMouse;
+        public MouseState       CurMouse;
+        public KeyboardState    Keyboard;
     }
 }

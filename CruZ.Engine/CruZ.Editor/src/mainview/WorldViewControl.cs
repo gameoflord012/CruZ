@@ -1,15 +1,7 @@
 ﻿using CruZ.Components;
-using CruZ.Editor.Systems;
-using CruZ.Editor.UI;
 using CruZ.Systems;
-using CruZ.UI;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Timers;
 using System.Windows.Forms;
 
 namespace CruZ.Editor.Controls
@@ -22,7 +14,7 @@ namespace CruZ.Editor.Controls
         //public event Action<GameTime>   UpdateUI;
         //public event Action<GameTime>   DrawUI;
 
-        //public event Action<GameTime>   UpdateInputEvent;
+        //public event Action<GameTime>   InputUpdate;
         //public event Action             InitializeECSSystem;
         
 
@@ -41,59 +33,78 @@ namespace CruZ.Editor.Controls
             //ApplicationContext  .SetContext(this);
             //Input               .SetContext(this);
             //UIManager           .SetContext(this);
+
             _gameApp = new GameApplication();
-            _mainCamera = new Camera(_gameApp.GraphicsDevice.Viewport);
-            Camera.Main = _mainCamera;
+            _gameApp.WindowResize += Game_WindowResize;
+            _gameApp.Initialize += Game_Initialize;
+            _gameApp.Window.AllowUserResizing = true;
+
+            Input.MouseScroll   += Input_MouseScroll;
+            Input.MouseMove     += Input_MouseMove;
+            Input.MouseDown     += Input_MouseDown;
+            Input.MouseUp       += Input_MouseUp;
 
             CacheService.RegisterCacheControl(this);
             CanReadCache?.Invoke(this, false);
-
-            Initialize();
         }
 
-        protected void Initialize()
+        private void Game_Initialize()
         {
-            //_gameLoopTimer = new();
-            //_gameLoopTimer.Start();
-
-            //_drawElapsed = _gameLoopTimer.Elapsed;
-            //_updateElapsed = _gameLoopTimer.Elapsed;
-
-            //_updateTimer = new();
-            //_updateTimer.SynchronizingObject = this;
-            //_updateTimer.Interval = 1f / GlobalVariables.TARGET_FPS * 1000;
-            //_updateTimer.Enabled = true;
-            //_updateTimer.Elapsed += Update;
-
             CanReadCache?.Invoke(this, true);
+
+            _mainCamera = new Camera(_gameApp.GraphicsDevice.Viewport);
+            Camera.Main = _mainCamera;
         }
 
-        private void Update(object? sender, ElapsedEventArgs e)
+        public void Run()
         {
-            GameTime gameTime = new(_gameLoopTimer.Elapsed, _gameLoopTimer.Elapsed - _updateElapsed);
-            _updateElapsed = _gameLoopTimer.Elapsed;
-
-            Editor.FPSCounter.Update(gameTime);
-
-            UpdateInputEvent?   .Invoke(gameTime);
-            ECSUpdate?        .Invoke(gameTime);
-            UpdateUI            .Invoke(gameTime);
-
-            Invalidate();
+            _gameApp.Run();
         }
 
-        protected override void Draw()
-        {
-            GameTime gameTime = new(_gameLoopTimer.Elapsed, _gameLoopTimer.Elapsed - _drawElapsed);
-            _drawElapsed = _gameLoopTimer.Elapsed;
+        #region COMMENT
+        //protected void Initialize()
+        //{
+        //    //_gameLoopTimer = new();
+        //    //_gameLoopTimer.Start();
 
-            //Editor.FPSCounter.UpdateFrameCounter();
+        //    //_drawElapsed = _gameLoopTimer.Elapsed;
+        //    //_updateElapsed = _gameLoopTimer.Elapsed;
 
-            ECSDraw?.Invoke(gameTime);
-            DrawUI?.Invoke(gameTime);
+        //    //_updateTimer = new();
+        //    //_updateTimer.SynchronizingObject = this;
+        //    //_updateTimer.Interval = 1f / GlobalVariables.TARGET_FPS * 1000;
+        //    //_updateTimer.Enabled = true;
+        //    //_updateTimer.Elapsed += OnUpdate;
 
-            DrawAxis();
-        }
+        //}
+
+        //private void Update(object? sender, ElapsedEventArgs e)
+        //{
+        //    //GameTime gameTime = new(_gameLoopTimer.Elapsed, _gameLoopTimer.Elapsed - _updateElapsed);
+        //    //_updateElapsed = _gameLoopTimer.Elapsed;
+
+        //    //Editor.FPSCounter.OnUpdate(gameTime);
+
+        //    //InputUpdate?   .Invoke(gameTime);
+        //    //ECSUpdate?        .Invoke(gameTime);
+        //    //UpdateUI            .Invoke(gameTime);
+
+        //    //Invalidate();
+        //}
+
+        //protected void Draw()
+        //{
+        //    //GameTime gameTime = new(_gameLoopTimer.Elapsed, _gameLoopTimer.Elapsed - _drawElapsed);
+        //    //_drawElapsed = _gameLoopTimer.Elapsed;
+
+        //    ////Editor.FPSCounter.UpdateFrameCounter();
+
+        //    //ECSDraw?.Invoke(gameTime);
+        //    //DrawUI?.Invoke(gameTime);
+
+        //    //DrawAxis();
+        //}
+        #endregion
 
         public void LoadScene(GameScene scene)
         {
@@ -122,52 +133,44 @@ namespace CruZ.Editor.Controls
             OnSelectedEntityChanged?.Invoke(this, _currentSelectedEntity);
         }
         
-        protected override void OnResize(EventArgs e)
+        private void Game_WindowResize(Viewport viewport)
         {
-            base.OnResize(e);
-
-            Camera.Main.ViewPortWidth = Width;
-            Camera.Main.ViewPortHeight = Height;
+            Camera.Main.ViewPortWidth = viewport.Width;
+            Camera.Main.ViewPortHeight = viewport.Height;
         }
 
-        protected override void OnMouseWheel(MouseEventArgs e)
+        private void Input_MouseScroll(InputInfo info)
         {
-            base.OnMouseWheel(e);
-            Camera.Main.Zoom = new(Camera.Main.Zoom.X - e.Delta * 0.001f * Camera.Main.Zoom.X, Camera.Main.Zoom.Y);
+            Camera.Main.Zoom = new(Camera.Main.Zoom.X - info.SrollDelta * 0.001f * Camera.Main.Zoom.X, Camera.Main.Zoom.Y);
         }
 
-        protected override void OnMouseMove(System.Windows.Forms.MouseEventArgs e)
+        private void Input_MouseMove(InputInfo info)
         {
-            base.OnMouseMove(e);
-
             if (_isMouseDraggingCamera)
             {
                 var scale = Camera.Main.ScreenToWorldScale();
                 var delt = new Vector3(
-                    (e.X - _mouseStartDragPoint.X) * scale.X,
-                    (e.Y - _mouseStartDragPoint.Y) * scale.Y);
+                    (info.CurMouse.Position.X - _mouseStartDragPoint.X) * scale.X,
+                    (info.CurMouse.Position.Y - _mouseStartDragPoint.Y) * scale.Y);
 
                 Camera.Main.Position = _cameraStartDragCoord - delt;
             }
         }
 
-        protected override void OnMouseDown(System.Windows.Forms.MouseEventArgs e)
+        private void Input_MouseDown(InputInfo info)
         {
-            base.OnMouseDown(e);
-
-            if (e.Button == _cameraMouseDragButton && !_isMouseDraggingCamera)
+            if (info.CurMouse.MiddleButton == XNA.Input.ButtonState.Pressed 
+                && !_isMouseDraggingCamera)
             {
                 _isMouseDraggingCamera = true;
-                _mouseStartDragPoint = e.Location;
+                _mouseStartDragPoint = info.CurMouse.Position;
                 _cameraStartDragCoord = Camera.Main.Position;
             }
         }
 
-        protected override void OnMouseUp(System.Windows.Forms.MouseEventArgs e)
+        private void Input_MouseUp(InputInfo info)
         {
-            base.OnMouseUp(e);
-
-            if (e.Button == _cameraMouseDragButton)
+            if (info.CurMouse.MiddleButton == XNA.Input.ButtonState.Pressed)
             {
                 _isMouseDraggingCamera = false;
             }
@@ -201,9 +204,9 @@ namespace CruZ.Editor.Controls
         //System.Timers.Timer _updateTimer;
         //List<Button> _entityBtns = new();
 
-        bool                    _isMouseDraggingCamera;
-        Vector3                 _cameraStartDragCoord;
-        System.Drawing.Point    _mouseStartDragPoint;
+        bool        _isMouseDraggingCamera;
+        Vector3     _cameraStartDragCoord;
+        XNA.Point   _mouseStartDragPoint;
 
         GameScene?          _currentScene;
         TransformEntity     _currentSelectedEntity;

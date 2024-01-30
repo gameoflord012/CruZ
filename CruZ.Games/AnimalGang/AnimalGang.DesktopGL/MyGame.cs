@@ -9,9 +9,9 @@ namespace CruZ.Games.AnimalGang
 {
     class MyGame : GameApplication
     {
-        protected override void Initialize()
+        protected override void OnInitialize()
         {
-            base.Initialize();
+            base.OnInitialize();
 
             var scene = SceneManager.SceneAssets.Values.First();
             ResourceManager.CreateResource("scenes\\scene1.scene", scene, true);
@@ -21,14 +21,14 @@ namespace CruZ.Games.AnimalGang
             scene.SetActive(true);
         }
 
-        protected override void Draw(GameTime gameTime)
+        protected override void OnDraw(GameTime gameTime)
         {
-            base.Draw(gameTime);
+            base.OnDraw(gameTime);
         }
 
-        protected override void EndRun()
+        protected override void OnEndRun()
         {
-            base.EndRun();
+            base.OnEndRun();
 
             Logging.FlushToDebug();
         }

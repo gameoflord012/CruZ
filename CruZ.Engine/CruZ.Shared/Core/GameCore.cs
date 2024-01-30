@@ -11,7 +11,6 @@ namespace CruZ
 
     public partial class GameCore : Game
     {
-
         public event Action?                    InitializeEvent;
         public event Action?                    InitializeSystemEvent;
         public event Action?                    LoadContentEvent;
@@ -63,9 +62,6 @@ namespace CruZ
 
         protected override void Update(GameTime gameTime)
         {
-            //if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-            //    Exit();
-
             UpdateEvent?.Invoke(gameTime);
             base.Update(gameTime);
 

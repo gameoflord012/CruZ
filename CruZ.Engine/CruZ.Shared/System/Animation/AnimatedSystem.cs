@@ -21,11 +21,11 @@ namespace CruZ.Systems
             _spriteBatch = new SpriteBatch(ApplicationContext.GraphicsDevice);
         }
 
-        //public void Draw(GameTime gameTime)
+        //public void OnDraw(GameTime gameTime)
         //{
         //    foreach (var animatedSprite in this.GetAllComponents(_spriteRendererMapper))
         //    {
-        //        animatedSprite.Draw(_spriteBatch, Camera.Main.ViewMatrix());
+        //        animatedSprite.OnDraw(_spriteBatch, Camera.Main.ViewMatrix());
         //    }
         //}
 

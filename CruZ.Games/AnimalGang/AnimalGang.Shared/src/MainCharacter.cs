@@ -25,7 +25,7 @@ namespace CruZ.Games.AnimalGang
 
         protected override void OnUpdate(GameTime gameTime)
         {
-            if (Input.KeyboardState.IsKeyDown(Keys.Space))
+            if (Input.Info.Keyboard.IsKeyDown(Keys.Space))
             {
                 _attackTimer = 0;
                 _animation.SelectPlayer("player-sword-attack").Play("attack");
@@ -61,19 +61,19 @@ namespace CruZ.Games.AnimalGang
         {
             Vector3 moveDir = Vector3.Zero;
 
-            if (Input.KeyboardState.IsKeyDown(Keys.A))
+            if (Input.Info.Keyboard.IsKeyDown(Keys.A))
             {
                 moveDir += new Vector3(-1, 0);
             }
-            if (Input.KeyboardState.IsKeyDown(Keys.D))
+            if (Input.Info.Keyboard.IsKeyDown(Keys.D))
             {
                 moveDir += new Vector3(1, 0);
             }
-            if (Input.KeyboardState.IsKeyDown(Keys.S))
+            if (Input.Info.Keyboard.IsKeyDown(Keys.S))
             {
                 moveDir += new Vector3(0, 1);
             }
-            if (Input.KeyboardState.IsKeyDown(Keys.W))
+            if (Input.Info.Keyboard.IsKeyDown(Keys.W))
             {
                 moveDir += new Vector3(0, -1);
             }

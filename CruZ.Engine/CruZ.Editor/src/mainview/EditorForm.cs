@@ -7,6 +7,7 @@ using System;
 using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace CruZ.Editor
@@ -14,15 +15,17 @@ namespace CruZ.Editor
     public partial class EditorForm : Form
     {
         public PropertyGrid Inspector_PropertyGrid { get => inspector_PropertyGrid; }
-        //TODO: public WorldViewControl WorldViewControl    { get => worldViewControl; }
+        //TODO: public WorldViewControl WorldViewControl    { get => _worldViewControl; }
 
         private EditorForm()
         {
             KeyPreview = true;
 
             InitializeComponent();
-            //TODO: worldViewControl.OnSelectedEntityChanged += WorldViewControl_OnSelectedEntityChanged;
-            //TODO: worldViewControl.SceneLoadEvent += WorldViewControl_SceneLoadEvent;
+            InitializeThread();
+
+            //TODO: _worldViewControl.OnSelectedEntityChanged += WorldViewControl_OnSelectedEntityChanged;
+            //TODO: _worldViewControl.SceneLoadEvent += WorldViewControl_SceneLoadEvent;
             entities_ComboBox.SelectedIndexChanged += Entities_ComboBox_SelectedIndexChanged;
             entities_ComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
         }
@@ -46,7 +49,7 @@ namespace CruZ.Editor
 
         private void Entities_ComboBox_SelectedIndexChanged(object? sender, EventArgs e)
         {
-            //TODO: worldViewControl.SelectEntity((TransformEntity)entities_ComboBox.SelectedItem);
+            //TODO: _worldViewControl.SelectEntity((TransformEntity)entities_ComboBox.SelectedItem);
         }
 
         private void WorldViewControl_SceneLoadEvent(object? sender, GameScene e)
@@ -79,16 +82,16 @@ namespace CruZ.Editor
             string sceneFile = files[0];
 
             var scene = ResourceManager.LoadResource<GameScene>(sceneFile, out _);
-            //TODO: worldViewControl.LoadScene(scene);
+            //TODO: _worldViewControl.LoadScene(scene);
         }
 
         private void SaveScene_Clicked(object sender, EventArgs args)
         {
-            //TODO: if (worldViewControl.CurrentGameScene == null) return;
+            //TODO: if (_worldViewControl.CurrentGameScene == null) return;
 
             try
             {
-                //TODO: ResourceManager.SaveResource(worldViewControl.CurrentGameScene);
+                //TODO: ResourceManager.SaveResource(_worldViewControl.CurrentGameScene);
             }
             catch (System.Exception e)
             {
@@ -108,7 +111,7 @@ namespace CruZ.Editor
 
             ResourceManager.CreateResource(
                 savePath,
-                //TODO: worldViewControl.CurrentGameScene, 
+                //TODO: _worldViewControl.CurrentGameScene, 
                 true);
         }
 
@@ -121,7 +124,7 @@ namespace CruZ.Editor
 
             try
             {
-                //TODO: worldViewControl.LoadScene(SceneManager.GetSceneAssets(input));
+                //TODO: _worldViewControl.LoadScene(SceneManager.GetSceneAssets(input));
             }
             catch (SceneAssetNotFoundException ex)
             {
@@ -139,6 +142,24 @@ namespace CruZ.Editor
             );
         }
 
+        private void InitializeThread()
+        {
+            _worldViewControl_Thread = new Thread(InitializeWorldViewControl);
+            _worldViewControl_Thread.Start();
+        }
+
+        private void InitializeWorldViewControl()
+        {
+            _worldViewControl = new WorldViewControl();
+            _worldViewControl.Run();
+        }
+
+        WorldViewControl _worldViewControl;
+        Thread _worldViewControl_Thread;
+    }
+
+    public partial class EditorForm
+    {
         static EditorForm? _instance;
         public static EditorForm Instance => _instance ??= new EditorForm();
     }

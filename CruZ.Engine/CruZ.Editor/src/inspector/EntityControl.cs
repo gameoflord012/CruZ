@@ -42,7 +42,7 @@ namespace CruZ.Editor.UI
 
             CalcBounds();
 
-            if(args.InputInfo.CurMouseState.LeftButton == XNA.Input.ButtonState.Pressed)
+            if(args.InputInfo.CurMouse.LeftButton == XNA.Input.ButtonState.Pressed)
             {
                 _showBorder ^= true;
             }

@@ -4,9 +4,9 @@ namespace FirstDesktopGame
 {
     public class MyGame : GameApplication
     {
-        protected override void Initialize()
+        protected override void OnInitialize()
         {
-            base.Initialize();
+            base.OnInitialize();
         }
     }
 }
