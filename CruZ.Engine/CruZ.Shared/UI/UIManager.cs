@@ -12,7 +12,6 @@ namespace CruZ.UI
     {
         event Action<GameTime>  DrawUI;
         event Action<GameTime>  UpdateUI;
-        SpriteBatch             SpriteBatch { get; }
     }
 
     public class UIArgs
@@ -41,18 +40,11 @@ namespace CruZ.UI
             }
         }
 
-        private UIArgs GetArgs(GameTime gameTime)
-        {
-            UIArgs args = new();
-            args.GameTime = gameTime;
-            args.InputInfo = Input.Instance.GetInfo();
-            args.SpriteBatch = _context.SpriteBatch;
-            return args;
-        }
-
         private void OnDrawUI(GameTime gameTime)
         {
             var args = GetArgs(gameTime);
+
+            if(_spriteBatch == null) _spriteBatch = new SpriteBatch(ApplicationContext.GraphicsDevice);
 
             _spriteBatch.Begin();
 
@@ -64,7 +56,15 @@ namespace CruZ.UI
             _spriteBatch.End();
         }
 
-        SpriteBatch         _spriteBatch => _context.SpriteBatch;
+        private UIArgs GetArgs(GameTime gameTime)
+        {
+            UIArgs args = new();
+            args.GameTime = gameTime;
+            args.InputInfo = Input.Instance.GetInfo();
+            return args;
+        }
+
+        SpriteBatch?        _spriteBatch;
         UIContext           _context;
         List<UIControl>     _controls = [];
     }

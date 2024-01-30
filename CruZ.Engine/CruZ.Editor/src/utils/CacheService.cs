@@ -13,13 +13,14 @@ namespace CruZ.Editor
 
         public static void RegisterCacheControl(ICacheControl control)
         {
-            _registedCacheControls.Add(control);
+            _cacheControls.Add(control);
 
-            control.CanReadCacheChanged -= Control_CanReadCacheChanged;
-            control.CanReadCacheChanged += Control_CanReadCacheChanged;
+            control.CanReadCache -= Control_CanReadCacheChanged;
+            control.CanReadCache += Control_CanReadCacheChanged;
 
-            control.Control.ParentChanged -= Control_ParentChanged;
-            control.Control.ParentChanged += Control_ParentChanged;
+            //TODO:
+            //control.Control.ParentChanged -= Control_ParentChanged;
+            //control.Control.ParentChanged += Control_ParentChanged;
         }
 
         private static void Control_CanReadCacheChanged(object? sender, bool canRead)
@@ -35,18 +36,19 @@ namespace CruZ.Editor
 
         private static void Control_ParentChanged(object? sender, EventArgs e)
         {
-            var cache = sender as ICacheControl;
-            Trace.Assert(cache != null);
+            //TODO:
+            //var cache = sender as ICacheControl;
+            //Trace.Assert(cache != null);
 
-            if(cache.Control.Parent != null)
-            {
-                ReadCache(cache);
-            }
+            //if(cache.Control.Parent != null)
+            //{
+            //    ReadCache(cache);
+            //}
         }
 
         public static void CallReadCaches()
         {
-            foreach (var cache in _registedCacheControls)
+            foreach (var cache in _cacheControls)
             {
                 ReadCache(cache);
             }
@@ -54,7 +56,7 @@ namespace CruZ.Editor
 
         public static void CallWriteCaches()
         {
-            foreach (var cache in _registedCacheControls)
+            foreach (var cache in _cacheControls)
             {
                 WriteCache(cache);
             }
@@ -106,7 +108,7 @@ namespace CruZ.Editor
             return _canReadCaches[cache];
         }
 
-        private static HashSet<ICacheControl> _registedCacheControls = [];
+        private static HashSet<ICacheControl> _cacheControls = [];
         private static Dictionary<ICacheControl, bool> _canReadCaches = [];
     }
 }

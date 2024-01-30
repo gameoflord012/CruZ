@@ -8,9 +8,9 @@ namespace CruZ.Systems
     {
         private ECS(IECSContextProvider contextProvider)
         {
-            contextProvider.DrawEvent += Draw;
-            contextProvider.UpdateEvent += Update;
-            contextProvider.InitializeSystemEvent += InitializeSystem;
+            contextProvider.ECSDraw += Draw;
+            contextProvider.ECSUpdate += Update;
+            contextProvider.InitializeECSSystem += InitializeSystem;
         }
 
         private void InitializeSystem()

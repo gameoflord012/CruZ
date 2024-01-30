@@ -14,60 +14,58 @@ using System.Windows.Forms;
 
 namespace CruZ.Editor.Controls
 {
-    public partial class WorldViewControl : MonoGame.Forms.NET.Controls.InvalidationControl, 
-        IECSContextProvider, IApplicationContextProvider, IInputContextProvider, UIContext
+    public partial class WorldViewControl
     {
-        public event Action<GameTime>   DrawEvent;
-        public event Action<GameTime>   UpdateEvent;
+        //public event Action<GameTime>   ECSDraw;
+        //public event Action<GameTime>   ECSUpdate;
 
-        public event Action<GameTime>   UpdateUI;
-        public event Action<GameTime>   DrawUI;
+        //public event Action<GameTime>   UpdateUI;
+        //public event Action<GameTime>   DrawUI;
 
-        public event Action<GameTime>   UpdateInputEvent;
-        public event Action             InitializeSystemEvent;
+        //public event Action<GameTime>   UpdateInputEvent;
+        //public event Action             InitializeECSSystem;
         
+
+        //public GraphicsDevice   GraphicsDevice      => Editor.GraphicsDevice;
+        //public ContentManager   Content             => Editor.Content;
+        //public SpriteBatch      SpriteBatch         => Editor.spriteBatch;
+
         public event EventHandler<GameScene>        SceneLoadEvent;
         public event EventHandler<TransformEntity>  OnSelectedEntityChanged;
-
-        public GraphicsDevice   GraphicsDevice      => Editor.GraphicsDevice;
-        public ContentManager   Content             => Editor.Content;
-        public GameScene?       CurrentGameScene    => _currentScene;
-        public SpriteBatch      SpriteBatch         => Editor.spriteBatch;
+        
+        public GameScene? CurrentGameScene => _currentScene;
 
         public WorldViewControl()
         {
-            ECS                 .SetContext(this);
-            ApplicationContext  .SetContext(this);
-            Input               .SetContext(this);
-            UIManager           .SetContext(this);
-
-            _camera = new Camera(Width, Height);
-            Camera.Main = _camera;
+            //ECS                 .SetContext(this);
+            //ApplicationContext  .SetContext(this);
+            //Input               .SetContext(this);
+            //UIManager           .SetContext(this);
+            _gameApp = new GameApplication();
+            _mainCamera = new Camera(_gameApp.GraphicsDevice.Viewport);
+            Camera.Main = _mainCamera;
 
             CacheService.RegisterCacheControl(this);
-            CanReadCacheChanged?.Invoke(this, false);
+            CanReadCache?.Invoke(this, false);
+
+            Initialize();
         }
 
-        protected override void Initialize()
+        protected void Initialize()
         {
-            Editor.Content.RootDirectory = ".";
-            InitializeSystemEvent.Invoke();
+            //_gameLoopTimer = new();
+            //_gameLoopTimer.Start();
 
-            Editor.FPSCounter.Enabled = true;
+            //_drawElapsed = _gameLoopTimer.Elapsed;
+            //_updateElapsed = _gameLoopTimer.Elapsed;
 
-            _gameLoopTimer = new();
-            _gameLoopTimer.Start();
+            //_updateTimer = new();
+            //_updateTimer.SynchronizingObject = this;
+            //_updateTimer.Interval = 1f / GlobalVariables.TARGET_FPS * 1000;
+            //_updateTimer.Enabled = true;
+            //_updateTimer.Elapsed += Update;
 
-            _drawElapsed = _gameLoopTimer.Elapsed;
-            _updateElapsed = _gameLoopTimer.Elapsed;
-
-            _updateTimer = new();
-            _updateTimer.SynchronizingObject = this;
-            _updateTimer.Interval = 1f / GlobalVariables.TARGET_FPS * 1000;
-            _updateTimer.Enabled = true;
-            _updateTimer.Elapsed += Update;
-
-            CanReadCacheChanged?.Invoke(this, true);
+            CanReadCache?.Invoke(this, true);
         }
 
         private void Update(object? sender, ElapsedEventArgs e)
@@ -78,7 +76,7 @@ namespace CruZ.Editor.Controls
             Editor.FPSCounter.Update(gameTime);
 
             UpdateInputEvent?   .Invoke(gameTime);
-            UpdateEvent?        .Invoke(gameTime);
+            ECSUpdate?        .Invoke(gameTime);
             UpdateUI            .Invoke(gameTime);
 
             Invalidate();
@@ -89,9 +87,9 @@ namespace CruZ.Editor.Controls
             GameTime gameTime = new(_gameLoopTimer.Elapsed, _gameLoopTimer.Elapsed - _drawElapsed);
             _drawElapsed = _gameLoopTimer.Elapsed;
 
-            Editor.FPSCounter.UpdateFrameCounter();
+            //Editor.FPSCounter.UpdateFrameCounter();
 
-            DrawEvent?.Invoke(gameTime);
+            ECSDraw?.Invoke(gameTime);
             DrawUI?.Invoke(gameTime);
 
             DrawAxis();
@@ -177,40 +175,40 @@ namespace CruZ.Editor.Controls
 
         private void InitEntityControl()
         {
-            if (_currentScene == null) return;
-            foreach (var e in _currentScene.Entities)
-            {
-                var btn = new EntityButton(e);
+            //if (_currentScene == null) return;
+            //foreach (var e in _currentScene.Entities)
+            //{
+            //    var btn = new EntityButton(e);
 
-                _entityBtns.Add(btn);
-                btn.MouseDown += EntityBtn_MouseDown;
-                Controls.Add(btn);
-                //Controls.Add(new EntityControl(e));
-                UIManager.Controls.Add(new EntityControl(e));
-            }
+            //    _entityBtns.Add(btn);
+            //    btn.MouseDown += EntityBtn_MouseDown;
+            //    Controls.Add(btn);
+            //    //Controls.Add(new EntityControl(e));
+            //    UIManager.Controls.Add(new EntityControl(e));
+            //}
         }
 
-        private void EntityBtn_MouseDown(object? sender, EventArgs e)
-        {
-            SelectEntity(((EntityButton)sender).AttachedEntity);
-        }
+        //private void EntityBtn_MouseDown(object? sender, EventArgs e)
+        //{
+        //    SelectEntity(((EntityButton)sender).AttachedEntity);
+        //}
 
         readonly MouseButtons _cameraMouseDragButton = MouseButtons.Middle;
 
-        Stopwatch   _gameLoopTimer;
-        TimeSpan    _drawElapsed;
-        TimeSpan    _updateElapsed;
+        //Stopwatch   _gameLoopTimer;
+        //TimeSpan    _drawElapsed;
+        //TimeSpan    _updateElapsed;
+        //System.Timers.Timer _updateTimer;
+        //List<Button> _entityBtns = new();
 
         bool                    _isMouseDraggingCamera;
         Vector3                 _cameraStartDragCoord;
         System.Drawing.Point    _mouseStartDragPoint;
 
-        GameScene?      _currentScene;
-        TransformEntity _currentSelectedEntity;
-        System.Timers.Timer _updateTimer;
+        GameScene?          _currentScene;
+        TransformEntity     _currentSelectedEntity;
+        GameApplication     _gameApp;
 
-        List<Button> _entityBtns = new();
-
-        Camera _camera;
+        Camera _mainCamera;
     }
 }

@@ -9,8 +9,8 @@ namespace CruZ.Editor.Controls
 {
     public partial class WorldViewControl : ICacheControl
     {
-        public Control Control => this;
-        public event    EventHandler<bool> CanReadCacheChanged;
+        //public Control Control => this;
+        public event    EventHandler<bool> CanReadCache;
         public string   UniquedCachedPath => "WorldViewControlSuperUnique.cache";
 
 
@@ -22,13 +22,13 @@ namespace CruZ.Editor.Controls
 
                 var lastScenePath = reader.ReadString();
 
-                _camera.Position = new(
+                _mainCamera.Position = new(
                     reader.ReadSingle(),
                     reader.ReadSingle(),
                     reader.ReadSingle()
                     );
 
-                _camera.Zoom = new(
+                _mainCamera.Zoom = new(
                     reader.ReadSingle(),
                     reader.ReadSingle(),
                     reader.ReadSingle()
@@ -62,13 +62,13 @@ namespace CruZ.Editor.Controls
                     bin.Write(CurrentGameScene.ResourceInfo.ResourceName);
                 }
 
-                bin.Write(_camera.Position.X);
-                bin.Write(_camera.Position.Y);
-                bin.Write(_camera.Position.Z);
+                bin.Write(_mainCamera.Position.X);
+                bin.Write(_mainCamera.Position.Y);
+                bin.Write(_mainCamera.Position.Z);
 
-                bin.Write(_camera.Zoom.X);
-                bin.Write(_camera.Zoom.Y);
-                bin.Write(_camera.Zoom.Z);
+                bin.Write(_mainCamera.Zoom.X);
+                bin.Write(_mainCamera.Zoom.Y);
+                bin.Write(_mainCamera.Zoom.Z);
 
                 bin.Flush();
             }

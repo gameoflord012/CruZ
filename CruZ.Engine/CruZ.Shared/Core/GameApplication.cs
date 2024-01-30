@@ -1,4 +1,5 @@
 ﻿using CruZ.Systems;
+using CruZ.UI;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -6,7 +7,8 @@ using System;
 
 namespace CruZ
 {
-    public abstract class GameApplication: IECSContextProvider, IInputContextProvider, IApplicationContextProvider
+    public class GameApplication: 
+        IECSContextProvider, IInputContextProvider, IApplicationContextProvider, UIContext
     {
         public ContentManager       Content         { get => _core.Content; }
         public GraphicsDevice       GraphicsDevice  { get => _core.GraphicsDevice; }
@@ -46,9 +48,12 @@ namespace CruZ
 
         private GameCore _core;
 
-        event Action<GameTime>  IECSContextProvider.DrawEvent               { add { _core.DrawEvent             += value; } remove { _core.DrawEvent            -= value; } }
-        event Action<GameTime>  IECSContextProvider.UpdateEvent             { add { _core.UpdateEvent           += value; } remove { _core.UpdateEvent          -= value; } }
-        event Action            IECSContextProvider.InitializeSystemEvent   { add { _core.InitializeSystemEvent += value; } remove { _core.InitializeSystemEvent-= value; } }
+        public event Action<GameTime> DrawUI;
+        public event Action<GameTime> UpdateUI;
+
+        event Action<GameTime>  IECSContextProvider.ECSDraw               { add { _core.DrawEvent             += value; } remove { _core.DrawEvent            -= value; } }
+        event Action<GameTime>  IECSContextProvider.ECSUpdate             { add { _core.UpdateEvent           += value; } remove { _core.UpdateEvent          -= value; } }
+        event Action            IECSContextProvider.InitializeECSSystem   { add { _core.InitializeSystemEvent += value; } remove { _core.InitializeSystemEvent-= value; } }
         event Action<GameTime>  IInputContextProvider.UpdateInputEvent      { add { _core.UpdateEvent           += value; } remove { _core.UpdateEvent          -= value; } }
     }
 }
