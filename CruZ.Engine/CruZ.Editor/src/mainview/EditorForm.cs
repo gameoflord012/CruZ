@@ -13,7 +13,7 @@ namespace CruZ.Editor
 {
     public partial class EditorForm : Form
     {
-        public PropertyGrid Inspector_PropertyGrid  { get => inspector_PropertyGrid; }
+        public PropertyGrid Inspector_PropertyGrid { get => inspector_PropertyGrid; }
         //TODO: public WorldViewControl WorldViewControl    { get => worldViewControl; }
 
         private EditorForm()
@@ -29,13 +29,13 @@ namespace CruZ.Editor
 
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
-            if(keyData == (Keys.Control | Keys.Z))
+            if (keyData == (Keys.Control | Keys.Z))
             {
                 UndoService.Undo();
                 return true;
             }
 
-            if(keyData == (Keys.Control | Keys.Shift | Keys.Z))
+            if (keyData == (Keys.Control | Keys.Shift | Keys.Z))
             {
                 UndoService.Redo();
                 return true;
@@ -53,7 +53,7 @@ namespace CruZ.Editor
         {
             entities_ComboBox.Items.Clear();
 
-            for(int i = 0; i < e.Entities.Count(); i++)
+            for (int i = 0; i < e.Entities.Count(); i++)
             {
                 entities_ComboBox.Items.Add(e.Entities[i]);
             }
@@ -90,7 +90,7 @@ namespace CruZ.Editor
             {
                 //TODO: ResourceManager.SaveResource(worldViewControl.CurrentGameScene);
             }
-            catch(System.Exception e)
+            catch (System.Exception e)
             {
                 ShowExceptionDialog(e);
             }
@@ -117,7 +117,7 @@ namespace CruZ.Editor
             string input = Microsoft.VisualBasic.Interaction.InputBox(
                 "Enter Scene name to load", "Load scene Prompt");
 
-            if(string.IsNullOrWhiteSpace(input)) return;
+            if (string.IsNullOrWhiteSpace(input)) return;
 
             try
             {
@@ -138,7 +138,7 @@ namespace CruZ.Editor
                 MessageBoxIcon.Error
             );
         }
-        
+
         static EditorForm? _instance;
         public static EditorForm Instance => _instance ??= new EditorForm();
     }

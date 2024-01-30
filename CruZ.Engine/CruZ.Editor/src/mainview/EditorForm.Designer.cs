@@ -33,74 +33,37 @@ namespace CruZ.Editor
         /// </summary>
         private void InitializeComponent()
         {
-            splitContainer1 = new SplitContainer();
             entities_ComboBox = new ComboBox();
             inspector_PropertyGrid = new PropertyGrid();
-            menuStrip = new MenuStrip();
             file_Menu = new ToolStripMenuItem();
             scene_Menu = new ToolStripMenuItem();
             openScene_MenuButton = new ToolStripMenuItem();
             saveScene_MenuButton = new ToolStripMenuItem();
             saveAsScene_MenuButton = new ToolStripMenuItem();
             loadScene_MenuButton = new ToolStripMenuItem();
-            ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
-            splitContainer1.Panel1.SuspendLayout();
-            splitContainer1.Panel2.SuspendLayout();
-            splitContainer1.SuspendLayout();
+            menuStrip = new MenuStrip();
+            entities_Text = new Label();
+            inspector_Panel = new Panel();
             menuStrip.SuspendLayout();
+            inspector_Panel.SuspendLayout();
             SuspendLayout();
-            // 
-            // splitContainer1
-            // 
-            splitContainer1.Dock = DockStyle.Fill;
-            splitContainer1.Location = new Point(0, 24);
-            splitContainer1.Margin = new Padding(3, 2, 3, 2);
-            splitContainer1.Name = "splitContainer1";
-            // 
-            // splitContainer1.Panel1
-            // 
-            
-            // 
-            // splitContainer1.Panel2
-            // 
-            splitContainer1.Panel2.Controls.Add(entities_ComboBox);
-            splitContainer1.Panel2.Controls.Add(inspector_PropertyGrid);
-            splitContainer1.Size = new Size(700, 314);
-            splitContainer1.SplitterDistance = 419;
-            splitContainer1.TabIndex = 0;
-            // 
-            // worldViewControl
-            // 
-            
             // 
             // entities_ComboBox
             // 
-            entities_ComboBox.Dock = DockStyle.Top;
+            entities_ComboBox.Dock = DockStyle.Fill;
             entities_ComboBox.FormattingEnabled = true;
-            entities_ComboBox.Location = new Point(0, 0);
+            entities_ComboBox.Location = new Point(0, 17);
             entities_ComboBox.Name = "entities_ComboBox";
-            entities_ComboBox.Size = new Size(277, 23);
+            entities_ComboBox.Size = new Size(700, 23);
             entities_ComboBox.TabIndex = 1;
             // 
             // inspector_PropertyGrid
             // 
-            inspector_PropertyGrid.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            inspector_PropertyGrid.Location = new Point(0, 29);
+            inspector_PropertyGrid.Dock = DockStyle.Bottom;
+            inspector_PropertyGrid.Location = new Point(0, 53);
             inspector_PropertyGrid.Name = "inspector_PropertyGrid";
-            inspector_PropertyGrid.Size = new Size(277, 285);
+            inspector_PropertyGrid.Size = new Size(700, 261);
             inspector_PropertyGrid.TabIndex = 0;
-            // 
-            // menuStrip
-            // 
-            menuStrip.BackColor = SystemColors.Control;
-            menuStrip.ImageScalingSize = new Size(20, 20);
-            menuStrip.Items.AddRange(new ToolStripItem[] { file_Menu });
-            menuStrip.Location = new Point(0, 0);
-            menuStrip.Name = "menuStrip";
-            menuStrip.Padding = new Padding(5, 2, 0, 2);
-            menuStrip.Size = new Size(700, 24);
-            menuStrip.TabIndex = 1;
-            menuStrip.Text = "menuStrip1";
             // 
             // file_Menu
             // 
@@ -145,38 +108,57 @@ namespace CruZ.Editor
             loadScene_MenuButton.Text = "Load Scene";
             loadScene_MenuButton.Click += LoadScene_Clicked;
             // 
+            // menuStrip
+            // 
+            menuStrip.BackColor = SystemColors.ButtonHighlight;
+            menuStrip.ImageScalingSize = new Size(20, 20);
+            menuStrip.Items.AddRange(new ToolStripItem[] { file_Menu });
+            menuStrip.Location = new Point(0, 0);
+            menuStrip.Name = "menuStrip";
+            menuStrip.Padding = new Padding(5, 2, 0, 2);
+            menuStrip.Size = new Size(700, 24);
+            menuStrip.TabIndex = 1;
+            menuStrip.Text = "menuStrip1";
+            // 
+            // entities_Text
+            // 
+            entities_Text.Dock = DockStyle.Top;
+            entities_Text.Location = new Point(0, 0);
+            entities_Text.Name = "entities_Text";
+            entities_Text.Size = new Size(700, 17);
+            entities_Text.TabIndex = 2;
+            entities_Text.Text = "Entities";
+            // 
+            // inspector_Panel
+            // 
+            inspector_Panel.Controls.Add(inspector_PropertyGrid);
+            inspector_Panel.Controls.Add(entities_ComboBox);
+            inspector_Panel.Controls.Add(entities_Text);
+            inspector_Panel.Dock = DockStyle.Fill;
+            inspector_Panel.Location = new Point(0, 24);
+            inspector_Panel.Name = "inspector_Panel";
+            inspector_Panel.Size = new Size(700, 314);
+            inspector_Panel.TabIndex = 3;
+            // 
             // EditorForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(700, 338);
-            Controls.Add(splitContainer1);
+            Controls.Add(inspector_Panel);
             Controls.Add(menuStrip);
             MainMenuStrip = menuStrip;
             Margin = new Padding(3, 2, 3, 2);
             Name = "EditorForm";
             Text = "EditorForm";
-            splitContainer1.Panel1.ResumeLayout(false);
-            splitContainer1.Panel2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)splitContainer1).EndInit();
-            splitContainer1.ResumeLayout(false);
             menuStrip.ResumeLayout(false);
             menuStrip.PerformLayout();
+            inspector_Panel.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
         }
 
         #endregion
-
-        private SplitContainer splitContainer1;
-        //TODO: private WorldViewControl worldViewControl;
-        private MenuStrip menuStrip;
-        private ToolStripMenuItem file_Menu;
-        private ToolStripMenuItem scene_Menu;
-        private ToolStripMenuItem saveScene_MenuButton;
-        private ToolStripMenuItem loadScene_MenuButton;
-        private ToolStripMenuItem saveAsScene_MenuButton;
-        private ToolStripMenuItem openScene_MenuButton;
         private PropertyGrid inspector_PropertyGrid;
         private ComboBox entities_ComboBox;
 
@@ -195,5 +177,15 @@ namespace CruZ.Editor
         //worldViewControl.Size = new Size(419, 314);
         //worldViewControl.TabIndex = 0;
         #endregion
+
+        private ToolStripMenuItem file_Menu;
+        private ToolStripMenuItem scene_Menu;
+        private ToolStripMenuItem openScene_MenuButton;
+        private ToolStripMenuItem saveScene_MenuButton;
+        private ToolStripMenuItem saveAsScene_MenuButton;
+        private ToolStripMenuItem loadScene_MenuButton;
+        private MenuStrip menuStrip;
+        private Label entities_Text;
+        private Panel inspector_Panel;
     }
 }
