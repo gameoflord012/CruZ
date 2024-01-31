@@ -16,6 +16,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Core\ApplicationContext.Static.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Exceptions\MissingContextException.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Exceptions\SceneAssetNotFoundException.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Exceptions\SystemUninitailizeException.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System\Animation\AnimationComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System\Entity\Utils\ComponentManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System\Camera\Camera.Static.cs" />

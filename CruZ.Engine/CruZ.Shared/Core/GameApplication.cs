@@ -18,23 +18,27 @@ namespace CruZ
         public event Action<GameTime>   InputUpdate;
         public event Action<Viewport>   WindowResize;
 
-        public event Action             Initialize;
+        public event Action             Initializing;
+        public event Action             Initialized;
 
         public ContentManager       Content         { get => _core.Content; }
         public GraphicsDevice       GraphicsDevice  { get => _core.GraphicsDevice; }
         public GameWindow           Window          => _core.Window;
 
+        public bool IsGameRunning { get => _isGameRunning; }
+
         public GameApplication()
         {
             _core = new();
 
-            _core.InitializeEvent   += InternalInitialize;
-            _core.LoadContentEvent  += OnLoadContent;
+            _core.Initializing      += InternalInitializing;
             _core.UpdateEvent       += InternalUpdate;
             _core.DrawEvent         += InternalDraw;
+            _core.ExitEvent         += InternalOnExit;
+
+            _core.LoadContentEvent  += OnLoadContent;
             _core.LateDrawEvent     += OnLateDraw;
-            _core.EndRunEvent       += OnEndRun;
-            _core.ExitEvent         += OnExit;
+            //_core.EndRunEvent       += OnEndRun;
 
             _core.Window.ClientSizeChanged += Window_ClientSizeChanged;
 
@@ -48,6 +52,13 @@ namespace CruZ
         public void Run()
         {
             _core.Run();
+            _isGameRunning = true;
+        }
+
+        public void Exit()
+        {
+            _core.Exit();
+            _isGameRunning = false;
         }
 
         private void Window_ClientSizeChanged(object? sender, EventArgs e)
@@ -71,23 +82,31 @@ namespace CruZ
             OnDraw(gameTime);
         }
 
-        private void InternalInitialize()
+        private void InternalInitializing()
         {
             Camera.Main = new Camera(GraphicsDevice.Viewport);
             InitializeECSSystem?.Invoke();
 
-            Initialize?.Invoke();
+            Initializing?.Invoke();
             OnInitialize();
+
+            Initialized?.Invoke();
+        }
+
+        private void InternalOnExit(object? sender, EventArgs e)
+        {
+            OnExit();
         }
 
         protected virtual void  OnInitialize() { }
         protected virtual void  OnUpdate(GameTime gameTime) { }
         protected virtual void  OnDraw(GameTime gameTime) { }
         protected virtual void  OnLateDraw(GameTime gameTime) { }
-        protected virtual void  OnExit(object sender, EventArgs args) { }
-        protected virtual void  OnEndRun() { }
+        protected virtual void  OnExit() { }
         protected virtual void  OnLoadContent() { }
+        //protected virtual void  OnEndRun() { }
 
         private GameCore _core;
+        private bool _isGameRunning = false;
     }
 }

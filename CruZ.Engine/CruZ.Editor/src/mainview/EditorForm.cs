@@ -1,11 +1,8 @@
-﻿using CruZ.Components;
-using CruZ.Editor.Controls;
+﻿using CruZ.Editor.Controls;
 using CruZ.Editor.Systems;
 using CruZ.Resource;
-using CruZ.Scene;
 using System;
 using System.Diagnostics;
-using System.Drawing;
 using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
@@ -15,19 +12,20 @@ namespace CruZ.Editor
     public partial class EditorForm : Form
     {
         public PropertyGrid Inspector_PropertyGrid { get => inspector_PropertyGrid; }
-        //TODO: public EditorApplication EditorApplication    { get => _worldViewControl; }
+        //TODO: public EditorApplication EditorApplication    { get => _editorApp; }
 
         private EditorForm()
         {
             KeyPreview = true;
 
             InitializeComponent();
-            InitializeThread();
 
-            //TODO: _worldViewControl.OnSelectedEntityChanged += WorldViewControl_OnSelectedEntityChanged;
-            //TODO: _worldViewControl.SceneLoadEvent += WorldViewControl_SceneLoadEvent;
+            //TODO: _editorApp.OnSelectedEntityChanged += WorldViewControl_OnSelectedEntityChanged;
+            //TODO: _editorApp.SceneLoadEvent += WorldViewControl_SceneLoadEvent;
             entities_ComboBox.SelectedIndexChanged += Entities_ComboBox_SelectedIndexChanged;
             entities_ComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
+
+            _editorApp = new();
         }
 
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
@@ -49,7 +47,7 @@ namespace CruZ.Editor
 
         private void Entities_ComboBox_SelectedIndexChanged(object? sender, EventArgs e)
         {
-            //TODO: _worldViewControl.SelectEntity((TransformEntity)entities_ComboBox.SelectedItem);
+            //TODO: _editorApp.SelectEntity((TransformEntity)entities_ComboBox.SelectedItem);
         }
 
         private void WorldViewControl_SceneLoadEvent(object? sender, GameScene e)
@@ -69,11 +67,6 @@ namespace CruZ.Editor
             entities_ComboBox.SelectedItem = e;
         }
 
-        protected override void OnFormClosing(FormClosingEventArgs e)
-        {
-            CacheService.CallWriteCaches();
-        }
-
         private void OpenScene_Clicked(object sender, EventArgs e)
         {
             var files = DialogHelper.SelectSceneFile(false);
@@ -81,17 +74,16 @@ namespace CruZ.Editor
 
             string sceneFile = files[0];
 
-            var scene = ResourceManager.LoadResource<GameScene>(sceneFile, out _);
-            //TODO: _worldViewControl.LoadScene(scene);
+            _editorApp.LoadSceneFromResouceFile(sceneFile);
         }
 
         private void SaveScene_Clicked(object sender, EventArgs args)
         {
-            //TODO: if (_worldViewControl.CurrentGameScene == null) return;
+            //TODO: if (_editorApp.CurrentGameScene == null) return;
 
             try
             {
-                //TODO: ResourceManager.SaveResource(_worldViewControl.CurrentGameScene);
+                //TODO: ResourceManager.SaveResource(_editorApp.CurrentGameScene);
             }
             catch (System.Exception e)
             {
@@ -102,6 +94,7 @@ namespace CruZ.Editor
 
         private void File_Menu_Clicked(object sender, EventArgs e)
         {
+
         }
 
         private void SaveAsScene_Clicked(object sender, EventArgs e)
@@ -111,7 +104,7 @@ namespace CruZ.Editor
 
             ResourceManager.CreateResource(
                 savePath,
-                //TODO: _worldViewControl.CurrentGameScene, 
+                //TODO: _editorApp.CurrentGameScene, 
                 true);
         }
 
@@ -124,7 +117,7 @@ namespace CruZ.Editor
 
             try
             {
-                //TODO: _worldViewControl.LoadScene(SceneManager.GetSceneAssets(input));
+                //TODO: _editorApp.LoadScene(SceneManager.GetSceneAssets(input));
             }
             catch (SceneAssetNotFoundException ex)
             {
@@ -142,20 +135,13 @@ namespace CruZ.Editor
             );
         }
 
-        private void InitializeThread()
+        protected override void OnFormClosing(FormClosingEventArgs e)
         {
-            _worldViewControl_Thread = new Thread(InitializeWorldViewControl);
-            _worldViewControl_Thread.Start();
+            CacheService.CallWriteCaches();
+            _editorApp.ExitApp();
         }
 
-        private void InitializeWorldViewControl()
-        {
-            _worldViewControl = new EditorApplication();
-            _worldViewControl.Run();
-        }
-
-        EditorApplication _worldViewControl;
-        Thread _worldViewControl_Thread;
+        EditorApplication _editorApp;
     }
 
     public partial class EditorForm

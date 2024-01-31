@@ -7,7 +7,7 @@ namespace CruZ
 
     public partial class GameCore : Game
     {
-        public event Action?                    InitializeEvent;
+        public event Action?                    Initializing;
         public event Action?                    InitializeSystemEvent;
         public event Action?                    LoadContentEvent;
         public event Action?                    EndRunEvent;
@@ -48,7 +48,7 @@ namespace CruZ
             base.Initialize();
 
             InitalizeSystem();
-            InitializeEvent?.Invoke();
+            Initializing?.Invoke();
         }
 
         private void InitalizeSystem()

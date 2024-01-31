@@ -1,4 +1,5 @@
 ﻿using Box2D.NetStandard.Dynamics.World;
+using CruZ.Exception;
 using CruZ.Serialization;
 using CruZ.Systems;
 using Microsoft.Xna.Framework;
@@ -79,6 +80,11 @@ namespace CruZ.Components
 
         ISerializable ISerializable.CreateDefault()
         {
+            if(ECS.World == null)
+            {
+                throw new SystemUninitailizeException($"System {nameof(ECS.World)} is uninitlized");
+            }
+
             return new TransformEntity(ECS.World.CreateEntity());
         }
     }

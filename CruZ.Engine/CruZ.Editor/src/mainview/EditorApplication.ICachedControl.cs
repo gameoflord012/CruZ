@@ -9,16 +9,15 @@ namespace CruZ.Editor.Controls
 {
     public partial class EditorApplication : ICacheControl
     {
-        //public Control Control => this;
-        public event    EventHandler<bool> CanReadCache;
+        public event    Action<ICacheControl> UpdateCache;
         public string   UniquedCachedPath => "WorldViewControlSuperUnique.cache";
 
 
-        public void ReadCache(Stream stream)
+        public bool ReadCache(Stream stream)
         {
             using (BinaryReader reader = new(stream))
             {
-                if(reader.ReadString() != "!WorldViewCache") return;
+                if(reader.ReadString() != "!WorldViewCache") return false;
 
                 var lastScenePath = reader.ReadString();
 
@@ -41,8 +40,10 @@ namespace CruZ.Editor.Controls
                 }
                 catch 
                 {
-                    throw;
+                    return false;
                 }
+
+                return true;
             }
         }
 
