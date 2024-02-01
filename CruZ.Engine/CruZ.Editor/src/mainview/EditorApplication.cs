@@ -43,6 +43,7 @@ namespace CruZ.Editor.Controls
             Input.MouseUp       += Input_MouseUp;
 
             CacheService.Register(this);
+            UpdateCache?.Invoke(this);
         }
 
         #region COMMENT
@@ -174,10 +175,8 @@ namespace CruZ.Editor.Controls
 
         private void GameApp_Intialized()
         {
-            _mainCamera = new Camera(_gameApp.GraphicsDevice.Viewport);
-            Camera.Main = _mainCamera;
+            Camera.Main = GetMainCamera();
 
-            UpdateCache.Invoke(this);
             _appInitalized_Reset.Set();
         }
 
@@ -238,6 +237,11 @@ namespace CruZ.Editor.Controls
             SceneLoadEvent?.Invoke(this, _currentScene);
 
             InitEntityControl();
+        }
+
+        private Camera GetMainCamera()
+        {
+            return _mainCamera ??= new Camera(_gameApp.GraphicsDevice.Viewport);
         }
 
         //private void EntityBtn_MouseDown(object? sender, EventArgs e)

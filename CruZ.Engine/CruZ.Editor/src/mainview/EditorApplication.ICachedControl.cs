@@ -21,22 +21,21 @@ namespace CruZ.Editor.Controls
 
                 var lastScenePath = reader.ReadString();
 
-                _mainCamera.Position = new(
-                    reader.ReadSingle(),
-                    reader.ReadSingle(),
-                    reader.ReadSingle()
-                    );
+                //GetMainCamera().Position = new(
+                //    reader.ReadSingle(),
+                //    reader.ReadSingle(),
+                //    reader.ReadSingle()
+                //    );
 
-                _mainCamera.Zoom = new(
-                    reader.ReadSingle(),
-                    reader.ReadSingle(),
-                    reader.ReadSingle()
-                    );
+                //GetMainCamera().Zoom = new(
+                //    reader.ReadSingle(),
+                //    reader.ReadSingle(),
+                //    reader.ReadSingle()
+                //    );
                 
                 try
                 {
-                    var toLoad = ResourceManager.LoadResource<GameScene>(lastScenePath);
-                    LoadScene(toLoad);
+                    LoadSceneFromFile(lastScenePath);
                 }
                 catch 
                 {

@@ -12,7 +12,6 @@ namespace CruZ.Editor
 
         public Inspector()
         {
-            //TODO: EditorForm.Instance.EditorApplication.ECSDraw += WorldViewControl_DrawEvent;
         }
 
         public void DisplayEntity(TransformEntity e)
@@ -20,6 +19,7 @@ namespace CruZ.Editor
             PropertyGrid.SelectedObject = new EntityWrapper(e);
         }
 
+        //TODO: refresh property grid every frames or when properties changed
         private void WorldViewControl_DrawEvent(XNA.GameTime obj)
         {
             if(PropertyGrid.ContainsFocus) return;

@@ -9,7 +9,7 @@ namespace CruZ.Editor
     {
         public const string CACHE_ROOT = "Control Caches";
 
-        public static void Register(ICacheControl control, bool canReadCache = true)
+        public static void Register(ICacheControl control)
         {
             _cacheControls.Add(control);
 

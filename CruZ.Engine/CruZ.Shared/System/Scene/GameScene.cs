@@ -9,9 +9,6 @@ using System.Collections.Generic;
 
 namespace CruZ
 {
-    //TODO: Game Scene can't not be directly load from file,
-    //it should only accessble from a GameApplication instance or scene may not be unload correctly
-
     public partial class GameScene : IHostResource, ISerializable
     {
         public event Action<TransformEntity>? OnEntityAdded;

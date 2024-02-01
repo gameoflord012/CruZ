@@ -52,8 +52,8 @@ namespace CruZ
 
         public void Run()
         {
-            _core.Run();
             _isGameRunning = true;
+            _core.Run();
         }
 
         public void Exit()
