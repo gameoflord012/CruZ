@@ -201,7 +201,6 @@ namespace CruZ.Editor.Controls
 
             _gameApp = null;
             _gameAppThread = null;
-            _mainCamera = null;
         }
 
         private void Check_AppInitialized()

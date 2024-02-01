@@ -43,6 +43,7 @@ namespace CruZ.Components
     {
         public event EventHandler<DrawBeginEventArgs>   DrawLoopBegin;
         public event EventHandler<DrawEndEventArgs>     DrawLoopEnd;
+        public event Action                             DrawBegin;
         public event Action                             DrawEnd;
 
         [Browsable(false), JsonIgnore]
@@ -70,6 +71,7 @@ namespace CruZ.Components
         {
             Trace.Assert(_e != null);
 
+            DrawBegin?.Invoke();
             while (true)
             {
                 DrawBeginEventArgs beginArgs = new();
@@ -119,6 +121,8 @@ namespace CruZ.Components
                 DrawLoopEnd?.Invoke(this, endArgs);
                 if (!endArgs.KeepDrawing) break;
             }
+
+            DrawEnd?.Invoke();
         }
 
         public void OnAttached(TransformEntity entity)
