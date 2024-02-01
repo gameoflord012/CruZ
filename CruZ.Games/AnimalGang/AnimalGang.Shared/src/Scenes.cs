@@ -10,7 +10,7 @@ namespace CruZ.Scene
         [SceneAssetMethod("Scene1")]
         public static GameScene Scene1()
         {
-            var scene = new GameScene();
+            var scene = GameApplication.CreateScene();
 
             var player = ECS.CreateEntity();
             player.Name = "Player";

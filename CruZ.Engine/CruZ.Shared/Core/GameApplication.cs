@@ -7,7 +7,7 @@ using System;
 
 namespace CruZ
 {
-    public class GameApplication : 
+    public partial class GameApplication : 
         IECSContextProvider, IInputContextProvider, IApplicationContextProvider, UIContext
     {
         public event Action<GameTime>   DrawUI;
@@ -17,6 +17,7 @@ namespace CruZ
         public event Action             InitializeECSSystem;
         public event Action<GameTime>   InputUpdate;
         public event Action<Viewport>   WindowResize;
+        public event Action             ExitEvent;
 
         public event Action             Initializing;
         public event Action             Initialized;
@@ -27,7 +28,7 @@ namespace CruZ
 
         public bool IsGameRunning { get => _isGameRunning; }
 
-        public GameApplication()
+        private GameApplication()
         {
             _core = new();
 
@@ -42,9 +43,9 @@ namespace CruZ
 
             _core.Window.ClientSizeChanged += Window_ClientSizeChanged;
 
-            ApplicationContext  .SetContext(this);
-            ECS                 .SetContext(this);
-            Input               .SetContext(this);
+            ApplicationContext  .CreateContext(this);
+            ECS                 .CreateContext(this);
+            Input               .CreateContext(this);
 
             //_core.Run();
         }
@@ -95,6 +96,7 @@ namespace CruZ
 
         private void InternalOnExit(object? sender, EventArgs e)
         {
+            ExitEvent?.Invoke();
             OnExit();
         }
 
@@ -108,5 +110,20 @@ namespace CruZ
 
         private GameCore _core;
         private bool _isGameRunning = false;
+    }
+
+    public partial class GameApplication
+    {
+        public static GameApplication CreateContext()
+        {
+            return Instance = new GameApplication();
+        }
+
+        public static GameApplication? Instance { get; private set; }
+
+        public static GameScene CreateScene()
+        {
+            return GameScene.Create(GameApplication.Instance);
+        }
     }
 }

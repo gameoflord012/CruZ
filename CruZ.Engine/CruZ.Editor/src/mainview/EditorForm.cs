@@ -74,7 +74,7 @@ namespace CruZ.Editor
 
             string sceneFile = files[0];
 
-            _editorApp.LoadSceneFromResouceFile(sceneFile);
+            _editorApp.LoadSceneFromFile(sceneFile);
         }
 
         private void SaveScene_Clicked(object sender, EventArgs args)

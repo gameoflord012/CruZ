@@ -32,10 +32,10 @@ namespace CruZ.Editor.Controls
 
         public EditorApplication()
         {
-            //ECS                 .SetContext(this);
-            //ApplicationContext  .SetContext(this);
-            //Input               .SetContext(this);
-            //UIManager           .SetContext(this);
+            //ECS                 .CreateContext(this);
+            //ApplicationContext  .CreateContext(this);
+            //Input               .CreateContext(this);
+            //UIManager           .CreateContext(this);
 
             Input.MouseScroll   += Input_MouseScroll;
             Input.MouseMove     += Input_MouseMove;
@@ -96,7 +96,7 @@ namespace CruZ.Editor.Controls
             if (_currentScene == null) return;
 
             _currentScene.SetActive(false);
-            _currentScene.Dispose();
+            //_currentScene.Dispose();
         }
 
         public void SelectEntity(TransformEntity e)
@@ -107,7 +107,7 @@ namespace CruZ.Editor.Controls
             OnSelectedEntityChanged?.Invoke(this, _currentSelectedEntity);
         }
 
-        public void LoadSceneFromResouceFile(string file)
+        public void LoadSceneFromFile(string file)
         {
             Check_AppInitialized();
 
@@ -118,9 +118,11 @@ namespace CruZ.Editor.Controls
         public void ExitApp()
         {
             if(_gameApp == null) return;
+            if(_gameApp.IsGameRunning) _gameApp.Exit();
+            if(!_gameAppThread.Join(5000)) throw new System.Exception("Can't exit editor app");
 
-            _gameApp.Exit();
-            _gameAppThread?.Join();
+            _gameApp = null;
+            _gameAppThread = null;
         }
 
         #endregion
@@ -174,39 +176,44 @@ namespace CruZ.Editor.Controls
         {
             _mainCamera = new Camera(_gameApp.GraphicsDevice.Viewport);
             Camera.Main = _mainCamera;
-            
-            UpdateCache.Invoke(this);
 
-            _gameInitialized_ResetEvent.Set();
+            UpdateCache.Invoke(this);
+            _appInitalized_Reset.Set();
+        }
+
+        private void Game_Exit()
+        {
+            UnloadCurrentScene();
         }
 
         #endregion
 
         private void Check_AppInitialized()
         {
-            _gameAppThread ??= new Thread(StartNewAppSession);
-            
-            if(_gameAppThread.IsAlive)
-            {
-                return;
-            }
+            if(_gameAppThread != null && _gameAppThread.IsAlive) return;
 
-            _gameInitialized_ResetEvent.Reset();
-            _gameAppThread.Start();
-            _gameInitialized_ResetEvent.WaitOne();
+            _appInitalized_Reset.Reset();
+            var newSession = new Thread(StartNewAppSession);
+            newSession.Start();
+            _appInitalized_Reset.WaitOne();
+
+            _gameAppThread = newSession;
         }
 
         private void StartNewAppSession()
         {
-            _gameApp = new GameApplication();
+            ExitApp();
+
+            _gameApp = GameApplication.CreateContext();
 
             _gameApp.WindowResize += Game_WindowResize;
             _gameApp.Initializing += GameApp_Intialized;
             _gameApp.Window.AllowUserResizing = true;
+            _gameApp.ExitEvent += Game_Exit;
 
             _gameApp.Run();
         }
-
+        
         private void InitEntityControl()
         {
             //if (_currentScene == null) return;
@@ -256,6 +263,6 @@ namespace CruZ.Editor.Controls
 
         Camera _mainCamera;
 
-        ManualResetEvent _gameInitialized_ResetEvent = new(false);
+        ManualResetEvent _appInitalized_Reset = new(false);
     }
 }

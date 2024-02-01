@@ -31,13 +31,64 @@ namespace CruZ.Resource
             _GetResourcePathFromGuid = _ResourceImporterObject.BuildResult;
         }
 
+        public static void CreateResource(string resourcePath, object resObj, bool renew = false)
+        {
+            object? existedResource = null;
+
+            if (!renew)
+            {
+                try
+                {
+                    existedResource = LoadResource(resourcePath, resObj.GetType());
+                }
+                catch
+                {
+                    Logging.PushMsg("Failed to load resource \"{0}\", new one will be created", resourcePath);
+                }
+            }
+
+            if (existedResource == null)
+            {
+                _Serializer.SerializeToFile(resObj, Path.Combine(RESOURCE_ROOT, resourcePath));
+            }
+
+            if (existedResource is IDisposable idispose)
+                idispose.Dispose();
+
+            InitResourceHost(resObj, resourcePath);
+        }
+
+        public static void SaveResource(IHostResource hostRes)
+        {
+            if (hostRes.ResourceInfo.IsRuntime)
+                throw new ArgumentException($"Can't save runtime {hostRes} resource, use create resource instead");
+
+            CreateResource(hostRes.ResourceInfo.ResourceName, hostRes, true);
+        }
+
+        public static T LoadResource<T>(string resourcePath)
+        {
+            return (T)LoadResource(resourcePath, typeof(T));
+        }
+
+        public static T LoadResource<T>(string resPath, out ResourceInfo resInfo)
+        {
+            resInfo = CreateResourceInfo(resPath);
+            return (T)LoadResource(resPath, typeof(T));
+        }
+
+        public static T LoadResource<T>(Guid guid)
+        {
+            return LoadResource<T>(GetResourcePath(guid));
+        }
+
         /// <summary>
         /// Load resource with relative or full path, the resource file should within the .resObj folder
         /// </summary>
         /// <param name="resourcePath">May be fullpath or relative path to resource root</param>
         /// <param name="ty"></param>
         /// <returns></returns>
-        public static object LoadResource(string resourcePath, Type ty)
+        private static object LoadResource(string resourcePath, Type ty)
         {
             object resObj;
 
@@ -65,64 +116,10 @@ namespace CruZ.Resource
             return resObj;
         }
 
-        public static void CreateResource(string resourcePath, object resObj, bool renew = false)
-        {
-            object? existedResource = null;
-
-            if (!renew)
-            {
-                try
-                {
-                    existedResource = LoadResource(resourcePath, resObj.GetType());
-                }
-                catch
-                {
-                    Logging.PushMsg("Failed to load resource \"{0}\", new one will be created", resourcePath);
-                }
-            }
-
-            if(existedResource == null)
-            {
-                _Serializer.SerializeToFile(resObj, Path.Combine(RESOURCE_ROOT, resourcePath));
-            }
-
-            InitResourceHost(resObj, resourcePath);
-        }
-
-        public static void SaveResource(IHostResource hostRes)
-        {
-            if(hostRes.ResourceInfo.IsRuntime) 
-                throw new ArgumentException($"Can't save runtime {hostRes} resource, use create resource instead");
-            
-            CreateResource(hostRes.ResourceInfo.ResourceName, hostRes, true);
-        }
-
-        public static T LoadResource<T>(string resourcePath)
-        {
-            return (T)LoadResource(resourcePath, typeof(T));
-        }
-
-        public static T LoadResource<T>(string resPath, out ResourceInfo resInfo)
-        {
-            resInfo = CreateResourceInfo(resPath);
-            return (T)LoadResource(resPath, typeof(T));
-        }
-
-        public static T LoadResource<T>(Guid guid)
-        {
-            return LoadResource<T>(GetResourcePath(guid));
-        }
-
-        public static string GetFullResPath()
+        private static string GetFullResPath()
         {
             return Path.GetFullPath(RESOURCE_ROOT);
         }
-
-        //public static bool IsResourceInfoValid(IResourceInfo r)
-        //{
-        //    if(r.ResourceName == null) return false;
-        //    return Path.IsPathRooted(r.ResourceName) || r.ResourceName.StartsWith("resObj:");
-        //}
 
         private static T LoadContent<T>(string resourcePath)
         {

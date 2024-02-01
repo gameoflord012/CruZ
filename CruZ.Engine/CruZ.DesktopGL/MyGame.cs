@@ -2,11 +2,11 @@
 
 namespace FirstDesktopGame
 {
-    public class MyGame : GameApplication
+    public class MyGame //: GameApplication
     {
-        protected override void OnInitialize()
-        {
-            base.OnInitialize();
-        }
+        //protected override void OnInitialize()
+        //{
+        //    base.OnInitialize();
+        //}
     }
 }
