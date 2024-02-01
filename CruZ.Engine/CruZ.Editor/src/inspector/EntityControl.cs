@@ -13,10 +13,10 @@ namespace CruZ.Editor.UI
             _e = e;
             _sp = e.GetComponent<SpriteComponent>();
 
-            if(_e.HasComponent(typeof(TileComponent))) return;
+            if (_e.HasComponent(typeof(TileComponent))) return;
 
-            //_sp.DrawBegin += Sprite_DrawBegin;
-            //_sp.DrawEnd += Sprite_DrawEnd;
+            _sp.DrawBegin += Sprite_DrawBegin;
+            _sp.DrawEnd += Sprite_DrawEnd;
         }
 
         private void Sprite_DrawEnd(object? sender, DrawEndEventArgs e)
@@ -39,13 +39,11 @@ namespace CruZ.Editor.UI
 
         public override void Update(UIArgs args)
         {
-            return; 
-
             base.Update(args);
 
             CalcBounds();
 
-            if(args.InputInfo.CurMouse.LeftButton == XNA.Input.ButtonState.Pressed)
+            if (args.InputInfo.CurMouse.LeftButton == XNA.Input.ButtonState.Pressed)
             {
                 _showBorder ^= true;
             }
@@ -61,15 +59,14 @@ namespace CruZ.Editor.UI
 
             Width = (int)size.Width;
             Height = (int)size.Height;
-        
-                    }
+
+        }
 
         public override void Draw(UIArgs args)
         {
-            Width = 100;
-            Height = 100;
-            Location = Camera.Main.CoordinateToPoint(_e.Transform.Position);    
-            args.SpriteBatch.DrawLine(new(Location.X, Location.Y), new(Location.X + Width, Location.Y + Height), XNA.Color.Red, 2);
+            if (_e.HasComponent(typeof(TileComponent))) return;
+
+            base.Draw(args);
         }
 
         TransformEntity _e;

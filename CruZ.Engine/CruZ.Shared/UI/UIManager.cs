@@ -60,7 +60,7 @@ namespace CruZ.UI
         private UIArgs GetArgs(GameTime gameTime)
         {
             if(_spriteBatch == null)
-                _spriteBatch = new(ApplicationContext.GraphicsDevice);
+                _spriteBatch = GameApplication.GetSpriteBatch();
 
             UIArgs args = new();
             args.GameTime = gameTime;

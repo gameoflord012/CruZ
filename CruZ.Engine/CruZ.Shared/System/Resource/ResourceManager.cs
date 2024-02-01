@@ -127,11 +127,11 @@ namespace CruZ.Resource
             {
                 if (typeof(T) == typeof(SpriteSheet))
                 {
-                    return ApplicationContext.Content.Load<T>(
+                    return GameApplication.GetContent().Load<T>(
                         CONTENT_ROOT + "\\" + resourcePath, new JsonContentLoader());
                 }
 
-                return ApplicationContext.Content.Load<T>(
+                return GameApplication.GetContent().Load<T>(
                     CONTENT_ROOT + "\\" + resourcePath);
             }
             catch (FileNotFoundException)

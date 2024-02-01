@@ -12,7 +12,8 @@ namespace CruZ.UI
 
         public virtual void Draw(UIArgs args)
         {
-            args.SpriteBatch.DrawRectangle(_location, _size, Color.Red, 2);
+            args.SpriteBatch.DrawRectangle(_location, _size, Color.Blue, 5);
+            args.SpriteBatch.DrawCircle(_location, 100, 1000, Color.Blue, 5);
         }
 
         private Vector2 _location;

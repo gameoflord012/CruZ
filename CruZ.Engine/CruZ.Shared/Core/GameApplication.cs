@@ -8,7 +8,7 @@ using System;
 namespace CruZ
 {
     public partial class GameApplication : 
-        IECSContextProvider, IInputContextProvider, IApplicationContextProvider, UIContext, IDisposable
+        IECSContextProvider, IInputContextProvider, UIContext, IDisposable
     {
         public event Action<GameTime>   DrawUI;
         public event Action<GameTime>   UpdateUI;
@@ -25,6 +25,7 @@ namespace CruZ
         public ContentManager       Content         { get => _core.Content; }
         public GraphicsDevice       GraphicsDevice  { get => _core.GraphicsDevice; }
         public GameWindow           Window          => _core.Window;
+        public bool                 ExitCalled      { get => _exitCalled; }
 
         private GameApplication()
         {
@@ -41,7 +42,6 @@ namespace CruZ
 
             _core.Window.ClientSizeChanged += Window_ClientSizeChanged;
 
-            ApplicationContext  .CreateContext(this);
             ECS                 .CreateContext(this);
             Input               .CreateContext(this);
             UIManager           .CreateContext(this);
@@ -82,6 +82,7 @@ namespace CruZ
 
         private void InternalInitializing()
         {
+            _spriteBatch = new(GraphicsDevice);
             Camera.Main = new Camera(GraphicsDevice.Viewport);
             InitializeECSSystem?.Invoke();
 
@@ -93,6 +94,7 @@ namespace CruZ
 
         private void InternalOnExit(object? sender, EventArgs e)
         {
+            _exitCalled = true;
             ExitEvent?.Invoke();
             OnExit();
         }
@@ -106,12 +108,20 @@ namespace CruZ
 
         public void Dispose()
         {
-            _core.Dispose();
+            if(!disposed)
+            {
+                disposed = true;
+                _core.Dispose();
+                _spriteBatch.Dispose();
+            }
         }
 
         //protected virtual void  OnEndRun() { }
 
         private GameCore _core;
+        private SpriteBatch _spriteBatch;
+        bool disposed = false;
+        bool _exitCalled = false;
     }
 
     public partial class GameApplication
@@ -126,6 +136,16 @@ namespace CruZ
         public static GameScene CreateScene()
         {
             return GameScene.Create(_instance);
+        }
+
+        public static SpriteBatch GetSpriteBatch()
+        {
+            return _instance._spriteBatch;
+        }
+
+        public static ContentManager GetContent()
+        {
+            return _instance.Content;
         }
     }
 }

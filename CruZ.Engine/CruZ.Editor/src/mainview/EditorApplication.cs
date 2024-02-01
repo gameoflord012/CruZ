@@ -120,19 +120,17 @@ namespace CruZ.Editor.Controls
 
         public void ExitApp()
         {
-            if(_gameApp != null)
+            if (_gameApp != null)
             {
-                _gameApp.Exit();
-                _gameApp.Dispose();
+                if (!_gameApp.ExitCalled)
+                    _gameApp.Exit();
             }
 
-            if(_gameAppThread != null)
-                if(!_gameAppThread.Join(5000))
+            if (_gameAppThread != null)
+                if (!_gameAppThread.Join(5000))
                     throw new System.Exception("Can't exit editor app");
 
-            _gameApp = null;
-            _gameAppThread = null;
-            _mainCamera = null;
+            CleanSession();
         }
 
         #endregion
@@ -189,15 +187,22 @@ namespace CruZ.Editor.Controls
             _appInitalized_Reset.Set();
         }
 
-        private void Game_Exit()
+        private void GameApp_Exit()
         {
             UnloadCurrentScene();
-
-            _gameApp = null;
-            _gameAppThread = null;
+            CleanSession();
         }
 
         #endregion
+
+        private void CleanSession()
+        {
+            _gameApp?.Dispose();
+
+            _gameApp = null;
+            _gameAppThread = null;
+            _mainCamera = null;
+        }
 
         private void Check_AppInitialized()
         {
@@ -221,7 +226,7 @@ namespace CruZ.Editor.Controls
             _gameApp.WindowResize += Game_WindowResize;
             _gameApp.Initializing += GameApp_Intialized;
             _gameApp.Window.AllowUserResizing = true;
-            _gameApp.ExitEvent += Game_Exit;
+            _gameApp.ExitEvent += GameApp_Exit;
 
             _gameApp.Run();
         }
