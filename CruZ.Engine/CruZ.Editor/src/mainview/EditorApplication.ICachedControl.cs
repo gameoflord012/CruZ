@@ -33,14 +33,7 @@ namespace CruZ.Editor.Controls
                 //    reader.ReadSingle()
                 //    );
                 
-                try
-                {
-                    LoadSceneFromFile(lastScenePath);
-                }
-                catch 
-                {
-                    return false;
-                }
+                LoadSceneFromFile(lastScenePath);
 
                 return true;
             }

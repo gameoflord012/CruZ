@@ -44,23 +44,24 @@ namespace CruZ.UI
         {
             var args = GetArgs(gameTime);
 
-            if(_spriteBatch == null) _spriteBatch = new SpriteBatch(ApplicationContext.GraphicsDevice);
-
-            _spriteBatch.Begin();
+            args.SpriteBatch.Begin();
 
             foreach (var control in Controls)
             {
                 control.Draw(args);
             }
 
-            _spriteBatch.End();
+            args.SpriteBatch.End();
         }
 
         private UIArgs GetArgs(GameTime gameTime)
         {
+            _spriteBatch ??= new SpriteBatch(ApplicationContext.GraphicsDevice);
+
             UIArgs args = new();
             args.GameTime = gameTime;
             args.InputInfo = Input.Instance.GetInputInfo();
+            args.SpriteBatch = _spriteBatch;
             return args;
         }
 
@@ -71,7 +72,7 @@ namespace CruZ.UI
 
     public partial class UIManager
     {
-        public static void SetContext(UIContext context)
+        public static void CreateContext(UIContext context)
         {
             Instance = new(context);
         }

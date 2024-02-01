@@ -46,6 +46,7 @@ namespace CruZ
             ApplicationContext  .CreateContext(this);
             ECS                 .CreateContext(this);
             Input               .CreateContext(this);
+            UIManager           .CreateContext(this);
 
             //_core.Run();
         }

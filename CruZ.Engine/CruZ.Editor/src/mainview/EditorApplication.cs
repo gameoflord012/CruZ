@@ -1,6 +1,8 @@
 ﻿using CruZ.Components;
+using CruZ.Editor.UI;
 using CruZ.Resource;
 using CruZ.Systems;
+using CruZ.UI;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
@@ -215,17 +217,19 @@ namespace CruZ.Editor.Controls
         
         private void InitEntityControl()
         {
-            //if (_currentScene == null) return;
-            //foreach (var e in _currentScene.Entities)
-            //{
-            //    var btn = new EntityButton(e);
+            if (_currentScene == null) return;
 
-            //    _entityBtns.Add(btn);
-            //    btn.MouseDown += EntityBtn_MouseDown;
-            //    Controls.Add(btn);
-            //    //Controls.Add(new EntityControl(e));
-            //    UIManager.Controls.Add(new EntityControl(e));
-            //}
+            foreach (var e in _currentScene.Entities)
+            {
+                //var btn = new EntityButton(e);
+
+                //_entityBtns.Add(btn);
+                //btn.MouseDown += EntityBtn_MouseDown;
+                //Controls.Add(btn);
+                //Controls.Add(new EntityControl(e));
+
+                UIManager.Controls.Add(new EntityControl(e));
+            }
         }
 
         private void LoadScene(GameScene scene)
