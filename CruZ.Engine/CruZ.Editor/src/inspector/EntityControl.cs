@@ -2,6 +2,7 @@
 using CruZ.Systems;
 using CruZ.UI;
 using MonoGame.Extended;
+using System.Diagnostics;
 
 namespace CruZ.Editor.UI
 {
@@ -14,8 +15,8 @@ namespace CruZ.Editor.UI
 
             if(_e.HasComponent(typeof(TileComponent))) return;
 
-            _sp.DrawBegin += Sprite_DrawBegin;
-            _sp.DrawEnd += Sprite_DrawEnd;
+            //_sp.DrawBegin += Sprite_DrawBegin;
+            //_sp.DrawEnd += Sprite_DrawEnd;
         }
 
         private void Sprite_DrawEnd(object? sender, DrawEndEventArgs e)
@@ -38,6 +39,8 @@ namespace CruZ.Editor.UI
 
         public override void Update(UIArgs args)
         {
+            return; 
+
             base.Update(args);
 
             CalcBounds();
@@ -58,12 +61,15 @@ namespace CruZ.Editor.UI
 
             Width = (int)size.Width;
             Height = (int)size.Height;
-        }
+        
+                    }
 
         public override void Draw(UIArgs args)
         {
-            if(_showBorder)
-                base.Draw(args);
+            Width = 100;
+            Height = 100;
+            Location = Camera.Main.CoordinateToPoint(_e.Transform.Position);    
+            args.SpriteBatch.DrawLine(new(Location.X, Location.Y), new(Location.X + Width, Location.Y + Height), XNA.Color.Red, 2);
         }
 
         TransformEntity _e;

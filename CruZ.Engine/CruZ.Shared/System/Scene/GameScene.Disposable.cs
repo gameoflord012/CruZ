@@ -6,31 +6,10 @@ namespace CruZ
     {
         public void Dispose()
         {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        private void Dispose(bool disposing)
-        {
-            if(!_disposed)
+            foreach (var e in _entities)
             {
-                if(disposing)
-                {
-                    foreach (var e in _entities)
-                    {
-                        e.Dispose();
-                    }
-                }
-
-                _disposed = true;
+                e.Dispose();
             }
         }
-        
-        ~GameScene()
-        {
-            Dispose(false);
-        }
-
-        private bool _disposed = false;
     }
 }

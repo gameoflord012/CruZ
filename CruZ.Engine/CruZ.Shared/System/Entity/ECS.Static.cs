@@ -8,13 +8,12 @@ namespace CruZ.Systems
     {
         public static void CreateContext(IECSContextProvider contextProvider)
         {
-            _instance = new ECS(contextProvider);
+            _Instance = new ECS(contextProvider);
         }
 
-        private static ECS? _instance;
-        public static ECS Instance { get => _instance ?? throw new MissingContextException(typeof(ECS)); }
+        private static ECS? _Instance;
 
-        public static World World { get => Instance._world; }
+        public static World World { get => _Instance._world; }
 
         public static TransformEntity CreateEntity()
         {

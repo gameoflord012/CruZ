@@ -7,15 +7,17 @@ namespace CruZ
 {
     public partial class ApplicationContext
     {
-        private static ApplicationContext _instance;
-        public static ApplicationContext Instance { get => _instance ?? throw new MissingContextException(typeof(ApplicationContext)); }
+        private static ApplicationContext? _instance;
 
         public static void CreateContext(IApplicationContextProvider contextProvider)
         {
             _instance = new(contextProvider);
         }
 
-        public static GraphicsDevice GraphicsDevice { get => Instance._contextProvider.GraphicsDevice; }
-        public static ContentManager Content        { get => Instance._contextProvider.Content; }
+        public static GraphicsDevice GraphicsDevice 
+        {
+            get => _instance._contextProvider.GraphicsDevice; 
+        }
+        public static ContentManager Content { get => _instance._contextProvider.Content; }
     }
 }

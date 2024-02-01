@@ -19,14 +19,13 @@ namespace CruZ.Systems
         public static event Action<InputInfo> MouseDown;
         public static event Action<InputInfo> MouseUp;
 
-        public static InputInfo Info => Instance.GetInputInfo();
+        public static InputInfo Info => _Instance.GetInputInfo();
 
-        static Input? _instance;
-        public static Input Instance { get => _instance ?? throw new MissingContextException(typeof(Input)); }
+        static Input? _Instance;
 
         public static void CreateContext(IInputContextProvider contextProvider)
         {
-            _instance = new(contextProvider);
+            _Instance = new(contextProvider);
         }
     }
 }

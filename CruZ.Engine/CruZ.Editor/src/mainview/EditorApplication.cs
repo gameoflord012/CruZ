@@ -120,12 +120,19 @@ namespace CruZ.Editor.Controls
 
         public void ExitApp()
         {
-            if(_gameApp == null) return;
-            if(_gameApp.IsGameRunning) _gameApp.Exit();
-            if(!_gameAppThread.Join(5000)) throw new System.Exception("Can't exit editor app");
+            if(_gameApp != null)
+            {
+                _gameApp.Exit();
+                _gameApp.Dispose();
+            }
+
+            if(_gameAppThread != null)
+                if(!_gameAppThread.Join(5000))
+                    throw new System.Exception("Can't exit editor app");
 
             _gameApp = null;
             _gameAppThread = null;
+            _mainCamera = null;
         }
 
         #endregion
@@ -134,8 +141,8 @@ namespace CruZ.Editor.Controls
 
         private void Game_WindowResize(Viewport viewport)
         {
-            Camera.Main.ViewPortWidth = viewport.Width;
-            Camera.Main.ViewPortHeight = viewport.Height;
+            GetMainCamera().ViewPortWidth = viewport.Width;
+            GetMainCamera().ViewPortHeight = viewport.Height;
         }
 
         private void Input_MouseScroll(InputInfo info)
@@ -185,6 +192,9 @@ namespace CruZ.Editor.Controls
         private void Game_Exit()
         {
             UnloadCurrentScene();
+
+            _gameApp = null;
+            _gameAppThread = null;
         }
 
         #endregion
@@ -195,6 +205,7 @@ namespace CruZ.Editor.Controls
 
             _appInitalized_Reset.Reset();
             var newSession = new Thread(StartNewAppSession);
+            newSession.Name = "EditorApp session";
             newSession.Start();
             _appInitalized_Reset.WaitOne();
 
@@ -228,8 +239,15 @@ namespace CruZ.Editor.Controls
                 //Controls.Add(btn);
                 //Controls.Add(new EntityControl(e));
 
+                //TODO: DONOT CREATE ENTITYCONTROL ON DIFFERENT THREAD
                 UIManager.Controls.Add(new EntityControl(e));
+                e.OnRemoveFromWorld += Entity_Remove;
             }
+        }
+
+        private void Entity_Remove(object? sender, EventArgs e)
+        {
+            UIManager.Controls.Clear();
         }
 
         private void LoadScene(GameScene scene)
@@ -269,7 +287,7 @@ namespace CruZ.Editor.Controls
         GameApplication?    _gameApp;
         Thread?             _gameAppThread;
 
-        Camera _mainCamera;
+        Camera? _mainCamera;
 
         ManualResetEvent _appInitalized_Reset = new(false);
     }

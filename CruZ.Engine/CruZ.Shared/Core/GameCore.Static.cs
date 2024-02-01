@@ -14,6 +14,6 @@
 //    {
         
 
-//        //public static Viewport Viewport { get => Instance.GraphicsDevice.Viewport; }
+//        //public static Viewport Viewport { get => _Instance.GraphicsDevice.Viewport; }
 //    }
 //}

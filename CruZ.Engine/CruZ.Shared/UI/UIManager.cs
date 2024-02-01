@@ -5,6 +5,8 @@ using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended.Timers;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Diagnostics.Tracing;
 
 namespace CruZ.UI
 {
@@ -26,6 +28,7 @@ namespace CruZ.UI
         UIManager(UIContext context)
         {
             _context = context;
+
             _context.DrawUI += OnDrawUI;
             _context.UpdateUI += OnUpdateUI;
         }
@@ -56,16 +59,17 @@ namespace CruZ.UI
 
         private UIArgs GetArgs(GameTime gameTime)
         {
-            _spriteBatch ??= new SpriteBatch(ApplicationContext.GraphicsDevice);
+            if(_spriteBatch == null)
+                _spriteBatch = new(ApplicationContext.GraphicsDevice);
 
             UIArgs args = new();
             args.GameTime = gameTime;
-            args.InputInfo = Input.Instance.GetInputInfo();
+            args.InputInfo = Input.Info;
             args.SpriteBatch = _spriteBatch;
             return args;
         }
 
-        SpriteBatch?        _spriteBatch;
+        SpriteBatch?        _spriteBatch = null;
         UIContext           _context;
         List<UIControl>     _controls = [];
     }
@@ -74,10 +78,10 @@ namespace CruZ.UI
     {
         public static void CreateContext(UIContext context)
         {
-            Instance = new(context);
+            _instance = new(context);
         }
 
-        public static UIManager? Instance { get; private set; }
-        public static List<UIControl> Controls => Instance._controls;
+        private static UIManager? _instance;
+        public static List<UIControl> Controls => _instance._controls;
     }
 }

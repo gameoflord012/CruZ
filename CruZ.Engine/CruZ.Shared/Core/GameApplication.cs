@@ -8,7 +8,7 @@ using System;
 namespace CruZ
 {
     public partial class GameApplication : 
-        IECSContextProvider, IInputContextProvider, IApplicationContextProvider, UIContext
+        IECSContextProvider, IInputContextProvider, IApplicationContextProvider, UIContext, IDisposable
     {
         public event Action<GameTime>   DrawUI;
         public event Action<GameTime>   UpdateUI;
@@ -25,8 +25,6 @@ namespace CruZ
         public ContentManager       Content         { get => _core.Content; }
         public GraphicsDevice       GraphicsDevice  { get => _core.GraphicsDevice; }
         public GameWindow           Window          => _core.Window;
-
-        public bool IsGameRunning { get => _isGameRunning; }
 
         private GameApplication()
         {
@@ -53,14 +51,12 @@ namespace CruZ
 
         public void Run()
         {
-            _isGameRunning = true;
             _core.Run();
         }
 
         public void Exit()
         {
             _core.Exit();
-            _isGameRunning = false;
         }
 
         private void Window_ClientSizeChanged(object? sender, EventArgs e)
@@ -107,24 +103,29 @@ namespace CruZ
         protected virtual void  OnLateDraw(GameTime gameTime) { }
         protected virtual void  OnExit() { }
         protected virtual void  OnLoadContent() { }
+
+        public void Dispose()
+        {
+            _core.Dispose();
+        }
+
         //protected virtual void  OnEndRun() { }
 
         private GameCore _core;
-        private bool _isGameRunning = false;
     }
 
     public partial class GameApplication
     {
         public static GameApplication CreateContext()
         {
-            return Instance = new GameApplication();
+            return _instance = new GameApplication();
         }
 
-        public static GameApplication? Instance { get; private set; }
+        private static GameApplication? _instance;
 
         public static GameScene CreateScene()
         {
-            return GameScene.Create(GameApplication.Instance);
+            return GameScene.Create(_instance);
         }
     }
 }
