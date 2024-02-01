@@ -27,20 +27,20 @@ namespace CruZ.Components
         {
             if(_sp != null)
             {
-                _sp.DrawBegin -= Sprite_OnDrawBegin;
-                _sp.DrawEnd -= Sprite_OnDrawEnd;
+                _sp.DrawLoopBegin -= Sprite_DrawLoopBegin;
+                _sp.DrawLoopEnd -=  Sprite_DrawLoopEnd;
             }
 
             _e.TryGetComponent(ref _sp);
 
             if(_sp != null)
             {
-                _sp.DrawBegin += Sprite_OnDrawBegin;
-                _sp.DrawEnd += Sprite_OnDrawEnd;
+                _sp.DrawLoopBegin += Sprite_DrawLoopBegin;
+                _sp.DrawLoopEnd += Sprite_DrawLoopEnd;
             }
         }
 
-        private void Sprite_OnDrawBegin(object? sender, DrawBeginEventArgs args)
+        private void Sprite_DrawLoopBegin(object? sender, DrawBeginEventArgs args)
         {
             if(Debug && (_idX + _idY) % 2 == 0)
             {
@@ -62,7 +62,7 @@ namespace CruZ.Components
             }
         }
 
-        private void Sprite_OnDrawEnd(object? sender, DrawEndEventArgs e)
+        private void Sprite_DrawLoopEnd(object? sender, DrawEndEventArgs e)
         {
             var bounds = _sp.Texture.Bounds;
 

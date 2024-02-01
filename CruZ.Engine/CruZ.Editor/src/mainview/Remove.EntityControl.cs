@@ -14,8 +14,8 @@
 
 //            if (_e.HasComponent(typeof(TileComponent))) return;
 
-//            _sp.DrawBegin += Sprite_BeginDraw;
-//            _sp.DrawEnd += Sprite_EndDraw;
+//            _sp.DrawLoopBegin += Sprite_BeginDraw;
+//            _sp.DrawLoopEnd += Sprite_EndDraw;
 //        }
 
 //        protected override void OnPaintBackground(PaintEventArgs e)

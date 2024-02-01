@@ -15,24 +15,16 @@ namespace CruZ.Editor.UI
 
             if (_e.HasComponent(typeof(TileComponent))) return;
 
-            _sp.DrawBegin += Sprite_DrawBegin;
-            _sp.DrawEnd += Sprite_DrawEnd;
+            _sp.DrawLoopBegin += Sprite_DrawLoopBegin;
+            _sp.DrawLoopEnd += Sprite_DrawLoopEnd;
         }
 
-        private void Sprite_DrawEnd(object? sender, DrawEndEventArgs e)
+        private void Sprite_DrawLoopEnd(object? sender, DrawEndEventArgs e)
         {
-            //var coord = _args.Position;
-            //var rect = _args.SourceRectangle;
-            //var point = Camera.Main.CoordinateToPoint(coord);
-
-            //Width       = (int)(rect.Width * Camera.Main.WorldToScreenScale().X);
-            //Height      = (int)(rect.Height * Camera.Main.WorldToScreenScale().Y);
-            //Location    = new(point.X - Width / 2, point.Y - Height / 2);
-
             _bounds = _args.BoundRect();
         }
 
-        private void Sprite_DrawBegin(object? sender, DrawBeginEventArgs args)
+        private void Sprite_DrawLoopBegin(object? sender, DrawBeginEventArgs args)
         {
             _args = args;
         }
@@ -64,8 +56,6 @@ namespace CruZ.Editor.UI
 
         public override void Draw(UIArgs args)
         {
-            if (_e.HasComponent(typeof(TileComponent))) return;
-
             base.Draw(args);
         }
 

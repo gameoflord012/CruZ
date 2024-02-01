@@ -41,8 +41,9 @@ namespace CruZ.Components
 
     public partial class SpriteComponent : IComponent, IComponentCallback
     {
-        public event EventHandler<DrawBeginEventArgs>   DrawBegin;
-        public event EventHandler<DrawEndEventArgs>     DrawEnd;
+        public event EventHandler<DrawBeginEventArgs>   DrawLoopBegin;
+        public event EventHandler<DrawEndEventArgs>     DrawLoopEnd;
+        public event Action                             DrawEnd;
 
         [Browsable(false), JsonIgnore]
         public Type             ComponentType => typeof(SpriteComponent);
@@ -84,7 +85,7 @@ namespace CruZ.Components
                     beginArgs.Texture           = Texture;
                 }
                 
-                DrawBegin?.Invoke(this, beginArgs);
+                DrawLoopBegin?.Invoke(this, beginArgs);
 
                 if (beginArgs.Skip)
                 {
@@ -115,7 +116,7 @@ namespace CruZ.Components
                 }
 
                 var endArgs = new DrawEndEventArgs();
-                DrawEnd?.Invoke(this, endArgs);
+                DrawLoopEnd?.Invoke(this, endArgs);
                 if (!endArgs.KeepDrawing) break;
             }
         }

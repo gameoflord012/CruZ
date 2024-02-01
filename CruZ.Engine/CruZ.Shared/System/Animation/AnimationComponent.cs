@@ -43,29 +43,29 @@ namespace CruZ.Components
             UnLoad();
             _sprite = sprite;
 
-            _sprite.DrawBegin  += Sprite_OnDrawBegin;
-            _sprite.DrawEnd    += Sprite_OnDrawEnd;
+            _sprite.DrawLoopBegin += Sprite_DrawLoopBegin;
+            _sprite.DrawLoopEnd   += Sprite_DrawLoopEnd;
         }
 
         public void UnLoad()
         {
             if(_sprite != null)
             {
-                _sprite.DrawBegin  -= Sprite_OnDrawBegin;
-                _sprite.DrawEnd    -= Sprite_OnDrawEnd;
+                _sprite.DrawLoopBegin -= Sprite_DrawLoopBegin;
+                _sprite.DrawLoopEnd   -= Sprite_DrawLoopEnd;
             }
 
             _sprite = null;
         }
 
-        private void Sprite_OnDrawBegin(object? sender, DrawBeginEventArgs e)
+        private void Sprite_DrawLoopBegin(object? sender, DrawBeginEventArgs e)
         {
             e.Texture = _animatedSprite.TextureRegion.Texture;
             e.SourceRectangle = _animatedSprite.TextureRegion.Bounds;
             e.Origin = _animatedSprite.OriginNormalized;
         }
         
-        private void Sprite_OnDrawEnd(object? sender, DrawEndEventArgs e)
+        private void Sprite_DrawLoopEnd(object? sender, DrawEndEventArgs e)
         {
             
         }

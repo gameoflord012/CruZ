@@ -33,13 +33,13 @@ namespace CruZ.Resource
 
         public static void CreateResource(string resourcePath, object resObj, bool renew = false)
         {
-            object? existedResource = null;
+            object? existsResource = null;
 
             if (!renew)
             {
                 try
                 {
-                    existedResource = LoadResource(resourcePath, resObj.GetType());
+                    existsResource = LoadResource(resourcePath, resObj.GetType());
                 }
                 catch
                 {
@@ -47,12 +47,12 @@ namespace CruZ.Resource
                 }
             }
 
-            if (existedResource == null)
+            if (existsResource == null)
             {
                 _Serializer.SerializeToFile(resObj, Path.Combine(RESOURCE_ROOT, resourcePath));
             }
 
-            if (existedResource is IDisposable idispose)
+            if (existsResource is IDisposable idispose)
                 idispose.Dispose();
 
             InitResourceHost(resObj, resourcePath);
