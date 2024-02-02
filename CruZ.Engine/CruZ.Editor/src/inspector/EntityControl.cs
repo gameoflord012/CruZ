@@ -37,13 +37,13 @@ namespace CruZ.Editor.UI
             var rect = _args.BoundRect();
             _bounds.X = MathF.Min(_bounds.X, rect.X);
             _bounds.Y = MathF.Min(_bounds.Y, rect.Y);
-            _bounds.Width =     _bounds.Right  < rect.Right  ? rect.Right  - _bounds.X : _bounds.Width;
-            _bounds.Height =    _bounds.Bottom < rect.Bottom ? rect.Bottom - _bounds.Y : _bounds.Height;
+            _bounds.Width = _bounds.Right < rect.Right ? rect.Right - _bounds.X : _bounds.Width;
+            _bounds.Height = _bounds.Bottom < rect.Bottom ? rect.Bottom - _bounds.Y : _bounds.Height;
         }
 
-        public override void Update(UIArgs args)
+        protected override void OnUpdate(UIArgs args)
         {
-            base.Update(args);
+            base.OnUpdate(args);
 
             CalcBounds();
 
@@ -65,9 +65,9 @@ namespace CruZ.Editor.UI
             Height = (int)size.Height;
         }
 
-        public override void Draw(UIArgs args)
+        protected override void OnDraw(UIArgs args)
         {
-            base.Draw(args);
+            base.OnDraw(args);
         }
 
         TransformEntity _e;

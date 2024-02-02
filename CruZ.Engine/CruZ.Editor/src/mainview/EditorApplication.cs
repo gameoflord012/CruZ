@@ -21,15 +21,15 @@ namespace CruZ.Editor.Controls
 
         //public event Action<GameTime>   InputUpdate;
         //public event Action             InitializeECSSystem;
-        
+
 
         //public GraphicsDevice   GraphicsDevice      => Editor.GraphicsDevice;
         //public ContentManager   Content             => Editor.Content;
         //public SpriteBatch      SpriteBatch         => Editor.spriteBatch;
 
-        public event EventHandler<GameScene>        SceneLoadEvent;
-        public event EventHandler<TransformEntity>  OnSelectedEntityChanged;
-        
+        public event EventHandler<GameScene> SceneLoadEvent;
+        public event EventHandler<TransformEntity> OnSelectedEntityChanged;
+
         public GameScene? CurrentGameScene => _currentScene;
 
         public EditorApplication()
@@ -39,10 +39,10 @@ namespace CruZ.Editor.Controls
             //Input               .CreateContext(this);
             //UIManager           .CreateContext(this);
 
-            Input.MouseScroll   += Input_MouseScroll;
-            Input.MouseMove     += Input_MouseMove;
-            Input.MouseDown     += Input_MouseDown;
-            Input.MouseUp       += Input_MouseUp;
+            Input.MouseScroll += Input_MouseScroll;
+            Input.MouseMove += Input_MouseMove;
+            Input.MouseDown += Input_MouseDown;
+            Input.MouseUp += Input_MouseUp;
 
             CacheService.Register(this);
             UpdateCache?.Invoke(this);
@@ -65,7 +65,7 @@ namespace CruZ.Editor.Controls
 
         //}
 
-        //private void Update(object? sender, ElapsedEventArgs e)
+        //private void OnUpdate(object? sender, ElapsedEventArgs e)
         //{
         //    //GameTime gameTime = new(_gameLoopTimer.Elapsed, _gameLoopTimer.Elapsed - _updateElapsed);
         //    //_updateElapsed = _gameLoopTimer.Elapsed;
@@ -79,7 +79,7 @@ namespace CruZ.Editor.Controls
         //    //Invalidate();
         //}
 
-        //protected void Draw()
+        //protected void OnDraw()
         //{
         //    //GameTime gameTime = new(_gameLoopTimer.Elapsed, _gameLoopTimer.Elapsed - _drawElapsed);
         //    //_drawElapsed = _gameLoopTimer.Elapsed;
@@ -163,7 +163,7 @@ namespace CruZ.Editor.Controls
 
         private void Input_MouseDown(InputInfo info)
         {
-            if (info.CurMouse.MiddleButton == XNA.Input.ButtonState.Pressed 
+            if (info.CurMouse.MiddleButton == XNA.Input.ButtonState.Pressed
                 && !_isMouseDraggingCamera)
             {
                 _isMouseDraggingCamera = true;
@@ -205,7 +205,7 @@ namespace CruZ.Editor.Controls
 
         private void Check_AppInitialized()
         {
-            if(_gameAppThread != null && _gameAppThread.IsAlive) return;
+            if (_gameAppThread != null && _gameAppThread.IsAlive) return;
 
             _appInitalized_Reset.Reset();
             var newSession = new Thread(StartNewAppSession);
@@ -229,7 +229,7 @@ namespace CruZ.Editor.Controls
 
             _gameApp.Run();
         }
-        
+
         private void InitEntityControl()
         {
             if (_currentScene == null) return;
@@ -244,14 +244,8 @@ namespace CruZ.Editor.Controls
                 //Controls.Add(new EntityControl(e));
 
                 //TODO: DONOT CREATE ENTITYCONTROL ON DIFFERENT THREAD
-                UIManager.Controls.Add(new EntityControl(e));
-                e.OnRemoveFromWorld += Entity_Remove;
+                UIManager.Root.AddChild(new EntityControl(e));
             }
-        }
-
-        private void Entity_Remove(object? sender, EventArgs e)
-        {
-            UIManager.Controls.Clear();
         }
 
         private void LoadScene(GameScene scene)
@@ -281,15 +275,15 @@ namespace CruZ.Editor.Controls
         //System.Timers.Timer _updateTimer;
         //List<Button> _entityBtns = new();
 
-        bool        _isMouseDraggingCamera;
-        Vector3     _cameraStartDragCoord;
-        XNA.Point   _mouseStartDragPoint;
+        bool _isMouseDraggingCamera;
+        Vector3 _cameraStartDragCoord;
+        XNA.Point _mouseStartDragPoint;
 
-        GameScene?      _currentScene;
+        GameScene? _currentScene;
         TransformEntity _currentSelectedEntity;
 
-        GameApplication?    _gameApp;
-        Thread?             _gameAppThread;
+        GameApplication? _gameApp;
+        Thread? _gameAppThread;
 
         Camera? _mainCamera;
 

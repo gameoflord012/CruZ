@@ -21,6 +21,11 @@ namespace CruZ.UI
         public GameTime     GameTime;
         public InputInfo    InputInfo;
         public SpriteBatch  SpriteBatch;
+
+        public Point MousePos()
+        {
+            return InputInfo.CurMouse.Position;
+        }
     }
 
     public partial class UIManager
@@ -37,9 +42,9 @@ namespace CruZ.UI
         {
             UIArgs args = GetArgs(gameTime);
 
-            foreach (var control in Controls)
+            foreach (var control in GetTree(_root))
             {
-                control.Update(args);
+                control.InternalUpdate(args);
             }
         }
 
@@ -49,12 +54,28 @@ namespace CruZ.UI
 
             args.SpriteBatch.Begin();
 
-            foreach (var control in Controls)
+            foreach (var control in GetTree(_root))
             {
-                control.Draw(args);
+                control.InternalDraw(args);
             }
 
             args.SpriteBatch.End();
+        }
+
+        private UIControl[] GetTree(UIControl control)
+        {
+            List<UIControl> list = [];
+            list.Add(control);
+
+            for(int i = 0; i < list.Count; i++)
+            {
+                foreach (var child in list[i].Childs)
+                {
+                    list.Add(child);
+                }
+            }
+
+            return list.ToArray();
         }
 
         private UIArgs GetArgs(GameTime gameTime)
@@ -71,7 +92,7 @@ namespace CruZ.UI
 
         SpriteBatch?        _spriteBatch = null;
         UIContext           _context;
-        List<UIControl>     _controls = [];
+        UIControl           _root = new();
     }
 
     public partial class UIManager
@@ -82,6 +103,6 @@ namespace CruZ.UI
         }
 
         private static UIManager? _instance;
-        public static List<UIControl> Controls => _instance._controls;
+        public static UIControl Root=> _instance._root;
     }
 }
