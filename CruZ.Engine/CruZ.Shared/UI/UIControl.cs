@@ -28,6 +28,11 @@ namespace CruZ.UI
             child.OnParentChanged(this);
         }
 
+        public Draw.RectangleF GetRect()
+        {
+            return new Draw.RectangleF(_location.X, _location.Y, _size.Width, _size.Height);
+        }
+
         public void RemoveChild(UIControl child)
         {
             _childs.Remove(this);
@@ -74,13 +79,7 @@ namespace CruZ.UI
         {
             return GetRect().Contains(_args.MousePos().X, _args.MousePos().Y);
         }
-
-        private Draw.RectangleF GetRect()
-        {
-
-            return new Draw.RectangleF(_location.X, _location.Y, _size.Width, _size.Height);
-        }
-
+        
         List<UIControl> _childs = [];
 
         UIControl? _parent;

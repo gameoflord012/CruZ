@@ -14,6 +14,7 @@ namespace CruZ.UI
     {
         event Action<GameTime>  DrawUI;
         event Action<GameTime>  UpdateUI;
+        event Action            InitializeUI;
     }
 
     public class UIArgs
@@ -34,11 +35,25 @@ namespace CruZ.UI
         {
             _context = context;
 
-            _context.DrawUI += OnDrawUI;
-            _context.UpdateUI += OnUpdateUI;
+            _context.DrawUI += Context_DrawUI;
+            _context.UpdateUI += Context_UpdateUI;
+            _context.InitializeUI += Context_Initialize;
         }
 
-        private void OnUpdateUI(GameTime gameTime)
+        private void Context_Initialize()
+        {
+            GameApplication.RegisterWindowResize(GameApp_WindowResize);
+            GameApp_WindowResize(GameApplication.Viewport);
+        }
+
+        private void GameApp_WindowResize(Viewport viewport)
+        {
+            Root.Location = new(0, 0);
+            Root.Width = viewport.Width;
+            Root.Height = viewport.Height;
+        }
+
+        private void Context_UpdateUI(GameTime gameTime)
         {
             UIArgs args = GetArgs(gameTime);
 
@@ -48,7 +63,7 @@ namespace CruZ.UI
             }
         }
 
-        private void OnDrawUI(GameTime gameTime)
+        private void Context_DrawUI(GameTime gameTime)
         {
             var args = GetArgs(gameTime);
 
@@ -60,22 +75,6 @@ namespace CruZ.UI
             }
 
             args.SpriteBatch.End();
-        }
-
-        private UIControl[] GetTree(UIControl control)
-        {
-            List<UIControl> list = [];
-            list.Add(control);
-
-            for(int i = 0; i < list.Count; i++)
-            {
-                foreach (var child in list[i].Childs)
-                {
-                    list.Add(child);
-                }
-            }
-
-            return list.ToArray();
         }
 
         private UIArgs GetArgs(GameTime gameTime)
@@ -100,6 +99,40 @@ namespace CruZ.UI
         public static void CreateContext(UIContext context)
         {
             _instance = new(context);
+        }
+
+        public static UIControl[] GetContains(int mouseX, int mouseY)
+        {
+            return GetContains(_instance._root, mouseX, mouseY);
+        }
+
+        public static UIControl[] GetContains(UIControl root, int mouseX, int mouseY)
+        {
+            List<UIControl> contains = [];
+
+            foreach (var node in GetTree(root))
+            {
+                if(node.GetRect().Contains(mouseX, mouseY))
+                    contains.Add(node);
+            }
+
+            return contains.ToArray();
+        }
+
+        private static UIControl[] GetTree(UIControl control)
+        {
+            List<UIControl> list = [];
+            list.Add(control);
+
+            for(int i = 0; i < list.Count; i++)
+            {
+                foreach (var child in list[i].Childs)
+                {
+                    list.Add(child);
+                }
+            }
+
+            return list.ToArray();
         }
 
         private static UIManager? _instance;

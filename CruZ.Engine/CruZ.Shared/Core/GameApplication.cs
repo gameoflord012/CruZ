@@ -7,44 +7,46 @@ using System;
 
 namespace CruZ
 {
-    public partial class GameApplication : 
+    public partial class GameApplication :
         IECSContextProvider, IInputContextProvider, UIContext, IDisposable
     {
         public event Action<GameTime>   DrawUI;
         public event Action<GameTime>   UpdateUI;
-        public event Action<GameTime>   ECSDraw;
-        public event Action<GameTime>   ECSUpdate;
-        public event Action             InitializeECSSystem;
-        public event Action<GameTime>   InputUpdate;
-        public event Action<Viewport>   WindowResize;
-        public event Action             ExitEvent;
+        public event Action             InitializeUI;
 
-        public event Action             Initializing;
-        public event Action             Initialized;
+        public event Action<GameTime> ECSDraw;
+        public event Action<GameTime> ECSUpdate;
+        public event Action InitializeECSSystem;
+        public event Action<GameTime> InputUpdate;
+        public event Action<Viewport> WindowResize;
+        public event Action ExitEvent;
 
-        public ContentManager       Content         { get => _core.Content; }
-        public GraphicsDevice       GraphicsDevice  { get => _core.GraphicsDevice; }
-        public GameWindow           Window          => _core.Window;
-        public bool                 ExitCalled      { get => _exitCalled; }
+        public event Action Initializing;
+        public event Action Initialized;
+
+        public ContentManager Content { get => _core.Content; }
+        public GraphicsDevice GraphicsDevice { get => _core.GraphicsDevice; }
+        public GameWindow Window => _core.Window;
+        public bool ExitCalled { get => _exitCalled; }
 
         private GameApplication()
         {
             _core = new();
 
-            _core.Initializing      += InternalInitializing;
-            _core.UpdateEvent       += InternalUpdate;
-            _core.DrawEvent         += InternalDraw;
-            _core.ExitEvent         += InternalOnExit;
+            _core.Initializing += InternalInitializing;
+            _core.UpdateEvent += InternalUpdate;
+            _core.DrawEvent += InternalDraw;
+            _core.ExitEvent += InternalOnExit;
 
-            _core.LoadContentEvent  += OnLoadContent;
-            _core.LateDrawEvent     += OnLateDraw;
+            _core.LoadContentEvent += OnLoadContent;
+            _core.LateDrawEvent += OnLateDraw;
             //_core.EndRunEvent       += OnEndRun;
 
             _core.Window.ClientSizeChanged += Window_ClientSizeChanged;
 
-            ECS                 .CreateContext(this);
-            Input               .CreateContext(this);
-            UIManager           .CreateContext(this);
+            ECS.CreateContext(this);
+            Input.CreateContext(this);
+            UIManager.CreateContext(this);
 
             //_core.Run();
         }
@@ -84,11 +86,12 @@ namespace CruZ
         {
             _spriteBatch = new(GraphicsDevice);
             Camera.Main = new Camera(GraphicsDevice.Viewport);
+
             InitializeECSSystem?.Invoke();
-
+            InitializeUI?.Invoke();
             Initializing?.Invoke();
-            OnInitialize();
 
+            OnInitialize();
             Initialized?.Invoke();
         }
 
@@ -99,16 +102,16 @@ namespace CruZ
             OnExit();
         }
 
-        protected virtual void  OnInitialize() { }
-        protected virtual void  OnUpdate(GameTime gameTime) { }
-        protected virtual void  OnDraw(GameTime gameTime) { }
-        protected virtual void  OnLateDraw(GameTime gameTime) { }
-        protected virtual void  OnExit() { }
-        protected virtual void  OnLoadContent() { }
+        protected virtual void OnInitialize() { }
+        protected virtual void OnUpdate(GameTime gameTime) { }
+        protected virtual void OnDraw(GameTime gameTime) { }
+        protected virtual void OnLateDraw(GameTime gameTime) { }
+        protected virtual void OnExit() { }
+        protected virtual void OnLoadContent() { }
 
         public void Dispose()
         {
-            if(!disposed)
+            if (!disposed)
             {
                 disposed = true;
                 _core.Dispose();
@@ -126,12 +129,17 @@ namespace CruZ
 
     public partial class GameApplication
     {
+        public static Viewport Viewport => _instance.GraphicsDevice.Viewport;
+
+        public static void RegisterWindowResize(Action<Viewport> windowResize)
+        {
+            _instance.WindowResize += windowResize;
+        }
+
         public static GameApplication CreateContext()
         {
             return _instance = new GameApplication();
         }
-
-        private static GameApplication? _instance;
 
         public static GameScene CreateScene()
         {
@@ -147,5 +155,7 @@ namespace CruZ
         {
             return _instance.Content;
         }
+
+        private static GameApplication? _instance;
     }
 }
