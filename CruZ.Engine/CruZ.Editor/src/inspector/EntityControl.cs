@@ -9,6 +9,22 @@ namespace CruZ.Editor.UI
 {
     public class EntityControl : UIControl
     {
+        public event Action<EntityControl>? Selecting;
+
+        public TransformEntity AttachEntity { get => _e; }
+
+        public void SelectEntity(bool shouldSelect)
+        {
+            if(shouldSelect)
+            {
+                _showBorder = true;
+            }
+            else
+            {
+                _showBorder = false;
+            }
+        }
+
         public EntityControl(TransformEntity e)
         {
             _e = e;
@@ -21,11 +37,17 @@ namespace CruZ.Editor.UI
             _sp.DrawEnd += Sprite_DrawEnd;
         }
 
+        protected override void OnDraw(UIArgs args)
+        {
+            if (_showBorder)
+                base.OnDraw(args);
+        }
+
         protected override void OnMouseDown(UIArgs args)
         {
             if (args.InputInfo.IsMouseDown(MouseKey.Left))
             {
-                _showBorder ^= true;
+                Selecting?.Invoke(this);
             }
         }
 
@@ -56,15 +78,9 @@ namespace CruZ.Editor.UI
             _bounds.Height = _bounds.Bottom < rect.Bottom ? rect.Bottom - _bounds.Y : _bounds.Height;
         }
 
-        protected override void OnDraw(UIArgs args)
-        {
-            if(_showBorder)
-                base.OnDraw(args);
-        }
-
         private void Entity_OnRemoveFromWorld(object? sender, EventArgs e)
         {
-            if(Parent != null) Parent.RemoveChild(this); 
+            if (Parent != null) Parent.RemoveChild(this);
         }
 
         private void CalcBounds()

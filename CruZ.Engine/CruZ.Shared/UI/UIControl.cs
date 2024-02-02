@@ -62,9 +62,9 @@ namespace CruZ.UI
 
         protected virtual void OnDraw(UIArgs args)
         {
-            if (IsMouseHover())
-                args.SpriteBatch.FillRectangle(_location, _size, 
-                    new Color(50, 0, 0, 5), 1f);
+            //if (IsMouseHover())
+            //    args.SpriteBatch.FillRectangle(_location, _size, 
+            //        new Color(50, 0, 0, 5), 1f);
 
             args.SpriteBatch.DrawRectangle(_location, _size, Color.Red);
 

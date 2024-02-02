@@ -103,6 +103,6 @@ namespace CruZ.UI
         }
 
         private static UIManager? _instance;
-        public static UIControl Root=> _instance._root;
+        public static UIControl Root => _instance._root;
     }
 }

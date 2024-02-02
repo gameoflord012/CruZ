@@ -6,6 +6,7 @@ using CruZ.UI;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Windows.Forms;
 
@@ -45,10 +46,22 @@ namespace CruZ.Editor.Controls
 
         public void SelectEntity(TransformEntity e)
         {
-            if (e == _currentSelectedEntity) return;
+            if (_currentSelect != null &&
+                e == _currentSelect.AttachEntity) 
+            {
+                _currentSelect.SelectEntity(false);
+                return;
+            }
 
-            _currentSelectedEntity = e;
-            OnSelectedEntityChanged?.Invoke(this, _currentSelectedEntity);
+            if (_currentSelect != null)
+            {
+                _currentSelect.SelectEntity(false);
+            }
+
+            _currentSelect = GetEntityControl(e);
+            _currentSelect.SelectEntity(true);
+
+            OnSelectedEntityChanged?.Invoke(this, e);
         }
 
         public void LoadSceneFromFile(string file)
@@ -134,9 +147,26 @@ namespace CruZ.Editor.Controls
             CleanSession();
         }
 
+        private void EntityControl_Selecting(EntityControl control)
+        {
+            SelectEntity(control.AttachEntity);
+        }
         #endregion
 
         #region PRIVATE
+
+        private EntityControl? GetEntityControl(TransformEntity e)
+        {
+            foreach (var control in _eControls)
+            {
+                if (control.AttachEntity == e)
+                {
+                    return control;
+                }
+            }
+
+            return null;
+        }
 
         private void CleanSession()
         {
@@ -177,17 +207,15 @@ namespace CruZ.Editor.Controls
         {
             if (_currentScene == null) return;
 
+            _eControls.Clear();
+
             foreach (var e in _currentScene.Entities)
             {
-                //var btn = new EntityButton(e);
+                var eControl = new EntityControl(e);
+                UIManager.Root.AddChild(eControl);
+                eControl.Selecting += EntityControl_Selecting;
 
-                //_entityBtns.Add(btn);
-                //btn.MouseDown += EntityBtn_MouseDown;
-                //Controls.Add(btn);
-                //Controls.Add(new EntityControl(e));
-
-                //TODO: DONOT CREATE ENTITYCONTROL ON DIFFERENT THREAD
-                UIManager.Root.AddChild(new EntityControl(e));
+                _eControls.Add(eControl);
             }
         }
 
@@ -207,17 +235,6 @@ namespace CruZ.Editor.Controls
             return _mainCamera ??= new Camera(_gameApp.GraphicsDevice.Viewport);
         }
 
-        //private void EntityBtn_MouseDown(object? sender, EventArgs e)
-        //{
-        //    SelectEntity(((EntityButton)sender).AttachedEntity);
-        //}
-
-        //Stopwatch   _gameLoopTimer;
-        //TimeSpan    _drawElapsed;
-        //TimeSpan    _updateElapsed;
-        //System.Timers.Timer _updateTimer;
-        //List<Button> _entityBtns = new();
-
         #endregion
 
         bool                _isMouseDraggingCamera;
@@ -225,7 +242,7 @@ namespace CruZ.Editor.Controls
         XNA.Point           _mouseStartDragPoint;
 
         GameScene?          _currentScene;
-        TransformEntity     _currentSelectedEntity;
+        EntityControl?      _currentSelect;
 
         GameApplication?    _gameApp;
         Thread?             _gameAppThread;
@@ -233,5 +250,7 @@ namespace CruZ.Editor.Controls
         Camera?             _mainCamera;
 
         ManualResetEvent    _appInitalized_Reset = new(false);
+        
+        List<EntityControl> _eControls = [];
     }
 }
