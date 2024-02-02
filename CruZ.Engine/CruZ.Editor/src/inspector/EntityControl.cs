@@ -12,11 +12,21 @@ namespace CruZ.Editor.UI
         public EntityControl(TransformEntity e)
         {
             _e = e;
+            _e.RemoveFromWorldEvent += Entity_OnRemoveFromWorld;
             _sp = e.GetComponent<SpriteComponent>();
 
             _sp.DrawLoopBegin += Sprite_DrawLoopBegin;
             _sp.DrawLoopEnd += Sprite_DrawLoopEnd;
             _sp.DrawBegin += Sprite_DrawBegin;
+            _sp.DrawEnd += Sprite_DrawEnd;
+        }
+
+        protected override void OnMouseDown(UIArgs args)
+        {
+            if (args.InputInfo.IsMouseDown(MouseKey.Left))
+            {
+                _showBorder ^= true;
+            }
         }
 
         private void Sprite_DrawBegin()
@@ -25,6 +35,11 @@ namespace CruZ.Editor.UI
             _bounds.Y = _e.Position.Y;
             _bounds.Width = 0;
             _bounds.Height = 0;
+        }
+
+        private void Sprite_DrawEnd()
+        {
+            CalcBounds();
         }
 
         private void Sprite_DrawLoopBegin(object? sender, DrawBeginEventArgs args)
@@ -41,16 +56,15 @@ namespace CruZ.Editor.UI
             _bounds.Height = _bounds.Bottom < rect.Bottom ? rect.Bottom - _bounds.Y : _bounds.Height;
         }
 
-        protected override void OnUpdate(UIArgs args)
+        protected override void OnDraw(UIArgs args)
         {
-            base.OnUpdate(args);
+            if(_showBorder)
+                base.OnDraw(args);
+        }
 
-            CalcBounds();
-
-            //if (args.InputInfo.CurMouse.LeftButton == XNA.Input.ButtonState.Pressed)
-            //{
-            //    _showBorder ^= true;
-            //}
+        private void Entity_OnRemoveFromWorld(object? sender, EventArgs e)
+        {
+            if(Parent != null) Parent.RemoveChild(this); 
         }
 
         private void CalcBounds()
@@ -63,11 +77,6 @@ namespace CruZ.Editor.UI
 
             Width = (int)size.Width;
             Height = (int)size.Height;
-        }
-
-        protected override void OnDraw(UIArgs args)
-        {
-            base.OnDraw(args);
         }
 
         TransformEntity _e;

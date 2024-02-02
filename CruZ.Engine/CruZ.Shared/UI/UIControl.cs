@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using MonoGame.Extended;
+using System;
 using System.Collections.Generic;
 using Draw = System.Drawing;
 
@@ -17,28 +18,47 @@ namespace CruZ.UI
 
         public int Width { get => (int)_size.Width; set => _size.Width = value; }
         public int Height { get => (int)_size.Height; set => _size.Height = value; }
+        public UIControl? Parent { get => _parent; }
 
         public void AddChild(UIControl child)
         {
             _childs.Add(child);
+
+            child._parent = this;
             child.OnParentChanged(this);
         }
 
         public void RemoveChild(UIControl child)
         {
             _childs.Remove(this);
+
+            child._parent = this;
             child.OnParentChanged(null);
         }
 
-        protected virtual void OnParentChanged(UIControl? parent)
+        internal void InternalUpdate(UIArgs args)
         {
+            _args = args;
 
+            if(args.InputInfo.IsAnyMouseDown() && IsMouseHover())
+            {
+                OnMouseDown(args);
+            }
+
+            OnUpdate(args);
         }
 
-        protected virtual void OnUpdate(UIArgs args)
+        internal void InternalDraw(UIArgs args)
         {
-
+            _args = args;
+            OnDraw(args);
         }
+
+        protected virtual void OnMouseDown(UIArgs args) { }
+
+        protected virtual void OnParentChanged(UIControl? parent) { }
+
+        protected virtual void OnUpdate(UIArgs args) { }
 
         protected virtual void OnDraw(UIArgs args)
         {
@@ -48,18 +68,6 @@ namespace CruZ.UI
 
             args.SpriteBatch.DrawRectangle(_location, _size, Color.Red);
 
-        }
-
-        internal void InternalUpdate(UIArgs args)
-        {
-            _args = args;
-            OnUpdate(args);
-        }
-
-        internal void InternalDraw(UIArgs args)
-        {
-            _args = args;
-            OnDraw(args);
         }
 
         protected bool IsMouseHover()
@@ -75,6 +83,7 @@ namespace CruZ.UI
 
         List<UIControl> _childs = [];
 
+        UIControl? _parent;
         Vector2 _location = new(0, 0);
         Size2 _size = new(0, 0);
         UIArgs _args;

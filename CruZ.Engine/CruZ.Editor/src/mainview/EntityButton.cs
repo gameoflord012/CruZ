@@ -20,7 +20,7 @@
 
 //            this._attachedEntity = attachedEntity;
 //            _attachedEntity.OnActiveStateChanged += AttachedEntity_OnActiveStateChanged;
-//            _attachedEntity.OnRemoveFromWorld += AttachedEntity_OnRemoveFromWorld;
+//            _attachedEntity.RemoveFromWorldEvent += AttachedEntity_OnRemoveFromWorld;
 
 //            Size = new(ButtonSize, ButtonSize);
 //        }

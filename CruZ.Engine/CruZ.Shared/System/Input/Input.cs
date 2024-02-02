@@ -71,11 +71,48 @@ namespace CruZ.Systems
         KeyboardState   _keyboardState;
     }
 
+    public enum MouseKey
+    {
+        Left,
+        Middle,
+        Right
+    }
+
     public struct InputInfo
     {
         public int              SrollDelta;
         public MouseState       PrevMouse;
         public MouseState       CurMouse;
         public KeyboardState    Keyboard;
+
+        public bool IsMouseDown(MouseKey key)
+        {
+            return 
+                GetMouseState(CurMouse,  key) == ButtonState.Pressed &&
+                GetMouseState(PrevMouse, key) == ButtonState.Released;
+        }
+
+        public bool IsAnyMouseDown()
+        {
+            return
+                IsMouseDown(MouseKey.Left) ||
+                IsMouseDown(MouseKey.Middle) ||
+                IsMouseDown(MouseKey.Right);
+        }
+
+        private ButtonState GetMouseState(MouseState state, MouseKey key)
+        {
+            switch (key)
+            {
+                case MouseKey.Left:
+                    return state.LeftButton;
+                case MouseKey.Middle:
+                    return state.MiddleButton;
+                case MouseKey.Right:
+                    return state.RightButton;
+                default:
+                    throw new System.Exception();
+            }
+        }
     }
 }

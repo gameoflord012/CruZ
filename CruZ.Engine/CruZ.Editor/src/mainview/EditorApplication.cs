@@ -13,20 +13,6 @@ namespace CruZ.Editor.Controls
 {
     public partial class EditorApplication
     {
-        //public event Action<GameTime>   ECSDraw;
-        //public event Action<GameTime>   ECSUpdate;
-
-        //public event Action<GameTime>   UpdateUI;
-        //public event Action<GameTime>   DrawUI;
-
-        //public event Action<GameTime>   InputUpdate;
-        //public event Action             InitializeECSSystem;
-
-
-        //public GraphicsDevice   GraphicsDevice      => Editor.GraphicsDevice;
-        //public ContentManager   Content             => Editor.Content;
-        //public SpriteBatch      SpriteBatch         => Editor.spriteBatch;
-
         public event EventHandler<GameScene> SceneLoadEvent;
         public event EventHandler<TransformEntity> OnSelectedEntityChanged;
 
@@ -47,51 +33,6 @@ namespace CruZ.Editor.Controls
             CacheService.Register(this);
             UpdateCache?.Invoke(this);
         }
-
-        #region COMMENT
-        //protected void Initializing()
-        //{
-        //    //_gameLoopTimer = new();
-        //    //_gameLoopTimer.Start();
-
-        //    //_drawElapsed = _gameLoopTimer.Elapsed;
-        //    //_updateElapsed = _gameLoopTimer.Elapsed;
-
-        //    //_updateTimer = new();
-        //    //_updateTimer.SynchronizingObject = this;
-        //    //_updateTimer.Interval = 1f / GlobalVariables.TARGET_FPS * 1000;
-        //    //_updateTimer.Enabled = true;
-        //    //_updateTimer.Elapsed += OnUpdate;
-
-        //}
-
-        //private void OnUpdate(object? sender, ElapsedEventArgs e)
-        //{
-        //    //GameTime gameTime = new(_gameLoopTimer.Elapsed, _gameLoopTimer.Elapsed - _updateElapsed);
-        //    //_updateElapsed = _gameLoopTimer.Elapsed;
-
-        //    //Editor.FPSCounter.OnUpdate(gameTime);
-
-        //    //InputUpdate?   .Invoke(gameTime);
-        //    //ECSUpdate?        .Invoke(gameTime);
-        //    //UpdateUI            .Invoke(gameTime);
-
-        //    //Invalidate();
-        //}
-
-        //protected void OnDraw()
-        //{
-        //    //GameTime gameTime = new(_gameLoopTimer.Elapsed, _gameLoopTimer.Elapsed - _drawElapsed);
-        //    //_drawElapsed = _gameLoopTimer.Elapsed;
-
-        //    ////Editor.FPSCounter.UpdateFrameCounter();
-
-        //    //ECSDraw?.Invoke(gameTime);
-        //    //DrawUI?.Invoke(gameTime);
-
-        //    //DrawAxis();
-        //}
-        #endregion
 
         #region PUBLIC_FUNCS
         public void UnloadCurrentScene()
@@ -195,6 +136,8 @@ namespace CruZ.Editor.Controls
 
         #endregion
 
+        #region PRIVATE
+
         private void CleanSession()
         {
             _gameApp?.Dispose();
@@ -275,18 +218,20 @@ namespace CruZ.Editor.Controls
         //System.Timers.Timer _updateTimer;
         //List<Button> _entityBtns = new();
 
-        bool _isMouseDraggingCamera;
-        Vector3 _cameraStartDragCoord;
-        XNA.Point _mouseStartDragPoint;
+        #endregion
 
-        GameScene? _currentScene;
-        TransformEntity _currentSelectedEntity;
+        bool                _isMouseDraggingCamera;
+        Vector3             _cameraStartDragCoord;
+        XNA.Point           _mouseStartDragPoint;
 
-        GameApplication? _gameApp;
-        Thread? _gameAppThread;
+        GameScene?          _currentScene;
+        TransformEntity     _currentSelectedEntity;
 
-        Camera? _mainCamera;
+        GameApplication?    _gameApp;
+        Thread?             _gameAppThread;
 
-        ManualResetEvent _appInitalized_Reset = new(false);
+        Camera?             _mainCamera;
+
+        ManualResetEvent    _appInitalized_Reset = new(false);
     }
 }

@@ -12,7 +12,7 @@ namespace CruZ.Components
     public partial class TransformEntity : IEquatable<TransformEntity>
     {
         public event EventHandler<bool>         OnActiveStateChanged;
-        public event EventHandler               OnRemoveFromWorld;
+        public event EventHandler               RemoveFromWorldEvent;
         public event EventHandler<IComponent>   OnComponentAdded;
 
         public string           Name        = "";
@@ -84,7 +84,7 @@ namespace CruZ.Components
         public void RemoveFromWorld()
         {
             SetIsActive(false);
-            OnRemoveFromWorld?.Invoke(this, EventArgs.Empty);
+            RemoveFromWorldEvent?.Invoke(this, EventArgs.Empty);
             ECS.World.DestroyEntity(_entity);
         }
 
