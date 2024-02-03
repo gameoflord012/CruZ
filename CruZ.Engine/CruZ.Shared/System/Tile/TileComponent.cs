@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CruZ.Global;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
@@ -58,7 +59,7 @@ namespace CruZ.Components
 
             if(_sp.YLayerDepth)
             {
-                args.LayerDepth = (args.Position.Y / 1000 + 1) / 2;
+                args.LayerDepth = (args.Position.Y / Variables.MAX_WORLD_DISTANCE + 1) / 2;
             }
         }
 

@@ -8,6 +8,7 @@ using System.Diagnostics;
 namespace CruZ.Components
 {
     using Box2D.NetStandard.Dynamics.World;
+    using CruZ.Global;
     using Microsoft.Xna.Framework;
     using MonoGame.Extended;
     using System.ComponentModel;
@@ -75,46 +76,46 @@ namespace CruZ.Components
             while (true)
             {
                 DrawBeginEventArgs beginArgs = new();
-                beginArgs.Position          = new Vector2(_e.Transform.Position.X, _e.Transform.Position.Y);
-                beginArgs.ViewMatrix        = viewMatrix;
-                beginArgs.LayerDepth        = YLayerDepth ? (beginArgs.Position.Y / 1000 + 1) / 2 : LayerDepth;
-                beginArgs.Origin            = new(0.5f, 0.5f);
-                beginArgs.Scale             = new Vector2(_e.Transform.Scale.X, _e.Transform.Scale.Y);
-                
-                if(Texture != null)
+                beginArgs.Position = new Vector2(_e.Transform.Position.X, _e.Transform.Position.Y);
+                beginArgs.ViewMatrix = viewMatrix;
+                beginArgs.LayerDepth = CalculateLayerDepth();
+                beginArgs.Origin = new(0.5f, 0.5f);
+                beginArgs.Scale = new Vector2(_e.Transform.Scale.X, _e.Transform.Scale.Y);
+
+                if (Texture != null)
                 {
-                    beginArgs.SourceRectangle   = Texture.Bounds;
-                    beginArgs.Texture           = Texture;
+                    beginArgs.SourceRectangle = Texture.Bounds;
+                    beginArgs.Texture = Texture;
                 }
-                
+
                 DrawLoopBegin?.Invoke(this, beginArgs);
 
                 if (beginArgs.Skip)
                 {
 
                 }
-                else if(beginArgs.Texture == null)
+                else if (beginArgs.Texture == null)
                 {
-                    
+
                 }
                 else
                 {
                     spriteBatch.Draw(
-                    texture:            beginArgs.Texture,
-                    position:           beginArgs.Position,
+                    texture: beginArgs.Texture,
+                    position: beginArgs.Position,
 
-                    sourceRectangle:    beginArgs.SourceRectangle,
+                    sourceRectangle: beginArgs.SourceRectangle,
 
-                    color:              XNA.Color.White,
-                    rotation:           0,
+                    color: XNA.Color.White,
+                    rotation: 0,
 
-                    origin:             new(beginArgs.Origin.X * beginArgs.SourceRectangle.Width, 
+                    origin: new(beginArgs.Origin.X * beginArgs.SourceRectangle.Width,
                                             beginArgs.Origin.Y * beginArgs.SourceRectangle.Height),
 
-                    scale:              beginArgs.Scale,
+                    scale: beginArgs.Scale,
 
-                    effects:            Flip ? SpriteEffects.FlipHorizontally : SpriteEffects.None,
-                    layerDepth:         beginArgs.LayerDepth);
+                    effects: Flip ? SpriteEffects.FlipHorizontally : SpriteEffects.None,
+                    layerDepth: beginArgs.LayerDepth);
                 }
 
                 var endArgs = new DrawEndEventArgs();
@@ -128,6 +129,18 @@ namespace CruZ.Components
         public void OnAttached(TransformEntity entity)
         {
             _e = entity;
+        }
+
+        public int CompareLayer(SpriteComponent other)
+        {
+            return SortingLayer == other.SortingLayer ? 
+                CalculateLayerDepth().CompareTo(other.CalculateLayerDepth()) : 
+                SortingLayer.CompareTo(other.SortingLayer);
+        }
+
+        private float CalculateLayerDepth()
+        {
+            return YLayerDepth ? (_e.Transform.Position.Y / Variables.MAX_WORLD_DISTANCE + 1) / 2 : LayerDepth;
         }
 
         private Texture2D?          _texture;

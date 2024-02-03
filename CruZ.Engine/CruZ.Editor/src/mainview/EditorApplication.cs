@@ -7,6 +7,8 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
 
@@ -15,7 +17,7 @@ namespace CruZ.Editor.Controls
     public partial class EditorApplication
     {
         public event EventHandler<GameScene> SceneLoadEvent;
-        public event EventHandler<TransformEntity> OnSelectedEntityChanged;
+        public event EventHandler<TransformEntity?> OnSelectedEntityChanged;
 
         public GameScene? CurrentGameScene => _currentScene;
 
@@ -44,22 +46,24 @@ namespace CruZ.Editor.Controls
             //_currentScene.Dispose();
         }
 
-        public void SelectEntity(TransformEntity e)
+        public void SelectEntity(TransformEntity? e)
         {
-            if (_currentSelect != null &&
-                e == _currentSelect.AttachEntity) 
-            {
-                _currentSelect.SelectEntity(false);
+            if (_currentSelect != null && e == _currentSelect.AttachEntity) 
                 return;
-            }
 
             if (_currentSelect != null)
-            {
                 _currentSelect.SelectEntity(false);
+
+            if(e != null)
+            {
+                _currentSelect = GetEntityControl(e);
+                _currentSelect.SelectEntity(true);
+            }
+            else
+            {
+                _currentSelect = null;
             }
 
-            _currentSelect = GetEntityControl(e);
-            _currentSelect.SelectEntity(true);
 
             OnSelectedEntityChanged?.Invoke(this, e);
         }
@@ -137,19 +141,59 @@ namespace CruZ.Editor.Controls
         private void GameApp_Intialized()
         {
             Camera.Main = GetMainCamera();
+            UIManager.Root.MouseDown += UI_MouseDown;
 
             _appInitalized_Reset.Set();
+        }
+
+        private void UI_MouseDown(UIArgs args)
+        {
+            if(!args.InputInfo.IsMouseDown(MouseKey.Left)) return;
+
+            var contains = UIManager.GetContains(args.MousePos().X, args.MousePos().Y);
+            
+            var eControl = contains
+                .Where(e => e is EntityControl)
+                .Select(e => (EntityControl)e).ToList();
+
+            eControl.Sort((e1, e2) =>
+            {
+                SpriteComponent? sp1 = null, sp2 = null;
+                e1.AttachEntity.TryGetComponent(ref sp1);
+                e2.AttachEntity.TryGetComponent(ref sp2);
+
+                if(sp1 == sp2) return 0;
+                if(sp1 == null) return -1;
+                if(sp2 == null) return 1;
+
+                return sp1.CompareLayer(sp2);
+            });
+
+            if(eControl.Count() == 0) 
+            {
+                SelectEntity(null);
+                return;
+            }
+
+            int idx = 0;
+
+            for(int i = 0; i < eControl.Count(); i++)
+            {
+                if (eControl[i] == _currentSelect)
+                {
+                    idx = i;
+                    break;
+                }
+            }
+
+            idx = (idx + 1) % eControl.Count();
+            SelectEntity(eControl[idx].AttachEntity);
         }
 
         private void GameApp_Exit()
         {
             UnloadCurrentScene();
             CleanSession();
-        }
-
-        private void EntityControl_Selecting(EntityControl control)
-        {
-            SelectEntity(control.AttachEntity);
         }
         #endregion
 
@@ -213,8 +257,6 @@ namespace CruZ.Editor.Controls
             {
                 var eControl = new EntityControl(e);
                 UIManager.Root.AddChild(eControl);
-                eControl.Selecting += EntityControl_Selecting;
-
                 _eControls.Add(eControl);
             }
         }

@@ -8,6 +8,8 @@ namespace CruZ.UI
 {
     public class UIControl
     {
+        public event Action<UIArgs>? MouseDown;
+
         public UIControl[] Childs => _childs.ToArray();
 
         public Draw.Point Location
@@ -47,6 +49,7 @@ namespace CruZ.UI
 
             if(args.InputInfo.IsAnyMouseDown() && IsMouseHover())
             {
+                MouseDown?.Invoke(args);
                 OnMouseDown(args);
             }
 
