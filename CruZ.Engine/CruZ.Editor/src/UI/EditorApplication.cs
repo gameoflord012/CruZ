@@ -17,7 +17,7 @@ namespace CruZ.Editor.Controls
     public partial class EditorApplication
     {
         public event EventHandler<GameScene> SceneLoadEvent;
-        public event EventHandler<TransformEntity?> OnSelectedEntityChanged;
+        public event Action<TransformEntity?> OnSelectedEntityChanged;
 
         public GameScene? CurrentGameScene => _currentScene;
 
@@ -65,7 +65,7 @@ namespace CruZ.Editor.Controls
             }
 
 
-            OnSelectedEntityChanged?.Invoke(this, e);
+            OnSelectedEntityChanged?.Invoke(e);
         }
 
         public void LoadSceneFromFile(string file)

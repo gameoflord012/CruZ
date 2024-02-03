@@ -87,7 +87,7 @@ namespace CruZ.UI
 
         SpriteBatch?        _spriteBatch = null;
         UIContext           _context;
-        UIControl           _root = new();
+        RootControl           _root = new();
     }
 
     public partial class UIManager
@@ -132,6 +132,6 @@ namespace CruZ.UI
         }
 
         private static UIManager? _instance;
-        public static UIControl Root => _instance._root;
+        public static RootControl Root => _instance._root;
     }
 }

@@ -1,5 +1,6 @@
 ﻿using CruZ.Components;
 using CruZ.Editor.Controls;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
@@ -14,9 +15,18 @@ namespace CruZ.Editor
         {
         }
 
-        public void DisplayEntity(TransformEntity e)
+        public void DisplayEntity(TransformEntity? e)
         {
-            PropertyGrid.SelectedObject = new EntityWrapper(e);
+            if(PropertyGrid.InvokeRequired)
+            {
+                Action safeInvoke = delegate { DisplayEntity(e); };
+                PropertyGrid.Invoke(safeInvoke);
+            }
+            else
+            {
+                if(e == null) PropertyGrid.SelectedObject = null;
+                PropertyGrid.SelectedObject = new EntityWrapper(e);
+            }
         }
 
         //TODO: refresh property grid every frames or when properties changed

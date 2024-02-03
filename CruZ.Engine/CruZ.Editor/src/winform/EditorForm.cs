@@ -19,13 +19,14 @@ namespace CruZ.Editor
             KeyPreview = true;
 
             InitializeComponent();
+            _editorApp = new();
 
-            //TODO: _editorApp.OnSelectedEntityChanged += WorldViewControl_OnSelectedEntityChanged;
+            _editorApp.OnSelectedEntityChanged += EditorApp_SelectChange;
             //TODO: _editorApp.SceneLoadEvent += WorldViewControl_SceneLoadEvent;
+
             entities_ComboBox.SelectedIndexChanged += Entities_ComboBox_SelectedIndexChanged;
             entities_ComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
 
-            _editorApp = new();
         }
 
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
@@ -60,11 +61,11 @@ namespace CruZ.Editor
             }
         }
 
-        private void WorldViewControl_OnSelectedEntityChanged(object? sender, Components.TransformEntity e)
+        private void EditorApp_SelectChange(Components.TransformEntity? e)
         {
             Inspector.Instance.DisplayEntity(e);
-            Trace.Assert(entities_ComboBox.Items.Contains(e));
-            entities_ComboBox.SelectedItem = e;
+            //Trace.Assert(entities_ComboBox.Items.Contains(e));
+            //entities_ComboBox.SelectedItem = e;
         }
 
         private void OpenScene_Clicked(object sender, EventArgs e)
