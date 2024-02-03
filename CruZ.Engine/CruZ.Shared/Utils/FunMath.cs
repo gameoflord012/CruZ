@@ -14,5 +14,15 @@ namespace CruZ.Utility
         {
             return RoundInt(MathF.Ceiling(f));
         }
+
+        public static DRAW.Point Minus(this DRAW.Point p1, DRAW.Point p2)
+        {
+            return new(p1.X - p2.X, p1.Y - p2.Y);
+        }
+
+        public static DRAW.Point Add(this DRAW.Point p1, DRAW.Point p2)
+        {
+            return new(p1.X + p2.X, p1.Y + p2.Y);
+        }
     }
 }

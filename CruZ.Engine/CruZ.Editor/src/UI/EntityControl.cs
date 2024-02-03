@@ -1,6 +1,7 @@
 ﻿using CruZ.Components;
 using CruZ.Systems;
 using CruZ.UI;
+using CruZ.Utility;
 using MonoGame.Extended;
 using System;
 using System.Diagnostics;
@@ -9,19 +10,23 @@ namespace CruZ.Editor.UI
 {
     public class EntityControl : UIControl
     {
-        public event Action<EntityControl>? Selecting;
+        //public event Action<EntityControl>? Selecting;
 
         public TransformEntity AttachEntity { get => _e; }
+
+        public bool Draggable = false;
 
         public void SelectEntity(bool shouldSelect)
         {
             if(shouldSelect)
             {
                 _showBorder = true;
+                Draggable = true;
             }
             else
             {
                 _showBorder = false;
+                Draggable = false;
             }
         }
 
@@ -37,17 +42,39 @@ namespace CruZ.Editor.UI
             _sp.DrawEnd += Sprite_DrawEnd;
         }
 
+        protected override void OnUpdate(UIArgs args)
+        {
+            base.OnUpdate(args);
+
+            if(Draggable && _dragging)
+            {
+                var ePoint = args.MousePos().Add(_dragCenterOffset);
+                _e.Transform.Position = Camera.Main.PointToCoordinate(ePoint);
+
+            }
+        }
+
         protected override void OnDraw(UIArgs args)
         {
             if (_showBorder)
                 base.OnDraw(args);
         }
 
-        protected override void OnMouseDown(UIArgs args)
+        protected override void MouseStateChange(UIArgs args)
         {
-            if (args.InputInfo.IsMouseDown(MouseKey.Left))
+            if(Draggable)
             {
-                Selecting?.Invoke(this);
+                if(args.InputInfo.IsMouseDown(MouseKey.Left) && !_dragging)
+                {
+                    _dragging = true;
+
+                    var  ePoint = Camera.Main.CoordinateToPoint(_e.Transform.Position);
+                    _dragCenterOffset = ePoint.Minus(args.MousePos());
+                }
+                else if(args.InputInfo.IsMouseUp(MouseKey.Left))
+                {
+                    _dragging = false;
+                }
             }
         }
 
@@ -55,6 +82,7 @@ namespace CruZ.Editor.UI
         {
             _bounds.X = _e.Position.X;
             _bounds.Y = _e.Position.Y;
+
             _bounds.Width = 0;
             _bounds.Height = 0;
         }
@@ -95,10 +123,28 @@ namespace CruZ.Editor.UI
             Height = (int)size.Height;
         }
 
+        private DRAW.Point GetCenter()
+        {
+            return new(
+                Location.X + (Width + 1) / 2,
+                Location.Y + (Height + 1) / 2);
+        }
+
+        private void SetCenter(DRAW.Point p)
+        {
+            Location = new(
+                p.X - Width / 2,
+                p.Y - Height / 2);
+        }
+
         TransformEntity _e;
         SpriteComponent _sp;
         DrawBeginEventArgs _args;
         RectangleF _bounds; //World bounds
+
+        DRAW.Point _dragCenterOffset;
+
+        bool _dragging = false;
         bool _showBorder = false;
     }
 }

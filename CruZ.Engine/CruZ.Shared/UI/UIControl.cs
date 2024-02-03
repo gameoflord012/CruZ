@@ -47,10 +47,10 @@ namespace CruZ.UI
         {
             _args = args;
 
-            if(args.InputInfo.IsAnyMouseDown() && IsMouseHover())
+            if(args.InputInfo.MouseStateChange() && IsMouseHover())
             {
                 MouseDown?.Invoke(args);
-                OnMouseDown(args);
+                MouseStateChange(args);
             }
 
             OnUpdate(args);
@@ -62,7 +62,7 @@ namespace CruZ.UI
             OnDraw(args);
         }
 
-        protected virtual void OnMouseDown(UIArgs args) { }
+        protected virtual void MouseStateChange(UIArgs args) { }
 
         protected virtual void OnParentChanged(UIControl? parent) { }
 

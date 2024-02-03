@@ -148,6 +148,12 @@ namespace CruZ.Editor.Controls
 
         private void UI_MouseDown(UIArgs args)
         {
+            if(args.InputInfo.IsMouseDown(MouseKey.Right))
+            {
+                SelectEntity(null);
+                return;
+            }
+
             if(!args.InputInfo.IsMouseDown(MouseKey.Left)) return;
 
             var contains = UIManager.GetContains(args.MousePos().X, args.MousePos().Y);

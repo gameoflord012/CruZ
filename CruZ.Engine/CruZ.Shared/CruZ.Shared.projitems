@@ -37,7 +37,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)UI\RootControl.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)UI\UIControl.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)UI\UIManager.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Utils\GlobalUsing.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Gobal\GlobalUsing.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\Helper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System\Resource\ResourceManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System\EntityScriptSystem.cs" />

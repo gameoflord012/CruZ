@@ -19,9 +19,11 @@ namespace CruZ.UI
         public InputInfo    InputInfo;
         public SpriteBatch  SpriteBatch;
 
-        public Point MousePos()
+        public DRAW.Point MousePos()
         {
-            return InputInfo.CurMouse.Position;
+            return new(
+                InputInfo.CurMouse.Position.X, 
+                InputInfo.CurMouse.Position.Y);
         }
     }
 

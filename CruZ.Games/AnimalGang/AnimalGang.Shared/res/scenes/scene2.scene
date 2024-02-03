@@ -56,7 +56,7 @@
       ]
     },
     {
-      "position": "-4.833353, -31.250076, 0",
+      "position": "-36.500103, -27.083397, 0",
       "scale": "0.5, 0.5, 0",
       "components": [
         {
@@ -66,7 +66,7 @@
             "LayerDepth": 0.2,
             "SortingLayer": 1,
             "YLayerDepth": true,
-            "Flip": true
+            "Flip": false
           }
         },
         {

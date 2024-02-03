@@ -92,12 +92,19 @@ namespace CruZ.Systems
                 GetMouseState(PrevMouse, key) == ButtonState.Released;
         }
 
-        public bool IsAnyMouseDown()
+        public bool IsMouseUp(MouseKey key)
+        {
+            return 
+                GetMouseState(PrevMouse, key) == ButtonState.Pressed &&
+                GetMouseState(CurMouse, key) == ButtonState.Released;
+        }
+
+        public bool MouseStateChange()
         {
             return
-                IsMouseDown(MouseKey.Left) ||
-                IsMouseDown(MouseKey.Middle) ||
-                IsMouseDown(MouseKey.Right);
+                GetMouseState(CurMouse, MouseKey.Left)      != GetMouseState(PrevMouse, MouseKey.Left)  ||
+                GetMouseState(CurMouse, MouseKey.Middle)    != GetMouseState(PrevMouse, MouseKey.Middle) ||
+                GetMouseState(CurMouse, MouseKey.Right)     != GetMouseState(PrevMouse, MouseKey.Right);
         }
 
         private ButtonState GetMouseState(MouseState state, MouseKey key)
