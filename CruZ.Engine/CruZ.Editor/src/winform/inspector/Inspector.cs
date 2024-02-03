@@ -9,7 +9,7 @@ namespace CruZ.Editor
 {
     class Inspector
     {
-        PropertyGrid PropertyGrid => EditorForm.Instance.Inspector_PropertyGrid;
+        PropertyGrid PropertyGrid => EditorForm.GetPropertyGrid();
 
         public Inspector()
         {
@@ -25,7 +25,7 @@ namespace CruZ.Editor
             else
             {
                 if(e == null) PropertyGrid.SelectedObject = null;
-                PropertyGrid.SelectedObject = new EntityWrapper(e);
+                else PropertyGrid.SelectedObject = new EntityWrapper(e);
             }
         }
 

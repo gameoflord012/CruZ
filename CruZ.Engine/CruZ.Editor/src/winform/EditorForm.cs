@@ -26,7 +26,6 @@ namespace CruZ.Editor
 
             entities_ComboBox.SelectedIndexChanged += Entities_ComboBox_SelectedIndexChanged;
             entities_ComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
-
         }
 
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
@@ -143,11 +142,20 @@ namespace CruZ.Editor
         }
 
         EditorApplication _editorApp;
-    }
 
-    public partial class EditorForm
-    {
+        public static PropertyGrid GetPropertyGrid()
+        {
+            return _instance.inspector_PropertyGrid;
+        }
+
+        public static void Run()
+        {
+            if(_instance != null) throw new InvalidOperationException("Already Ran");
+
+            _instance = new EditorForm();
+            Application.Run(_instance);
+        }
+
         static EditorForm? _instance;
-        public static EditorForm Instance => _instance ??= new EditorForm();
     }
 }

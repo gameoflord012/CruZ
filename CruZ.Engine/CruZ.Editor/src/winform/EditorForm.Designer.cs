@@ -58,10 +58,10 @@ namespace CruZ.Editor
             // 
             // inspector_PropertyGrid
             // 
-            inspector_PropertyGrid.Dock = DockStyle.Bottom;
-            inspector_PropertyGrid.Location = new Point(0, 53);
+            inspector_PropertyGrid.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            inspector_PropertyGrid.Location = new Point(3, 53);
             inspector_PropertyGrid.Name = "inspector_PropertyGrid";
-            inspector_PropertyGrid.Size = new Size(700, 261);
+            inspector_PropertyGrid.Size = new Size(697, 261);
             inspector_PropertyGrid.TabIndex = 0;
             // 
             // file_Menu

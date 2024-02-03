@@ -23,7 +23,7 @@
           "com-data": {
             "ComponentType": "CruZ.Components.TileComponent, CruZ.Editor, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
             "Debug": true,
-            "TileSize": 12
+            "TileSize": 16
           }
         }
       ]
@@ -56,7 +56,7 @@
       ]
     },
     {
-      "position": "0, 0, 0",
+      "position": "-4.833353, -31.250076, 0",
       "scale": "0.5, 0.5, 0",
       "components": [
         {
@@ -66,13 +66,13 @@
             "LayerDepth": 0.2,
             "SortingLayer": 1,
             "YLayerDepth": true,
-            "Flip": false
+            "Flip": true
           }
         },
         {
           "com-type": "CruZ.Games.AnimalGang.MainCharacter, CruZ.Editor, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
           "com-data": {
-            "Speed": 15.0
+            "Speed": 50.0
           }
         },
         {
