@@ -62,7 +62,7 @@ namespace CruZ.Editor
 
         private void EditorApp_SelectChange(Components.TransformEntity? e)
         {
-            Inspector.Instance.DisplayEntity(e);
+            Inspector.DisplayEntity(e);
             //Trace.Assert(entities_ComboBox.Items.Contains(e));
             //entities_ComboBox.SelectedItem = e;
         }

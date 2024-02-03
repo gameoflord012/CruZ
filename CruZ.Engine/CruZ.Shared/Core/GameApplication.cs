@@ -17,9 +17,12 @@ namespace CruZ
         public event Action<GameTime> ECSDraw;
         public event Action<GameTime> ECSUpdate;
         public event Action InitializeECSSystem;
-        public event Action<GameTime> InputUpdate;
-        public event Action<Viewport> WindowResize;
-        public event Action ExitEvent;
+
+
+        public event Action<GameTime>   InputUpdate;
+        public event Action<Viewport>   WindowResize;
+        public event Action             ExitEvent;
+        public event Action<GameTime>   Draw;
 
         public event Action Initializing;
         public event Action Initialized;
@@ -77,6 +80,7 @@ namespace CruZ
 
         private void InternalDraw(GameTime gameTime)
         {
+            Draw?.Invoke(gameTime);
             ECSDraw?.Invoke(gameTime);
             DrawUI?.Invoke(gameTime);
             OnDraw(gameTime);
@@ -134,6 +138,16 @@ namespace CruZ
         public static void RegisterWindowResize(Action<Viewport> windowResize)
         {
             _instance.WindowResize += windowResize;
+        }
+
+        public static void RegisterDraw(Action<GameTime> draw)
+        {
+            _instance.Draw += draw;
+        }
+
+        public static void UnregisterDraw(Action<GameTime> draw)
+        {
+            _instance.Draw -= draw;
         }
 
         public static GameApplication CreateContext()

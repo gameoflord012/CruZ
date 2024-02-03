@@ -1,5 +1,6 @@
 ﻿using CruZ.Components;
 using CruZ.Editor.Controls;
+using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,14 +10,15 @@ namespace CruZ.Editor
 {
     class Inspector
     {
-        PropertyGrid PropertyGrid => EditorForm.GetPropertyGrid();
+        public static PropertyGrid PropertyGrid => EditorForm.GetPropertyGrid();
 
-        public Inspector()
+        public static void DisplayEntity(TransformEntity? e)
         {
-        }
+            GameApplication.UnregisterDraw(GameApp_Draw);
 
-        public void DisplayEntity(TransformEntity? e)
-        {
+            if(e != null)
+                GameApplication.RegisterDraw(GameApp_Draw);
+
             if(PropertyGrid.InvokeRequired)
             {
                 Action safeInvoke = delegate { DisplayEntity(e); };
@@ -29,14 +31,23 @@ namespace CruZ.Editor
             }
         }
 
-        //TODO: refresh property grid every frames or when properties changed
-        private void WorldViewControl_DrawEvent(XNA.GameTime obj)
+        private static void GameApp_Draw(GameTime time)
         {
-            if(PropertyGrid.ContainsFocus) return;
-            PropertyGrid.Refresh();
+            RefreshPropertyGrid();
         }
 
-        static Inspector? _instance;
-        static public Inspector Instance => _instance ??= new Inspector();
+        private static void RefreshPropertyGrid()
+        {
+            if(PropertyGrid.InvokeRequired)
+            {
+                Action safeInvoke = delegate { RefreshPropertyGrid(); };
+                PropertyGrid.Invoke(safeInvoke);
+            }
+            else
+            {
+                if(PropertyGrid.ContainsFocus) return;
+                PropertyGrid.Refresh();
+            }
+        }
     }
 }
