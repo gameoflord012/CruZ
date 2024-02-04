@@ -28,10 +28,18 @@ namespace CruZ.Editor.Controls
             //Input               .CreateContext(this);
             //UIManager           .CreateContext(this);
 
-            Input.MouseScroll += Input_MouseScroll;
-            Input.MouseMove += Input_MouseMove;
-            Input.MouseDown += Input_MouseDown;
-            Input.MouseUp += Input_MouseUp;
+            //TODO: change thoses event to mose change state
+            Input.MouseScrolled     += Input_MouseScroll;
+            Input.MouseMoved        += Input_MouseMove;
+            Input.MouseStateChanged += Input_MouseStateChanged;
+
+            //Input.MouseScrolledif (info.IsMouseDown(MouseKey.Middle)
+            //    && !_isMouseDraggingCamera)
+            //{
+            //    _isMouseDraggingCamera = true;
+            //    _mouseStartDragPoint = info.CurMouse.Position;
+            //    _cameraStartDragCoord = Camera.Main.Position;
+            //}
 
             CacheService.Register(this);
             UpdateCache?.Invoke(this);
@@ -103,7 +111,9 @@ namespace CruZ.Editor.Controls
 
         private void Input_MouseScroll(InputInfo info)
         {
-            Camera.Main.Zoom = new(Camera.Main.Zoom.X - info.SrollDelta * 0.001f * Camera.Main.Zoom.X, Camera.Main.Zoom.Y);
+            Camera.Main.Zoom = new(
+                Camera.Main.Zoom.X - info.SrollDelta * 0.001f * Camera.Main.Zoom.X, 
+                Camera.Main.Zoom.Y);
         }
 
         private void Input_MouseMove(InputInfo info)
@@ -119,20 +129,17 @@ namespace CruZ.Editor.Controls
             }
         }
 
-        private void Input_MouseDown(InputInfo info)
+        private void Input_MouseStateChanged(InputInfo info)
         {
-            if (info.CurMouse.MiddleButton == XNA.Input.ButtonState.Pressed
+            if (info.IsMouseDown(MouseKey.Middle)
                 && !_isMouseDraggingCamera)
             {
                 _isMouseDraggingCamera = true;
                 _mouseStartDragPoint = info.CurMouse.Position;
                 _cameraStartDragCoord = Camera.Main.Position;
             }
-        }
 
-        private void Input_MouseUp(InputInfo info)
-        {
-            if (info.CurMouse.MiddleButton == XNA.Input.ButtonState.Released)
+            if (info.IsMouseUp(MouseKey.Middle))
             {
                 _isMouseDraggingCamera = false;
             }
@@ -141,7 +148,7 @@ namespace CruZ.Editor.Controls
         private void GameApp_Intialized()
         {
             Camera.Main = GetMainCamera();
-            UIManager.Root.MouseDown += UI_MouseDown;
+            UIManager.Root.MouseStateChange += UI_MouseDown;
 
             _appInitalized_Reset.Set();
         }

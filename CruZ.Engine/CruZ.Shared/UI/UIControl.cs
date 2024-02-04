@@ -8,7 +8,7 @@ namespace CruZ.UI
 {
     public class UIControl
     {
-        public event Action<UIArgs>? MouseDown;
+        public event Action<UIArgs>? MouseStateChange;
 
         public UIControl[] Childs => _childs.ToArray();
 
@@ -47,10 +47,10 @@ namespace CruZ.UI
         {
             _args = args;
 
-            if(args.InputInfo.MouseStateChange() && IsMouseHover())
+            if(args.InputInfo.DoesMouseStateChange && IsMouseHover())
             {
-                MouseDown?.Invoke(args);
-                MouseStateChange(args);
+                MouseStateChange?.Invoke(args);
+                OnMouseStateChange(args);
             }
 
             OnUpdate(args);
@@ -62,7 +62,7 @@ namespace CruZ.UI
             OnDraw(args);
         }
 
-        protected virtual void MouseStateChange(UIArgs args) { }
+        protected virtual void OnMouseStateChange(UIArgs args) { }
 
         protected virtual void OnParentChanged(UIControl? parent) { }
 

@@ -75,9 +75,9 @@
 //            _attachedEntity.Transform.Position = Camera.Main.PointToCoordinate(GetCenter());
 //        }
 
-//        protected override void MouseStateChange(MouseEventArgs mevent)
+//        protected override void OnMouseStateChange(MouseEventArgs mevent)
 //        {
-//            base.MouseStateChange(mevent);
+//            base.OnMouseStateChange(mevent);
 
 //            if (mevent.Button == MouseButtons.Left && _isMouseEntered)
 //            {

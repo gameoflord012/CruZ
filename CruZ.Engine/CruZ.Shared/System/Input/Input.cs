@@ -13,101 +13,50 @@ namespace CruZ.Systems
             contextProvider.InputUpdate += InputUpdate;
         }
 
-        public void InputUpdate(GameTime gameTime)
-        {
-            _prevMouse =   _curMouse;
-            _curMouse =    Mouse.GetState();
-            _keyboardState =    Keyboard.GetState();
-
-            if(ScrollDelta() != 0)
-            {
-                MouseScroll?.Invoke(GetInputInfo());
-            }
-
-            if(MouseMoveDelta() != Point.Zero)
-            {
-                MouseMove?.Invoke(GetInputInfo());
-            }
-
-            if(
-                _curMouse.LeftButton    == ButtonState.Pressed && _prevMouse.LeftButton     != ButtonState.Pressed ||
-                _curMouse.RightButton   == ButtonState.Pressed && _prevMouse.RightButton    != ButtonState.Pressed||
-                _curMouse.MiddleButton  == ButtonState.Pressed && _prevMouse.MiddleButton   != ButtonState.Pressed)
-            {
-                MouseDown?.Invoke(GetInputInfo());
-            }
-
-            if(
-                _curMouse.LeftButton    == ButtonState.Released && _prevMouse.LeftButton     != ButtonState.Released ||
-                _curMouse.RightButton   == ButtonState.Released && _prevMouse.RightButton    != ButtonState.Released||
-                _curMouse.MiddleButton  == ButtonState.Released && _prevMouse.MiddleButton   != ButtonState.Released)
-            {
-                MouseUp?.Invoke(GetInputInfo());
-            }
-        }
-
         public int ScrollDelta()
         {
-            return _curMouse.ScrollWheelValue - _prevMouse.ScrollWheelValue;
+            return _info.CurMouse.ScrollWheelValue - _info.PreMouse.ScrollWheelValue;
         }
 
         public Point MouseMoveDelta()
         {
-            return _curMouse.Position - _prevMouse.Position;
+            return _info.CurMouse.Position - _info.PreMouse.Position;
         }
 
-        public InputInfo GetInputInfo()
+        private void InputUpdate(GameTime gameTime)
         {
-            InputInfo info = new();
-            info.SrollDelta = ScrollDelta();
-            info.PrevMouse = _prevMouse;
-            info.CurMouse = _curMouse;
-            info.Keyboard = _keyboardState;
-            return info;
+            _info.PreMouse = _info.CurMouse;
+            _info.CurMouse = Mouse.GetState();
+            _info.Keyboard = Keyboard.GetState();
+
+            _info.SrollDelta = ScrollDelta();
+
+            _info.DoesMouseScroll = ScrollDelta() != 0;
+            _info.DoesMouseMove = DoesMouseMove();
+            _info.DoesMouseStateChange = DoesMouseStateChange();
+
+            _info.DoesMouseStay = !DoesMouseMove() || _info.IsMouseDown(MouseKey.Left);
+            _info.DoesMouseClick = _info.DoesMouseStay && _info.IsMouseUp(MouseKey.Left);
+        
+            if(_info.DoesMouseMove) MouseMoved?.Invoke(_info);
+            if(_info.DoesMouseScroll) MouseScrolled?.Invoke(_info);
+            if(_info.DoesMouseStateChange) MouseStateChanged?.Invoke(_info);
         }
 
-        MouseState      _prevMouse;
-        MouseState      _curMouse;
-        KeyboardState   _keyboardState;
-    }
-
-    public enum MouseKey
-    {
-        Left,
-        Middle,
-        Right
-    }
-
-    public struct InputInfo
-    {
-        public int              SrollDelta;
-        public MouseState       PrevMouse;
-        public MouseState       CurMouse;
-        public KeyboardState    Keyboard;
-
-        public bool IsMouseDown(MouseKey key)
-        {
-            return 
-                GetMouseState(CurMouse,  key) == ButtonState.Pressed &&
-                GetMouseState(PrevMouse, key) == ButtonState.Released;
-        }
-
-        public bool IsMouseUp(MouseKey key)
-        {
-            return 
-                GetMouseState(PrevMouse, key) == ButtonState.Pressed &&
-                GetMouseState(CurMouse, key) == ButtonState.Released;
-        }
-
-        public bool MouseStateChange()
+        private bool DoesMouseStateChange()
         {
             return
-                GetMouseState(CurMouse, MouseKey.Left)      != GetMouseState(PrevMouse, MouseKey.Left)  ||
-                GetMouseState(CurMouse, MouseKey.Middle)    != GetMouseState(PrevMouse, MouseKey.Middle) ||
-                GetMouseState(CurMouse, MouseKey.Right)     != GetMouseState(PrevMouse, MouseKey.Right);
+                GetMouseState(_info.CurMouse, MouseKey.Left)    != GetMouseState(_info.PreMouse, MouseKey.Left) ||
+                GetMouseState(_info.CurMouse, MouseKey.Middle)  != GetMouseState(_info.PreMouse, MouseKey.Middle) ||
+                GetMouseState(_info.CurMouse, MouseKey.Right)   != GetMouseState(_info.PreMouse, MouseKey.Right);
         }
 
-        private ButtonState GetMouseState(MouseState state, MouseKey key)
+        private bool DoesMouseMove()
+        {
+            return MouseMoveDelta() != Point.Zero;
+        }
+
+        internal static ButtonState GetMouseState(MouseState state, MouseKey key)
         {
             switch (key)
             {
@@ -120,6 +69,46 @@ namespace CruZ.Systems
                 default:
                     throw new System.Exception();
             }
+        }
+
+        InputInfo _info;
+    }
+
+    public enum MouseKey
+    {
+        Left,
+        Middle,
+        Right
+    }
+
+    public struct InputInfo
+    {
+        public int SrollDelta;
+
+        public MouseState PreMouse;
+        public MouseState CurMouse;
+
+        public KeyboardState Keyboard;
+
+        public bool DoesMouseStateChange;
+        public bool DoesMouseClick;
+        public bool DoesMouseStay;
+        public bool DoesMouseMove;
+        public bool DoesMouseScroll;
+
+
+        public bool IsMouseDown(MouseKey key)
+        {
+            return
+                Input.GetMouseState(CurMouse, key) == ButtonState.Pressed &&
+                Input.GetMouseState(PreMouse, key) == ButtonState.Released;
+        }
+
+        public bool IsMouseUp(MouseKey key)
+        {
+            return
+                Input.GetMouseState(PreMouse, key) == ButtonState.Pressed &&
+                Input.GetMouseState(CurMouse, key) == ButtonState.Released;
         }
     }
 }

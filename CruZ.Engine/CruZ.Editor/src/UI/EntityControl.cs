@@ -60,7 +60,7 @@ namespace CruZ.Editor.UI
                 base.OnDraw(args);
         }
 
-        protected override void MouseStateChange(UIArgs args)
+        protected override void OnMouseStateChange(UIArgs args)
         {
             if(Draggable)
             {

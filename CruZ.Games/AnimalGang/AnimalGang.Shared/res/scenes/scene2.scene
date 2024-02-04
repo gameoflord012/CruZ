@@ -2,7 +2,7 @@
   "Name": "",
   "_entities": [
     {
-      "position": "0, 0, 0",
+      "position": "349.31427, -165.13042, 0",
       "scale": "1, 1, 1",
       "components": [
         {
@@ -29,7 +29,7 @@
       ]
     },
     {
-      "position": "0, 0, 0",
+      "position": "-248.40126, -252.63539, 0",
       "scale": "1, 1, 1",
       "components": [
         {
@@ -56,7 +56,7 @@
       ]
     },
     {
-      "position": "-36.500103, -27.083397, 0",
+      "position": "-33.16676, -52.91681, 0",
       "scale": "0.5, 0.5, 0",
       "components": [
         {
@@ -66,7 +66,7 @@
             "LayerDepth": 0.2,
             "SortingLayer": 1,
             "YLayerDepth": true,
-            "Flip": false
+            "Flip": true
           }
         },
         {

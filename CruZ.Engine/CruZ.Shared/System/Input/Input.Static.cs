@@ -14,12 +14,11 @@ namespace CruZ.Systems
 
     public partial class Input
     {
-        public static event Action<InputInfo> MouseScroll;
-        public static event Action<InputInfo> MouseMove;
-        public static event Action<InputInfo> MouseDown;
-        public static event Action<InputInfo> MouseUp;
+        public static event Action<InputInfo>? MouseScrolled;
+        public static event Action<InputInfo>? MouseMoved;
+        public static event Action<InputInfo>? MouseStateChanged;
 
-        public static InputInfo Info => _Instance.GetInputInfo();
+        public static InputInfo Info => _Instance._info;
 
         static Input? _Instance;
 
