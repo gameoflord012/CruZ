@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using CruZ.Utility;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.Diagnostics;
@@ -8,9 +9,12 @@ namespace CruZ.Systems
 {
     public partial class Input
     {
+        public static readonly float MOUSE_CLICK_DURATION = 0.1f;
+
         public Input(IInputContextProvider contextProvider)
         {
             contextProvider.InputUpdate += InputUpdate;
+            _info = new();
         }
 
         public int ScrollDelta()
@@ -29,18 +33,26 @@ namespace CruZ.Systems
             _info.CurMouse = Mouse.GetState();
             _info.Keyboard = Keyboard.GetState();
 
-            _info.SrollDelta = ScrollDelta();
+            // Can call IsMouseUp/Down after this line
 
+            _info.SrollDelta = ScrollDelta();
             _info.DoesMouseScroll = ScrollDelta() != 0;
+
             _info.DoesMouseMove = DoesMouseMove();
+
             _info.DoesMouseStateChange = DoesMouseStateChange();
 
-            _info.DoesMouseStay = !DoesMouseMove() || _info.IsMouseDown(MouseKey.Left);
-            _info.DoesMouseClick = _info.DoesMouseStay && _info.IsMouseUp(MouseKey.Left);
+            if(_info.IsMouseDown(MouseKey.Left))
+                _info.TimeSceneLastDownClick = gameTime.TotalSeconds();
+
+            _info.DoesMouseClick = 
+                gameTime.TotalSeconds() - _info.TimeSceneLastDownClick < MOUSE_CLICK_DURATION &&
+                _info.IsMouseUp(MouseKey.Left);
         
             if(_info.DoesMouseMove) MouseMoved?.Invoke(_info);
             if(_info.DoesMouseScroll) MouseScrolled?.Invoke(_info);
             if(_info.DoesMouseStateChange) MouseStateChanged?.Invoke(_info);
+            if(_info.DoesMouseClick) MouseClicked?.Invoke(_info);
         }
 
         private bool DoesMouseStateChange()
@@ -83,6 +95,8 @@ namespace CruZ.Systems
 
     public struct InputInfo
     {
+        public InputInfo() { }
+
         public int SrollDelta;
 
         public MouseState PreMouse;
@@ -96,6 +110,7 @@ namespace CruZ.Systems
         public bool DoesMouseMove;
         public bool DoesMouseScroll;
 
+        public float TimeSceneLastDownClick = -1000; // Min number
 
         public bool IsMouseDown(MouseKey key)
         {

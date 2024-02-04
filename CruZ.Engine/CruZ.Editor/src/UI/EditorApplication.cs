@@ -32,6 +32,7 @@ namespace CruZ.Editor.Controls
             Input.MouseScrolled     += Input_MouseScroll;
             Input.MouseMoved        += Input_MouseMove;
             Input.MouseStateChanged += Input_MouseStateChanged;
+            Input.MouseClicked += Input_MouseClicked;
 
             //Input.MouseScrolledif (info.IsMouseDown(MouseKey.Middle)
             //    && !_isMouseDraggingCamera)
@@ -103,12 +104,25 @@ namespace CruZ.Editor.Controls
 
         #region EVENT_HANDLER
 
-        private void Game_WindowResize(Viewport viewport)
+        private void GameApp_WindowResize(Viewport viewport)
         {
             GetMainCamera().ViewPortWidth = viewport.Width;
             GetMainCamera().ViewPortHeight = viewport.Height;
         }
+        
+        private void GameApp_Intialized()
+        {
+            Camera.Main = GetMainCamera();
 
+            _appInitalized_Reset.Set();
+        }
+
+        private void GameApp_Exit()
+        {
+            UnloadCurrentScene();
+            CleanSession();
+        }
+        
         private void Input_MouseScroll(InputInfo info)
         {
             Camera.Main.Zoom = new(
@@ -145,26 +159,27 @@ namespace CruZ.Editor.Controls
             }
         }
 
-        private void GameApp_Intialized()
+        private void Input_MouseClicked(InputInfo info)
         {
-            Camera.Main = GetMainCamera();
-            UIManager.Root.MouseStateChange += UI_MouseDown;
-
-            _appInitalized_Reset.Set();
+            FindEntityToSelect(info);
         }
 
-        private void UI_MouseDown(UIArgs args)
+
+        #endregion
+
+        #region PRIVATE
+        private void FindEntityToSelect(InputInfo info)
         {
-            if(args.InputInfo.IsMouseDown(MouseKey.Right))
-            {
-                SelectEntity(null);
-                return;
-            }
+            //if (info.IsMouseDown(MouseKey.Right))
+            //{
+            //    SelectEntity(null);
+            //    return;
+            //}
 
-            if(!args.InputInfo.IsMouseDown(MouseKey.Left)) return;
+            //if (!info.IsMouseDown(MouseKey.Left)) return;
 
-            var contains = UIManager.GetContains(args.MousePos().X, args.MousePos().Y);
-            
+            var contains = UIManager.GetContains(info.CurMouse.X, info.CurMouse.Y);
+
             var eControl = contains
                 .Where(e => e is EntityControl)
                 .Select(e => (EntityControl)e).ToList();
@@ -175,14 +190,14 @@ namespace CruZ.Editor.Controls
                 e1.AttachEntity.TryGetComponent(ref sp1);
                 e2.AttachEntity.TryGetComponent(ref sp2);
 
-                if(sp1 == sp2) return 0;
-                if(sp1 == null) return -1;
-                if(sp2 == null) return 1;
+                if (sp1 == sp2) return 0;
+                if (sp1 == null) return -1;
+                if (sp2 == null) return 1;
 
                 return sp1.CompareLayer(sp2);
             });
 
-            if(eControl.Count() == 0) 
+            if (eControl.Count() == 0)
             {
                 SelectEntity(null);
                 return;
@@ -190,7 +205,7 @@ namespace CruZ.Editor.Controls
 
             int idx = 0;
 
-            for(int i = 0; i < eControl.Count(); i++)
+            for (int i = 0; i < eControl.Count(); i++)
             {
                 if (eControl[i] == _currentSelect)
                 {
@@ -202,15 +217,6 @@ namespace CruZ.Editor.Controls
             idx = (idx + 1) % eControl.Count();
             SelectEntity(eControl[idx].AttachEntity);
         }
-
-        private void GameApp_Exit()
-        {
-            UnloadCurrentScene();
-            CleanSession();
-        }
-        #endregion
-
-        #region PRIVATE
 
         private EntityControl? GetEntityControl(TransformEntity e)
         {
@@ -252,7 +258,7 @@ namespace CruZ.Editor.Controls
 
             _gameApp = GameApplication.CreateContext();
 
-            _gameApp.WindowResize += Game_WindowResize;
+            _gameApp.WindowResize += GameApp_WindowResize;
             _gameApp.Initializing += GameApp_Intialized;
             _gameApp.Window.AllowUserResizing = true;
             _gameApp.ExitEvent += GameApp_Exit;

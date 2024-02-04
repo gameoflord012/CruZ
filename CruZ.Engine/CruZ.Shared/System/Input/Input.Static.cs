@@ -17,6 +17,7 @@ namespace CruZ.Systems
         public static event Action<InputInfo>? MouseScrolled;
         public static event Action<InputInfo>? MouseMoved;
         public static event Action<InputInfo>? MouseStateChanged;
+        public static event Action<InputInfo>? MouseClicked;
 
         public static InputInfo Info => _Instance._info;
 
