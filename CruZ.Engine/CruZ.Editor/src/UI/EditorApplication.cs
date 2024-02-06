@@ -6,6 +6,7 @@ using CruZ.UI;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading;
 
@@ -28,6 +29,8 @@ namespace CruZ.Editor.Controls
 
             CacheService.Register(this);
             UpdateCache?.Invoke(this);
+
+            _thisThreadId = Thread.CurrentThread.ManagedThreadId;
         }
 
         #region PUBLIC_FUNCS
@@ -71,17 +74,18 @@ namespace CruZ.Editor.Controls
 
         public void ExitApp()
         {
-            if (_gameApp != null)
+            if (_gameApp != null && !_gameApp.ExitCalled)
             {
-                if (!_gameApp.ExitCalled)
-                    _gameApp.Exit();
+                _gameApp.Exit();
+                _gameApp.Dispose();
             }
 
             if (_gameAppThread != null)
                 if (!_gameAppThread.Join(5000))
                     throw new System.Exception("Can't exit editor app");
 
-            CleanSession();
+            _gameApp = null;
+            _gameAppThread = null;
         }
 
         #endregion
@@ -104,7 +108,7 @@ namespace CruZ.Editor.Controls
         private void GameApp_Exit()
         {
             UnloadCurrentScene();
-            CleanSession();
+            ExitAppAsync();
         }
         
         private void Input_MouseScroll(IInputInfo info)
@@ -153,14 +157,6 @@ namespace CruZ.Editor.Controls
         #region PRIVATE
         private void FindEntityToSelect(UIInfo info)
         {
-            //if (info.IsMouseJustDown(MouseKey.Right))
-            //{
-            //    SelectEntity(null);
-            //    return;
-            //}
-
-            //if (!info.IsMouseJustDown(MouseKey.Left)) return;
-
             var contains = UIManager.GetContains(info.MousePos().X, info.MousePos().Y);
 
             var eControl = contains
@@ -212,14 +208,6 @@ namespace CruZ.Editor.Controls
             }
 
             return null;
-        }
-
-        private void CleanSession()
-        {
-            _gameApp?.Dispose();
-
-            _gameApp = null;
-            _gameAppThread = null;
         }
 
         private void Check_AppInitialized()
@@ -278,8 +266,18 @@ namespace CruZ.Editor.Controls
         {
             return _mainCamera ??= new Camera(_gameApp.GraphicsDevice.Viewport);
         }
-
         #endregion
+
+        #region THREADING
+        public void ExitAppAsync()
+        {
+            ThreadPool.QueueUserWorkItem(delegate 
+            {
+                ExitApp();
+            });
+        } 
+        #endregion
+
 
         bool                _isMouseDraggingCamera;
         Vector3             _cameraStartDragCoord;
@@ -296,5 +294,18 @@ namespace CruZ.Editor.Controls
         ManualResetEvent    _appInitalized_Reset = new(false);
         
         List<EntityControl> _eControls = [];
+        
+        int _thisThreadId;
+    }
+
+    public class EditorAsyncResult : IAsyncResult
+    {
+        public object? AsyncState => null;
+
+        public WaitHandle AsyncWaitHandle => throw new NotImplementedException();
+
+        public bool CompletedSynchronously => true;
+
+        public bool IsCompleted => true;
     }
 }
