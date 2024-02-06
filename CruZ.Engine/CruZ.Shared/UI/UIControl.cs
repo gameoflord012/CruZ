@@ -1,15 +1,17 @@
-﻿using Microsoft.Xna.Framework;
+﻿using CruZ.Systems;
+using Microsoft.Xna.Framework;
 using MonoGame.Extended;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using Draw = System.Drawing;
 
 namespace CruZ.UI
 {
-    public class UIControl
+    public partial class UIControl
     {
-        public event Action<UIArgs>? MouseStateChange;
-
+        #region Properties
+        public UIControl? Parent { get => _parent; }
         public UIControl[] Childs => _childs.ToArray();
 
         public Draw.Point Location
@@ -17,10 +19,9 @@ namespace CruZ.UI
             get => new((int)_location.X, (int)_location.Y);
             set { _location.X = value.X; _location.Y = value.Y; }
         }
-
         public int Width { get => (int)_size.Width; set => _size.Width = value; }
         public int Height { get => (int)_size.Height; set => _size.Height = value; }
-        public UIControl? Parent { get => _parent; }
+        #endregion
 
         public void AddChild(UIControl child)
         {
@@ -43,51 +44,105 @@ namespace CruZ.UI
             child.OnParentChanged(null);
         }
 
-        internal void InternalUpdate(UIArgs args)
+        internal void InternalUpdate(UIInfo args)
         {
             _args = args;
 
-            if(args.InputInfo.DoesMouseStateChange && IsMouseHover())
+            ProcessDragging(args);
+            
+            if (IsMouseHover())
             {
-                MouseStateChange?.Invoke(args);
-                OnMouseStateChange(args);
+
+                if (args.InputInfo.MouseClick && !Dragging())
+                {
+                    OnMouseClick(args);
+                }
+
+                if (args.InputInfo.MouseStateChanges)
+                {
+                    OnMouseStateChange(args);
+                }
             }
 
             OnUpdate(args);
         }
 
-        internal void InternalDraw(UIArgs args)
+        internal void InternalDraw(UIInfo args)
         {
             _args = args;
             OnDraw(args);
-        }
-
-        protected virtual void OnMouseStateChange(UIArgs args) { }
-
-        protected virtual void OnParentChanged(UIControl? parent) { }
-
-        protected virtual void OnUpdate(UIArgs args) { }
-
-        protected virtual void OnDraw(UIArgs args)
-        {
-            //if (IsMouseHover())
-            //    args.SpriteBatch.FillRectangle(_location, _size, 
-            //        new Color(50, 0, 0, 5), 1f);
-
-            args.SpriteBatch.DrawRectangle(_location, _size, Color.Red);
-
         }
 
         protected bool IsMouseHover()
         {
             return GetRect().Contains(_args.MousePos().X, _args.MousePos().Y);
         }
-        
-        List<UIControl> _childs = [];
 
+        protected void ReleaseDrag()
+        {
+            s_GlobalDragObject = null;
+        }
+
+        protected virtual void OnMouseClick(UIInfo args)
+        {
+        }
+        protected virtual void OnMouseStateChange(UIInfo args) { }
+        protected virtual void OnParentChanged(UIControl? parent) { }
+        protected virtual void OnUpdate(UIInfo args) { }
+        protected virtual void OnDraw(UIInfo args)
+        {
+            args.SpriteBatch.DrawRectangle(_location, _size, Color.Red);
+        }
+
+        #region Dragging
+        protected virtual object? OnStartDragging(UIInfo args) => null;
+        protected virtual void OnUpdateDragging(UIInfo args) { }
+        protected virtual bool OnReleaseDragging() => true;
+
+        private void ProcessDragging(UIInfo args)
+        {
+            if (!Dragging() &&
+                IsMouseHover() &&
+                args.InputInfo.IsMouseHeldDown(MouseKey.Left) &&
+                args.InputInfo.MouseMoving)
+            {
+                _dragObject = OnStartDragging(args);
+                s_GlobalDragObject = _dragObject;
+            }
+
+            
+            if(Dragging() && s_GlobalDragObject == _dragObject)
+            {
+                OnUpdateDragging(args);
+
+                if(args.InputInfo.IsMouseHeldUp(MouseKey.Left))
+                {
+                    if(OnReleaseDragging())
+                    {
+                        _dragObject = null;
+                        s_GlobalDragObject = null;
+                    }
+                }
+            }
+        }
+        #endregion
+
+        #region Private_Variables
+        List<UIControl> _childs = [];
         UIControl? _parent;
+
         Vector2 _location = new(0, 0);
         Size2 _size = new(0, 0);
-        UIArgs _args;
+
+        object? _dragObject;
+
+        UIInfo _args;
+        #endregion
+    }
+
+    public partial class UIControl
+    {
+        private static object? s_GlobalDragObject = null;
+        public static bool Dragging() { return s_GlobalDragObject != null; }
     }
 }

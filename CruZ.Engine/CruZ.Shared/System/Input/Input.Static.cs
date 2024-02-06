@@ -14,18 +14,18 @@ namespace CruZ.Systems
 
     public partial class Input
     {
-        public static event Action<InputInfo>? MouseScrolled;
-        public static event Action<InputInfo>? MouseMoved;
-        public static event Action<InputInfo>? MouseStateChanged;
-        public static event Action<InputInfo>? MouseClicked;
+        public static event Action<IInputInfo>? MouseScrolled;
+        public static event Action<IInputInfo>? MouseMoved;
+        public static event Action<IInputInfo>? MouseStateChanged;
+        //public static event Action<IInputInfo>? MouseClicked;
 
-        public static InputInfo Info => _Instance._info;
+        public static IInputInfo Info => _instance;
 
-        static Input? _Instance;
+        static Input? _instance;
 
         public static void CreateContext(IInputContextProvider contextProvider)
         {
-            _Instance = new(contextProvider);
+            _instance = new(contextProvider);
         }
     }
 }

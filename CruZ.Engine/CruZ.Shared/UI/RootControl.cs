@@ -4,7 +4,7 @@
     {
 
 
-        protected override void OnDraw(UIArgs args)
+        protected override void OnDraw(UIInfo args)
         {
             base.OnDraw(args);
         }

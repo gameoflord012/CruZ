@@ -33,7 +33,7 @@ namespace CruZ
         {
             var v3 = (Vector3)value;
 
-            if(destinationType == typeof(string))
+            if (destinationType == typeof(string))
             {
                 return $"{v3.X}, {v3.Y}, {v3.Z}";
             }
@@ -43,14 +43,23 @@ namespace CruZ
 
         public override object? ConvertFrom(ITypeDescriptorContext? context, CultureInfo? culture, object value)
         {
-            if(value is string)
+            if (value is string)
             {
+                float x = 0, y = 0, z = 0;
+
                 var valStr = (string)value;
                 var split = valStr.Split(',');
 
-                float.TryParse(split[0], out float x);
-                float.TryParse(split[1], out float y);
-                float.TryParse(split[2], out float z);
+                try
+                {
+                    float.TryParse(split[0], out x);
+                    float.TryParse(split[1], out y);
+                    float.TryParse(split[2], out z);
+                }
+                catch (IndexOutOfRangeException)
+                {
+
+                }
 
                 return new Vector3(x, y, z);
             }

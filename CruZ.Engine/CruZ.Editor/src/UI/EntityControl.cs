@@ -22,12 +22,12 @@ namespace CruZ.Editor.UI
         {
             if (shouldSelect)
             {
-                _showBorder = true;
+                _shouldDisplay = true;
                 Draggable = true;
             }
             else
             {
-                _showBorder = false;
+                _shouldDisplay = false;
                 Draggable = false;
             }
         }
@@ -43,21 +43,9 @@ namespace CruZ.Editor.UI
             _sp.DrawEnd += Sprite_DrawEnd;
         }
 
-        protected override void OnUpdate(UIArgs args)
+        protected override void OnDraw(UIInfo args)
         {
-            base.OnUpdate(args);
-
-            if (Draggable && _dragging)
-            {
-                var ePoint = args.MousePos().Add(_dragCenterOffset);
-                _e.Transform.Position = Camera.Main.PointToCoordinate(ePoint);
-
-            }
-        }
-
-        protected override void OnDraw(UIArgs args)
-        {
-            if (_showBorder)
+            if (_shouldDisplay)
             {
                 base.OnDraw(args);
                 foreach (var origin in _origins)
@@ -68,24 +56,7 @@ namespace CruZ.Editor.UI
             }
         }
 
-        protected override void OnMouseStateChange(UIArgs args)
-        {
-            if (Draggable)
-            {
-                if (args.InputInfo.IsMouseDown(MouseKey.Left) && !_dragging)
-                {
-                    _dragging = true;
-
-                    var ePoint = Camera.Main.CoordinateToPoint(_e.Transform.Position);
-                    _dragCenterOffset = ePoint.Minus(args.MousePos());
-                }
-                else if (args.InputInfo.IsMouseUp(MouseKey.Left))
-                {
-                    _dragging = false;
-                }
-            }
-        }
-
+        #region SPRITE_EVENT_HANDLERS
         private void Sprite_DrawBegin()
         {
             _boundsHasValue = false;
@@ -101,8 +72,10 @@ namespace CruZ.Editor.UI
 
         private void Sprite_DrawLoopEnd(object? sender, DrawLoopEndEventArgs args)
         {
-            _origins.Add(args.BeginArgs.GetWorldOrigin());
+            if (_shouldDisplay)
+                _origins.Add(args.BeginArgs.GetWorldOrigin());
         }
+        #endregion
 
         private void Entity_OnRemoveFromWorld(object? sender, EventArgs e)
         {
@@ -135,6 +108,25 @@ namespace CruZ.Editor.UI
                 p.Y - Height / 2);
         }
 
+        #region DRAGGING
+        protected override object? OnStartDragging(UIInfo args)
+        {
+            if(Draggable)
+            {
+                var ePoint = Camera.Main.CoordinateToPoint(_e.Transform.Position);
+                _dragCenterOffset = ePoint.Minus(args.MousePos());
+                return this;
+            }
+            return Draggable ? this : null;
+        }
+
+        protected override void OnUpdateDragging(UIInfo info)
+        {
+            var ePoint = info.MousePos().Add(_dragCenterOffset);
+            _e.Transform.Position = Camera.Main.PointToCoordinate(ePoint);
+        }
+        #endregion
+
         TransformEntity _e;
         SpriteComponent _sp;
         DRAW.RectangleF _bounds; //World bounds
@@ -144,7 +136,7 @@ namespace CruZ.Editor.UI
         public List<Vector3> _origins = [];
 
         bool _dragging = false;
-        bool _showBorder = false;
+        bool _shouldDisplay = false;
         bool _boundsHasValue = false;
     }
 }

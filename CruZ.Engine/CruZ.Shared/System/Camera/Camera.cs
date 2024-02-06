@@ -105,7 +105,13 @@ namespace CruZ.Systems
 
         public Vector3 Zoom { 
             get => _zoom; 
-            set { _zoom = value; } }
+            set 
+            { 
+                value.X = MathF.Max(0.1f, value.X);
+                value.Y = MathF.Max(0.1f, value.Y);
+                _zoom = value; 
+            } 
+        }
 
         private Vector3 _zoom = new(1, 1);
         private float _viewPortWidth;

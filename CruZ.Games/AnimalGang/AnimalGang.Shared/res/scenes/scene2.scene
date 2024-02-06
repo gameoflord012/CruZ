@@ -2,7 +2,7 @@
   "Name": "",
   "_entities": [
     {
-      "position": "-23.660507, 57.9441, 0",
+      "position": "-23.749498, 57.938328, 0",
       "scale": "1, 1, 1",
       "components": [
         {
@@ -64,7 +64,7 @@
       ]
     },
     {
-      "position": "-33.16676, -52.91681, 0",
+      "position": "-21.400642, 10.439336, 0",
       "scale": "0.5, 0.5, 0",
       "components": [
         {
@@ -74,10 +74,10 @@
             "LayerDepth": 0.2,
             "SortingLayer": 1,
             "YLayerDepth": true,
-            "Flip": true,
+            "Flip": false,
             "Origin": {
-              "X": 0.5,
-              "Y": 0.5
+              "X": 1.0,
+              "Y": 1.0
             }
           }
         },

@@ -25,6 +25,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)System\EntityScript.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System\Entity\Interface\IECSContextProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System\Entity\Interface\IComponent.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)System\Input\IDraggable.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System\Input\Input.Static.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System\Entity\TransformEntity.Disposable.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System\Resource\ResourceInfo.cs" />

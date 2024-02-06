@@ -4,13 +4,10 @@ using CruZ.Resource;
 using CruZ.Systems;
 using CruZ.UI;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading;
-using System.Windows.Forms;
 
 namespace CruZ.Editor.Controls
 {
@@ -32,9 +29,10 @@ namespace CruZ.Editor.Controls
             Input.MouseScrolled     += Input_MouseScroll;
             Input.MouseMoved        += Input_MouseMove;
             Input.MouseStateChanged += Input_MouseStateChanged;
-            Input.MouseClicked += Input_MouseClicked;
 
-            //Input.MouseScrolledif (info.IsMouseDown(MouseKey.Middle)
+            UIManager.MouseClick += UI_MouseClick;
+
+            //Input.MouseScrolledif (info.IsMouseJustDown(MouseKey.Middle)
             //    && !_isMouseDraggingCamera)
             //{
             //    _isMouseDraggingCamera = true;
@@ -123,14 +121,14 @@ namespace CruZ.Editor.Controls
             CleanSession();
         }
         
-        private void Input_MouseScroll(InputInfo info)
+        private void Input_MouseScroll(IInputInfo info)
         {
             Camera.Main.Zoom = new(
                 Camera.Main.Zoom.X - info.SrollDelta * 0.001f * Camera.Main.Zoom.X, 
                 Camera.Main.Zoom.Y);
         }
 
-        private void Input_MouseMove(InputInfo info)
+        private void Input_MouseMove(IInputInfo info)
         {
             if (_isMouseDraggingCamera)
             {
@@ -143,9 +141,9 @@ namespace CruZ.Editor.Controls
             }
         }
 
-        private void Input_MouseStateChanged(InputInfo info)
+        private void Input_MouseStateChanged(IInputInfo info)
         {
-            if (info.IsMouseDown(MouseKey.Middle)
+            if (info.IsMouseJustDown(MouseKey.Middle)
                 && !_isMouseDraggingCamera)
             {
                 _isMouseDraggingCamera = true;
@@ -153,32 +151,31 @@ namespace CruZ.Editor.Controls
                 _cameraStartDragCoord = Camera.Main.Position;
             }
 
-            if (info.IsMouseUp(MouseKey.Middle))
+            if (info.IsMouseJustUp(MouseKey.Middle))
             {
                 _isMouseDraggingCamera = false;
             }
         }
 
-        private void Input_MouseClicked(InputInfo info)
+        private void UI_MouseClick(UIInfo info)
         {
             FindEntityToSelect(info);
         }
 
-
         #endregion
 
         #region PRIVATE
-        private void FindEntityToSelect(InputInfo info)
+        private void FindEntityToSelect(UIInfo info)
         {
-            //if (info.IsMouseDown(MouseKey.Right))
+            //if (info.IsMouseJustDown(MouseKey.Right))
             //{
             //    SelectEntity(null);
             //    return;
             //}
 
-            //if (!info.IsMouseDown(MouseKey.Left)) return;
+            //if (!info.IsMouseJustDown(MouseKey.Left)) return;
 
-            var contains = UIManager.GetContains(info.CurMouse.X, info.CurMouse.Y);
+            var contains = UIManager.GetContains(info.MousePos().X, info.MousePos().Y);
 
             var eControl = contains
                 .Where(e => e is EntityControl)

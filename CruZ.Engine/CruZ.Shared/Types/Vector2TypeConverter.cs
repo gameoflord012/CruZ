@@ -7,23 +7,18 @@ using System.Numerics;
 
 namespace CruZ
 {
-    class Vector2TypeConverter : ExpandableObjectConverter
+    class Vector2TypeConverter : TypeConverter
     {
-        public override bool GetCreateInstanceSupported(System.ComponentModel.ITypeDescriptorContext context)
-        {
-            return true;
-        }
+        //public override bool GetCreateInstanceSupported(System.ComponentModel.ITypeDescriptorContext context)
+        //{
+        //    return true;
+        //}
 
-        public override object CreateInstance(System.ComponentModel.ITypeDescriptorContext context, System.Collections.IDictionary propertyValues)
-        {
-            var valueTypeConverter = new ValueTypeTypeConverter();
-            return valueTypeConverter.CreateInstance(context, propertyValues);
-        }
-
-        public override PropertyDescriptorCollection GetProperties(ITypeDescriptorContext? context, object value, Attribute[]? attributes)
-        {
-            return base.GetProperties(context, value, attributes);
-        }
+        //public override object CreateInstance(System.ComponentModel.ITypeDescriptorContext context, System.Collections.IDictionary propertyValues)
+        //{
+        //    var valueTypeConverter = new ValueTypeTypeConverter();
+        //    return valueTypeConverter.CreateInstance(context, propertyValues);
+        //}
 
         public override bool CanConvertFrom(ITypeDescriptorContext? context, Type sourceType)
         {
@@ -51,12 +46,21 @@ namespace CruZ
         {
             if (value is string)
             {
+                float x = 0, y = 0;
+
                 var valStr = (string)value;
                 var split = valStr.Split(',');
 
-                float.TryParse(split[0], out float x);
-                float.TryParse(split[1], out float y);
-
+                try
+                {
+                    float.TryParse(split[0], out x);
+                    float.TryParse(split[1], out y);
+                }
+                catch (IndexOutOfRangeException)
+                {
+                    
+                }
+                
                 return new Vector2(x, y);
             }
 

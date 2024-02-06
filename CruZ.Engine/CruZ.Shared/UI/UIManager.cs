@@ -13,10 +13,10 @@ namespace CruZ.UI
         event Action            InitializeUI;
     }
 
-    public class UIArgs
+    public struct UIInfo
     {
         public GameTime     GameTime;
-        public InputInfo    InputInfo;
+        public IInputInfo   InputInfo;
         public SpriteBatch  SpriteBatch;
 
         public DRAW.Point MousePos()
@@ -53,17 +53,22 @@ namespace CruZ.UI
 
         private void Context_UpdateUI(GameTime gameTime)
         {
-            UIArgs args = GetArgs(gameTime);
+            UIInfo info = GetInfo(gameTime);
+
+            if(info.InputInfo.MouseClick && !UIControl.Dragging())
+            {
+                MouseClick?.Invoke(info);
+            }
 
             foreach (var control in GetTree(_root))
             {
-                control.InternalUpdate(args);
+                control.InternalUpdate(info);
             }
         }
 
         private void Context_DrawUI(GameTime gameTime)
         {
-            var args = GetArgs(gameTime);
+            var args = GetInfo(gameTime);
 
             args.SpriteBatch.Begin();
 
@@ -75,25 +80,29 @@ namespace CruZ.UI
             args.SpriteBatch.End();
         }
 
-        private UIArgs GetArgs(GameTime gameTime)
+        private UIInfo GetInfo(GameTime gameTime)
         {
             if(_spriteBatch == null)
                 _spriteBatch = GameApplication.GetSpriteBatch();
 
-            UIArgs args = new();
-            args.GameTime = gameTime;
-            args.InputInfo = Input.Info;
-            args.SpriteBatch = _spriteBatch;
-            return args;
+            UIInfo info = new();
+            
+            info.GameTime = gameTime;
+            info.InputInfo = Input.Info;
+            info.SpriteBatch = _spriteBatch;
+
+            return info;
         }
 
-        SpriteBatch?        _spriteBatch = null;
-        UIContext           _context;
-        RootControl           _root = new();
+        SpriteBatch?    _spriteBatch = null;
+        UIContext       _context;
+        RootControl     _root = new();
     }
 
     public partial class UIManager
     {
+        public static event Action<UIInfo>? MouseClick;
+
         public static void CreateContext(UIContext context)
         {
             _instance = new(context);
@@ -116,6 +125,10 @@ namespace CruZ.UI
 
             return contains.ToArray();
         }
+
+        //public static object? s_GlobalDragObject { get => _instance._dragObject; set => _instance._dragObject = value; }
+
+        //public static bool Dragging() { return s_GlobalDragObject != null; }
 
         private static UIControl[] GetTree(UIControl control)
         {
