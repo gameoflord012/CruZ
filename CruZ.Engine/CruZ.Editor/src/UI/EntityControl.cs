@@ -4,7 +4,9 @@ using CruZ.UI;
 using CruZ.Utility;
 using MonoGame.Extended;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Numerics;
 
 namespace CruZ.Editor.UI
 {
@@ -18,7 +20,7 @@ namespace CruZ.Editor.UI
 
         public void SelectEntity(bool shouldSelect)
         {
-            if(shouldSelect)
+            if (shouldSelect)
             {
                 _showBorder = true;
                 Draggable = true;
@@ -36,7 +38,6 @@ namespace CruZ.Editor.UI
             _e.RemoveFromWorldEvent += Entity_OnRemoveFromWorld;
             _sp = e.GetComponent<SpriteComponent>();
 
-            _sp.DrawLoopBegin += Sprite_DrawLoopBegin;
             _sp.DrawLoopEnd += Sprite_DrawLoopEnd;
             _sp.DrawBegin += Sprite_DrawBegin;
             _sp.DrawEnd += Sprite_DrawEnd;
@@ -46,7 +47,7 @@ namespace CruZ.Editor.UI
         {
             base.OnUpdate(args);
 
-            if(Draggable && _dragging)
+            if (Draggable && _dragging)
             {
                 var ePoint = args.MousePos().Add(_dragCenterOffset);
                 _e.Transform.Position = Camera.Main.PointToCoordinate(ePoint);
@@ -57,21 +58,28 @@ namespace CruZ.Editor.UI
         protected override void OnDraw(UIArgs args)
         {
             if (_showBorder)
+            {
                 base.OnDraw(args);
+                foreach (var origin in _origins)
+                {
+                    var screen = Camera.Main.CoordinateToPoint(origin);
+                    args.SpriteBatch.DrawCircle(new(screen.X, screen.Y), 2, 8, XNA.Color.Blue);
+                }
+            }
         }
 
         protected override void OnMouseStateChange(UIArgs args)
         {
-            if(Draggable)
+            if (Draggable)
             {
-                if(args.InputInfo.IsMouseDown(MouseKey.Left) && !_dragging)
+                if (args.InputInfo.IsMouseDown(MouseKey.Left) && !_dragging)
                 {
                     _dragging = true;
 
-                    var  ePoint = Camera.Main.CoordinateToPoint(_e.Transform.Position);
+                    var ePoint = Camera.Main.CoordinateToPoint(_e.Transform.Position);
                     _dragCenterOffset = ePoint.Minus(args.MousePos());
                 }
-                else if(args.InputInfo.IsMouseUp(MouseKey.Left))
+                else if (args.InputInfo.IsMouseUp(MouseKey.Left))
                 {
                     _dragging = false;
                 }
@@ -80,30 +88,20 @@ namespace CruZ.Editor.UI
 
         private void Sprite_DrawBegin()
         {
-            _bounds.X = _e.Position.X;
-            _bounds.Y = _e.Position.Y;
+            _boundsHasValue = false;
 
-            _bounds.Width = 0;
-            _bounds.Height = 0;
+            _origins.Clear();
         }
 
-        private void Sprite_DrawEnd()
+        private void Sprite_DrawEnd(DrawEndEventArgs args)
         {
+            _bounds = args.RenderBounds;
             CalcBounds();
         }
 
-        private void Sprite_DrawLoopBegin(object? sender, DrawBeginEventArgs args)
+        private void Sprite_DrawLoopEnd(object? sender, DrawLoopEndEventArgs args)
         {
-            _args = args;
-        }
-
-        private void Sprite_DrawLoopEnd(object? sender, DrawEndEventArgs e)
-        {
-            var rect = _args.BoundRect();
-            _bounds.X = MathF.Min(_bounds.X, rect.X);
-            _bounds.Y = MathF.Min(_bounds.Y, rect.Y);
-            _bounds.Width = _bounds.Right < rect.Right ? rect.Right - _bounds.X : _bounds.Width;
-            _bounds.Height = _bounds.Bottom < rect.Bottom ? rect.Bottom - _bounds.Y : _bounds.Height;
+            _origins.Add(args.BeginArgs.GetWorldOrigin());
         }
 
         private void Entity_OnRemoveFromWorld(object? sender, EventArgs e)
@@ -139,12 +137,14 @@ namespace CruZ.Editor.UI
 
         TransformEntity _e;
         SpriteComponent _sp;
-        DrawBeginEventArgs _args;
-        RectangleF _bounds; //World bounds
+        DRAW.RectangleF _bounds; //World bounds
 
         DRAW.Point _dragCenterOffset;
 
+        public List<Vector3> _origins = [];
+
         bool _dragging = false;
         bool _showBorder = false;
+        bool _boundsHasValue = false;
     }
 }

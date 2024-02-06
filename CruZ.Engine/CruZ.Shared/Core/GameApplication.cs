@@ -150,6 +150,11 @@ namespace CruZ
             _instance.Draw -= draw;
         }
 
+        public static bool IsActive()
+        {
+            return _instance._core.IsActive;
+        }
+
         public static GameApplication CreateContext()
         {
             return _instance = new GameApplication();

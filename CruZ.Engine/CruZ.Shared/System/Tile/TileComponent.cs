@@ -41,7 +41,7 @@ namespace CruZ.Components
             }
         }
 
-        private void Sprite_DrawLoopBegin(object? sender, DrawBeginEventArgs args)
+        private void Sprite_DrawLoopBegin(object? sender, DrawLoopBeginEventArgs args)
         {
             if(Debug && (_idX + _idY) % 2 == 0)
             {
@@ -63,7 +63,7 @@ namespace CruZ.Components
             }
         }
 
-        private void Sprite_DrawLoopEnd(object? sender, DrawEndEventArgs e)
+        private void Sprite_DrawLoopEnd(object? sender, DrawLoopEndEventArgs e)
         {
             var bounds = _sp.Texture.Bounds;
 

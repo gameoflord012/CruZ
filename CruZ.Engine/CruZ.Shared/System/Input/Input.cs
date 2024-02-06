@@ -9,7 +9,7 @@ namespace CruZ.Systems
 {
     public partial class Input
     {
-        public static readonly float MOUSE_CLICK_DURATION = 0.1f;
+        public static readonly float MOUSE_CLICK_DURATION = 0.5f;
 
         public Input(IInputContextProvider contextProvider)
         {
@@ -29,6 +29,8 @@ namespace CruZ.Systems
 
         private void InputUpdate(GameTime gameTime)
         {
+            if(!GameApplication.IsActive()) return;
+
             _info.PreMouse = _info.CurMouse;
             _info.CurMouse = Mouse.GetState();
             _info.Keyboard = Keyboard.GetState();

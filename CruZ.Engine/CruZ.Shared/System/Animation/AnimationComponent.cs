@@ -58,14 +58,14 @@ namespace CruZ.Components
             _sprite = null;
         }
 
-        private void Sprite_DrawLoopBegin(object? sender, DrawBeginEventArgs e)
+        private void Sprite_DrawLoopBegin(object? sender, DrawLoopBeginEventArgs e)
         {
             e.Texture = _animatedSprite.TextureRegion.Texture;
             e.SourceRectangle = _animatedSprite.TextureRegion.Bounds;
-            e.Origin = _animatedSprite.OriginNormalized;
+            e.Origin = new(_animatedSprite.OriginNormalized.X, _animatedSprite.OriginNormalized.Y);
         }
         
-        private void Sprite_DrawLoopEnd(object? sender, DrawEndEventArgs e)
+        private void Sprite_DrawLoopEnd(object? sender, DrawLoopEndEventArgs e)
         {
             
         }
