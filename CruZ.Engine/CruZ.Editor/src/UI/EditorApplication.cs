@@ -20,25 +20,11 @@ namespace CruZ.Editor.Controls
 
         public EditorApplication()
         {
-            //ECS                 .CreateContext(this);
-            //ApplicationContext  .CreateContext(this);
-            //Input               .CreateContext(this);
-            //UIManager           .CreateContext(this);
-
-            //TODO: change thoses event to mose change state
             Input.MouseScrolled     += Input_MouseScroll;
             Input.MouseMoved        += Input_MouseMove;
             Input.MouseStateChanged += Input_MouseStateChanged;
 
             UIManager.MouseClick += UI_MouseClick;
-
-            //Input.MouseScrolledif (info.IsMouseJustDown(MouseKey.Middle)
-            //    && !_isMouseDraggingCamera)
-            //{
-            //    _isMouseDraggingCamera = true;
-            //    _mouseStartDragPoint = info.CurMouse.Position;
-            //    _cameraStartDragCoord = Camera.Main.Position;
-            //}
 
             CacheService.Register(this);
             UpdateCache?.Invoke(this);

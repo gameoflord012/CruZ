@@ -51,7 +51,8 @@ namespace CruZ.Editor.UI
                 foreach (var origin in _origins)
                 {
                     var screen = Camera.Main.CoordinateToPoint(origin);
-                    args.SpriteBatch.DrawCircle(new(screen.X, screen.Y), 2, 8, XNA.Color.Blue);
+                    args.SpriteBatch.DrawCircle(new(screen.X, screen.Y), 
+                        EditorVariables.CENTER_CIRCLE_SIZE, 8, XNA.Color.Blue);
                 }
             }
         }
