@@ -20,6 +20,9 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MonoGame.Content.Builder.Editor.Windows", "ThirdParty\MonoGameModified\Tools\MonoGame.Content.Builder.Editor\MonoGame.Content.Builder.Editor.Windows.csproj", "{C123B1CD-1CDB-4F38-A4AD-41081079B114}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Others", "Others", "{B2EFD66A-EF07-46F2-A89E-AE5C6917319E}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CruZ", "CruZ", "{06F0198E-A6EA-4165-9D3B-38A6B36D6687}"
 EndProject

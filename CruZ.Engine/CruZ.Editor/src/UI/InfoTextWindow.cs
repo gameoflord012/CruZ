@@ -1,4 +1,5 @@
 ﻿using CruZ.UI;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace CruZ.Editor.UI
 {
@@ -15,7 +16,11 @@ namespace CruZ.Editor.UI
 
         protected override void OnDraw(UIInfo args)
         {
+            
+            //args.SpriteBatch.DrawString()
             base.OnDraw(args);
         }
+
+        SpriteFont _font;
     }
 }
