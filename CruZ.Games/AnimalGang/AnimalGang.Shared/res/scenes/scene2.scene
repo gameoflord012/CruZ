@@ -17,8 +17,8 @@
             "YLayerDepth": false,
             "Flip": false,
             "Origin": {
-              "X": 1.0,
-              "Y": 1.0
+              "X": 0.5,
+              "Y": 0.5
             }
           }
         },
@@ -64,7 +64,7 @@
       ]
     },
     {
-      "position": "-61.666924, 32.5925, 0",
+      "position": "-55.776546, 25.098995, 0",
       "scale": "0.1, 0.1, 0",
       "components": [
         {
@@ -74,17 +74,17 @@
             "LayerDepth": 0.2,
             "SortingLayer": 1,
             "YLayerDepth": true,
-            "Flip": false,
+            "Flip": true,
             "Origin": {
-              "X": 1.0,
-              "Y": 1.0
+              "X": 0.5,
+              "Y": 0.5
             }
           }
         },
         {
           "com-type": "CruZ.Games.AnimalGang.MainCharacter, CruZ.Editor, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
           "com-data": {
-            "Speed": 50.0
+            "Speed": 10.0
           }
         },
         {

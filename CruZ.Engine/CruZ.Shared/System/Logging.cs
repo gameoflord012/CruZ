@@ -7,24 +7,33 @@ namespace CruZ.Utility
 {
     public class Logging
     {
-        private static Logging _main;
-        public static Logging Main { get => _main ??= new Logging(); }
+        Dictionary<string, string> _msgs = new();
+        int _maxMsg = 10;
 
-        public static void PushMsg(string msg)
+        public static void SetMsg(string msg, string key = DefaultString)
         {
-            while (Main._msgs.Count > Main._maxMsg) Main._msgs.RemoveAt(0);
-            Main._msgs.Add(msg);
+            Main._msgs [key] = msg;
         }
 
-        public static void PushMsg(string fmt, params object[] args)
+        #region Static
+        public static void PushMsg(string newMsg, string key = DefaultString)
+        {
+            //while (Main._msgs.Count > Main._maxMsg) Main._msgs.RemoveAt(0);
+            var msg = GetMsg(key);
+            var prefix = string.IsNullOrEmpty(msg) ? "" : msg + Environment.NewLine;
+            SetMsg(prefix + newMsg);
+        }
+
+        public static void PushMsg(string fmt, string key = DefaultString, params object[] args)
         {
             var msg = string.Format(fmt, args);
-            PushMsg(msg);
+            PushMsg(msg, key);
         }
 
-        public static string[] GetMsgs()
+        public static string GetMsg(string key = DefaultString)
         {
-            return Main._msgs.ToArray();
+            if(!Main._msgs.ContainsKey(key)) return "";
+            return Main._msgs[key];
         }
 
         public static void FlushToDebug()
@@ -37,9 +46,10 @@ namespace CruZ.Utility
             Debug.WriteLine("===========================END_LOG============================");
         }
 
-        List<string> _msgs = new();
-        int _maxMsg = 10;
-
-        public List<string> Msgs { get => _msgs; set => _msgs = value; }
+        private static Logging _main;
+        private static Logging Main { get => _main ??= new Logging(); } 
+        private const string DefaultString = "Default";
+        #endregion
+        //public Dictionary<string, string> Msgs { get => _msgs; set => _msgs = value; }
     }
 }

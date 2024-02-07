@@ -11,6 +11,7 @@
 
 	<PropertyGroup>
 		<DefineConstants>$(DefineConstants);CRUZ_EDITOR</DefineConstants>
+		<RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
 	</PropertyGroup>
 
 	<ItemGroup>

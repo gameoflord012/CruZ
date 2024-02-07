@@ -3,6 +3,7 @@ using CruZ.Editor.UI;
 using CruZ.Resource;
 using CruZ.Systems;
 using CruZ.UI;
+using CruZ.Utility;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
@@ -60,6 +61,7 @@ namespace CruZ.Editor.Controls
                 _currentSelect = null;
             }
 
+            Logging.SetMsg(e != null ? e.ToString() : "");
 
             OnSelectedEntityChanged?.Invoke(e);
         }
@@ -276,6 +278,8 @@ namespace CruZ.Editor.Controls
             _currentScene = scene;
             _currentScene.SetActive(true);
             SceneLoadEvent?.Invoke(this, _currentScene);
+
+            Logging.SetMsg(_currentScene.ResourceInfo.ResourceName, "Scene");
 
             InitUI();
         }

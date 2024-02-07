@@ -16,6 +16,7 @@
 		<Exec Command="mgcb /@:$(_ResFolder)\Content\Content.mgcb /workingDir:$(_ResFolder)\ /outputDir:Content\bin /intermediateDir:Content\obj\.obj"/>
 
 		<Copy
+			ContinueOnError="WarnAndContinue"
 			SourceFiles="@(_ResItems)"
 			DestinationFolder="$(OutputPath)\res\%(RecursiveDir)"
 			SkipUnchangedFiles="true"/>
