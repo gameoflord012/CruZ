@@ -30,10 +30,22 @@ namespace CruZ.Systems
 
         private void InputUpdate(GameTime gameTime)
         {
-            if (!GameApplication.IsActive()) return;
+            if (!GameApplication.IsActive())
+            {
+                _isActive = false;
+                return;
+            }
+            else if(!_isActive)
+            {
+                _isActive = true;
+                _preMouse = _curMouse = XNA.Input.Mouse.GetState();
+            }
+            else
+            {
+                _preMouse = _curMouse;
+                _curMouse = XNA.Input.Mouse.GetState();
+            }
 
-            _preMouse = _curMouse;
-            _curMouse = XNA.Input.Mouse.GetState();
             _keyboard = XNA.Input.Keyboard.GetState();
 
             // Can call IsMouseJustUp/Down after this line
@@ -120,6 +132,7 @@ namespace CruZ.Systems
         private bool _mouseClick;
         private bool _mouseScrolling;
         private bool _mouseStateChanges;
+        private bool _isActive = false;
 
         public bool MouseClick => _mouseClick;
         public int SrollDelta => _scrollDelta;

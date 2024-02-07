@@ -74,18 +74,21 @@ namespace CruZ.Editor.Controls
 
         public void ExitApp()
         {
-            if (_gameApp != null && !_gameApp.ExitCalled)
+            lock(this)
             {
-                _gameApp.Exit();
-                _gameApp.Dispose();
+                if (_gameApp != null && !_gameApp.ExitCalled)
+                {
+                    _gameApp.Exit();
+                    _gameApp.Dispose();
+                }
+
+                if (_gameAppThread != null)
+                    if (!_gameAppThread.Join(5000))
+                        throw new System.Exception("Can't exit editor app");
+
+                _gameApp = null;
+                _gameAppThread = null;
             }
-
-            if (_gameAppThread != null)
-                if (!_gameAppThread.Join(5000))
-                    throw new System.Exception("Can't exit editor app");
-
-            _gameApp = null;
-            _gameAppThread = null;
         }
 
         #endregion
@@ -110,7 +113,12 @@ namespace CruZ.Editor.Controls
             UnloadCurrentScene();
             ExitAppAsync();
         }
-        
+
+        private void GameApp_EarlyDraw(DrawEventArgs args)
+        {
+            DrawAxis(args.SpriteBatch);
+        }
+
         private void Input_MouseScroll(IInputInfo info)
         {
             Camera.Main.Zoom = new(
@@ -233,6 +241,7 @@ namespace CruZ.Editor.Controls
             _gameApp.Initializing += GameApp_Intialized;
             _gameApp.Window.AllowUserResizing = true;
             _gameApp.ExitEvent += GameApp_Exit;
+            _gameApp.EarlyDraw += GameApp_EarlyDraw;
 
             _gameApp.Run();
         }
