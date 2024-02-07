@@ -22,6 +22,7 @@ namespace CruZ.Components
         public bool             IsActive    { get => _isActive;     set => SetIsActive(value); }
         public Transform        Transform   { get => _transform;    set => _transform = value; }
         public Vector3          Position    { get => Transform.Position; set => Transform.Position = value; }
+        public Vector3          Scale       { get => Transform.Scale; set => Transform.Scale = value; }
 
         [Browsable(false)]
         public IComponent[]     Components  => GetAllComponents(this);

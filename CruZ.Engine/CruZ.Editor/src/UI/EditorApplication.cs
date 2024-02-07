@@ -76,9 +76,11 @@ namespace CruZ.Editor.Controls
         {
             lock(this)
             {
-                if (_gameApp != null && !_gameApp.ExitCalled)
+                if (_gameApp != null)
                 {
-                    _gameApp.Exit();
+                    if(!_gameApp.ExitCalled)
+                        _gameApp.Exit();
+
                     _gameApp.Dispose();
                 }
 

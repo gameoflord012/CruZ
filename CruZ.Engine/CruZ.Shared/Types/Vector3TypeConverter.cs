@@ -6,7 +6,7 @@ using System.IO;
 
 namespace CruZ
 {
-    class Vector3TypeConverter : ExpandableObjectConverter
+    class Vector3TypeConverter : TypeConverter
     {
         public override bool GetCreateInstanceSupported(System.ComponentModel.ITypeDescriptorContext context)
         {
