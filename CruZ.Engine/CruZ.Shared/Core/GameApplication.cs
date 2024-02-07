@@ -24,6 +24,7 @@ namespace CruZ
         public event Action                 ExitEvent;
         public event Action<DrawEventArgs>  EarlyDraw;
         public event Action<GameTime>       Draw;
+        public event Action<DrawEventArgs>  LateDraw;
 
         public event Action Initializing;
         public event Action Initialized;
@@ -81,9 +82,11 @@ namespace CruZ
 
         private void InternalDraw(GameTime gameTime)
         {
-            EarlyDraw?.Invoke(new DrawEventArgs(_spriteBatch, gameTime));
+            var drawArgs = new DrawEventArgs(_spriteBatch, gameTime);
+            EarlyDraw?.Invoke(drawArgs);
             Draw?.Invoke(gameTime);
             ECSDraw?.Invoke(gameTime);
+            LateDraw?.Invoke(drawArgs);
             DrawUI?.Invoke(gameTime);
             OnDraw(gameTime);
         }

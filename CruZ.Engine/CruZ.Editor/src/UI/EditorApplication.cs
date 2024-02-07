@@ -248,8 +248,14 @@ namespace CruZ.Editor.Controls
             _gameApp.Run();
         }
 
-        private void InitEntityControl()
+        private void InitUI()
         {
+            #region InfoTextWindow
+            _infoTextWindow = new InfoTextWindow();
+            UIManager.Root.AddChild(_infoTextWindow);
+            #endregion
+
+            #region EntityControl
             if (_currentScene == null) return;
 
             _eControls.Clear();
@@ -259,7 +265,8 @@ namespace CruZ.Editor.Controls
                 var eControl = new EntityControl(e);
                 UIManager.Root.AddChild(eControl);
                 _eControls.Add(eControl);
-            }
+            } 
+            #endregion
         }
 
         private void LoadScene(GameScene scene)
@@ -270,7 +277,7 @@ namespace CruZ.Editor.Controls
             _currentScene.SetActive(true);
             SceneLoadEvent?.Invoke(this, _currentScene);
 
-            InitEntityControl();
+            InitUI();
         }
 
         private Camera GetMainCamera()
@@ -305,6 +312,7 @@ namespace CruZ.Editor.Controls
         ManualResetEvent    _appInitalized_Reset = new(false);
         
         List<EntityControl> _eControls = [];
+        InfoTextWindow      _infoTextWindow;
         
         int _thisThreadId;
     }
