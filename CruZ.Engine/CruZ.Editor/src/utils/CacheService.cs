@@ -13,8 +13,8 @@ namespace CruZ.Editor
         {
             _cacheControls.Add(control);
 
-            control.UpdateCache -= Control_UpdateCache;
-            control.UpdateCache += Control_UpdateCache;
+            control.CacheRead -= Control_UpdateCache;
+            control.CacheRead += Control_UpdateCache;
         }
 
         private static void Control_UpdateCache(ICacheControl cache)

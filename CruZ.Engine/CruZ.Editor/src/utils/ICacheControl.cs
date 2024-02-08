@@ -6,7 +6,7 @@ namespace CruZ.Editor.Controls
 {
     public interface ICacheControl
     {
-        event Action<ICacheControl> UpdateCache;
+        event Action<ICacheControl> CacheRead;
         string UniquedCachedPath { get; }
         
         void WriteCache(Stream stream);

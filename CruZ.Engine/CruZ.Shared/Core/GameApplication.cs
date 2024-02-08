@@ -18,7 +18,6 @@ namespace CruZ
         public event Action<GameTime> ECSUpdate;
         public event Action InitializeECSSystem;
 
-
         public event Action<GameTime>       InputUpdate;
         public event Action<Viewport>       WindowResize;
         public event Action                 ExitEvent;
@@ -33,6 +32,7 @@ namespace CruZ
         public GraphicsDevice GraphicsDevice { get => _core.GraphicsDevice; }
         public GameWindow Window => _core.Window;
         public bool ExitCalled { get => _exitCalled; }
+        public bool IsInitialized { get; private set; } = false;
 
         private GameApplication()
         {
@@ -93,6 +93,8 @@ namespace CruZ
 
         private void InternalInitializing()
         {
+            IsInitialized = true;
+
             _spriteBatch = new(GraphicsDevice);
             Camera.Main = new Camera(GraphicsDevice.Viewport);
 

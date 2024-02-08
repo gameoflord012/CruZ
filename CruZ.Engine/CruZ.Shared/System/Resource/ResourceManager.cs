@@ -112,6 +112,9 @@ namespace CruZ.Resource
                 var dir = Path.GetDirectoryName(resourcePath);
                 var file = Path.GetFileNameWithoutExtension(resourcePath);
 
+                if(dir == null || file == null)
+                    throw new ArgumentException($"Invalid resourcePath value {resourcePath}");
+
                 resObj = LoadContentNonGeneric(Path.Combine(dir, file), ty);
             }
             catch (ContentLoadException)
