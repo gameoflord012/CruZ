@@ -23,7 +23,6 @@ namespace CruZ.Resource
             set 
             { 
                 _resourceRoot = value;
-                _contentRoot = $"{ResourceRoot}\\Content\\bin";
             } 
         }
 
@@ -32,9 +31,19 @@ namespace CruZ.Resource
             _Serializer = new Serializer();
             _Serializer.Converters.Add(new TextureAtlasJsonConverter());
             _Serializer.Converters.Add(new SerializableJsonConverter());
+        }
 
-            _ResourceImporterObject = ResourceImporter.ReadImporterObject(ResourceRoot + "\\.resourceImporter");
-            _GetResourcePathFromGuid = _ResourceImporterObject.BuildResult;
+        public static void RunImport()
+        {
+            var dotImporter  = Path.Combine(ResourceRoot, ".resourceImporter");
+            var importerObject = ResourceImporter.ReadImporterObject(dotImporter);
+
+            ResourceImporter.ResourceRoot = ResourceRoot;
+            ResourceImporter.SetImporterObject(importerObject);
+            ResourceImporter.DoBuild();
+            ResourceImporter.ExportResult();
+            
+            _GetResourcePathFromGuid = importerObject.BuildResult;
         }
 
         public static void CreateResource(string resourcePath, object resObj, bool renew = false)
@@ -134,11 +143,11 @@ namespace CruZ.Resource
                 if (typeof(T) == typeof(SpriteSheet))
                 {
                     return GameApplication.GetContent().Load<T>(
-                        _contentRoot + "\\" + resourcePath, new JsonContentLoader());
+                        ContentRoot + "\\" + resourcePath, new JsonContentLoader());
                 }
 
                 return GameApplication.GetContent().Load<T>(
-                    _contentRoot + "\\" + resourcePath);
+                    ContentRoot + "\\" + resourcePath);
             }
             catch (FileNotFoundException)
             {
@@ -193,11 +202,10 @@ namespace CruZ.Resource
         }
 
         private static Serializer _Serializer;
-        private static ResourceImporterObject _ResourceImporterObject;
         private static Dictionary<string, string> _GetResourcePathFromGuid = [];
 
         private static string _resourceRoot = "res";
-        private static string _contentRoot = $"res\\Content\\bin";
+        private static string ContentRoot => $"{_resourceRoot}\\Content\\bin";
 
     }
 }

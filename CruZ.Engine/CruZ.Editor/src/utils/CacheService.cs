@@ -41,12 +41,10 @@ namespace CruZ.Editor
         private static void ReadCache(ICacheControl cacheControl)
         {
             var cachePath = GetCachePath(cacheControl);
-            var cacheDir = Path.GetDirectoryName(cachePath);
 
-            Directory.CreateDirectory(cacheDir);
             if(!File.Exists(cachePath))
             {
-                File.Create(cachePath).Close();
+                return;
             }
 
             bool cacheRead = false;

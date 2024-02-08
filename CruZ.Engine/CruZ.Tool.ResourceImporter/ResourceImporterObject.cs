@@ -10,5 +10,8 @@ namespace CruZ.Tool.ResourceImporter
 
         [JsonProperty(PropertyName = "build-result")]
         public Dictionary<string, string> BuildResult = new Dictionary<string, string>();
+
+        [JsonIgnore]
+        public string ImporterFilePath { get; set; }
     }
 }

@@ -1,7 +1,8 @@
 ﻿using CommandLine;
+using CruZ.Resource;
+using CruZ.Tool.ResourceImporter;
 using System;
 using System.IO;
-using System.Windows.Forms;
 
 namespace CruZ.Editor
 {
@@ -15,12 +16,16 @@ namespace CruZ.Editor
             Parser.Default.ParseArguments<Options>(args)
             .WithParsed<Options>(o =>
             {
-                var fullDir = Path.Combine(o.ProjectRoot, WORKING_DIR);
-                if(!Directory.Exists(fullDir)) Directory.CreateDirectory(fullDir);
+                var workDir = Path.Combine(o.ProjectRoot, WORKING_DIR);
+                var resDir = Path.Combine(workDir, "..\\res");
 
-                Environment.CurrentDirectory = fullDir;
+                if (!Directory.Exists(workDir)) Directory.CreateDirectory(workDir);
+
+                Environment.CurrentDirectory = workDir;
+                ResourceManager.ResourceRoot = resDir;
             });
 
+            ResourceManager.RunImport();
             EditorForm.Run();
         }
 

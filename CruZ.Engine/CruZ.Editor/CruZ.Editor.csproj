@@ -49,7 +49,7 @@
 	  </EmbeddedResource>
 	</ItemGroup>
 
-	<Import Project="..\..\CruZ.Games\AnimalGang\CruZ.Games.AnimalGang.targets" />
+	<!--<Import Project="..\..\CruZ.Games\AnimalGang\CruZ.Games.AnimalGang.targets" />-->
 
 	<Import Project="..\CruZ.Shared\CruZ.Shared.projitems" Label="Shared" />
 	<Import Project="..\..\CruZ.Games\AnimalGang\AnimalGang.Shared\AnimalGang.Shared.projitems" Label="Shared" />

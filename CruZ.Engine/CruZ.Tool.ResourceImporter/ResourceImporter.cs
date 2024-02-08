@@ -60,16 +60,9 @@ namespace CruZ.Tool.ResourceImporter
             _ImporterObject.BuildResult = getPathFromGuid;
         }
 
-        private static string GetRelativePath(string relativeFolder, string destinationFile)
+        public static string ReadResourceGuid(string resourcePath)
         {
-            Uri folder = new Uri(Path.GetFullPath(relativeFolder).TrimEnd('\\') + "\\");
-            Uri file = new Uri(Path.GetFullPath(destinationFile));
-
-            return Uri.UnescapeDataString(
-                folder.MakeRelativeUri(file)
-                    .ToString()
-                    .Replace('/', Path.DirectorySeparatorChar)
-                );
+            return ReadGuidFrom(resourcePath + ".import");
         }
 
         public static void ExportResult(string filePath)
@@ -79,6 +72,11 @@ namespace CruZ.Tool.ResourceImporter
                 writer.WriteLine(JsonConvert.SerializeObject(_ImporterObject, _SerializerSettings));
                 writer.Flush();
             }
+        }
+
+        public static void ExportResult()
+        {
+            ExportResult(_ImporterObject.ImporterFilePath);
         }
 
         public static Dictionary<string, string> GetResults()
@@ -95,26 +93,24 @@ namespace CruZ.Tool.ResourceImporter
         {
             var importerObject = new ResourceImporterObject();
 
-            if (File.Exists(filePath))
+            Debug.WriteLine("Reading " + Path.GetFullPath(filePath));
+
+            using (StreamReader reader = new StreamReader(filePath))
             {
-                Debug.WriteLine("Reading " + Path.GetFullPath(filePath));
+                var json = reader.ReadToEnd();
+                var deserialize = JsonConvert.DeserializeObject<ResourceImporterObject>(json, _SerializerSettings);
 
-                using (StreamReader reader = new StreamReader(filePath))
+                if (deserialize == null)
                 {
-                    var json = reader.ReadToEnd();
-                    var deserialize = JsonConvert.DeserializeObject<ResourceImporterObject>(json, _SerializerSettings);
-
-                    if(deserialize == null)
-                    {
-                        Debug.WriteLine("Failed to read json file, default settings is used");
-                    }
-                    else
-                    {
-                        importerObject = deserialize;
-                    }
+                    Debug.WriteLine("Failed to read json file, default settings is used");
+                }
+                else
+                {
+                    importerObject = deserialize;
                 }
             }
 
+            importerObject.ImporterFilePath = filePath;
             return importerObject;
         }
 
@@ -147,11 +143,6 @@ namespace CruZ.Tool.ResourceImporter
             }
         }
 
-        public static string ReadResourceGuid(string resourcePath)
-        {
-            return ReadGuidFrom(resourcePath + ".import");
-        }
-
         private static string ReadGuidFrom(string filePath)
         {
             if (!File.Exists(filePath)) throw new FileNotFoundException(filePath);
@@ -159,6 +150,18 @@ namespace CruZ.Tool.ResourceImporter
             {
                 return reader.ReadToEnd().Replace("\r\n", "");
             }
+        }
+
+        private static string GetRelativePath(string relativeFolder, string destinationFile)
+        {
+            Uri folder = new Uri(Path.GetFullPath(relativeFolder).TrimEnd('\\') + "\\");
+            Uri file = new Uri(Path.GetFullPath(destinationFile));
+
+            return Uri.UnescapeDataString(
+                folder.MakeRelativeUri(file)
+                    .ToString()
+                    .Replace('/', Path.DirectorySeparatorChar)
+                );
         }
 
         private static string GetUniqueGuid(HashSet<string> excludeList)
