@@ -6,12 +6,12 @@ using System.Collections.Generic;
 
 namespace CruZ.Editor.UI
 {
-    internal class InfoTextWindow : UIControl
+    internal class LoggingWindow : UIControl
     {
         //string DisplayText = "Default";
         Dictionary<string, string> TextInfo = [];
 
-        public InfoTextWindow()
+        public LoggingWindow()
         {
             Location = new(5, 3);
 
@@ -28,8 +28,9 @@ namespace CruZ.Editor.UI
         protected override void OnDraw(UIInfo info)
         {
             _sb = info.SpriteBatch;
-
             _curRow = 0;
+            DrawString(Logging.GetMsg("Fps"));
+            _curRow++;
             DrawString(Logging.GetMsg("Scene"));
             _curRow++;
             DrawString(Logging.GetMsg("Default"));

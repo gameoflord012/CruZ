@@ -257,7 +257,7 @@ namespace CruZ.Editor.Controls
         private void InitUI()
         {
             #region InfoTextWindow
-            _infoTextWindow = new InfoTextWindow();
+            _infoTextWindow = new LoggingWindow();
             UIManager.Root.AddChild(_infoTextWindow);
             #endregion
 
@@ -320,7 +320,7 @@ namespace CruZ.Editor.Controls
         ManualResetEvent    _appInitalized_Reset = new(false);
         
         List<EntityControl> _eControls = [];
-        InfoTextWindow      _infoTextWindow;
+        LoggingWindow      _infoTextWindow;
         
         int _thisThreadId;
     }

@@ -1,8 +1,10 @@
 ﻿using CruZ.Systems;
 using CruZ.UI;
+using CruZ.Utility;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended;
 using System;
 
 namespace CruZ
@@ -33,6 +35,7 @@ namespace CruZ
         public GameWindow Window => _core.Window;
         public bool ExitCalled { get => _exitCalled; }
         public bool IsInitialized { get; private set; } = false;
+        public int FpsResult { get => _fpsResult; }
 
         private GameApplication()
         {
@@ -82,6 +85,8 @@ namespace CruZ
 
         private void InternalDraw(GameTime gameTime)
         {
+            CalculateFps(gameTime);
+
             var drawArgs = new DrawEventArgs(_spriteBatch, gameTime);
             EarlyDraw?.Invoke(drawArgs);
             Draw?.Invoke(gameTime);
@@ -89,6 +94,7 @@ namespace CruZ
             LateDraw?.Invoke(drawArgs);
             DrawUI?.Invoke(gameTime);
             OnDraw(gameTime);
+
         }
 
         private void InternalInitializing()
@@ -120,6 +126,27 @@ namespace CruZ
         protected virtual void OnExit() { }
         protected virtual void OnLoadContent() { }
 
+        private void CalculateFps(GameTime gameTime)
+        {
+            _fpsTimer += gameTime.GetElapsedSeconds();
+            _frameCount++;
+
+            int seconds = 0;
+            while(_fpsTimer > 1)
+            { 
+                seconds++;
+                _fpsTimer -= 1;
+            }
+
+            if(seconds > 0)
+            {
+                _fpsResult = _frameCount / seconds;
+                _frameCount = 0;
+
+                Logging.SetMsg($"Fps: {_fpsResult}", "Fps");
+            }
+        }
+        
         public void Dispose()
         {
             if (!disposed)
@@ -136,6 +163,10 @@ namespace CruZ
         private SpriteBatch _spriteBatch;
         bool disposed = false;
         bool _exitCalled = false;
+
+        int _fpsResult = 0;
+        int _frameCount = 0;
+        float _fpsTimer = 0;
     }
 
     public partial class GameApplication
@@ -181,6 +212,8 @@ namespace CruZ
         {
             return _instance.Content;
         }
+
+        public static int GetFpsResult() => _instance.FpsResult;
 
         private static GameApplication? _instance;
     }
