@@ -56,7 +56,7 @@ namespace CruZ.Editor.UI
         SpriteBatch? _sb;
         float _lineSpacing;
         float _curRow;
-        float _scale = 1f;
+        float _scale = 0.7f;
         //string _text = "helloWorld";
     }
 }
