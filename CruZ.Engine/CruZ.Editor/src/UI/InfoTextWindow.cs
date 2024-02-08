@@ -23,7 +23,7 @@ namespace CruZ.Editor.UI
         //public void SetText(string text)Regular
         //{
         //    _text = text;
-        //}
+        //} 
 
         protected override void OnDraw(UIInfo info)
         {
@@ -50,13 +50,13 @@ namespace CruZ.Editor.UI
         //{
         //    if(TextInfo.ContainsKey(key)) return TextInfo[key];
         //    return "";
-        //}
+        //} 
 
         SpriteFont _font;
         SpriteBatch? _sb;
         float _lineSpacing;
         float _curRow;
-        float _scale = 0.8f;
+        float _scale = 1f;
         //string _text = "helloWorld";
     }
 }
