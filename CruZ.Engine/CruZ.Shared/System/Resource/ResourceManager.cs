@@ -18,8 +18,14 @@ namespace CruZ.Resource
 {
     public static class ResourceManager
     {
-        public const string RESOURCE_ROOT = "res";
-        public const string CONTENT_ROOT = "res\\Content\\bin";
+        public static string ResourceRoot { 
+            get => _resourceRoot; 
+            set 
+            { 
+                _resourceRoot = value;
+                _contentRoot = $"{ResourceRoot}\\Content\\bin";
+            } 
+        }
 
         static ResourceManager()
         {
@@ -27,7 +33,7 @@ namespace CruZ.Resource
             _Serializer.Converters.Add(new TextureAtlasJsonConverter());
             _Serializer.Converters.Add(new SerializableJsonConverter());
 
-            _ResourceImporterObject = ResourceImporter.ReadImporterObject(RESOURCE_ROOT + "\\.resourceImporter");
+            _ResourceImporterObject = ResourceImporter.ReadImporterObject(ResourceRoot + "\\.resourceImporter");
             _GetResourcePathFromGuid = _ResourceImporterObject.BuildResult;
         }
 
@@ -49,7 +55,7 @@ namespace CruZ.Resource
 
             if (existsResource == null)
             {
-                _Serializer.SerializeToFile(resObj, Path.Combine(RESOURCE_ROOT, resourcePath));
+                _Serializer.SerializeToFile(resObj, Path.Combine(ResourceRoot, resourcePath));
             }
 
             if (existsResource is IDisposable idispose)
@@ -103,7 +109,7 @@ namespace CruZ.Resource
             {
                 try
                 {
-                    resObj = _Serializer.DeserializeFromFile(Path.Combine(RESOURCE_ROOT, resourcePath), ty);
+                    resObj = _Serializer.DeserializeFromFile(Path.Combine(ResourceRoot, resourcePath), ty);
                 }
                 catch (FileNotFoundException)
                 {
@@ -118,7 +124,7 @@ namespace CruZ.Resource
 
         private static string GetFullResPath()
         {
-            return Path.GetFullPath(RESOURCE_ROOT);
+            return Path.GetFullPath(ResourceRoot);
         }
 
         private static T LoadContent<T>(string resourcePath)
@@ -128,11 +134,11 @@ namespace CruZ.Resource
                 if (typeof(T) == typeof(SpriteSheet))
                 {
                     return GameApplication.GetContent().Load<T>(
-                        CONTENT_ROOT + "\\" + resourcePath, new JsonContentLoader());
+                        _contentRoot + "\\" + resourcePath, new JsonContentLoader());
                 }
 
                 return GameApplication.GetContent().Load<T>(
-                    CONTENT_ROOT + "\\" + resourcePath);
+                    _contentRoot + "\\" + resourcePath);
             }
             catch (FileNotFoundException)
             {
@@ -189,5 +195,9 @@ namespace CruZ.Resource
         private static Serializer _Serializer;
         private static ResourceImporterObject _ResourceImporterObject;
         private static Dictionary<string, string> _GetResourcePathFromGuid = [];
+
+        private static string _resourceRoot = "res";
+        private static string _contentRoot = $"res\\Content\\bin";
+
     }
 }

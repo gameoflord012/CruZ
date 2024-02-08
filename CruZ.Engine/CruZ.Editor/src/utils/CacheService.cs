@@ -7,7 +7,7 @@ namespace CruZ.Editor
 {
     class CacheService
     {
-        public const string CACHE_ROOT = "Control Caches";
+        public const string CACHE_ROOT = "caches";
 
         public static void Register(ICacheControl control)
         {

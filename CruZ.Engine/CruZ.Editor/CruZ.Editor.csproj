@@ -22,6 +22,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="Box2D.NetStandard" Version="2.4.7-alpha" />
+		<PackageReference Include="CommandLineParser" Version="2.9.1" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
 	</ItemGroup>
 
