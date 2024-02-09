@@ -119,8 +119,15 @@ namespace CruZ.Editor
 
         private void LoadScene_Clicked(object sender, EventArgs e)
         {
-            string sceneName = Microsoft.VisualBasic.Interaction.InputBox(
-                "Enter Scene name to load", "Load scene Prompt");
+            //string sceneName = Microsoft.VisualBasic.Interaction.InputBox(
+            //    "Enter Scene name to load", "Load scene Prompt");
+
+            using var dialog = new LoadRuntimeSceneForm();
+            dialog.ShowDialog();
+
+            if(dialog.DialogResult != DialogResult.OK) return;
+
+            var sceneName = dialog.ReturnSceneName;
 
             if (string.IsNullOrWhiteSpace(sceneName)) return;
 

@@ -67,6 +67,11 @@ namespace CruZ.Scene
             return scene;
         }
 
+        public static string[] GetSceneNames()
+        {
+            return _sceneMethods.Keys.ToArray();
+        }
+
         //TODO: Current scene asset maybe dispose if new scene is loaded
         private static Dictionary<string, MethodInfo> _sceneMethods = [];
     }

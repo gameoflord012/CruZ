@@ -1,1 +1,116 @@
-true
+{
+  "Name": "",
+  "_entities": [
+    {
+      "position": "0, 0, 0",
+      "scale": "1, 1, 1",
+      "components": [
+        {
+          "com-type": "CruZ.Components.SpriteComponent, CruZ.Editor, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+          "com-data": {
+            "_spriteResInfo": {
+              "ResourceName": "tiles\\dungeon-floor",
+              "IsRuntime": false
+            },
+            "LayerDepth": 0.0,
+            "SortingLayer": 0,
+            "YLayerDepth": false,
+            "Flip": false,
+            "Origin": {
+              "X": 0.5,
+              "Y": 0.5
+            }
+          }
+        },
+        {
+          "com-type": "CruZ.Components.TileComponent, CruZ.Editor, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+          "com-data": {
+            "ComponentType": "CruZ.Components.TileComponent, CruZ.Editor, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+            "Debug": false,
+            "TileSize": 16
+          }
+        }
+      ]
+    },
+    {
+      "position": "0, 0, 0",
+      "scale": "1, 1, 1",
+      "components": [
+        {
+          "com-type": "CruZ.Components.SpriteComponent, CruZ.Editor, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+          "com-data": {
+            "_spriteResInfo": {
+              "ResourceName": "tiles\\dungeon-wall",
+              "IsRuntime": false
+            },
+            "LayerDepth": 0.0,
+            "SortingLayer": 1,
+            "YLayerDepth": true,
+            "Flip": false,
+            "Origin": {
+              "X": 0.5,
+              "Y": 0.5
+            }
+          }
+        },
+        {
+          "com-type": "CruZ.Components.TileComponent, CruZ.Editor, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+          "com-data": {
+            "ComponentType": "CruZ.Components.TileComponent, CruZ.Editor, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+            "Debug": false,
+            "TileSize": 16
+          }
+        }
+      ]
+    },
+    {
+      "position": "-0.5, -0.5, 0",
+      "scale": "0.1, 0.1, 0",
+      "components": [
+        {
+          "com-type": "CruZ.Components.SpriteComponent, CruZ.Editor, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+          "com-data": {
+            "_spriteResInfo": null,
+            "LayerDepth": 0.2,
+            "SortingLayer": 1,
+            "YLayerDepth": true,
+            "Flip": false,
+            "Origin": {
+              "X": 0.5,
+              "Y": 0.5
+            }
+          }
+        },
+        {
+          "com-type": "CruZ.Games.AnimalGang.MainCharacter, CruZ.Editor, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+          "com-data": {
+            "Speed": 6.0
+          }
+        },
+        {
+          "com-type": "CruZ.Components.AnimationComponent, CruZ.Editor, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+          "com-data": {
+            "animation-players": [
+              {
+                "resource-uri": "anims/player-walk.sf",
+                "animation-player-key": "player-normal"
+              },
+              {
+                "resource-uri": "anims/player-sword-idle.sf",
+                "animation-player-key": "player-sword-idle"
+              },
+              {
+                "resource-uri": "anims/player-sword-attack.sf",
+                "animation-player-key": "player-sword-attack"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "ResourceInfo": {
+    "ResourceName": "D:\\monogame-projects\\CruZ_GameEngine\\CruZ.Games\\AnimalGang\\AnimalGang.Shared\\res\\scenes\\scene1.scene",
+    "IsRuntime": false
+  }
+}
