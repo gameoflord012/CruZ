@@ -1,4 +1,5 @@
 ﻿using Assimp.Configs;
+using CruZ.Exception;
 using CruZ.Serialization;
 using CruZ.Tool.ResourceImporter;
 using CruZ.Utility;
@@ -126,6 +127,10 @@ namespace CruZ.Resource
                 catch (FileNotFoundException)
                 {
                     throw new FileNotFoundException(string.Format("Can't find resource file {0}", resourcePath));
+                }
+                catch(JsonReaderException)
+                {
+                    throw new LoadResourceFailedException($"Can't load resource \"{resourcePath}\" due to invalid resource formatting or not available in content");
                 }
             }
 

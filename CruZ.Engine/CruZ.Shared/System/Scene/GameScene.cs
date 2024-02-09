@@ -1,6 +1,7 @@
 ﻿using CruZ.Components;
 using CruZ.Resource;
 using CruZ.Serialization;
+using CruZ.Systems;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Serialization;
@@ -35,14 +36,14 @@ namespace CruZ
             OnEntityAdded?.Invoke(e);
         }
 
-        public void RemoveFromScene(TransformEntity e)
-        {
-            if (_entities.Contains(e)) return;
-            _entities.Remove(e);
-            e.IsActive = _isActive;
+        //public void RemoveFromScene(TransformEntity e)
+        //{
+        //    if (_entities.Contains(e)) return;
+        //    _entities.Remove(e);
+        //    e.IsActive = _isActive;
 
-            OnEntityRemoved?.Invoke(e);
-        }
+        //    OnEntityRemoved?.Invoke(e);
+        //}
 
         public void SetActive(bool isActive)
         {
@@ -53,6 +54,14 @@ namespace CruZ
             {
                 e.IsActive = _isActive;
             }
+        }
+
+        public TransformEntity CreateEntity()
+        {
+            var e = ECS.CreateEntity();
+            AddEntity(e);
+
+            return e;
         }
 
         private void Game_Exit()

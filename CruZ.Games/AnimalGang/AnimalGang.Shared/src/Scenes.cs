@@ -12,7 +12,7 @@ namespace CruZ.Scene
         {
             var scene = GameApplication.CreateScene();
 
-            var player = ECS.CreateEntity();
+            var player = scene.CreateEntity();
             player.Name = "Player";
 
             var anim = new AnimationComponent();
@@ -29,7 +29,7 @@ namespace CruZ.Scene
             player_sp.SortingLayer = 1;
             player_sp.YLayerDepth = true;
 
-            var dungeonFloor = ECS.CreateEntity();
+            var dungeonFloor = scene.CreateEntity();
             dungeonFloor.Name = "dungeonFloor";
             dungeonFloor.AddComponent(new SpriteComponent());
             dungeonFloor.AddComponent(new TileComponent());
@@ -37,7 +37,7 @@ namespace CruZ.Scene
             dungeonFloor_sp.SortingLayer = 0;
             dungeonFloor_sp.LoadTexture("tiles\\dungeon-floor");
 
-            var dungeonWall = ECS.CreateEntity();
+            var dungeonWall = scene.CreateEntity();
             dungeonWall.AddComponent(new SpriteComponent());
             dungeonWall.AddComponent(new TileComponent());
             var dungeonWall_sp = dungeonWall.GetComponent<SpriteComponent>();
@@ -45,16 +45,18 @@ namespace CruZ.Scene
             dungeonWall_sp.SortingLayer = 1;
             dungeonWall_sp.YLayerDepth = true;
 
-            scene.AddEntity(dungeonFloor);
-            scene.AddEntity(dungeonWall);
-            scene.AddEntity(player);
-
             return scene;
         }
-    
+
+        [SceneAssetMethod]
         public static GameScene Scene2()
         {
             var scene = GameApplication.CreateScene();
+
+            var ground = scene.CreateEntity();
+            var sp_ground = new SpriteComponent();
+            sp_ground.LoadTexture("tiles\\tile3\\home-ground-behind.png");
+            ground.AddComponent(sp_ground);
 
             return scene;
         }

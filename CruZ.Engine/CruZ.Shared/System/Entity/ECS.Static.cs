@@ -8,16 +8,25 @@ namespace CruZ.Systems
     {
         public static void CreateContext(IECSContextProvider contextProvider)
         {
-            _Instance = new ECS(contextProvider);
+            _instance = new ECS(contextProvider);
         }
 
-        private static ECS? _Instance;
+        private static ECS? _instance;
 
-        public static World World { get => _Instance._world; }
+        //public static World World { get => _instance._world; }
 
-        public static TransformEntity CreateEntity()
+        /// <summary>
+        /// Not good idea to call this without proper memory manage
+        /// </summary>
+        /// <returns></returns>
+        internal static TransformEntity CreateEntity()
         {
-            return World.CreateTransformEntity();
+            return _instance._world.CreateTransformEntity();
+        }
+
+        internal static void Destroy(Entity entity)
+        {
+            _instance._world.DestroyEntity(entity);
         }
     }
 }

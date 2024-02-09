@@ -82,13 +82,6 @@ namespace CruZ.Components
             return string.IsNullOrEmpty(Name) ? $"Entity({Entity.Id})" : Name;
         }
 
-        public void RemoveFromWorld()
-        {
-            SetIsActive(false);
-            RemoveFromWorldEvent?.Invoke(this, EventArgs.Empty);
-            ECS.World.DestroyEntity(_entity);
-        }
-
         private void ProcessCallback(IComponent component)
         {
             if (component is IComponentCallback)

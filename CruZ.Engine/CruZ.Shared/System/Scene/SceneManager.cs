@@ -27,7 +27,7 @@ namespace CruZ.Scene
                     var sceneName = classAttribute.AssetClassId + "\\" +
 
                                     (string.IsNullOrEmpty(methodAttribute.AssetMethodId) ? 
-                                        methodAttribute.AssetMethodId + "\\" : "") +
+                                        "" : methodAttribute.AssetMethodId + "\\") +
 
                                     method.Name;
 
