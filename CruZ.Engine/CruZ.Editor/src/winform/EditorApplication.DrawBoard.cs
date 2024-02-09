@@ -30,13 +30,6 @@ namespace CruZ.Editor.Controls
 
             DrawBoard(FunMath.RoundInt(lineDis), col);
 
-            var vp_Width = GameApplication.Viewport.Width;
-            var vp_Height = GameApplication.Viewport.Height;
-
-            var center = new PointF(vp_Width / 2f, vp_Height / 2f);
-            spriteBatch.DrawLine(center.X, center.Y - 10, center.X, center.Y + 10, XNA.Color.Black);
-            spriteBatch.DrawLine(center.X - 10, center.Y, center.X + 10, center.Y, XNA.Color.Black);
-
             spriteBatch.End();
 
             void DrawBoard(int lineDis, XNA.Color col)
