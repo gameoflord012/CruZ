@@ -12,10 +12,10 @@ namespace CruZ.Scene
         {
             Type[] types = Assembly.GetEntryAssembly().GetTypes();
 
-            var assetClasses = types
+            var sceneClasses = types
                 .Where(type => Attribute.IsDefined(type, typeof(SceneAssetClassAttribute)));
 
-            foreach (var clazz in assetClasses)
+            foreach (var clazz in sceneClasses)
             {
                 foreach (var method in clazz
                     .GetMethods()
@@ -24,33 +24,50 @@ namespace CruZ.Scene
                     var classAttribute = clazz.GetCustomAttribute(typeof(SceneAssetClassAttribute)) as SceneAssetClassAttribute;
                     var methodAttribute = method.GetCustomAttribute(typeof(SceneAssetMethodAttribute)) as SceneAssetMethodAttribute;
 
-                    var assetPath = classAttribute.AssetClassId + "\\" +
+                    var sceneName = classAttribute.AssetClassId + "\\" +
                                     methodAttribute.AssetMethodId + "\\" +
                                     method.Name;
 
-                    try
-                    {
-                        SceneAssets[assetPath] = (GameScene)method.Invoke(null, BindingFlags.DoNotWrapExceptions, null, null, null);
-                        SceneAssets[assetPath].ResourceInfo = ResourceInfo.Create(assetPath, true);
-                    }
-                    catch
-                    {
-                        throw;
-                    }
+                    _sceneMethods[sceneName] = method;
+
+                    //try
+                    //{
+                        
+                    //    //_sceneMethods[sceneName] = (GameScene)method.Invoke(null, BindingFlags.DoNotWrapExceptions, null, null, null);
+                    //    //_sceneMethods[sceneName].ResourceInfo = ResourceInfo.Create(sceneName, true);
+                    //}
+                    //catch
+                    //{
+                    //    throw;
+                    //}
                 }
             }
 
         }
 
-        public static GameScene GetSceneAssets(string assetName)
+        public static GameScene GetRuntimeScene(string sceneName)
         {
-            if (!SceneAssets.ContainsKey(assetName))
-                throw new SceneAssetNotFoundException($"Asset {assetName} not available");
+            if (!_sceneMethods.ContainsKey(sceneName))
+                throw new SceneAssetNotFoundException($"Asset {sceneName} not available");
 
-            return SceneAssets[assetName];
+            var method = _sceneMethods[sceneName];
+            GameScene scene;
+
+            try
+            {
+
+                scene = (GameScene)method.Invoke(null, BindingFlags.DoNotWrapExceptions, null, null, null);
+                scene.ResourceInfo = ResourceInfo.Create(sceneName, true);
+            }
+            catch
+            {
+                throw;
+            }
+
+            return scene;
         }
 
         //TODO: Current scene asset maybe dispose if new scene is loaded
-        public static Dictionary<string, GameScene> SceneAssets = [];
+        private static Dictionary<string, MethodInfo> _sceneMethods = [];
     }
 }

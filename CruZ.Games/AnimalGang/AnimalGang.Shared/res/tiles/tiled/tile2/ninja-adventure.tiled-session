@@ -1,0 +1,61 @@
+{
+    "Map/SizeTest": {
+        "height": 4300,
+        "width": 2
+    },
+    "activeFile": "",
+    "expandedProjectPaths": [
+    ],
+    "fileStates": {
+        "": {
+            "scaleInDock": 1
+        },
+        "#TilesetDesert": {
+            "scaleInDock": 1
+        },
+        "#ninja-adventure": {
+            "dynamicWrapping": true
+        },
+        "TilesetDesert.tsx": {
+            "dynamicWrapping": false,
+            "scaleInDock": 1,
+            "scaleInEditor": 2
+        },
+        "TilesetDungeon.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "TilesetFloor.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "TilesetHouse.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "TilesetNature.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "ninja-adventure.tsx": {
+            "dynamicWrapping": true,
+            "scaleInDock": 0.33,
+            "scaleInEditor": 0.5
+        }
+    },
+    "last.imagePath": "D:/monogame-projects/CruZ_GameEngine/CruZ.Games/AnimalGang/AnimalGang.Shared/res/imgs/NinjaAdventure/Backgrounds/Tilesets",
+    "openFiles": [
+    ],
+    "project": "ninja-adventure.tiled-project",
+    "recentFiles": [
+        "TilesetNature.tsx",
+        "TilesetHouse.tsx",
+        "TilesetFloor.tsx",
+        "TilesetDesert.tsx",
+        "ninja-adventure.tsx",
+        "TilesetDungeon.tsx"
+    ],
+    "tileset.lastUsedFormat": "tsx",
+    "tileset.spacing": 1,
+    "tileset.type": 0
+}

@@ -50,5 +50,25 @@ namespace CruZ.Editor
                 }
             }
         }
+
+        public static void ShowExceptionDialog(System.Exception ex)
+        {
+            MessageBox.Show(
+                $"{ex}\nInner Error: {ex.InnerException}",
+                "Error",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Error
+            );
+        }
+
+        public static void ShowInfoDialog(string msg)
+        {
+            MessageBox.Show(
+                msg,
+                "Info",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Information
+            );
+        }
     }
 }

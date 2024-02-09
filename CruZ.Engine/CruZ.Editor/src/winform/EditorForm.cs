@@ -1,6 +1,7 @@
 ﻿using CruZ.Editor.Controls;
 using CruZ.Editor.Systems;
 using CruZ.Resource;
+using CruZ.Scene;
 using System;
 using System.Diagnostics;
 using System.Linq;
@@ -11,6 +12,8 @@ namespace CruZ.Editor
 {
     public partial class EditorForm : Form
     {
+        public static event Action FormClosing;
+
         public PropertyGrid Inspector_PropertyGrid { get => inspector_PropertyGrid; }
         //TODO: public EditorApplication EditorApplication    { get => _editorApp; }
 
@@ -87,7 +90,7 @@ namespace CruZ.Editor
             }
             catch (System.Exception e)
             {
-                ShowExceptionDialog(e);
+                DialogHelper.ShowExceptionDialog(e);
             }
 
         }
@@ -99,45 +102,42 @@ namespace CruZ.Editor
 
         private void SaveAsScene_Clicked(object sender, EventArgs e)
         {
+            if(_editorApp.CurrentGameScene == null)
+            {
+                DialogHelper.ShowInfoDialog("Nothing to save.");
+                return;
+            }
+
             var savePath = DialogHelper.GetSaveScenePath();
             if (savePath == null) return;
 
             ResourceManager.CreateResource(
                 savePath,
-                //TODO: _editorApp.CurrentGameScene, 
+                _editorApp.CurrentGameScene, 
                 true);
         }
 
         private void LoadScene_Clicked(object sender, EventArgs e)
         {
-            string input = Microsoft.VisualBasic.Interaction.InputBox(
+            string sceneName = Microsoft.VisualBasic.Interaction.InputBox(
                 "Enter Scene name to load", "Load scene Prompt");
 
-            if (string.IsNullOrWhiteSpace(input)) return;
+            if (string.IsNullOrWhiteSpace(sceneName)) return;
 
             try
             {
-                //TODO: _editorApp.LoadScene(SceneManager.GetSceneAssets(input));
+                _editorApp.LoadRuntimeScene(sceneName);
             }
             catch (SceneAssetNotFoundException ex)
             {
-                ShowExceptionDialog(ex);
+                DialogHelper.ShowExceptionDialog(ex);
             }
-        }
-
-        private void ShowExceptionDialog(System.Exception ex)
-        {
-            MessageBox.Show(
-                $"{ex}\nInner Error: {ex.InnerException}",
-                "Error",
-                MessageBoxButtons.OK,
-                MessageBoxIcon.Error
-            );
         }
 
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
             //CacheService.CallWriteCaches();
+            FormClosing?.Invoke();
             _editorApp.ExitApp();
         }
 

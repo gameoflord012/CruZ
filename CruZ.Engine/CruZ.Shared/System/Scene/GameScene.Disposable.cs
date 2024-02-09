@@ -6,6 +6,8 @@ namespace CruZ
     {
         public void Dispose()
         {
+            SetActive(false);
+
             foreach (var e in _entities)
             {
                 e.Dispose();

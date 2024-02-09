@@ -1,6 +1,7 @@
 ﻿using CruZ.Components;
 using CruZ.Editor.UI;
 using CruZ.Resource;
+using CruZ.Scene;
 using CruZ.Systems;
 using CruZ.UI;
 using CruZ.Utility;
@@ -26,6 +27,8 @@ namespace CruZ.Editor.Controls
             Input.MouseMoved        += Input_MouseMove;
             Input.MouseStateChanged += Input_MouseStateChanged;
 
+            EditorForm.FormClosing += EditorForm_Closing;
+
             UIManager.MouseClick += UI_MouseClick;
 
             CacheService.Register(this);
@@ -39,13 +42,11 @@ namespace CruZ.Editor.Controls
         {
             if (_currentScene == null) return;
 
-            ResourceManager.SaveResource(_currentScene);
+            if(_currentScene.ResourceInfo != null && !_currentScene.ResourceInfo.IsRuntime)
+                ResourceManager.SaveResource(_currentScene);
 
-            _currentScene.SetActive(false);
+            _currentScene.Dispose();
             _currentScene = null;
-
-            // TODO: something may wrong here
-            //_currentScene.Dispose();
         }
 
         public void SelectEntity(TransformEntity? e)
@@ -79,6 +80,13 @@ namespace CruZ.Editor.Controls
             LoadScene(scene);
         }
 
+        public void LoadRuntimeScene(string sceneName)
+        {
+            Check_AppInitialized();
+
+            LoadScene(SceneManager.GetRuntimeScene(sceneName));
+        }
+
         public void ExitApp()
         {
             lock(this)
@@ -101,10 +109,13 @@ namespace CruZ.Editor.Controls
                 _gameAppThread = null;
             }
         }
-
         #endregion
 
         #region EVENT_HANDLER
+        private void EditorForm_Closing()
+        {
+            CacheWrite?.Invoke(this, "LoadedScene");
+        }
 
         private void GameApp_WindowResize(Viewport viewport)
         {

@@ -30,8 +30,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)System\Entity\TransformEntity.Disposable.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System\Resource\ResourceInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System\Scene\GameScene.Disposable.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)System\Scene\SceneAssetMethodAttribute.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)System\Scene\SceneAssetClassAttribute.cs" />
+    <Compile Include="..\CruZ.Shared\System\Scene\RuntimeSceneMethodAttribute.cs" />
+    <Compile Include="..\CruZ.Shared\System\Scene\RuntimeSceneClassAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System\Tile\TileComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Types\ValueTypeConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Types\Vector2TypeConverter.cs" />

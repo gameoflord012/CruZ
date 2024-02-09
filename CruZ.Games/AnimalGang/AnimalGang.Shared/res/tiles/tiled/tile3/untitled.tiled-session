@@ -1,0 +1,61 @@
+{
+    "Map/SizeTest": {
+        "height": 4300,
+        "width": 2
+    },
+    "activeFile": "D:/monogame-projects/CruZ_GameEngine/CruZ.Games/AnimalGang/AnimalGang.Shared/res/tiles/tile3/TilesetFloor.tsx",
+    "expandedProjectPaths": [
+    ],
+    "file.lastUsedOpenFilter": "All Files (*)",
+    "fileStates": {
+        "D:/monogame-projects/CruZ_GameEngine/CruZ.Games/AnimalGang/AnimalGang.Shared/res/tiles/tile3/TilesetFloor.tsx": {
+            "scaleInDock": 1.5,
+            "scaleInEditor": 3
+        },
+        "D:/monogame-projects/CruZ_GameEngine/CruZ.Games/AnimalGang/AnimalGang.Shared/res/tiles/tile3/TilesetHouse.tsx": {
+            "scaleInDock": 2,
+            "scaleInEditor": 5.5
+        },
+        "D:/monogame-projects/CruZ_GameEngine/CruZ.Games/AnimalGang/AnimalGang.Shared/res/tiles/tile3/TilesetNature.tsx": {
+            "scaleInDock": 3,
+            "scaleInEditor": 3
+        },
+        "D:/monogame-projects/CruZ_GameEngine/CruZ.Games/AnimalGang/AnimalGang.Shared/res/tiles/tile3/TilesetWater.tsx": {
+            "scaleInDock": 3,
+            "scaleInEditor": 5.5
+        },
+        "D:/monogame-projects/CruZ_GameEngine/CruZ.Games/AnimalGang/AnimalGang.Shared/res/tiles/tile3/map1.tmx": {
+            "scale": 2,
+            "selectedLayer": 3,
+            "viewCenter": {
+                "x": 231,
+                "y": 176.25
+            }
+        }
+    },
+    "last.imagePath": "D:/monogame-projects/CruZ_GameEngine/CruZ.Games/AnimalGang/AnimalGang.Shared/res/tiles/tile3",
+    "map.lastUsedFormat": "tmx",
+    "map.tileHeight": 16,
+    "map.tileWidth": 16,
+    "openFiles": [
+        "D:/monogame-projects/CruZ_GameEngine/CruZ.Games/AnimalGang/AnimalGang.Shared/res/tiles/tile3/map1.tmx",
+        "D:/monogame-projects/CruZ_GameEngine/CruZ.Games/AnimalGang/AnimalGang.Shared/res/tiles/tile3/TilesetHouse.tsx",
+        "D:/monogame-projects/CruZ_GameEngine/CruZ.Games/AnimalGang/AnimalGang.Shared/res/tiles/tile3/TilesetWater.tsx",
+        "D:/monogame-projects/CruZ_GameEngine/CruZ.Games/AnimalGang/AnimalGang.Shared/res/tiles/tile3/TilesetNature.tsx",
+        "D:/monogame-projects/CruZ_GameEngine/CruZ.Games/AnimalGang/AnimalGang.Shared/res/tiles/tile3/TilesetFloor.tsx"
+    ],
+    "project": "untitled.tiled-project",
+    "recentFiles": [
+        "D:/monogame-projects/CruZ_GameEngine/CruZ.Games/AnimalGang/AnimalGang.Shared/res/tiles/tile3/map1.tmx",
+        "D:/monogame-projects/CruZ_GameEngine/CruZ.Games/AnimalGang/AnimalGang.Shared/res/tiles/tile3/TilesetHouse.tsx",
+        "D:/monogame-projects/CruZ_GameEngine/CruZ.Games/AnimalGang/AnimalGang.Shared/res/tiles/tile3/TilesetWater.tsx",
+        "D:/monogame-projects/CruZ_GameEngine/CruZ.Games/AnimalGang/AnimalGang.Shared/res/tiles/tile3/TilesetNature.tsx",
+        "D:/monogame-projects/CruZ_GameEngine/CruZ.Games/AnimalGang/AnimalGang.Shared/res/tiles/tile3/TilesetFloor.tsx"
+    ],
+    "tileset.lastUsedFormat": "tsx",
+    "tileset.spacing": 0,
+    "tileset.tileSize": {
+        "height": 16,
+        "width": 16
+    }
+}
