@@ -142,6 +142,11 @@ namespace CruZ.Editor.Controls
             DrawAxis(args.SpriteBatch);
         }
 
+        private void GameApp_DrawUI(XNA.GameTime obj)
+        {
+            throw new NotImplementedException();
+        }
+
         private void Input_MouseScroll(IInputInfo info)
         {
             Camera.Main.Zoom = new(
@@ -259,14 +264,19 @@ namespace CruZ.Editor.Controls
             ExitApp();
 
             _gameApp = GameApplication.CreateContext();
+            RegisterGameAppEvents();
 
+            _gameApp.Run();
+        }
+
+        private void RegisterGameAppEvents()
+        {
             _gameApp.WindowResize += GameApp_WindowResize;
             _gameApp.Initializing += GameApp_Intialized;
             _gameApp.Window.AllowUserResizing = true;
             _gameApp.ExitEvent += GameApp_Exit;
             _gameApp.EarlyDraw += GameApp_EarlyDraw;
-
-            _gameApp.Run();
+            _gameApp.DrawUI += GameApp_DrawUI;
         }
 
         private void InitUI()
