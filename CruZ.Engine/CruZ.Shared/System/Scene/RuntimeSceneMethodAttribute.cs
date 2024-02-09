@@ -4,7 +4,7 @@
     public class SceneAssetMethodAttribute
         : System.Attribute
     {
-        public SceneAssetMethodAttribute(string assetMethodId = "_")
+        public SceneAssetMethodAttribute(string assetMethodId = "")
         {
             AssetMethodId = assetMethodId;
         }

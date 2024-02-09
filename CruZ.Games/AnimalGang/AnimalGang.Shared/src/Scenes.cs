@@ -7,7 +7,7 @@ namespace CruZ.Scene
     [SceneAssetClass("Scenes")]
     public class Scenes
     {
-        [SceneAssetMethod("Scene1")]
+        [SceneAssetMethod]
         public static GameScene Scene1()
         {
             var scene = GameApplication.CreateScene();
@@ -48,6 +48,13 @@ namespace CruZ.Scene
             scene.AddEntity(dungeonFloor);
             scene.AddEntity(dungeonWall);
             scene.AddEntity(player);
+
+            return scene;
+        }
+    
+        public static GameScene Scene2()
+        {
+            var scene = GameApplication.CreateScene();
 
             return scene;
         }

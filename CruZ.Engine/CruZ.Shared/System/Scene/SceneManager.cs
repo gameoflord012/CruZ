@@ -25,7 +25,10 @@ namespace CruZ.Scene
                     var methodAttribute = method.GetCustomAttribute(typeof(SceneAssetMethodAttribute)) as SceneAssetMethodAttribute;
 
                     var sceneName = classAttribute.AssetClassId + "\\" +
-                                    methodAttribute.AssetMethodId + "\\" +
+
+                                    (string.IsNullOrEmpty(methodAttribute.AssetMethodId) ? 
+                                        methodAttribute.AssetMethodId + "\\" : "") +
+
                                     method.Name;
 
                     _sceneMethods[sceneName] = method;
