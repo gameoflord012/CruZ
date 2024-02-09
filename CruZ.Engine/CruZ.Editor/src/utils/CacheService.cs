@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 
 namespace CruZ.Editor
 {
@@ -13,62 +14,84 @@ namespace CruZ.Editor
         {
             _cacheControls.Add(control);
 
-            control.CacheRead -= Control_UpdateCache;
-            control.CacheRead += Control_UpdateCache;
+            control.CacheRead -= Control_CacheRead;
+            control.CacheRead += Control_CacheRead;
+
+            control.CacheWrite -= Control_CacheWrite;    
+            control.CacheWrite += Control_CacheWrite;    
         }
 
-        private static void Control_UpdateCache(ICacheControl cache)
+        private static void Control_CacheWrite(ICacheControl cache, string key)
         {
-            ReadCache(cache);
+            WriteCache(cache, key);
         }
 
-        public static void CallReadCaches()
+        private static void Control_CacheRead(ICacheControl cache, string key)
         {
-            foreach (var cache in _cacheControls)
-            {
-                ReadCache(cache);
-            }
+            ReadCache(cache, key);
         }
 
-        public static void CallWriteCaches()
-        {
-            foreach (var cache in _cacheControls)
-            {
-                WriteCache(cache);
-            }
-        }
+        //public static void CallReadCaches()
+        //{
+        //    foreach (var cache in _cacheControls)
+        //    {
+        //        ReadCache(cache);
+        //    }
+        //}
 
-        private static void ReadCache(ICacheControl cacheControl)
+        //public static void CallWriteCaches()
+        //{
+        //    foreach (var cache in _cacheControls)
+        //    {
+        //        WriteCache(cache);
+        //    }
+        //}
+
+        private static void ReadCache(ICacheControl cacheControl, string key)
         {
-            var cachePath = GetCachePath(cacheControl);
+            var cachePath = GetCachePath(cacheControl, key);
 
             if(!File.Exists(cachePath))
             {
                 return;
             }
 
-            bool cacheRead = false;
+            bool success = false;
             try
             {
-                using var file = File.OpenRead(cachePath);
-                cacheRead = cacheControl.ReadCache(file);
+                using var binReader = new BinaryReader(File.OpenRead(cachePath));
+                success = cacheControl.ReadCache(binReader, key);
             }
             catch
             {
-                if(!cacheRead) throw;
+                if(!success) throw;
             }
         }
 
-        private static void WriteCache(ICacheControl cacheControl)
+        private static void WriteCache(ICacheControl cacheControl, string key)
         {
-            var cachePath = GetCachePath(cacheControl);
-            using var file = File.OpenWrite(cachePath);
-            cacheControl.WriteCache(file);
+            var cachePath = GetCachePath(cacheControl, key);
+
+            using MemoryStream mem = new();
+            using BinaryWriter binWriter = new(mem);
+
+            if (!cacheControl.WriteCache(binWriter, key)) return;
+            using FileStream file = GetCacheFile(cachePath);
+
+            binWriter.Flush();
+            mem.WriteTo(file);
         }
 
-        public static string GetCachePath(ICacheControl cachedControl)
+        private static FileStream GetCacheFile(string cachePath)
         {
-            return Path.Combine(CACHE_ROOT, cachedControl.UniquedCachedPath);
+            var cacheDir = Path.GetDirectoryName(cachePath);
+            if (!Directory.Exists(cacheDir)) Directory.CreateDirectory(cacheDir);
+            return File.OpenWrite(cachePath);
+        }
+
+        public static string GetCachePath(ICacheControl cachedControl, string key)
+        {
+            return Path.Combine(CACHE_ROOT, cachedControl.UniquedCachedDir, key) + ".cache";
         }
 
         private static HashSet<ICacheControl> _cacheControls = [];

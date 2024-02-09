@@ -46,6 +46,7 @@ namespace CruZ.Systems
                 _curMouse = XNA.Input.Mouse.GetState();
             }
 
+            _preKeyboard = _keyboard;
             _keyboard = XNA.Input.Keyboard.GetState();
 
             // Can call IsMouseJustUp/Down after this line
@@ -124,8 +125,11 @@ namespace CruZ.Systems
         }
 
         private MouseState _curMouse;
-        private KeyboardState _keyboard;
         private MouseState _preMouse;
+
+        public KeyboardState _preKeyboard;
+        private KeyboardState _keyboard;
+
         private int _scrollDelta;
         private bool _mouseMoving;
         private float _timeSceneLastDownClick;
@@ -141,6 +145,7 @@ namespace CruZ.Systems
         public bool MouseStateChanges => _mouseStateChanges;
         
         public KeyboardState Keyboard => _keyboard;
+        public KeyboardState PreKeyboard => _preKeyboard;
         public MouseState CurMouse => _curMouse;
         public MouseState PreMouse => _preMouse;
         
@@ -159,6 +164,9 @@ namespace CruZ.Systems
 
         MouseState CurMouse { get; }
         MouseState PreMouse { get; }
+
+
+        KeyboardState PreKeyboard { get; }
         KeyboardState Keyboard { get; }
 
         bool MouseStateChanges { get; }
@@ -169,6 +177,11 @@ namespace CruZ.Systems
         bool IsMouseHeldUp(MouseKey key);
         bool IsMouseJustDown(MouseKey key);
         bool IsMouseJustUp(MouseKey key);
+
+        bool IsKeyJustDown(XNA.Input.Keys key)
+        {
+            return PreKeyboard.IsKeyUp(key) && Keyboard.IsKeyDown(key);
+        }
 
         DRAW.Point MousePos ()
         {

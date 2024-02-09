@@ -21,6 +21,9 @@ namespace CruZ.UI
         }
         public int Width { get => (int)_size.Width; set => _size.Width = value; }
         public int Height { get => (int)_size.Height; set => _size.Height = value; }
+
+        public XNA.Color BackgroundColor = XNA.Color.Red;
+        public bool Active = true;
         #endregion
 
         public void AddChild(UIControl child)
@@ -46,6 +49,8 @@ namespace CruZ.UI
 
         internal void InternalUpdate(UIInfo args)
         {
+            if(!Active) return;
+
             _args = args;
 
             ProcessDragging(args);
@@ -69,6 +74,8 @@ namespace CruZ.UI
 
         internal void InternalDraw(UIInfo args)
         {
+            if(!Active) return;
+
             _args = args;
             OnDraw(args);
         }
@@ -91,7 +98,7 @@ namespace CruZ.UI
         protected virtual void OnUpdate(UIInfo args) { }
         protected virtual void OnDraw(UIInfo args)
         {
-            args.SpriteBatch.DrawRectangle(_location, _size, Color.Red);
+            args.SpriteBatch.DrawRectangle(_location, _size, BackgroundColor);
         }
 
         #region Dragging

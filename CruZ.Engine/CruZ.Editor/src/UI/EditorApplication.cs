@@ -29,7 +29,7 @@ namespace CruZ.Editor.Controls
             UIManager.MouseClick += UI_MouseClick;
 
             CacheService.Register(this);
-            CacheRead?.Invoke(this);
+            CacheRead?.Invoke(this, "LoadedScene");
 
             _thisThreadId = Thread.CurrentThread.ManagedThreadId;
         }
@@ -38,6 +38,8 @@ namespace CruZ.Editor.Controls
         public void UnloadCurrentScene()
         {
             if (_currentScene == null) return;
+
+            ResourceManager.SaveResource(_currentScene);
 
             _currentScene.SetActive(false);
             _currentScene = null;
@@ -83,6 +85,8 @@ namespace CruZ.Editor.Controls
             {
                 if (_gameApp != null)
                 {
+                    CacheWrite?.Invoke(this, "Camera");
+
                     if(!_gameApp.ExitCalled)
                         _gameApp.Exit();
 
@@ -111,7 +115,7 @@ namespace CruZ.Editor.Controls
         private void GameApp_Intialized()
         {
             Camera.Main = GetMainCamera();
-            CacheRead?.Invoke(this);
+            CacheRead?.Invoke(this, "Camera");
 
             _appInitalized_Reset.Set();
         }

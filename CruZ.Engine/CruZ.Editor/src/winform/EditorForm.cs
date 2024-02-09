@@ -137,7 +137,7 @@ namespace CruZ.Editor
 
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
-            CacheService.CallWriteCaches();
+            //CacheService.CallWriteCaches();
             _editorApp.ExitApp();
         }
 

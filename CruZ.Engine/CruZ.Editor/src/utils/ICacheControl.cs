@@ -6,10 +6,12 @@ namespace CruZ.Editor.Controls
 {
     public interface ICacheControl
     {
-        event Action<ICacheControl> CacheRead;
-        string UniquedCachedPath { get; }
+        event Action<ICacheControl, string> CacheRead;
+        event Action<ICacheControl, string> CacheWrite;
+
+        string UniquedCachedDir { get; }
         
-        void WriteCache(Stream stream);
-        bool ReadCache(Stream stream);
+        bool WriteCache(BinaryWriter binWriter, string key);
+        bool ReadCache(BinaryReader binReader, string key);
     }
 }

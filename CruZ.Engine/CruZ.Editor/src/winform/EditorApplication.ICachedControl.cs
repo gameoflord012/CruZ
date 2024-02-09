@@ -1,79 +1,68 @@
-﻿using CruZ.Resource;
-using CruZ.Scene;
-using System;
+﻿using System;
 using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
-using System.Windows.Forms;
 
 namespace CruZ.Editor.Controls
 {
     public partial class EditorApplication : ICacheControl
     {
-        public event    Action<ICacheControl> CacheRead;
-        public string   UniquedCachedPath => "WorldViewControlSuperUnique.cache";
+        public event    Action<ICacheControl, string> CacheRead;
+        public event    Action<ICacheControl, string> CacheWrite;
+        public string   UniquedCachedDir => "EditorApplication";
 
 
-        public bool ReadCache(Stream stream)
+        public bool ReadCache(BinaryReader binReader, string key)
         {
-            using (BinaryReader reader = new(stream))
+            if(key == "LoadedScene")
             {
-                // TODO: Looping when calling LoadSceneFromFile
+                var lastScenePath = binReader.ReadString();
 
-                if(reader.ReadString() != "!WorldViewCache") return false;
-
-                var lastScenePath = reader.ReadString();
-
-                var px = reader.ReadSingle();
-                var py = reader.ReadSingle();
-                var pz = reader.ReadSingle();
-
-                var zx = reader.ReadSingle();
-                var zy = reader.ReadSingle();
-                var zz = reader.ReadSingle();
-
-
-                if (_gameApp == null)
-                {
-                    if(!string.IsNullOrEmpty(lastScenePath))
-                        LoadSceneFromFile(lastScenePath);
-                }
-
-                if(_gameApp != null && _gameApp.IsInitialized)
-                {
-                    GetMainCamera().Position = new(px, py, pz);
-                    GetMainCamera().Zoom = new(zx, zy, zz);
-                }
-
-                return true;
+                if (!string.IsNullOrEmpty(lastScenePath))
+                    LoadSceneFromFile(lastScenePath);
             }
+
+            if(key == "Camera")
+            {
+                var px = binReader.ReadSingle();
+                var py = binReader.ReadSingle();
+                var pz = binReader.ReadSingle();
+
+                var zx = binReader.ReadSingle();
+                var zy = binReader.ReadSingle();
+                var zz = binReader.ReadSingle();
+
+                GetMainCamera().Position = new(px, py, pz);
+                GetMainCamera().Zoom = new(zx, zy, zz);
+            }
+
+            return true;
         }
 
-        public void WriteCache(Stream stream)
+        public bool WriteCache(BinaryWriter binWriter, string key)
         {
-            using(BinaryWriter bin = new BinaryWriter(stream))
+            if(key == "LoadedScene")
             {
-                bin.Write("!WorldViewCache");
-
-                if(CurrentGameScene == null)
+                if (CurrentGameScene == null)
                 {
-                    bin.Write("");
+                    return false;
                 }
                 else
                 {
-                    ResourceManager.SaveResource(CurrentGameScene);
-                    bin.Write(CurrentGameScene.ResourceInfo.ResourceName);
+                    binWriter.Write(CurrentGameScene.ResourceInfo.ResourceName);
                 }
-
-                bin.Write(GetMainCamera().Position.X);
-                bin.Write(GetMainCamera().Position.Y);
-                bin.Write(GetMainCamera().Position.Z);
-
-                bin.Write(_mainCamera.Zoom.X);
-                bin.Write(_mainCamera.Zoom.Y);
-                bin.Write(_mainCamera.Zoom.Z);
-
-                bin.Flush();
             }
+                
+            if(key == "Camera")
+            {
+                binWriter.Write(GetMainCamera().Position.X);
+                binWriter.Write(GetMainCamera().Position.Y);
+                binWriter.Write(GetMainCamera().Position.Z);
+
+                binWriter.Write(GetMainCamera().Zoom.X);
+                binWriter.Write(GetMainCamera().Zoom.Y);
+                binWriter.Write(GetMainCamera().Zoom.Z);
+            }
+
+            return true;
         }
     }
 }

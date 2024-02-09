@@ -16,20 +16,18 @@ namespace CruZ.Editor.UI
 
         public TransformEntity AttachEntity { get => _e; }
 
-        public bool Draggable = false;
-
         public void SelectEntity(bool shouldSelect)
         {
             if (shouldSelect)
             {
-                _shouldDisplay = true;
-                Draggable = true;
+                Active = true;
             }
             else
             {
-                _shouldDisplay = false;
-                Draggable = false;
+                Active = false;
             }
+
+            _draggableToggle = false;
         }
 
         public EntityControl(TransformEntity e)
@@ -41,20 +39,32 @@ namespace CruZ.Editor.UI
             _sp.DrawLoopEnd += Sprite_DrawLoopEnd;
             _sp.DrawBegin += Sprite_DrawBegin;
             _sp.DrawEnd += Sprite_DrawEnd;
+
+            _initialBackgroundCol = BackgroundColor;
+
+            Active = false;
         }
 
         protected override void OnDraw(UIInfo args)
         {
-            if (_shouldDisplay)
+            base.OnDraw(args);
+
+            foreach (var origin in _origins)
             {
-                base.OnDraw(args);
-                foreach (var origin in _origins)
-                {
-                    var screen = Camera.Main.CoordinateToPoint(origin);
-                    args.SpriteBatch.DrawCircle(new(screen.X, screen.Y), 
-                        EditorVariables.CENTER_CIRCLE_SIZE, 8, XNA.Color.Blue);
-                }
+                var screen = Camera.Main.CoordinateToPoint(origin);
+                args.SpriteBatch.DrawCircle(new(screen.X, screen.Y),
+                    EditorVariables.CENTER_CIRCLE_SIZE, 8, XNA.Color.Blue);
             }
+        }
+
+        protected override void OnUpdate(UIInfo args)
+        {
+            if(args.InputInfo.IsKeyJustDown(XNA.Input.Keys.W))
+            {
+                _draggableToggle = !_draggableToggle;
+            }
+
+            BackgroundColor = _draggableToggle ? _draggableBackgroundCol : _initialBackgroundCol;
         }
 
         #region SPRITE_EVENT_HANDLERS
@@ -73,8 +83,8 @@ namespace CruZ.Editor.UI
 
         private void Sprite_DrawLoopEnd(object? sender, DrawLoopEndEventArgs args)
         {
-            if (_shouldDisplay)
-                _origins.Add(args.BeginArgs.GetWorldOrigin());
+            _origins.Add(args.BeginArgs.GetWorldOrigin());
+
         }
         #endregion
 
@@ -137,7 +147,12 @@ namespace CruZ.Editor.UI
         public List<Vector3> _origins = [];
 
         bool _dragging = false;
-        bool _shouldDisplay = false;
         bool _boundsHasValue = false;
+        bool _draggableToggle;
+
+        bool Draggable => _draggableToggle;
+
+        XNA.Color _initialBackgroundCol;
+        XNA.Color _draggableBackgroundCol = XNA.Color.Green;
     }
 }
