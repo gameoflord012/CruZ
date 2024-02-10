@@ -55,7 +55,7 @@ namespace CruZ.Scene
 
             var ground = scene.CreateEntity();
             var sp_ground = new SpriteComponent();
-            sp_ground.LoadTexture("tiles\\tile3\\home-ground-behind.png");
+            sp_ground.LoadTexture("home-ground-behind");
             ground.AddComponent(sp_ground);
 
             return scene;

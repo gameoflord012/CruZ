@@ -1,4 +1,5 @@
-﻿using CruZ.Resource;
+﻿using CruZ.Exception;
+using CruZ.Resource;
 using System;
 using System.Collections.Generic;
 using System.Linq;

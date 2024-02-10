@@ -137,10 +137,10 @@ namespace CruZ.Editor.Controls
             ExitAppAsync();
         }
 
-        private void GameApp_EarlyDraw(DrawEventArgs args)
-        {
-            DrawAxis(args.SpriteBatch);
-        }
+        //private void GameApp_EarlyDraw(DrawEventArgs args)
+        //{
+        //    DrawAxis(args.SpriteBatch);
+        //}
 
         private void Input_MouseScroll(IInputInfo info)
         {
@@ -270,7 +270,7 @@ namespace CruZ.Editor.Controls
             _gameApp.Initializing += GameApp_Intialized;
             _gameApp.Window.AllowUserResizing = true;
             _gameApp.ExitEvent += GameApp_Exit;
-            _gameApp.EarlyDraw += GameApp_EarlyDraw;
+            //_gameApp.EarlyDraw += GameApp_EarlyDraw;
         }
 
         private void InitUI()
