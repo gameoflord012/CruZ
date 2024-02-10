@@ -1,0 +1,30 @@
+{
+  "textureAtlas": {
+    "texture": "D:\\monogame-projects\\CruZ_GameEngine\\CruZ.Games\\AnimalGang\\AnimalGang.Shared\\res\\anims\\draw-ninja\\dark-ninja.png",
+    "regionWidth": 16,
+    "regionHeight": 16,
+    "textureGuid": "95f8ffad-4a70-4ecd-b47b-cf9fc7240f20"
+  },
+  "cycles": {
+    "walk-front": {
+      "frames": [0,4,8,12],
+      "isLooping": false,
+      "frameDuration": 0.2
+    },
+    "walk-back": {
+      "frames": [1,5,9,13],
+      "isLooping": false,
+      "frameDuration": 0.2
+    },
+    "walk-left": {
+      "frames": [2,6,10,14],
+      "isLooping": false,
+      "frameDuration": 0.2
+    },
+    "walk-right": {
+      "frames": [3,7,11,15],
+      "isLooping": false,
+      "frameDuration": 0.2
+    }
+  }
+}

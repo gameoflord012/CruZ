@@ -43,7 +43,7 @@ namespace CruZ.Editor.Controls
             {
                 if (CurrentGameScene == null)
                 {
-                    return false;
+                    binWriter.Write("");
                 }
                 else
                 {

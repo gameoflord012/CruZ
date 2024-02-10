@@ -8,7 +8,7 @@ using System.Drawing;
 
 namespace CruZ.UI
 {
-    public class CrossHair : UIControl
+    public class BoardGrid : UIControl
     {
         protected override void OnDraw(UIInfo args)
         {

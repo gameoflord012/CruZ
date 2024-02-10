@@ -59,13 +59,12 @@ namespace CruZ.Scene
 
             try
             {
-
                 scene = (GameScene)method.Invoke(null, BindingFlags.DoNotWrapExceptions, null, null, null);
                 scene.ResourceInfo = ResourceInfo.Create(sceneName, true);
             }
-            catch
+            catch(System.Exception e)
             {
-                throw;
+                throw new RuntimeSceneLoadException($"Problem with loading {sceneName}", e);
             }
 
             return scene;

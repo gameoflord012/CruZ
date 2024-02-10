@@ -52,11 +52,52 @@ namespace CruZ.Scene
         public static GameScene Scene2()
         {
             var scene = GameApplication.CreateScene();
-
-            var ground = scene.CreateEntity();
+            //
+            // ground
+            //
             var sp_ground = new SpriteComponent();
             sp_ground.LoadTexture("home-ground-behind");
+            sp_ground.SortingLayer = 0;
+
+            var ground = scene.CreateEntity("Ground");
             ground.AddComponent(sp_ground);
+            ground.Scale = new(1f / 16f, 1f / 16f);
+            // 
+            // object
+            //
+            var sp_groundObj = new SpriteComponent();
+            sp_groundObj.LoadTexture("home-object-mid");
+            sp_groundObj.SortingLayer = 1;
+            sp_groundObj.YLayerDepth = true;
+
+            var groundObj = scene.CreateEntity("Objects");
+            groundObj.AddComponent(sp_groundObj);
+            groundObj.Scale = new(1f / 16f, 1f / 16f);
+            //
+            // frontObj
+            //
+            var sp_frontObj = new SpriteComponent();
+            sp_frontObj.LoadTexture("home-object-font");
+            sp_frontObj.SortingLayer = 2;
+
+            var frontObj = scene.CreateEntity("TopObj");
+            frontObj.AddComponent(sp_frontObj);
+            frontObj.Scale = new(1f / 16f, 1f / 16f);
+            //
+            // Player
+            //
+            var script_mainChar = new MainCharacter();
+            
+            var anims_mainChar = new AnimationComponent();
+            anims_mainChar.LoadSpriteSheet("anims\\dark-ninja\\dark-ninja-walk.sf", "ninja-movement");
+
+            var sp_mainChar = new SpriteComponent();
+            sp_mainChar.SortingLayer = 1;
+            sp_mainChar.YLayerDepth = true;
+
+            var mainChar = scene.CreateEntity();
+            mainChar.AddComponent(script_mainChar);
+            mainChar.AddComponent(sp_mainChar);
 
             return scene;
         }

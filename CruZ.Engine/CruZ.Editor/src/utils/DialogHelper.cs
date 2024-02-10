@@ -53,12 +53,15 @@ namespace CruZ.Editor
 
         public static void ShowExceptionDialog(System.Exception ex)
         {
-            MessageBox.Show(
-                $"{ex}\nInner Error: {ex.InnerException}",
-                "Error",
-                MessageBoxButtons.OK,
-                MessageBoxIcon.Error
-            );
+            ThreadExceptionDialog exceptionDialog = new(ex);
+            exceptionDialog.ShowDialog();
+
+            //MessageBox.Show(
+            //    $"{ex}\nInner Error: {ex.InnerException}",
+            //    "Error",
+            //    MessageBoxButtons.OK,
+            //    MessageBoxIcon.Error
+            //);
         }
 
         public static void ShowInfoDialog(string msg)

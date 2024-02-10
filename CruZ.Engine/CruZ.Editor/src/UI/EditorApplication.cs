@@ -1,5 +1,6 @@
 ﻿using CruZ.Components;
 using CruZ.Editor.UI;
+using CruZ.Exception;
 using CruZ.Resource;
 using CruZ.Scene;
 using CruZ.Systems;
@@ -84,7 +85,15 @@ namespace CruZ.Editor.Controls
         {
             Check_AppInitialized();
 
-            LoadScene(SceneManager.GetRuntimeScene(sceneName));
+            try
+            {
+                LoadScene(SceneManager.GetRuntimeScene(sceneName));
+            }
+            catch(RuntimeSceneLoadException e)
+            {
+                DialogHelper.ShowExceptionDialog(e);
+                throw;
+            }
         }
 
         public void ExitApp()
@@ -273,12 +282,11 @@ namespace CruZ.Editor.Controls
             //_gameApp.EarlyDraw += GameApp_EarlyDraw;
         }
 
-        private void InitUI()
+        private void InitUIControls()
         {
-            #region InfoTextWindow
-            _infoTextWindow = new LoggingWindow();
-            UIManager.Root.AddChild(_infoTextWindow);
-            #endregion
+            // orders of ui gettin added is effect which is drawing first
+
+            UIManager.Root.AddChild(new BoardGrid());
 
             #region EntityControl
             if (_currentScene == null) return;
@@ -293,8 +301,11 @@ namespace CruZ.Editor.Controls
             } 
             #endregion
 
-            UIManager.Root.AddChild(new CrossHair());
-        }
+            #region InfoTextWindow
+            _infoTextWindow = new LoggingWindow();
+            UIManager.Root.AddChild(_infoTextWindow);
+            #endregion
+    }
 
         private void LoadScene(GameScene scene)
         {
@@ -306,7 +317,7 @@ namespace CruZ.Editor.Controls
 
             Logging.SetMsg(_currentScene.ResourceInfo.ResourceName, "Scene");
 
-            InitUI();
+            InitUIControls();
         }
 
         private Camera GetMainCamera()

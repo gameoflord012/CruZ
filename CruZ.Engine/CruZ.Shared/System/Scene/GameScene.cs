@@ -56,9 +56,10 @@ namespace CruZ
             }
         }
 
-        public TransformEntity CreateEntity()
+        public TransformEntity CreateEntity(string name = "")
         {
             var e = ECS.CreateEntity();
+            e.Name = name;
             AddEntity(e);
 
             return e;

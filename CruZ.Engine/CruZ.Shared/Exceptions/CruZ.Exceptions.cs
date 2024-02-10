@@ -48,3 +48,15 @@ public class SceneAssetNotFoundException : System.Exception
       System.Runtime.Serialization.SerializationInfo info,
       System.Runtime.Serialization.StreamingContext context) : base(info, context) { }
 }
+
+
+[Serializable]
+public class RuntimeSceneLoadException : System.Exception
+{
+    public RuntimeSceneLoadException() { }
+    public RuntimeSceneLoadException(string message) : base(message) { }
+    public RuntimeSceneLoadException(string message, System.Exception inner) : base(message, inner) { }
+    protected RuntimeSceneLoadException(
+      System.Runtime.Serialization.SerializationInfo info,
+      System.Runtime.Serialization.StreamingContext context) : base(info, context) { }
+}
