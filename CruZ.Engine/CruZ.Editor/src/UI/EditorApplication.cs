@@ -10,6 +10,7 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 
@@ -27,6 +28,7 @@ namespace CruZ.Editor.Controls
             Input.MouseScrolled     += Input_MouseScroll;
             Input.MouseMoved        += Input_MouseMove;
             Input.MouseStateChanged += Input_MouseStateChanged;
+            Input.KeyStateChanged   += Input_KeyStateChanged;
 
             EditorForm.FormClosing += EditorForm_Closing;
 
@@ -37,6 +39,7 @@ namespace CruZ.Editor.Controls
 
             _thisThreadId = Thread.CurrentThread.ManagedThreadId;
         }
+
 
         #region PUBLIC_FUNCS
         public void UnloadCurrentScene()
@@ -187,11 +190,19 @@ namespace CruZ.Editor.Controls
             }
         }
 
+        private void Input_KeyStateChanged(IInputInfo info)
+        {
+            if( info.Keyboard.IsKeyDown(XNA.Input.Keys.LeftControl) &&
+                info.IsKeyJustDown(XNA.Input.Keys.Z))
+            {
+                Debug.WriteLine("Undo");
+            }
+        }
+        
         private void UI_MouseClick(UIInfo info)
         {
             FindEntityToSelect(info);
         }
-
         #endregion
 
         #region PRIVATE

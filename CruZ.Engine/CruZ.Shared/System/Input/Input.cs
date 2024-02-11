@@ -68,6 +68,9 @@ namespace CruZ.Systems
             if (_mouseMoving) MouseMoved?.Invoke(this);
             if (_mouseScrolling) MouseScrolled?.Invoke(this);
             if (_mouseStateChanges) MouseStateChanged?.Invoke(this);
+
+            if(_preKeyboard.GetHashCode() != Keyboard.GetHashCode())
+                KeyStateChanged?.Invoke(this);
         }
 
         private bool DoesMouseStateChange()
@@ -148,7 +151,6 @@ namespace CruZ.Systems
         public KeyboardState PreKeyboard => _preKeyboard;
         public MouseState CurMouse => _curMouse;
         public MouseState PreMouse => _preMouse;
-        
     }
 
     public enum MouseKey

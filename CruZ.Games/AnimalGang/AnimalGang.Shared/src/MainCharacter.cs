@@ -27,17 +27,17 @@ namespace CruZ.Games.AnimalGang
         protected override void OnUpdate(GameTime gameTime)
         {
             #region AttackLogics
-            if (Input.Info.Keyboard.IsKeyDown(Keys.Space))
-            {
-                _attackTimer = 0;
-                _animation.SelectPlayer("player-sword-attack").Play("attack");
-            }
+            //if (Input.Info.Keyboard.IsKeyDown(Keys.Space))
+            //{
+            //    _attackTimer = 0;
+            //    _animation.SelectPlayer("player-sword-attack").Play("attack");
+            //}
 
-            if (_attackTimer < _attackDuration)
-            {
-                _attackTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
-                return;
-            } 
+            //if (_attackTimer < _attackDuration)
+            //{
+            //    _attackTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
+            //    return;
+            //} 
             #endregion
 
             if(_remainDis >= 0)

@@ -14,10 +14,19 @@ namespace CruZ.Editor.Controls
         {
             if(key == "LoadedScene")
             {
-                var lastScenePath = binReader.ReadString();
+                var lastSceneFile = binReader.ReadString();
 
-                if (!string.IsNullOrEmpty(lastScenePath))
-                    LoadSceneFromFile(lastScenePath);
+                if (!string.IsNullOrEmpty(lastSceneFile))
+                {
+                    if(Path.GetExtension(lastSceneFile) == "scene")
+                    {
+                        LoadSceneFromFile(lastSceneFile);
+                    }
+                    else
+                    {
+                        LoadRuntimeScene(lastSceneFile);
+                    }
+                }
             }
 
             if(key == "Camera")
