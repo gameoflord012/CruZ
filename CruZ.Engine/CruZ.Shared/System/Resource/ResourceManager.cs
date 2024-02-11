@@ -44,6 +44,7 @@ namespace CruZ.Resource
             ResourceImporter.DoBuild();
             ResourceImporter.ExportResult();
             
+            Logging.SetMsg(importerObject.BuildLog, "ResourceImporter", true);
             _GetResourcePathFromGuid = importerObject.BuildResult;
         }
 
@@ -59,7 +60,8 @@ namespace CruZ.Resource
                 }
                 catch
                 {
-                    Logging.PushMsg("Failed to load resource \"{0}\", new one will be created", resourcePath);
+                    Logging.PushMsg(
+                        $"Failed to load resource \"{resourcePath}\", new one will be created", "ResourceManager");
                 }
             }
 
@@ -213,7 +215,7 @@ namespace CruZ.Resource
         private static Dictionary<string, string> _GetResourcePathFromGuid = [];
 
         private static string _resourceRoot = "res";
-        private static string ContentRoot => $"{_resourceRoot}\\Content\\bin";
+        private static string ContentRoot => $"{_resourceRoot}\\.content\\bin";
 
     }
 }

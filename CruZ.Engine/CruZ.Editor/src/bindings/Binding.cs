@@ -13,8 +13,8 @@
 //            _bindingTarget = bindingTarget;
 //            _propertyType = typeof(T);
 
-//            _getter = Helper.GetPropertyGetter(_bindingTarget, propertyName, _propertyType);
-//            _setter = Helper.GetPropertySetter(_bindingTarget, propertyName, _propertyType);
+//            _getter = FileHelper.GetPropertyGetter(_bindingTarget, propertyName, _propertyType);
+//            _setter = FileHelper.GetPropertySetter(_bindingTarget, propertyName, _propertyType);
 //        }
 
 //        public T Get()

@@ -28,6 +28,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)System\Entity\TransformEntity.Disposable.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System\Resource\ResourceInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System\Scene\GameScene.Disposable.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utils\Helper.cs" />
     <Compile Include="..\CruZ.Shared\System\Scene\RuntimeSceneMethodAttribute.cs" />
     <Compile Include="..\CruZ.Shared\System\Scene\RuntimeSceneClassAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System\Tile\TileComponent.cs" />
@@ -38,8 +39,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)UI\UIControl.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)UI\UIManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Gobal\GlobalUsing.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Utils\ExtensionFunctions.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Utils\Helper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utils\GameTimeHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utils\FileHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System\Resource\ResourceManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System\EntityScriptSystem.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System\Entity\ECS.cs" />
@@ -51,7 +52,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)System\Serialization\TextureAtlasJsonConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Types\Vector3.cs" />
     <Compile Include="..\CruZ.Shared\System\Scene\SceneManager.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Utils\URI.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System\Entity\EntityEventComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\FunMath.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System\Entity\Interface\IComponentCallback.cs" />
@@ -61,9 +61,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)System\Entity\TransformEntity.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System\Camera\Camera.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Core\GameCore.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Utils\SceneManager.cs" />
     <Compile Include="..\CruZ.Shared\System\EntityEventSystem.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)System\Logging.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utils\Logging.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Types\IRunnable.cs" />
     <Compile Include="..\CruZ.Shared\Core\GameApplication.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System\Input\Input.cs" />

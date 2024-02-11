@@ -21,7 +21,7 @@ namespace CruZ.Serialization
         public void SerializeToFile(object o, string filePath)
         {
             var json = JsonConvert.SerializeObject(o, _settings);
-            using (var writer = Helper.CreateOrOpenFilePath(filePath, false))
+            using (var writer = FileHelper.OpenWrite(filePath, false))
             {
                 writer.WriteLine(json);
                 writer.Flush();

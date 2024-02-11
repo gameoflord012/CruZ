@@ -4,9 +4,11 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel.Design;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Text;
 
 namespace CruZ.Tool.ResourceImporter
 {
@@ -21,6 +23,8 @@ namespace CruZ.Tool.ResourceImporter
             Dictionary<string, string> getPathFromGuid = new Dictionary<string, string>();
 
             RemoveExcessDotImport();
+
+            BuildContent();
 
             foreach (var import in GetImportItems())
             {
@@ -42,7 +46,7 @@ namespace CruZ.Tool.ResourceImporter
                 else
                 {
                     File.Create(dotImport).Close();
-                    Debug.WriteLine(string.Format("Created new file {0}", dotImport));
+                    //Debug.WriteLine(string.Format("Created new file {0}", dotImport));
                 }
 
                 using (var writer = new StreamWriter(dotImport, false))
@@ -53,11 +57,71 @@ namespace CruZ.Tool.ResourceImporter
                     writer.WriteLine(guid);
                     writer.Flush();
 
-                    Debug.WriteLine(string.Format("Guid for {0} generated", dotImport));
+                    //Debug.WriteLine(string.Format("Guid for {0} generated", dotImport));
                 }
             }
 
             _ImporterObject.BuildResult = getPathFromGuid;
+        }
+
+        private static void BuildContent()
+        {
+            string cmdArgs =
+@"
+/workingDir:./..
+/outputDir:bin
+/intermediateDir:bin/obj
+/platform:Windows
+
+/incremental
+";
+            foreach (var import in GetImportItems())
+            {
+                cmdArgs += $"/build:{import}\n";
+            }
+
+            var contentDir = Path.Combine(ResourceRoot, ".content");
+
+            var tempFile = Path.Combine(contentDir, "temp\\buildcontent.temp");
+            var tempDir = Path.GetDirectoryName(tempFile);
+
+            if (!Directory.Exists(tempDir))
+                Directory.CreateDirectory(tempDir);
+
+            File.WriteAllText(tempFile, cmdArgs, Encoding.UTF8);
+
+            StartBuildProcess(tempFile);
+
+            var preExistMgcbFile = Path.Combine(contentDir, "Content.mgcb");
+            if(File.Exists(preExistMgcbFile)) 
+                StartBuildProcess(preExistMgcbFile);
+        }
+
+        private static void StartBuildProcess(string mgcbFile)
+        {
+            var cmd = new Process()
+            {
+                StartInfo = new ProcessStartInfo()
+                {
+                    FileName = "dotnet.exe",
+                    WorkingDirectory = ResourceRoot,
+                    Arguments = $"mgcb /@:{mgcbFile}",
+                    CreateNoWindow = true,
+                    WindowStyle = ProcessWindowStyle.Hidden,
+                    UseShellExecute = false,
+                    RedirectStandardOutput = true,
+                }
+            };
+
+            //cmd.OutputDataReceived += (sender, e) => Log(e.Data);
+            //cmd.BeginOutputReadLine();
+
+            cmd.Start();
+            _ImporterObject.BuildLog += 
+                cmd.StandardOutput.ReadToEnd() + Environment.NewLine;
+            cmd.WaitForExit();
+
+            cmd.Dispose();
         }
 
         public static string ReadResourceGuid(string resourcePath)
@@ -93,7 +157,7 @@ namespace CruZ.Tool.ResourceImporter
         {
             var importerObject = new ResourceImporterObject();
 
-            Debug.WriteLine("Reading " + Path.GetFullPath(filePath));
+            //Debug.WriteLine("Reading " + Path.GetFullPath(filePath));
 
             using (StreamReader reader = new StreamReader(filePath))
             {
@@ -102,7 +166,7 @@ namespace CruZ.Tool.ResourceImporter
 
                 if (deserialize == null)
                 {
-                    Debug.WriteLine("Failed to read json file, default settings is used");
+                    //Debug.WriteLine("Failed to read json file, default settings is used");
                 }
                 else
                 {
@@ -114,6 +178,10 @@ namespace CruZ.Tool.ResourceImporter
             return importerObject;
         }
 
+        /// <summary>
+        /// Get files with match import pattern
+        /// </summary>
+        /// <returns>Full path</returns>
         private static string[] GetImportItems()
         {
             HashSet<string> importItems = new HashSet<string>();
@@ -123,7 +191,7 @@ namespace CruZ.Tool.ResourceImporter
                 foreach (var match in Directory.EnumerateFiles(ResourceRoot, pattern, SearchOption.AllDirectories))
                 {
                     importItems.Add(match);
-                    Debug.WriteLine("Matches found: " + match);
+                    //Debug.WriteLine("Matches found: " + match);
                 }
             }
 
@@ -138,7 +206,7 @@ namespace CruZ.Tool.ResourceImporter
                 if (!File.Exists(import))
                 {
                     File.Delete(dotImport);
-                    Debug.WriteLine("Removed " + dotImport);
+                    //Debug.WriteLine("Removed " + dotImport);
                 }
             }
         }
@@ -176,5 +244,10 @@ namespace CruZ.Tool.ResourceImporter
         }
 
         static readonly JsonSerializerSettings _SerializerSettings = new JsonSerializerSettings { Formatting = Formatting.Indented };
+    
+        private static void Log(string msg)
+        {
+            Debug.WriteLine("<--ResourceImporter--> " + msg);
+        }
     }
 }

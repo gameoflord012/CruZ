@@ -21,7 +21,7 @@
 //        //public static void SerializeToFile(object o, string filePath)
 //        //{
 //        //    var json = JsonConvert.SerializeObject(o, _settings);
-//        //    using (var writer = Helper.CreateOrOpenFilePath(filePath, false))
+//        //    using (var writer = FileHelper.OpenFile(filePath, false))
 //        //    {
 //        //        writer.WriteLine(json);
 //        //        writer.Flush();

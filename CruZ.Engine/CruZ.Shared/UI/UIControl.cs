@@ -41,9 +41,12 @@ namespace CruZ.UI
 
         public void RemoveChild(UIControl child)
         {
-            _childs.Remove(this);
+            if(!_childs.Remove(child))
+            {
+                throw new ArgumentException($"Fail to remove {child} ui control from {this}");
+            }
 
-            child._parent = this;
+            child._parent = null;
             child.OnParentChanged(null);
         }
 

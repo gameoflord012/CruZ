@@ -98,11 +98,11 @@ namespace CruZ.Components
 
         public AnimationPlayer SelectPlayer(string key)
         {
-            if(_currentAnimationPlayer == _getAnimationPlayer[key]) 
+            if(_currentAnimationPlayer == GetPlayer(key)) 
                 return _currentAnimationPlayer;
 
             _currentAnimationPlayer?.UnLoad();
-            _currentAnimationPlayer = _getAnimationPlayer[key];
+            _currentAnimationPlayer = GetPlayer(key);
             _currentAnimationPlayer.Load(_sprite);
 
             return _currentAnimationPlayer;
@@ -112,6 +112,14 @@ namespace CruZ.Components
         {
             _e = entity;
             _e.OnComponentAdded += Entity_OnComponentAdded;
+        }
+
+        private AnimationPlayer GetPlayer(string key)
+        {
+            if(!_getAnimationPlayer.ContainsKey(key)) 
+                throw new ArgumentException($"No animation with key {key}");
+
+            return _getAnimationPlayer[key];
         }
 
         private void Entity_OnComponentAdded(object? sender, IComponent e)

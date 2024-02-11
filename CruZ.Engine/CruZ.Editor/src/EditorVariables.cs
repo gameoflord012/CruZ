@@ -11,7 +11,7 @@ namespace CruZ.Editor
 {
     static class EditorVariables
     {
-        public static readonly XNA.Color UNIT_BOARD_COLOR = XNA.Color.AliceBlue;
+        public static readonly XNA.Color UNIT_BOARD_COLOR = XNA.Color.DimGray;
         public static readonly int TARGET_FPS = 60;
         public static readonly float MAX_WORLD_DISTANCE = 10000;
         public static readonly float CENTER_CIRCLE_SIZE = 4;

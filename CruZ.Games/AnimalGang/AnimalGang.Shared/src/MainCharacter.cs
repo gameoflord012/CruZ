@@ -60,19 +60,19 @@ namespace CruZ.Games.AnimalGang
             }
 
             #region AnimationLogics
-            if (_moveDir.SqrMagnitude() > 0.1f)
-            {
-                _animation.SelectPlayer("player-normal").Play("walk");
+            //if (_moveDir.SqrMagnitude() > 0.1f)
+            //{
+            //    _animation.SelectPlayer("player-normal").Play("walk");
 
-                if (MathF.Abs(_moveDir.X) > 0.1)
-                {
-                    _sprite.Flip = _moveDir.X < 0;
-                }
-            }
-            else
-            {
-                _animation.SelectPlayer("player-sword-idle").Play("idle");
-            } 
+            //    if (MathF.Abs(_moveDir.X) > 0.1)
+            //    {
+            //        _sprite.Flip = _moveDir.X < 0;
+            //    }
+            //}
+            //else
+            //{
+            //    _animation.SelectPlayer("player-sword-idle").Play("idle");
+            //} 
             #endregion
         }
 

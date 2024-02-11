@@ -2,7 +2,7 @@
 
 namespace CruZ.Utility
 {
-    public static class ExtensionFunctions
+    public static class GameTimeHelper
     {
         public static float TotalSeconds(this GameTime gameTime)
         {

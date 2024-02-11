@@ -5,9 +5,6 @@
   ],
   "build-result": {
     "085974f4-213c-4302-9b1a-fa7f98eb7f2f": "imgs\\homelander.jpg",
-    "443c3b7f-9d5a-48dc-95ba-05fac8085591": "Content\\home-ground-behind.png",
-    "f31fb03d-39aa-4533-a2ae-5893fd97218a": "Content\\home-object-font.png",
-    "8c687dad-37d7-4506-bb67-85dea39920f2": "Content\\home-object-mid.png",
     "a688e6a0-d7f0-4635-b5a3-caeb6cf57d91": "imgs\\b42a6ef64cee0954e2df21b22a1d248f.png",
     "5f34ad42-034e-43c5-a62b-c1ac0314c7af": "imgs\\image.png",
     "864cf6ce-ab99-4ed7-b20f-33979cfda686": "imgs\\player-sword-attack.png",
@@ -17,7 +14,7 @@
     "7348f25c-4486-4235-bfce-f0f9e632d05e": "tiles\\dungeon-floor.png",
     "2b3ac511-8f30-4a70-ae64-3c35895edfeb": "tiles\\dungeon-wall.png",
     "ee16ed9f-32f4-4b70-b904-08a9d1e803b8": "tiles\\garden.png",
-    "95f8ffad-4a70-4ecd-b47b-cf9fc7240f20": "anims\\drark-ninja\\dark-ninja.png",
+    "95f8ffad-4a70-4ecd-b47b-cf9fc7240f20": "anims\\dark-ninja\\dark-ninja.png",
     "36135537-de24-4f72-afef-27dd35f4d6ea": "imgs\\NinjaAdventure\\Example 5 ( Old Version).png",
     "0ca1153d-23e2-4679-86e7-42f425777327": "imgs\\NinjaAdventure\\MusicCover.png",
     "43bf770a-1ab0-4084-8cef-98ccb7984812": "imgs\\NinjaAdventure\\Palette.png",
