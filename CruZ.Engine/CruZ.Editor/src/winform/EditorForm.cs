@@ -25,11 +25,16 @@ namespace CruZ.Editor
             InitializeComponent();
             _editorApp = new();
 
-            _editorApp.OnSelectedEntityChanged += EditorApp_SelectChange;
-            //TODO: _editorApp.SceneLoadEvent += WorldViewControl_SceneLoadEvent;
+            _editorApp.SelectEntityChanged += EditorApp_SelectEntity;
+            _editorApp.LoadedSceneChanged += EditorApp_LoadNewScene;
 
             entities_ComboBox.SelectedIndexChanged += Entities_ComboBox_SelectedIndexChanged;
             entities_ComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
+        }
+
+        public void Init()
+        {
+            _editorApp.Init();
         }
 
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
@@ -49,26 +54,29 @@ namespace CruZ.Editor
             return base.ProcessCmdKey(ref msg, keyData);
         }
 
-        private void Entities_ComboBox_SelectedIndexChanged(object? sender, EventArgs e)
-        {
-            //TODO: _editorApp.SelectEntity((TransformEntity)entities_ComboBox.SelectedItem);
-        }
-
-        private void WorldViewControl_SceneLoadEvent(object? sender, GameScene e)
+        private void EditorApp_LoadNewScene(GameScene? scene)
         {
             entities_ComboBox.Items.Clear();
 
-            for (int i = 0; i < e.Entities.Count(); i++)
+            if(scene == null) return;
+
+            for (int i = 0; i < scene.Entities.Count(); i++)
             {
-                entities_ComboBox.Items.Add(e.Entities[i]);
+                entities_ComboBox.Items.Add(scene.Entities[i]);
             }
         }
 
-        private void EditorApp_SelectChange(Components.TransformEntity? e)
+        private void EditorApp_SelectEntity(Components.TransformEntity? e)
         {
             Inspector.DisplayEntity(e);
             //Trace.Assert(entities_ComboBox.Items.Contains(e));
             //entities_ComboBox.SelectedItem = e;
+        }
+
+        #region Form_Events_Handler
+        private void Entities_ComboBox_SelectedIndexChanged(object? sender, EventArgs e)
+        {
+            //TODO: _editorApp.SelectEntity((TransformEntity)entities_ComboBox.SelectedItem);
         }
 
         private void OpenScene_Clicked(object sender, EventArgs e)
@@ -103,7 +111,7 @@ namespace CruZ.Editor
 
         private void SaveAsScene_Clicked(object sender, EventArgs e)
         {
-            if(_editorApp.CurrentGameScene == null)
+            if (_editorApp.CurrentGameScene == null)
             {
                 DialogHelper.ShowInfoDialog("Nothing to save.");
                 return;
@@ -114,7 +122,7 @@ namespace CruZ.Editor
 
             ResourceManager.CreateResource(
                 savePath,
-                _editorApp.CurrentGameScene, 
+                _editorApp.CurrentGameScene,
                 true);
         }
 
@@ -126,7 +134,7 @@ namespace CruZ.Editor
             using var dialog = new LoadRuntimeSceneForm();
             dialog.ShowDialog();
 
-            if(dialog.DialogResult != DialogResult.OK) return;
+            if (dialog.DialogResult != DialogResult.OK) return;
 
             var sceneName = dialog.ReturnSceneName;
 
@@ -147,10 +155,12 @@ namespace CruZ.Editor
             //CacheService.CallWriteCaches();
             FormClosing?.Invoke();
             _editorApp.ExitApp();
-        }
+        } 
+        #endregion
 
         EditorApplication _editorApp;
-
+        
+        #region Static
         public static PropertyGrid GetPropertyGrid()
         {
             return _instance.inspector_PropertyGrid;
@@ -158,12 +168,15 @@ namespace CruZ.Editor
 
         public static void Run()
         {
-            if(_instance != null) throw new InvalidOperationException("Already Ran");
+            if (_instance != null) throw new InvalidOperationException("Already Ran");
 
             _instance = new EditorForm();
+            _instance.Init();
+
             Application.Run(_instance);
         }
 
-        static EditorForm? _instance;
+        static EditorForm? _instance; 
+        #endregion
     }
 }

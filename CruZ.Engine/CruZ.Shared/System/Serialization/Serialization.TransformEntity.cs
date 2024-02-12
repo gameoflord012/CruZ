@@ -1,5 +1,4 @@
-﻿using CruZ.Exception;
-using CruZ.Serialization;
+﻿using CruZ.Serialization;
 using CruZ.Systems;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -71,6 +70,7 @@ namespace CruZ.Components
             }
             writer.WriteEnd();
         }
+
 
         ISerializable ISerializable.CreateDefault()
         {

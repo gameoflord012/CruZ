@@ -1,4 +1,5 @@
 ﻿using CruZ.Components;
+using CruZ.Editor.Systems;
 using CruZ.Systems;
 using CruZ.UI;
 using CruZ.Utility;
@@ -10,7 +11,7 @@ using System.Numerics;
 
 namespace CruZ.Editor.UI
 {
-    public class EntityControl : UIControl
+    public class EntityControl : UIControl, ICanUndo
     {
         //public event Action<EntityControl>? Selecting;
 
@@ -135,6 +136,21 @@ namespace CruZ.Editor.UI
         {
             var ePoint = info.MousePos().Add(_dragCenterOffset);
             _e.Transform.Position = Camera.Main.PointToCoordinate(ePoint);
+        }
+
+        public object CaptureState()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void RestoreState(object state)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool StatesIdentical(object stateA, object stateB)
+        {
+            throw new NotImplementedException();
         }
         #endregion
 

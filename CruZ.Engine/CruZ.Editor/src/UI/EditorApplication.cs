@@ -18,8 +18,8 @@ namespace CruZ.Editor.Controls
 {
     public partial class EditorApplication
     {
-        public event EventHandler<GameScene> SceneLoadEvent;
-        public event Action<TransformEntity?> OnSelectedEntityChanged;
+        public event Action<GameScene?> LoadedSceneChanged;
+        public event Action<TransformEntity?> SelectEntityChanged;
 
         public GameScene? CurrentGameScene => _currentScene;
 
@@ -31,19 +31,22 @@ namespace CruZ.Editor.Controls
             Input.KeyStateChanged   += Input_KeyStateChanged;
 
             EditorForm.FormClosing += EditorForm_Closing;
-
             UIManager.MouseClick += UI_MouseClick;
-
-            CacheService.Register(this);
-            CacheRead?.Invoke(this, "LoadedScene");
 
             _thisThreadId = Thread.CurrentThread.ManagedThreadId;
         }
 
+        public void Init()
+        {
+            CacheService.Register(this);
+            CacheRead?.Invoke(this, "LoadedScene");
+        }
 
         #region PUBLIC_FUNCS
         public void UnloadCurrentScene()
         {
+            SelectEntity(null);
+
             if (_currentScene == null) return;
 
             if(_currentScene.ResourceInfo != null && !_currentScene.ResourceInfo.IsRuntime)
@@ -51,6 +54,8 @@ namespace CruZ.Editor.Controls
 
             _currentScene.Dispose();
             _currentScene = null;
+
+            LoadedSceneChanged?.Invoke(null);
         }
 
         public void SelectEntity(TransformEntity? e)
@@ -73,7 +78,7 @@ namespace CruZ.Editor.Controls
 
             Logging.SetMsg(e != null ? e.ToString() : "");
 
-            OnSelectedEntityChanged?.Invoke(e);
+            SelectEntityChanged?.Invoke(e);
         }
 
         public void LoadSceneFromFile(string file)
@@ -324,7 +329,7 @@ namespace CruZ.Editor.Controls
 
             _currentScene = scene;
             _currentScene.SetActive(true);
-            SceneLoadEvent?.Invoke(this, _currentScene);
+            LoadedSceneChanged?.Invoke(_currentScene);
 
             Logging.SetMsg(_currentScene.ResourceInfo.ResourceName, "Scene");
 

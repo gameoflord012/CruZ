@@ -43,8 +43,15 @@ namespace CruZ.Editor
             menuStrip = new MenuStrip();
             entities_Text = new Label();
             inspector_Panel = new Panel();
+            tabControl1 = new TabControl();
+            inspectorTab = new TabPage();
+            sceneTab = new TabPage();
+            sceneTree = new TreeView();
             menuStrip.SuspendLayout();
             inspector_Panel.SuspendLayout();
+            tabControl1.SuspendLayout();
+            inspectorTab.SuspendLayout();
+            sceneTab.SuspendLayout();
             SuspendLayout();
             // 
             // entities_ComboBox
@@ -53,7 +60,7 @@ namespace CruZ.Editor
             entities_ComboBox.FormattingEnabled = true;
             entities_ComboBox.Location = new Point(0, 17);
             entities_ComboBox.Name = "entities_ComboBox";
-            entities_ComboBox.Size = new Size(700, 23);
+            entities_ComboBox.Size = new Size(686, 23);
             entities_ComboBox.TabIndex = 1;
             // 
             // inspector_PropertyGrid
@@ -61,7 +68,7 @@ namespace CruZ.Editor
             inspector_PropertyGrid.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             inspector_PropertyGrid.Location = new Point(3, 53);
             inspector_PropertyGrid.Name = "inspector_PropertyGrid";
-            inspector_PropertyGrid.Size = new Size(697, 261);
+            inspector_PropertyGrid.Size = new Size(683, 227);
             inspector_PropertyGrid.TabIndex = 0;
             // 
             // file_Menu
@@ -124,7 +131,7 @@ namespace CruZ.Editor
             entities_Text.Dock = DockStyle.Top;
             entities_Text.Location = new Point(0, 0);
             entities_Text.Name = "entities_Text";
-            entities_Text.Size = new Size(700, 17);
+            entities_Text.Size = new Size(686, 17);
             entities_Text.TabIndex = 2;
             entities_Text.Text = "Entities";
             // 
@@ -134,17 +141,58 @@ namespace CruZ.Editor
             inspector_Panel.Controls.Add(entities_ComboBox);
             inspector_Panel.Controls.Add(entities_Text);
             inspector_Panel.Dock = DockStyle.Fill;
-            inspector_Panel.Location = new Point(0, 24);
+            inspector_Panel.Location = new Point(3, 3);
             inspector_Panel.Name = "inspector_Panel";
-            inspector_Panel.Size = new Size(700, 314);
+            inspector_Panel.Size = new Size(686, 280);
             inspector_Panel.TabIndex = 3;
+            // 
+            // tabControl1
+            // 
+            tabControl1.Controls.Add(inspectorTab);
+            tabControl1.Controls.Add(sceneTab);
+            tabControl1.Dock = DockStyle.Fill;
+            tabControl1.Location = new Point(0, 24);
+            tabControl1.Name = "tabControl1";
+            tabControl1.SelectedIndex = 0;
+            tabControl1.Size = new Size(700, 314);
+            tabControl1.TabIndex = 4;
+            // 
+            // inspectorTab
+            // 
+            inspectorTab.Controls.Add(inspector_Panel);
+            inspectorTab.Location = new Point(4, 24);
+            inspectorTab.Name = "inspectorTab";
+            inspectorTab.Padding = new Padding(3);
+            inspectorTab.Size = new Size(692, 286);
+            inspectorTab.TabIndex = 0;
+            inspectorTab.Text = "Inspector";
+            inspectorTab.UseVisualStyleBackColor = true;
+            // 
+            // sceneTab
+            // 
+            sceneTab.Controls.Add(sceneTree);
+            sceneTab.Location = new Point(4, 24);
+            sceneTab.Name = "sceneTab";
+            sceneTab.Padding = new Padding(3);
+            sceneTab.Size = new Size(692, 286);
+            sceneTab.TabIndex = 1;
+            sceneTab.Text = "Scene Hierarchy";
+            sceneTab.UseVisualStyleBackColor = true;
+            // 
+            // sceneTree
+            // 
+            sceneTree.Dock = DockStyle.Fill;
+            sceneTree.Location = new Point(3, 3);
+            sceneTree.Name = "sceneTree";
+            sceneTree.Size = new Size(686, 280);
+            sceneTree.TabIndex = 0;
             // 
             // EditorForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(700, 338);
-            Controls.Add(inspector_Panel);
+            Controls.Add(tabControl1);
             Controls.Add(menuStrip);
             MainMenuStrip = menuStrip;
             Margin = new Padding(3, 2, 3, 2);
@@ -153,6 +201,9 @@ namespace CruZ.Editor
             menuStrip.ResumeLayout(false);
             menuStrip.PerformLayout();
             inspector_Panel.ResumeLayout(false);
+            tabControl1.ResumeLayout(false);
+            inspectorTab.ResumeLayout(false);
+            sceneTab.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
         }
@@ -186,5 +237,9 @@ namespace CruZ.Editor
         private MenuStrip menuStrip;
         private Label entities_Text;
         private Panel inspector_Panel;
+        private TabControl tabControl1;
+        private TabPage inspectorTab;
+        private TabPage sceneTab;
+        private TreeView sceneTree;
     }
 }
