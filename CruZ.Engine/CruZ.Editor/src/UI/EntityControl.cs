@@ -67,7 +67,7 @@ namespace CruZ.Editor.UI
             BackgroundColor = _draggableToggle ? _draggableBackgroundCol : _initialBackgroundCol;
         }
 
-        #region SPRITE_EVENT_HANDLERS
+        #region Sprites_Events
         private void Sprite_DrawBegin()
         {
             _boundsHasValue = false;
