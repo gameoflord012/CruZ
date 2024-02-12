@@ -58,12 +58,14 @@ namespace CruZ.Editor
         private void EditorApp_LoadNewScene(GameScene? scene)
         {
             entities_ComboBox.Items.Clear();
+            sceneTree.Nodes.Clear();
 
             if(scene == null) return;
 
-            for (int i = 0; i < scene.Entities.Count(); i++)
+            foreach (var e in scene.Entities)
             {
-                entities_ComboBox.Items.Add(scene.Entities[i]);
+                entities_ComboBox.Items.Add(e);
+                sceneTree.Nodes.Add(e.ToString());
             }
         }
 
@@ -154,6 +156,9 @@ namespace CruZ.Editor
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
             //CacheService.CallWriteCaches();
+            _editorApp.SelectEntityChanged -= EditorApp_SelectEntity;
+            _editorApp.LoadedSceneChanged -= EditorApp_LoadNewScene;
+
             FormClosing?.Invoke();
             _editorApp.ExitAppAsync();
         } 

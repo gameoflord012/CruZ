@@ -43,32 +43,39 @@ namespace CruZ.Editor
             menuStrip = new MenuStrip();
             entities_Text = new Label();
             inspector_Panel = new Panel();
-            tabControl1 = new TabControl();
             inspectorTab = new TabPage();
             sceneTab = new TabPage();
             sceneTree = new TreeView();
+            splitContainer1 = new SplitContainer();
+            tabControlTop = new TabControl();
+            tabControlBottom = new TabControl();
             menuStrip.SuspendLayout();
             inspector_Panel.SuspendLayout();
-            tabControl1.SuspendLayout();
             inspectorTab.SuspendLayout();
             sceneTab.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
+            splitContainer1.Panel1.SuspendLayout();
+            splitContainer1.Panel2.SuspendLayout();
+            splitContainer1.SuspendLayout();
+            tabControlTop.SuspendLayout();
+            tabControlBottom.SuspendLayout();
             SuspendLayout();
             // 
             // entities_ComboBox
             // 
-            entities_ComboBox.Dock = DockStyle.Fill;
+            entities_ComboBox.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             entities_ComboBox.FormattingEnabled = true;
             entities_ComboBox.Location = new Point(0, 17);
             entities_ComboBox.Name = "entities_ComboBox";
-            entities_ComboBox.Size = new Size(686, 23);
+            entities_ComboBox.Size = new Size(363, 23);
             entities_ComboBox.TabIndex = 1;
             // 
             // inspector_PropertyGrid
             // 
             inspector_PropertyGrid.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            inspector_PropertyGrid.Location = new Point(3, 53);
+            inspector_PropertyGrid.Location = new Point(0, 46);
             inspector_PropertyGrid.Name = "inspector_PropertyGrid";
-            inspector_PropertyGrid.Size = new Size(683, 227);
+            inspector_PropertyGrid.Size = new Size(363, 183);
             inspector_PropertyGrid.TabIndex = 0;
             // 
             // file_Menu
@@ -122,40 +129,28 @@ namespace CruZ.Editor
             menuStrip.Location = new Point(0, 0);
             menuStrip.Name = "menuStrip";
             menuStrip.Padding = new Padding(5, 2, 0, 2);
-            menuStrip.Size = new Size(700, 24);
+            menuStrip.Size = new Size(377, 24);
             menuStrip.TabIndex = 1;
             menuStrip.Text = "menuStrip1";
             // 
             // entities_Text
             // 
-            entities_Text.Dock = DockStyle.Top;
             entities_Text.Location = new Point(0, 0);
             entities_Text.Name = "entities_Text";
-            entities_Text.Size = new Size(686, 17);
+            entities_Text.Size = new Size(334, 17);
             entities_Text.TabIndex = 2;
             entities_Text.Text = "Entities";
             // 
             // inspector_Panel
             // 
-            inspector_Panel.Controls.Add(inspector_PropertyGrid);
             inspector_Panel.Controls.Add(entities_ComboBox);
             inspector_Panel.Controls.Add(entities_Text);
+            inspector_Panel.Controls.Add(inspector_PropertyGrid);
             inspector_Panel.Dock = DockStyle.Fill;
             inspector_Panel.Location = new Point(3, 3);
             inspector_Panel.Name = "inspector_Panel";
-            inspector_Panel.Size = new Size(686, 280);
+            inspector_Panel.Size = new Size(363, 222);
             inspector_Panel.TabIndex = 3;
-            // 
-            // tabControl1
-            // 
-            tabControl1.Controls.Add(inspectorTab);
-            tabControl1.Controls.Add(sceneTab);
-            tabControl1.Dock = DockStyle.Fill;
-            tabControl1.Location = new Point(0, 24);
-            tabControl1.Name = "tabControl1";
-            tabControl1.SelectedIndex = 0;
-            tabControl1.Size = new Size(700, 314);
-            tabControl1.TabIndex = 4;
             // 
             // inspectorTab
             // 
@@ -163,7 +158,7 @@ namespace CruZ.Editor
             inspectorTab.Location = new Point(4, 24);
             inspectorTab.Name = "inspectorTab";
             inspectorTab.Padding = new Padding(3);
-            inspectorTab.Size = new Size(692, 286);
+            inspectorTab.Size = new Size(369, 228);
             inspectorTab.TabIndex = 0;
             inspectorTab.Text = "Inspector";
             inspectorTab.UseVisualStyleBackColor = true;
@@ -174,7 +169,7 @@ namespace CruZ.Editor
             sceneTab.Location = new Point(4, 24);
             sceneTab.Name = "sceneTab";
             sceneTab.Padding = new Padding(3);
-            sceneTab.Size = new Size(692, 286);
+            sceneTab.Size = new Size(369, 70);
             sceneTab.TabIndex = 1;
             sceneTab.Text = "Scene Hierarchy";
             sceneTab.UseVisualStyleBackColor = true;
@@ -184,16 +179,54 @@ namespace CruZ.Editor
             sceneTree.Dock = DockStyle.Fill;
             sceneTree.Location = new Point(3, 3);
             sceneTree.Name = "sceneTree";
-            sceneTree.Size = new Size(686, 280);
+            sceneTree.Size = new Size(363, 64);
             sceneTree.TabIndex = 0;
+            // 
+            // splitContainer1
+            // 
+            splitContainer1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            splitContainer1.Location = new Point(0, 27);
+            splitContainer1.Name = "splitContainer1";
+            splitContainer1.Orientation = Orientation.Horizontal;
+            // 
+            // splitContainer1.Panel1
+            // 
+            splitContainer1.Panel1.Controls.Add(tabControlTop);
+            // 
+            // splitContainer1.Panel2
+            // 
+            splitContainer1.Panel2.Controls.Add(tabControlBottom);
+            splitContainer1.Size = new Size(377, 358);
+            splitContainer1.SplitterDistance = 98;
+            splitContainer1.TabIndex = 5;
+            // 
+            // tabControlTop
+            // 
+            tabControlTop.Controls.Add(sceneTab);
+            tabControlTop.Dock = DockStyle.Fill;
+            tabControlTop.Location = new Point(0, 0);
+            tabControlTop.Name = "tabControlTop";
+            tabControlTop.SelectedIndex = 0;
+            tabControlTop.Size = new Size(377, 98);
+            tabControlTop.TabIndex = 5;
+            // 
+            // tabControlBottom
+            // 
+            tabControlBottom.Controls.Add(inspectorTab);
+            tabControlBottom.Dock = DockStyle.Fill;
+            tabControlBottom.Location = new Point(0, 0);
+            tabControlBottom.Name = "tabControlBottom";
+            tabControlBottom.SelectedIndex = 0;
+            tabControlBottom.Size = new Size(377, 256);
+            tabControlBottom.TabIndex = 6;
             // 
             // EditorForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(700, 338);
-            Controls.Add(tabControl1);
+            ClientSize = new Size(377, 385);
             Controls.Add(menuStrip);
+            Controls.Add(splitContainer1);
             MainMenuStrip = menuStrip;
             Margin = new Padding(3, 2, 3, 2);
             Name = "EditorForm";
@@ -201,9 +234,14 @@ namespace CruZ.Editor
             menuStrip.ResumeLayout(false);
             menuStrip.PerformLayout();
             inspector_Panel.ResumeLayout(false);
-            tabControl1.ResumeLayout(false);
             inspectorTab.ResumeLayout(false);
             sceneTab.ResumeLayout(false);
+            splitContainer1.Panel1.ResumeLayout(false);
+            splitContainer1.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)splitContainer1).EndInit();
+            splitContainer1.ResumeLayout(false);
+            tabControlTop.ResumeLayout(false);
+            tabControlBottom.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
         }
@@ -237,9 +275,11 @@ namespace CruZ.Editor
         private MenuStrip menuStrip;
         private Label entities_Text;
         private Panel inspector_Panel;
-        private TabControl tabControl1;
         private TabPage inspectorTab;
         private TabPage sceneTab;
         private TreeView sceneTree;
+        private SplitContainer splitContainer1;
+        private TabControl tabControlTop;
+        private TabControl tabControlBottom;
     }
 }
