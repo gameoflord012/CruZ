@@ -1,4 +1,6 @@
-﻿using CruZ.Editor.Controls;
+﻿using Assimp;
+using CruZ.Components;
+using CruZ.Editor.Controls;
 using CruZ.Editor.Systems;
 using CruZ.Exception;
 using CruZ.Resource;
@@ -29,7 +31,9 @@ namespace CruZ.Editor
             _editorApp.SelectEntityChanged += EditorApp_SelectEntity;
             _editorApp.LoadedSceneChanged += EditorApp_LoadNewScene;
 
-            entities_ComboBox.SelectedIndexChanged += Entities_ComboBox_SelectedIndexChanged;
+            entities_ComboBox.SelectedIndexChanged += EntityComboBox_SelectedIndexChanged;
+            sceneTree.BeforeSelect += SceneTree_BeforeSelect;
+            
             entities_ComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
         }
 
@@ -37,7 +41,7 @@ namespace CruZ.Editor
         {
             _editorApp.Init();
         }
-
+        
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
             if (keyData == (Keys.Control | Keys.Z))
@@ -55,32 +59,33 @@ namespace CruZ.Editor
             return base.ProcessCmdKey(ref msg, keyData);
         }
 
+        #region Components_Event_Handlers
+        private void SceneTree_BeforeSelect(object? sender, TreeViewCancelEventArgs e)
+        {
+            _editorApp.SelectEntity((TransformEntity)e.Node.Tag);
+        }
+
         private void EditorApp_LoadNewScene(GameScene? scene)
         {
-            entities_ComboBox.Items.Clear();
-            sceneTree.Nodes.Clear();
-
-            if(scene == null) return;
-
-            foreach (var e in scene.Entities)
-            {
-                entities_ComboBox.Items.Add(e);
-                sceneTree.Nodes.Add(e.ToString());
-            }
+            UpdateEntityComboBox(scene);
+            UpdateSceneTree(scene);
         }
 
         private void EditorApp_SelectEntity(Components.TransformEntity? e)
         {
-            Inspector.DisplayEntity(e);
-            //Trace.Assert(entities_ComboBox.Items.Contains(e));
-            //entities_ComboBox.SelectedItem = e;
+            ControlInvoke(entities_ComboBox, 
+                () => entities_ComboBox.SelectedItem = e);
+
+            UpdatePropertyGrid(e);
         }
 
-        #region Form_Events_Handler
-        private void Entities_ComboBox_SelectedIndexChanged(object? sender, EventArgs e)
+        private void EntityComboBox_SelectedIndexChanged(object? sender, EventArgs e)
         {
-            //TODO: _editorApp.SelectEntity((TransformEntity)entities_ComboBox.SelectedItem);
-        }
+            _editorApp.SelectEntity((TransformEntity)entities_ComboBox.SelectedItem);
+        } 
+        #endregion
+
+        #region Clicked_Event_Handlers
 
         private void OpenScene_Clicked(object sender, EventArgs e)
         {
@@ -153,6 +158,8 @@ namespace CruZ.Editor
             }
         }
 
+        #endregion
+
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
             //CacheService.CallWriteCaches();
@@ -161,6 +168,50 @@ namespace CruZ.Editor
 
             FormClosing?.Invoke();
             _editorApp.ExitAppAsync();
+        }
+
+        private void ControlInvoke(Control control, Action action)
+        {
+            if (control.IsDisposed) return;
+
+            if (control.InvokeRequired)
+            {
+                control.Invoke(action);
+            }
+            else
+            {
+                action.Invoke();
+            }
+        }
+
+        #region Private
+        private void UpdateEntityComboBox(GameScene? scene)
+        {
+            entities_ComboBox.Items.Clear();
+
+            if (scene == null) return;
+
+            for (int i = 0; i < scene.Entities.Count(); i++)
+            {
+                var e = scene.Entities[i];
+                entities_ComboBox.Items.Add(e);
+            }
+        }
+
+        private void UpdateSceneTree(GameScene? scene)
+        {
+            sceneTree.Nodes.Clear();
+
+            if (scene == null) return;
+
+            for (int i = 0; i < scene.Entities.Count(); i++)
+            {
+                var e = scene.Entities[i];
+
+                sceneTree.Nodes.Add(e.ToString());
+                sceneTree.Nodes[i].ContextMenuStrip = sceneContextMenuStrip;
+                sceneTree.Nodes[i].Tag = e;
+            }
         } 
         #endregion
 

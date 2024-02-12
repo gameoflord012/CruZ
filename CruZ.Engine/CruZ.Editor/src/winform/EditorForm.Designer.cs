@@ -32,6 +32,7 @@ namespace CruZ.Editor
         /// </summary>
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
             entities_ComboBox = new ComboBox();
             inspector_PropertyGrid = new PropertyGrid();
             file_Menu = new ToolStripMenuItem();
@@ -49,6 +50,8 @@ namespace CruZ.Editor
             splitContainer1 = new SplitContainer();
             tabControlTop = new TabControl();
             tabControlBottom = new TabControl();
+            sceneContextMenuStrip = new ContextMenuStrip(components);
+            addComponentToolStripMenuItem = new ToolStripMenuItem();
             menuStrip.SuspendLayout();
             inspector_Panel.SuspendLayout();
             inspectorTab.SuspendLayout();
@@ -59,6 +62,7 @@ namespace CruZ.Editor
             splitContainer1.SuspendLayout();
             tabControlTop.SuspendLayout();
             tabControlBottom.SuspendLayout();
+            sceneContextMenuStrip.SuspendLayout();
             SuspendLayout();
             // 
             // entities_ComboBox
@@ -90,34 +94,34 @@ namespace CruZ.Editor
             // 
             scene_Menu.DropDownItems.AddRange(new ToolStripItem[] { openScene_MenuButton, saveScene_MenuButton, saveAsScene_MenuButton, loadScene_MenuButton });
             scene_Menu.Name = "scene_Menu";
-            scene_Menu.Size = new Size(105, 22);
+            scene_Menu.Size = new Size(180, 22);
             scene_Menu.Text = "Scene";
             // 
             // openScene_MenuButton
             // 
             openScene_MenuButton.Name = "openScene_MenuButton";
-            openScene_MenuButton.Size = new Size(137, 22);
+            openScene_MenuButton.Size = new Size(180, 22);
             openScene_MenuButton.Text = "Open Scene";
             openScene_MenuButton.Click += OpenScene_Clicked;
             // 
             // saveScene_MenuButton
             // 
             saveScene_MenuButton.Name = "saveScene_MenuButton";
-            saveScene_MenuButton.Size = new Size(137, 22);
+            saveScene_MenuButton.Size = new Size(180, 22);
             saveScene_MenuButton.Text = "Save Scene";
             saveScene_MenuButton.Click += SaveScene_Clicked;
             // 
             // saveAsScene_MenuButton
             // 
             saveAsScene_MenuButton.Name = "saveAsScene_MenuButton";
-            saveAsScene_MenuButton.Size = new Size(137, 22);
+            saveAsScene_MenuButton.Size = new Size(180, 22);
             saveAsScene_MenuButton.Text = "Save As ...";
             saveAsScene_MenuButton.Click += SaveAsScene_Clicked;
             // 
             // loadScene_MenuButton
             // 
             loadScene_MenuButton.Name = "loadScene_MenuButton";
-            loadScene_MenuButton.Size = new Size(137, 22);
+            loadScene_MenuButton.Size = new Size(180, 22);
             loadScene_MenuButton.Text = "Load Scene";
             loadScene_MenuButton.Click += LoadScene_Clicked;
             // 
@@ -220,6 +224,18 @@ namespace CruZ.Editor
             tabControlBottom.Size = new Size(377, 256);
             tabControlBottom.TabIndex = 6;
             // 
+            // sceneContextMenuStrip
+            // 
+            sceneContextMenuStrip.Items.AddRange(new ToolStripItem[] { addComponentToolStripMenuItem });
+            sceneContextMenuStrip.Name = "sceneClickMenu";
+            sceneContextMenuStrip.Size = new Size(181, 48);
+            // 
+            // addComponentToolStripMenuItem
+            // 
+            addComponentToolStripMenuItem.Name = "addComponentToolStripMenuItem";
+            addComponentToolStripMenuItem.Size = new Size(180, 22);
+            addComponentToolStripMenuItem.Text = "Add Component";
+            // 
             // EditorForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -242,6 +258,7 @@ namespace CruZ.Editor
             splitContainer1.ResumeLayout(false);
             tabControlTop.ResumeLayout(false);
             tabControlBottom.ResumeLayout(false);
+            sceneContextMenuStrip.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
         }
@@ -281,5 +298,7 @@ namespace CruZ.Editor
         private SplitContainer splitContainer1;
         private TabControl tabControlTop;
         private TabControl tabControlBottom;
+        private ContextMenuStrip sceneContextMenuStrip;
+        private ToolStripMenuItem addComponentToolStripMenuItem;
     }
 }

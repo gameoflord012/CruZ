@@ -81,6 +81,20 @@ namespace CruZ.Editor.Controls
             SelectEntityChanged?.Invoke(e);
         }
 
+        //public void SelectEntity(string entityName)
+        //{
+        //    if(_currentScene == null) 
+        //        throw new InvalidOperationException("No scene is active, load a scene first");
+
+        //    foreach (var e in _currentScene.Entities)
+        //    {
+        //        if(e.ToString() == entityName)
+        //            SelectEntity(e);
+
+        //        return;
+        //    }
+        //}
+
         public void LoadSceneFromFile(string file)
         {
             Check_AppInitialized();
