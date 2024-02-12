@@ -4,6 +4,7 @@ using CruZ.Exception;
 using CruZ.Resource;
 using CruZ.Scene;
 using System;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
@@ -154,7 +155,7 @@ namespace CruZ.Editor
         {
             //CacheService.CallWriteCaches();
             FormClosing?.Invoke();
-            _editorApp.ExitApp();
+            _editorApp.ExitAppAsync();
         } 
         #endregion
 

@@ -16,19 +16,10 @@ namespace CruZ.Editor
         {
             GameApplication.UnregisterDraw(GameApp_Draw);
 
-            if(e != null)
+            if (e != null)
                 GameApplication.RegisterDraw(GameApp_Draw);
 
-            if(PropertyGrid.InvokeRequired)
-            {
-                Action safeInvoke = delegate { DisplayEntity(e); };
-                PropertyGrid.Invoke(safeInvoke);
-            }
-            else
-            {
-                if(e == null) PropertyGrid.SelectedObject = null;
-                else PropertyGrid.SelectedObject = new EntityWrapper(e);
-            }
+            SetPropertyGridSelectedObject(e);
         }
 
         private static void GameApp_Draw(GameTime time)
@@ -38,10 +29,30 @@ namespace CruZ.Editor
 
         private static void RefreshPropertyGrid()
         {
+            PropertyGridInvoke(delegate
+            {
+                if (PropertyGrid.ContainsFocus) return;
+                PropertyGrid.Refresh();
+            });   
+        }
+
+
+        private static void SetPropertyGridSelectedObject(TransformEntity? e)
+        {
+            PropertyGridInvoke(delegate
+            {
+                if (e == null) PropertyGrid.SelectedObject = null;
+                else PropertyGrid.SelectedObject = new EntityWrapper(e);
+            });
+        }
+
+        private static void PropertyGridInvoke(Action action)
+        {
+            if(PropertyGrid.IsDisposed) return;
+
             if(PropertyGrid.InvokeRequired)
             {
-                Action safeInvoke = delegate { RefreshPropertyGrid(); };
-                PropertyGrid.Invoke(safeInvoke);
+                PropertyGrid.Invoke(action);
             }
             else
             {

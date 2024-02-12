@@ -66,6 +66,8 @@ namespace CruZ
 
         public void Exit()
         {
+            if(_exitCalled) return;
+
             _core.Exit();
         }
 

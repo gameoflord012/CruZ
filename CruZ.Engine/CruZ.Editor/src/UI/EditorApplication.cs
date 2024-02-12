@@ -111,10 +111,8 @@ namespace CruZ.Editor.Controls
                 if (_gameApp != null)
                 {
                     CacheWrite?.Invoke(this, "Camera");
-
-                    if(!_gameApp.ExitCalled)
-                        _gameApp.Exit();
-
+                     
+                    _gameApp.Exit();
                     _gameApp.Dispose();
                 }
 
