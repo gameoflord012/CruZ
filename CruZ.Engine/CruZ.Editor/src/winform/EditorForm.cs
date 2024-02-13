@@ -2,10 +2,12 @@
 using CruZ.Components;
 using CruZ.Editor.Controls;
 using CruZ.Editor.Systems;
+using CruZ.Editor.Utility;
 using CruZ.Exception;
 using CruZ.Resource;
 using CruZ.Scene;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
@@ -16,23 +18,21 @@ namespace CruZ.Editor
 {
     public partial class EditorForm : Form
     {
-        public static event Action FormClosing;
-
-        public PropertyGrid Inspector_PropertyGrid { get => inspector_PropertyGrid; }
-        //TODO: public EditorApplication EditorApplication    { get => _editorApp; }
-
         private EditorForm()
         {
             KeyPreview = true;
 
             InitializeComponent();
-            _editorApp = new();
+
+            _editorApp = new(this);
 
             _editorApp.SelectEntityChanged += EditorApp_SelectEntity;
             _editorApp.LoadedSceneChanged += EditorApp_LoadNewScene;
 
             entities_ComboBox.SelectedIndexChanged += EntityComboBox_SelectedIndexChanged;
             sceneTree.BeforeSelect += SceneTree_BeforeSelect;
+
+            _formThread = Thread.CurrentThread;
             
             entities_ComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
         }
@@ -73,7 +73,7 @@ namespace CruZ.Editor
 
         private void EditorApp_SelectEntity(Components.TransformEntity? e)
         {
-            ControlInvoke(entities_ComboBox, 
+            SafeInvoke(entities_ComboBox, 
                 () => entities_ComboBox.SelectedItem = e);
 
             UpdatePropertyGrid(e);
@@ -162,61 +162,65 @@ namespace CruZ.Editor
 
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
-            //CacheService.CallWriteCaches();
+            _editorApp.CleanAppSession();
+
             _editorApp.SelectEntityChanged -= EditorApp_SelectEntity;
             _editorApp.LoadedSceneChanged -= EditorApp_LoadNewScene;
-
-            FormClosing?.Invoke();
-            _editorApp.ExitAppAsync();
+            GameApplication.UnregisterDraw(GameApp_Draw);
         }
 
-        private void ControlInvoke(Control control, Action action)
+        #region Private
+        private void UpdateEntityComboBox(GameScene? scene)
         {
-            if (control.IsDisposed) return;
+            SafeInvoke(entities_ComboBox, delegate
+            {
+                entities_ComboBox.Items.Clear();
 
+                if (scene == null) return;
+
+                for (int i = 0; i < scene.Entities.Count(); i++)
+                {
+                    var e = scene.Entities[i];
+                    entities_ComboBox.Items.Add(e);
+                }
+            });
+        }
+
+        private void UpdateSceneTree(GameScene? scene)
+        {
+            SafeInvoke(sceneTree, delegate
+            {
+                sceneTree.Nodes.Clear();
+
+                if (scene == null) return;
+
+                for (int i = 0; i < scene.Entities.Count(); i++)
+                {
+                    var e = scene.Entities[i];
+
+                    sceneTree.Nodes.Add(e.ToString());
+                    sceneTree.Nodes[i].ContextMenuStrip = sceneContextMenuStrip;
+                    sceneTree.Nodes[i].Tag = e;
+                }
+            });
+        }
+
+        public void SafeInvoke(Control control, Action action)
+        {
             if (control.InvokeRequired)
             {
-                control.Invoke(action);
+                control.BeginInvoke(action);
             }
             else
             {
                 action.Invoke();
             }
         }
-
-        #region Private
-        private void UpdateEntityComboBox(GameScene? scene)
-        {
-            entities_ComboBox.Items.Clear();
-
-            if (scene == null) return;
-
-            for (int i = 0; i < scene.Entities.Count(); i++)
-            {
-                var e = scene.Entities[i];
-                entities_ComboBox.Items.Add(e);
-            }
-        }
-
-        private void UpdateSceneTree(GameScene? scene)
-        {
-            sceneTree.Nodes.Clear();
-
-            if (scene == null) return;
-
-            for (int i = 0; i < scene.Entities.Count(); i++)
-            {
-                var e = scene.Entities[i];
-
-                sceneTree.Nodes.Add(e.ToString());
-                sceneTree.Nodes[i].ContextMenuStrip = sceneContextMenuStrip;
-                sceneTree.Nodes[i].Tag = e;
-            }
-        } 
         #endregion
 
         EditorApplication _editorApp;
-        
+        Thread _formThread;
+
         #region Static
         public static PropertyGrid GetPropertyGrid()
         {

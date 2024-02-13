@@ -1,5 +1,6 @@
 ﻿using CruZ.Components;
 using CruZ.Editor.UI;
+using CruZ.Editor.Utility;
 using CruZ.Exception;
 using CruZ.Resource;
 using CruZ.Scene;
@@ -12,7 +13,9 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Threading;
+using System.Windows.Forms;
 
 namespace CruZ.Editor.Controls
 {
@@ -23,14 +26,16 @@ namespace CruZ.Editor.Controls
 
         public GameScene? CurrentGameScene => _currentScene;
 
-        public EditorApplication()
+        public EditorApplication(EditorForm form)
         {
+            _editorForm = form;
+
             Input.MouseScrolled     += Input_MouseScroll;
             Input.MouseMoved        += Input_MouseMove;
             Input.MouseStateChanged += Input_MouseStateChanged;
             Input.KeyStateChanged   += Input_KeyStateChanged;
 
-            EditorForm.FormClosing += EditorForm_Closing;
+            _editorForm.FormClosing += EditorForm_Closing;
             UIManager.MouseClick += UI_MouseClick;
 
             _thisThreadId = Thread.CurrentThread.ManagedThreadId;
@@ -118,30 +123,25 @@ namespace CruZ.Editor.Controls
             }
         }
 
-        public void ExitApp()
+        public void CleanAppSession()
         {
-            lock(this)
-            {
-                if (_gameApp != null)
-                {
-                    CacheWrite?.Invoke(this, "Camera");
-                     
-                    _gameApp.Exit();
-                    _gameApp.Dispose();
-                }
+            if(_gameApp == null || _gameApp.ExitCalled) return;
+            Trace.Assert(_gameAppThread != null);
 
-                if (_gameAppThread != null)
-                    if (!_gameAppThread.Join(5000))
-                        throw new System.Exception("Can't exit editor app");
+            CacheWrite?.Invoke(this, "Camera");
 
-                _gameApp = null;
-                _gameAppThread = null;
-            }
+            _gameApp.Exit();
+
+            if (!_gameAppThread.Join(5000))
+                throw new System.Exception("Can't exit editor app");
+
+            _gameApp = null;
+            _gameAppThread = null;
         }
         #endregion
 
         #region EVENT_HANDLER
-        private void EditorForm_Closing()
+        private void EditorForm_Closing(object? sender, FormClosingEventArgs args)
         {
             CacheWrite?.Invoke(this, "LoadedScene");
         }
@@ -163,7 +163,7 @@ namespace CruZ.Editor.Controls
         private void GameApp_Exit()
         {
             UnloadCurrentScene();
-            ExitAppAsync();
+            _editorForm.SafeInvoke(_editorForm, CleanAppSession);
         }
 
         //private void GameApp_EarlyDraw(DrawEventArgs args)
@@ -293,7 +293,7 @@ namespace CruZ.Editor.Controls
 
         private void StartNewAppSession()
         {
-            ExitApp();
+            CleanAppSession();
 
             _gameApp = GameApplication.CreateContext();
             RegisterGameAppEvents();
@@ -359,7 +359,7 @@ namespace CruZ.Editor.Controls
         {
             ThreadPool.QueueUserWorkItem(delegate 
             {
-                ExitApp();
+                CleanAppSession();
             });
         } 
         #endregion
@@ -381,6 +381,8 @@ namespace CruZ.Editor.Controls
         
         List<EntityControl> _eControls = [];
         LoggingWindow      _infoTextWindow;
+
+        EditorForm _editorForm;
         
         int _thisThreadId;
     }

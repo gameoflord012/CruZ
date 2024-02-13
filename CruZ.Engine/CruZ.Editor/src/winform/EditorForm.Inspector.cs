@@ -43,7 +43,7 @@ namespace CruZ.Editor
 
         private void PropertyGridInvoke(Action action)
         {
-            ControlInvoke(inspector_PropertyGrid ,action);
+            SafeInvoke(inspector_PropertyGrid ,action);
         }
     }
 }
