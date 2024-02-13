@@ -1,6 +1,6 @@
 ﻿namespace CruZ.Editor
 {
-    partial class LoadRuntimeSceneDialog
+    partial class EditComponentDialog
     {
         /// <summary>
         /// Required designer variable.
@@ -28,57 +28,55 @@
         /// </summary>
         private void InitializeComponent()
         {
-            selectScene_ComboBox = new System.Windows.Forms.ComboBox();
-            scene_Label = new System.Windows.Forms.Label();
+            selectComponent_ComboBox = new System.Windows.Forms.ComboBox();
             ok_Button = new System.Windows.Forms.Button();
+            component_Label = new System.Windows.Forms.Label();
             SuspendLayout();
             // 
-            // selectScene_ComboBox
+            // selectComponent_ComboBox
             // 
-            selectScene_ComboBox.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
-            selectScene_ComboBox.FormattingEnabled = true;
-            selectScene_ComboBox.Location = new DRAW.Point(12, 27);
-            selectScene_ComboBox.Name = "selectScene_ComboBox";
-            selectScene_ComboBox.Size = new DRAW.Size(402, 23);
-            selectScene_ComboBox.TabIndex = 0;
-            // 
-            // scene_Label
-            // 
-            scene_Label.AutoSize = true;
-            scene_Label.Location = new DRAW.Point(12, 9);
-            scene_Label.Name = "scene_Label";
-            scene_Label.Size = new DRAW.Size(116, 15);
-            scene_Label.TabIndex = 1;
-            scene_Label.Text = "Select runtime scene";
+            selectComponent_ComboBox.FormattingEnabled = true;
+            selectComponent_ComboBox.Location = new DRAW.Point(12, 27);
+            selectComponent_ComboBox.Name = "selectComponent_ComboBox";
+            selectComponent_ComboBox.Size = new DRAW.Size(248, 23);
+            selectComponent_ComboBox.TabIndex = 0;
             // 
             // ok_Button
             // 
-            ok_Button.Anchor = System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right;
-            ok_Button.Location = new DRAW.Point(339, 178);
+            ok_Button.Location = new DRAW.Point(185, 153);
             ok_Button.Name = "ok_Button";
             ok_Button.Size = new DRAW.Size(75, 23);
-            ok_Button.TabIndex = 2;
+            ok_Button.TabIndex = 1;
             ok_Button.Text = "OK";
             ok_Button.UseVisualStyleBackColor = true;
             // 
-            // LoadRuntimeSceneDialog
+            // component_Label
+            // 
+            component_Label.AutoSize = true;
+            component_Label.Location = new DRAW.Point(12, 9);
+            component_Label.Name = "component_Label";
+            component_Label.Size = new DRAW.Size(76, 15);
+            component_Label.TabIndex = 2;
+            component_Label.Text = "Components";
+            // 
+            // EditComponentDialog
             // 
             AutoScaleDimensions = new DRAW.SizeF(7F, 15F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            ClientSize = new DRAW.Size(426, 213);
+            ClientSize = new DRAW.Size(272, 188);
+            Controls.Add(selectComponent_ComboBox);
+            Controls.Add(component_Label);
             Controls.Add(ok_Button);
-            Controls.Add(selectScene_ComboBox);
-            Controls.Add(scene_Label);
-            Name = "LoadRuntimeSceneForm";
-            Text = "LoadRuntimeSceneForm";
+            Name = "EditComponentDialog";
+            Text = "Form1";
             ResumeLayout(false);
             PerformLayout();
         }
 
         #endregion
 
-        private System.Windows.Forms.ComboBox selectScene_ComboBox;
-        private System.Windows.Forms.Label scene_Label;
+        private System.Windows.Forms.ComboBox selectComponent_ComboBox;
         private System.Windows.Forms.Button ok_Button;
+        private System.Windows.Forms.Label component_Label;
     }
 }

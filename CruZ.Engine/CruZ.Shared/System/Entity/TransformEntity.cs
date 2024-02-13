@@ -74,6 +74,11 @@ namespace CruZ.Components
 
         public bool HasComponent(Type ty)
         {
+            if(ty.IsInterface)
+            {
+                throw new ArgumentException($"Can't pass component type as interface {ty}");
+            }
+
             return _entity.Has(CreateInstanceFrom(ty).ComponentType);
         }
 

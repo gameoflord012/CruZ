@@ -11,10 +11,10 @@ using System.Windows.Forms;
 
 namespace CruZ.Editor
 {
-    public partial class LoadRuntimeSceneForm : Form
+    public partial class LoadRuntimeSceneDialog : Form
     {
         public string ReturnSceneName { get; private set; }
-        public LoadRuntimeSceneForm()
+        public LoadRuntimeSceneDialog()
         {
             InitializeComponent();
 

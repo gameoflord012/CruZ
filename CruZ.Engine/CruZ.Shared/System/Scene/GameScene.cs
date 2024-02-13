@@ -96,6 +96,11 @@ namespace CruZ
             writer.WriteEnd();
         }
 
+        public override string ToString()
+        {
+            return string.IsNullOrEmpty(Name) ? ResourceInfo.ResourceName : Name;
+        }
+
         bool _isActive = false;
 
         [JsonProperty]

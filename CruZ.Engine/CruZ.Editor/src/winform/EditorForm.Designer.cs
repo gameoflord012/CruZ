@@ -50,8 +50,10 @@ namespace CruZ.Editor
             splitContainer1 = new SplitContainer();
             tabControlTop = new TabControl();
             tabControlBottom = new TabControl();
-            sceneContextMenuStrip = new ContextMenuStrip(components);
-            addComponentToolStripMenuItem = new ToolStripMenuItem();
+            entity_ContextMenuStrip = new ContextMenuStrip(components);
+            addComponent_ToolStripMenuItem = new ToolStripMenuItem();
+            scene_ContextMenuStrip = new ContextMenuStrip(components);
+            addEntity_ToolStripMenuItem = new ToolStripMenuItem();
             menuStrip.SuspendLayout();
             inspector_Panel.SuspendLayout();
             inspectorTab.SuspendLayout();
@@ -62,7 +64,8 @@ namespace CruZ.Editor
             splitContainer1.SuspendLayout();
             tabControlTop.SuspendLayout();
             tabControlBottom.SuspendLayout();
-            sceneContextMenuStrip.SuspendLayout();
+            entity_ContextMenuStrip.SuspendLayout();
+            scene_ContextMenuStrip.SuspendLayout();
             SuspendLayout();
             // 
             // entities_ComboBox
@@ -94,34 +97,34 @@ namespace CruZ.Editor
             // 
             scene_Menu.DropDownItems.AddRange(new ToolStripItem[] { openScene_MenuButton, saveScene_MenuButton, saveAsScene_MenuButton, loadScene_MenuButton });
             scene_Menu.Name = "scene_Menu";
-            scene_Menu.Size = new Size(180, 22);
+            scene_Menu.Size = new Size(105, 22);
             scene_Menu.Text = "Scene";
             // 
             // openScene_MenuButton
             // 
             openScene_MenuButton.Name = "openScene_MenuButton";
-            openScene_MenuButton.Size = new Size(180, 22);
+            openScene_MenuButton.Size = new Size(137, 22);
             openScene_MenuButton.Text = "Open Scene";
             openScene_MenuButton.Click += OpenScene_Clicked;
             // 
             // saveScene_MenuButton
             // 
             saveScene_MenuButton.Name = "saveScene_MenuButton";
-            saveScene_MenuButton.Size = new Size(180, 22);
+            saveScene_MenuButton.Size = new Size(137, 22);
             saveScene_MenuButton.Text = "Save Scene";
             saveScene_MenuButton.Click += SaveScene_Clicked;
             // 
             // saveAsScene_MenuButton
             // 
             saveAsScene_MenuButton.Name = "saveAsScene_MenuButton";
-            saveAsScene_MenuButton.Size = new Size(180, 22);
+            saveAsScene_MenuButton.Size = new Size(137, 22);
             saveAsScene_MenuButton.Text = "Save As ...";
             saveAsScene_MenuButton.Click += SaveAsScene_Clicked;
             // 
             // loadScene_MenuButton
             // 
             loadScene_MenuButton.Name = "loadScene_MenuButton";
-            loadScene_MenuButton.Size = new Size(180, 22);
+            loadScene_MenuButton.Size = new Size(137, 22);
             loadScene_MenuButton.Text = "Load Scene";
             loadScene_MenuButton.Click += LoadScene_Clicked;
             // 
@@ -224,17 +227,29 @@ namespace CruZ.Editor
             tabControlBottom.Size = new Size(377, 256);
             tabControlBottom.TabIndex = 6;
             // 
-            // sceneContextMenuStrip
+            // entity_ContextMenuStrip
             // 
-            sceneContextMenuStrip.Items.AddRange(new ToolStripItem[] { addComponentToolStripMenuItem });
-            sceneContextMenuStrip.Name = "sceneClickMenu";
-            sceneContextMenuStrip.Size = new Size(181, 48);
+            entity_ContextMenuStrip.Items.AddRange(new ToolStripItem[] { addComponent_ToolStripMenuItem });
+            entity_ContextMenuStrip.Name = "sceneClickMenu";
+            entity_ContextMenuStrip.Size = new Size(164, 26);
             // 
-            // addComponentToolStripMenuItem
+            // addComponent_ToolStripMenuItem
             // 
-            addComponentToolStripMenuItem.Name = "addComponentToolStripMenuItem";
-            addComponentToolStripMenuItem.Size = new Size(180, 22);
-            addComponentToolStripMenuItem.Text = "Add Component";
+            addComponent_ToolStripMenuItem.Name = "addComponent_ToolStripMenuItem";
+            addComponent_ToolStripMenuItem.Size = new Size(163, 22);
+            addComponent_ToolStripMenuItem.Text = "Add Component";
+            // 
+            // scene_ContextMenuStrip
+            // 
+            scene_ContextMenuStrip.Items.AddRange(new ToolStripItem[] { addEntity_ToolStripMenuItem });
+            scene_ContextMenuStrip.Name = "scene_ContextMenuStrip";
+            scene_ContextMenuStrip.Size = new Size(157, 26);
+            // 
+            // addEntity_ToolStripMenuItem
+            // 
+            addEntity_ToolStripMenuItem.Name = "addNewEntity_ToolStripMenuItem";
+            addEntity_ToolStripMenuItem.Size = new Size(156, 22);
+            addEntity_ToolStripMenuItem.Text = "Add New Entity";
             // 
             // EditorForm
             // 
@@ -258,7 +273,8 @@ namespace CruZ.Editor
             splitContainer1.ResumeLayout(false);
             tabControlTop.ResumeLayout(false);
             tabControlBottom.ResumeLayout(false);
-            sceneContextMenuStrip.ResumeLayout(false);
+            entity_ContextMenuStrip.ResumeLayout(false);
+            scene_ContextMenuStrip.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
         }
@@ -298,7 +314,9 @@ namespace CruZ.Editor
         private SplitContainer splitContainer1;
         private TabControl tabControlTop;
         private TabControl tabControlBottom;
-        private ContextMenuStrip sceneContextMenuStrip;
-        private ToolStripMenuItem addComponentToolStripMenuItem;
+        private ContextMenuStrip entity_ContextMenuStrip;
+        private ToolStripMenuItem addComponent_ToolStripMenuItem;
+        private ContextMenuStrip scene_ContextMenuStrip;
+        private ToolStripMenuItem addEntity_ToolStripMenuItem;
     }
 }
