@@ -6,7 +6,6 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Diagnostics;
 
 namespace CruZ.Components
@@ -78,10 +77,9 @@ namespace CruZ.Components
         SpriteComponent? _sprite;
     }
 
-    public class AnimationComponent : IComponent, IComponentCallback, ISerializable
+    public class AnimationComponent : Component, ICustomSerializable
     {
-        [Browsable(false)]
-        public Type ComponentType => typeof(AnimationComponent);
+        public override Type ComponentType => typeof(AnimationComponent);
 
         public void LoadSpriteSheet(string resourcePath, string animationPlayerKey)
         {
@@ -108,10 +106,10 @@ namespace CruZ.Components
             return _currentAnimationPlayer;
         }
 
-        public void OnAttached(TransformEntity entity)
+        protected override void OnAttached(TransformEntity entity)
         {
             _e = entity;
-            _e.ComponentAdded += Entity_OnComponentAdded;
+            _e.ComponentsChanged += Entity_ComponentsChanged;
         }
 
         private AnimationPlayer GetPlayer(string key)
@@ -122,12 +120,12 @@ namespace CruZ.Components
             return _getAnimationPlayer[key];
         }
 
-        private void Entity_OnComponentAdded(object? sender, IComponent e)
+        private void Entity_ComponentsChanged(Dictionary<Type, Component> components)
         {
             _e.TryGetComponent(ref _sprite);
         }
 
-        public ISerializable? CreateDefault()
+        public ICustomSerializable? CreateDefault()
         {
             return new AnimationComponent();
         }

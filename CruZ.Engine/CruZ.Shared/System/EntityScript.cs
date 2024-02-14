@@ -9,12 +9,12 @@ using Newtonsoft.Json.Linq;
 
 namespace CruZ.Components
 {
-    public class EntityScript : IComponent, IComponentCallback
+    public class EntityScript : Component
     {
         [JsonIgnore]
-        public Type ComponentType => typeof(EntityScript);
+        public override Type ComponentType => typeof(EntityScript);
 
-        public virtual void OnAttached(TransformEntity entity)
+        protected override void OnAttached(TransformEntity entity)
         {
             _e = entity;
         }

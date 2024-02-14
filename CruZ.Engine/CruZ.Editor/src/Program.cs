@@ -1,4 +1,5 @@
 ﻿using CommandLine;
+using CruZ.Components;
 using CruZ.Resource;
 using CruZ.Tool.ResourceImporter;
 using System;

@@ -7,7 +7,7 @@ using System.Reflection;
 
 namespace CruZ.Components
 {
-    public partial class TransformEntity : ISerializable
+    public partial class TransformEntity : ICustomSerializable
     {
         public event Action OnDeserializationCompleted;
 
@@ -20,9 +20,9 @@ namespace CruZ.Components
             Transform.Position = jObject["position"].ToObject<Vector3>(serializer);
             Transform.Scale = jObject["scale"].ToObject<Vector3>(serializer);
 
-            foreach (var com in jObject["components"])
+            foreach (var comObject in jObject["components"])
             {
-                var tyStr = com["com-type"].Value<string>();
+                var tyStr = comObject["com-type"].Value<string>();
 
                 var comTy = Type.GetType(tyStr, (assName) =>
                 {
@@ -33,10 +33,10 @@ namespace CruZ.Components
 #endif
                 }, null) ?? throw new(string.Format("Can't get Type from string \"{0}\"", tyStr));
 
-                object comData = com["com-data"].ToObject(comTy, serializer);
-                var iCom = (IComponent)comData;
+                object comData = comObject["com-data"].ToObject(comTy, serializer);
+                var com = (Component)comData;
 
-                AddComponent(iCom);
+                AddComponent(com);
             }
 
             OnDeserializationCompleted?.Invoke();
@@ -72,7 +72,7 @@ namespace CruZ.Components
         }
 
 
-        ISerializable ISerializable.CreateDefault()
+        ICustomSerializable ICustomSerializable.CreateDefault()
         {
             return ECS.CreateEntity();
         }

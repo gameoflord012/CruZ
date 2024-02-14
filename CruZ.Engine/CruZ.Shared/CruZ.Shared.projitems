@@ -19,11 +19,11 @@
     <Compile Include="$(MSBuildThisFileDirectory)Gobal\Variables.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System\Animation\AnimationComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System\Entity\ComponentHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)System\Entity\Component.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System\Entity\Utils\ComponentManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System\Camera\Camera.Static.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System\EntityScript.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System\Entity\Interface\IECSContextProvider.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)System\Entity\Interface\IComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System\Input\IDraggable.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System\Input\Input.Static.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System\Entity\TransformEntity.Disposable.cs" />
@@ -55,7 +55,6 @@
     <Compile Include="..\CruZ.Shared\System\Scene\SceneManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System\Entity\EntityEventComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\FunMath.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)System\Entity\Interface\IComponentCallback.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System\PhysicBody.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System\Sprite\SpriteComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System\Entity\Transform.cs" />
@@ -81,7 +80,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)System\Sprite\SpriteSystem.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="$(MSBuildThisFileDirectory)System\Entity\Interface\" />
     <Folder Include="$(MSBuildThisFileDirectory)System\Entity\Utils\" />
     <Folder Include="$(MSBuildThisFileDirectory)System\Camera\" />
     <Folder Include="$(MSBuildThisFileDirectory)System\Animation\" />

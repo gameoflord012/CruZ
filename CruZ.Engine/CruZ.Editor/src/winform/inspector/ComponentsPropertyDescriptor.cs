@@ -6,7 +6,7 @@ namespace CruZ.Editor
     public class ComponentsPropertyDescriptor : PropertyDescriptor
     {
         public ComponentsPropertyDescriptor(
-            Components.IComponent[] components, 
+            Components.Component[] components, 
             int index, string name, Attribute[]? attrs) : base(name, attrs)
         {
             _index = index;
@@ -15,7 +15,7 @@ namespace CruZ.Editor
         }
 
         public override Type ComponentType => typeof(ComponentsWrapper);
-        public override Type PropertyType => typeof(Components.IComponent);
+        public override Type PropertyType => typeof(Components.Component);
         
         public override bool CanResetValue(object component) => false;
         public override bool ShouldSerializeValue(object component) => true;
@@ -33,6 +33,6 @@ namespace CruZ.Editor
 
     
         int _index;
-        Components.IComponent[] _components;
+        Components.Component[] _components;
     }
 }

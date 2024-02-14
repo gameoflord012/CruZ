@@ -12,20 +12,20 @@ namespace CruZ.Serialization
     {
         public override bool CanConvert(Type objectType)
         {
-            return typeof(ISerializable).IsAssignableFrom(objectType);
+            return typeof(ICustomSerializable).IsAssignableFrom(objectType);
         }
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
-            var uninitialObject = (ISerializable)RuntimeHelpers.GetUninitializedObject(objectType);
-            ISerializable value = uninitialObject.CreateDefault() ?? uninitialObject;
+            var uninitialObject = (ICustomSerializable)RuntimeHelpers.GetUninitializedObject(objectType);
+            ICustomSerializable value = uninitialObject.CreateDefault() ?? uninitialObject;
             value.ReadJson(reader, serializer);
             return value;
         }
 
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
-            var serializable = (ISerializable)value;
+            var serializable = (ICustomSerializable)value;
             serializable.WriteJson(writer, serializer);
         }
 

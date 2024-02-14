@@ -11,9 +11,9 @@ namespace CruZ.Components
 {
     public partial class TransformEntity : IEquatable<TransformEntity>
     {
-        public event EventHandler<bool>         OnActiveStateChanged;
-        public event EventHandler               RemoveFromWorldEvent;
-        public event EventHandler<IComponent>   ComponentAdded;
+        public event EventHandler<bool>                     OnActiveStateChanged;
+        public event EventHandler                           RemoveFromWorldEvent;
+        public event Action<Dictionary<Type, Component>>    ComponentsChanged;
 
         public string           Name        = "";
         [Browsable(false)]
@@ -25,7 +25,7 @@ namespace CruZ.Components
         public Vector3          Scale       { get => Transform.Scale; set => Transform.Scale = value; }
 
         [Browsable(false)]
-        public IComponent[]     Components  => GetAllComponents(this);
+        public Component[]     Components  => GetAllComponents(this);
 
         public TransformEntity(Entity e)
         {
@@ -33,43 +33,45 @@ namespace CruZ.Components
             _idToTransformEntity[_entity.Id] = this;
         }
 
-        public T GetComponent<T>()
+        public T GetComponent<T>() where T : Component
         {
             return (T)GetComponent(typeof(T));
         }
 
-        public void TryGetComponent<T>(ref T? com) where T : IComponent
+        public void TryGetComponent<T>(ref T? com) where T : Component
         {
             if(HasComponent(typeof(T))) 
                 com = GetComponent<T>();
         }
 
-        public object GetComponent(Type ty)
+        public Component GetComponent(Type ty)
         {
-            if (!ComponentManager.IsComponent(ty))
-                throw new(string.Format("Type {0} is not component type", ty));
-
-            IComponent com = CreateInstanceFrom(ty);
-
-            if (!_tyToComp.ContainsKey(com.ComponentType))
+            if(!ty.IsAssignableTo(typeof(Component)))
             {
-                throw new(string.Format("Entity doesn't contain {0}", ty));
+                throw new ArgumentException($"Type {ty} is not a Component Type");
             }
 
-            return _tyToComp[com.ComponentType];
+            var compTy = ComponentHelper.GetComponentType(ty);
+
+            if (!_tyToComp.ContainsKey(compTy))
+            {
+                throw new($"Entity doesn't contain entity of type {ty}");
+            }
+
+            return _tyToComp[compTy];
         }
 
-        public void AddComponent(IComponent component)
+        public void AddComponent(Component component)
         {
             if (HasComponent(component.ComponentType))
                 throw new(string.Format("Component {0} already added", component));
 
             _entity.Attach(component, component.ComponentType);
-
             _comToEntity[component] = this;
             _tyToComp[component.ComponentType] = component;
 
-            ProcessCallback(component);
+            component.InternalOnAttached(this);
+            ComponentsChanged?.Invoke(_tyToComp);
         }
 
         public void RemoveComponent(Type compTy)
@@ -79,10 +81,12 @@ namespace CruZ.Components
 
             var comp = GetComponent(compTy);
             
-            _comToEntity.Remove(comp);
+            _entity.Detach(compTy);
+            _comToEntity.Remove(_tyToComp[compTy]);
             _tyToComp.Remove(compTy);
 
-            _entity.Detach(compTy);
+            comp.InternalOnDetached(this);
+            ComponentsChanged?.Invoke(_tyToComp);
         }
 
         public bool HasComponent(Type ty)
@@ -92,23 +96,12 @@ namespace CruZ.Components
                 throw new ArgumentException($"Can't pass component type as interface {ty}");
             }
 
-            return _entity.Has(CreateInstanceFrom(ty).ComponentType);
+            return _entity.Has(ComponentHelper.GetComponentType(ty));
         }
 
         public override string ToString()
         {
             return string.IsNullOrEmpty(Name) ? $"Entity({Entity.Id})" : Name;
-        }
-
-        private void ProcessCallback(IComponent component)
-        {
-            if (component is IComponentCallback)
-            {
-                var callback = (IComponentCallback)component;
-                callback.OnAttached(this);
-            }
-
-            ComponentAdded?.Invoke(this, component);
         }
 
         private void SetIsActive(bool value)
@@ -128,12 +121,12 @@ namespace CruZ.Components
         TransformEntity?                _parent;
         bool                            _isActive = false;
         Transform                       _transform = new();
-        Dictionary<Type, IComponent>    _tyToComp = new();
+        Dictionary<Type, Component>    _tyToComp = new();
 
-        private static IComponent CreateInstanceFrom(Type ty)
-        {
-            return (IComponent)Helper.GetUnitializeObject(ty);
-        }
+        //private static Component CreateInstanceFrom(Type ty)
+        //{
+        //    return (Component)Helper.GetUnitializeObject(ty);
+        //}
 
         public static TransformEntity GetEntity(object component)
         {
@@ -147,7 +140,7 @@ namespace CruZ.Components
             }
         }
 
-        public static IComponent[] GetAllComponents(TransformEntity e)
+        public static Component[] GetAllComponents(TransformEntity e)
         {
             return e._tyToComp.Values.ToArray();
         }

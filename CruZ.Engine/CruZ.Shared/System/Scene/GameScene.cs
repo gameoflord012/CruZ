@@ -10,7 +10,7 @@ using System.Collections.Generic;
 
 namespace CruZ
 {
-    public partial class GameScene : IHostResource, ISerializable
+    public partial class GameScene : IHostResource, ICustomSerializable
     {
         public event Action<TransformEntity>? OnEntityAdded;
         public event Action<TransformEntity>? OnEntityRemoved;
@@ -70,7 +70,7 @@ namespace CruZ
             Dispose();
         }
 
-        public ISerializable? CreateDefault()
+        public ICustomSerializable? CreateDefault()
         {
             return GameApplication.CreateScene();
         }

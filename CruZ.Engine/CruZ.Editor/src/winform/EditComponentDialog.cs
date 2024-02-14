@@ -50,8 +50,8 @@ namespace CruZ.Editor
             var compTypes = Assembly.GetExecutingAssembly()
                 .GetTypes()
                 .Where(t => 
-                    !t.IsInterface && 
-                    typeof(IComponent).IsAssignableFrom(t) && 
+                    !t.IsAbstract && 
+                    typeof(Component).IsAssignableFrom(t) && 
                     !_e.HasComponent(t));
 
             foreach (var compTy in compTypes)

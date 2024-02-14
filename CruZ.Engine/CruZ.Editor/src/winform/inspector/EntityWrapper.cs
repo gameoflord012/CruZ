@@ -20,11 +20,11 @@ namespace CruZ.Editor
     [TypeConverter(typeof(ComponentsTypeConverter))]
     public class ComponentsWrapper
     {
-        public ComponentsWrapper(Components.IComponent[] comps)
+        public ComponentsWrapper(Components.Component[] comps)
         {
             Components = comps;
         }
 
-        public Components.IComponent[] Components { get; set; }
+        public Components.Component[] Components { get; set; }
     }
 }

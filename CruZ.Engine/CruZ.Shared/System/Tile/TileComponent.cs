@@ -1,4 +1,5 @@
 ﻿using CruZ.Global;
+using CruZ.Serialization;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -10,27 +11,32 @@ namespace CruZ.Components
 {
     using XNA = Microsoft.Xna.Framework;
 
-    public class TileComponent : IComponent, IComponentCallback
+    public class TileComponent : Component
     {
         [Browsable(false)]
-        public Type ComponentType => typeof(TileComponent);
+        public override Type ComponentType => typeof(TileComponent);
 
         public bool Debug       { get; set; } = false;
         public int  TileSize    { get; set; } = 16;
 
-        public void OnAttached(TransformEntity entity)
+        protected override void OnAttached(TransformEntity entity)
         {
             _e = entity;
-            _e.ComponentAdded += Entity_AddComponent;
+            _e.ComponentsChanged += Entity_ComponentsChanged;
         }
 
-
-        public void OnDettached(TransformEntity entity)
+        protected override void OnDetached(TransformEntity entity)
         {
-            throw new NotImplementedException();
+            _e.ComponentsChanged -= Entity_ComponentsChanged;
+
+            if (_sp != null)
+            {
+                _sp.DrawLoopBegin -= Sprite_DrawLoopBegin;
+                _sp.DrawLoopEnd -= Sprite_DrawLoopEnd;
+            }
         }
 
-        private void Entity_AddComponent(object? sender, IComponent e)
+        private void Entity_ComponentsChanged(Dictionary<Type, Component> components)
         {
             if(_sp != null)
             {

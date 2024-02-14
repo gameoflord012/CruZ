@@ -61,7 +61,7 @@ namespace CruZ.Components
         public bool HasRenderBounds = false;
     }
 
-    public partial class SpriteComponent : IComponent, IComponentCallback
+    public partial class SpriteComponent : Component
     {
         public event EventHandler<DrawLoopBeginEventArgs> DrawLoopBegin;
         public event EventHandler<DrawLoopEndEventArgs> DrawLoopEnd;
@@ -69,7 +69,7 @@ namespace CruZ.Components
         public event Action<DrawEndEventArgs> DrawEnd;
 
         [Browsable(false), JsonIgnore]
-        public Type ComponentType => typeof(SpriteComponent);
+        public override Type ComponentType => typeof(SpriteComponent);
 
         [JsonIgnore, Browsable(false)]
         public Texture2D? Texture { get => _texture; set => _texture = value; }
@@ -80,8 +80,8 @@ namespace CruZ.Components
         [TypeConverter(typeof(Vector2TypeConverter))]
         public NUM.Vector2 Origin { get; set; } = new(0.5f, 0.5f);
 
-        public SpriteComponent() { }
-        public SpriteComponent(string resourceName) { LoadTexture(resourceName); }
+        //public SpriteComponent() { }
+        //public SpriteComponent(string resourceName) { LoadTexture(resourceName); }
 
         public void LoadTexture(string resourcePath)
         {
@@ -169,7 +169,7 @@ namespace CruZ.Components
             DrawEnd?.Invoke(drawEnd);
         }
 
-        public void OnAttached(TransformEntity entity)
+        protected override void OnAttached(TransformEntity entity)
         {
             _e = entity;
         }

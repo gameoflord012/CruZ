@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
 using System;
+using System.Collections.Generic;
 
 namespace CruZ.Games.AnimalGang
 {
@@ -12,13 +13,13 @@ namespace CruZ.Games.AnimalGang
     {
         public float Speed { get => _speed; set => _speed = value; }
 
-        public override void OnAttached(TransformEntity entity)
+        protected override void OnAttached(TransformEntity entity)
         {
             base.OnAttached(entity);
-            entity.ComponentAdded += Entity_OnComponentAdded;
+            entity.ComponentsChanged += Entity_ComponentsChanged;
         }
 
-        private void Entity_OnComponentAdded(object? sender, IComponent e)
+        private void Entity_ComponentsChanged(Dictionary<Type, Component> comps)
         {
             AttachedEntity.TryGetComponent(ref _sprite);
             AttachedEntity.TryGetComponent(ref _animation);
