@@ -17,6 +17,13 @@ namespace CruZ.Editor
             SetPropertyGridSelectedObject(e);
         }
 
+
+        private void Inspector_Invalidated(object? sender, InvalidateEventArgs e)
+        {
+            var wrapper = (EntityWrapper)inspector_PropertyGrid.SelectedObject;
+            wrapper?.RefreshComponents();
+        }
+
         private void GameApp_Draw(GameTime time)
         {
             RefreshPropertyGrid();

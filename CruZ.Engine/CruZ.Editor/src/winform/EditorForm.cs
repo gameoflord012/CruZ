@@ -1,7 +1,7 @@
 ﻿using Assimp;
 using CruZ.Components;
 using CruZ.Editor.Controls;
-using CruZ.Editor.Systems;
+using CruZ.Editor.Services;
 using CruZ.Editor.Utility;
 using CruZ.Exception;
 using CruZ.Resource;
@@ -41,6 +41,12 @@ namespace CruZ.Editor
 
             componentEditor_ToolStripMenuItem.Click += AddComponent_Click;
             addEntity_ToolStripMenuItem.Click += AddEntity_Click;
+
+            inspector_PropertyGrid.Invalidated += Inspector_Invalidated;
+
+            InvalidatedService.Register
+                (inspector_PropertyGrid, 
+                "EntityComponentChange");
         }
 
         public void Init()

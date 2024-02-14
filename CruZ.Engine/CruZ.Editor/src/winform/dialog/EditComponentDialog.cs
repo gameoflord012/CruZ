@@ -1,4 +1,5 @@
 ﻿using CruZ.Components;
+using CruZ.Editor.Services;
 using CruZ.Utility;
 using System;
 using System.Linq;
@@ -83,9 +84,11 @@ namespace CruZ.Editor
                 else
                 {
                     if(!_e.HasComponent(compTy)) continue;
-                    _e.RemoveComponent(compTy); 
+                    _e.RemoveComponent(compTy);
                 }
             }
+
+            InvalidatedService.SendInvalidated("EntityComponentChange");
         }
 
         TransformEntity _e;

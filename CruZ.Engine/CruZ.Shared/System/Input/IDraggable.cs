@@ -1,4 +1,4 @@
-﻿//namespace CruZ.Systems
+﻿//namespace CruZ.Services
 //{
 //    public interface IDraggable
 //    {

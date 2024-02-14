@@ -10,8 +10,13 @@ namespace CruZ.Editor
 
         public EntityWrapper(TransformEntity e)
         {
-            Components = new(e.Components);
             TransformEntity = e;
+            RefreshComponents();
+        }
+
+        public void RefreshComponents()
+        {
+            Components = new(TransformEntity.Components);
         }
 
         public ComponentsWrapper Components { get; set; }
