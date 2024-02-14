@@ -28,21 +28,14 @@
         /// </summary>
         private void InitializeComponent()
         {
-            selectComponent_ComboBox = new System.Windows.Forms.ComboBox();
             ok_Button = new System.Windows.Forms.Button();
             component_Label = new System.Windows.Forms.Label();
+            component_ListBox = new System.Windows.Forms.CheckedListBox();
             SuspendLayout();
-            // 
-            // selectComponent_ComboBox
-            // 
-            selectComponent_ComboBox.FormattingEnabled = true;
-            selectComponent_ComboBox.Location = new DRAW.Point(12, 27);
-            selectComponent_ComboBox.Name = "selectComponent_ComboBox";
-            selectComponent_ComboBox.Size = new DRAW.Size(248, 23);
-            selectComponent_ComboBox.TabIndex = 0;
             // 
             // ok_Button
             // 
+            ok_Button.Anchor = System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right;
             ok_Button.Location = new DRAW.Point(185, 153);
             ok_Button.Name = "ok_Button";
             ok_Button.Size = new DRAW.Size(75, 23);
@@ -59,12 +52,21 @@
             component_Label.TabIndex = 2;
             component_Label.Text = "Components";
             // 
+            // component_ListBox
+            // 
+            component_ListBox.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
+            component_ListBox.FormattingEnabled = true;
+            component_ListBox.Location = new DRAW.Point(12, 27);
+            component_ListBox.Name = "component_ListBox";
+            component_ListBox.Size = new DRAW.Size(248, 112);
+            component_ListBox.TabIndex = 4;
+            // 
             // EditComponentDialog
             // 
             AutoScaleDimensions = new DRAW.SizeF(7F, 15F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             ClientSize = new DRAW.Size(272, 188);
-            Controls.Add(selectComponent_ComboBox);
+            Controls.Add(component_ListBox);
             Controls.Add(component_Label);
             Controls.Add(ok_Button);
             Name = "EditComponentDialog";
@@ -74,9 +76,8 @@
         }
 
         #endregion
-
-        private System.Windows.Forms.ComboBox selectComponent_ComboBox;
         private System.Windows.Forms.Button ok_Button;
         private System.Windows.Forms.Label component_Label;
+        private System.Windows.Forms.CheckedListBox component_ListBox;
     }
 }

@@ -13,7 +13,7 @@ namespace CruZ.Components
     {
         public event EventHandler<bool>         OnActiveStateChanged;
         public event EventHandler               RemoveFromWorldEvent;
-        public event EventHandler<IComponent>   OnComponentAdded;
+        public event EventHandler<IComponent>   ComponentAdded;
 
         public string           Name        = "";
         [Browsable(false)]
@@ -51,12 +51,12 @@ namespace CruZ.Components
 
             IComponent com = CreateInstanceFrom(ty);
 
-            if (!_addedComponents.ContainsKey(com.ComponentType))
+            if (!_tyToComp.ContainsKey(com.ComponentType))
             {
                 throw new(string.Format("Entity doesn't contain {0}", ty));
             }
 
-            return _addedComponents[com.ComponentType];
+            return _tyToComp[com.ComponentType];
         }
 
         public void AddComponent(IComponent component)
@@ -67,9 +67,22 @@ namespace CruZ.Components
             _entity.Attach(component, component.ComponentType);
 
             _comToEntity[component] = this;
-            _addedComponents[component.ComponentType] = component;
+            _tyToComp[component.ComponentType] = component;
 
             ProcessCallback(component);
+        }
+
+        public void RemoveComponent(Type compTy)
+        {
+            if (!HasComponent(compTy))
+                throw new(string.Format($"Component {compTy} doesn't exists"));
+
+            var comp = GetComponent(compTy);
+            
+            _comToEntity.Remove(comp);
+            _tyToComp.Remove(compTy);
+
+            _entity.Detach(compTy);
         }
 
         public bool HasComponent(Type ty)
@@ -95,7 +108,7 @@ namespace CruZ.Components
                 callback.OnAttached(this);
             }
 
-            OnComponentAdded?.Invoke(this, component);
+            ComponentAdded?.Invoke(this, component);
         }
 
         private void SetIsActive(bool value)
@@ -115,7 +128,7 @@ namespace CruZ.Components
         TransformEntity?                _parent;
         bool                            _isActive = false;
         Transform                       _transform = new();
-        Dictionary<Type, IComponent>    _addedComponents = new();
+        Dictionary<Type, IComponent>    _tyToComp = new();
 
         private static IComponent CreateInstanceFrom(Type ty)
         {
@@ -136,7 +149,7 @@ namespace CruZ.Components
 
         public static IComponent[] GetAllComponents(TransformEntity e)
         {
-            return e._addedComponents.Values.ToArray();
+            return e._tyToComp.Values.ToArray();
         }
 
         public static TransformEntity GetTransformEntity(int eId)

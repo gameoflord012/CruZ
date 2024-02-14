@@ -111,7 +111,7 @@ namespace CruZ.Components
         public void OnAttached(TransformEntity entity)
         {
             _e = entity;
-            _e.OnComponentAdded += Entity_OnComponentAdded;
+            _e.ComponentAdded += Entity_OnComponentAdded;
         }
 
         private AnimationPlayer GetPlayer(string key)

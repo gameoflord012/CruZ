@@ -21,10 +21,16 @@ namespace CruZ.Components
         public void OnAttached(TransformEntity entity)
         {
             _e = entity;
-            _e.OnComponentAdded += Entity_OnComponentAdded;
+            _e.ComponentAdded += Entity_AddComponent;
         }
 
-        private void Entity_OnComponentAdded(object? sender, IComponent e)
+
+        public void OnDettached(TransformEntity entity)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void Entity_AddComponent(object? sender, IComponent e)
         {
             if(_sp != null)
             {

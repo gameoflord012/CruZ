@@ -15,6 +15,7 @@ namespace CruZ.Components
         private void RemoveFromWorld()
         {
             SetIsActive(false);
+
             ECS.Destroy(_entity);
             RemoveFromWorldEvent?.Invoke(this, EventArgs.Empty);
         }

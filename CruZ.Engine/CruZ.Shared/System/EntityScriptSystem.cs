@@ -1,4 +1,5 @@
 ﻿using CruZ.Components;
+using CruZ.Utility;
 using Microsoft.Xna.Framework;
 using MonoGame.Extended.Entities;
 using MonoGame.Extended.Entities.Systems;

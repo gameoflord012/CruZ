@@ -18,6 +18,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Exceptions\CruZ.Exceptions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Gobal\Variables.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System\Animation\AnimationComponent.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)System\Entity\ComponentHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System\Entity\Utils\ComponentManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System\Camera\Camera.Static.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System\EntityScript.cs" />
@@ -44,7 +45,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)System\Resource\ResourceManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System\EntityScriptSystem.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System\Entity\ECS.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)System\Entity\EntityExtension.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)System\Entity\Entity.Extension.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System\Entity\ECS.Static.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System\Serialization\GlobalSerializer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System\Serialization\IAmResource.cs" />

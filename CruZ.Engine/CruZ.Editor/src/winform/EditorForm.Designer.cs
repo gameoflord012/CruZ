@@ -51,7 +51,7 @@ namespace CruZ.Editor
             tabControlTop = new TabControl();
             tabControlBottom = new TabControl();
             entity_ContextMenuStrip = new ContextMenuStrip(components);
-            addComponent_ToolStripMenuItem = new ToolStripMenuItem();
+            componentEditor_ToolStripMenuItem = new ToolStripMenuItem();
             scene_ContextMenuStrip = new ContextMenuStrip(components);
             addEntity_ToolStripMenuItem = new ToolStripMenuItem();
             menuStrip.SuspendLayout();
@@ -229,15 +229,15 @@ namespace CruZ.Editor
             // 
             // entity_ContextMenuStrip
             // 
-            entity_ContextMenuStrip.Items.AddRange(new ToolStripItem[] { addComponent_ToolStripMenuItem });
+            entity_ContextMenuStrip.Items.AddRange(new ToolStripItem[] { componentEditor_ToolStripMenuItem });
             entity_ContextMenuStrip.Name = "sceneClickMenu";
-            entity_ContextMenuStrip.Size = new Size(164, 26);
+            entity_ContextMenuStrip.Size = new Size(167, 26);
             // 
-            // addComponent_ToolStripMenuItem
+            // componentEditor_ToolStripMenuItem
             // 
-            addComponent_ToolStripMenuItem.Name = "addComponent_ToolStripMenuItem";
-            addComponent_ToolStripMenuItem.Size = new Size(163, 22);
-            addComponent_ToolStripMenuItem.Text = "Add Component";
+            componentEditor_ToolStripMenuItem.Name = "componentEditor_ToolStripMenuItem";
+            componentEditor_ToolStripMenuItem.Size = new Size(166, 22);
+            componentEditor_ToolStripMenuItem.Text = "Edit Components";
             // 
             // scene_ContextMenuStrip
             // 
@@ -247,7 +247,7 @@ namespace CruZ.Editor
             // 
             // addEntity_ToolStripMenuItem
             // 
-            addEntity_ToolStripMenuItem.Name = "addNewEntity_ToolStripMenuItem";
+            addEntity_ToolStripMenuItem.Name = "addEntity_ToolStripMenuItem";
             addEntity_ToolStripMenuItem.Size = new Size(156, 22);
             addEntity_ToolStripMenuItem.Text = "Add New Entity";
             // 
@@ -315,7 +315,7 @@ namespace CruZ.Editor
         private TabControl tabControlTop;
         private TabControl tabControlBottom;
         private ContextMenuStrip entity_ContextMenuStrip;
-        private ToolStripMenuItem addComponent_ToolStripMenuItem;
+        private ToolStripMenuItem componentEditor_ToolStripMenuItem;
         private ContextMenuStrip scene_ContextMenuStrip;
         private ToolStripMenuItem addEntity_ToolStripMenuItem;
     }

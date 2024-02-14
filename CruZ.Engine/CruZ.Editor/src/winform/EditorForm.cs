@@ -20,9 +20,10 @@ namespace CruZ.Editor
     {
         private EditorForm()
         {
-            KeyPreview = true;
-
             InitializeComponent();
+
+            KeyPreview = true;
+            Text = "CruZ Engine";
 
             _editorApp = new(this);
             _formThread = Thread.CurrentThread;
@@ -38,7 +39,7 @@ namespace CruZ.Editor
             sceneTree.NodeMouseClick += (sender, args) 
                 => sceneTree.SelectedNode = args.Node;
 
-            addComponent_ToolStripMenuItem.Click += AddComponent_Click;
+            componentEditor_ToolStripMenuItem.Click += AddComponent_Click;
             addEntity_ToolStripMenuItem.Click += AddEntity_Click;
         }
 

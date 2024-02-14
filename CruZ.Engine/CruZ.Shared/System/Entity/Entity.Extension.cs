@@ -1,9 +1,11 @@
-﻿using MonoGame.Extended.Entities;
+﻿using CruZ.Components;
+using MonoGame.Extended.Entities;
 using MonoGame.Extended.Entities.Systems;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices.JavaScript;
 
 namespace CruZ.Components
 {
@@ -23,6 +25,12 @@ namespace CruZ.Components
         {
             var mapper = e.ComponentManager.GetMapper(ty);
             mapper.Put(e.Id, component);
+        }
+
+        public static void Detach(this Entity e, Type ty)
+        {
+            var mapper = e.ComponentManager.GetMapper(ty);
+            mapper.Delete(e.Id);
         }
 
         public static TransformEntity CreateTransformEntity(this World world)

@@ -1,4 +1,5 @@
 ﻿using CruZ.Components;
+using CruZ.Utility;
 using System;
 using System.Linq;
 using System.Reflection;
@@ -9,9 +10,9 @@ namespace CruZ.Editor
 {
     public partial class EditComponentDialog : Form
     {
-        class ComboBoxItem
+        class BoxItem
         {
-            public ComboBoxItem(Type compTy, string text)
+            public BoxItem(Type compTy, string text)
             {
                 CompType = compTy;
                 Text = text;
@@ -29,16 +30,21 @@ namespace CruZ.Editor
         public EditComponentDialog(TransformEntity e)
         {
             InitializeComponent();
+            this.Text = "Component Editor";
 
             _e = e;
 
             foreach (var comp in TransformEntity.GetAllComponents(e))
             {
-                selectComponent_ComboBox.Items.Add(
-                    new ComboBoxItem(
+                int id = component_ListBox.Items.Count;
+
+                component_ListBox.Items.Add(
+                    new BoxItem(
                         comp.GetType(), 
                         comp.GetType().Name + "*")
                 );
+
+                component_ListBox.SetItemCheckState(id, CheckState.Checked);
             }
 
             var compTypes = Assembly.GetExecutingAssembly()
@@ -50,14 +56,36 @@ namespace CruZ.Editor
 
             foreach (var compTy in compTypes)
             {
-                selectComponent_ComboBox.Items.Add(
-                    new ComboBoxItem(
+                component_ListBox.Items.Add(
+                    new BoxItem(
                         compTy,
                         compTy.Name));
             }
 
             ok_Button.DialogResult = DialogResult.OK;
-            ok_Button.Click += (sender, e) => Close();
+            ok_Button.Click += Ok_Button_Click;
+        }
+
+        private void Ok_Button_Click(object? sender, EventArgs e)
+        {
+            for(int i = 0; i < component_ListBox.Items.Count; i++)
+            {
+                var boxItem = (BoxItem)component_ListBox.Items[i];
+                var compTy = boxItem.CompType;
+
+                if (component_ListBox.GetItemChecked(i))
+                {
+                    if(_e.HasComponent(compTy)) continue;
+
+                    var comp = ComponentHelper.GetDefaultComponentInstance(compTy);
+                    _e.AddComponent(comp);
+                }
+                else
+                {
+                    if(!_e.HasComponent(compTy)) continue;
+                    _e.RemoveComponent(compTy); 
+                }
+            }
         }
 
         TransformEntity _e;

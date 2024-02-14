@@ -15,7 +15,7 @@ namespace CruZ.Games.AnimalGang
         public override void OnAttached(TransformEntity entity)
         {
             base.OnAttached(entity);
-            entity.OnComponentAdded += Entity_OnComponentAdded;
+            entity.ComponentAdded += Entity_OnComponentAdded;
         }
 
         private void Entity_OnComponentAdded(object? sender, IComponent e)
