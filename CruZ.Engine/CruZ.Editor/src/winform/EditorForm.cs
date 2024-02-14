@@ -166,6 +166,8 @@ namespace CruZ.Editor
                 savePath,
                 _editorApp.CurrentGameScene,
                 true);
+
+            _editorApp.LoadSceneFromFile(savePath);
         }
 
         private void LoadScene_Clicked(object sender, EventArgs e)

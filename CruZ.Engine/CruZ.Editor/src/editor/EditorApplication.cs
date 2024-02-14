@@ -12,6 +12,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Threading;
@@ -105,6 +106,8 @@ namespace CruZ.Editor.Controls
             Check_AppInitialized();
 
             var scene = ResourceManager.LoadResource<GameScene>(file);
+            scene.Name = Path.GetRelativePath(ResourceManager.ResourceRoot, file);
+
             LoadScene(scene);
         }
 
@@ -343,7 +346,7 @@ namespace CruZ.Editor.Controls
             _currentScene.SetActive(true);
             LoadedSceneChanged?.Invoke(_currentScene);
 
-            Logging.SetMsg(_currentScene.ResourceInfo.ResourceName, "Scene");
+            Logging.SetMsg(_currentScene.ToString(), "Scene");
 
             InitUIControls();
         }
