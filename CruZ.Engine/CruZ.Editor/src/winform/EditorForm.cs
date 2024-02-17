@@ -33,23 +33,19 @@ namespace CruZ.Editor
 
             entities_ComboBox.SelectedIndexChanged += EntityComboBox_SelectedIndexChanged;
             entities_ComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
-            
+
             sceneTree.BeforeSelect += SceneTree_BeforeSelect;
             sceneTree.ContextMenuStrip = scene_ContextMenuStrip;
-            sceneTree.NodeMouseClick += (sender, args) 
+            sceneTree.NodeMouseClick += (sender, args)
                 => sceneTree.SelectedNode = args.Node;
 
             componentEditor_ToolStripMenuItem.Click += AddComponent_Click;
             addEntity_ToolStripMenuItem.Click += AddEntity_Click;
 
-            inspector_PropertyGrid.Invalidated += Inspector_Invalidated;
-
-            InvalidatedService.Register
-                (inspector_PropertyGrid, 
-                "EntityComponentChange");
+            InitInspector();
         }
 
-        public void Init()
+        public void InitEditorApp()
         {
             _editorApp.Init();
         }
@@ -97,7 +93,7 @@ namespace CruZ.Editor
             SafeInvoke(entities_ComboBox, 
                 () => entities_ComboBox.SelectedItem = e);
 
-            UpdatePropertyGrid(e);
+            ChangeInspectorSelectingEntity(e);
         }
 
         private void EntityComboBox_SelectedIndexChanged(object? sender, EventArgs e)
@@ -268,7 +264,7 @@ namespace CruZ.Editor
             if (_instance != null) throw new InvalidOperationException("Already Ran");
 
             _instance = new EditorForm();
-            _instance.Init();
+            _instance.InitEditorApp();
 
             Application.Run(_instance);
         }

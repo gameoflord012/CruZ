@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
 using System;
+using System.Collections.Generic;
 
 namespace CruZ
 {
@@ -80,11 +81,19 @@ namespace CruZ
 
         private void InternalUpdate(GameTime gameTime)
         {
+            ProcessMarshalRequests();
+
             InputUpdate?.Invoke(gameTime);
             ECSUpdate?.Invoke(gameTime);
             UpdateUI?.Invoke(gameTime);
+        }
 
-            //OnUpdate(gameTime);
+        private void ProcessMarshalRequests()
+        {
+            foreach (var invoke in _marshalRequests)
+            {
+                invoke.Invoke();
+            }
         }
 
         private void InternalDraw(GameTime gameTime)
@@ -174,6 +183,8 @@ namespace CruZ
         int _fpsResult = 0;
         int _frameCount = 0;
         float _fpsTimer = 0;
+
+        List<Action> _marshalRequests = [];
     }
 
     public partial class GameApplication
@@ -221,6 +232,11 @@ namespace CruZ
         }
 
         public static int GetFpsResult() => _instance.FpsResult;
+
+        public static void MarshalInvoke(Action action)
+        {
+            _instance._marshalRequests.Add(action);
+        }
 
         private static GameApplication? _instance;
     }

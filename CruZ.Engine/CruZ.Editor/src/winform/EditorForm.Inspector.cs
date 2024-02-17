@@ -1,4 +1,5 @@
 ﻿using CruZ.Components;
+using CruZ.Editor.Services;
 using Microsoft.Xna.Framework;
 using System;
 using System.Windows.Forms;
@@ -7,16 +8,35 @@ namespace CruZ.Editor
 {
     public partial class EditorForm : Form
     {
-        public void UpdatePropertyGrid(TransformEntity? e)
+        private void InitInspector()
+        {
+            inspector_PropertyGrid.Invalidated += Inspector_Invalidated;
+
+            InvalidatedService.Register
+                (inspector_PropertyGrid,
+                "EntityComponentChange", "CurrentSelectedEntityChange");
+
+            inspector_PropertyGrid.PropertyValueChanged += Inspector_PropertyGrid_PropertyValueChanged;
+        }
+
+        private void Inspector_PropertyGrid_PropertyValueChanged(object? s, PropertyValueChangedEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ChangeInspectorSelectingEntity(TransformEntity? e)
         {
             GameApplication.UnregisterDraw(GameApp_Draw);
 
             if (e != null)
                 GameApplication.RegisterDraw(GameApp_Draw);
 
-            SetPropertyGridSelectedObject(e);
+            PropertyGridInvoke(delegate
+            {
+                if (e == null) inspector_PropertyGrid.SelectedObject = null;
+                else inspector_PropertyGrid.SelectedObject = new EntityWrapper(e);
+            });
         }
-
 
         private void Inspector_Invalidated(object? sender, InvalidateEventArgs e)
         {
@@ -35,16 +55,6 @@ namespace CruZ.Editor
             {
                 if (inspector_PropertyGrid.ContainsFocus) return;
                 inspector_PropertyGrid.Refresh();
-            });
-        }
-
-
-        private void SetPropertyGridSelectedObject(TransformEntity? e)
-        {
-            PropertyGridInvoke(delegate
-            {
-                if (e == null) inspector_PropertyGrid.SelectedObject = null;
-                else inspector_PropertyGrid.SelectedObject = new EntityWrapper(e);
             });
         }
 
