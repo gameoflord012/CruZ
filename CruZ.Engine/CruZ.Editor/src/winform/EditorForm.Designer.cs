@@ -33,8 +33,6 @@ namespace CruZ.Editor
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
-            entities_ComboBox = new ComboBox();
-            inspector_PropertyGrid = new PropertyGrid();
             file_Menu = new ToolStripMenuItem();
             scene_Menu = new ToolStripMenuItem();
             openScene_MenuButton = new ToolStripMenuItem();
@@ -42,9 +40,8 @@ namespace CruZ.Editor
             saveAsScene_MenuButton = new ToolStripMenuItem();
             loadScene_MenuButton = new ToolStripMenuItem();
             menuStrip = new MenuStrip();
-            entities_Text = new Label();
-            inspector_Panel = new Panel();
             inspectorTab = new TabPage();
+            entityInspector = new src.winform.EntityInspector();
             sceneTab = new TabPage();
             sceneTree = new TreeView();
             splitContainer1 = new SplitContainer();
@@ -55,7 +52,6 @@ namespace CruZ.Editor
             scene_ContextMenuStrip = new ContextMenuStrip(components);
             addEntity_ToolStripMenuItem = new ToolStripMenuItem();
             menuStrip.SuspendLayout();
-            inspector_Panel.SuspendLayout();
             inspectorTab.SuspendLayout();
             sceneTab.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
@@ -67,23 +63,6 @@ namespace CruZ.Editor
             entity_ContextMenuStrip.SuspendLayout();
             scene_ContextMenuStrip.SuspendLayout();
             SuspendLayout();
-            // 
-            // entities_ComboBox
-            // 
-            entities_ComboBox.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            entities_ComboBox.FormattingEnabled = true;
-            entities_ComboBox.Location = new Point(0, 17);
-            entities_ComboBox.Name = "entities_ComboBox";
-            entities_ComboBox.Size = new Size(363, 23);
-            entities_ComboBox.TabIndex = 1;
-            // 
-            // inspector_PropertyGrid
-            // 
-            inspector_PropertyGrid.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            inspector_PropertyGrid.Location = new Point(0, 46);
-            inspector_PropertyGrid.Name = "inspector_PropertyGrid";
-            inspector_PropertyGrid.Size = new Size(363, 183);
-            inspector_PropertyGrid.TabIndex = 0;
             // 
             // file_Menu
             // 
@@ -140,28 +119,9 @@ namespace CruZ.Editor
             menuStrip.TabIndex = 1;
             menuStrip.Text = "menuStrip1";
             // 
-            // entities_Text
-            // 
-            entities_Text.Location = new Point(0, 0);
-            entities_Text.Name = "entities_Text";
-            entities_Text.Size = new Size(334, 17);
-            entities_Text.TabIndex = 2;
-            entities_Text.Text = "Entities";
-            // 
-            // inspector_Panel
-            // 
-            inspector_Panel.Controls.Add(entities_ComboBox);
-            inspector_Panel.Controls.Add(entities_Text);
-            inspector_Panel.Controls.Add(inspector_PropertyGrid);
-            inspector_Panel.Dock = DockStyle.Fill;
-            inspector_Panel.Location = new Point(3, 3);
-            inspector_Panel.Name = "inspector_Panel";
-            inspector_Panel.Size = new Size(363, 222);
-            inspector_Panel.TabIndex = 3;
-            // 
             // inspectorTab
             // 
-            inspectorTab.Controls.Add(inspector_Panel);
+            inspectorTab.Controls.Add(entityInspector);
             inspectorTab.Location = new Point(4, 24);
             inspectorTab.Name = "inspectorTab";
             inspectorTab.Padding = new Padding(3);
@@ -169,6 +129,14 @@ namespace CruZ.Editor
             inspectorTab.TabIndex = 0;
             inspectorTab.Text = "Inspector";
             inspectorTab.UseVisualStyleBackColor = true;
+            // 
+            // entityInspector
+            // 
+            entityInspector.Dock = DockStyle.Fill;
+            entityInspector.Location = new Point(3, 3);
+            entityInspector.Name = "entityInspector";
+            entityInspector.Size = new Size(363, 222);
+            entityInspector.TabIndex = 0;
             // 
             // sceneTab
             // 
@@ -264,7 +232,6 @@ namespace CruZ.Editor
             Text = "EditorForm";
             menuStrip.ResumeLayout(false);
             menuStrip.PerformLayout();
-            inspector_Panel.ResumeLayout(false);
             inspectorTab.ResumeLayout(false);
             sceneTab.ResumeLayout(false);
             splitContainer1.Panel1.ResumeLayout(false);
@@ -280,8 +247,6 @@ namespace CruZ.Editor
         }
 
         #endregion
-        private PropertyGrid inspector_PropertyGrid;
-        private ComboBox entities_ComboBox;
 
         #region WORLDVIEW_COMMENT
         //TODO:
@@ -306,8 +271,6 @@ namespace CruZ.Editor
         private ToolStripMenuItem saveAsScene_MenuButton;
         private ToolStripMenuItem loadScene_MenuButton;
         private MenuStrip menuStrip;
-        private Label entities_Text;
-        private Panel inspector_Panel;
         private TabPage inspectorTab;
         private TabPage sceneTab;
         private TreeView sceneTree;
@@ -318,5 +281,6 @@ namespace CruZ.Editor
         private ToolStripMenuItem componentEditor_ToolStripMenuItem;
         private ContextMenuStrip scene_ContextMenuStrip;
         private ToolStripMenuItem addEntity_ToolStripMenuItem;
+        private src.winform.EntityInspector entityInspector;
     }
 }

@@ -4,7 +4,6 @@ using CruZ.Utility;
 using System;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Windows.Forms;
 
 namespace CruZ.Editor
@@ -88,7 +87,7 @@ namespace CruZ.Editor
                 }
             }
 
-            InvalidatedService.SendInvalidated("EntityComponentChange");
+            InvalidatedService.SendInvalidated(InvalidatedEvents.EntityComponentChanged);
         }
 
         TransformEntity _e;

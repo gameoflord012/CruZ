@@ -3,33 +3,39 @@ using System.Windows.Forms;
 
 namespace CruZ.Editor.Services
 {
+    enum InvalidatedEvents
+    {
+        EntityComponentChanged,
+        SelectingEntityChanged
+    }
+
     class InvalidatedService
     {
-        public static void Register(Control controls, params string[] invalidatedStrings)
+        public static void Register(Control controls, params InvalidatedEvents[] invalidatedEvents)
         {
-            foreach (var invalidatedString in invalidatedStrings)
+            foreach (var invalidatedEvent in invalidatedEvents)
             {
-                GetRegisters(invalidatedString).Remove(controls);
-                GetRegisters(invalidatedString).Add(controls);
+                GetRegisters(invalidatedEvent).Remove(controls);
+                GetRegisters(invalidatedEvent).Add(controls);
             }
         }
 
-        public static void SendInvalidated(string invalidatedString)
+        public static void SendInvalidated(InvalidatedEvents invalidatedEvent)
         {
-            foreach (var control in GetRegisters(invalidatedString))
+            foreach (var control in GetRegisters(invalidatedEvent))
             {
                 control.Refresh();
             }
         }
 
-        static List<Control> GetRegisters(string invalidatedString)
+        static List<Control> GetRegisters(InvalidatedEvents invalidatedEvent)
         {
-            if (!registers.ContainsKey(invalidatedString))
-                registers[invalidatedString] = [];
+            if (!registers.ContainsKey(invalidatedEvent))
+                registers[invalidatedEvent] = [];
 
-            return registers[invalidatedString];
+            return registers[invalidatedEvent];
         }
 
-        static Dictionary<string, List<Control>> registers = [];
+        static Dictionary<InvalidatedEvents, List<Control>> registers = [];
     }
 }

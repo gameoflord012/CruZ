@@ -19,7 +19,7 @@ namespace CruZ.Systems
                 //AddSystem(new EntityEventSystem()).
                 AddSystem(new SpriteSystem()).
                 AddSystem(new AnimatedSystem()).
-                AddSystem(new PhysicSystem()).
+                //AddSystem(new PhysicSystem()).
                 AddSystem(new EntityScriptSystem()).
                 Build();
         }

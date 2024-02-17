@@ -22,8 +22,8 @@ namespace CruZ.Editor.Controls
 {
     public partial class EditorApplication
     {
-        public event Action<GameScene?> LoadedSceneChanged;
-        public event Action<TransformEntity?> SelectEntityChanged;
+        public event Action<GameScene?> CurrentSceneChanged;
+        public event Action<TransformEntity?> SelectingEntityChanged;
 
         public GameScene? CurrentGameScene => _currentScene;
 
@@ -48,7 +48,7 @@ namespace CruZ.Editor.Controls
             CacheRead?.Invoke(this, "LoadedScene");
         }
 
-        #region PUBLIC_FUNCS
+        #region Public_Functions
         public void UnloadCurrentScene()
         {
             SelectEntity(null);
@@ -61,7 +61,7 @@ namespace CruZ.Editor.Controls
             _currentScene.Dispose();
             _currentScene = null;
 
-            LoadedSceneChanged?.Invoke(null);
+            CurrentSceneChanged?.Invoke(null);
         }
 
         public void SelectEntity(TransformEntity? e)
@@ -84,22 +84,8 @@ namespace CruZ.Editor.Controls
 
             Logging.SetMsg(e != null ? e.ToString() : "");
 
-            SelectEntityChanged?.Invoke(e);
+            SelectingEntityChanged?.Invoke(e);
         }
-
-        //public void SelectEntity(string entityName)
-        //{
-        //    if(_currentScene == null) 
-        //        throw new InvalidOperationException("No scene is active, load a scene first");
-
-        //    foreach (var e in _currentScene.Entities)
-        //    {
-        //        if(e.ToString() == entityName)
-        //            SelectEntity(e);
-
-        //        return;
-        //    }
-        //}
 
         public void LoadSceneFromFile(string file)
         {
@@ -143,7 +129,7 @@ namespace CruZ.Editor.Controls
         }
         #endregion
 
-        #region EVENT_HANDLER
+        #region Event_Handlers
         private void EditorForm_Closing(object? sender, FormClosingEventArgs args)
         {
             CacheWrite?.Invoke(this, "LoadedScene");
@@ -166,7 +152,7 @@ namespace CruZ.Editor.Controls
         private void GameApp_Exit()
         {
             UnloadCurrentScene();
-            _editorForm.SafeInvoke(_editorForm, CleanAppSession);
+            _editorForm.SafeInvoke(CleanAppSession);
         }
 
         //private void GameApp_EarlyDraw(DrawEventArgs args)
@@ -224,8 +210,8 @@ namespace CruZ.Editor.Controls
             FindEntityToSelect(info);
         }
         #endregion
-
-        #region PRIVATE
+        
+        #region Private_Functions
         private void FindEntityToSelect(UIInfo info)
         {
             var contains = UIManager.GetContains(info.MousePos().X, info.MousePos().Y);
@@ -344,7 +330,7 @@ namespace CruZ.Editor.Controls
 
             _currentScene = scene;
             _currentScene.SetActive(true);
-            LoadedSceneChanged?.Invoke(_currentScene);
+            CurrentSceneChanged?.Invoke(_currentScene);
 
             Logging.SetMsg(_currentScene.ToString(), "Scene");
 
@@ -357,47 +343,27 @@ namespace CruZ.Editor.Controls
         }
         #endregion
 
-        #region THREADING
-        public void ExitAppAsync()
-        {
-            ThreadPool.QueueUserWorkItem(delegate 
-            {
-                CleanAppSession();
-            });
-        } 
-        #endregion
+        #region Private_Variables
+        bool _isMouseDraggingCamera;
+        Vector3 _cameraStartDragCoord;
+        XNA.Point _mouseStartDragPoint;
 
+        GameScene? _currentScene;
+        EntityControl? _currentSelect;
 
-        bool                _isMouseDraggingCamera;
-        Vector3             _cameraStartDragCoord;
-        XNA.Point           _mouseStartDragPoint;
+        GameApplication? _gameApp;
+        Thread? _gameAppThread;
 
-        GameScene?          _currentScene;
-        EntityControl?      _currentSelect;
+        Camera? _mainCamera;
 
-        GameApplication?    _gameApp;
-        Thread?             _gameAppThread;
+        ManualResetEvent _appInitalized_Reset = new(false);
 
-        Camera?             _mainCamera;
-
-        ManualResetEvent    _appInitalized_Reset = new(false);
-        
         List<EntityControl> _eControls = [];
-        LoggingWindow      _infoTextWindow;
+        LoggingWindow _infoTextWindow;
 
         EditorForm _editorForm;
-        
-        int _thisThreadId;
-    }
 
-    public class EditorAsyncResult : IAsyncResult
-    {
-        public object? AsyncState => null;
-
-        public WaitHandle AsyncWaitHandle => throw new NotImplementedException();
-
-        public bool CompletedSynchronously => true;
-
-        public bool IsCompleted => true;
+        int _thisThreadId; 
+        #endregion
     }
 }

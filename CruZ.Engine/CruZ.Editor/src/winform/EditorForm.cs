@@ -1,13 +1,10 @@
-﻿using Assimp;
-using CruZ.Components;
+﻿using CruZ.Components;
 using CruZ.Editor.Controls;
 using CruZ.Editor.Services;
 using CruZ.Editor.Utility;
 using CruZ.Exception;
 using CruZ.Resource;
-using CruZ.Scene;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
@@ -18,6 +15,9 @@ namespace CruZ.Editor
 {
     public partial class EditorForm : Form
     {
+        //internal event Action<TransformEntity?>? SelectingEntityChanged;
+        //internal event Action<GameScene?>? CurrentSceneChanged;
+
         private EditorForm()
         {
             InitializeComponent();
@@ -26,13 +26,9 @@ namespace CruZ.Editor
             Text = "CruZ Engine";
 
             _editorApp = new(this);
+            _editorApp.CurrentSceneChanged += EditorApp_LoadNewScene;
+            
             _formThread = Thread.CurrentThread;
-
-            _editorApp.SelectEntityChanged += EditorApp_SelectEntity;
-            _editorApp.LoadedSceneChanged += EditorApp_LoadNewScene;
-
-            entities_ComboBox.SelectedIndexChanged += EntityComboBox_SelectedIndexChanged;
-            entities_ComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
 
             sceneTree.BeforeSelect += SceneTree_BeforeSelect;
             sceneTree.ContextMenuStrip = scene_ContextMenuStrip;
@@ -40,16 +36,11 @@ namespace CruZ.Editor
                 => sceneTree.SelectedNode = args.Node;
 
             componentEditor_ToolStripMenuItem.Click += AddComponent_Click;
+
             addEntity_ToolStripMenuItem.Click += AddEntity_Click;
-
-            InitInspector();
-        }
-
-        public void InitEditorApp()
-        {
-            _editorApp.Init();
         }
         
+        #region Overrides
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
             if (keyData == (Keys.Control | Keys.Z))
@@ -70,12 +61,9 @@ namespace CruZ.Editor
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
             _editorApp.CleanAppSession();
-
-            _editorApp.SelectEntityChanged -= EditorApp_SelectEntity;
-            _editorApp.LoadedSceneChanged -= EditorApp_LoadNewScene;
-            GameApplication.UnregisterDraw(GameApp_Draw);
+            _editorApp.CurrentSceneChanged -= EditorApp_LoadNewScene;
         }
-        
+        #endregion
         #region Components_Event_Handlers
         private void SceneTree_BeforeSelect(object? sender, TreeViewCancelEventArgs e)
         {
@@ -84,21 +72,7 @@ namespace CruZ.Editor
 
         private void EditorApp_LoadNewScene(GameScene? scene)
         {
-            UpdateEntityComboBox(scene);
             InitSceneTree(scene);
-        }
-
-        private void EditorApp_SelectEntity(Components.TransformEntity? e)
-        {
-            SafeInvoke(entities_ComboBox, 
-                () => entities_ComboBox.SelectedItem = e);
-
-            ChangeInspectorSelectingEntity(e);
-        }
-
-        private void EntityComboBox_SelectedIndexChanged(object? sender, EventArgs e)
-        {
-            _editorApp.SelectEntity((TransformEntity)entities_ComboBox.SelectedItem);
         }
         #endregion
 
@@ -199,25 +173,9 @@ namespace CruZ.Editor
         #endregion
 
         #region Private
-        private void UpdateEntityComboBox(GameScene? scene)
-        {
-            SafeInvoke(entities_ComboBox, delegate
-            {
-                entities_ComboBox.Items.Clear();
-
-                if (scene == null) return;
-
-                for (int i = 0; i < scene.Entities.Count(); i++)
-                {
-                    var e = scene.Entities[i];
-                    entities_ComboBox.Items.Add(e);
-                }
-            });
-        }
-
         private void InitSceneTree(GameScene? scene)
         {
-            SafeInvoke(sceneTree, delegate
+            sceneTree.SafeInvoke(delegate
             {
                 sceneTree.Nodes.Clear();
                 if (scene == null) return;
@@ -237,39 +195,28 @@ namespace CruZ.Editor
             });
         }
 
-        public void SafeInvoke(Control control, Action action)
+        private void Init()
         {
-            if (control.InvokeRequired)
-            {
-                control.BeginInvoke(action);
-            }
-            else
-            {
-                action.Invoke();
-            }
+            _editorApp.Init();
+            entityInspector.Init(_editorApp);
         }
-        #endregion
 
         EditorApplication _editorApp;
         Thread _formThread;
+        #endregion
 
         #region Static
-        public static PropertyGrid GetPropertyGrid()
-        {
-            return _instance.inspector_PropertyGrid;
-        }
-
         public static void Run()
         {
             if (_instance != null) throw new InvalidOperationException("Already Ran");
 
             _instance = new EditorForm();
-            _instance.InitEditorApp();
+            _instance.Init();
 
             Application.Run(_instance);
         }
 
-        static EditorForm? _instance; 
+        static EditorForm? _instance;
         #endregion
     }
 }
