@@ -55,7 +55,7 @@ namespace CruZ.Components
 
             if (!_tyToComp.ContainsKey(compTy))
             {
-                throw new($"Entity doesn't contain entity of type {ty}");
+                throw new($"Entity doesn't contain component of type {ty}");
             }
 
             return _tyToComp[compTy];
@@ -76,14 +76,11 @@ namespace CruZ.Components
 
         public void RemoveComponent(Type compTy)
         {
-            if (!HasComponent(compTy))
-                throw new(string.Format($"Component {compTy} doesn't exists"));
-
             var comp = GetComponent(compTy);
             
-            _entity.Detach(compTy);
-            _comToEntity.Remove(_tyToComp[compTy]);
-            _tyToComp.Remove(compTy);
+            _entity.Detach(comp.ComponentType);
+            _comToEntity.Remove(comp);
+            _tyToComp.Remove(comp.ComponentType);
 
             comp.InternalOnDetached(this);
             ComponentsChanged?.Invoke(_tyToComp);

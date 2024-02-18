@@ -1,4 +1,5 @@
 ﻿using CruZ.Components;
+using CruZ.Editor.Controls;
 using CruZ.Editor.Services;
 using CruZ.Utility;
 using System;
@@ -75,15 +76,22 @@ namespace CruZ.Editor
 
                 if (component_ListBox.GetItemChecked(i))
                 {
-                    if(_e.HasComponent(compTy)) continue;
+                    if (_e.HasComponent(compTy)) continue;
 
-                    var comp = ComponentHelper.GetDefaultComponentInstance(compTy);
-                    _e.AddComponent(comp);
+                    GameApplication.MarshalInvoke(delegate
+                    {
+                        var comp = ComponentHelper.GetDefaultComponentInstance(compTy);
+                        _e.AddComponent(comp);
+                    });
                 }
                 else
                 {
                     if(!_e.HasComponent(compTy)) continue;
-                    _e.RemoveComponent(compTy);
+
+                    GameApplication.MarshalInvoke(delegate
+                    {
+                        _e.RemoveComponent(compTy);
+                    });
                 }
             }
 

@@ -1,10 +1,13 @@
 ﻿using CruZ.Systems;
 using CruZ.UI;
 using CruZ.Utility;
+
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+
 using MonoGame.Extended;
+
 using System;
 using System.Collections.Generic;
 
@@ -13,20 +16,20 @@ namespace CruZ
     public partial class GameApplication :
         IECSContextProvider, IInputContextProvider, UIContext, IDisposable
     {
-        public event Action<GameTime>   DrawUI;
-        public event Action<GameTime>   UpdateUI;
-        public event Action             InitializeUI;
+        public event Action<GameTime> DrawUI;
+        public event Action<GameTime> UpdateUI;
+        public event Action InitializeUI;
 
         public event Action<GameTime> ECSDraw;
         public event Action<GameTime> ECSUpdate;
         public event Action InitializeECSSystem;
 
-        public event Action<GameTime>       InputUpdate;
-        public event Action<Viewport>       WindowResize;
-        public event Action                 ExitEvent;
-        public event Action<DrawEventArgs>  EarlyDraw;
-        public event Action<GameTime>       Draw;
-        public event Action<DrawEventArgs>  LateDraw;
+        public event Action<GameTime> InputUpdate;
+        public event Action<Viewport> WindowResize;
+        public event Action ExitEvent;
+        public event Action<DrawEventArgs> EarlyDraw;
+        public event Action<GameTime> Draw;
+        public event Action<DrawEventArgs> LateDraw;
 
         public event Action Initializing;
         public event Action Initialized;
@@ -67,9 +70,9 @@ namespace CruZ
 
         public void Exit()
         {
-            lock(this)
+            lock (this)
             {
-                if(!_exitCalled)
+                if (!_exitCalled)
                     _core.Exit();
             }
         }
@@ -94,6 +97,8 @@ namespace CruZ
             {
                 invoke.Invoke();
             }
+
+            _marshalRequests.Clear();
         }
 
         private void InternalDraw(GameTime gameTime)
@@ -137,6 +142,7 @@ namespace CruZ
 
         protected virtual void OnInitialize() { }
         protected virtual void OnDraw(GameTime gameTime) { }
+
         //protected virtual void OnUpdate(GameTime gameTime) { }
         //protected virtual void OnLateDraw(GameTime gameTime) { }
         //protected virtual void OnExit() { }
@@ -148,13 +154,13 @@ namespace CruZ
             _frameCount++;
 
             int seconds = 0;
-            while(_fpsTimer > 1)
-            { 
+            while (_fpsTimer > 1)
+            {
                 seconds++;
                 _fpsTimer -= 1;
             }
 
-            if(seconds > 0)
+            if (seconds > 0)
             {
                 _fpsResult = _frameCount / seconds;
                 _frameCount = 0;
@@ -162,7 +168,7 @@ namespace CruZ
                 Logging.SetMsg($"Fps: {_fpsResult}", "Fps");
             }
         }
-        
+
         public void Dispose()
         {
             if (!disposed)
@@ -231,11 +237,14 @@ namespace CruZ
             return _instance.Content;
         }
 
-        public static int GetFpsResult() => _instance.FpsResult;
+        //public static int GetFpsResult() => _instance.FpsResult;
 
         public static void MarshalInvoke(Action action)
         {
-            _instance._marshalRequests.Add(action);
+            lock (_instance)
+            {
+                _instance._marshalRequests.Add(action);
+            }
         }
 
         private static GameApplication? _instance;

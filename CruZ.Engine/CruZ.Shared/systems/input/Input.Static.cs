@@ -21,7 +21,7 @@ namespace CruZ.Systems
         public static event Action<IInputInfo>? KeyStateChanged;
         //public static event Action<IInputInfo>? MouseClicked;
 
-        public static IInputInfo Info => _instance;
+        public static IInputInfo Info => _instance._info;
 
         static Input? _instance;
 

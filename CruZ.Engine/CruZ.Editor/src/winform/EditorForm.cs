@@ -5,6 +5,7 @@ using CruZ.Editor.Utility;
 using CruZ.Exception;
 using CruZ.Resource;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
@@ -27,19 +28,35 @@ namespace CruZ.Editor
 
             _editorApp = new(this);
             _editorApp.CurrentSceneChanged += EditorApp_LoadNewScene;
-            
+
             _formThread = Thread.CurrentThread;
 
-            sceneTree.BeforeSelect += SceneTree_BeforeSelect;
-            sceneTree.ContextMenuStrip = scene_ContextMenuStrip;
-            sceneTree.NodeMouseClick += (sender, args)
-                => sceneTree.SelectedNode = args.Node;
+            _editorApp.SelectingEntityChanged += Editor_SelectingEntityChanged;
+
+            InitSceneTree();
 
             componentEditor_ToolStripMenuItem.Click += AddComponent_Click;
 
             addEntity_ToolStripMenuItem.Click += AddEntity_Click;
         }
-        
+
+        private void InitSceneTree()
+        {
+            sceneTree.HideSelection = false;
+            sceneTree.BeforeSelect += SceneTree_BeforeSelect;
+            sceneTree.ContextMenuStrip = scene_ContextMenuStrip;
+            sceneTree.NodeMouseClick += (sender, args)
+                => sceneTree.SelectedNode = args.Node;
+        }
+
+        private void Editor_SelectingEntityChanged(TransformEntity? e)
+        {
+            sceneTree.SafeInvoke(delegate
+            {
+                sceneTree.SelectedNode = e == null ? null : _entityToNode[e];
+            });
+        }
+
         #region Overrides
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
@@ -72,7 +89,7 @@ namespace CruZ.Editor
 
         private void EditorApp_LoadNewScene(GameScene? scene)
         {
-            InitSceneTree(scene);
+            UpdateSceneTree(scene);
         }
         #endregion
 
@@ -109,11 +126,11 @@ namespace CruZ.Editor
 
         private void SaveScene_Clicked(object sender, EventArgs args)
         {
-            //TODO: if (_editorApp.CurrentGameScene == null) return;
+            //TODO: if (_editor.CurrentGameScene == null) return;
 
             try
             {
-                //TODO: ResourceManager.SaveResource(_editorApp.CurrentGameScene);
+                //TODO: ResourceManager.SaveResource(_editor.CurrentGameScene);
             }
             catch (System.Exception e)
             {
@@ -173,11 +190,13 @@ namespace CruZ.Editor
         #endregion
 
         #region Private
-        private void InitSceneTree(GameScene? scene)
+        private void UpdateSceneTree(GameScene? scene)
         {
             sceneTree.SafeInvoke(delegate
             {
                 sceneTree.Nodes.Clear();
+                _entityToNode.Clear();
+
                 if (scene == null) return;
                 
                 sceneTree.Nodes.Add(scene.ToString());
@@ -187,10 +206,14 @@ namespace CruZ.Editor
                 for (int i = 0; i < scene.Entities.Count(); i++)
                 {
                     var e = scene.Entities[i];
-
                     root.Nodes.Add(e.ToString());
-                    root.Nodes[i].ContextMenuStrip = entity_ContextMenuStrip;
-                    root.Nodes[i].Tag = e;
+
+                    var node = root.Nodes[i];
+
+                    node.ContextMenuStrip = entity_ContextMenuStrip;
+                    node.Tag = e;
+
+                    _entityToNode[e] = node;
                 }
             });
         }
@@ -203,6 +226,7 @@ namespace CruZ.Editor
 
         EditorApplication _editorApp;
         Thread _formThread;
+        Dictionary<TransformEntity, TreeNode> _entityToNode = [];
         #endregion
 
         #region Static

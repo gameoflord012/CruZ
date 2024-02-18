@@ -250,18 +250,18 @@ namespace CruZ.Editor
 
         #region WORLDVIEW_COMMENT
         //TODO:
-        //_editorApp = new EditorApplication();
+        //_editor = new EditorApplication();
 
 
-        //splitContainer1.Panel1.Controls.Add(_editorApp);
+        //splitContainer1.Panel1.Controls.Add(_editor);
 
-        //_editorApp.BackColor = Color.LightSeaGreen;
-        //_editorApp.Dock = DockStyle.Fill;
-        //_editorApp.Location = new Point(0, 0);
-        //_editorApp.Margin = new Padding(3, 2, 3, 2);
-        //_editorApp.Name = "_editorApp";
-        //_editorApp.Size = new Size(419, 314);
-        //_editorApp.TabIndex = 0;
+        //_editor.BackColor = Color.LightSeaGreen;
+        //_editor.Dock = DockStyle.Fill;
+        //_editor.Location = new Point(0, 0);
+        //_editor.Margin = new Padding(3, 2, 3, 2);
+        //_editor.Name = "_editor";
+        //_editor.Size = new Size(419, 314);
+        //_editor.TabIndex = 0;
         #endregion
 
         private ToolStripMenuItem file_Menu;

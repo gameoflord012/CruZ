@@ -19,7 +19,7 @@ namespace CruZ.Editor.src.winform
 
         public void Init(EditorApplication editor)
         {
-            _editorApp = editor;
+            _editor = editor;
 
             entities_ComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
 
@@ -53,7 +53,7 @@ namespace CruZ.Editor.src.winform
 
         private void EntityList_SelectedIndexChanged(object? sender, EventArgs e)
         {
-            _editorApp.SelectEntity((TransformEntity)entities_ComboBox.SelectedItem);
+            _editor.SelectEntity((TransformEntity)entities_ComboBox.SelectedItem);
         }
 
         private void Inspector_Invalidated(object? sender, InvalidateEventArgs e)
@@ -85,6 +85,10 @@ namespace CruZ.Editor.src.winform
             });
         }
 
+        // TODO: this function update every draws causing
+        // EditorApplication.SelectEntity() call multiple times
+        // which shouldn't be
+ 
         private void UpdatePropertyGrid(TransformEntity? e)
         {
             entities_ComboBox.SafeInvoke(delegate
@@ -123,18 +127,18 @@ namespace CruZ.Editor.src.winform
             entities_ComboBox.SelectedIndexChanged += EntityList_SelectedIndexChanged;
             inspector_PropertyGrid.Invalidated += Inspector_Invalidated;
 
-            _editorApp.SelectingEntityChanged += Editor_SelectingEntityChanged;
+            _editor.SelectingEntityChanged += Editor_SelectingEntityChanged;
 
-            _editorApp.CurrentSceneChanged += Editor_CurrentSceneChanged;
-            if (_editorApp.CurrentGameScene != null)
+            _editor.CurrentSceneChanged += Editor_CurrentSceneChanged;
+            if (_editor.CurrentGameScene != null)
             {
-                UpdateEntityComboBox(_editorApp.CurrentGameScene);
+                UpdateEntityComboBox(_editor.CurrentGameScene);
             }
 
             inspector_PropertyGrid.PropertyValueChanged += PropertyGrid_PropertyValueChanged;
         }
 
-        EditorApplication _editorApp; 
+        EditorApplication _editor; 
         #endregion
     }
 }
