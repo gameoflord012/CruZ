@@ -13,9 +13,29 @@ namespace CruZ.Editor.UI
 {
     public class EntityControl : UIControl, ICanUndo
     {
-        //public event Action<EntityControl>? Selecting;
+        static readonly int MIN_BOUND_SIZE = 25;
 
         public TransformEntity AttachEntity { get => _e; }
+
+        public EntityControl(TransformEntity e)
+        {
+            _e = e;
+            _e.RemoveFromWorldEvent += Entity_OnRemoveFromWorld;
+            _e.ComponentsChanged += Entity_ComponentsChanged;
+
+            if(e.HasComponent(typeof(SpriteComponent)))
+            {
+                _sp = e.GetComponent<SpriteComponent>();
+
+                _sp.DrawLoopEnd += Sprite_DrawLoopEnd;
+                _sp.DrawBegin += Sprite_DrawBegin;
+                _sp.DrawEnd += Sprite_DrawEnd;
+            }
+
+            _initialBackgroundCol = BackgroundColor;
+
+            Active = false;
+        }
 
         public void SelectEntity(bool shouldSelect)
         {
@@ -31,30 +51,20 @@ namespace CruZ.Editor.UI
             _draggableToggle = false;
         }
 
-        public EntityControl(TransformEntity e)
-        {
-            _e = e;
-            _e.RemoveFromWorldEvent += Entity_OnRemoveFromWorld;
-            _sp = e.GetComponent<SpriteComponent>();
-
-            _sp.DrawLoopEnd += Sprite_DrawLoopEnd;
-            _sp.DrawBegin += Sprite_DrawBegin;
-            _sp.DrawEnd += Sprite_DrawEnd;
-
-            _initialBackgroundCol = BackgroundColor;
-
-            Active = false;
-        }
-
         protected override void OnDraw(UIInfo args)
         {
             base.OnDraw(args);
 
-            foreach (var origin in _origins)
+            if(_hasRenderBound)
             {
-                var screen = Camera.Main.CoordinateToPoint(origin);
-                args.SpriteBatch.DrawCircle(new(screen.X, screen.Y),
-                    EditorVariables.CENTER_CIRCLE_SIZE, 8, XNA.Color.Blue);
+                // Draw sprite origin
+                foreach (var origin in _origins)
+                {
+                    var screen = Camera.Main.CoordinateToPoint(origin);
+
+                    args.SpriteBatch.DrawCircle(new(screen.X, screen.Y),
+                        EditorVariables.CENTER_CIRCLE_SIZE, 8, XNA.Color.Blue);
+                }
             }
         }
 
@@ -66,26 +76,32 @@ namespace CruZ.Editor.UI
             }
 
             BackgroundColor = _draggableToggle ? _draggableBackgroundCol : _initialBackgroundCol;
+
+            if(!_hasRenderBound)
+            {
+                var center = Camera.Main.CoordinateToPoint(_e.Transform.Position);
+
+                Width = MIN_BOUND_SIZE;
+                Height = MIN_BOUND_SIZE;
+
+                SetCenter(center);
+            }
         }
 
         #region Sprites_Events
         private void Sprite_DrawBegin()
         {
-            _boundsHasValue = false;
-
             _origins.Clear();
         }
 
         private void Sprite_DrawEnd(DrawEndEventArgs args)
         {
-            _bounds = args.RenderBounds;
-            CalcBounds();
+            CalcControlBounds(args);
         }
 
         private void Sprite_DrawLoopEnd(object? sender, DrawLoopEndEventArgs args)
         {
             _origins.Add(args.BeginArgs.GetWorldOrigin());
-
         }
         #endregion
 
@@ -94,16 +110,26 @@ namespace CruZ.Editor.UI
             if (Parent != null) Parent.RemoveChild(this);
         }
 
-        private void CalcBounds()
+        private void Entity_ComponentsChanged(Dictionary<Type, Component> comps)
         {
+            _e.TryGetComponent(ref _sp);
+        }
+
+        private void CalcControlBounds(DrawEndEventArgs args)
+        {
+            _hasRenderBound = args.HasRenderBounds;
+            if(!_hasRenderBound) return;
+
+            _bounds = args.RenderBounds;
+
             Location = Camera.Main.CoordinateToPoint(new(_bounds.X, _bounds.Y));
 
-            var size = new Size2
-                (_bounds.Width * Camera.Main.WorldToScreenScale().X,
+            var size = new Size2(
+                _bounds.Width * Camera.Main.WorldToScreenScale().X,
                 _bounds.Height * Camera.Main.WorldToScreenScale().Y);
 
-            Width = (int)size.Width;
-            Height = (int)size.Height;
+            Width = (int)MathF.Max(MIN_BOUND_SIZE, size.Width);
+            Height = (int)MathF.Max(MIN_BOUND_SIZE, size.Height);
         }
 
         private DRAW.Point GetCenter()
@@ -155,15 +181,15 @@ namespace CruZ.Editor.UI
         #endregion
 
         TransformEntity _e;
-        SpriteComponent _sp;
+        SpriteComponent? _sp;
         DRAW.RectangleF _bounds; //World bounds
+        bool _hasRenderBound;
 
         DRAW.Point _dragCenterOffset;
 
         public List<Vector3> _origins = [];
 
         bool _dragging = false;
-        bool _boundsHasValue = false;
         bool _draggableToggle;
 
         bool Draggable => _draggableToggle;

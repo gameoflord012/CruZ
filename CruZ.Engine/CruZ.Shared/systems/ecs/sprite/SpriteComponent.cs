@@ -59,6 +59,9 @@ namespace CruZ.Components
     public class DrawEndEventArgs : EventArgs
     {
         public DRAW.RectangleF RenderBounds;
+        /// <summary>
+        /// To mark the RenderBounds property is valid to use in <see cref="DrawEndEventArgs"/>
+        /// </summary>
         public bool HasRenderBounds = false;
     }
     #endregion

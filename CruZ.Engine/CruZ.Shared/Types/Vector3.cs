@@ -69,6 +69,11 @@ namespace CruZ
             return new(v.X * s, v.Y * s, v.Z * s);
         }
 
+        public override string ToString()
+        {
+            return $"{X}, {Y}, {Z}";
+        }
+
         public static Vector3 Zero => new(0, 0, 0);
         public static Vector3 One => new(1, 1, 1);
     }
