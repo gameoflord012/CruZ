@@ -41,7 +41,7 @@ namespace CruZ.Editor
             loadScene_MenuButton = new ToolStripMenuItem();
             menuStrip = new MenuStrip();
             inspectorTab = new TabPage();
-            entityInspector = new src.winform.Inspector();
+            entityInspector = new Inspector();
             sceneTab = new TabPage();
             sceneTree = new TreeView();
             splitContainer1 = new SplitContainer();
@@ -281,6 +281,6 @@ namespace CruZ.Editor
         private ToolStripMenuItem componentEditor_ToolStripMenuItem;
         private ContextMenuStrip scene_ContextMenuStrip;
         private ToolStripMenuItem addEntity_ToolStripMenuItem;
-        private src.winform.Inspector entityInspector;
+        private Inspector entityInspector;
     }
 }

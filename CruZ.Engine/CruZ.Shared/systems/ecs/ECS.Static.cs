@@ -13,8 +13,6 @@ namespace CruZ.Systems
 
         private static ECS? _instance;
 
-        //public static World World { get => _instance._world; }
-
         /// <summary>
         /// Not good idea to call this without proper memory manage
         /// </summary>

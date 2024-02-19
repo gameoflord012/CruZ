@@ -1,20 +1,16 @@
 ﻿using CruZ.Resource;
-using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Newtonsoft.Json;
 using System;
 using System.Diagnostics;
+using CruZ.Global;
+using Microsoft.Xna.Framework;
+using System.ComponentModel;
 
 namespace CruZ.Components
 {
-    using Box2D.NetStandard.Dynamics.World;
-    using CruZ.Global;
-    using Microsoft.Xna.Framework;
-    using MonoGame.Extended;
-    using System.ComponentModel;
-    using System.IO;
-    using System.Numerics;
 
+    #region EventArgs
     public class DrawLoopBeginEventArgs : EventArgs
     {
         public Rectangle SourceRectangle;
@@ -60,7 +56,7 @@ namespace CruZ.Components
         public DRAW.RectangleF RenderBounds;
         public bool HasRenderBounds = false;
     }
-
+    #endregion
     public partial class SpriteComponent : Component
     {
         public event EventHandler<DrawLoopBeginEventArgs> DrawLoopBegin;
@@ -70,7 +66,6 @@ namespace CruZ.Components
 
         [Browsable(false), JsonIgnore]
         public override Type ComponentType => typeof(SpriteComponent);
-
         [JsonIgnore, Browsable(false)]
         public Texture2D? Texture { get => _texture; set => _texture = value; }
         public float LayerDepth { get; set; } = 0;
