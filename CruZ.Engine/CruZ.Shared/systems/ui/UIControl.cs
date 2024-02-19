@@ -10,6 +10,9 @@ namespace CruZ.UI
 {
     public partial class UIControl
     {
+        static readonly int BOUND_THICKNESS = 2;
+        static readonly XNA.Color DEFAULT_BACKGROUND_COLOR = XNA.Color.Red;
+
         #region Properties
         public UIControl? Parent { get => _parent; }
         public UIControl[] Childs => _childs.ToArray();
@@ -22,7 +25,7 @@ namespace CruZ.UI
         public int Width { get => (int)_size.Width; set => _size.Width = value; }
         public int Height { get => (int)_size.Height; set => _size.Height = value; }
 
-        public XNA.Color BackgroundColor = XNA.Color.Red;
+        public Color BackgroundColor = DEFAULT_BACKGROUND_COLOR;
         public bool Active = true;
         #endregion
 
@@ -60,7 +63,6 @@ namespace CruZ.UI
             
             if (IsMouseHover())
             {
-
                 if (args.InputInfo.MouseClick && !Dragging())
                 {
                     OnMouseClick(args);
@@ -101,7 +103,7 @@ namespace CruZ.UI
         protected virtual void OnUpdate(UIInfo args) { }
         protected virtual void OnDraw(UIInfo args)
         {
-            args.SpriteBatch.DrawRectangle(_location, _size, BackgroundColor);
+            args.SpriteBatch.DrawRectangle(_location, _size, BackgroundColor, BOUND_THICKNESS);
         }
 
         #region Dragging

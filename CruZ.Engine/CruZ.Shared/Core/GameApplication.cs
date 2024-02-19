@@ -48,11 +48,7 @@ namespace CruZ
             _core.Initializing += InternalInitializing;
             _core.UpdateEvent += InternalUpdate;
             _core.DrawEvent += InternalDraw;
-            _core.ExitEvent += InternalOnExit;
-
-            //_core.LoadContentEvent += OnLoadContent;
-            //_core.LateDrawEvent += OnLateDraw;
-            //_core.EndRunEvent       += OnEndRun;
+            _core.ExitEvent += InternalExit;
 
             _core.Window.ClientSizeChanged += Window_ClientSizeChanged;
 
@@ -130,23 +126,16 @@ namespace CruZ
             Initialized?.Invoke();
         }
 
-        private void InternalOnExit(object? sender, EventArgs e)
+        private void InternalExit(object? sender, EventArgs e)
         {
             _exitCalled = true;
 
             ExitEvent?.Invoke();
             Dispose();
-
-            //OnExit();
         }
 
         protected virtual void OnInitialize() { }
         protected virtual void OnDraw(GameTime gameTime) { }
-
-        //protected virtual void OnUpdate(GameTime gameTime) { }
-        //protected virtual void OnLateDraw(GameTime gameTime) { }
-        //protected virtual void OnExit() { }
-        //protected virtual void OnLoadContent() { }
 
         private void CalculateFps(GameTime gameTime)
         {

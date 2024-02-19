@@ -66,25 +66,28 @@ namespace CruZ.Editor.Controls
 
         public void SelectEntity(TransformEntity? e)
         {
-            if (_currentSelect != null && e == _currentSelect.AttachEntity) 
-                return;
-
-            if (_currentSelect != null)
-                _currentSelect.SelectEntity(false);
-
-            if(e != null)
+            lock (this)
             {
-                _currentSelect = GetEntityControl(e);
-                _currentSelect.SelectEntity(true);
-            }
-            else
-            {
-                _currentSelect = null;
-            }
+                if (_currentSelect != null && e == _currentSelect.AttachEntity)
+                    return;
 
-            Logging.SetMsg(e != null ? e.ToString() : "");
+                if (_currentSelect != null)
+                    _currentSelect.SelectEntity(false);
 
-            SelectingEntityChanged?.Invoke(e);
+                if (e != null)
+                {
+                    _currentSelect = GetEntityControl(e);
+                    _currentSelect.SelectEntity(true);
+                }
+                else
+                {
+                    _currentSelect = null;
+                }
+
+                Logging.SetMsg(e != null ? e.ToString() : "");
+
+                SelectingEntityChanged?.Invoke(e);
+            }
         }
 
         public void LoadSceneFromFile(string file)
@@ -204,7 +207,7 @@ namespace CruZ.Editor.Controls
                 Debug.WriteLine("Undo");
             }
         }
-        
+
         private void UI_MouseClick(UIInfo info)
         {
             FindEntityToSelect(info);

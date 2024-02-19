@@ -23,5 +23,10 @@ namespace CruZ.Components
 
         internal void InternalOnAttached(TransformEntity e) { OnAttached(e); }
         internal void InternalOnDetached(TransformEntity e) { OnDetached(e); }
+
+        public override string ToString()
+        {
+            return GetType().Name;
+        }
     }
 }

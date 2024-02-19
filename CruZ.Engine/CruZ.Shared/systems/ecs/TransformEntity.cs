@@ -21,7 +21,9 @@ namespace CruZ.Components
         public TransformEntity? Parent      { get => _parent;       set => _parent = value; }
         public bool             IsActive    { get => _isActive;     set => SetIsActive(value); }
         public Transform        Transform   { get => _transform;    set => _transform = value; }
+        [Browsable(false)]
         public Vector3          Position    { get => Transform.Position; set => Transform.Position = value; }
+        [Browsable(false)]
         public Vector3          Scale       { get => Transform.Scale; set => Transform.Scale = value; }
 
         [Browsable(false)]

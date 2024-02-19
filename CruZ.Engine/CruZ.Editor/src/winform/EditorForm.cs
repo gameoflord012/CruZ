@@ -6,7 +6,6 @@ using CruZ.Exception;
 using CruZ.Resource;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
@@ -26,12 +25,12 @@ namespace CruZ.Editor
             KeyPreview = true;
             Text = "CruZ Engine";
 
-            _editorApp = new(this);
-            _editorApp.CurrentSceneChanged += EditorApp_LoadNewScene;
+            _editor = new(this);
+            _editor.CurrentSceneChanged += EditorApp_LoadNewScene;
 
             _formThread = Thread.CurrentThread;
 
-            _editorApp.SelectingEntityChanged += Editor_SelectingEntityChanged;
+            _editor.SelectingEntityChanged += Editor_SelectingEntityChanged;
 
             InitSceneTree();
 
@@ -77,14 +76,14 @@ namespace CruZ.Editor
 
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
-            _editorApp.CleanAppSession();
-            _editorApp.CurrentSceneChanged -= EditorApp_LoadNewScene;
+            _editor.CleanAppSession();
+            _editor.CurrentSceneChanged -= EditorApp_LoadNewScene;
         }
         #endregion
         #region Components_Event_Handlers
         private void SceneTree_BeforeSelect(object? sender, TreeViewCancelEventArgs e)
         {
-            _editorApp.SelectEntity((TransformEntity)e.Node.Tag);
+            _editor.SelectEntity((TransformEntity)e.Node.Tag);
         }
 
         private void EditorApp_LoadNewScene(GameScene? scene)
@@ -121,7 +120,7 @@ namespace CruZ.Editor
 
             string sceneFile = files[0];
 
-            _editorApp.LoadSceneFromFile(sceneFile);
+            _editor.LoadSceneFromFile(sceneFile);
         }
 
         private void SaveScene_Clicked(object sender, EventArgs args)
@@ -146,7 +145,7 @@ namespace CruZ.Editor
 
         private void SaveAsScene_Clicked(object sender, EventArgs e)
         {
-            if (_editorApp.CurrentGameScene == null)
+            if (_editor.CurrentGameScene == null)
             {
                 DialogHelper.ShowInfoDialog("Nothing to save.");
                 return;
@@ -157,10 +156,10 @@ namespace CruZ.Editor
 
             ResourceManager.CreateResource(
                 savePath,
-                _editorApp.CurrentGameScene,
+                _editor.CurrentGameScene,
                 true);
 
-            _editorApp.LoadSceneFromFile(savePath);
+            _editor.LoadSceneFromFile(savePath);
         }
 
         private void LoadScene_Clicked(object sender, EventArgs e)
@@ -179,7 +178,7 @@ namespace CruZ.Editor
 
             try
             {
-                _editorApp.LoadRuntimeScene(sceneName);
+                _editor.LoadRuntimeScene(sceneName);
             }
             catch (SceneAssetNotFoundException ex)
             {
@@ -220,11 +219,11 @@ namespace CruZ.Editor
 
         private void Init()
         {
-            _editorApp.Init();
-            entityInspector.Init(_editorApp);
+            _editor.Init();
+            entityInspector.Init(_editor);
         }
 
-        EditorApplication _editorApp;
+        EditorApplication _editor;
         Thread _formThread;
         Dictionary<TransformEntity, TreeNode> _entityToNode = [];
         #endregion

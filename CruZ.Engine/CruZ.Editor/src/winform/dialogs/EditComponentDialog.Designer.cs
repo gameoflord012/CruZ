@@ -24,7 +24,7 @@
 
         /// <summary>
         /// Required method for Designer support - do not modify
-        /// the contents of this method with the code editor.
+        /// the contents of this method with the code _editor.
         /// </summary>
         private void InitializeComponent()
         {

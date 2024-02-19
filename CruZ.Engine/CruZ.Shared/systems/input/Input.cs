@@ -44,13 +44,16 @@ namespace CruZ.Systems
             {
                 _isActive = true;
                 _preMouseState = Mouse.GetState();
+                _preKeyboard = Keyboard.GetState();
+                _timeSceneLastDownClick = gameTime.TotalSeconds();
             }
 
             _info.preMouse = _preMouseState;
             _preMouseState = Mouse.GetState();
             _info.curMouse = Mouse.GetState();
 
-            _info.preKeyboard = _info.curKeyboard;
+            _info.preKeyboard = _preKeyboard;
+            _preKeyboard = Keyboard.GetState();
             _info.curKeyboard = Keyboard.GetState();
             #endregion
 
@@ -188,7 +191,6 @@ namespace CruZ.Systems
         MouseState CurMouse { get; }
         MouseState PreMouse { get; }
 
-
         KeyboardState PreKeyboard { get; }
         KeyboardState Keyboard { get; }
 
@@ -201,7 +203,7 @@ namespace CruZ.Systems
         bool IsMouseJustDown(MouseKey key);
         bool IsMouseJustUp(MouseKey key);
 
-        bool IsKeyJustDown(XNA.Input.Keys key)
+        bool IsKeyJustDown(Keys key)
         {
             return PreKeyboard.IsKeyUp(key) && Keyboard.IsKeyDown(key);
         }

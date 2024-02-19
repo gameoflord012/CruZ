@@ -5,14 +5,17 @@ using CruZ.Editor.Services;
 using CruZ.Editor.Utility;
 using Microsoft.Xna.Framework;
 using System;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Drawing.Design;
 using System.Linq;
 using System.Windows.Forms;
 
 namespace CruZ.Editor.src.winform
 {
-    public partial class EntityInspector : UserControl
+    public partial class EditorInspector : UserControl
     {
-        public EntityInspector()
+        public EditorInspector()
         {
             InitializeComponent();
         }
@@ -22,7 +25,6 @@ namespace CruZ.Editor.src.winform
             _editor = editor;
 
             entities_ComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
-
 
             InvalidatedService.Register
                 (inspector_PropertyGrid,
@@ -46,12 +48,12 @@ namespace CruZ.Editor.src.winform
             UpdatePropertyGrid(e);
         }
 
-        private void PropertyGrid_PropertyValueChanged(object? s, PropertyValueChangedEventArgs e)
-        {
-            throw new NotImplementedException();
-        }
+        //private void PropertyGrid_PropertyValueChanged(object? s, PropertyValueChangedEventArgs e)
+        //{
+        //    e.ChangedItem.
+        //}
 
-        private void EntityList_SelectedIndexChanged(object? sender, EventArgs e)
+        private void EntityComboBox_SelectedIndexChanged(object? sender, EventArgs e)
         {
             _editor.SelectEntity((TransformEntity)entities_ComboBox.SelectedItem);
         }
@@ -84,10 +86,6 @@ namespace CruZ.Editor.src.winform
                 }
             });
         }
-
-        // TODO: this function update every draws causing
-        // EditorApplication.SelectEntity() call multiple times
-        // which shouldn't be
  
         private void UpdatePropertyGrid(TransformEntity? e)
         {
@@ -110,9 +108,10 @@ namespace CruZ.Editor.src.winform
 
         private void RefreshPropertyGrid()
         {
+            if (!GameApplication.IsActive()) return;
+
             PropertyGridInvoke(delegate
             {
-                if (inspector_PropertyGrid.ContainsFocus) return;
                 inspector_PropertyGrid.Refresh();
             });
         }
@@ -124,7 +123,7 @@ namespace CruZ.Editor.src.winform
 
         private void RegisterEvents()
         {
-            entities_ComboBox.SelectedIndexChanged += EntityList_SelectedIndexChanged;
+            entities_ComboBox.SelectedIndexChanged += EntityComboBox_SelectedIndexChanged;
             inspector_PropertyGrid.Invalidated += Inspector_Invalidated;
 
             _editor.SelectingEntityChanged += Editor_SelectingEntityChanged;
@@ -134,11 +133,9 @@ namespace CruZ.Editor.src.winform
             {
                 UpdateEntityComboBox(_editor.CurrentGameScene);
             }
-
-            inspector_PropertyGrid.PropertyValueChanged += PropertyGrid_PropertyValueChanged;
         }
 
-        EditorApplication _editor; 
+        EditorApplication _editor;
         #endregion
     }
 }

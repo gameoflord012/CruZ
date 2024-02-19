@@ -28,7 +28,7 @@ namespace CruZ.Editor
 
         /// <summary>
         /// Required method for Designer support - do not modify
-        /// the contents of this method with the code editor.
+        /// the contents of this method with the code _editor.
         /// </summary>
         private void InitializeComponent()
         {
@@ -41,7 +41,7 @@ namespace CruZ.Editor
             loadScene_MenuButton = new ToolStripMenuItem();
             menuStrip = new MenuStrip();
             inspectorTab = new TabPage();
-            entityInspector = new src.winform.EntityInspector();
+            entityInspector = new src.winform.EditorInspector();
             sceneTab = new TabPage();
             sceneTree = new TreeView();
             splitContainer1 = new SplitContainer();
@@ -281,6 +281,6 @@ namespace CruZ.Editor
         private ToolStripMenuItem componentEditor_ToolStripMenuItem;
         private ContextMenuStrip scene_ContextMenuStrip;
         private ToolStripMenuItem addEntity_ToolStripMenuItem;
-        private src.winform.EntityInspector entityInspector;
+        private src.winform.EditorInspector entityInspector;
     }
 }
