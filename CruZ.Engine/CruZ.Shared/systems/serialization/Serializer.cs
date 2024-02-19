@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Text;
 
@@ -59,19 +60,12 @@ namespace CruZ.Serialization
             {
                 o = JsonConvert.DeserializeObject(json, ty, _settings);
             }
-            catch (JsonSerializationException e)
+            catch (System.Exception e)
             {
-                throw new JsonSerializationException(string.Format("can't deserialize data \"{0}\" to type {1}", json, ty), e);
-            }
-            catch (JsonReaderException e)
-            {
-                throw new JsonReaderException(string.Format("can't deserialize data \"{0}\" to type {1}", json, ty), e);
+                throw new ArgumentException(string.Format("Problem to deserialize \"{0}\" to type {1}", json, ty), e);
             }
 
-            if (o == null)
-            {
-                throw new(string.Format("Problem to deserialize \"{0}\" to type {1}", json, ty));
-            }
+            Trace.Assert(o != null);
 
             return o;
         }

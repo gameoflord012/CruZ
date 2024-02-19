@@ -69,36 +69,45 @@ namespace CruZ.Components
         public event Action DrawBegin;
         public event Action<DrawEndEventArgs> DrawEnd;
 
-        [Browsable(false), JsonIgnore]
-        public override Type ComponentType => typeof(SpriteComponent);
-        [JsonIgnore, Browsable(false)]
-        public Texture2D? Texture { get => _texture; set => _texture = value; }
+        #region Properties
         public float LayerDepth { get; set; } = 0;
         public int SortingLayer { get; set; } = 0;
         public bool YLayerDepth { get; set; } = false;
         public bool Flip { get; set; }
+
+        [Browsable(false), JsonIgnore]
+        public override Type ComponentType => typeof(SpriteComponent);
+
+        [JsonIgnore, Browsable(false)]
+        public Texture2D? Texture { get => _texture; set => _texture = value; }
+
         [TypeConverter(typeof(Vector2TypeConverter))]
         public NUM.Vector2 Origin { get; set; } = new(0.5f, 0.5f);
+
 #if CRUZ_EDITOR
         [Editor(typeof(CruZ.Editor.FileUITypeEditor), typeof(UITypeEditor))]
 #endif
-        public string TexturePath { get => _spriteResInfo.ResourceName; set => LoadTexture(value); }
-
-        //public SpriteComponent() { }
-        //public SpriteComponent(string texturePath) { LoadTexture(texturePath); }
-
+        public string TexturePath 
+        { 
+            get =>  _spriteResInfo != null ? _spriteResInfo.ResourceName : ""; 
+            set => LoadTexture(value); 
+        }
+        #endregion
         public void LoadTexture(string texturePath)
         {
             if (!string.IsNullOrEmpty(texturePath))
             {
+                ResourceInfo info;
                 try
                 {
-                    Texture = ResourceManager.LoadResource<Texture2D>(texturePath, out _spriteResInfo);
+                    Texture = ResourceManager.LoadResource<Texture2D>(texturePath, out info);
                 }
-                catch(LoadResourceFailedException e)
+                catch(System.Exception e)
                 {
-                    throw new ArgumentException($"Invalid texture path \"{texturePath}\"", e);
+                    throw new ArgumentException($"Failed to load texture with path \"{texturePath}\"", e);
                 }
+
+                _spriteResInfo = info;
             }
         }
 
