@@ -6,6 +6,11 @@ using System.Diagnostics;
 using CruZ.Global;
 using Microsoft.Xna.Framework;
 using System.ComponentModel;
+using CruZ.Exception;
+
+#if CRUZ_EDITOR
+using System.Drawing.Design;
+#endif
 
 namespace CruZ.Components
 {
@@ -74,15 +79,26 @@ namespace CruZ.Components
         public bool Flip { get; set; }
         [TypeConverter(typeof(Vector2TypeConverter))]
         public NUM.Vector2 Origin { get; set; } = new(0.5f, 0.5f);
+#if CRUZ_EDITOR
+        [Editor(typeof(CruZ.Editor.FileUITypeEditor), typeof(UITypeEditor))]
+#endif
+        public string TexturePath { get => _spriteResInfo.ResourceName; set => LoadTexture(value); }
 
         //public SpriteComponent() { }
-        //public SpriteComponent(string resourceName) { LoadTexture(resourceName); }
+        //public SpriteComponent(string texturePath) { LoadTexture(texturePath); }
 
-        public void LoadTexture(string resourcePath)
+        public void LoadTexture(string texturePath)
         {
-            if (!string.IsNullOrEmpty(resourcePath))
+            if (!string.IsNullOrEmpty(texturePath))
             {
-                Texture = ResourceManager.LoadResource<Texture2D>(resourcePath, out _spriteResInfo);
+                try
+                {
+                    Texture = ResourceManager.LoadResource<Texture2D>(texturePath, out _spriteResInfo);
+                }
+                catch(LoadResourceFailedException e)
+                {
+                    throw new ArgumentException($"Invalid texture path \"{texturePath}\"", e);
+                }
             }
         }
 

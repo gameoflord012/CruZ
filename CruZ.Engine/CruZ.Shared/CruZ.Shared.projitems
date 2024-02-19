@@ -20,13 +20,12 @@
     <Compile Include="$(MSBuildThisFileDirectory)systems\ecs\animation\AnimationComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)systems\ecs\ComponentHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)systems\ecs\Component.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)systems\ecs\Utils\ComponentManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)systems\camera\Camera.Static.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)systems\ecs\EntityScript.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)systems\ecs\script\EntityScript.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)systems\ecs\IECSContextProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)systems\input\IDraggable.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)systems\input\Input.Static.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)systems\ecs\TransformEntity.Disposable.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)systems\ecs\transform\TransformEntity.Disposable.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)systems\resource\ResourceInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)systems\scene\GameScene.Disposable.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)utils\Helper.cs" />
@@ -43,22 +42,20 @@
     <Compile Include="$(MSBuildThisFileDirectory)utils\GameTimeHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)utils\FileHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)systems\resource\ResourceManager.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)systems\ecs\EntityScriptSystem.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)systems\ecs\script\EntityScriptSystem.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)systems\ecs\ECS.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)systems\ecs\EntityExtension.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)systems\ecs\ECS.Static.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)systems\serialization\GlobalSerializer.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)systems\serialization\IAmResource.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)systems\serialization\Serializer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)systems\serialization\TextureAtlasJsonConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)types\Vector3.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)systems\scene\SceneManager.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)systems\ecs\EntityEventComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)utils\FunMath.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)systems\PhysicBody.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)systems\ecs\sprite\SpriteComponent.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)systems\ecs\Transform.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)systems\ecs\TransformEntity.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)systems\ecs\transform\Transform.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)systems\ecs\transform\TransformEntity.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)systems\camera\Camera.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)core\GameCore.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)utils\Logging.cs" />
@@ -71,15 +68,16 @@
     <Compile Include="$(MSBuildThisFileDirectory)systems\PhysicSystem.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)systems\serialization\ISerializable.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)systems\serialization\SerializableJsonConverter.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)systems\serialization\Serialization.SpriteComponent.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)systems\serialization\Serialization.TransformEntity.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)systems\ecs\sprite\SpriteComponent.Serialization.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)systems\ecs\transform\TransformEntity.Serialization.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)systems\serialization\TransformEntityCreationConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)systems\serialization\TransformEntityJsonConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)systems\serialization\TransformJsonConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)systems\ecs\sprite\SpriteSystem.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)utils\PathHelper.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="$(MSBuildThisFileDirectory)systems\" />
-    <Folder Include="$(MSBuildThisFileDirectory)systems\" />
+    <Folder Include="$(MSBuildThisFileDirectory)systems\ecs\script\" />
+    <Folder Include="$(MSBuildThisFileDirectory)systems\ecs\transform\" />
   </ItemGroup>
 </Project>

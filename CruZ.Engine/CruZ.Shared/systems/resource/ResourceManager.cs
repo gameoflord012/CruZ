@@ -1,18 +1,19 @@
-﻿using Assimp.Configs;
-using CruZ.Exception;
+﻿using CruZ.Exception;
 using CruZ.Serialization;
 using CruZ.Tool.ResourceImporter;
 using CruZ.Utility;
+
 using Microsoft.Xna.Framework.Content;
+
 using MonoGame.Extended.Content;
 using MonoGame.Extended.Serialization;
 using MonoGame.Extended.Sprites;
+
 using Newtonsoft.Json;
+
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Linq.Expressions;
 using System.Reflection;
 
 namespace CruZ.Resource
@@ -34,7 +35,7 @@ namespace CruZ.Resource
             _Serializer.Converters.Add(new SerializableJsonConverter());
         }
 
-        public static void RunImport()
+        internal static void RunImport()
         {
             var dotImporter  = Path.Combine(ResourceRoot, ".resourceImporter");
             var importerObject = ResourceImporter.ReadImporterObject(dotImporter);
@@ -70,18 +71,18 @@ namespace CruZ.Resource
                 _Serializer.SerializeToFile(resObj, Path.Combine(ResourceRoot, resourcePath));
             }
 
-            if (existsResource is IDisposable idispose)
-                idispose.Dispose();
+            if (existsResource is IDisposable iDisposable)
+                iDisposable.Dispose();
 
             InitResourceHost(resObj, resourcePath);
         }
 
-        public static void SaveResource(IHostResource hostRes)
+        public static void SaveResource(IHostResource host)
         {
-            if (hostRes.ResourceInfo.IsRuntime)
-                throw new ArgumentException($"Can't save runtime {hostRes} resource, use create resource instead");
+            if (host.ResourceInfo.IsRuntime)
+                throw new ArgumentException($"Can't save runtime {host} resource, use create resource instead");
 
-            CreateResource(hostRes.ResourceInfo.ResourceName, hostRes, true);
+            CreateResource(host.ResourceInfo.ResourceName, host, true);
         }
 
         public static T LoadResource<T>(string resourcePath)
@@ -89,10 +90,10 @@ namespace CruZ.Resource
             return (T)LoadResource(resourcePath, typeof(T));
         }
 
-        public static T LoadResource<T>(string resPath, out ResourceInfo resInfo)
+        public static T LoadResource<T>(string resourcePath, out ResourceInfo resInfo)
         {
-            resInfo = CreateResourceInfo(resPath);
-            return (T)LoadResource(resPath, typeof(T));
+            resInfo = CreateResourceInfo(resourcePath);
+            return (T)LoadResource(resourcePath, typeof(T));
         }
 
         public static T LoadResource<T>(Guid guid)
@@ -108,15 +109,23 @@ namespace CruZ.Resource
         /// <returns></returns>
         private static object LoadResource(string resourcePath, Type ty)
         {
+            var fullResourcePath = Path.Combine(ResourceRoot, resourcePath);
+            var relResourcePath = Path.GetRelativePath(ResourceRoot, fullResourcePath);
+
+            if (!PathHelper.IsSubPath(ResourceRoot, fullResourcePath))
+            {
+                throw new ArgumentException($"Resource Path \"{resourcePath}\" must be a subpath of resource root \"{ResourceRoot}\"");
+            }
+
             object resObj;
 
             try
             {
-                var dir = Path.GetDirectoryName(resourcePath);
-                var file = Path.GetFileNameWithoutExtension(resourcePath);
+                var dir = Path.GetDirectoryName(relResourcePath);
+                var file = Path.GetFileNameWithoutExtension(relResourcePath);
 
                 if(dir == null || file == null)
-                    throw new ArgumentException($"Invalid resourcePath value {resourcePath}");
+                    throw new ArgumentException($"Invalid resourcePath value {relResourcePath}");
 
                 resObj = LoadContentNonGeneric(Path.Combine(dir, file), ty);
             }
@@ -124,15 +133,15 @@ namespace CruZ.Resource
             {
                 try
                 {
-                    resObj = _Serializer.DeserializeFromFile(Path.Combine(ResourceRoot, resourcePath), ty);
+                    resObj = _Serializer.DeserializeFromFile(fullResourcePath, ty);
                 }
                 catch (FileNotFoundException)
                 {
-                    throw new FileNotFoundException(string.Format("Can't find resource file {0}", resourcePath));
+                    throw new FileNotFoundException(string.Format("Can't find resource file {0}", fullResourcePath));
                 }
                 catch(JsonReaderException)
                 {
-                    throw new LoadResourceFailedException($"Can't load resource \"{resourcePath}\" due to invalid resource formatting or not available in content");
+                    throw new LoadResourceFailedException($"Can't load resource \"{fullResourcePath}\" due to invalid resource formatting or not available in content");
                 }
             }
 
@@ -206,9 +215,9 @@ namespace CruZ.Resource
                 host.ResourceInfo = CreateResourceInfo(resourcePath);
         }
 
-        private static ResourceInfo CreateResourceInfo(string resPath)
+        private static ResourceInfo CreateResourceInfo(string resourcePath)
         {
-            return ResourceInfo.Create(resPath, false);
+            return ResourceInfo.Create(resourcePath, false);
         }
 
         private static Serializer _Serializer;
