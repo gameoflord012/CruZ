@@ -1,6 +1,6 @@
-﻿namespace CruZ.Editor.src.winform
+﻿namespace CruZ.Editor
 {
-    partial class EditorInspector
+    partial class Inspector
     {
         /// <summary> 
         /// Required designer variable.
@@ -24,7 +24,7 @@
 
         /// <summary> 
         /// Required method for Designer support - do not modify 
-        /// the contents of this method with the code _editor.
+        /// the contents of this method with the code _editorApp.
         /// </summary>
         private void InitializeComponent()
         {
@@ -71,7 +71,7 @@
             inspector_Panel.Size = new DRAW.Size(288, 233);
             inspector_Panel.TabIndex = 4;
             // 
-            // EditorInspector
+            // Inspector
             // 
             AutoScaleDimensions = new DRAW.SizeF(7F, 15F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;

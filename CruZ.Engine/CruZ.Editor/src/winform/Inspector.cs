@@ -11,16 +11,16 @@ using System.Drawing.Design;
 using System.Linq;
 using System.Windows.Forms;
 
-namespace CruZ.Editor.src.winform
+namespace CruZ.Editor
 {
-    public partial class EditorInspector : UserControl
+    public partial class Inspector : UserControl
     {
-        public EditorInspector()
+        public Inspector()
         {
             InitializeComponent();
         }
 
-        public void Init(EditorApplication editor)
+        public void Init(GameEditor editor)
         {
             _editor = editor;
 
@@ -35,7 +35,7 @@ namespace CruZ.Editor.src.winform
         }
 
         #region Event_Handlers
-        private void Editor_CurrentSceneChanged(GameScene? scene)
+        private void EditorApp_CurrentSceneChanged(GameScene? scene)
         {
             UpdateEntityComboBox(scene);
         }
@@ -43,17 +43,12 @@ namespace CruZ.Editor.src.winform
         /// 
         /// </summary>
         /// <param name="e"></param>
-        private void Editor_SelectingEntityChanged(TransformEntity? e)
+        private void EditorApp_SelectingEntityChanged(TransformEntity? e)
         {
             UpdatePropertyGrid(e);
         }
 
-        //private void PropertyGrid_PropertyValueChanged(object? s, PropertyValueChangedEventArgs e)
-        //{
-        //    e.ChangedItem.
-        //}
-
-        private void EntityComboBox_SelectedIndexChanged(object? sender, EventArgs e)
+        private void Entities_ComboBox_SelectedIndexChanged(object? sender, EventArgs e)
         {
             _editor.SelectEntity((TransformEntity)entities_ComboBox.SelectedItem);
         }
@@ -123,19 +118,19 @@ namespace CruZ.Editor.src.winform
 
         private void RegisterEvents()
         {
-            entities_ComboBox.SelectedIndexChanged += EntityComboBox_SelectedIndexChanged;
+            entities_ComboBox.SelectedIndexChanged += Entities_ComboBox_SelectedIndexChanged;
             inspector_PropertyGrid.Invalidated += Inspector_Invalidated;
 
-            _editor.SelectingEntityChanged += Editor_SelectingEntityChanged;
+            _editor.SelectingEntityChanged += EditorApp_SelectingEntityChanged;
 
-            _editor.CurrentSceneChanged += Editor_CurrentSceneChanged;
+            _editor.CurrentSceneChanged += EditorApp_CurrentSceneChanged;
             if (_editor.CurrentGameScene != null)
             {
                 UpdateEntityComboBox(_editor.CurrentGameScene);
             }
         }
 
-        EditorApplication _editor;
+        GameEditor _editor;
         #endregion
     }
 }

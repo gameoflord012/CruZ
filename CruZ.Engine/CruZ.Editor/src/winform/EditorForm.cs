@@ -15,9 +15,6 @@ namespace CruZ.Editor
 {
     public partial class EditorForm : Form
     {
-        //internal event Action<TransformEntity?>? SelectingEntityChanged;
-        //internal event Action<GameScene?>? CurrentSceneChanged;
-
         private EditorForm()
         {
             InitializeComponent();
@@ -25,12 +22,12 @@ namespace CruZ.Editor
             KeyPreview = true;
             Text = "CruZ Engine";
 
-            _editor = new(this);
-            _editor.CurrentSceneChanged += EditorApp_LoadNewScene;
+            _editorApp = new(this);
+            _editorApp.CurrentSceneChanged += EditorApp_LoadNewScene;
 
             _formThread = Thread.CurrentThread;
 
-            _editor.SelectingEntityChanged += Editor_SelectingEntityChanged;
+            _editorApp.SelectingEntityChanged += EditorApp_SelectingEntityChanged;
 
             InitSceneTree();
 
@@ -48,7 +45,7 @@ namespace CruZ.Editor
                 => sceneTree.SelectedNode = args.Node;
         }
 
-        private void Editor_SelectingEntityChanged(TransformEntity? e)
+        private void EditorApp_SelectingEntityChanged(TransformEntity? e)
         {
             sceneTree.SafeInvoke(delegate
             {
@@ -76,14 +73,15 @@ namespace CruZ.Editor
 
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
-            _editor.CleanAppSession();
-            _editor.CurrentSceneChanged -= EditorApp_LoadNewScene;
+            _editorApp.CleanAppSession();
+            _editorApp.CurrentSceneChanged -= EditorApp_LoadNewScene;
         }
         #endregion
+
         #region Components_Event_Handlers
         private void SceneTree_BeforeSelect(object? sender, TreeViewCancelEventArgs e)
         {
-            _editor.SelectEntity((TransformEntity)e.Node.Tag);
+            _editorApp.SelectEntity((TransformEntity)e.Node.Tag);
         }
 
         private void EditorApp_LoadNewScene(GameScene? scene)
@@ -120,16 +118,16 @@ namespace CruZ.Editor
 
             string sceneFile = files[0];
 
-            _editor.LoadSceneFromFile(sceneFile);
+            _editorApp.LoadSceneFromFile(sceneFile);
         }
 
         private void SaveScene_Clicked(object sender, EventArgs args)
         {
-            //TODO: if (_editor.CurrentGameScene == null) return;
+            //TODO: if (_editorApp.CurrentGameScene == null) return;
 
             try
             {
-                //TODO: ResourceManager.SaveResource(_editor.CurrentGameScene);
+                //TODO: ResourceManager.SaveResource(_editorApp.CurrentGameScene);
             }
             catch (System.Exception e)
             {
@@ -145,7 +143,7 @@ namespace CruZ.Editor
 
         private void SaveAsScene_Clicked(object sender, EventArgs e)
         {
-            if (_editor.CurrentGameScene == null)
+            if (_editorApp.CurrentGameScene == null)
             {
                 DialogHelper.ShowInfoDialog("Nothing to save.");
                 return;
@@ -156,10 +154,10 @@ namespace CruZ.Editor
 
             ResourceManager.CreateResource(
                 savePath,
-                _editor.CurrentGameScene,
+                _editorApp.CurrentGameScene,
                 true);
 
-            _editor.LoadSceneFromFile(savePath);
+            _editorApp.LoadSceneFromFile(savePath);
         }
 
         private void LoadScene_Clicked(object sender, EventArgs e)
@@ -178,7 +176,7 @@ namespace CruZ.Editor
 
             try
             {
-                _editor.LoadRuntimeScene(sceneName);
+                _editorApp.LoadRuntimeScene(sceneName);
             }
             catch (SceneAssetNotFoundException ex)
             {
@@ -219,12 +217,12 @@ namespace CruZ.Editor
 
         private void Init()
         {
-            _editor.Init();
-            entityInspector.Init(_editor);
+            _editorApp.Init();
+            entityInspector.Init(_editorApp);
         }
 
-        EditorApplication _editor;
         Thread _formThread;
+        GameEditor _editorApp;
         Dictionary<TransformEntity, TreeNode> _entityToNode = [];
         #endregion
 

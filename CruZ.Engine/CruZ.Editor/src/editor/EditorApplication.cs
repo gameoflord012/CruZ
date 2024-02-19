@@ -10,24 +10,26 @@ using CruZ.Utility;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Security.Cryptography;
 using System.Threading;
 using System.Windows.Forms;
 
+
 namespace CruZ.Editor.Controls
 {
-    public partial class EditorApplication
+    /// <summary>
+    /// Handle editing operations on game, also manage GameApplication
+    /// </summary>
+    public partial class GameEditor
     {
         public event Action<GameScene?> CurrentSceneChanged;
         public event Action<TransformEntity?> SelectingEntityChanged;
 
         public GameScene? CurrentGameScene => _currentScene;
 
-        public EditorApplication(EditorForm form)
+        public GameEditor(EditorForm form)
         {
             _editorForm = form;
 

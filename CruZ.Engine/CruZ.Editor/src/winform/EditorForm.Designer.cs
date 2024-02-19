@@ -28,7 +28,7 @@ namespace CruZ.Editor
 
         /// <summary>
         /// Required method for Designer support - do not modify
-        /// the contents of this method with the code _editor.
+        /// the contents of this method with the code _editorApp.
         /// </summary>
         private void InitializeComponent()
         {
@@ -41,7 +41,7 @@ namespace CruZ.Editor
             loadScene_MenuButton = new ToolStripMenuItem();
             menuStrip = new MenuStrip();
             inspectorTab = new TabPage();
-            entityInspector = new src.winform.EditorInspector();
+            entityInspector = new src.winform.Inspector();
             sceneTab = new TabPage();
             sceneTree = new TreeView();
             splitContainer1 = new SplitContainer();
@@ -250,18 +250,18 @@ namespace CruZ.Editor
 
         #region WORLDVIEW_COMMENT
         //TODO:
-        //_editor = new EditorApplication();
+        //_editorApp = new GameEditor();
 
 
-        //splitContainer1.Panel1.Controls.Add(_editor);
+        //splitContainer1.Panel1.Controls.Add(_editorApp);
 
-        //_editor.BackColor = Color.LightSeaGreen;
-        //_editor.Dock = DockStyle.Fill;
-        //_editor.Location = new Point(0, 0);
-        //_editor.Margin = new Padding(3, 2, 3, 2);
-        //_editor.Name = "_editor";
-        //_editor.Size = new Size(419, 314);
-        //_editor.TabIndex = 0;
+        //_editorApp.BackColor = Color.LightSeaGreen;
+        //_editorApp.Dock = DockStyle.Fill;
+        //_editorApp.Location = new Point(0, 0);
+        //_editorApp.Margin = new Padding(3, 2, 3, 2);
+        //_editorApp.Name = "_editorApp";
+        //_editorApp.Size = new Size(419, 314);
+        //_editorApp.TabIndex = 0;
         #endregion
 
         private ToolStripMenuItem file_Menu;
@@ -281,6 +281,6 @@ namespace CruZ.Editor
         private ToolStripMenuItem componentEditor_ToolStripMenuItem;
         private ContextMenuStrip scene_ContextMenuStrip;
         private ToolStripMenuItem addEntity_ToolStripMenuItem;
-        private src.winform.EditorInspector entityInspector;
+        private src.winform.Inspector entityInspector;
     }
 }

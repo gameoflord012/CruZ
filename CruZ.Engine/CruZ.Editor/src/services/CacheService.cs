@@ -10,7 +10,7 @@ namespace CruZ.Editor
     {
         public const string CACHE_ROOT = "caches";
 
-        public static void Register(ICacheControl control)
+        public static void Register(INeedCache control)
         {
             _cacheControls.Add(control);
 
@@ -21,12 +21,12 @@ namespace CruZ.Editor
             control.CacheWrite += Control_CacheWrite;    
         }
 
-        private static void Control_CacheWrite(ICacheControl cache, string key)
+        private static void Control_CacheWrite(INeedCache cache, string key)
         {
             WriteCache(cache, key);
         }
 
-        private static void Control_CacheRead(ICacheControl cache, string key)
+        private static void Control_CacheRead(INeedCache cache, string key)
         {
             ReadCache(cache, key);
         }
@@ -47,7 +47,7 @@ namespace CruZ.Editor
         //    }
         //}
 
-        private static void ReadCache(ICacheControl cacheControl, string key)
+        private static void ReadCache(INeedCache cacheControl, string key)
         {
             var cachePath = GetCachePath(cacheControl, key);
 
@@ -68,7 +68,7 @@ namespace CruZ.Editor
             }
         }
 
-        private static void WriteCache(ICacheControl cacheControl, string key)
+        private static void WriteCache(INeedCache cacheControl, string key)
         {
             var cachePath = GetCachePath(cacheControl, key);
 
@@ -89,11 +89,11 @@ namespace CruZ.Editor
             return File.OpenWrite(cachePath);
         }
 
-        public static string GetCachePath(ICacheControl cachedControl, string key)
+        public static string GetCachePath(INeedCache cachedControl, string key)
         {
             return Path.Combine(CACHE_ROOT, cachedControl.UniquedCachedDir, key) + ".cache";
         }
 
-        private static HashSet<ICacheControl> _cacheControls = [];
+        private static HashSet<INeedCache> _cacheControls = [];
     }
 }
