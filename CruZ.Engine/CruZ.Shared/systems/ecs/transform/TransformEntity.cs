@@ -11,9 +11,9 @@ namespace CruZ.Components
 {
     public partial class TransformEntity : IEquatable<TransformEntity>
     {
-        public event EventHandler<bool>                     OnActiveStateChanged;
-        public event EventHandler                           RemoveFromWorldEvent;
-        public event Action<Dictionary<Type, Component>>    ComponentsChanged;
+        public event EventHandler<bool> OnActiveStateChanged;
+        public event EventHandler RemoveFromWorldEvent;
+        public event Action<ComponentCollection> ComponentChanged;
 
         public string           Name        = "";
         [Browsable(false)]
@@ -73,7 +73,7 @@ namespace CruZ.Components
             _tyToComp[component.ComponentType] = component;
 
             component.InternalOnAttached(this);
-            ComponentsChanged?.Invoke(_tyToComp);
+            ComponentChanged?.Invoke(new ComponentCollection(_tyToComp));
         }
 
         public void RemoveComponent(Type compTy)
@@ -85,7 +85,7 @@ namespace CruZ.Components
             _tyToComp.Remove(comp.ComponentType);
 
             comp.InternalOnDetached(this);
-            ComponentsChanged?.Invoke(_tyToComp);
+            ComponentChanged?.Invoke(new ComponentCollection(_tyToComp));
         }
 
         public bool HasComponent(Type ty)

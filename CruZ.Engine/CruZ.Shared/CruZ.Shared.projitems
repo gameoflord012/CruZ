@@ -18,6 +18,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)exception\CruZ.Exceptions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)global\Variables.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)systems\ecs\animation\AnimationComponent.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)systems\ecs\ComponentCollection.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)systems\ecs\ComponentHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)systems\ecs\Component.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)systems\camera\Camera.Static.cs" />

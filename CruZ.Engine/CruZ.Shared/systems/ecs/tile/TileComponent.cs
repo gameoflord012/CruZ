@@ -22,13 +22,10 @@ namespace CruZ.Components
         protected override void OnAttached(TransformEntity entity)
         {
             _e = entity;
-            _e.ComponentsChanged += Entity_ComponentsChanged;
         }
 
         protected override void OnDetached(TransformEntity entity)
         {
-            _e.ComponentsChanged -= Entity_ComponentsChanged;
-
             if (_sp != null)
             {
                 _sp.DrawLoopBegin -= Sprite_DrawLoopBegin;
@@ -36,17 +33,17 @@ namespace CruZ.Components
             }
         }
 
-        private void Entity_ComponentsChanged(Dictionary<Type, Component> components)
+        protected override void OnComponentChanged(ComponentCollection comps)
         {
-            if(_sp != null)
+            if (_sp != null)
             {
                 _sp.DrawLoopBegin -= Sprite_DrawLoopBegin;
-                _sp.DrawLoopEnd -=  Sprite_DrawLoopEnd;
+                _sp.DrawLoopEnd -= Sprite_DrawLoopEnd;
             }
 
-            _e.TryGetComponent(ref _sp);
+            comps.TryGetComponent(ref _sp);
 
-            if(_sp != null)
+            if (_sp != null)
             {
                 _sp.DrawLoopBegin += Sprite_DrawLoopBegin;
                 _sp.DrawLoopEnd += Sprite_DrawLoopEnd;

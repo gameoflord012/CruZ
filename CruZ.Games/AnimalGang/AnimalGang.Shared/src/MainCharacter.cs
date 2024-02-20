@@ -16,13 +16,12 @@ namespace CruZ.Games.AnimalGang
         protected override void OnAttached(TransformEntity entity)
         {
             base.OnAttached(entity);
-            entity.ComponentsChanged += Entity_ComponentsChanged;
         }
 
-        private void Entity_ComponentsChanged(Dictionary<Type, Component> comps)
+        protected override void OnComponentChanged(ComponentCollection comps)
         {
-            AttachedEntity.TryGetComponent(ref _sprite);
-            AttachedEntity.TryGetComponent(ref _animation);
+            comps.TryGetComponent(ref _sprite);
+            comps.TryGetComponent(ref _animation);
         }
 
         protected override void OnUpdate(GameTime gameTime)

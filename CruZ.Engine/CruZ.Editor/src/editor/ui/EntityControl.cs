@@ -21,7 +21,7 @@ namespace CruZ.Editor.UI
         {
             _e = e;
             _e.RemoveFromWorldEvent += Entity_OnRemoveFromWorld;
-            _e.ComponentsChanged += Entity_ComponentsChanged;
+            _e.ComponentChanged += Entity_ComponentChanged;
 
             if(e.HasComponent(typeof(SpriteComponent)))
             {
@@ -110,9 +110,9 @@ namespace CruZ.Editor.UI
             if (Parent != null) Parent.RemoveChild(this);
         }
 
-        private void Entity_ComponentsChanged(Dictionary<Type, Component> comps)
+        private void Entity_ComponentChanged(ComponentCollection comps)
         {
-            _e.TryGetComponent(ref _sp);
+            comps.TryGetComponent(ref _sp);
         }
 
         private void CalcControlBounds(DrawEndEventArgs args)

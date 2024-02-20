@@ -106,12 +106,6 @@ namespace CruZ.Components
             return _currentAnimationPlayer;
         }
 
-        protected override void OnAttached(TransformEntity entity)
-        {
-            _e = entity;
-            _e.ComponentsChanged += Entity_ComponentsChanged;
-        }
-
         private AnimationPlayer GetPlayer(string key)
         {
             if(!_getAnimationPlayer.ContainsKey(key)) 
@@ -120,9 +114,14 @@ namespace CruZ.Components
             return _getAnimationPlayer[key];
         }
 
-        private void Entity_ComponentsChanged(Dictionary<Type, Component> components)
+        protected override void OnAttached(TransformEntity entity)
         {
-            _e.TryGetComponent(ref _sprite);
+            _e = entity;
+        }
+
+        protected override void OnComponentChanged(ComponentCollection comps)
+        {
+            comps.TryGetComponent(ref _sprite);
         }
 
         public ICustomSerializable? CreateDefault()
