@@ -22,7 +22,6 @@ namespace CruZ.Editor
 
             scene_TreeView.HideSelection = false;
             scene_TreeView.BeforeSelect += SceneTree_BeforeSelect;
-            scene_TreeView.ContextMenuStrip = sceneEntity_ContextMenuStrip;
             scene_TreeView.NodeMouseClick += (sender, args)
                 => scene_TreeView.SelectedNode = args.Node;
 
@@ -96,7 +95,7 @@ namespace CruZ.Editor
 
                 scene_TreeView.Nodes.Add(currentScene.ToString());
                 var root = scene_TreeView.Nodes[0];
-                root.ContextMenuStrip = sceneEntity_ContextMenuStrip;
+                root.ContextMenuStrip = null;
 
                 for (int i = 0; i < currentScene.Entities.Count(); i++)
                 {
