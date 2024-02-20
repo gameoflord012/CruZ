@@ -26,8 +26,9 @@ namespace CruZ.Editor
 
             entities_ComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
 
-            InvalidatedService.Register
+            InvalidateService.Register
                 (inspector_PropertyGrid,
+                InvalidatedEvents.EntityNameChanged,
                 InvalidatedEvents.EntityComponentChanged,
                 InvalidatedEvents.SelectingEntityChanged);
 

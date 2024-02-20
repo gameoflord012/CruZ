@@ -95,7 +95,7 @@ namespace CruZ.Editor
                 }
             }
 
-            InvalidatedService.SendInvalidated(InvalidatedEvents.EntityComponentChanged);
+            InvalidateService.Invalidate(InvalidatedEvents.EntityComponentChanged);
         }
 
         TransformEntity _e;

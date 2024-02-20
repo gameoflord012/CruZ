@@ -15,7 +15,8 @@ namespace CruZ.Components
         public event EventHandler RemoveFromWorldEvent;
         public event Action<ComponentCollection> ComponentChanged;
 
-        public string           Name        = "";
+        [ReadOnly(true)]
+        public string           Name        { get => _name;         set => _name = value; }
         [Browsable(false)]
         public Entity           Entity      { get => _entity; }
         public TransformEntity? Parent      { get => _parent;       set => _parent = value; }
@@ -120,7 +121,8 @@ namespace CruZ.Components
         TransformEntity?                _parent;
         bool                            _isActive = false;
         Transform                       _transform = new();
-        Dictionary<Type, Component>    _tyToComp = new();
+        Dictionary<Type, Component>     _tyToComp = new();
+        string                          _name = "";
 
         //private static Component CreateInstanceFrom(Type ty)
         //{

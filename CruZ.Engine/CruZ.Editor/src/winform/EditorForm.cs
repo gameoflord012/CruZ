@@ -20,7 +20,6 @@ namespace CruZ.Editor
         {
             InitializeComponent();
 
-            KeyPreview = true;
             Text = "CruZ Engine";
 
             _editor = new(this);

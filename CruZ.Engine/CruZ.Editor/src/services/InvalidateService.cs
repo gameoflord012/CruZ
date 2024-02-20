@@ -5,11 +5,12 @@ namespace CruZ.Editor.Services
 {
     enum InvalidatedEvents
     {
+        EntityNameChanged,
         EntityComponentChanged,
         SelectingEntityChanged
     }
 
-    class InvalidatedService
+    class InvalidateService
     {
         public static void Register(Control controls, params InvalidatedEvents[] invalidatedEvents)
         {
@@ -20,7 +21,7 @@ namespace CruZ.Editor.Services
             }
         }
 
-        public static void SendInvalidated(InvalidatedEvents invalidatedEvent)
+        public static void Invalidate(InvalidatedEvents invalidatedEvent)
         {
             foreach (var control in GetRegisters(invalidatedEvent))
             {

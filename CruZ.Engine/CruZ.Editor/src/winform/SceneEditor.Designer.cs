@@ -54,7 +54,7 @@
             scene_TreeView.Dock = System.Windows.Forms.DockStyle.Fill;
             scene_TreeView.Location = new DRAW.Point(0, 0);
             scene_TreeView.Name = "scene_TreeView";
-            scene_TreeView.Size = new DRAW.Size(331, 193);
+            scene_TreeView.Size = new DRAW.Size(331, 196);
             scene_TreeView.TabIndex = 1;
             // 
             // sceneEditor_Panel
@@ -63,7 +63,7 @@
             sceneEditor_Panel.Dock = System.Windows.Forms.DockStyle.Fill;
             sceneEditor_Panel.Location = new DRAW.Point(0, 0);
             sceneEditor_Panel.Name = "sceneEditor_Panel";
-            sceneEditor_Panel.Size = new DRAW.Size(331, 193);
+            sceneEditor_Panel.Size = new DRAW.Size(331, 196);
             sceneEditor_Panel.TabIndex = 2;
             // 
             // SceneEditor
@@ -72,7 +72,7 @@
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             Controls.Add(sceneEditor_Panel);
             Name = "SceneEditor";
-            Size = new DRAW.Size(331, 193);
+            Size = new DRAW.Size(331, 196);
             sceneEntity_ContextMenuStrip.ResumeLayout(false);
             sceneEditor_Panel.ResumeLayout(false);
             ResumeLayout(false);

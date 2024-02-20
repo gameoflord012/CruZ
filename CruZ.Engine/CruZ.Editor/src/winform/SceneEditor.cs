@@ -1,15 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 using CruZ.Components;
 using CruZ.Editor.Controls;
+using CruZ.Editor.Services;
 using CruZ.Editor.Utility;
 
 namespace CruZ.Editor
@@ -20,14 +16,17 @@ namespace CruZ.Editor
         {
             InitializeComponent();
 
+            scene_TreeView.LabelEdit = true;
             scene_TreeView.HideSelection = false;
             scene_TreeView.BeforeSelect += SceneTree_BeforeSelect;
             scene_TreeView.NodeMouseClick += (sender, args)
                 => scene_TreeView.SelectedNode = args.Node;
+            scene_TreeView.BeforeLabelEdit += SceneTree_BeforeLabelEdit;
+            scene_TreeView.AfterLabelEdit += SceneTree_AfterLabelEdit;
 
             editEntity_ToolStripMenuItem.Click += EditEntity_ToolStripMenuItem_Clicked;
         }
-        
+
         public void Init(GameEditor editor)
         {
             FindForm().FormClosing += EditorForm_FormClosing;
@@ -40,10 +39,40 @@ namespace CruZ.Editor
             UpdateSceneTree(_editor.CurrentGameScene);
         }
 
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        {
+            if(keyData == Keys.F2)
+            {
+                if(scene_TreeView.SelectedNode != null)
+                {
+                    scene_TreeView.SelectedNode.BeginEdit();
+                }
+            }
+
+            return false;
+        }
+
         #region Event Handlers
         private void SceneTree_BeforeSelect(object? sender, TreeViewCancelEventArgs e)
         {
             _editor.SelectedEntity = (TransformEntity)e.Node.Tag;
+        }
+
+        private void SceneTree_BeforeLabelEdit(object? sender, NodeLabelEditEventArgs args)
+        {
+            if (args.Node == _root_TreeNode) args.CancelEdit = true;
+        }
+
+        private void SceneTree_AfterLabelEdit(object? sender, NodeLabelEditEventArgs args)
+        {
+            if(string.IsNullOrEmpty(args.Label))
+            {
+                return;
+            }
+
+            var e = (TransformEntity)args.Node.Tag;
+            e.Name = args.Label;
+            InvalidateService.Invalidate(InvalidatedEvents.EntityNameChanged);
         }
 
         private void EditorApp_SelectedEntityChanged(TransformEntity? e)
@@ -90,29 +119,31 @@ namespace CruZ.Editor
             {
                 scene_TreeView.Nodes.Clear();
                 _entityToNode.Clear();
+                _root_TreeNode = null;
 
                 if (currentScene == null) return;
 
                 scene_TreeView.Nodes.Add(currentScene.ToString());
-                var root = scene_TreeView.Nodes[0];
-                root.ContextMenuStrip = null;
+                _root_TreeNode = scene_TreeView.Nodes[0];
+                _root_TreeNode.ContextMenuStrip = null;
 
                 for (int i = 0; i < currentScene.Entities.Count(); i++)
                 {
                     var e = currentScene.Entities[i];
-                    root.Nodes.Add(e.ToString());
+                    _root_TreeNode.Nodes.Add(e.ToString());
 
-                    var entity_Node = root.Nodes[i];
+                    var entityNode = _root_TreeNode.Nodes[i];
 
-                    entity_Node.ContextMenuStrip = sceneEntity_ContextMenuStrip;
-                    entity_Node.Tag = e;
+                    entityNode.ContextMenuStrip = sceneEntity_ContextMenuStrip;
+                    entityNode.Tag = e;
 
-                    _entityToNode[e] = entity_Node;
+                    _entityToNode[e] = entityNode;
                 }
             });
         } 
         #endregion
 
+        TreeNode? _root_TreeNode;
         GameEditor _editor;
         Dictionary<TransformEntity, TreeNode> _entityToNode = [];
     }
