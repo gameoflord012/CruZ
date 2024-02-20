@@ -136,6 +136,20 @@ namespace CruZ.Editor.Controls
             _gameApp = null;
             _gameAppThread = null;
         }
+
+        public TransformEntity CreateNewEntity()
+        {
+            if(_currentScene == null) 
+                throw new InvalidOperationException("Can't create new entity when Scene is not loaded");
+
+            var newEntity = _currentScene.CreateEntity();
+
+            // TODO: Improve this to automatically update when new entity add or remove
+            // by adding EntityAdded or EntityRemoved listeners
+            UpdateEntityControls();
+            
+            return newEntity;
+        }
         #endregion
 
         #region Event_Handlers
@@ -317,7 +331,18 @@ namespace CruZ.Editor.Controls
 
             UIManager.Root.AddChild(new BoardGrid());
 
-            #region EntityControl
+            UpdateEntityControls();
+
+            #region InfoTextWindow
+            _infoTextWindow = new LoggingWindow();
+            UIManager.Root.AddChild(_infoTextWindow);
+            #endregion
+        }
+
+        // TODO: Improve this to automatically update when new entity add or remove
+        // by adding EntityAdded or EntityRemoved listeners
+        private void UpdateEntityControls()
+        {
             if (_currentScene == null) return;
 
             _eControls.Clear();
@@ -327,14 +352,8 @@ namespace CruZ.Editor.Controls
                 var eControl = new EntityControl(e);
                 UIManager.Root.AddChild(eControl);
                 _eControls.Add(eControl);
-            } 
-            #endregion
-
-            #region InfoTextWindow
-            _infoTextWindow = new LoggingWindow();
-            UIManager.Root.AddChild(_infoTextWindow);
-            #endregion
-    }
+            }
+        }
 
         private void LoadScene(GameScene scene)
         {

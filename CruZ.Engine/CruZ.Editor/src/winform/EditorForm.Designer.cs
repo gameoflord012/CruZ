@@ -143,9 +143,10 @@ namespace CruZ.Editor
             // 
             // sceneEditor
             // 
-            sceneEditor.Location = new Point(0, 0);
+            sceneEditor.Dock = DockStyle.Fill;
+            sceneEditor.Location = new Point(3, 3);
             sceneEditor.Name = "sceneEditor";
-            sceneEditor.Size = new Size(369, 74);
+            sceneEditor.Size = new Size(363, 64);
             sceneEditor.TabIndex = 0;
             // 
             // splitContainer1

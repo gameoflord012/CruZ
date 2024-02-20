@@ -12,8 +12,8 @@ namespace CruZ
 {
     public partial class GameScene : IHostResource, ICustomSerializable
     {
-        public event Action<TransformEntity>? OnEntityAdded;
-        public event Action<TransformEntity>? OnEntityRemoved;
+        public event Action<TransformEntity>? EntityAdded;
+        public event Action<TransformEntity>? EntityRemoved;
 
         public string               Name = "";
 
@@ -33,7 +33,7 @@ namespace CruZ
             _entities.Add(e);
             e.IsActive = _isActive;
 
-            OnEntityAdded?.Invoke(e);
+            EntityAdded?.Invoke(e);
         }
 
         //public void RemoveFromScene(TransformEntity e)
@@ -42,7 +42,7 @@ namespace CruZ
         //    _entities.Remove(e);
         //    e.IsActive = _isActive;
 
-        //    OnEntityRemoved?.Invoke(e);
+        //    EntityRemoved?.Invoke(e);
         //}
 
         public void SetActive(bool isActive)
@@ -56,7 +56,7 @@ namespace CruZ
             }
         }
 
-        public TransformEntity CreateEntity(string name = "")
+        public TransformEntity CreateEntity(string name = "New Entity")
         {
             var e = ECS.CreateEntity();
             e.Name = name;
