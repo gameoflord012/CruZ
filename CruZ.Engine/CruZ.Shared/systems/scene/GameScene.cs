@@ -36,14 +36,16 @@ namespace CruZ
             EntityAdded?.Invoke(e);
         }
 
-        //public void RemoveFromScene(TransformEntity e)
-        //{
-        //    if (_entities.Contains(e)) return;
-        //    _entities.Remove(e);
-        //    e.IsActive = _isActive;
+        public void RemoveEntity(TransformEntity e)
+        {
+            if (!_entities.Contains(e)) 
+                throw new ArgumentException($"Entity \"{e}\" not in scene {this}");
 
-        //    EntityRemoved?.Invoke(e);
-        //}
+            _entities.Remove(e);
+            e.IsActive = _isActive;
+
+            EntityRemoved?.Invoke(e);
+        }
 
         public void SetActive(bool isActive)
         {

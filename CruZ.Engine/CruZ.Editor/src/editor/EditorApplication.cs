@@ -150,6 +150,12 @@ namespace CruZ.Editor.Controls
             
             return newEntity;
         }
+
+        public void RemoveEntity(TransformEntity e)
+        {
+            _currentScene.RemoveEntity(e);
+            e.Dispose();
+        }
         #endregion
 
         #region Event_Handlers

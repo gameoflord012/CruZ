@@ -27,6 +27,7 @@ namespace CruZ.Editor
 
             addEntity_ToolStripMenuItem.Click += AddEntity_ToolStripMenuItem_Click;
             editEntity_ToolStripMenuItem.Click += EditEntity_ToolStripMenuItem_Clicked;
+            removeEntity_ToolStripMenuItem.Click += RemoveEntity_ToolStripMenuItem_Click;
         }
 
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
@@ -69,24 +70,6 @@ namespace CruZ.Editor
             InvalidateService.Invalidate(InvalidatedEvents.EntityNameChanged);
         }
 
-        private void EditEntity_ToolStripMenuItem_Clicked(object? sender, EventArgs args)
-        {
-            var menuItem = (ToolStripMenuItem)sender;
-            var context = (ContextMenuStrip)menuItem.Owner;
-
-
-            TreeView tree = (TreeView)context.SourceControl;
-            var e = (TransformEntity)tree.SelectedNode.Tag;
-
-            var editCompDialog = new EditComponentDialog(e);
-            editCompDialog.ShowDialog();
-        }
-
-        private void AddEntity_ToolStripMenuItem_Click(object? sender, EventArgs e)
-        {
-            _editor.CreateNewEntity();
-        }
-
         private void EditorApp_SelectedEntityChanged(TransformEntity? e)
         {
             UpdateSceneTree(e);
@@ -100,6 +83,30 @@ namespace CruZ.Editor
         private void EditorForm_FormClosing(object? sender, FormClosingEventArgs e)
         {
             _editor.CurrentSceneChanged -= EditorApp_CurrentSceneChanged;
+        }
+        
+        private void EditEntity_ToolStripMenuItem_Clicked(object? sender, EventArgs args)
+        {
+            //var menuItem = (ToolStripMenuItem)sender;
+            //var context = (ContextMenuStrip)menuItem.Owner;
+
+
+            //TreeView tree = (TreeView)context.SourceControl;
+
+            var e = (TransformEntity)scene_TreeView.SelectedNode.Tag;
+            var editCompDialog = new EditComponentDialog(e);
+            editCompDialog.ShowDialog();
+        }
+        
+        private void AddEntity_ToolStripMenuItem_Click(object? sender, EventArgs e)
+        {
+            _editor.CreateNewEntity();
+        }
+
+        private void RemoveEntity_ToolStripMenuItem_Click(object? sender, EventArgs args)
+        {
+            var e = (TransformEntity)scene_TreeView.SelectedNode.Tag;
+            _editor.RemoveEntity(e);
         }
         #endregion
 
