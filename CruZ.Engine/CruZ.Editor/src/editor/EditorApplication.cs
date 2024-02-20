@@ -178,6 +178,16 @@ namespace CruZ.Editor.Controls
             _editorForm.SafeInvoke(CleanAppSession);
         }
 
+        private void Scene_EntityAdded(TransformEntity e)
+        {
+            AddEntityControl(e);
+        }
+
+        private void Scene_EntityRemoved(TransformEntity e)
+        {
+            RemoveEntityControl(e);
+        }
+
         //private void GameApp_EarlyDraw(DrawEventArgs args)
         //{
         //    DrawAxis(args.SpriteBatch);
@@ -280,7 +290,7 @@ namespace CruZ.Editor.Controls
             SelectedEntity = eControl[idx].AttachEntity;
         }
 
-        private EntityControl GetEntityControl(TransformEntity e)
+        private EntityControl? GetEntityControl(TransformEntity e)
         {
             foreach (var control in _eControls)
             {
@@ -289,8 +299,8 @@ namespace CruZ.Editor.Controls
                     return control;
                 }
             }
-
-            throw new ArgumentException($"There is no EntityControl for entity {e}");
+            
+            return null;
         }
 
         private void Check_AppInitialized()
@@ -343,22 +353,46 @@ namespace CruZ.Editor.Controls
         // by adding EntityAdded or EntityRemoved listeners
         private void UpdateEntityControls()
         {
+            _eControls.Clear();
+
             if (_currentScene == null) return;
 
-            _eControls.Clear();
+            if(_lastScene != null)
+            {
+                _lastScene.EntityAdded -= Scene_EntityAdded; ;
+                _lastScene.EntityRemoved -= Scene_EntityRemoved;
+            }
+
+            _currentScene.EntityAdded += Scene_EntityAdded;
+            _currentScene.EntityRemoved += Scene_EntityRemoved;
 
             foreach (var e in _currentScene.Entities)
             {
-                var eControl = new EntityControl(e);
-                UIManager.Root.AddChild(eControl);
-                _eControls.Add(eControl);
+                AddEntityControl(e);
             }
+        }
+
+        private void AddEntityControl(TransformEntity e)
+        {
+            if(GetEntityControl(e) != null) return;
+
+            var eControl = new EntityControl(e);
+            UIManager.Root.AddChild(eControl);
+            _eControls.Add(eControl);
+        }
+
+        private void RemoveEntityControl(TransformEntity e)
+        {
+            GetEntityControl(e)?.Dispose();
         }
 
         private void LoadScene(GameScene scene)
         {
+            if(scene == _currentScene) return;
+
             UnloadCurrentScene();
 
+            _lastScene = _currentScene;
             _currentScene = scene;
             _currentScene.SetActive(true);
             CurrentSceneChanged?.Invoke(_currentScene);
@@ -380,6 +414,7 @@ namespace CruZ.Editor.Controls
         XNA.Point _mouseStartDragPoint;
 
         GameScene? _currentScene;
+        GameScene? _lastScene;
         TransformEntity? _currentSelect;
 
         GameApplication? _gameApp;

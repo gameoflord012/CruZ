@@ -8,7 +8,7 @@ using Draw = System.Drawing;
 
 namespace CruZ.UI
 {
-    public partial class UIControl
+    public partial class UIControl : IDisposable
     {
         static readonly int BOUND_THICKNESS = 2;
         static readonly XNA.Color DEFAULT_BACKGROUND_COLOR = XNA.Color.Red;
@@ -27,6 +27,8 @@ namespace CruZ.UI
 
         public Color BackgroundColor = DEFAULT_BACKGROUND_COLOR;
         public bool Active = true;
+
+        public object? Tag { get; set; } = null;
         #endregion
 
         public void AddChild(UIControl child)
@@ -135,6 +137,15 @@ namespace CruZ.UI
                         s_GlobalDragObject = null;
                     }
                 }
+            }
+        }
+
+        public void Dispose()
+        {
+            if(Parent != null)
+            {
+                Active = false;
+                Parent.RemoveChild(this);
             }
         }
         #endregion
