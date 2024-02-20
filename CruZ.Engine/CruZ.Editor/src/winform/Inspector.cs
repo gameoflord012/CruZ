@@ -50,7 +50,7 @@ namespace CruZ.Editor
 
         private void Entities_ComboBox_SelectedIndexChanged(object? sender, EventArgs e)
         {
-            _editor.SelectEntity((TransformEntity)entities_ComboBox.SelectedItem);
+            _editor.SelectedEntity = (TransformEntity)entities_ComboBox.SelectedItem;
         }
 
         private void Inspector_Invalidated(object? sender, InvalidateEventArgs e)

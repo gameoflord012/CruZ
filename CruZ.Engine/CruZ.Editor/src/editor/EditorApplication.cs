@@ -53,7 +53,7 @@ namespace CruZ.Editor.Controls
         #region Public_Functions
         public void UnloadCurrentScene()
         {
-            SelectEntity(null);
+            SelectedEntity = null;
 
             if (_currentScene == null) return;
 
@@ -66,30 +66,34 @@ namespace CruZ.Editor.Controls
             CurrentSceneChanged?.Invoke(null);
         }
 
-        public void SelectEntity(TransformEntity? e)
-        {
-            lock (this)
+        public TransformEntity? SelectedEntity 
+        { 
+            get => _currentSelect != null ? _currentSelect : null; 
+            set 
             {
-                if (_currentSelect != null && e == _currentSelect.AttachEntity)
-                    return;
-
-                if (_currentSelect != null)
-                    _currentSelect.SelectEntity(false);
-
-                if (e != null)
+                lock(this)
                 {
-                    _currentSelect = GetEntityControl(e);
-                    _currentSelect.SelectEntity(true);
-                }
-                else
-                {
-                    _currentSelect = null;
-                }
+                    if (_currentSelect != null && value == _currentSelect)
+                        return;
 
-                Logging.SetMsg(e != null ? e.ToString() : "");
+                    // Disable previous EntityControl
+                    if (_currentSelect != null)
+                        GetEntityControl(_currentSelect).SelectEntity(false);
 
-                SelectingEntityChanged?.Invoke(e);
-            }
+                    if (value != null)
+                    {
+                        _currentSelect = value;
+                        GetEntityControl(_currentSelect).SelectEntity(true);
+                    }
+                    else
+                    {
+                        _currentSelect = null;
+                    }
+
+                    Logging.SetMsg(value != null ? value.ToString() : "");
+                    SelectingEntityChanged?.Invoke(value);
+                }
+            } 
         }
 
         public void LoadSceneFromFile(string file)
@@ -240,26 +244,29 @@ namespace CruZ.Editor.Controls
 
             if (eControl.Count() == 0)
             {
-                SelectEntity(null);
+                SelectedEntity = null;
                 return;
             }
 
             int idx = 0;
 
-            for (int i = 0; i < eControl.Count(); i++)
+            if(_currentSelect  != null)
             {
-                if (eControl[i] == _currentSelect)
+                for (int i = 0; i < eControl.Count(); i++)
                 {
-                    idx = i;
-                    break;
+                    if (eControl[i] == GetEntityControl(_currentSelect))
+                    {
+                        idx = i;
+                        break;
+                    }
                 }
             }
 
             idx = (idx + 1) % eControl.Count();
-            SelectEntity(eControl[idx].AttachEntity);
+            SelectedEntity = eControl[idx].AttachEntity;
         }
 
-        private EntityControl? GetEntityControl(TransformEntity e)
+        private EntityControl GetEntityControl(TransformEntity e)
         {
             foreach (var control in _eControls)
             {
@@ -269,7 +276,7 @@ namespace CruZ.Editor.Controls
                 }
             }
 
-            return null;
+            throw new ArgumentException($"There is no EntityControl for entity {e}");
         }
 
         private void Check_AppInitialized()
@@ -354,10 +361,11 @@ namespace CruZ.Editor.Controls
         XNA.Point _mouseStartDragPoint;
 
         GameScene? _currentScene;
-        EntityControl? _currentSelect;
+        TransformEntity? _currentSelect;
 
         GameApplication? _gameApp;
         Thread? _gameAppThread;
+        int _thisThreadId;
 
         Camera? _mainCamera;
 
@@ -367,8 +375,6 @@ namespace CruZ.Editor.Controls
         LoggingWindow _infoTextWindow;
 
         EditorForm _editorForm;
-
-        int _thisThreadId; 
         #endregion
     }
 }

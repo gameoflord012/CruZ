@@ -28,11 +28,10 @@ namespace CruZ.Editor
 
         /// <summary>
         /// Required method for Designer support - do not modify
-        /// the contents of this method with the code _editorApp.
+        /// the contents of this method with the code _editor.
         /// </summary>
         private void InitializeComponent()
         {
-            components = new System.ComponentModel.Container();
             file_Menu = new ToolStripMenuItem();
             scene_Menu = new ToolStripMenuItem();
             openScene_MenuButton = new ToolStripMenuItem();
@@ -43,14 +42,10 @@ namespace CruZ.Editor
             inspectorTab = new TabPage();
             entityInspector = new Inspector();
             sceneTab = new TabPage();
-            sceneTree = new TreeView();
+            sceneEditor = new SceneEditor();
             splitContainer1 = new SplitContainer();
             tabControlTop = new TabControl();
             tabControlBottom = new TabControl();
-            entity_ContextMenuStrip = new ContextMenuStrip(components);
-            componentEditor_ToolStripMenuItem = new ToolStripMenuItem();
-            scene_ContextMenuStrip = new ContextMenuStrip(components);
-            addEntity_ToolStripMenuItem = new ToolStripMenuItem();
             menuStrip.SuspendLayout();
             inspectorTab.SuspendLayout();
             sceneTab.SuspendLayout();
@@ -60,8 +55,6 @@ namespace CruZ.Editor
             splitContainer1.SuspendLayout();
             tabControlTop.SuspendLayout();
             tabControlBottom.SuspendLayout();
-            entity_ContextMenuStrip.SuspendLayout();
-            scene_ContextMenuStrip.SuspendLayout();
             SuspendLayout();
             // 
             // file_Menu
@@ -70,7 +63,6 @@ namespace CruZ.Editor
             file_Menu.Name = "file_Menu";
             file_Menu.Size = new Size(37, 20);
             file_Menu.Text = "File";
-            file_Menu.Click += File_Menu_Clicked;
             // 
             // scene_Menu
             // 
@@ -140,7 +132,7 @@ namespace CruZ.Editor
             // 
             // sceneTab
             // 
-            sceneTab.Controls.Add(sceneTree);
+            sceneTab.Controls.Add(sceneEditor);
             sceneTab.Location = new Point(4, 24);
             sceneTab.Name = "sceneTab";
             sceneTab.Padding = new Padding(3);
@@ -149,13 +141,12 @@ namespace CruZ.Editor
             sceneTab.Text = "Scene Hierarchy";
             sceneTab.UseVisualStyleBackColor = true;
             // 
-            // sceneTree
+            // sceneEditor
             // 
-            sceneTree.Dock = DockStyle.Fill;
-            sceneTree.Location = new Point(3, 3);
-            sceneTree.Name = "sceneTree";
-            sceneTree.Size = new Size(363, 64);
-            sceneTree.TabIndex = 0;
+            sceneEditor.Location = new Point(0, 0);
+            sceneEditor.Name = "sceneEditor";
+            sceneEditor.Size = new Size(369, 74);
+            sceneEditor.TabIndex = 0;
             // 
             // splitContainer1
             // 
@@ -195,30 +186,6 @@ namespace CruZ.Editor
             tabControlBottom.Size = new Size(377, 256);
             tabControlBottom.TabIndex = 6;
             // 
-            // entity_ContextMenuStrip
-            // 
-            entity_ContextMenuStrip.Items.AddRange(new ToolStripItem[] { componentEditor_ToolStripMenuItem });
-            entity_ContextMenuStrip.Name = "sceneClickMenu";
-            entity_ContextMenuStrip.Size = new Size(167, 26);
-            // 
-            // componentEditor_ToolStripMenuItem
-            // 
-            componentEditor_ToolStripMenuItem.Name = "componentEditor_ToolStripMenuItem";
-            componentEditor_ToolStripMenuItem.Size = new Size(166, 22);
-            componentEditor_ToolStripMenuItem.Text = "Edit Components";
-            // 
-            // scene_ContextMenuStrip
-            // 
-            scene_ContextMenuStrip.Items.AddRange(new ToolStripItem[] { addEntity_ToolStripMenuItem });
-            scene_ContextMenuStrip.Name = "scene_ContextMenuStrip";
-            scene_ContextMenuStrip.Size = new Size(157, 26);
-            // 
-            // addEntity_ToolStripMenuItem
-            // 
-            addEntity_ToolStripMenuItem.Name = "addEntity_ToolStripMenuItem";
-            addEntity_ToolStripMenuItem.Size = new Size(156, 22);
-            addEntity_ToolStripMenuItem.Text = "Add New Entity";
-            // 
             // EditorForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -240,8 +207,6 @@ namespace CruZ.Editor
             splitContainer1.ResumeLayout(false);
             tabControlTop.ResumeLayout(false);
             tabControlBottom.ResumeLayout(false);
-            entity_ContextMenuStrip.ResumeLayout(false);
-            scene_ContextMenuStrip.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
         }
@@ -250,18 +215,18 @@ namespace CruZ.Editor
 
         #region WORLDVIEW_COMMENT
         //TODO:
-        //_editorApp = new GameEditor();
+        //_editor = new GameEditor();
 
 
-        //splitContainer1.Panel1.Controls.Add(_editorApp);
+        //splitContainer1.Panel1.Controls.Add(_editor);
 
-        //_editorApp.BackColor = Color.LightSeaGreen;
-        //_editorApp.Dock = DockStyle.Fill;
-        //_editorApp.Location = new Point(0, 0);
-        //_editorApp.Margin = new Padding(3, 2, 3, 2);
-        //_editorApp.Name = "_editorApp";
-        //_editorApp.Size = new Size(419, 314);
-        //_editorApp.TabIndex = 0;
+        //_editor.BackColor = Color.LightSeaGreen;
+        //_editor.Dock = DockStyle.Fill;
+        //_editor.Location = new Point(0, 0);
+        //_editor.Margin = new Padding(3, 2, 3, 2);
+        //_editor.Name = "_editor";
+        //_editor.Size = new Size(419, 314);
+        //_editor.TabIndex = 0;
         #endregion
 
         private ToolStripMenuItem file_Menu;
@@ -273,14 +238,10 @@ namespace CruZ.Editor
         private MenuStrip menuStrip;
         private TabPage inspectorTab;
         private TabPage sceneTab;
-        private TreeView sceneTree;
         private SplitContainer splitContainer1;
         private TabControl tabControlTop;
         private TabControl tabControlBottom;
-        private ContextMenuStrip entity_ContextMenuStrip;
-        private ToolStripMenuItem componentEditor_ToolStripMenuItem;
-        private ContextMenuStrip scene_ContextMenuStrip;
-        private ToolStripMenuItem addEntity_ToolStripMenuItem;
         private Inspector entityInspector;
+        private SceneEditor sceneEditor;
     }
 }
