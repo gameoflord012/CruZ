@@ -40,7 +40,7 @@ namespace CruZ.UI
 
             var col = lineDis == 1 ?
                 EditorVariables.UNIT_BOARD_COLOR :
-                XNA.Color.DarkGray;
+                EditorVariables.BOARD_COLOR;
 
             DrawBoard(FunMath.RoundInt(lineDis), col);
 

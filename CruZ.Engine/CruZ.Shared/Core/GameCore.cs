@@ -71,7 +71,6 @@ namespace CruZ
 
         private void InternalDraw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.Gray);
             DrawEvent?.Invoke(gameTime);
             LateDrawEvent?.Invoke(gameTime);
         }

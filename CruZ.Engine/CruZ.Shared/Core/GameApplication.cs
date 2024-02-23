@@ -16,6 +16,7 @@ namespace CruZ
     public partial class GameApplication :
         IECSContextProvider, IInputContextProvider, UIContext, IDisposable
     {
+        #region Events
         public event Action<GameTime> DrawUI;
         public event Action<GameTime> UpdateUI;
         public event Action InitializeUI;
@@ -33,13 +34,16 @@ namespace CruZ
 
         public event Action Initializing;
         public event Action Initialized;
+        #endregion
 
+        #region Properties
         public ContentManager Content { get => _core.Content; }
         public GraphicsDevice GraphicsDevice { get => _core.GraphicsDevice; }
         public GameWindow Window => _core.Window;
         public bool ExitCalled { get => _exitCalled; }
         public bool IsInitialized { get; private set; } = false;
-        public int FpsResult { get => _fpsResult; }
+        public int FpsResult { get => _fpsResult; } 
+        #endregion
 
         private GameApplication()
         {
@@ -55,8 +59,6 @@ namespace CruZ
             ECS.CreateContext(this);
             Input.CreateContext(this);
             UIManager.CreateContext(this);
-
-            //_core.Run();
         }
 
         public void Run()
@@ -77,16 +79,6 @@ namespace CruZ
         {
             WindowResize?.Invoke(_core.GraphicsDevice.Viewport);
         }
-
-        private void InternalUpdate(GameTime gameTime)
-        {
-            ProcessMarshalRequests();
-
-            InputUpdate?.Invoke(gameTime);
-            ECSUpdate?.Invoke(gameTime);
-            UpdateUI?.Invoke(gameTime);
-        }
-
         private void ProcessMarshalRequests()
         {
             foreach (var invoke in _marshalRequests)
@@ -97,9 +89,21 @@ namespace CruZ
             _marshalRequests.Clear();
         }
 
+        #region Internals
+        private void InternalUpdate(GameTime gameTime)
+        {
+            ProcessMarshalRequests();
+
+            InputUpdate?.Invoke(gameTime);
+            ECSUpdate?.Invoke(gameTime);
+            UpdateUI?.Invoke(gameTime);
+        }
+
         private void InternalDraw(GameTime gameTime)
         {
             CalculateFps(gameTime);
+
+            GraphicsDevice.Clear(Color.Beige);
 
             var drawArgs = new DrawEventArgs(_spriteBatch, gameTime);
             EarlyDraw?.Invoke(drawArgs);
@@ -108,9 +112,6 @@ namespace CruZ
             LateDraw?.Invoke(drawArgs);
             DrawUI?.Invoke(gameTime);
             OnDraw(gameTime);
-
-            //RenderTarget2D a;
-            //a.
         }
 
         private void InternalInitializing()
@@ -134,7 +135,8 @@ namespace CruZ
 
             ExitEvent?.Invoke();
             Dispose();
-        }
+        } 
+        #endregion
 
         protected virtual void OnInitialize() { }
         protected virtual void OnDraw(GameTime gameTime) { }
@@ -170,8 +172,7 @@ namespace CruZ
             }
         }
 
-        //protected virtual void  OnEndRun() { }
-
+        #region Privates
         private GameCore _core;
         private SpriteBatch _spriteBatch;
         bool disposed = false;
@@ -181,12 +182,15 @@ namespace CruZ
         int _frameCount = 0;
         float _fpsTimer = 0;
 
-        List<Action> _marshalRequests = [];
+        List<Action> _marshalRequests = []; 
+        #endregion
     }
 
     public partial class GameApplication
     {
         public static Viewport Viewport => _instance.GraphicsDevice.Viewport;
+
+        public static GraphicsDevice GetGraphicsDevice() => _instance.GraphicsDevice;
 
         public static void RegisterWindowResize(Action<Viewport> windowResize)
         {
@@ -231,8 +235,6 @@ namespace CruZ
         {
             return _instance.Content;
         }
-
-        //public static int GetFpsResult() => _instance.FpsResult;
 
         public static void MarshalInvoke(Action action)
         {

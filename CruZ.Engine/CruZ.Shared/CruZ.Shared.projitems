@@ -74,7 +74,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)systems\serialization\TransformEntityCreationConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)systems\serialization\TransformEntityJsonConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)systems\serialization\TransformJsonConverter.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)systems\ecs\sprite\SpriteSystem.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)systems\ecs\sprite\RenderSystem.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)utils\PathHelper.cs" />
   </ItemGroup>
   <ItemGroup>

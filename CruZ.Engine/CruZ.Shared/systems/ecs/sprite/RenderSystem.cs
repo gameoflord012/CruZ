@@ -1,17 +1,21 @@
 ﻿using CruZ.Components;
+using CruZ.Global;
+
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
 using MonoGame.Extended.Entities;
 using MonoGame.Extended.Entities.Systems;
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace CruZ.Systems
 {
-    internal class SpriteSystem : EntitySystem, IUpdateSystem, IDrawSystem
+    internal class RenderSystem : EntitySystem, IUpdateSystem, IDrawSystem
     {
-        public SpriteSystem() : base(Aspect.All(typeof(SpriteComponent)))
+        public RenderSystem() : base(Aspect.All(typeof(SpriteComponent)))
         {
         }
 
@@ -19,15 +23,26 @@ namespace CruZ.Systems
         {
             _spriteRendererMapper = mapperService.GetMapper<SpriteComponent>();
             _spriteBatch = GameApplication.GetSpriteBatch();
+            _gd = GameApplication.GetGraphicsDevice();
         }
 
         public void Draw(GameTime gameTime)
         {
             List<SpriteComponent> sprites = GetSortedSpriteList();
+            List<int> sortingLayers = [];
 
+            // process sprites
             int i = 0;
             while(i < sprites.Count)
             {
+                var sortingLayer = sprites[i].SortingLayer;
+                sortingLayers.Add(sortingLayer);
+
+                var renderTarget = GetRenderTarget(sortingLayer);
+
+                _gd.SetRenderTarget(renderTarget);
+                _gd.Clear(Color.Transparent);
+
                 _spriteBatch.Begin(
                     sortMode: SpriteSortMode.FrontToBack,
                     transformMatrix: Camera.Main.ViewMatrix(),
@@ -42,6 +57,25 @@ namespace CruZ.Systems
 
                 _spriteBatch.End();
             }
+
+            // render all renderTargets to back buffer
+            _gd.SetRenderTarget(null);
+            _gd.Clear(Variables.DEFAULT_BACKGROUND_COLOR);
+            _spriteBatch.Begin();
+            foreach (var sortingLayer in sortingLayers)
+            {
+                var renderTarget = GetRenderTarget(sortingLayer);
+                _spriteBatch.Draw(renderTarget, new Vector2(0, 0), Color.White);
+            }
+            _spriteBatch.End();
+        }
+
+        private RenderTarget2D GetRenderTarget(int sortingLayer)
+        {
+            if(!_renderTargets.ContainsKey(sortingLayer))
+                _renderTargets[sortingLayer] = new RenderTarget2D(_gd, _gd.Viewport.Width, _gd.Viewport.Height);
+        
+            return _renderTargets[sortingLayer];
         }
 
         private List<SpriteComponent> GetSortedSpriteList()
@@ -55,5 +89,7 @@ namespace CruZ.Systems
 
         SpriteBatch _spriteBatch;
         ComponentMapper<SpriteComponent> _spriteRendererMapper;
+        Dictionary<int, RenderTarget2D> _renderTargets = [];
+        GraphicsDevice _gd;
     }
 }

@@ -17,7 +17,7 @@ namespace CruZ.Systems
         {
             _world = new WorldBuilder().
                 //AddSystem(new EntityEventSystem()).
-                AddSystem(new SpriteSystem()).
+                AddSystem(new RenderSystem()).
                 AddSystem(new AnimatedSystem()).
                 //AddSystem(new PhysicSystem()).
                 AddSystem(new EntityScriptSystem()).
