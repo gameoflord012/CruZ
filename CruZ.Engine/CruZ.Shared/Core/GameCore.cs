@@ -65,8 +65,8 @@ namespace CruZ
 
         protected override void Draw(GameTime gameTime)
         {
-            base.Draw(gameTime);
             InternalDraw(gameTime);
+            base.Draw(gameTime);
         }
 
         private void InternalDraw(GameTime gameTime)

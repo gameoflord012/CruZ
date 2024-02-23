@@ -17,6 +17,7 @@
 		<ProjectReference Include="..\..\ThirdParty\MonoGame.Extended\src\cs\MonoGame.Extended.Animations\MonoGame.Extended.Animations.csproj" />
 		<ProjectReference Include="..\..\ThirdParty\MonoGame.Extended\src\cs\MonoGame.Extended.Entities\MonoGame.Extended.Entities.csproj" />
 		<ProjectReference Include="..\..\ThirdParty\MonoGameModified\MonoGame.Framework\MonoGame.Framework.DesktopGL.csproj" />
+		<!--TODO: ResourceImporter shouldn't be here-->
 		<ProjectReference Include="..\CruZ.Tool.ResourceImporter\CruZ.Tool.ResourceImporter.csproj" />
 	</ItemGroup>
 	

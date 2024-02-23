@@ -9,7 +9,6 @@ namespace CruZ.Editor.Controls
         public event    Action<INeedCache, string> CacheWrite;
         public string   UniquedCachedDir => "EditorApplication";
 
-
         public bool ReadCache(BinaryReader binReader, string key)
         {
             if(key == "LoadedScene")

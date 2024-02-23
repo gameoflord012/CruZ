@@ -30,11 +30,6 @@ namespace CruZ.Editor
             removeEntity_ToolStripMenuItem.Click += RemoveEntity_ToolStripMenuItem_Click;
         }
 
-        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
-        {
-            return base.ProcessCmdKey(ref msg, keyData);
-        }
-
         public void Init(GameEditor editor)
         {
             FindForm().FormClosing += EditorForm_FormClosing;
@@ -87,12 +82,6 @@ namespace CruZ.Editor
         
         private void EditEntity_ToolStripMenuItem_Clicked(object? sender, EventArgs args)
         {
-            //var menuItem = (ToolStripMenuItem)sender;
-            //var context = (ContextMenuStrip)menuItem.Owner;
-
-
-            //TreeView tree = (TreeView)context.SourceControl;
-
             var e = (TransformEntity)scene_TreeView.SelectedNode.Tag;
             var editCompDialog = new EditComponentDialog(e);
             editCompDialog.ShowDialog();

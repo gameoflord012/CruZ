@@ -81,4 +81,7 @@
     <Folder Include="$(MSBuildThisFileDirectory)systems\ecs\script\" />
     <Folder Include="$(MSBuildThisFileDirectory)systems\ecs\transform\" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="$(MSBuildThisFileDirectory)shaders\light-shader.fx" />
+  </ItemGroup>
 </Project>

@@ -109,6 +109,8 @@ namespace CruZ
             DrawUI?.Invoke(gameTime);
             OnDraw(gameTime);
 
+            //RenderTarget2D a;
+            //a.
         }
 
         private void InternalInitializing()
@@ -201,6 +203,10 @@ namespace CruZ
             _instance.Draw -= draw;
         }
 
+        /// <summary>
+        /// Whether the Game Window is active
+        /// </summary>
+        /// <returns></returns>
         public static bool IsActive()
         {
             return _instance._core.IsActive;
