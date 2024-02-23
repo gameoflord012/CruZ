@@ -22,14 +22,6 @@ namespace CruZ.Systems
             _spriteBatch = GameApplication.GetSpriteBatch();
         }
 
-        //public void OnDraw(GameTime gameTime)
-        //{
-        //    foreach (var animatedSprite in this.GetAllComponents(_spriteRendererMapper))
-        //    {
-        //        animatedSprite.OnDraw(_spriteBatch, Camera.Main.ViewMatrix());
-        //    }
-        //}
-
         public virtual void Update(GameTime gameTime) 
         {
             foreach (var spriteRenderer in this.GetAllComponents(_spriteRendererMapper))

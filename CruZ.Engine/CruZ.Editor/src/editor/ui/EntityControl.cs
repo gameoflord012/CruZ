@@ -57,7 +57,7 @@ namespace CruZ.Editor.UI
 
             if(_hasRenderBound)
             {
-                // Draw sprite origin
+                // InternalDraw sprite origin
                 foreach (var origin in _origins)
                 {
                     var screen = Camera.Main.CoordinateToPoint(origin);

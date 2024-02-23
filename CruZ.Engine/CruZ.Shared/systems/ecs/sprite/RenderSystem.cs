@@ -15,13 +15,15 @@ namespace CruZ.Systems
 {
     internal class RenderSystem : EntitySystem, IUpdateSystem, IDrawSystem
     {
-        public RenderSystem() : base(Aspect.All(typeof(SpriteComponent)))
+        public RenderSystem() : base(Aspect.One(
+            typeof(SpriteComponent), typeof(LightComponent)))
         {
         }
 
         public override void Initialize(IComponentMapperService mapperService)
         {
-            _spriteRendererMapper = mapperService.GetMapper<SpriteComponent>();
+            _spriteMapper = mapperService.GetMapper<SpriteComponent>();
+            _lightMapper = mapperService.GetMapper<LightComponent>();
             _spriteBatch = GameApplication.GetSpriteBatch();
             _gd = GameApplication.GetGraphicsDevice();
         }
@@ -29,6 +31,7 @@ namespace CruZ.Systems
         public void Draw(GameTime gameTime)
         {
             List<SpriteComponent> sprites = GetSortedSpriteList();
+            List<LightComponent> lights = _lightMapper.Components.ToList();
             List<int> sortingLayers = [];
 
             // process sprites
@@ -40,21 +43,31 @@ namespace CruZ.Systems
 
                 var renderTarget = GetRenderTarget(sortingLayer);
 
-                _gd.SetRenderTarget(renderTarget);
+                _gd.SetRenderTarget(renderTarget, RenderTargetUsage.);
                 _gd.Clear(Color.Transparent);
 
+                #region Process Sprites
                 _spriteBatch.Begin(
-                    sortMode: SpriteSortMode.FrontToBack,
-                    transformMatrix: Camera.Main.ViewMatrix(),
-                    samplerState: SamplerState.PointClamp);
+                            sortMode: SpriteSortMode.FrontToBack,
+                            transformMatrix: Camera.Main.ViewMatrix(),
+                            samplerState: SamplerState.PointClamp);
                 do
                 {
-                    sprites[i].Draw(_spriteBatch, Camera.Main.ViewMatrix());
+                    sprites[i].InternalDraw(_spriteBatch, Camera.Main.ViewMatrix());
                     i++;
                 } while (
                     i < sprites.Count &&
                     sprites[i].SortingLayer == sprites[i - 1].SortingLayer);
 
+                _spriteBatch.End();
+                #endregion
+
+                _spriteBatch.Begin();
+                foreach (var light in lights
+                    .Where(e => e.SortingLayers.Contains(sortingLayer)))
+                {
+                    light.InternalDraw(gameTime);
+                }
                 _spriteBatch.End();
             }
 
@@ -80,7 +93,7 @@ namespace CruZ.Systems
 
         private List<SpriteComponent> GetSortedSpriteList()
         {
-            List<SpriteComponent> sprites = this.GetAllComponents(_spriteRendererMapper).ToList();
+            List<SpriteComponent> sprites = this.GetAllComponents(_spriteMapper).ToList();
             sprites.Sort((s1, s2) => { return s1.SortingLayer.CompareTo(s2.SortingLayer); });
             return sprites;
         }
@@ -88,7 +101,8 @@ namespace CruZ.Systems
         public virtual void Update(GameTime gameTime) { }
 
         SpriteBatch _spriteBatch;
-        ComponentMapper<SpriteComponent> _spriteRendererMapper;
+        ComponentMapper<LightComponent> _lightMapper;
+        ComponentMapper<SpriteComponent> _spriteMapper;
         Dictionary<int, RenderTarget2D> _renderTargets = [];
         GraphicsDevice _gd;
     }

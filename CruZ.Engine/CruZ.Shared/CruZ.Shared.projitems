@@ -22,6 +22,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)systems\ecs\ComponentHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)systems\ecs\Component.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)systems\camera\Camera.Static.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)systems\ecs\light\LighComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)systems\ecs\script\EntityScript.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)systems\ecs\IECSContextProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)systems\input\IDraggable.cs" />

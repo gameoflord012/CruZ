@@ -74,12 +74,15 @@ namespace CruZ.Experiment
             _lightEffect.Parameters["LightPosition"]?.SetValue(_position);
             _lightEffect.Parameters["LightRadius"]?.SetValue(1f);
             _lightEffect.Parameters["LightColor"]?.SetValue(new Vector4(0, 0, 1, 1));
-
+             
             _spriteBatch.Begin(effect: _lightEffect);
             _spriteBatch.Draw(_lightTexture, new Vector2(0, 0), Color.Red);
             _spriteBatch.End();
 
             GraphicsDevice.SetRenderTarget(null);
+            GraphicsDevice.SetRenderTarget(_renderTarget);
+            GraphicsDevice.SetRenderTarget(null);
+
             GraphicsDevice.Clear(Color.RoyalBlue);
             _spriteBatch.Begin();
             _spriteBatch.Draw(_renderTarget, new Vector2(0, 0), Color.White);

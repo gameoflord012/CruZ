@@ -114,7 +114,7 @@ namespace CruZ.Components
             }
         }
 
-        public virtual void Draw(SpriteBatch spriteBatch, Matrix viewMatrix)
+        internal virtual void InternalDraw(SpriteBatch spriteBatch, Matrix viewMatrix)
         {
             Trace.Assert(_e != null);
 
