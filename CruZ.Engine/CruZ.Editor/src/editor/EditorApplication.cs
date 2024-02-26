@@ -58,7 +58,7 @@ namespace CruZ.Editor.Controls
             if (_currentScene == null) return;
 
             if(_currentScene.ResourceInfo != null && !_currentScene.ResourceInfo.IsRuntime)
-                ResourceManager.SaveResource(_currentScene);
+                ResourceManager.User.SaveResource(_currentScene);
 
             _currentScene.Dispose();
             _currentScene = null;
@@ -100,8 +100,8 @@ namespace CruZ.Editor.Controls
         {
             Check_AppInitialized();
 
-            var scene = ResourceManager.LoadResource<GameScene>(file);
-            scene.Name = Path.GetRelativePath(ResourceManager.ResourceRoot, file);
+            var scene = ResourceManager.User.LoadResource<GameScene>(file);
+            scene.Name = Path.GetRelativePath(ResourceManager.User.ResourceRoot, file);
 
             LoadScene(scene);
         }
@@ -144,8 +144,6 @@ namespace CruZ.Editor.Controls
 
             var newEntity = _currentScene.CreateEntity();
 
-            // TODO: Improve this to automatically update when new entity add or remove
-            // by adding EntityAdded or EntityRemoved listeners
             UpdateEntityControls();
             
             return newEntity;
@@ -355,8 +353,6 @@ namespace CruZ.Editor.Controls
             #endregion
         }
 
-        // TODO: Improve this to automatically update when new entity add or remove
-        // by adding EntityAdded or EntityRemoved listeners
         private void UpdateEntityControls()
         {
             _eControls.Clear();
@@ -421,19 +417,16 @@ namespace CruZ.Editor.Controls
 
         GameScene? _currentScene;
         GameScene? _lastScene;
-        TransformEntity? _currentSelect;
-
-        GameApplication? _gameApp;
-        Thread? _gameAppThread;
-        int _thisThreadId;
-
         Camera? _mainCamera;
+        TransformEntity? _currentSelect;
+        GameApplication? _gameApp;
 
+        Thread? _gameAppThread;
         ManualResetEvent _appInitalized_Reset = new(false);
+        int _thisThreadId;
 
         List<EntityControl> _eControls = [];
         LoggingWindow _infoTextWindow;
-
         EditorForm _editorForm;
         #endregion
     }

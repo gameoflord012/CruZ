@@ -18,38 +18,26 @@ using System.Reflection;
 
 namespace CruZ.Resource
 {
-    public static class ResourceManager
+    public class ResourceManager
     {
-        public static string ResourceRoot { 
+        public string ResourceRoot { 
             get => _resourceRoot; 
-            set 
+            internal set 
             { 
                 _resourceRoot = value;
+                RunImport();
             } 
         }
 
-        static ResourceManager()
+        private ResourceManager()
         {
-            _Serializer = new Serializer();
-            _Serializer.Converters.Add(new TextureAtlasJsonConverter());
-            _Serializer.Converters.Add(new SerializableJsonConverter());
+            _serializer = new Serializer();
+            _serializer.Converters.Add(new TextureAtlasJsonConverter());
+            _serializer.Converters.Add(new SerializableJsonConverter());
         }
 
-        internal static void RunImport()
-        {
-            var dotImporter  = Path.Combine(ResourceRoot, ".resourceImporter");
-            var importerObject = ResourceImporter.ReadImporterObject(dotImporter);
-
-            ResourceImporter.ResourceRoot = ResourceRoot;
-            ResourceImporter.SetImporterObject(importerObject);
-            ResourceImporter.DoBuild();
-            ResourceImporter.ExportResult();
-            
-            Logging.SetMsg(importerObject.BuildLog, "ResourceImporter", true);
-            _GetResourcePathFromGuid = importerObject.BuildResult;
-        }
-
-        public static void CreateResource(string resourcePath, object resObj, bool renew = false)
+        #region Public Functions
+        public void CreateResource(string resourcePath, object resObj, bool renew = false)
         {
             object? existsResource = null;
 
@@ -68,7 +56,7 @@ namespace CruZ.Resource
 
             if (existsResource == null)
             {
-                _Serializer.SerializeToFile(resObj, Path.Combine(ResourceRoot, resourcePath));
+                _serializer.SerializeToFile(resObj, Path.Combine(ResourceRoot, resourcePath));
             }
 
             if (existsResource is IDisposable iDisposable)
@@ -77,7 +65,7 @@ namespace CruZ.Resource
             InitResourceHost(resObj, resourcePath);
         }
 
-        public static void SaveResource(IHostResource host)
+        public void SaveResource(IHostResource host)
         {
             if (host.ResourceInfo.IsRuntime)
                 throw new ArgumentException($"Can't save runtime {host} resource, use create resource instead");
@@ -85,29 +73,31 @@ namespace CruZ.Resource
             CreateResource(host.ResourceInfo.ResourceName, host, true);
         }
 
-        public static T LoadResource<T>(string resourcePath)
+        public T LoadResource<T>(string resourcePath)
         {
             return (T)LoadResource(resourcePath, typeof(T));
         }
 
-        public static T LoadResource<T>(string resourcePath, out ResourceInfo resInfo)
+        public T LoadResource<T>(string resourcePath, out ResourceInfo resInfo)
         {
             resInfo = CreateResourceInfo(resourcePath);
             return (T)LoadResource(resourcePath, typeof(T));
         }
 
-        public static T LoadResource<T>(Guid guid)
+        public T LoadResource<T>(Guid guid)
         {
             return LoadResource<T>(GetResourcePath(guid));
-        }
+        } 
+        #endregion
 
+        #region Private Functions
         /// <summary>
         /// Load resource with relative or full path, the resource file should within the .resObj folder
         /// </summary>
         /// <param name="resourcePath">May be fullpath or relative path to resource root</param>
         /// <param name="ty"></param>
         /// <returns></returns>
-        private static object LoadResource(string resourcePath, Type ty)
+        private object LoadResource(string resourcePath, Type ty)
         {
             var fullResourcePath = Path.Combine(ResourceRoot, resourcePath);
             var relResourcePath = Path.GetRelativePath(ResourceRoot, fullResourcePath);
@@ -124,7 +114,7 @@ namespace CruZ.Resource
                 var dir = Path.GetDirectoryName(relResourcePath);
                 var file = Path.GetFileNameWithoutExtension(relResourcePath);
 
-                if(dir == null || file == null)
+                if (dir == null || file == null)
                     throw new ArgumentException($"Invalid resourcePath value {relResourcePath}");
 
                 resObj = LoadContentNonGeneric(Path.Combine(dir, file), ty);
@@ -133,13 +123,13 @@ namespace CruZ.Resource
             {
                 try
                 {
-                    resObj = _Serializer.DeserializeFromFile(fullResourcePath, ty);
+                    resObj = _serializer.DeserializeFromFile(fullResourcePath, ty);
                 }
                 catch (FileNotFoundException)
                 {
                     throw new FileNotFoundException(string.Format("Can't find resource file {0}", fullResourcePath));
                 }
-                catch(JsonReaderException)
+                catch (JsonReaderException)
                 {
                     throw new LoadResourceFailedException($"Can't load resource \"{fullResourcePath}\" due to invalid resource formatting or not available in content");
                 }
@@ -150,12 +140,21 @@ namespace CruZ.Resource
             return resObj;
         }
 
-        private static string GetFullResPath()
+        private void RunImport()
         {
-            return Path.GetFullPath(ResourceRoot);
+            var dotImporter = Path.Combine(ResourceRoot, ".resourceImporter");
+            var importerObject = ResourceImporter.ReadImporterObject(dotImporter);
+
+            ResourceImporter.ResourceRoot = ResourceRoot;
+            ResourceImporter.SetImporterObject(importerObject);
+            ResourceImporter.DoBuild();
+            ResourceImporter.ExportResult();
+
+            Logging.SetMsg(importerObject.BuildLog, "ResourceImporter", true);
+            _getResourcePathFromGuid = importerObject.BuildResult;
         }
 
-        private static T LoadContent<T>(string resourcePath)
+        private T LoadContent<T>(string resourcePath)
         {
             try
             {
@@ -178,7 +177,7 @@ namespace CruZ.Resource
             }
         }
 
-        private static object LoadContentNonGeneric(string resourcePath, Type ty)
+        private object LoadContentNonGeneric(string resourcePath, Type ty)
         {
             try
             {
@@ -197,11 +196,11 @@ namespace CruZ.Resource
             }
         }
 
-        private static string GetResourcePath(Guid guid)
+        private string GetResourcePath(Guid guid)
         {
             try
             {
-                return _GetResourcePathFromGuid[guid.ToString()];
+                return _getResourcePathFromGuid[guid.ToString()];
             }
             catch (KeyNotFoundException)
             {
@@ -209,22 +208,36 @@ namespace CruZ.Resource
             }
         }
 
-        private static void InitResourceHost(object resObj, string resourcePath)
+        private void InitResourceHost(object resObj, string resourcePath)
         {
             if (resObj is IHostResource host)
                 host.ResourceInfo = CreateResourceInfo(resourcePath);
         }
 
-        private static ResourceInfo CreateResourceInfo(string resourcePath)
+        private string GetFullResPath()
         {
-            return ResourceInfo.Create(resourcePath, false);
+            return Path.GetFullPath(ResourceRoot);
         }
 
-        private static Serializer _Serializer;
-        private static Dictionary<string, string> _GetResourcePathFromGuid = [];
+        private ResourceInfo CreateResourceInfo(string resourcePath)
+        {
+            return ResourceInfo.Create(resourcePath, false);
+        } 
+        #endregion
 
-        private static string _resourceRoot = "res";
-        private static string ContentRoot => $"{_resourceRoot}\\.content\\bin";
+        private Serializer _serializer;
+        private Dictionary<string, string> _getResourcePathFromGuid = [];
 
+        private string _resourceRoot = "res";
+        private string ContentRoot => $"{_resourceRoot}\\.content\\bin";
+
+        #region Static
+        static ResourceManager()
+        {
+            User = new();
+        }
+
+        public static ResourceManager User { get; }
+        #endregion
     }
 }

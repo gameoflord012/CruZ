@@ -103,7 +103,7 @@ namespace CruZ.Components
                 ResourceInfo info;
                 try
                 {
-                    Texture = ResourceManager.LoadResource<Texture2D>(texturePath, out info);
+                    Texture = ResourceManager.User.LoadResource<Texture2D>(texturePath, out info);
                 }
                 catch(System.Exception e)
                 {

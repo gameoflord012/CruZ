@@ -13,7 +13,7 @@ namespace CruZ.Editor
         {
             OpenFileDialog openFileDialog = new()
             {
-                InitialDirectory = ResourceManager.ResourceRoot,
+                InitialDirectory = ResourceManager.User.ResourceRoot,
                 Title = "Select a Scene",
                 Filter = "Scene File (*.scene)|*.scene",
                 Multiselect = multiselect,

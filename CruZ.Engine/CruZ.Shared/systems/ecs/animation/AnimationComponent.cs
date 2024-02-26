@@ -83,7 +83,7 @@ namespace CruZ.Components
 
         public void LoadSpriteSheet(string resourcePath, string animationPlayerKey)
         {
-            var spriteSheet = ResourceManager.LoadResource<SpriteSheet>(resourcePath);
+            var spriteSheet = ResourceManager.User.LoadResource<SpriteSheet>(resourcePath);
 
             _getAnimationPlayer[animationPlayerKey] = new AnimationPlayer(spriteSheet);
             _loadedResources.Add(new(resourcePath, animationPlayerKey));

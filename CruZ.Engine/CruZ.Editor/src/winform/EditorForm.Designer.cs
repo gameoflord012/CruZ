@@ -214,22 +214,6 @@ namespace CruZ.Editor
 
         #endregion
 
-        #region WORLDVIEW_COMMENT
-        //TODO:
-        //_editor = new GameEditor();
-
-
-        //splitContainer1.Panel1.Controls.Add(_editor);
-
-        //_editor.BackColor = Color.LightSeaGreen;
-        //_editor.Dock = DockStyle.Fill;
-        //_editor.Location = new Point(0, 0);
-        //_editor.Margin = new Padding(3, 2, 3, 2);
-        //_editor.Name = "_editor";
-        //_editor.Size = new Size(419, 314);
-        //_editor.TabIndex = 0;
-        #endregion
-
         private ToolStripMenuItem file_Menu;
         private ToolStripMenuItem scene_Menu;
         private ToolStripMenuItem openScene_MenuButton;

@@ -15,7 +15,7 @@ namespace CruZ.Editor.UI
         {
             Location = new(5, 3);
 
-            _font = ResourceManager.LoadResource<SpriteFont>("default");
+            _font = ResourceManager.User.LoadResource<SpriteFont>("default");
             _lineSpacing = _font.LineSpacing * _scale;
             _curRow = 0;
         }

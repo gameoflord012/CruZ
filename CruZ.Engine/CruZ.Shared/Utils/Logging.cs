@@ -1,36 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Runtime.Serialization;
+using System.IO;
 using System.Text;
 
 namespace CruZ.Utility
 {
     public class Logging
     {
-        private static string LOGGING_DIR = ".\\logs\\";
-
-        Dictionary<string, string> _msgs = new();
-        int _maxMsg = 10;
-
-        //public static void SetMsg(string msg, string key = DefaultString)
-        //{
-
-        //}
+        public static string OutputDir = ".";
 
         public static void SetMsg(string newMsg, string key = DefaultString, bool updateLogFile = false)
         {
             Main._msgs[key] = newMsg;
 
             if (updateLogFile)
-                FileHelper.WriteToFile($"{LOGGING_DIR}{key}.log",
+                FileHelper.WriteToFile(Path.Combine(OutputDir, key + ".log"),
                     newMsg, false);
         }
 
         public static void PushMsg(string newMsg, string key = DefaultString, bool updateLogFile = false)
         {
-            //while (Main._msgs.Count > Main._maxMsg) Main._msgs.RemoveAt(0);
-
             StringBuilder sb = new();
 
             var prevMsg = GetMsg(key);
@@ -45,12 +35,6 @@ namespace CruZ.Utility
 
             SetMsg(sb.ToString(), key, updateLogFile);
         }
-
-        //public static void PushMsg(string fmt, string key = DefaultString, params object[] args)
-        //{
-        //    var msg = string.Format(fmt, args);
-        //    PushMsg(msg, key);
-        //}
 
         public static string GetMsg(string key = DefaultString)
         {
@@ -68,9 +52,12 @@ namespace CruZ.Utility
             Debug.WriteLine("===========================END_LOG============================");
         }
 
-        private static Logging _main;
-        private static Logging Main { get => _main ??= new Logging(); }
-        private const string DefaultString = "Default";
-        //public Dictionary<string, string> Msgs { get => _msgs; set => _msgs = value; }
+        #region Privates
+        Dictionary<string, string> _msgs = new();
+        static Logging _main;
+        static Logging Main { get => _main ??= new Logging(); }
+        #endregion
+
+        const string DefaultString = "Default"; 
     }
 }

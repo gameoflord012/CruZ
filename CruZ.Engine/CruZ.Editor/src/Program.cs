@@ -1,7 +1,7 @@
 ﻿using CommandLine;
-using CruZ.Components;
+
 using CruZ.Resource;
-using CruZ.Tool.ResourceImporter;
+
 using System;
 using System.IO;
 
@@ -9,24 +9,19 @@ namespace CruZ.Editor
 {
     public class Program
     {
-        private const string WORKING_DIR = ".cruz";
-
         [STAThread]
         public static void Main(string[] args)
         {
             Parser.Default.ParseArguments<Options>(args)
-            .WithParsed<Options>(o =>
+            .WithParsed(o =>
             {
-                var workDir = Path.Combine(o.ProjectRoot, WORKING_DIR);
-                var resDir = Path.Combine(workDir, "..\\res");
+                EditorVariables.UserResDir = Path.Combine(o.ProjectRoot, "res");
+                EditorVariables.UserProjectProfileDir = Path.Combine(
+                    o.ProjectRoot, EditorVariables.USER_PROJECT_PROFILE_DIR_NAME);
 
-                if (!Directory.Exists(workDir)) Directory.CreateDirectory(workDir);
-
-                Environment.CurrentDirectory = workDir;
-                ResourceManager.ResourceRoot = resDir;
+                ResourceManager.User.ResourceRoot = EditorVariables.UserResDir;
             });
 
-            ResourceManager.RunImport();
             EditorForm.Run();
         }
 

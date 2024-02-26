@@ -1,4 +1,0 @@
-﻿namespace CruZ.Editor
-{
-
-}

@@ -94,7 +94,7 @@ namespace CruZ.Editor
             var savePath = DialogHelper.GetSaveScenePath();
             if (savePath == null) return;
 
-            ResourceManager.CreateResource(
+            ResourceManager.User.CreateResource(
                 savePath,
                 _editor.CurrentGameScene,
                 true);

@@ -8,7 +8,7 @@ namespace CruZ.Editor
 {
     class CacheService
     {
-        public const string CACHE_ROOT = "caches";
+        public static string OutputDir = ".";
 
         public static void Register(INeedCache control)
         {
@@ -30,22 +30,6 @@ namespace CruZ.Editor
         {
             ReadCache(cache, key);
         }
-
-        //public static void CallReadCaches()
-        //{
-        //    foreach (var cache in _cacheControls)
-        //    {
-        //        ReadCache(cache);
-        //    }
-        //}
-
-        //public static void CallWriteCaches()
-        //{
-        //    foreach (var cache in _cacheControls)
-        //    {
-        //        WriteCache(cache);
-        //    }
-        //}
 
         private static void ReadCache(INeedCache cacheControl, string key)
         {
@@ -91,9 +75,11 @@ namespace CruZ.Editor
 
         public static string GetCachePath(INeedCache cachedControl, string key)
         {
-            return Path.Combine(CACHE_ROOT, cachedControl.UniquedCachedDir, key) + ".cache";
+            return Path.Combine(
+                OutputDir, 
+                cachedControl.UniquedCachedDir, key) + ".cache";
         }
 
-        private static HashSet<INeedCache> _cacheControls = [];
+        static HashSet<INeedCache> _cacheControls = [];
     }
 }

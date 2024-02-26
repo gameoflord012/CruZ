@@ -43,7 +43,7 @@ namespace CruZ.Systems
 
                 var renderTarget = GetRenderTarget(sortingLayer);
 
-                _gd.SetRenderTarget(renderTarget, RenderTargetUsage.);
+                _gd.SetRenderTarget(renderTarget);
                 _gd.Clear(Color.Transparent);
 
                 #region Process Sprites

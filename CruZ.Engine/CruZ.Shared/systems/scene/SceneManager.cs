@@ -75,7 +75,6 @@ namespace CruZ.Scene
             return _sceneMethods.Keys.ToArray();
         }
 
-        //TODO: Current scene asset maybe dispose if new scene is loaded
         private static Dictionary<string, MethodInfo> _sceneMethods = [];
     }
 }
