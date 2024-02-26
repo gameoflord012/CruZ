@@ -42,15 +42,15 @@ namespace CruZ.Utility
             return Main._msgs[key];
         }
 
-        public static void FlushToDebug()
-        {
-            Debug.WriteLine("===========================CRUZ_LOGGING===========================");
-            foreach (var msg in Main._msgs)
-            {
-                Debug.WriteLine(msg);
-            }
-            Debug.WriteLine("===========================END_LOG============================");
-        }
+        //public static void FlushToDebug()
+        //{
+        //    Debug.WriteLine("===========================CRUZ_LOGGING===========================");
+        //    foreach (var msg in Main._msgs)
+        //    {
+        //        Debug.WriteLine(msg);
+        //    }
+        //    Debug.WriteLine("===========================END_LOG============================");
+        //}
 
         #region Privates
         Dictionary<string, string> _msgs = new();

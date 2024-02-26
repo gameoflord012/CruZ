@@ -4,10 +4,10 @@ using System.Windows.Forms;
 
 namespace CruZ.Editor.Controls
 {
-    public interface INeedCache
+    public interface ICacheable
     {
-        event Action<INeedCache, string> CacheRead;
-        event Action<INeedCache, string> CacheWrite;
+        event Action<ICacheable, string> CacheRead;
+        event Action<ICacheable, string> CacheWrite;
 
         string UniquedCachedDir { get; }
         

@@ -6,32 +6,35 @@ using System.Text;
 
 namespace CruZ.Editor
 {
+    /// <summary>
+    /// Provide service for read and write caches used in user-space.
+    /// </summary>
     class CacheService
     {
         public static string OutputDir = ".";
 
-        public static void Register(INeedCache control)
+        public static void Register(ICacheable cacheable)
         {
-            _cacheControls.Add(control);
+            _cacheControls.Add(cacheable);
 
-            control.CacheRead -= Control_CacheRead;
-            control.CacheRead += Control_CacheRead;
+            cacheable.CacheRead -= Cacheable_CacheRead;
+            cacheable.CacheRead += Cacheable_CacheRead;
 
-            control.CacheWrite -= Control_CacheWrite;    
-            control.CacheWrite += Control_CacheWrite;    
+            cacheable.CacheWrite -= Cacheable_CacheWrite;    
+            cacheable.CacheWrite += Cacheable_CacheWrite;    
         }
 
-        private static void Control_CacheWrite(INeedCache cache, string key)
+        private static void Cacheable_CacheWrite(ICacheable cache, string key)
         {
             WriteCache(cache, key);
         }
 
-        private static void Control_CacheRead(INeedCache cache, string key)
+        private static void Cacheable_CacheRead(ICacheable cache, string key)
         {
             ReadCache(cache, key);
         }
 
-        private static void ReadCache(INeedCache cacheControl, string key)
+        private static void ReadCache(ICacheable cacheControl, string key)
         {
             var cachePath = GetCachePath(cacheControl, key);
 
@@ -52,7 +55,7 @@ namespace CruZ.Editor
             }
         }
 
-        private static void WriteCache(INeedCache cacheControl, string key)
+        private static void WriteCache(ICacheable cacheControl, string key)
         {
             var cachePath = GetCachePath(cacheControl, key);
 
@@ -73,13 +76,13 @@ namespace CruZ.Editor
             return File.OpenWrite(cachePath);
         }
 
-        public static string GetCachePath(INeedCache cachedControl, string key)
+        public static string GetCachePath(ICacheable cachedControl, string key)
         {
             return Path.Combine(
                 OutputDir, 
                 cachedControl.UniquedCachedDir, key) + ".cache";
         }
 
-        static HashSet<INeedCache> _cacheControls = [];
+        static HashSet<ICacheable> _cacheControls = [];
     }
 }

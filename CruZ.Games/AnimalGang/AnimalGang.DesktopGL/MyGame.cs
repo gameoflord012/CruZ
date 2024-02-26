@@ -30,7 +30,7 @@ namespace CruZ.Games.AnimalGang
         {
             base.OnEndRun();
 
-            Logging.FlushToDebug();
+            //Logging.FlushToDebug();
         }
 
         public static void Main(string[] args)

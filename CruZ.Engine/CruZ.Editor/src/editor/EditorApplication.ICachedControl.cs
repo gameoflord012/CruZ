@@ -3,10 +3,10 @@ using System.IO;
 
 namespace CruZ.Editor.Controls
 {
-    public partial class GameEditor : INeedCache
+    public partial class GameEditor : ICacheable
     {
-        public event    Action<INeedCache, string> CacheRead;
-        public event    Action<INeedCache, string> CacheWrite;
+        public event    Action<ICacheable, string> CacheRead;
+        public event    Action<ICacheable, string> CacheWrite;
         public string   UniquedCachedDir => "EditorApplication";
 
         public bool ReadCache(BinaryReader binReader, string key)
