@@ -5,7 +5,7 @@ namespace CruZ
 {
     using Microsoft.Xna.Framework;
 
-    public partial class GameCore : Game
+    public partial class GameCore : XNA.Game
     {
         public event Action?                    Initializing;
         public event Action?                    InitializeSystemEvent;

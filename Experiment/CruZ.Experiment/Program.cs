@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework.Input;
 
 namespace CruZ.Experiment
 {
-    class MyGame : Game
+    class MyGame : Microsoft.Xna.Framework.Game
     {
         public MyGame()
         {
@@ -102,7 +102,7 @@ namespace CruZ.Experiment
     {
         static void Main(string[] args)
         {
-            Game game = new MyGame();
+            Microsoft.Xna.Framework.Game game = new MyGame();
             game.Run();
         }
     }

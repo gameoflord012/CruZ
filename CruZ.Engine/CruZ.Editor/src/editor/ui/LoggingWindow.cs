@@ -1,39 +1,39 @@
 ﻿using CruZ.Resource;
+using CruZ.Service;
 using CruZ.UI;
-using CruZ.Utility;
+
 using Microsoft.Xna.Framework.Graphics;
+
+using System;
 using System.Collections.Generic;
 
 namespace CruZ.Editor.UI
 {
     internal class LoggingWindow : UIControl
     {
-        //string DisplayText = "Default";
         Dictionary<string, string> TextInfo = [];
 
-        public LoggingWindow()
+        public LoggingWindow(IServiceProvider service)
         {
             Location = new(5, 3);
 
-            _font = ResourceManager.User.LoadResource<SpriteFont>("default");
+            _resource = (ResourceManager)service.GetService(typeof(ResourceManager));
+
+            // TODO: Load font from system instead of user resource directory
+            _font = _resource.Load<SpriteFont>("default");
             _lineSpacing = _font.LineSpacing * _scale;
             _curRow = 0;
         }
-
-        //public void SetText(string text)Regular
-        //{
-        //    _text = text;
-        //} 
 
         protected override void OnDraw(UIInfo info)
         {
             _sb = info.SpriteBatch;
             _curRow = 0;
-            DrawString(Logging.GetMsg("Fps"));
+            DrawString(LogService.GetMsg("Fps"));
             _curRow++;
-            DrawString(Logging.GetMsg("Scene"));
+            DrawString(LogService.GetMsg("Scene"));
             _curRow++;
-            DrawString(Logging.GetMsg("Default"));
+            DrawString(LogService.GetMsg("Default"));
         }
 
         private void DrawString(string s)
@@ -47,17 +47,12 @@ namespace CruZ.Editor.UI
                 );
         }
 
-        //private string GetText(string key)
-        //{
-        //    if(TextInfo.ContainsKey(key)) return TextInfo[key];
-        //    return "";
-        //} 
-
         SpriteFont _font;
         SpriteBatch? _sb;
         float _lineSpacing;
         float _curRow;
         float _scale = 0.7f;
-        //string _text = "helloWorld";
+
+        ResourceManager _resource;
     }
 }

@@ -11,14 +11,16 @@ namespace CruZ.Components
     {
         public event Action OnDeserializationCompleted;
 
-        public void ReadJson(JsonReader reader, JsonSerializer serializer)
+        public object ReadJson(JsonReader reader, JsonSerializer serializer)
         {
+            var value = ECS.CreateEntity();
+
             JObject jObject;
 
             jObject = JObject.Load(reader);
 
-            Transform.Position = jObject["position"].ToObject<Vector3>(serializer);
-            Transform.Scale = jObject["scale"].ToObject<Vector3>(serializer);
+            value.Transform.Position = jObject["position"].ToObject<Vector3>(serializer);
+            value.Transform.Scale = jObject["scale"].ToObject<Vector3>(serializer);
 
             foreach (var comObject in jObject["components"])
             {
@@ -36,10 +38,11 @@ namespace CruZ.Components
                 object comData = comObject["com-data"].ToObject(comTy, serializer);
                 var com = (Component)comData;
 
-                AddComponent(com);
+                value.AddComponent(com);
             }
 
-            OnDeserializationCompleted?.Invoke();
+            value.OnDeserializationCompleted?.Invoke();
+            return value;
         }
 
         public void WriteJson(JsonWriter writer, JsonSerializer serializer)
@@ -69,12 +72,6 @@ namespace CruZ.Components
                 writer.WriteEnd();
             }
             writer.WriteEnd();
-        }
-
-
-        ICustomSerializable ICustomSerializable.CreateDefault()
-        {
-            return ECS.CreateEntity();
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System.Collections.Generic;
 
-namespace CruZ.Tool.ResourceImporter
+namespace CruZ.Tools.ResourceImporter
 {
     public class ResourceImporterObject
     {

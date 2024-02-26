@@ -1,4 +1,6 @@
-﻿using Newtonsoft.Json;
+﻿using CruZ.Serialization;
+
+using Newtonsoft.Json;
 using System;
 using System.IO;
 
@@ -18,20 +20,18 @@ namespace CruZ.Resource
     {
         private ResourceInfo() { }
 
-        private ResourceInfo(string resName, bool isRuntime)
+        private ResourceInfo(ResourceManager? manager, string resName)
         {
             ResourceName = resName;
-            IsRuntime = isRuntime;
+            ResourceManager = manager;
         }
 
-        public static ResourceInfo Create(string resName, bool isRuntime)
+        public static ResourceInfo Create(ResourceManager? manager, string resourceName)
         {
-            return new ResourceInfo(resName, isRuntime);
+            return new ResourceInfo(manager, resourceName);
         }
 
-        [JsonProperty]
         public string ResourceName  { get; private set; }
-        [JsonProperty]
-        public bool   IsRuntime     { get; private set; }
+        public ResourceManager ResourceManager { get; private set; }
     }
 }

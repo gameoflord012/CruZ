@@ -1,5 +1,5 @@
 ﻿using CruZ.Components;
-using CruZ.Games.AnimalGang;
+using CruZ.Game.AnimalGang;
 using CruZ.Systems;
 
 namespace CruZ.Scene

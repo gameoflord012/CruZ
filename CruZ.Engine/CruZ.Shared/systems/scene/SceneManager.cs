@@ -60,7 +60,7 @@ namespace CruZ.Scene
             try
             {
                 scene = (GameScene)method.Invoke(null, BindingFlags.DoNotWrapExceptions, null, null, null);
-                scene.ResourceInfo = ResourceInfo.Create(sceneName, true);
+                scene.ResourceInfo = ResourceInfo.Create(null, sceneName);
             }
             catch(System.Exception e)
             {

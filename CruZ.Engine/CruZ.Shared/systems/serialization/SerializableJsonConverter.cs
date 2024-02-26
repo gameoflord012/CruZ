@@ -15,11 +15,11 @@ namespace CruZ.Serialization
             return typeof(ICustomSerializable).IsAssignableFrom(objectType);
         }
 
+        // TODO: Fix this
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
             var uninitialObject = (ICustomSerializable)RuntimeHelpers.GetUninitializedObject(objectType);
-            ICustomSerializable value = uninitialObject.CreateDefault() ?? uninitialObject;
-            value.ReadJson(reader, serializer);
+            var value = uninitialObject.ReadJson(reader, serializer);
             return value;
         }
 
@@ -28,21 +28,5 @@ namespace CruZ.Serialization
             var serializable = (ICustomSerializable)value;
             serializable.WriteJson(writer, serializer);
         }
-
-        //private Dictionary<string, object?> GetPropertiesValue(object obj)
-        //{
-        //    Dictionary<string, object?> dict = new();
-
-        //    var props = obj.GetType().GetProperties(
-        //        BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.GetField);
-            
-        //    foreach (var prop in props)
-        //    {
-        //        var jIgnore = prop.GetCustomAttribute(typeof(JsonIgnoreAttribute));
-        //        if(jIgnore == null) dict[prop.Name] = prop.GetValue(obj);
-        //    }
-
-        //    return dict;
-        //}
     }
 }

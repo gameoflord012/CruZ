@@ -1,6 +1,6 @@
-﻿using CruZ.Systems;
+﻿using CruZ.Service;
+using CruZ.Systems;
 using CruZ.UI;
-using CruZ.Utility;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
@@ -158,7 +158,7 @@ namespace CruZ
                 _fpsResult = _frameCount / seconds;
                 _frameCount = 0;
 
-                Logging.SetMsg($"Fps: {_fpsResult}", "Fps");
+                LogService.SetMsg($"Fps: {_fpsResult}", "Fps");
             }
         }
 

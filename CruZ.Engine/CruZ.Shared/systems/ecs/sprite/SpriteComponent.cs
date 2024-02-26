@@ -6,7 +6,6 @@ using System.Diagnostics;
 using CruZ.Global;
 using Microsoft.Xna.Framework;
 using System.ComponentModel;
-using CruZ.Exception;
 
 #if CRUZ_EDITOR
 using System.Drawing.Design;
@@ -14,7 +13,6 @@ using System.Drawing.Design;
 
 namespace CruZ.Components
 {
-
     #region EventArgs
     public class DrawLoopBeginEventArgs : EventArgs
     {
@@ -65,6 +63,10 @@ namespace CruZ.Components
         public bool HasRenderBounds = false;
     }
     #endregion
+
+    /// <summary>
+    /// Game component loaded from specify resource
+    /// </summary>
     public partial class SpriteComponent : Component
     {
         public event EventHandler<DrawLoopBeginEventArgs> DrawLoopBegin;
@@ -90,20 +92,20 @@ namespace CruZ.Components
 #if CRUZ_EDITOR
         [Editor(typeof(CruZ.Editor.FileUITypeEditor), typeof(UITypeEditor))]
 #endif
-        public string TexturePath 
-        { 
-            get =>  _spriteResInfo != null ? _spriteResInfo.ResourceName : ""; 
-            set => LoadTexture(value); 
-        }
+        //public string TexturePath 
+        //{ 
+        //    get =>  _spriteResInfo != null ? _spriteResInfo.ResourceName : ""; 
+        //    set => LoadTexture(value); 
+        //}
         #endregion
-        public void LoadTexture(string texturePath)
+        public void LoadTexture(ResourceManager resourceManager, string texturePath)
         {
             if (!string.IsNullOrEmpty(texturePath))
             {
                 ResourceInfo info;
                 try
                 {
-                    Texture = ResourceManager.User.LoadResource<Texture2D>(texturePath, out info);
+                    Texture = resourceManager.Load<Texture2D>(texturePath, out info);
                 }
                 catch(System.Exception e)
                 {

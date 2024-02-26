@@ -1,21 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Text;
 
-namespace CruZ.Utility
+using CruZ.Utility;
+
+namespace CruZ.Service
 {
-    public class Logging
+    public class LogService
     {
-        public static string OutputDir = ".";
+        public static string LogRoot = ".";
 
         public static void SetMsg(string newMsg, string key = DefaultString, bool updateLogFile = false)
         {
             Main._msgs[key] = newMsg;
 
             if (updateLogFile)
-                FileHelper.WriteToFile(Path.Combine(OutputDir, key + ".log"),
+                FileHelper.WriteToFile(Path.Combine(LogRoot, key + ".log"),
                     newMsg, false);
         }
 
@@ -54,8 +55,8 @@ namespace CruZ.Utility
 
         #region Privates
         Dictionary<string, string> _msgs = new();
-        static Logging _main;
-        static Logging Main { get => _main ??= new Logging(); }
+        static LogService _main;
+        static LogService Main { get => _main ??= new LogService(); }
         #endregion
 
         const string DefaultString = "Default"; 

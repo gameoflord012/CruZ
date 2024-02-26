@@ -1,15 +1,19 @@
 ﻿using CruZ.Components;
+using CruZ.Editor.Services;
 using CruZ.Editor.UI;
 using CruZ.Editor.Utility;
 using CruZ.Exception;
 using CruZ.Resource;
 using CruZ.Scene;
+using CruZ.Service;
 using CruZ.Systems;
 using CruZ.UI;
-using CruZ.Utility;
+
 using Microsoft.Xna.Framework.Graphics;
+
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -20,7 +24,8 @@ using System.Windows.Forms;
 namespace CruZ.Editor.Controls
 {
     /// <summary>
-    /// Handle editing operations on game, also manage GameApplication
+    /// Handle editing on <see cref="GameApplication"/>, 
+    /// also a wrapper of it.
     /// </summary>
     public partial class GameEditor
     {
@@ -29,24 +34,23 @@ namespace CruZ.Editor.Controls
 
         public GameScene? CurrentGameScene => _currentScene;
 
-        public GameEditor(EditorForm form)
+        public GameEditor(EditorForm form, IServiceProvider service)
         {
             _editorForm = form;
+            _thisThreadId = Thread.CurrentThread.ManagedThreadId;
+            _cacheService = (CacheService)service.GetService(typeof(CacheService));
 
             Input.MouseScrolled     += Input_MouseScroll;
             Input.MouseMoved        += Input_MouseMove;
             Input.MouseStateChanged += Input_MouseStateChanged;
             Input.KeyStateChanged   += Input_KeyStateChanged;
-
-            _editorForm.FormClosing += EditorForm_Closing;
             UIManager.MouseClick += UI_MouseClick;
-
-            _thisThreadId = Thread.CurrentThread.ManagedThreadId;
+            _editorForm.FormClosing += EditorForm_Closing;
         }
 
         public void Init()
         {
-            CacheService.Register(this);
+            _cacheService.Register(this);
             CacheRead?.Invoke(this, "LoadedScene");
         }
 
@@ -58,7 +62,7 @@ namespace CruZ.Editor.Controls
             if (_currentScene == null) return;
 
             if(_currentScene.ResourceInfo != null && !_currentScene.ResourceInfo.IsRuntime)
-                ResourceManager.User.SaveResource(_currentScene);
+                _resourceService.Save(_currentScene);
 
             _currentScene.Dispose();
             _currentScene = null;
@@ -90,7 +94,7 @@ namespace CruZ.Editor.Controls
                         _currentSelect = null;
                     }
 
-                    Logging.SetMsg(value != null ? value.ToString() : "");
+                    LogService.SetMsg(value != null ? value.ToString() : "");
                     SelectingEntityChanged?.Invoke(value);
                 }
             } 
@@ -100,8 +104,8 @@ namespace CruZ.Editor.Controls
         {
             Check_AppInitialized();
 
-            var scene = ResourceManager.User.LoadResource<GameScene>(file);
-            scene.Name = Path.GetRelativePath(ResourceManager.User.ResourceRoot, file);
+            var scene = _resourceService.Load<GameScene>(file);
+            scene.Name = Path.GetRelativePath(_resourceService.ResourceRoot, file);
 
             LoadScene(scene);
         }
@@ -191,11 +195,6 @@ namespace CruZ.Editor.Controls
         {
             RemoveEntityControl(e);
         }
-
-        //private void GameApp_EarlyDraw(DrawEventArgs args)
-        //{
-        //    DrawAxis(args.SpriteBatch);
-        //}
 
         private void Input_MouseScroll(IInputInfo info)
         {
@@ -348,6 +347,7 @@ namespace CruZ.Editor.Controls
             UpdateEntityControls();
 
             #region InfoTextWindow
+            new ServiceContainer()
             _infoTextWindow = new LoggingWindow();
             UIManager.Root.AddChild(_infoTextWindow);
             #endregion
@@ -399,7 +399,7 @@ namespace CruZ.Editor.Controls
             _currentScene.SetActive(true);
             CurrentSceneChanged?.Invoke(_currentScene);
 
-            Logging.SetMsg(_currentScene.ToString(), "Scene");
+            LogService.SetMsg(_currentScene.ToString(), "Scene");
 
             InitUIControls();
         }
@@ -428,6 +428,9 @@ namespace CruZ.Editor.Controls
         List<EntityControl> _eControls = [];
         LoggingWindow _infoTextWindow;
         EditorForm _editorForm;
+
+        CacheService _cacheService;
+        ResourceManager _resourceService;
         #endregion
     }
 }

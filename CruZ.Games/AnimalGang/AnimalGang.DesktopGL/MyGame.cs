@@ -5,7 +5,7 @@ using CruZ.Systems;
 using CruZ.Utility;
 using Microsoft.Xna.Framework;
 using System.Linq;
-namespace CruZ.Games.AnimalGang
+namespace CruZ.Game.AnimalGang
 {
     class MyGame : GameApplication
     {
@@ -30,7 +30,7 @@ namespace CruZ.Games.AnimalGang
         {
             base.OnEndRun();
 
-            //Logging.FlushToDebug();
+            //LogService.FlushToDebug();
         }
 
         public static void Main(string[] args)

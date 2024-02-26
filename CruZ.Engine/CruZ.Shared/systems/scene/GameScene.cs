@@ -72,14 +72,10 @@ namespace CruZ
             Dispose();
         }
 
-        public ICustomSerializable? CreateDefault()
-        {
-            return GameApplication.CreateScene();
-        }
-
-        public void ReadJson(JsonReader reader, JsonSerializer serializer)
+        public object ReadJson(JsonReader reader, JsonSerializer serializer)
         {
             serializer.Populate(reader, this);
+            return this;
         }
 
         public void WriteJson(JsonWriter writer, JsonSerializer serializer)

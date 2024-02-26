@@ -4,7 +4,7 @@ using System;
 using System.Diagnostics;
 using System.IO;
 
-namespace CruZ.Tool.ResourceImporter
+namespace CruZ.Tools.ResourceImporter
 {
     class Program
     {

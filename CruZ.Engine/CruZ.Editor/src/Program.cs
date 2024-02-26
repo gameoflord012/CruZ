@@ -1,7 +1,5 @@
 ﻿using CommandLine;
 
-using CruZ.Resource;
-
 using System;
 using System.IO;
 
@@ -15,11 +13,8 @@ namespace CruZ.Editor
             Parser.Default.ParseArguments<Options>(args)
             .WithParsed(o =>
             {
-                EditorVariables.UserResDir = Path.Combine(o.ProjectRoot, "res");
-                EditorVariables.UserProjectProfileDir = Path.Combine(
-                    o.ProjectRoot, EditorVariables.USER_PROJECT_PROFILE_DIR_NAME);
-
-                ResourceManager.User.ResourceRoot = EditorVariables.UserResDir;
+                EditorGlobal.UserProjectDir = Path.Combine(
+                    o.ProjectRoot, EditorGlobal.USER_PROJECT_PROFILE_DIR_NAME);
             });
 
             EditorForm.Run();

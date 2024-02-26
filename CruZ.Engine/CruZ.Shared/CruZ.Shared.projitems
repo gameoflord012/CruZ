@@ -60,7 +60,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)systems\ecs\transform\TransformEntity.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)systems\camera\Camera.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)core\GameCore.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)utils\Logging.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)service\LogService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)types\IRunnable.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)core\GameApplication.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)systems\input\Input.cs" />

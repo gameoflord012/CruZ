@@ -10,7 +10,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
-namespace CruZ.Tool.ResourceImporter
+namespace CruZ.Tools.ResourceImporter
 {
     public static class ResourceImporter
     {

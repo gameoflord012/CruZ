@@ -7,7 +7,7 @@ using MonoGame.Extended;
 using System;
 using System.Collections.Generic;
 
-namespace CruZ.Games.AnimalGang
+namespace CruZ.Game.AnimalGang
 {
     public class MainCharacter : EntityScript
     {

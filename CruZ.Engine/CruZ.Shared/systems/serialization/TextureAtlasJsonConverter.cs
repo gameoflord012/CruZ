@@ -1,12 +1,11 @@
 using System;
-using System.IO;
+
 using CruZ.Resource;
-using CruZ.Tool.ResourceImporter;
-using CruZ.Utility;
+
 using Microsoft.Xna.Framework.Graphics;
-using MonoGame.Extended.Content;
-using MonoGame.Extended.Serialization;
+
 using MonoGame.Extended.TextureAtlases;
+
 using Newtonsoft.Json;
 
 namespace CruZ.Serialization
@@ -34,17 +33,12 @@ namespace CruZ.Serialization
         {
             if (reader.ValueType == typeof(string))
             {
-                //var textureAtlasAssetName = reader.Value.ToString();
-                //var contentPath = GetContentPath(textureAtlasAssetName);
-                //var texturePackerFile = _contentManager.Load<TexturePackerFile>(contentPath, new JsonContentLoader());
-                //var texture = _contentManager.Load<Texture2D>(texturePackerFile.Metadata.Image);
-                //return TextureAtlas.Create(texturePackerFile.Metadata.Image, texture );
                 throw new NotImplementedException();
             }
             else
             {
                 var inlineAtlas = serializer.Deserialize<InlineTextureAtlas>(reader);
-                var texture = ResourceManager.User.LoadResource<Texture2D>(inlineAtlas.TextureGuid);
+                var texture = _resource.Load<Texture2D>(inlineAtlas.TextureGuid);
                 return TextureAtlas.Create(texture, inlineAtlas.RegionWidth, inlineAtlas.RegionHeight);
             }
         }

@@ -21,7 +21,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <None Remove="Resources\light-shader.xnb" />
+	  <None Remove="Content\light-shader.xnb" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -38,7 +38,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Resource Include="Resources\light-shader.xnb" />
+	  <Resource Include="Content\light-shader.xnb" />
 	</ItemGroup>
 
 	<ItemGroup>

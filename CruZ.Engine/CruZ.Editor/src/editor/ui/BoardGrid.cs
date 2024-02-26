@@ -39,8 +39,8 @@ namespace CruZ.UI
             }
 
             var col = lineDis == 1 ?
-                EditorVariables.UNIT_BOARD_COLOR :
-                EditorVariables.BOARD_COLOR;
+                EditorGlobal.UNIT_BOARD_COLOR :
+                EditorGlobal.BOARD_COLOR;
 
             DrawBoard(FunMath.RoundInt(lineDis), col);
 

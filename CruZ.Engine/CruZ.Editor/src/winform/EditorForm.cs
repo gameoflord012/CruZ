@@ -3,10 +3,12 @@ using CruZ.Editor.Controls;
 using CruZ.Editor.Services;
 using CruZ.Editor.Utility;
 using CruZ.Exception;
+using CruZ.Global;
 using CruZ.Resource;
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
@@ -14,16 +16,28 @@ using System.Windows.Forms;
 
 namespace CruZ.Editor
 {
+    /// <summary>
+    /// Handle WinForm API for the editor
+    /// </summary>
     public partial class EditorForm : Form
     {
         private EditorForm()
         {
             InitializeComponent();
+            InitializeServices();
 
             Text = "CruZ Engine";
-
-            _editor = new(this);
+            _editor = new(this, _services);
             _formThread = Thread.CurrentThread;
+        }
+
+        private void InitializeServices()
+        {
+            _services = new();
+            CacheService cacheService = new(EditorGlobal.UserProjectDir);
+            ResourceManager resourceManager = new(EditorGlobal.UserResDir);
+            _services.AddService(typeof(CacheService), cacheService);
+            _services.AddService(typeof(ResourceManager), resourceManager);
         }
 
         private void Init()
@@ -75,7 +89,7 @@ namespace CruZ.Editor
 
             try
             {
-                //TODO: ResourceManager.SaveResource(_editor.CurrentGameScene);
+                //TODO: ResourceManager.Save(_editor.CurrentGameScene);
             }
             catch (System.Exception e)
             {
@@ -128,6 +142,7 @@ namespace CruZ.Editor
         #region Private
         Thread _formThread;
         GameEditor _editor;
+        ServiceContainer _services;
         #endregion
 
         #region Static

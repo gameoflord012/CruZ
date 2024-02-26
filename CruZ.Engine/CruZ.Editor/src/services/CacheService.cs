@@ -1,19 +1,23 @@
 ﻿using CruZ.Editor.Controls;
-using System;
+
 using System.Collections.Generic;
 using System.IO;
-using System.Text;
 
-namespace CruZ.Editor
+namespace CruZ.Editor.Services
 {
     /// <summary>
-    /// Provide service for read and write caches used in user-space.
+    /// Provide service for read and write caches
     /// </summary>
     class CacheService
     {
-        public static string OutputDir = ".";
+        public string CacheRoot { get; private set; }
 
-        public static void Register(ICacheable cacheable)
+        public CacheService(string cacheRoot)
+        {
+            CacheRoot = cacheRoot;
+        }
+
+        public void Register(ICacheable cacheable)
         {
             _cacheControls.Add(cacheable);
 
@@ -24,17 +28,17 @@ namespace CruZ.Editor
             cacheable.CacheWrite += Cacheable_CacheWrite;    
         }
 
-        private static void Cacheable_CacheWrite(ICacheable cache, string key)
+        private void Cacheable_CacheWrite(ICacheable cache, string key)
         {
             WriteCache(cache, key);
         }
 
-        private static void Cacheable_CacheRead(ICacheable cache, string key)
+        private void Cacheable_CacheRead(ICacheable cache, string key)
         {
             ReadCache(cache, key);
         }
 
-        private static void ReadCache(ICacheable cacheControl, string key)
+        private void ReadCache(ICacheable cacheControl, string key)
         {
             var cachePath = GetCachePath(cacheControl, key);
 
@@ -55,7 +59,7 @@ namespace CruZ.Editor
             }
         }
 
-        private static void WriteCache(ICacheable cacheControl, string key)
+        private void WriteCache(ICacheable cacheControl, string key)
         {
             var cachePath = GetCachePath(cacheControl, key);
 
@@ -69,20 +73,20 @@ namespace CruZ.Editor
             mem.WriteTo(file);
         }
 
-        private static FileStream GetCacheFile(string cachePath)
+        private FileStream GetCacheFile(string cachePath)
         {
             var cacheDir = Path.GetDirectoryName(cachePath);
             if (!Directory.Exists(cacheDir)) Directory.CreateDirectory(cacheDir);
             return File.OpenWrite(cachePath);
         }
 
-        public static string GetCachePath(ICacheable cachedControl, string key)
+        public string GetCachePath(ICacheable cachedControl, string key)
         {
             return Path.Combine(
-                OutputDir, 
+                CacheRoot, 
                 cachedControl.UniquedCachedDir, key) + ".cache";
         }
 
-        static HashSet<ICacheable> _cacheControls = [];
+        HashSet<ICacheable> _cacheControls = [];
     }
 }

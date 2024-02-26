@@ -1,9 +1,13 @@
 ﻿using CruZ.Resource;
 using CruZ.Serialization;
+
 using Microsoft.Xna.Framework;
+
 using MonoGame.Extended.Sprites;
+
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -37,21 +41,21 @@ namespace CruZ.Components
 
         public void Load(SpriteComponent sprite)
         {
-            if(_sprite == sprite) return;
+            if (_sprite == sprite) return;
 
             UnLoad();
             _sprite = sprite;
 
             _sprite.DrawLoopBegin += Sprite_DrawLoopBegin;
-            _sprite.DrawLoopEnd   += Sprite_DrawLoopEnd;
+            _sprite.DrawLoopEnd += Sprite_DrawLoopEnd;
         }
 
         public void UnLoad()
         {
-            if(_sprite != null)
+            if (_sprite != null)
             {
                 _sprite.DrawLoopBegin -= Sprite_DrawLoopBegin;
-                _sprite.DrawLoopEnd   -= Sprite_DrawLoopEnd;
+                _sprite.DrawLoopEnd -= Sprite_DrawLoopEnd;
             }
 
             _sprite = null;
@@ -61,15 +65,15 @@ namespace CruZ.Components
         {
             e.Texture = _animatedSprite.TextureRegion.Texture;
             e.SourceRectangle = _animatedSprite.TextureRegion.Bounds;
-            e.Origin = 
+            e.Origin =
                 new(
                 _animatedSprite.OriginNormalized.X - 0.5f + e.Origin.X,
                 _animatedSprite.OriginNormalized.Y - 0.5f + e.Origin.Y);
         }
-        
+
         private void Sprite_DrawLoopEnd(object? sender, DrawLoopEndEventArgs e)
         {
-            
+
         }
 
         AnimatedSprite _animatedSprite;
@@ -83,7 +87,7 @@ namespace CruZ.Components
 
         public void LoadSpriteSheet(string resourcePath, string animationPlayerKey)
         {
-            var spriteSheet = ResourceManager.User.LoadResource<SpriteSheet>(resourcePath);
+            var spriteSheet = _resource.Load<SpriteSheet>(resourcePath);
 
             _getAnimationPlayer[animationPlayerKey] = new AnimationPlayer(spriteSheet);
             _loadedResources.Add(new(resourcePath, animationPlayerKey));
@@ -96,7 +100,7 @@ namespace CruZ.Components
 
         public AnimationPlayer SelectPlayer(string key)
         {
-            if(_currentAnimationPlayer == GetPlayer(key)) 
+            if (_currentAnimationPlayer == GetPlayer(key))
                 return _currentAnimationPlayer;
 
             _currentAnimationPlayer?.UnLoad();
@@ -108,7 +112,7 @@ namespace CruZ.Components
 
         private AnimationPlayer GetPlayer(string key)
         {
-            if(!_getAnimationPlayer.ContainsKey(key)) 
+            if (!_getAnimationPlayer.ContainsKey(key))
                 throw new ArgumentException($"No animation with key {key}");
 
             return _getAnimationPlayer[key];
@@ -124,12 +128,7 @@ namespace CruZ.Components
             comps.TryGetComponent(ref _sprite);
         }
 
-        public ICustomSerializable? CreateDefault()
-        {
-            return new AnimationComponent();
-        }
-
-        public void ReadJson(JsonReader reader, JsonSerializer serializer)
+        public object ReadJson(JsonReader reader, JsonSerializer serializer)
         {
             var jObject = JObject.Load(reader);
 
@@ -143,6 +142,8 @@ namespace CruZ.Components
 
                 LoadSpriteSheet(uri, playerKey);
             }
+
+            return this;
         }
 
         public void WriteJson(JsonWriter writer, JsonSerializer serializer)
@@ -164,11 +165,10 @@ namespace CruZ.Components
             writer.WriteEnd();
         }
 
-        AnimationPlayer?                    _currentAnimationPlayer;
+        AnimationPlayer? _currentAnimationPlayer;
         Dictionary<string, AnimationPlayer> _getAnimationPlayer = new();
-        SpriteComponent?                    _sprite;
-        TransformEntity?                    _e;
-
+        SpriteComponent? _sprite;
+        TransformEntity? _e;
         List<KeyValuePair<string, string>> _loadedResources = [];
     }
 }

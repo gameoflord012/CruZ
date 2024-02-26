@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.ComponentModel;
 
 namespace CruZ.Components
@@ -8,8 +7,6 @@ namespace CruZ.Components
     {
         [Browsable(false)]
         public abstract Type ComponentType { get; }
-
-        public Component() { Initialize(); }
 
         protected virtual void Initialize() { }
         protected virtual void OnAttached(TransformEntity entity) { }
@@ -37,5 +34,7 @@ namespace CruZ.Components
         {
             return GetType().Name;
         }
+
+        protected IServiceProvider _serviceProvider;
     }
 }
