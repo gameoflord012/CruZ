@@ -82,24 +82,24 @@ namespace CruZ.Tools.ResourceImporter
                 cmdArgs += $"/build:{import}\n";
             }
 
+            // Create temporary MGCB file which built imported items
             var contentDir = Path.Combine(ResourceRoot, ".content");
-
             var tempFile = Path.Combine(contentDir, "temp\\buildcontent.temp");
             var tempDir = Path.GetDirectoryName(tempFile);
-
             if (!Directory.Exists(tempDir))
                 Directory.CreateDirectory(tempDir);
-
             File.WriteAllText(tempFile, cmdArgs, Encoding.UTF8);
 
-            StartBuildProcess(tempFile);
+            // Bulid temporary MGCB file
+            BuildMGCBFile(tempFile);
 
+            // Rebuild predefined MGCB file
             var preExistMgcbFile = Path.Combine(contentDir, "Content.mgcb");
             if (File.Exists(preExistMgcbFile))
-                StartBuildProcess(preExistMgcbFile);
+                BuildMGCBFile(preExistMgcbFile);
         }
 
-        private static void StartBuildProcess(string mgcbFile)
+        private static void BuildMGCBFile(string mgcbFile)
         {
             var cmd = new Process()
             {
@@ -116,7 +116,7 @@ namespace CruZ.Tools.ResourceImporter
             };
 
             //cmd.OutputDataReceived += (sender, e) => Log(e.Data);
-            //cmd.BeginOutputReadLine();
+            //cmd.BeginOutputReadLine();    
 
             cmd.Start();
             _ImporterObject.BuildLog +=
