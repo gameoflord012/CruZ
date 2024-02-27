@@ -29,7 +29,6 @@ namespace CruZ.Resource
             private set 
             { 
                 _resourceRoot = Path.GetFullPath(value);
-                RunImport();
             } 
         }
 
@@ -159,10 +158,11 @@ namespace CruZ.Resource
             return Path.GetRelativePath(ResourceRoot, fullResourcePath);
         }
 
-        private void RunImport()
+        public void ImportResource()
         {
-            var dotImporter = Path.Combine(ResourceRoot, ".resourceImporter");
-            var importerObject = ResourceImporter.ReadImporterObject(dotImporter);
+            var dotImporterFile = Path.Combine(ResourceRoot, ".resourceImporter");
+            if(!File.Exists(dotImporterFile)) ResourceImporter.CreateDotImporter(dotImporterFile);
+            var importerObject = ResourceImporter.ReadImporterObject(dotImporterFile);
 
             ResourceImporter.ResourceRoot = ResourceRoot;
             ResourceImporter.SetImporterObject(importerObject);

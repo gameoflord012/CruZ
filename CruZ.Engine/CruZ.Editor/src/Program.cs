@@ -10,12 +10,17 @@ namespace CruZ.Editor
         [STAThread]
         public static void Main(string[] args)
         {
+            string userProjectDir = "";
             Parser.Default.ParseArguments<Options>(args)
             .WithParsed(o =>
             {
-                EditorContext.UserProjectDir = Path.Combine(o.ProjectRoot, "res\\");
+                userProjectDir = o.ProjectRoot;
             });
 
+            EditorContext.UserProjectDir = Path.Combine(userProjectDir, "res\\");
+            EditorContext.UserResource.ImportResource();
+            EditorContext.EditorResourceDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "res\\");
+            
             EditorForm.Run();
         }
 

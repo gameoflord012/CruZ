@@ -1,6 +1,8 @@
 ﻿using CommandLine;
+
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -93,7 +95,7 @@ namespace CruZ.Tools.ResourceImporter
             StartBuildProcess(tempFile);
 
             var preExistMgcbFile = Path.Combine(contentDir, "Content.mgcb");
-            if(File.Exists(preExistMgcbFile)) 
+            if (File.Exists(preExistMgcbFile))
                 StartBuildProcess(preExistMgcbFile);
         }
 
@@ -117,7 +119,7 @@ namespace CruZ.Tools.ResourceImporter
             //cmd.BeginOutputReadLine();
 
             cmd.Start();
-            _ImporterObject.BuildLog += 
+            _ImporterObject.BuildLog +=
                 cmd.StandardOutput.ReadToEnd() + Environment.NewLine;
             cmd.WaitForExit();
 
@@ -153,31 +155,40 @@ namespace CruZ.Tools.ResourceImporter
             _ImporterObject = importerObject;
         }
 
+        public static void CreateDotImporter(string dotImporterFile)
+        {
+            string dir = Path.GetDirectoryName(dotImporterFile);
+            Directory.CreateDirectory(dir);
+            string dotImporterTemplate =
+@"{
+""import-patterns"": [
+    ""*.jpg"",
+    ""*.png""
+  ]
+}";
+            File.WriteAllText(dotImporterFile, dotImporterTemplate);
+        }
+
         public static ResourceImporterObject ReadImporterObject(string filePath)
         {
             var importerObject = new ResourceImporterObject();
 
-            //Debug.WriteLine("Reading " + Path.GetFullPath(filePath));
+            if (!File.Exists(filePath))
+                throw new FileNotFoundException(filePath);
 
+            string json;
             using (StreamReader reader = new StreamReader(filePath))
             {
-                var json = reader.ReadToEnd();
-                var deserialize = JsonConvert.DeserializeObject<ResourceImporterObject>(json, _SerializerSettings);
-
-                if (deserialize == null)
-                {
-                    //Debug.WriteLine("Failed to read json file, default settings is used");
-                }
-                else
-                {
-                    importerObject = deserialize;
-                }
+                json = reader.ReadToEnd();
             }
 
+            JsonConvert.PopulateObject(json, importerObject, _SerializerSettings);
             importerObject.ImporterFilePath = filePath;
+
             return importerObject;
         }
 
+        #region Private Functions
         /// <summary>
         /// Get files with match import pattern
         /// </summary>
@@ -244,10 +255,11 @@ namespace CruZ.Tools.ResourceImporter
         }
 
         static readonly JsonSerializerSettings _SerializerSettings = new JsonSerializerSettings { Formatting = Formatting.Indented };
-    
+
         private static void Log(string msg)
         {
             Debug.WriteLine("<--ResourceImporter--> " + msg);
         }
+        #endregion
     }
 }
