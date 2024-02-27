@@ -34,16 +34,17 @@ namespace CruZ.Editor.Controls
 
         public GameScene? CurrentGameScene => _currentScene;
 
-        public GameEditor(EditorForm form, IServiceProvider service)
+        public GameEditor(EditorForm form)
         {
             _editorForm = form;
             _thisThreadId = Thread.CurrentThread.ManagedThreadId;
-            _cacheService = (CacheService)service.GetService(typeof(CacheService));
+            _cacheService = new CacheService(Path.Combine(EditorContext.UserProfileDir, "caches\\"));
+            _userResource = EditorContext.UserResource;
 
-            Input.MouseScrolled     += Input_MouseScroll;
-            Input.MouseMoved        += Input_MouseMove;
+            Input.MouseScrolled += Input_MouseScroll;
+            Input.MouseMoved += Input_MouseMove;
             Input.MouseStateChanged += Input_MouseStateChanged;
-            Input.KeyStateChanged   += Input_KeyStateChanged;
+            Input.KeyStateChanged += Input_KeyStateChanged;
             UIManager.MouseClick += UI_MouseClick;
             _editorForm.FormClosing += EditorForm_Closing;
         }
@@ -61,8 +62,8 @@ namespace CruZ.Editor.Controls
 
             if (_currentScene == null) return;
 
-            if(_currentScene.ResourceInfo != null && !_currentScene.ResourceInfo.IsRuntime)
-                _resourceService.Save(_currentScene);
+            if (_currentScene.ResourceInfo != null && _currentScene.ResourceInfo.ResourceManager != null)
+                _currentScene.ResourceInfo.ResourceManager.Save(_currentScene);
 
             _currentScene.Dispose();
             _currentScene = null;
@@ -70,12 +71,12 @@ namespace CruZ.Editor.Controls
             CurrentSceneChanged?.Invoke(null);
         }
 
-        public TransformEntity? SelectedEntity 
-        { 
-            get => _currentSelect != null ? _currentSelect : null; 
-            set 
+        public TransformEntity? SelectedEntity
+        {
+            get => _currentSelect != null ? _currentSelect : null;
+            set
             {
-                lock(this)
+                lock (this)
                 {
                     if (_currentSelect != null && value == _currentSelect)
                         return;
@@ -97,15 +98,15 @@ namespace CruZ.Editor.Controls
                     LogService.SetMsg(value != null ? value.ToString() : "");
                     SelectingEntityChanged?.Invoke(value);
                 }
-            } 
+            }
         }
 
         public void LoadSceneFromFile(string file)
         {
             Check_AppInitialized();
 
-            var scene = _resourceService.Load<GameScene>(file);
-            scene.Name = Path.GetRelativePath(_resourceService.ResourceRoot, file);
+            var scene = _userResource.Load<GameScene>(file);
+            scene.Name = Path.GetRelativePath(_userResource.ResourceRoot, file);
 
             LoadScene(scene);
         }
@@ -118,7 +119,7 @@ namespace CruZ.Editor.Controls
             {
                 LoadScene(SceneManager.GetRuntimeScene(sceneName));
             }
-            catch(RuntimeSceneLoadException e)
+            catch (RuntimeSceneLoadException e)
             {
                 DialogHelper.ShowExceptionDialog(e);
                 throw;
@@ -127,7 +128,7 @@ namespace CruZ.Editor.Controls
 
         public void CleanAppSession()
         {
-            if(_gameApp == null || _gameApp.ExitCalled) return;
+            if (_gameApp == null || _gameApp.ExitCalled) return;
             Trace.Assert(_gameAppThread != null);
 
             CacheWrite?.Invoke(this, "Camera");
@@ -143,13 +144,13 @@ namespace CruZ.Editor.Controls
 
         public TransformEntity CreateNewEntity()
         {
-            if(_currentScene == null) 
+            if (_currentScene == null)
                 throw new InvalidOperationException("Can't create new entity when Scene is not loaded");
 
             var newEntity = _currentScene.CreateEntity();
 
             UpdateEntityControls();
-            
+
             return newEntity;
         }
 
@@ -171,7 +172,7 @@ namespace CruZ.Editor.Controls
             GetMainCamera().ViewPortWidth = viewport.Width;
             GetMainCamera().ViewPortHeight = viewport.Height;
         }
-        
+
         private void GameApp_Intialized()
         {
             Camera.Main = GetMainCamera();
@@ -199,7 +200,7 @@ namespace CruZ.Editor.Controls
         private void Input_MouseScroll(IInputInfo info)
         {
             Camera.Main.Zoom = new(
-                Camera.Main.Zoom.X - info.SrollDelta * 0.001f * Camera.Main.Zoom.X, 
+                Camera.Main.Zoom.X - info.SrollDelta * 0.001f * Camera.Main.Zoom.X,
                 Camera.Main.Zoom.Y);
         }
 
@@ -234,7 +235,7 @@ namespace CruZ.Editor.Controls
 
         private void Input_KeyStateChanged(IInputInfo info)
         {
-            if( info.Keyboard.IsKeyDown(XNA.Input.Keys.LeftControl) &&
+            if (info.Keyboard.IsKeyDown(XNA.Input.Keys.LeftControl) &&
                 info.IsKeyJustDown(XNA.Input.Keys.Z))
             {
                 Debug.WriteLine("Undo");
@@ -246,7 +247,7 @@ namespace CruZ.Editor.Controls
             FindEntityToSelect(info);
         }
         #endregion
-        
+
         #region Private_Functions
         private void FindEntityToSelect(UIInfo info)
         {
@@ -277,7 +278,7 @@ namespace CruZ.Editor.Controls
 
             int idx = 0;
 
-            if(_currentSelect  != null)
+            if (_currentSelect != null)
             {
                 for (int i = 0; i < eControl.Count(); i++)
                 {
@@ -302,7 +303,7 @@ namespace CruZ.Editor.Controls
                     return control;
                 }
             }
-            
+
             return null;
         }
 
@@ -347,7 +348,6 @@ namespace CruZ.Editor.Controls
             UpdateEntityControls();
 
             #region InfoTextWindow
-            new ServiceContainer()
             _infoTextWindow = new LoggingWindow();
             UIManager.Root.AddChild(_infoTextWindow);
             #endregion
@@ -359,7 +359,7 @@ namespace CruZ.Editor.Controls
 
             if (_currentScene == null) return;
 
-            if(_lastScene != null)
+            if (_lastScene != null)
             {
                 _lastScene.EntityAdded -= Scene_EntityAdded; ;
                 _lastScene.EntityRemoved -= Scene_EntityRemoved;
@@ -376,7 +376,7 @@ namespace CruZ.Editor.Controls
 
         private void AddEntityControl(TransformEntity e)
         {
-            if(GetEntityControl(e) != null) return;
+            if (GetEntityControl(e) != null) return;
 
             var eControl = new EntityControl(e);
             UIManager.Root.AddChild(eControl);
@@ -390,7 +390,7 @@ namespace CruZ.Editor.Controls
 
         private void LoadScene(GameScene scene)
         {
-            if(scene == _currentScene) return;
+            if (scene == _currentScene) return;
 
             UnloadCurrentScene();
 
@@ -430,7 +430,7 @@ namespace CruZ.Editor.Controls
         EditorForm _editorForm;
 
         CacheService _cacheService;
-        ResourceManager _resourceService;
+        ResourceManager _userResource;
         #endregion
     }
 }

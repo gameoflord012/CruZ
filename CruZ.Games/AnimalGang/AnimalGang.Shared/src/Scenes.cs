@@ -1,4 +1,6 @@
-﻿using CruZ.Components;
+﻿using System.Resources;
+
+using CruZ.Components;
 using CruZ.Game.AnimalGang;
 using CruZ.Systems;
 

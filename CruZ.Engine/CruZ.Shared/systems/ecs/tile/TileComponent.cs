@@ -1,16 +1,9 @@
-﻿using CruZ.Global;
-using CruZ.Serialization;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.ComponentModel;
-using System.Drawing;
 using System.Numerics;
-using System.Text;
 
 namespace CruZ.Components
 {
-    using XNA = Microsoft.Xna.Framework;
-
     public class TileComponent : Component
     {
         [Browsable(false)]
@@ -68,7 +61,7 @@ namespace CruZ.Components
 
             if(_sp.YLayerDepth)
             {
-                args.LayerDepth = (args.Position.Y / Variables.MAX_WORLD_DISTANCE + 1) / 2;
+                args.LayerDepth = (args.Position.Y / GameConstants.MAX_WORLD_DISTANCE + 1) / 2;
             }
         }
 

@@ -37,9 +37,6 @@ namespace CruZ.Resource
         {
             _serializer = new Serializer();
 
-            var services = new ServiceContainer();
-            services.AddService(typeof(ResourceManager), this);
-            
             _serializer.Converters.Add(new TextureAtlasJsonConverter());
             _serializer.Converters.Add(new SerializableJsonConverter());
 

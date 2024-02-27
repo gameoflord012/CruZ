@@ -1,15 +1,9 @@
-﻿using CruZ.Components;
-using CruZ.Editor.Controls;
+﻿using CruZ.Editor.Controls;
 using CruZ.Editor.Services;
-using CruZ.Editor.Utility;
 using CruZ.Exception;
-using CruZ.Global;
-using CruZ.Resource;
 
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.Design;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
@@ -27,17 +21,14 @@ namespace CruZ.Editor
             InitializeServices();
 
             Text = "CruZ Engine";
-            _editor = new(this, _services);
+            _editor = new(this);
             _formThread = Thread.CurrentThread;
         }
 
         private void InitializeServices()
         {
             _services = new();
-            CacheService cacheService = new(EditorGlobal.UserProjectDir);
-            ResourceManager resourceManager = new(EditorGlobal.UserResDir);
-            _services.AddService(typeof(CacheService), cacheService);
-            _services.AddService(typeof(ResourceManager), resourceManager);
+            CacheService cacheService = new(EditorContext.UserProjectDir);
         }
 
         private void Init()
@@ -108,7 +99,7 @@ namespace CruZ.Editor
             var savePath = DialogHelper.GetSaveScenePath();
             if (savePath == null) return;
 
-            ResourceManager.User.CreateResource(
+            EditorContext.UserResource.Create(
                 savePath,
                 _editor.CurrentGameScene,
                 true);

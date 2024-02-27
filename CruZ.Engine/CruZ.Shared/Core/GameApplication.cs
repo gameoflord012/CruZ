@@ -173,7 +173,7 @@ namespace CruZ
         }
 
         #region Privates
-        private GameCore _core;
+        private GameWrapper _core;
         private SpriteBatch _spriteBatch;
         bool disposed = false;
         bool _exitCalled = false;
@@ -186,6 +186,7 @@ namespace CruZ
         #endregion
     }
 
+    // Static members
     public partial class GameApplication
     {
         public static Viewport Viewport => _instance.GraphicsDevice.Viewport;

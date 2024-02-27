@@ -5,7 +5,7 @@ namespace CruZ
 {
     using Microsoft.Xna.Framework;
 
-    public partial class GameCore : XNA.Game
+    public partial class GameWrapper : XNA.Game
     {
         public event Action?                    Initializing;
         public event Action?                    InitializeSystemEvent;
@@ -15,9 +15,8 @@ namespace CruZ
         public event Action<GameTime>?          UpdateEvent;
         public event Action<GameTime>?          DrawEvent;
         public event Action<GameTime>?          LateDrawEvent;
-        
 
-        public GameCore()
+        public GameWrapper()
         {
             Content.RootDirectory = ".";
             IsMouseVisible = true;

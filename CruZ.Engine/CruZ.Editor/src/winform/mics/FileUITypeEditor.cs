@@ -18,7 +18,7 @@ namespace CruZ.Editor
         {
             OpenFileDialog openFileDialog = new()
             {
-                InitialDirectory = ResourceManager.User.ResourceRoot,
+                InitialDirectory = EditorContext.UserResourceDir,
                 RestoreDirectory = true,
                 Title = "Select File",
                 Filter = "All Files|*.*",

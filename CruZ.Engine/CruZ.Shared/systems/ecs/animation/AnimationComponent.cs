@@ -85,6 +85,11 @@ namespace CruZ.Components
     {
         public override Type ComponentType => typeof(AnimationComponent);
 
+        public AnimationComponent()
+        {
+            _resource = GameContext.GameResource;
+        }
+
         public void LoadSpriteSheet(string resourcePath, string animationPlayerKey)
         {
             var spriteSheet = _resource.Load<SpriteSheet>(resourcePath);
@@ -169,6 +174,7 @@ namespace CruZ.Components
         Dictionary<string, AnimationPlayer> _getAnimationPlayer = new();
         SpriteComponent? _sprite;
         TransformEntity? _e;
+        ResourceManager _resource;
         List<KeyValuePair<string, string>> _loadedResources = [];
     }
 }

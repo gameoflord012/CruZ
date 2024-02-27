@@ -12,11 +12,10 @@
     <MonoGameContentReference Include="$(MSBuildThisFileDirectory)Content\Content.mgcb" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="$(MSBuildThisFileDirectory)core\ApplicationContext.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)core\ApplicationContext.Static.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)core\GameApplication.Disposable.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)global\GameContext.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)exception\CruZ.Exceptions.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)global\Variables.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)global\GameConstants.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)systems\ecs\animation\AnimationComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)systems\ecs\ComponentCollection.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)systems\ecs\ComponentHelper.cs" />
@@ -59,12 +58,11 @@
     <Compile Include="$(MSBuildThisFileDirectory)systems\ecs\transform\Transform.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)systems\ecs\transform\TransformEntity.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)systems\camera\Camera.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)core\GameCore.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)core\GameWrapper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)service\LogService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)types\IRunnable.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)core\GameApplication.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)systems\input\Input.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)core\GameCore.Static.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)systems\scene\GameScene.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)systems\ecs\animation\AnimatedSystem.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)systems\PhysicSystem.cs" />

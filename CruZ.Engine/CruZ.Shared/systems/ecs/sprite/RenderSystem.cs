@@ -1,13 +1,11 @@
 ﻿using CruZ.Components;
-using CruZ.Global;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using MonoGame.Extended;
+
 using MonoGame.Extended.Entities;
 using MonoGame.Extended.Entities.Systems;
 
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -73,7 +71,7 @@ namespace CruZ.Systems
 
             // render all renderTargets to back buffer
             _gd.SetRenderTarget(null);
-            _gd.Clear(Variables.DEFAULT_BACKGROUND_COLOR);
+            _gd.Clear(GameConstants.DEFAULT_BACKGROUND_COLOR);
             _spriteBatch.Begin();
             foreach (var sortingLayer in sortingLayers)
             {

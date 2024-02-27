@@ -25,6 +25,11 @@ namespace CruZ.Serialization
             private string _textureGuid { get; set; }
         }
 
+        public TextureAtlasJsonConverter()
+        {
+            _resource = GameContext.GameResource;
+        }
+
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
         }
@@ -47,5 +52,7 @@ namespace CruZ.Serialization
         {
             return objectType == typeof(TextureAtlas);
         }
+
+        ResourceManager _resource;
     }
 }

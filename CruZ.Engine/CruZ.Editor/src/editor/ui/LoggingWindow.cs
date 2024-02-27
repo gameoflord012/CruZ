@@ -13,13 +13,11 @@ namespace CruZ.Editor.UI
     {
         Dictionary<string, string> TextInfo = [];
 
-        public LoggingWindow(IServiceProvider service)
+        public LoggingWindow()
         {
             Location = new(5, 3);
 
-            _resource = (ResourceManager)service.GetService(typeof(ResourceManager));
-
-            // TODO: Load font from system instead of user resource directory
+            _resource = EditorContext.EditorResource;
             _font = _resource.Load<SpriteFont>("default");
             _lineSpacing = _font.LineSpacing * _scale;
             _curRow = 0;

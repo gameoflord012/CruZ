@@ -3,7 +3,6 @@ using Microsoft.Xna.Framework.Graphics;
 using Newtonsoft.Json;
 using System;
 using System.Diagnostics;
-using CruZ.Global;
 using Microsoft.Xna.Framework;
 using System.ComponentModel;
 
@@ -69,10 +68,10 @@ namespace CruZ.Components
     /// </summary>
     public partial class SpriteComponent : Component
     {
-        public event EventHandler<DrawLoopBeginEventArgs> DrawLoopBegin;
-        public event EventHandler<DrawLoopEndEventArgs> DrawLoopEnd;
-        public event Action DrawBegin;
-        public event Action<DrawEndEventArgs> DrawEnd;
+        public event EventHandler<DrawLoopBeginEventArgs>? DrawLoopBegin;
+        public event EventHandler<DrawLoopEndEventArgs>? DrawLoopEnd;
+        public event Action? DrawBegin;
+        public event Action<DrawEndEventArgs>? DrawEnd;
 
         #region Properties
         public float LayerDepth { get; set; } = 0;
@@ -92,20 +91,26 @@ namespace CruZ.Components
 #if CRUZ_EDITOR
         [Editor(typeof(CruZ.Editor.FileUITypeEditor), typeof(UITypeEditor))]
 #endif
-        //public string TexturePath 
-        //{ 
-        //    get =>  _spriteResInfo != null ? _spriteResInfo.ResourceName : ""; 
-        //    set => LoadTexture(value); 
-        //}
+        public string TexturePath
+        {
+            get => _spriteResInfo != null ? _spriteResInfo.ResourceName : "";
+            set => LoadTexture(value);
+        }
         #endregion
-        public void LoadTexture(ResourceManager resourceManager, string texturePath)
+
+        public SpriteComponent()
+        {
+            _resource = GameContext.GameResource;
+        }
+
+        public void LoadTexture(string texturePath)
         {
             if (!string.IsNullOrEmpty(texturePath))
             {
                 ResourceInfo info;
                 try
                 {
-                    Texture = resourceManager.Load<Texture2D>(texturePath, out info);
+                    Texture = _resource.Load<Texture2D>(texturePath, out info);
                 }
                 catch(System.Exception e)
                 {
@@ -208,13 +213,14 @@ namespace CruZ.Components
 
         private float CalculateLayerDepth()
         {
-            return YLayerDepth ? (_e.Transform.Position.Y / Variables.MAX_WORLD_DISTANCE + 1) / 2 : LayerDepth;
+            return YLayerDepth ? (_e.Transform.Position.Y / GameConstants.MAX_WORLD_DISTANCE + 1) / 2 : LayerDepth;
         }
 
-        private Texture2D? _texture;
-        private TransformEntity? _e;
-
+        Texture2D? _texture;
+        TransformEntity? _e;
         [JsonProperty]
-        private ResourceInfo? _spriteResInfo;
+        ResourceInfo? _spriteResInfo;
+        ResourceManager _resource;
+
     }
 }
