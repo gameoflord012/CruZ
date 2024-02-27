@@ -1,8 +1,8 @@
-﻿using System.ComponentModel;
-
-namespace CruZ
+﻿namespace CruZ
 {
-    [TypeConverter(typeof(Vector3TypeConverter))]
+#if CRUZ_EDITOR
+    [System.ComponentModel.TypeConverter(typeof(CruZ.Editor.Vector3TypeConverter))]
+#endif
     public partial struct Vector3
     {
         public Vector3(float x = 0, float y = 0, float z = 0)

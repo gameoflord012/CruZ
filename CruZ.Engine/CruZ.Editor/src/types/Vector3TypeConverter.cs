@@ -3,22 +3,24 @@ using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.IO;
-using System.Numerics;
 
-namespace CruZ
+namespace CruZ.Editor
 {
-    class Vector2TypeConverter : TypeConverter
+    /// <summary>
+    /// Convert Vector3 into string
+    /// </summary>
+    class Vector3TypeConverter : TypeConverter
     {
-        //public override bool GetCreateInstanceSupported(System.ComponentModel.ITypeDescriptorContext context)
-        //{
-        //    return true;
-        //}
+        public override bool GetCreateInstanceSupported(System.ComponentModel.ITypeDescriptorContext context)
+        {
+            return true;
+        }
 
-        //public override object CreateInstance(System.ComponentModel.ITypeDescriptorContext context, System.Collections.IDictionary propertyValues)
-        //{
-        //    var valueTypeConverter = new ValueTypeTypeConverter();
-        //    return valueTypeConverter.CreateInstance(context, propertyValues);
-        //}
+        public override object CreateInstance(System.ComponentModel.ITypeDescriptorContext context, System.Collections.IDictionary propertyValues)
+        {
+            var valueTypeConverter = new StructToValueTypeConverter();
+            return valueTypeConverter.CreateInstance(context, propertyValues);
+        }
 
         public override bool CanConvertFrom(ITypeDescriptorContext? context, Type sourceType)
         {
@@ -32,11 +34,11 @@ namespace CruZ
 
         public override object? ConvertTo(ITypeDescriptorContext? context, CultureInfo? culture, object? value, Type destinationType)
         {
-            var v2 = (Vector2)value;
+            var v3 = (Vector3)value;
 
             if (destinationType == typeof(string))
             {
-                return $"{v2.X}, {v2.Y}";
+                return $"{v3.X}, {v3.Y}, {v3.Z}";
             }
 
             return base.ConvertTo(context, culture, value, destinationType);
@@ -46,7 +48,7 @@ namespace CruZ
         {
             if (value is string)
             {
-                float x = 0, y = 0;
+                float x = 0, y = 0, z = 0;
 
                 var valStr = (string)value;
                 var split = valStr.Split(',');
@@ -55,13 +57,14 @@ namespace CruZ
                 {
                     float.TryParse(split[0], out x);
                     float.TryParse(split[1], out y);
+                    float.TryParse(split[2], out z);
                 }
                 catch (IndexOutOfRangeException)
                 {
-                    
+
                 }
-                
-                return new Vector2(x, y);
+
+                return new Vector3(x, y, z);
             }
 
             return base.ConvertFrom(context, culture, value);

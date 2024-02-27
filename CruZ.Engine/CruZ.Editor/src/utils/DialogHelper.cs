@@ -4,7 +4,7 @@ using CruZ.Resource;
 using System;
 using System.Windows.Forms;
 
-namespace CruZ.Editor
+namespace CruZ.Editor.Utility
 {
     class DialogHelper
     {

@@ -85,7 +85,9 @@ namespace CruZ.Components
         [JsonIgnore, Browsable(false)]
         public Texture2D? Texture { get => _texture; set => _texture = value; }
 
-        [TypeConverter(typeof(Vector2TypeConverter))]
+#if CRUZ_EDITOR
+        [TypeConverter(typeof(CruZ.Editor.Vector2TypeConverter))]
+#endif
         public NUM.Vector2 Origin { get; set; } = new(0.5f, 0.5f);
 
 #if CRUZ_EDITOR

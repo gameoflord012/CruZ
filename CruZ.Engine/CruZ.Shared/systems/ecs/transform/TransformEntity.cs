@@ -126,7 +126,7 @@ namespace CruZ.Components
 
         //private static Component CreateInstanceFrom(Type ty)
         //{
-        //    return (Component)Helper.GetUnitializeObject(ty);
+        //    return (Component)PropertyHelper.GetUnitializeObject(ty);
         //}
 
         public static TransformEntity GetEntity(object component)

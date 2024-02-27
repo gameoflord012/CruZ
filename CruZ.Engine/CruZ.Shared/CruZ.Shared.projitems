@@ -33,9 +33,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)systems\scene\RuntimeSceneMethodAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)systems\scene\RuntimeSceneClassAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)systems\ecs\tile\TileComponent.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)types\ValueTypeConverter.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)types\Vector2TypeConverter.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)types\Vector3TypeConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)systems\ui\RootControl.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)systems\ui\UIControl.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)systems\ui\UIManager.cs" />
@@ -60,7 +57,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)systems\camera\Camera.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)core\GameWrapper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)service\LogService.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)types\IRunnable.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)core\GameApplication.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)systems\input\Input.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)systems\scene\GameScene.cs" />

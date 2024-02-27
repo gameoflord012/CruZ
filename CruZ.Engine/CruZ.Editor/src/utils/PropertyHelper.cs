@@ -2,7 +2,7 @@
 
 namespace CruZ.Editor.Utility
 {
-    class Helper
+    class PropertyHelper
     {
         static public Func<object> GetPropertyGetter(object target, string propertyName, Type ty)
         {
