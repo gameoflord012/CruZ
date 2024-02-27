@@ -1,4 +1,4 @@
-﻿using Assimp;
+﻿
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework.Input;
 
 namespace CruZ.Experiment
 {
-    class MyGame : Microsoft.Xna.Framework.Game
+    class MyGame : Game
     {
         public MyGame()
         {
@@ -102,8 +102,12 @@ namespace CruZ.Experiment
     {
         static void Main(string[] args)
         {
-            Microsoft.Xna.Framework.Game game = new MyGame();
-            game.Run();
+            //Game game = new MyGame();
+            //game.Run();
+
+            Console.WriteLine(Environment.CurrentDirectory);
+            Console.WriteLine(Directory.GetCurrentDirectory());
+            Console.WriteLine(AppDomain.CurrentDomain.BaseDirectory);
         }
     }
 }

@@ -15,17 +15,6 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<Compile Remove="Views\**" />
-		<EmbeddedResource Remove="Views\**" />
-		<None Remove="Views\**" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <None Remove="Content\light-shader.xnb" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<PackageReference Include="Box2D.NetStandard" Version="2.4.7-alpha" />
 		<PackageReference Include="CommandLineParser" Version="2.9.1" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
 	</ItemGroup>
@@ -38,14 +27,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Resource Include="Content\light-shader.xnb" />
+	  <Content Include="Content\**" />
 	</ItemGroup>
-
-	<ItemGroup>
-		<Compile Update="src\mainview\WorldViewControl.cs" />
-	</ItemGroup>
-
-	<!--<Import Project="..\..\CruZ.Games\AnimalGang\CruZ.Games.AnimalGang.targets" />-->
 
 	<Import Project="..\CruZ.Shared\CruZ.Shared.projitems" Label="Shared" />
 	<Import Project="..\..\CruZ.Games\AnimalGang\AnimalGang.Shared\AnimalGang.Shared.projitems" Label="Shared" />

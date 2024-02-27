@@ -8,7 +8,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\..\CruZ.Engine\CruZ.DesktopGL\CruZ.DesktopGL.csproj" />
+		<ProjectReference Include="..\CruZ.DesktopGL\CruZ.DesktopGL.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
