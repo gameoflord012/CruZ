@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "CruZ.Editor": {
+      "commandName": "Project",
+      "commandLineArgs": "-rD:\\monogame-projects\\CruZ_GameEngine\\CruZ.Games\\AnimalGang\\AnimalGang.Shared"
+    }
+  }
+}

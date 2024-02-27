@@ -21,7 +21,7 @@ namespace CruZ.Editor
             InitializeServices();
 
             Text = "CruZ Engine";
-            _editor = new(this);
+            _gameEditor = new(this);
             _formThread = Thread.CurrentThread;
         }
 
@@ -33,9 +33,9 @@ namespace CruZ.Editor
 
         private void Init()
         {
-            _editor.Init();
-            entityInspector.Init(_editor);
-            sceneEditor.Init(_editor);
+            _gameEditor.Init();
+            entityInspector.Init(_gameEditor);
+            sceneEditor.Init(_gameEditor);
         }
 
         #region Overrides
@@ -58,8 +58,8 @@ namespace CruZ.Editor
 
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
-            _editor.CleanAppSession();
-            //_editor.CurrentSceneChanged -= EditorApp_CurrentSceneChanged;
+            _gameEditor.CleanAppSession();
+            //_gameEditor.CurrentSceneChanged -= EditorApp_CurrentSceneChanged;
         }
         #endregion
 
@@ -71,16 +71,16 @@ namespace CruZ.Editor
 
             string sceneFile = files[0];
 
-            _editor.LoadSceneFromFile(sceneFile);
+            _gameEditor.LoadSceneFromFile(sceneFile);
         }
 
         private void SaveScene_Clicked(object sender, EventArgs args)
         {
-            //TODO: if (_editor.CurrentGameScene == null) return;
+            //TODO: if (_gameEditor.CurrentGameScene == null) return;
 
             try
             {
-                //TODO: ResourceManager.Save(_editor.CurrentGameScene);
+                //TODO: ResourceManager.Save(_gameEditor.CurrentGameScene);
             }
             catch (System.Exception e)
             {
@@ -90,7 +90,7 @@ namespace CruZ.Editor
 
         private void SaveAsScene_Clicked(object sender, EventArgs e)
         {
-            if (_editor.CurrentGameScene == null)
+            if (_gameEditor.CurrentGameScene == null)
             {
                 DialogHelper.ShowInfoDialog("Nothing to save.");
                 return;
@@ -101,10 +101,10 @@ namespace CruZ.Editor
 
             EditorContext.UserResource.Create(
                 savePath,
-                _editor.CurrentGameScene,
+                _gameEditor.CurrentGameScene,
                 true);
 
-            _editor.LoadSceneFromFile(savePath);
+            _gameEditor.LoadSceneFromFile(savePath);
         }
 
         private void LoadScene_Clicked(object sender, EventArgs e)
@@ -120,7 +120,7 @@ namespace CruZ.Editor
 
             try
             {
-                _editor.LoadRuntimeScene(sceneName);
+                _gameEditor.LoadRuntimeScene(sceneName);
             }
             catch (SceneAssetNotFoundException ex)
             {
@@ -132,7 +132,7 @@ namespace CruZ.Editor
 
         #region Private
         Thread _formThread;
-        GameEditor _editor;
+        GameEditor _gameEditor;
         ServiceContainer _services;
         #endregion
 

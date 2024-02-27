@@ -28,7 +28,7 @@ namespace CruZ.Editor
 
         /// <summary>
         /// Required method for Designer support - do not modify
-        /// the contents of this method with the code _editor.
+        /// the contents of this method with the code _gameEditor.
         /// </summary>
         private void InitializeComponent()
         {

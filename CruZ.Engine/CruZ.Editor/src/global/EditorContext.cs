@@ -17,11 +17,12 @@ namespace CruZ.Editor
 
                 return _userProjectDir;
             }
+
             internal set
             {
                 if (_userProjectDir == value) return;
                 _userProjectDir = value;
-                UserResource = ResourceManager.From(UserResourceDir);
+                GameContext.GameResourceDir = value;
             }
         }
 
@@ -49,8 +50,7 @@ namespace CruZ.Editor
 
         public static ResourceManager UserResource
         {
-            get => _userResource ?? throw new InvalidOperationException("Set value first");
-            private set => _userResource = value;
+            get => GameContext.GameResource;
         }
 
         public static ResourceManager EditorResource
@@ -61,7 +61,6 @@ namespace CruZ.Editor
 
         static string? _userProjectDir;
         static string? _editorResourceDir;
-        static ResourceManager? _userResource;
         static ResourceManager? _editorResource;
     }
 }

@@ -25,9 +25,9 @@ namespace CruZ.Serialization
             private string _textureGuid { get; set; }
         }
 
-        public TextureAtlasJsonConverter()
+        public TextureAtlasJsonConverter(ResourceManager resource)
         {
-            _resource = GameContext.GameResource;
+            _resource = resource;
         }
 
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)

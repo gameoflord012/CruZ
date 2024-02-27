@@ -13,7 +13,7 @@ namespace CruZ.Editor
             Parser.Default.ParseArguments<Options>(args)
             .WithParsed(o =>
             {
-                EditorContext.UserProjectDir = Path.Combine(o.ProjectRoot);
+                EditorContext.UserProjectDir = Path.Combine(o.ProjectRoot, "res\\");
             });
 
             EditorForm.Run();

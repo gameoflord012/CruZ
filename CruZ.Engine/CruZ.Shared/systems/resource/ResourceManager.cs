@@ -37,7 +37,7 @@ namespace CruZ.Resource
         {
             _serializer = new Serializer();
 
-            _serializer.Converters.Add(new TextureAtlasJsonConverter());
+            _serializer.Converters.Add(new TextureAtlasJsonConverter(this));
             _serializer.Converters.Add(new SerializableJsonConverter());
 
             ResourceRoot = resourceRoot;
@@ -146,14 +146,17 @@ namespace CruZ.Resource
 
         private string GetCheckedResourcePath(string resourcePath)
         {
+            if(Path.IsPathRooted(resourcePath))
+                throw new ArgumentException($"resourcePath \"{resourcePath}\" shouldn't be rooted");
+
             var fullResourcePath = Path.Combine(ResourceRoot, resourcePath);
 
             if (!PathHelper.IsSubPath(ResourceRoot, fullResourcePath))
             {
-                throw new ArgumentException($"Resource Path \"{resourcePath}\" must be a subpath of resource root \"{ResourceRoot}\"");
+                throw new ArgumentException($"Resource Path \"{fullResourcePath}\" must be a subpath of resource root \"{ResourceRoot}\"");
             }
 
-            return Path.GetRelativePath(ResourceRoot, resourcePath);
+            return Path.GetRelativePath(ResourceRoot, fullResourcePath);
         }
 
         private void RunImport()
@@ -200,9 +203,9 @@ namespace CruZ.Resource
 #pragma warning disable CS8602 // Dereference of a possibly null reference.
 #pragma warning disable CS8603 // Possible null reference return.
                 return typeof(ResourceManager).
-                    GetMethod("LoadContent", System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.NonPublic).
+                    GetMethod(nameof(LoadContent), BindingFlags.NonPublic | BindingFlags.Instance).
                     MakeGenericMethod(ty).
-                    Invoke(null, BindingFlags.DoNotWrapExceptions, null, [resourcePath], null);
+                    Invoke(this, BindingFlags.DoNotWrapExceptions, null, [resourcePath], null);
 #pragma warning restore CS8603 // Possible null reference return.
 #pragma warning restore CS8602 // Dereference of a possibly null reference.
             }
