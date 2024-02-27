@@ -24,12 +24,13 @@ namespace CruZ.Resource
 {
     public class ResourceManager : ICustomSerializable
     {
-        public string ResourceRoot { 
-            get => _resourceRoot; 
-            private set 
-            { 
+        public string ResourceRoot
+        {
+            get => _resourceRoot;
+            private set
+            {
                 _resourceRoot = Path.GetFullPath(value);
-            } 
+            }
         }
 
         private ResourceManager(string resourceRoot)
@@ -95,7 +96,7 @@ namespace CruZ.Resource
         public T Load<T>(Guid guid)
         {
             return Load<T>(GetResourcePath(guid));
-        } 
+        }
         #endregion
 
         #region Private Functions
@@ -110,42 +111,42 @@ namespace CruZ.Resource
             resourcePath = GetCheckedResourcePath(resourcePath);
             var fullResourcePath = Path.Combine(ResourceRoot, resourcePath);
 
-            object resObj;
+            object? resObj;
+            try
+            {
+                // Try loading resource from built content first
+                var dir = Path.GetDirectoryName(resourcePath);
+                var file = Path.GetFileNameWithoutExtension(resourcePath);
+                if (dir == null || file == null) throw new ArgumentException($"Invalid resourcePath value {resourcePath}");
+                resObj = LoadContentNonGeneric(Path.Combine(dir, file), ty);
+                goto LOAD_FINISHED;
+            }
+            catch
+            {
+
+            }
 
             try
             {
-                var dir = Path.GetDirectoryName(resourcePath);
-                var file = Path.GetFileNameWithoutExtension(resourcePath);
-
-                if (dir == null || file == null)
-                    throw new ArgumentException($"Invalid resourcePath value {resourcePath}");
-
-                resObj = LoadContentNonGeneric(Path.Combine(dir, file), ty);
+                resObj = _serializer.DeserializeFromFile(fullResourcePath, ty);
             }
-            catch (ContentLoadException)
+            catch (FileNotFoundException)
             {
-                try
-                {
-                    resObj = _serializer.DeserializeFromFile(fullResourcePath, ty);
-                }
-                catch (FileNotFoundException)
-                {
-                    throw new FileNotFoundException(string.Format("Can't find resource file {0}", fullResourcePath));
-                }
-                catch (JsonReaderException)
-                {
-                    throw new LoadResourceFailedException($"Can't load resource \"{fullResourcePath}\" due to invalid resource formatting or not available in content");
-                }
+                throw new FileNotFoundException(string.Format("Can't find resource file {0}", fullResourcePath));
+            }
+            catch (JsonReaderException)
+            {
+                throw new LoadResourceFailedException($"Can't load resource \"{fullResourcePath}\" due to invalid resource formatting or not available in content");
             }
 
+        LOAD_FINISHED:
             InitResourceHost(resObj, resourcePath);
-
             return resObj;
         }
 
         private string GetCheckedResourcePath(string resourcePath)
         {
-            if(Path.IsPathRooted(resourcePath))
+            if (Path.IsPathRooted(resourcePath))
                 throw new ArgumentException($"resourcePath \"{resourcePath}\" shouldn't be rooted");
 
             var fullResourcePath = Path.Combine(ResourceRoot, resourcePath);
@@ -161,7 +162,7 @@ namespace CruZ.Resource
         public void ImportResource()
         {
             var dotImporterFile = Path.Combine(ResourceRoot, ".resourceImporter");
-            if(!File.Exists(dotImporterFile)) ResourceImporter.CreateDotImporter(dotImporterFile);
+            if (!File.Exists(dotImporterFile)) ResourceImporter.CreateDotImporter(dotImporterFile);
             var importerObject = ResourceImporter.ReadImporterObject(dotImporterFile);
 
             ResourceImporter.ResourceRoot = ResourceRoot;
@@ -258,7 +259,7 @@ namespace CruZ.Resource
         {
             resourceDir = Path.GetFullPath(resourceDir);
 
-            if(!_managers.ContainsKey(resourceDir))
+            if (!_managers.ContainsKey(resourceDir))
                 _managers[resourceDir] = new ResourceManager(resourceDir);
 
             return _managers[resourceDir];
