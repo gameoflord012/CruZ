@@ -49,11 +49,13 @@ namespace CruZ
         {
             _core = new();
 
+            _core.Content.RootDirectory = ".";
+            _core.IsMouseVisible = true;
+
             _core.Initializing += InternalInitializing;
             _core.UpdateEvent += InternalUpdate;
             _core.DrawEvent += InternalDraw;
             _core.ExitEvent += InternalExit;
-
             _core.Window.ClientSizeChanged += Window_ClientSizeChanged;
 
             ECS.CreateContext(this);

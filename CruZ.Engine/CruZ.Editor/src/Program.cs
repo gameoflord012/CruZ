@@ -17,8 +17,7 @@ namespace CruZ.Editor
                 userProjectDir = o.ProjectRoot;
             });
 
-            EditorContext.UserProjectDir = Path.Combine(userProjectDir, "res\\");
-            EditorContext.UserResource.ImportResource();
+            EditorContext.UserProjectDir = userProjectDir;
             EditorContext.EditorResourceDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "res\\");
             
             EditorForm.Run();

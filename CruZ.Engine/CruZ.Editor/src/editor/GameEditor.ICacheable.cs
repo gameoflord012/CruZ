@@ -5,9 +5,9 @@ namespace CruZ.Editor.Controls
 {
     public partial class GameEditor : ICacheable
     {
-        public event    Action<ICacheable, string> CacheRead;
-        public event    Action<ICacheable, string> CacheWrite;
-        public string   UniquedCachedDir => "EditorApplication";
+        public event Action<ICacheable, string>? CacheRead;
+        public event Action<ICacheable, string>? CacheWrite;
+        public string UniquedCachedDir => "EditorApplication";
 
         public bool ReadCache(BinaryReader binReader, string key)
         {

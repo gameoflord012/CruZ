@@ -36,11 +36,13 @@ namespace CruZ.Resource
         private ResourceManager(string resourceRoot)
         {
             _serializer = new Serializer();
+            ResourceRoot = resourceRoot;
 
             _serializer.Converters.Add(new TextureAtlasJsonConverter(this));
             _serializer.Converters.Add(new SerializableJsonConverter());
 
-            ResourceRoot = resourceRoot;
+            _importer = new(resourceRoot);
+            _importer.LoadImportedItems();
         }
 
         #region Public Functions
@@ -95,7 +97,7 @@ namespace CruZ.Resource
 
         public T Load<T>(Guid guid)
         {
-            return Load<T>(GetResourcePath(guid));
+            return Load<T>(GetResourcePathFromGuid(guid.ToString()));
         }
         #endregion
 
@@ -146,33 +148,25 @@ namespace CruZ.Resource
 
         private string GetCheckedResourcePath(string resourcePath)
         {
-            if (Path.IsPathRooted(resourcePath))
-                throw new ArgumentException($"resourcePath \"{resourcePath}\" shouldn't be rooted");
-
             var fullResourcePath = Path.Combine(ResourceRoot, resourcePath);
-
-            if (!PathHelper.IsSubPath(ResourceRoot, fullResourcePath))
-            {
-                throw new ArgumentException($"Resource Path \"{fullResourcePath}\" must be a subpath of resource root \"{ResourceRoot}\"");
-            }
-
+            if (!PathHelper.IsSubPath(ResourceRoot, fullResourcePath)) throw new ArgumentException($"Resource Path \"{fullResourcePath}\" must be a subpath of resource root \"{ResourceRoot}\"");
             return Path.GetRelativePath(ResourceRoot, fullResourcePath);
         }
 
-        public void ImportResource()
-        {
-            var dotImporterFile = Path.Combine(ResourceRoot, ".resourceImporter");
-            if (!File.Exists(dotImporterFile)) ResourceImporter.CreateDotImporter(dotImporterFile);
-            var importerObject = ResourceImporter.ReadImporterObject(dotImporterFile);
+        //public void ImportResource()
+        //{
+        //    //var dotImporterFile = Path.Combine(ResourceRoot, ".resourceImporter");
+        //    //if (!File.Exists(dotImporterFile)) ResourceImporter.CreateDotImporter(dotImporterFile);
+        //    //var importerObject = ResourceImporter.ReadImporterObject(dotImporterFile);
 
-            ResourceImporter.ResourceRoot = ResourceRoot;
-            ResourceImporter.SetImporterObject(importerObject);
-            ResourceImporter.DoBuild();
-            ResourceImporter.ExportResult();
+        //    //ResourceImporter.ResourceRoot = ResourceRoot;
+        //    //ResourceImporter.SetImporterObject(importerObject);
+        //    //ResourceImporter.DoBuild();
+        //    //ResourceImporter.ExportResult();
 
-            LogService.SetMsg(importerObject.BuildLog, "ResourceImporter", true);
-            _getResourcePathFromGuid = importerObject.BuildResult;
-        }
+        //    //LogService.SetMsg(importerObject.BuildLog, "ResourceImporter", true);
+        //    //_getResourcePathFromGuid = importerObject.BuildResult;
+        //}
 
         private T LoadContent<T>(string resourcePath)
         {
@@ -216,11 +210,11 @@ namespace CruZ.Resource
             }
         }
 
-        private string GetResourcePath(Guid guid)
+        private string GetResourcePathFromGuid(string guid)
         {
             try
             {
-                return _getResourcePathFromGuid[guid.ToString()];
+                return _importer.GetResourcePathFromGuid(guid);
             }
             catch (KeyNotFoundException)
             {
@@ -249,10 +243,9 @@ namespace CruZ.Resource
 
         #region Privates
         Serializer _serializer;
-        Dictionary<string, string> _getResourcePathFromGuid = [];
-
         string _resourceRoot = "res";
         string ContentRoot => $"{_resourceRoot}\\.content\\bin";
+        ResourceImporter _importer;
         #endregion
 
         public static ResourceManager From(string resourceDir)

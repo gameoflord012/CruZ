@@ -28,8 +28,8 @@ namespace CruZ.Editor.Controls
     /// </summary>
     public partial class GameEditor
     {
-        public event Action<GameScene?> CurrentSceneChanged;
-        public event Action<TransformEntity?> SelectingEntityChanged;
+        public event Action<GameScene?>? CurrentSceneChanged;
+        public event Action<TransformEntity?>? SelectingEntityChanged;
 
         public GameScene? CurrentGameScene => _currentScene;
 
@@ -45,7 +45,6 @@ namespace CruZ.Editor.Controls
             Input.MouseStateChanged += Input_MouseStateChanged;
             Input.KeyStateChanged += Input_KeyStateChanged;
             UIManager.MouseClick += UI_MouseClick;
-            _editorForm.FormClosing += EditorForm_Closing;
         }
 
         public void Init()
@@ -130,10 +129,9 @@ namespace CruZ.Editor.Controls
             if (_gameApp == null || _gameApp.ExitCalled) return;
             Trace.Assert(_gameAppThread != null);
 
-            CacheWrite?.Invoke(this, "Camera");
+            OnApplicationClose();
 
             _gameApp.Exit();
-
             if (!_gameAppThread.Join(5000))
                 throw new System.Exception("Can't exit editor app");
 
@@ -161,9 +159,10 @@ namespace CruZ.Editor.Controls
         #endregion
 
         #region Event_Handlers
-        private void EditorForm_Closing(object? sender, FormClosingEventArgs args)
+        private void OnApplicationClose()
         {
             CacheWrite?.Invoke(this, "LoadedScene");
+            CacheWrite?.Invoke(this, "Camera");
         }
 
         private void GameApp_WindowResize(Viewport viewport)

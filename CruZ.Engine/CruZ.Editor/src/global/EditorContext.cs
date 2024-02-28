@@ -22,7 +22,7 @@ namespace CruZ.Editor
             {
                 if (_userProjectDir == value) return;
                 _userProjectDir = value;
-                GameContext.GameResourceDir = value;
+                GameContext.GameResourceDir = Path.Combine(_userProjectDir, "res\\");
             }
         }
 

@@ -5,6 +5,9 @@ namespace CruZ
 {
     using Microsoft.Xna.Framework;
 
+    /// <summary>
+    /// Redirect events or overriden function, this shouldn't include any logic other than that.
+    /// </summary>
     public partial class GameWrapper : XNA.Game
     {
         public event Action?                    Initializing;
@@ -16,12 +19,11 @@ namespace CruZ
         public event Action<GameTime>?          DrawEvent;
         public event Action<GameTime>?          LateDrawEvent;
 
+        //public GraphicsDeviceManager GraphicsDeviceManager => _gdManager;
+
         public GameWrapper()
         {
-            Content.RootDirectory = ".";
-            IsMouseVisible = true;
-
-            _graphics = new GraphicsDeviceManager(this);
+            _gdManager = new GraphicsDeviceManager(this);
         }
 
         protected override void EndRun()
@@ -74,14 +76,6 @@ namespace CruZ
             LateDrawEvent?.Invoke(gameTime);
         }
 
-        public void ChangeWindowSize(int width, int height)
-        {
-            _graphics.IsFullScreen = false;
-            _graphics.PreferredBackBufferWidth = width;
-            _graphics.PreferredBackBufferHeight = height;
-            _graphics.ApplyChanges();
-        }
-
-        private GraphicsDeviceManager _graphics;
+        private GraphicsDeviceManager _gdManager;
     }
 }

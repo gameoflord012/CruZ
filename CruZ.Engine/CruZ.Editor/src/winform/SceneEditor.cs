@@ -122,15 +122,14 @@ namespace CruZ.Editor
                 }
 
                 scene_TreeView.Tag = currentScene;
-
-                currentScene.EntityAdded += CurrentScene_EntityAdded;
-                currentScene.EntityRemoved += CurrentScene_EntityRemoved;
-
                 scene_TreeView.Nodes.Clear();
                 _entityToNode.Clear();
                 _root_TreeNode = null;
 
                 if (currentScene == null) return;
+
+                currentScene.EntityAdded += CurrentScene_EntityAdded;
+                currentScene.EntityRemoved += CurrentScene_EntityRemoved;
 
                 // init tree root
                 _root_TreeNode = scene_TreeView.Nodes.Add(currentScene.ToString());
@@ -141,19 +140,6 @@ namespace CruZ.Editor
                 {
                     AddSceneNode(e);
                 }
-
-                // update removed entity
-                //List<TreeNode> nodesToRemove = [];
-                //foreach (var entity in _entityToNode.Keys)
-                //{
-                //    if (!currentScene.Entities.Contains(entity))
-                //        nodesToRemove.Add(_entityToNode[entity]);
-                //}
-                //foreach (var node in nodesToRemove)
-                //{
-                //    node.Remove();
-                //    _entityToNode.Remove((TransformEntity)node.Tag);
-                //}
             });
         }
 

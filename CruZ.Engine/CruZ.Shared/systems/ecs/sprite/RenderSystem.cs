@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Entities;
 using MonoGame.Extended.Entities.Systems;
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -16,6 +17,7 @@ namespace CruZ.Systems
         public RenderSystem() : base(Aspect.One(
             typeof(SpriteComponent), typeof(LightComponent)))
         {
+            GameApplication.RegisterWindowResize(GameApp_WindowResize);
         }
 
         public override void Initialize(IComponentMapperService mapperService)
@@ -81,11 +83,17 @@ namespace CruZ.Systems
             _spriteBatch.End();
         }
 
+        private void GameApp_WindowResize(Viewport viewport)
+        {
+            foreach (var renderTarget in _renderTargets.Values) 
+                renderTarget.Dispose();
+            _renderTargets.Clear();
+        }
+
         private RenderTarget2D GetRenderTarget(int sortingLayer)
         {
             if(!_renderTargets.ContainsKey(sortingLayer))
                 _renderTargets[sortingLayer] = new RenderTarget2D(_gd, _gd.Viewport.Width, _gd.Viewport.Height);
-        
             return _renderTargets[sortingLayer];
         }
 

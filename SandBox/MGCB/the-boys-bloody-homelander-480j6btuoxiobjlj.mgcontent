@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PipelineBuildEvent xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <SourceFile>D:/monogame-projects/CruZ_GameEngine/SandBox/MGCB/the-boys-bloody-homelander-480j6btuoxiobjlj.webp</SourceFile>
+  <SourceTime>2024-02-22T15:14:57.3616639+07:00</SourceTime>
+  <DestFile>D:/monogame-projects/CruZ_GameEngine/SandBox/MGCB/the-boys-bloody-homelander-480j6btuoxiobjlj.xnb</DestFile>
+  <DestTime>2024-02-28T16:17:38.6398101+07:00</DestTime>
+  <Importer>TextureImporter</Importer>
+  <ImporterTime>2022-07-26T18:44:56+07:00</ImporterTime>
+  <Processor>TextureProcessor</Processor>
+  <ProcessorTime>2022-07-26T18:44:56+07:00</ProcessorTime>
+  <Dependencies />
+  <BuildAsset />
+  <BuildOutput />
+</PipelineBuildEvent>

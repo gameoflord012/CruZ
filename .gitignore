@@ -6,6 +6,9 @@
 # MGCB
 *.mgstats
 
+# Temp files
+*.temp
+
 # User-specific files
 *.rsuser
 *.suo

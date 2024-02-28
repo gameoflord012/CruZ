@@ -1,12 +1,11 @@
 ﻿using CruZ.Editor.Controls;
+using CruZ.Editor.Properties;
 using CruZ.Editor.Services;
 using CruZ.Editor.Utility;
 using CruZ.Exception;
 
 using System;
-using System.ComponentModel.Design;
 using System.Linq;
-using System.Threading;
 using System.Windows.Forms;
 
 namespace CruZ.Editor
@@ -21,14 +20,13 @@ namespace CruZ.Editor
             InitializeComponent();
             InitializeServices();
 
+            Icon = EditorResource.Icon;
             Text = "CruZ Engine";
             _gameEditor = new(this);
-            _formThread = Thread.CurrentThread;
         }
 
         private void InitializeServices()
         {
-            _services = new();
             CacheService cacheService = new(EditorContext.UserProjectDir);
         }
 
@@ -132,9 +130,7 @@ namespace CruZ.Editor
         #endregion
 
         #region Private
-        Thread _formThread;
         GameEditor _gameEditor;
-        ServiceContainer _services;
         #endregion
 
         #region Static
