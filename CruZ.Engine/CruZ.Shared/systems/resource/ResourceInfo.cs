@@ -1,8 +1,4 @@
-﻿using CruZ.Serialization;
-
-using Newtonsoft.Json;
-using System;
-using System.IO;
+﻿using System;
 
 namespace CruZ.Resource
 {
@@ -20,18 +16,19 @@ namespace CruZ.Resource
     {
         private ResourceInfo() { }
 
-        private ResourceInfo(ResourceManager? manager, string resName)
+        private ResourceInfo(Guid guid, string resourceName)
         {
-            ResourceName = resName;
-            ResourceManager = manager;
+            Guid = guid;
+            ResourceName = resourceName;
         }
 
-        public static ResourceInfo Create(ResourceManager? manager, string resourceName)
+        public static ResourceInfo Create(Guid guid, string resourceName)
         {
-            return new ResourceInfo(manager, resourceName);
+            return new ResourceInfo(guid, resourceName);
         }
 
-        public string ResourceName  { get; private set; }
-        public ResourceManager ResourceManager { get; private set; }
+        public Guid Guid { get; private set; }
+        public string ResourceName { get; private set; }
+        //public ResourceManager ResourceManager { get; private set; }
     }
 }

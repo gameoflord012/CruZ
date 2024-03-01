@@ -15,7 +15,6 @@ namespace CruZ.Components
         {
             if(_spriteResInfo != null)
             {
-                Trace.Assert(_resource == _spriteResInfo.ResourceManager);
                 LoadTexture(_spriteResInfo.ResourceName);
             }
         }

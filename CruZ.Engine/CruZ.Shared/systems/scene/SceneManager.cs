@@ -33,17 +33,6 @@ namespace CruZ.Scene
                                     method.Name;
 
                     _sceneMethods[sceneName] = method;
-
-                    //try
-                    //{
-                        
-                    //    //_sceneMethods[sceneName] = (GameScene)method.Invoke(null, BindingFlags.DoNotWrapExceptions, null, null, null);
-                    //    //_sceneMethods[sceneName].ResourceInfo = ResourceInfo.Create(sceneName, true);
-                    //}
-                    //catch
-                    //{
-                    //    throw;
-                    //}
                 }
             }
 
@@ -59,8 +48,8 @@ namespace CruZ.Scene
 
             try
             {
-                scene = (GameScene)method.Invoke(null, BindingFlags.DoNotWrapExceptions, null, null, null);
-                scene.ResourceInfo = ResourceInfo.Create(null, sceneName);
+                scene = (GameScene)method.Invoke(null, null);
+                scene.Name = sceneName;
             }
             catch(System.Exception e)
             {
