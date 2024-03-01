@@ -27,7 +27,10 @@
     <Compile Include="$(MSBuildThisFileDirectory)systems\input\IDraggable.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)systems\input\Input.Static.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)systems\ecs\transform\TransformEntity.Disposable.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)systems\resource\ICheckResourcePath.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)systems\resource\NonContextResourcePath.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)systems\resource\ResourceInfo.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)systems\resource\ResourcePath.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)systems\scene\GameScene.Disposable.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)utils\Helper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)systems\scene\RuntimeSceneMethodAttribute.cs" />

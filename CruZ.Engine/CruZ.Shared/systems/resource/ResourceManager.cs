@@ -5,7 +5,6 @@ using CruZ.Tools.ResourceImporter;
 using CruZ.Utility;
 
 using Microsoft.Xna.Framework.Content;
-using Microsoft.Xna.Framework.Graphics;
 
 using MonoGame.Extended.Content;
 using MonoGame.Extended.Serialization;
@@ -16,13 +15,12 @@ using Newtonsoft.Json.Linq;
 
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.Design;
 using System.IO;
 using System.Reflection;
 
 namespace CruZ.Resource
 {
-    public class ResourceManager : ICustomSerializable
+    public class ResourceManager : ICustomSerializable, ICheckResourcePath
     {
         public string ResourceRoot
         {
@@ -42,21 +40,21 @@ namespace CruZ.Resource
             _serializer.Converters.Add(new SerializableJsonConverter());
 
             _importer = new(resourceRoot);
-            _importer.LoadImportedItems();
+            _importer.InitializeImporter();
         }
 
         #region Public Functions
-        public void Create(string resourcePath, object resObj, bool renew = false)
+        public void Create(NonContextResourcePath nonContextResourcePath, object resObj, bool replaceIfExists = false)
         {
-            resourcePath = GetCheckedResourcePath(resourcePath);
+            ResourcePath resourcePath = nonContextResourcePath.CheckedBy(this);
 
             object? existsResource = null;
 
-            if (!renew)
+            if (!replaceIfExists)
             {
                 try
                 {
-                    existsResource = LoadResource(resourcePath, resObj.GetType());
+                    existsResource = LoadResource(nonContextResourcePath, resObj.GetType(), out _);
                 }
                 catch
                 {
@@ -73,12 +71,12 @@ namespace CruZ.Resource
             if (existsResource is IDisposable iDisposable)
                 iDisposable.Dispose();
 
-            InitResourceHost(resObj, resourcePath);
+            InitResourceHost(resObj, nonContextResourcePath);
         }
 
         public void Save(IHostResource host)
         {
-            if (host.ResourceInfo.ResourceManager == null)
+            if (host.ResourceInfo == null)
                 throw new ArgumentException($"Can't save {host} resource, use create resource first");
 
             Create(host.ResourceInfo.ResourceName, host, true);
@@ -86,31 +84,54 @@ namespace CruZ.Resource
 
         public T Load<T>(string resourcePath)
         {
-            return (T)LoadResource(resourcePath, typeof(T));
+            return (T)LoadResource(resourcePath, typeof(T), out _);
         }
 
-        public T Load<T>(string resourcePath, out ResourceInfo resInfo)
+        public T Load<T>(string resourcePath, out ResourceInfo infoOut)
         {
-            resInfo = CreateResourceInfo(resourcePath);
-            return (T)LoadResource(resourcePath, typeof(T));
+            return (T)LoadResource(resourcePath, typeof(T), out infoOut);
         }
 
         public T Load<T>(Guid guid)
         {
-            return Load<T>(GetResourcePathFromGuid(guid.ToString()));
+            return Load<T>(GetResourcePathFromGuid(guid));
         }
+        #endregion
+
+        #region Interface Implementations
+        public string CheckedResourcePath(string nonContextResourcePath)
+        {
+            var fullResourcePath = Path.Combine(ResourceRoot, nonContextResourcePath);
+            if (!PathHelper.IsSubPath(ResourceRoot, fullResourcePath)) throw new ArgumentException($"Resource Path \"{fullResourcePath}\" must be a subpath of resource root \"{ResourceRoot}\"");
+            return Path.GetRelativePath(ResourceRoot, fullResourcePath);
+        }
+
+        public object ReadJson(JsonReader reader, JsonSerializer serializer)
+        {
+            JObject jO = JObject.Load(reader);
+            var root = jO[nameof(ResourceRoot)].Value<string>();
+            return From(root);
+        }
+
+        public void WriteJson(JsonWriter writer, JsonSerializer serializer)
+        {
+            writer.WriteStartObject();
+            writer.WritePropertyName(nameof(ResourceRoot));
+            writer.WriteValue(ResourceRoot);
+            writer.WriteEnd();
+        } 
         #endregion
 
         #region Private Functions
         /// <summary>
-        /// Load resource with relative or full path, the resource file should within the .resObj folder
+        /// Load resource with relative or full path, the resource fileName should within the .resObj folder
         /// </summary>
         /// <param root="resourcePath">May be fullpath or relative path to resource root</param>
         /// <param root="ty"></param>
         /// <returns></returns>
-        private object LoadResource(string resourcePath, Type ty)
+        private object LoadResource(NonContextResourcePath nonContextResourcePath, Type ty, out ResourceInfo infoOut)
         {
-            resourcePath = GetCheckedResourcePath(resourcePath);
+            ResourcePath resourcePath = nonContextResourcePath.CheckedBy(this);
             var fullResourcePath = Path.Combine(ResourceRoot, resourcePath);
 
             object? resObj;
@@ -118,9 +139,11 @@ namespace CruZ.Resource
             {
                 // Try loading resource from built content first
                 var dir = Path.GetDirectoryName(resourcePath);
-                var file = Path.GetFileNameWithoutExtension(resourcePath);
-                if (dir == null || file == null) throw new ArgumentException($"Invalid resourcePath value {resourcePath}");
-                resObj = LoadContentNonGeneric(Path.Combine(dir, file), ty);
+                var fileName = Path.GetFileNameWithoutExtension(resourcePath);
+                if (dir == null || fileName == null) throw new ArgumentException($"Invalid resourcePath value {resourcePath}");
+                var content = Path.Combine(dir, fileName);
+                resObj = LoadContentNonGeneric(content, ty);
+                infoOut = InitResourceHost(resObj, Path.Combine(ContentRoot, content + ".xnb"));
                 goto LOAD_FINISHED;
             }
             catch
@@ -131,6 +154,7 @@ namespace CruZ.Resource
             try
             {
                 resObj = _serializer.DeserializeFromFile(fullResourcePath, ty);
+                infoOut = InitResourceHost(resObj, nonContextResourcePath);
             }
             catch (FileNotFoundException)
             {
@@ -142,34 +166,13 @@ namespace CruZ.Resource
             }
 
         LOAD_FINISHED:
-            InitResourceHost(resObj, resourcePath);
             return resObj;
         }
 
-        private string GetCheckedResourcePath(string resourcePath)
+        private T LoadContent<T>(NonContextResourcePath nonContextResourcePath)
         {
-            var fullResourcePath = Path.Combine(ResourceRoot, resourcePath);
-            if (!PathHelper.IsSubPath(ResourceRoot, fullResourcePath)) throw new ArgumentException($"Resource Path \"{fullResourcePath}\" must be a subpath of resource root \"{ResourceRoot}\"");
-            return Path.GetRelativePath(ResourceRoot, fullResourcePath);
-        }
+            ResourcePath resourcePath = nonContextResourcePath.CheckedBy(this);
 
-        //public void ImportResource()
-        //{
-        //    //var dotImporterFile = Path.Combine(ResourceRoot, ".resourceImporter");
-        //    //if (!File.Exists(dotImporterFile)) ResourceImporter.CreateDotImporter(dotImporterFile);
-        //    //var importerObject = ResourceImporter.ReadImporterObject(dotImporterFile);
-
-        //    //ResourceImporter.ResourceRoot = ResourceRoot;
-        //    //ResourceImporter.SetImporterObject(importerObject);
-        //    //ResourceImporter.DoBuild();
-        //    //ResourceImporter.ExportResult();
-
-        //    //LogService.SetMsg(importerObject.BuildLog, "ResourceImporter", true);
-        //    //_getResourcePathFromGuid = importerObject.BuildResult;
-        //}
-
-        private T LoadContent<T>(string resourcePath)
-        {
             try
             {
                 if (typeof(T) == typeof(SpriteSheet))
@@ -191,7 +194,7 @@ namespace CruZ.Resource
             }
         }
 
-        private object LoadContentNonGeneric(string resourcePath, Type ty)
+        private object LoadContentNonGeneric(NonContextResourcePath resourcePath, Type ty)
         {
             try
             {
@@ -210,7 +213,7 @@ namespace CruZ.Resource
             }
         }
 
-        private string GetResourcePathFromGuid(string guid)
+        private string GetResourcePathFromGuid(Guid guid)
         {
             try
             {
@@ -222,32 +225,41 @@ namespace CruZ.Resource
             }
         }
 
-        private void InitResourceHost(object resObj, string resourcePath)
+        private ResourceInfo InitResourceHost(object resObj, NonContextResourcePath nonContextResourcePath)
         {
-            GetCheckedResourcePath(resourcePath);
-
+            var info = CreateResourceInfo(nonContextResourcePath);
             if (resObj is IHostResource host)
-                host.ResourceInfo = CreateResourceInfo(resourcePath);
+                host.ResourceInfo = info;
+            return info;
         }
 
-        private string GetFullResPath()
+        private ResourceInfo CreateResourceInfo(NonContextResourcePath nonContextResourcePath)
         {
-            return Path.GetFullPath(ResourceRoot);
-        }
+            ResourcePath resourcePath = nonContextResourcePath.CheckedBy(this);
 
-        private ResourceInfo CreateResourceInfo(string resourcePath)
-        {
-            return ResourceInfo.Create(this, resourcePath);
+            try
+            {
+                return ResourceInfo.Create(_importer.GetResourceGuid((string)resourcePath), resourcePath);
+            }
+            catch (ResourcePathNotFoundException)
+            {
+                throw new ArgumentException($"Resource \"{resourcePath}\" maybe unimported");
+            }
+            catch (ResourceGuidNotFoundException)
+            {
+                throw new ArgumentException($"Resource \"{resourcePath}\" maybe unimported");
+            }
         }
         #endregion
 
-        #region Privates
+        #region Private Variables
         Serializer _serializer;
+        ResourceImporter _importer;
         string _resourceRoot = "res";
         string ContentRoot => $"{_resourceRoot}\\.content\\bin";
-        ResourceImporter _importer;
         #endregion
 
+        #region Static
         public static ResourceManager From(string resourceDir)
         {
             resourceDir = Path.GetFullPath(resourceDir);
@@ -258,21 +270,7 @@ namespace CruZ.Resource
             return _managers[resourceDir];
         }
 
-        public object ReadJson(JsonReader reader, JsonSerializer serializer)
-        {
-            JObject jO = JObject.Load(reader);
-            var root = jO[nameof(ResourceRoot)].Value<string>();
-            return From(root);
-        }
-
-        public void WriteJson(JsonWriter writer, JsonSerializer serializer)
-        {
-            writer.WriteStartObject();
-            writer.WritePropertyName(nameof(ResourceRoot));
-            writer.WriteValue(ResourceRoot);
-            writer.WriteEnd();
-        }
-
-        static Dictionary<string, ResourceManager> _managers = [];
+        static Dictionary<string, ResourceManager> _managers = []; 
+        #endregion
     }
 }
