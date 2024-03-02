@@ -58,7 +58,7 @@ namespace CruZ.Scene
             // ground
             //
             var sp_ground = new SpriteComponent();
-            sp_ground.LoadTexture("tiles\\tile3\\home-ground-behind");
+            sp_ground.LoadTexture("tiles\\tile3\\home-ground-behind.png");
             sp_ground.SortingLayer = 0;
 
             var ground = scene.CreateEntity("Ground");
@@ -68,7 +68,7 @@ namespace CruZ.Scene
             // object
             //
             var sp_groundObj = new SpriteComponent();
-            sp_groundObj.LoadTexture("tiles\\tile3\\home-object-mid");
+            sp_groundObj.LoadTexture("tiles\\tile3\\home-object-mid.png");
             sp_groundObj.SortingLayer = 1;
             sp_groundObj.YLayerDepth = true;
 
@@ -79,7 +79,7 @@ namespace CruZ.Scene
             // frontObj
             //
             var sp_frontObj = new SpriteComponent();
-            sp_frontObj.LoadTexture("tiles\\tile3\\home-object-font");
+            sp_frontObj.LoadTexture("tiles\\tile3\\home-object-font.png");
             sp_frontObj.SortingLayer = 2;
 
             var frontObj = scene.CreateEntity("TopObj");

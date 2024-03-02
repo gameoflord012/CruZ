@@ -5,6 +5,8 @@
 
 # MGCB
 *.mgstats
+*.xnb
+*.mgcontent
 
 # Temp files
 *.temp

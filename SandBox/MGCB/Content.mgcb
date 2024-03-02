@@ -1,0 +1,6 @@
+/workingDir:./
+/outputDir:bin
+/intermediateDir:bin/obj
+/platform:Windows
+
+/build:homelander.jpg;homelander.png.xnb
