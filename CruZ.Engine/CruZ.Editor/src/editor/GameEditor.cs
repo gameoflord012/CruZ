@@ -104,7 +104,8 @@ namespace CruZ.Editor.Controls
         {
             Check_AppInitialized();
 
-            var scene = _userResource.Load<GameScene>(file);
+            var resInfo = _userResource.PreLoad(file);
+            var scene = _userResource.Load<GameScene>(resInfo);
             scene.Name = Path.GetRelativePath(_userResource.ResourceRoot, file);
 
             LoadScene(scene);

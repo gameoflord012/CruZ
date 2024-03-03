@@ -36,7 +36,7 @@
 //                    {
 //                        writer.WriteStartObject();
 //                        writer.WritePropertyName(pair.Key.ToString());
-//                        serializer.Serialize(writer, pair.Value, pair.Key);
+//                        serializer.Serialize(writer, pair.Formated, pair.Key);
 //                        writer.WriteEnd();
 //                    }
 //                }

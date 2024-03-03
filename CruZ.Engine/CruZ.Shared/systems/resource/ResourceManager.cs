@@ -24,7 +24,7 @@ using static CruZ.Tools.ResourceImporter.ResourceImporter;
 
 namespace CruZ.Resource
 {
-    public class ResourceManager : ICustomSerializable, ICheckResourcePath
+    public class ResourceManager : ICustomSerializable
     {
         public string ResourceRoot
         {
@@ -49,9 +49,9 @@ namespace CruZ.Resource
         }
 
         #region Public Functions
-        public void Create(NonContextResourcePath nonContextResourcePath, object resObj, bool replaceIfExists = false)
+        public void Create(string nonContextResourcePath, object resObj, bool replaceIfExists = false)
         {
-            ResourcePath resourcePath = nonContextResourcePath.CheckedBy(this);
+            var resourcePath = CheckedResourcePath(nonContextResourcePath);          
 
             object? existsResource = null;
 
@@ -59,7 +59,7 @@ namespace CruZ.Resource
             {
                 try
                 {
-                    existsResource = Load(nonContextResourcePath, resObj.GetType(), out _);
+                    existsResource = Load(nonContextResourcePath, resObj.GetType());
                 }
                 catch
                 {
@@ -87,37 +87,40 @@ namespace CruZ.Resource
             Create(host.ResourceInfo.ResourceName, host, true);
         }
 
-        public void PreLoad<T>(params NonContextResourcePath[] resourcePath)
+        public ResourceInfo PreLoad(string nonContextResourcePath)
         {
-            ResourceImporter.NonContextResourcePath[] buildingContent =
-                Array.ConvertAll(
-                    resourcePath,
-                    e => new ResourceImporter.NonContextResourcePath(e.CheckedBy(this)));
-            _importer.ImportResources(buildingContent);
+            PreLoad([nonContextResourcePath]);
+            return CreateResourceInfo(nonContextResourcePath);
         }
 
-        public T Load<T>(NonContextResourcePath resourcePath)
+        public void PreLoad(params string[] nonContextResourcePath)
         {
-            return (T)Load(resourcePath, typeof(T), out _);
+            var resourcePaths = nonContextResourcePath.Select(e => CheckedResourcePath(e).ToString()).ToArray();
+            _importer.ImportResources(resourcePaths);
         }
 
-        public T Load<T>(NonContextResourcePath resourcePath, out ResourceInfo infoOut)
+        public T Load<T>(ResourceInfo resourceInfo)
         {
-            return (T)Load(resourcePath, typeof(T), out infoOut);
-        }
-
-        public T Load<T>(Guid guid)
-        {
-            return Load<T>(GetResourcePathFromGuid(guid));
+            return (T)Load(resourceInfo.Guid.ToString(), typeof(T));
         }
         #endregion
 
         #region Interface Implementations
-        public string CheckedResourcePath(string nonContextResourcePath)
+        public ResourcePath CheckedResourcePath(string nonContextResourcePath)
         {
+            // If it is Guid representation
+            if(
+                Guid.TryParse(nonContextResourcePath, out Guid guid) && 
+                _importer.ContainGuid(guid))
+            {
+                return ResourcePath.Create(guid, _importer.GetResourcePathFromGuid(guid));
+            }
+
+            // If it is filepath representation
             var fullResourcePath = Path.Combine(ResourceRoot, nonContextResourcePath);
             if (!PathHelper.IsSubPath(ResourceRoot, fullResourcePath)) throw new ArgumentException($"Resource Path \"{fullResourcePath}\" must be a subpath of resource root \"{ResourceRoot}\"");
-            return Path.GetRelativePath(ResourceRoot, fullResourcePath);
+            var formated = Path.GetRelativePath(ResourceRoot, fullResourcePath);
+            return ResourcePath.Create(_importer.GetResourceGuid(formated), formated);
         }
 
         public object ReadJson(JsonReader reader, JsonSerializer serializer)
@@ -143,9 +146,9 @@ namespace CruZ.Resource
         /// <param root="nonContextResourcePath">May be fullpath or relative path to resource root</param>
         /// <param root="ty"></param>
         /// <returns></returns>
-        private object Load(NonContextResourcePath nonContextResourcePath, Type ty, out ResourceInfo infoOut)
+        private object Load(string nonContextResourcePath, Type ty)
         {
-            ResourcePath resourcePath = nonContextResourcePath.CheckedBy(this);
+            ResourcePath resourcePath = CheckedResourcePath(nonContextResourcePath);
             object? resObj;
 
             if (ContentSupportedTypes.Contains(ty))
@@ -157,15 +160,13 @@ namespace CruZ.Resource
                 resObj = LoadResource(nonContextResourcePath, ty);
             }
 
-
-        LOAD_FINISHED:
-            infoOut = InitResourceHost(resObj, nonContextResourcePath);
+            InitResourceHost(resObj, nonContextResourcePath);
             return resObj;
         }
 
-        private object LoadResource(NonContextResourcePath nonContextResourcePath, Type ty)
+        private object LoadResource(string nonContextResourcePath, Type ty)
         {
-            ResourcePath resourcePath = nonContextResourcePath.CheckedBy(this);
+            ResourcePath resourcePath = CheckedResourcePath(nonContextResourcePath);
             var fullResourcePath = Path.Combine(ResourceRoot, resourcePath);
 
             object? resObj;
@@ -185,23 +186,15 @@ namespace CruZ.Resource
             return resObj;
         }
 
-        private T LoadContent<T>(NonContextResourcePath nonContextResourcePath)
+        private T LoadContent<T>(string nonContextResourcePath)
         {
-            ResourcePath resourcePath = nonContextResourcePath.CheckedBy(this);
+            ResourcePath resourcePath = CheckedResourcePath(nonContextResourcePath);
             T resultObject;
 
             try
             {
-                if (typeof(T) == typeof(SpriteSheet))
-                {
-                    resultObject = GameApplication.GetContent().Load<T>(
-                        ContentOutputDir + "\\" + resourcePath, new JsonContentLoader());
-                }
-                else
-                {
-                    resultObject = GameApplication.GetContent().Load<T>(
+                resultObject = GameApplication.GetContent().Load<T>(
                         ContentOutputDir + "\\" + resourcePath);
-                }
             }
             catch (FileNotFoundException)
             {
@@ -215,7 +208,7 @@ namespace CruZ.Resource
             return resultObject;
         }
 
-        private object LoadContentNonGeneric(NonContextResourcePath nonContextResourcePath, Type ty)
+        private object LoadContentNonGeneric(string nonContextResourcePath, Type ty)
         {
             try
             {
@@ -230,7 +223,7 @@ namespace CruZ.Resource
             }
             catch (System.Exception e)
             {
-                throw new ContentLoadException($"Cannot load content {nonContextResourcePath.CheckedBy(this)}", e);
+                throw new ContentLoadException($"Cannot load content {nonContextResourcePath}", e);
             }
         }
 
@@ -246,17 +239,15 @@ namespace CruZ.Resource
             }
         }
 
-        private ResourceInfo InitResourceHost(object resObj, NonContextResourcePath nonContextResourcePath)
+        private void InitResourceHost(object resObj, string nonContextResourcePath)
         {
             var info = CreateResourceInfo(nonContextResourcePath);
-            if (resObj is IHostResource host)
-                host.ResourceInfo = info;
-            return info;
+            if (resObj is IHostResource host) host.ResourceInfo = info;
         }
 
-        private ResourceInfo CreateResourceInfo(NonContextResourcePath nonContextResourcePath)
+        private ResourceInfo CreateResourceInfo(string nonContextResourcePath)
         {
-            ResourcePath resourcePath = nonContextResourcePath.CheckedBy(this);
+            ResourcePath resourcePath = CheckedResourcePath(nonContextResourcePath);
 
             try
             {
@@ -282,7 +273,6 @@ namespace CruZ.Resource
         private static readonly Type[] ContentSupportedTypes =
         {
             typeof(Texture2D),
-            typeof(SpriteSheet),
             typeof(SpriteFont),
             typeof(Effect)
         };

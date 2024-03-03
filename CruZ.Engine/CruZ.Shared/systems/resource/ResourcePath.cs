@@ -1,24 +1,32 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 
 namespace CruZ.Resource
 {
     public struct ResourcePath
     {
-        public ResourcePath(ICheckResourcePath checker, string NonContextResourcePath)
+        private ResourcePath(Guid guid, string formatedResourcePath)
         {
-            _resourcePath = checker.CheckedResourcePath(NonContextResourcePath);
+            Formated = formatedResourcePath;
+            Guid = guid;
+        }
+
+        public static ResourcePath Create(Guid guid, string formatedResourcePath)
+        {
+            return new ResourcePath(guid, formatedResourcePath);
         }
 
         public static implicit operator string(ResourcePath resourcePath)
         {
-            return resourcePath._resourcePath;
+            return resourcePath.Formated;
         }
 
         public override string ToString()
         {
-            return _resourcePath;
+            return Formated;
         }
 
-        string _resourcePath;
+        public string Formated { get; private set; }
+        public Guid Guid { get; private set; }
     }
 }

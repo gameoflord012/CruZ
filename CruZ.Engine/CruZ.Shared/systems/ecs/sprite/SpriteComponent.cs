@@ -109,17 +109,15 @@ namespace CruZ.Components
         {
             if (!string.IsNullOrEmpty(texturePath))
             {
-                ResourceInfo info;
+                _spriteResInfo = _resource.PreLoad(texturePath);
                 try
                 {
-                    Texture = _resource.Load<Texture2D>(texturePath, out info);
+                    Texture = _resource.Load<Texture2D>(_spriteResInfo);
                 }
                 catch(System.Exception e)
                 {
                     throw new ArgumentException($"Failed to load texture with path \"{texturePath}\"", e);
                 }
-
-                _spriteResInfo = info;
             }
         }
 
