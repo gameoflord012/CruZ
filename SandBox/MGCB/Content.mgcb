@@ -4,5 +4,4 @@
 /platform:Windows
 
 /build:homelander.jpg;homelander.png.xnb
-/build:player-sword-idle.sf
 /build:editorfont.spritefont

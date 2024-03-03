@@ -18,8 +18,8 @@ namespace CruZ
         public string               Name = "";
 
         [JsonIgnore]
-        public TransformEntity[]        Entities        { get => _entities.ToArray(); }
-        public ResourceInfo?            ResourceInfo    { get; set; }
+        public TransformEntity[] Entities        { get => _entities.ToArray(); }
+        public ResourceInfo? ResourceInfo    { get; set; }
 
         private GameScene(GameApplication gameApp) 
         {

@@ -43,8 +43,7 @@ namespace CruZ.Components
 
         public void TryGetComponent<T>(ref T? com) where T : Component
         {
-            if(HasComponent(typeof(T))) 
-                com = GetComponent<T>();
+            if(HasComponent(typeof(T))) com = GetComponent<T>();
         }
 
         public Component GetComponent(Type ty)

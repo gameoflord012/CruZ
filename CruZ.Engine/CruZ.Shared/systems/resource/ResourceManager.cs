@@ -87,21 +87,44 @@ namespace CruZ.Resource
             Create(host.ResourceInfo.ResourceName, host, true);
         }
 
-        public ResourceInfo PreLoad(string nonContextResourcePath)
-        {
-            PreLoad([nonContextResourcePath]);
-            return CreateResourceInfo(nonContextResourcePath);
-        }
+        //public ResourceInfo PreLoad(string nonContextResourcePath)
+        //{
+        //    PreLoad([nonContextResourcePath]);
+        //    return RetriveResourceInfo(nonContextResourcePath);
+        //}
 
-        public void PreLoad(params string[] nonContextResourcePath)
+        //public void PreLoad(params string[] nonContextResourcePath)
+        //{
+        //    var resourcePaths = nonContextResourcePath.Select(e => CheckedResourcePath(e).ToString()).ToArray();
+        //    _importer.ImportResources(resourcePaths);
+        //}
+
+        public T Load<T>(string nonContextResourcePath)
         {
-            var resourcePaths = nonContextResourcePath.Select(e => CheckedResourcePath(e).ToString()).ToArray();
-            _importer.ImportResources(resourcePaths);
+            return (T)Load(nonContextResourcePath, typeof(T));
         }
 
         public T Load<T>(ResourceInfo resourceInfo)
         {
             return (T)Load(resourceInfo.Guid.ToString(), typeof(T));
+        }
+        
+        public ResourceInfo RetriveResourceInfo(string nonContextResourcePath)
+        {
+            ResourcePath resourcePath = CheckedResourcePath(nonContextResourcePath);
+
+            try
+            {
+                return ResourceInfo.Create(_importer.GetResourceGuid((string)resourcePath), resourcePath);
+            }
+            catch (ResourcePathNotFoundException)
+            {
+                throw new ArgumentException($"Resource \"{resourcePath}\" maybe unimported");
+            }
+            catch (ResourceGuidNotFoundException)
+            {
+                throw new ArgumentException($"Resource \"{resourcePath}\" maybe unimported");
+            }
         }
         #endregion
 
@@ -194,7 +217,7 @@ namespace CruZ.Resource
             try
             {
                 resultObject = GameApplication.GetContent().Load<T>(
-                        ContentOutputDir + "\\" + resourcePath);
+                        ContentOutputDir + "\\" + resourcePath.Guid);
             }
             catch (FileNotFoundException)
             {
@@ -241,26 +264,8 @@ namespace CruZ.Resource
 
         private void InitResourceHost(object resObj, string nonContextResourcePath)
         {
-            var info = CreateResourceInfo(nonContextResourcePath);
+            var info = RetriveResourceInfo(nonContextResourcePath);
             if (resObj is IHostResource host) host.ResourceInfo = info;
-        }
-
-        private ResourceInfo CreateResourceInfo(string nonContextResourcePath)
-        {
-            ResourcePath resourcePath = CheckedResourcePath(nonContextResourcePath);
-
-            try
-            {
-                return ResourceInfo.Create(_importer.GetResourceGuid((string)resourcePath), resourcePath);
-            }
-            catch (ResourcePathNotFoundException)
-            {
-                throw new ArgumentException($"Resource \"{resourcePath}\" maybe unimported");
-            }
-            catch (ResourceGuidNotFoundException)
-            {
-                throw new ArgumentException($"Resource \"{resourcePath}\" maybe unimported");
-            }
         }
         #endregion
 

@@ -109,7 +109,8 @@ namespace CruZ.Components
         {
             if (!string.IsNullOrEmpty(texturePath))
             {
-                _spriteResInfo = _resource.PreLoad(texturePath);
+                _spriteResInfo = _resource.RetriveResourceInfo(texturePath);
+
                 try
                 {
                     Texture = _resource.Load<Texture2D>(_spriteResInfo);

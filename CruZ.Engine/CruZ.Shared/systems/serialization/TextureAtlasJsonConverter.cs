@@ -43,8 +43,7 @@ namespace CruZ.Serialization
             else
             {
                 var inlineAtlas = serializer.Deserialize<InlineTextureAtlas>(reader);
-                var resInfo = _resource.PreLoad(inlineAtlas.TextureGuid.ToString());
-                var texture = _resource.Load<Texture2D>(resInfo);
+                var texture = _resource.Load<Texture2D>(inlineAtlas.TextureGuid.ToString());
                 return TextureAtlas.Create(texture, inlineAtlas.RegionWidth, inlineAtlas.RegionHeight);
             }
         }
