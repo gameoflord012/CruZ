@@ -78,59 +78,15 @@ namespace CruZ.Tools.ResourceImporter
     {
         public ResourceImporter(string importDir)
         {
-            _resourceDir = Path.GetFullPath(importDir);
-            _contentOutputDir = Path.GetFullPath(Path.Combine(importDir, ".content\\bin"));
-            _guidManager = new GuidManager<ResourcePath>();
-
-            //_fileWatcher = new FileSystemWatcher(importDir);
-            //_fileWatcher.IncludeSubdirectories = true;
-            //_fileWatcher.NotifyFilter =
-            //    NotifyFilters.LastWrite |
-            //    NotifyFilters.FileName |
-            //    NotifyFilters.DirectoryName |
-            //    NotifyFilters.CreationTime;
-            //_fileWatcher.Created += FileWatcher_Created;
-            //_fileWatcher.Deleted += FileWatcher_Deleted;
-            //_fileWatcher.Changed += FileWatcher_Changed;
-            //_fileWatcher.Renamed += FileWatcher_Renamed;
-            //_fileWatcher.EnableRaisingEvents = false;
+            //_resourceDir = Path.GetFullPath(importDir);
+            //_contentOutputDir = Path.GetFullPath(Path.Combine(importDir, ".content\\bin"));
+            //_guidManager = new GuidManager<ResourcePath>();
         }
 
         #region Public Functions
         public void InitializeImporter()
         {
-            // iterate through last session imported items
-            foreach (var filePath in Directory.EnumerateFiles(_resourceDir, "*.*", SearchOption.AllDirectories))
-            {
-                var extension = Path.GetExtension(filePath);
-                switch (extension)
-                {
-                    // remove excess .import files
-                    case ".import":
-                        var resourceFile = filePath.Substring(0, filePath.LastIndexOf(extension));
-                        if (!File.Exists(resourceFile)) UnimportResource(resourceFile);
-                        break;
-
-                    // remove last content build
-                    //case ".xnb":
-                    //case ".mgcontent":
-                    //    File.Delete(filePath);
-                    //    break;
-
-                    default:
-                        // initialize resource if filePath is a resource path
-                        if (ResourceSupportedExtensions.Contains(Path.GetExtension(filePath).ToLower()))
-                        {
-                            InitImportingResource(filePath);
-                            // TODO: test
-                            _buildRequests.Add(filePath);
-                        }
-                        break;
-                }
-            }
-
-            // TODO: test
-            ProcessBuildRequests();
+            
         }
 
         public string GetResourcePathFromGuid(Guid guid)
@@ -143,56 +99,7 @@ namespace CruZ.Tools.ResourceImporter
             return _guidManager.IsConsumed(guid);
         }
 
-        public Guid GetResourceGuid(string rawResourcePath)
-        {
-            var resourcePath = GetCheckedResourcePath(rawResourcePath);
-            return _guidManager.GetGuid(resourcePath);
-        }
-
-        //public void ImportResources(params string[] importRequests)
-        //{
-        //    foreach (var request in importRequests)
-        //    {
-        //        var requestResource = GetCheckedResourcePath(request);
-        //        InitImportingResource(requestResource);
-        //        _buildRequests.Add(requestResource);
-        //    }
-
-        //    ProcessBuildRequests();
-        //}
-        #endregion
-
-        #region FileWatcher Functions
-        // TODO: implement filePath watcher
-        //public void EnableWatch() { _fileWatcher.EnableRaisingEvents = true; }
-
-        //public void DisableWatch() { _fileWatcher.EnableRaisingEvents = false; }
-
-        //private void FileWatcher_Renamed(object sender, RenamedEventArgs e)
-        //{
-        //    File.Move(DotImport(e.OldFullPath), DotImport(e.FullPath));
-        //    string xnbOld = GetXnb(e.OldFullPath), xnbNew = GetXnb(e.FullPath), mgcontentOld = GetMgcontent(e.OldFullPath), mgcontentNew = GetMgcontent(e.FullPath);
-        //    if (File.Exists(xnbOld)) File.Move(xnbOld, xnbNew);
-        //    if (File.Exists(mgcontentOld)) File.Move(mgcontentOld, mgcontentNew);
-        //}
-
-        //private void FileWatcher_Changed(object sender, FileSystemEventArgs e)
-        //{
-        //    _buildRequests.Add(e.FullPath);
-        //    ProcessBuildRequests();
-        //}
-
-        //private void FileWatcher_Created(object sender, FileSystemEventArgs e)
-        //{
-        //    InitImportingResource(e.FullPath);
-        //    _buildRequests.Add(e.FullPath);
-        //    ProcessBuildRequests();
-        //}
-
-        //private void FileWatcher_Deleted(object sender, FileSystemEventArgs e)
-        //{
-        //    UnimportResource(e.FullPath);
-        //}
+        
         #endregion
 
         #region Private And Internals Functions
@@ -201,49 +108,23 @@ namespace CruZ.Tools.ResourceImporter
             var resourceFullPath = Path.Combine(_resourceDir, resourcePathString);
             return ResourcePath.Create(Path.GetFullPath(resourceFullPath));
         }
-        /// <summary>
-        /// Read Guid or auto-generated new Guid and .import files
-        /// </summary>
-        /// <param name="resourcePath"></param>
-        private void InitImportingResource(string rawResourcePath)
-        {
-            var resourcePath = GetCheckedResourcePath(rawResourcePath);
-            var dotImport = DotImport(resourcePath);
-            Guid guid;
-            if (File.Exists(dotImport)) // if .import exists
-            {
-                // read guid from .import
-                guid = ReadGuidFromImportFile(resourcePath);
-            }
-            else // if don't
-            {
-                // Write new guid to .import
-                guid = _guidManager.GenerateUniqueGuid();
-                using (var writer = new StreamWriter(File.Create(dotImport)))
-                {
-                    writer.WriteLine(guid);
-                    writer.Flush();
-                }
-            }
+        
 
-            _guidManager.ConsumeGuid(guid, resourcePath);
-        }
+        //private void UnimportResource(string rawResourcePath)
+        //{
+        //    var resourcePath = GetCheckedResourcePath(rawResourcePath);
+        //    _guidManager.RemoveValue(resourcePath);
 
-        private void UnimportResource(string rawResourcePath)
-        {
-            var resourcePath = GetCheckedResourcePath(rawResourcePath);
-            _guidManager.RemoveValue(resourcePath);
+        //    // clean .import filePath
+        //    var dotImport = DotImport(resourcePath);
+        //    if (File.Exists(dotImport))
+        //    {
+        //        File.Delete(dotImport);
+        //        _guidManager.RemoveValue(resourcePath);
+        //    }
 
-            // clean .import filePath
-            var dotImport = DotImport(resourcePath);
-            if (File.Exists(dotImport))
-            {
-                File.Delete(dotImport);
-                _guidManager.RemoveValue(resourcePath);
-            }
-
-            UnloadContent(rawResourcePath);
-        }
+        //    UnloadContent(rawResourcePath);
+        //}
 
         private void ProcessBuildRequests()
         {
@@ -312,16 +193,7 @@ namespace CruZ.Tools.ResourceImporter
             if (File.Exists(xnb)) File.Delete(xnb);
             if (File.Exists(mgcontent)) File.Delete(mgcontent);
         }
-
-        private string GetXnb(string resourcePath)
-        {
-            return Path.Combine(_contentOutputDir, GetResourceGuid(resourcePath) + ".xnb");
-        }
-
-        private string GetMgcontent(string resourcePath)
-        {
-            return Path.Combine(_contentOutputDir, GetResourceGuid(resourcePath) + ".mgcontent");
-        }
+        
 
         private string GetResourceRelativePath(string rawResourcePath)
         {
@@ -343,32 +215,9 @@ namespace CruZ.Tools.ResourceImporter
         GuidManager<ResourcePath> _guidManager;
         List<string> _buildRequests = new List<string>(); // resource files need to rebuild after being modified
 
-        private static readonly string[] ContentSupportedExtensions = new string[]
-        {
-            ".jpg", ".png", ".spritefont"
-        };
-
-        private static readonly string[] ResourceSupportedExtensions = ContentSupportedExtensions.Concat(new string[]
-        {
-            ".sf", ".scene"
-        }).ToArray();
+        
 
         #region Static Functions
-        private static Guid ReadGuidFromImportFile(string resourcePath)
-        {
-            var dotImport = DotImport(resourcePath);
-            if (!File.Exists(dotImport)) throw new FileNotFoundException(dotImport);
-            using (var reader = new StreamReader(dotImport))
-            {
-                return new Guid(reader.ReadToEnd().Replace("\r\n", ""));
-            }
-        }
-
-        private static string DotImport(string resourcePath)
-        {
-            if (Path.GetExtension(resourcePath) == ".import") return resourcePath;
-            return resourcePath + ".import";
-        }
 
         private static void Log(string msg)
         {

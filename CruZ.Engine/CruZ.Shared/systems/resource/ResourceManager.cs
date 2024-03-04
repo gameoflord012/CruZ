@@ -1,15 +1,10 @@
 ﻿using CruZ.Exception;
 using CruZ.Serialization;
 using CruZ.Service;
-using CruZ.Tools.ResourceImporter;
 using CruZ.Utility;
 
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-
-using MonoGame.Extended.Content;
-using MonoGame.Extended.Serialization;
-using MonoGame.Extended.Sprites;
 
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -20,11 +15,9 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 
-using static CruZ.Tools.ResourceImporter.ResourceImporter;
-
 namespace CruZ.Resource
 {
-    public class ResourceManager : ICustomSerializable
+    public class ResourceManager : ICustomSerializable, IGuidValueProcessor<string>
     {
         public string ResourceRoot
         {
@@ -43,23 +36,54 @@ namespace CruZ.Resource
             _serializer.Converters.Add(new TextureAtlasJsonConverter(this));
             _serializer.Converters.Add(new SerializableJsonConverter());
 
-            _importer = new(resourceRoot);
-            _importer.InitializeImporter();
+            _guidManager = new(this);
+
+            InitResourceDir();
             //_importer.EnableWatch();
         }
 
-        #region Public Functions
-        public void Create(string nonContextResourcePath, object resObj, bool replaceIfExists = false)
+        private void InitResourceDir()
         {
-            var resourcePath = CheckedResourcePath(nonContextResourcePath);          
+            // iterate through last session imported items
+            foreach (var filePath in Directory.EnumerateFiles(ResourceRoot, "*.*", SearchOption.AllDirectories))
+            {
+                var extension = Path.GetExtension(filePath);
+                switch (extension)
+                {
+                    // remove excess .import files
+                    case ".import":
+                        var resourceFile = filePath.Substring(0, filePath.LastIndexOf(extension));
+                        if (!File.Exists(resourceFile)) File.Delete(filePath);
+                        break;
 
+                    // remove last content build
+                    //case ".xnb":
+                    //case ".mgcontent":
+                    //    File.Delete(filePath);
+                    //    break;
+
+                    default:
+                        // initialize resource if filePath is a resource
+                        if (ResourceSupportedExtensions.Contains(Path.GetExtension(filePath).ToLower()))
+                        {
+                            InitImportingResource(filePath);
+                        }
+                        break;
+                }
+            }
+        }
+
+        #region Public Functions
+        public void Create(string resourcePath, object resObj, bool replaceIfExists = false)
+        {
+            resourcePath = GetFormattedResourcePath(resourcePath);
             object? existsResource = null;
 
             if (!replaceIfExists)
             {
                 try
                 {
-                    existsResource = Load(nonContextResourcePath, resObj.GetType());
+                    existsResource = Load(resourcePath, resObj.GetType());
                 }
                 catch
                 {
@@ -76,7 +100,7 @@ namespace CruZ.Resource
             if (existsResource is IDisposable iDisposable)
                 iDisposable.Dispose();
 
-            InitResourceHost(resObj, nonContextResourcePath);
+            InitResourceHost(resObj, resourcePath);
         }
 
         public void Save(IHostResource host)
@@ -87,41 +111,33 @@ namespace CruZ.Resource
             Create(host.ResourceInfo.ResourceName, host, true);
         }
 
-        //public ResourceInfo PreLoad(string nonContextResourcePath)
-        //{
-        //    PreLoad([nonContextResourcePath]);
-        //    return RetriveResourceInfo(nonContextResourcePath);
-        //}
-
-        //public void PreLoad(params string[] nonContextResourcePath)
-        //{
-        //    var resourcePaths = nonContextResourcePath.Select(e => CheckedResourcePath(e).ToString()).ToArray();
-        //    _importer.ImportResources(resourcePaths);
-        //}
-
-        public T Load<T>(string nonContextResourcePath)
+        public T Load<T>(string resourcePath)
         {
-            return (T)Load(nonContextResourcePath, typeof(T));
+            return (T)Load(resourcePath, typeof(T));
+        }
+
+        public T Load<T>(Guid guid)
+        {
+            return (T)Load(_guidManager.GetValue(guid), typeof(T));
         }
 
         public T Load<T>(ResourceInfo resourceInfo)
         {
-            return (T)Load(resourceInfo.Guid.ToString(), typeof(T));
+            return Load<T>(resourceInfo.Guid);
         }
-        
-        public ResourceInfo RetriveResourceInfo(string nonContextResourcePath)
-        {
-            ResourcePath resourcePath = CheckedResourcePath(nonContextResourcePath);
 
+        public ResourceInfo RetriveResourceInfo(string resourcePath)
+        {
+            resourcePath = GetFormattedResourcePath(resourcePath);
             try
             {
-                return ResourceInfo.Create(_importer.GetResourceGuid((string)resourcePath), resourcePath);
+                return ResourceInfo.Create(_guidManager.GetGuid(resourcePath), resourcePath);
             }
-            catch (ResourcePathNotFoundException)
+            catch (InvalidGuidException)
             {
                 throw new ArgumentException($"Resource \"{resourcePath}\" maybe unimported");
             }
-            catch (ResourceGuidNotFoundException)
+            catch (InvalidGuidValueException)
             {
                 throw new ArgumentException($"Resource \"{resourcePath}\" maybe unimported");
             }
@@ -129,21 +145,9 @@ namespace CruZ.Resource
         #endregion
 
         #region Interface Implementations
-        public ResourcePath CheckedResourcePath(string nonContextResourcePath)
+        public string GetProcessedGuidValue(string value)
         {
-            // If it is Guid representation
-            if(
-                Guid.TryParse(nonContextResourcePath, out Guid guid) && 
-                _importer.ContainGuid(guid))
-            {
-                return ResourcePath.Create(guid, _importer.GetResourcePathFromGuid(guid));
-            }
-
-            // If it is filepath representation
-            var fullResourcePath = Path.Combine(ResourceRoot, nonContextResourcePath);
-            if (!PathHelper.IsSubPath(ResourceRoot, fullResourcePath)) throw new ArgumentException($"Resource Path \"{fullResourcePath}\" must be a subpath of resource root \"{ResourceRoot}\"");
-            var formated = Path.GetRelativePath(ResourceRoot, fullResourcePath);
-            return ResourcePath.Create(_importer.GetResourceGuid(formated), formated);
+            return GetFormattedResourcePath(value);
         }
 
         public object ReadJson(JsonReader reader, JsonSerializer serializer)
@@ -166,30 +170,29 @@ namespace CruZ.Resource
         /// <summary>
         /// Load resource with relative or full path, the resource fileName should within the .resObj folder
         /// </summary>
-        /// <param root="nonContextResourcePath">May be fullpath or relative path to resource root</param>
+        /// <param root="resourcePath">May be fullpath or relative path to resource root</param>
         /// <param root="ty"></param>
         /// <returns></returns>
-        private object Load(string nonContextResourcePath, Type ty)
+        private object Load(string resourcePath, Type ty)
         {
-            ResourcePath resourcePath = CheckedResourcePath(nonContextResourcePath);
             object? resObj;
 
             if (ContentSupportedTypes.Contains(ty))
             {
-                resObj = LoadContentNonGeneric(resourcePath.ToString(), ty);
+                resObj = LoadContentNonGeneric(resourcePath, ty);
             }
             else
             {
-                resObj = LoadResource(nonContextResourcePath, ty);
+                resObj = LoadResource(resourcePath, ty);
             }
 
-            InitResourceHost(resObj, nonContextResourcePath);
+            InitResourceHost(resObj, resourcePath);
             return resObj;
         }
 
-        private object LoadResource(string nonContextResourcePath, Type ty)
+        private object LoadResource(string resourcePath, Type ty)
         {
-            ResourcePath resourcePath = CheckedResourcePath(nonContextResourcePath);
+            resourcePath = GetFormattedResourcePath(resourcePath);
             var fullResourcePath = Path.Combine(ResourceRoot, resourcePath);
 
             object? resObj;
@@ -209,15 +212,15 @@ namespace CruZ.Resource
             return resObj;
         }
 
-        private T LoadContent<T>(string nonContextResourcePath)
+        private T LoadContent<T>(string resourcePath)
         {
-            ResourcePath resourcePath = CheckedResourcePath(nonContextResourcePath);
+            resourcePath = GetFormattedResourcePath(resourcePath);
             T resultObject;
 
             try
             {
                 resultObject = GameApplication.GetContent().Load<T>(
-                        ContentOutputDir + "\\" + resourcePath.Guid);
+                        ContentOutputDir + "\\" + _guidManager.GetGuid(resourcePath));
             }
             catch (FileNotFoundException)
             {
@@ -231,7 +234,7 @@ namespace CruZ.Resource
             return resultObject;
         }
 
-        private object LoadContentNonGeneric(string nonContextResourcePath, Type ty)
+        private object LoadContentNonGeneric(string resourcePath, Type ty)
         {
             try
             {
@@ -240,38 +243,84 @@ namespace CruZ.Resource
                 return typeof(ResourceManager).
                     GetMethod(nameof(LoadContent), BindingFlags.NonPublic | BindingFlags.Instance).
                     MakeGenericMethod(ty).
-                    Invoke(this, [nonContextResourcePath]);
+                    Invoke(this, [resourcePath]);
 #pragma warning restore CS8603 // Possible null reference return.
 #pragma warning restore CS8602 // Dereference of a possibly null reference.
             }
             catch (System.Exception e)
             {
-                throw new ContentLoadException($"Cannot load content {nonContextResourcePath}", e);
+                throw new ContentLoadException($"Cannot load content {resourcePath}", e);
             }
         }
 
-        private string GetResourcePathFromGuid(Guid guid)
+        private void InitResourceHost(object resObj, string resourcePath)
         {
-            try
-            {
-                return _importer.GetResourcePathFromGuid(guid);
-            }
-            catch (KeyNotFoundException)
-            {
-                throw new KeyNotFoundException("Can't find resource with guid " + guid);
-            }
-        }
-
-        private void InitResourceHost(object resObj, string nonContextResourcePath)
-        {
-            var info = RetriveResourceInfo(nonContextResourcePath);
+            var info = RetriveResourceInfo(resourcePath);
             if (resObj is IHostResource host) host.ResourceInfo = info;
+        }
+
+        private string GetFormattedResourcePath(string resourcePath)
+        {
+            resourcePath = Path.Combine(ResourceRoot, resourcePath);
+            if (!PathHelper.IsSubPath(ResourceRoot, resourcePath)) 
+                throw new ArgumentException($"Resource Path \"{resourcePath}\" must be a subpath of resource root \"{ResourceRoot}\"");
+            return Path.GetFullPath(resourcePath);
+        }
+
+        /// <summary>
+        /// Read Guid or auto-generated new Guid and .import files
+        /// </summary>
+        /// <param name="resourcePath"></param>
+        private void InitImportingResource(string resourcePath)
+        {
+            resourcePath = GetFormattedResourcePath(resourcePath);
+            Guid guid;
+
+            if (TryReadGuidFromImportFile(resourcePath, out guid)) // if .import exists
+            {
+
+            }
+            else // if don't
+            {
+                // Write new guid to .import
+                guid = _guidManager.GenerateUniqueGuid();
+                using (var writer = new StreamWriter(File.Create(resourcePath + ".import")))
+                {
+                    writer.WriteLine(guid);
+                    writer.Flush();
+                }
+            }
+
+            _guidManager.ConsumeGuid(guid, resourcePath);
+        }
+
+        private string GetXnb(string rawResourcePath)
+        {
+            return Path.Combine(ContentOutputDir, _guidManager.GetGuid(rawResourcePath) + ".xnb");
+        }
+
+        private string GetMgcontent(string rawResourcePath)
+        {
+            return Path.Combine(ContentOutputDir, _guidManager.GetGuid(rawResourcePath) + ".mgcontent");
+        }
+
+        /// <summary>
+        /// Get .import file from normal file
+        /// </summary>
+        /// <param name="resourcePath"></param>
+        /// <returns></returns>
+        private static bool TryReadGuidFromImportFile(string filePath, out Guid guid)
+        {
+            var dotImport = filePath + ".import";
+            guid = default;
+            if(!File.Exists(dotImport)) return false;
+            return Guid.TryParse(File.ReadLines(dotImport).First(), out guid);
         }
         #endregion
 
         #region Private Variables
         Serializer _serializer;
-        ResourceImporter _importer;
+        GuidManager<string> _guidManager;
         string _resourceRoot = "res";
         string ContentOutputDir => $"{_resourceRoot}\\.content\\bin";
 
@@ -281,6 +330,20 @@ namespace CruZ.Resource
             typeof(SpriteFont),
             typeof(Effect)
         };
+
+        private static readonly string[] ContentSupportedExtensions =
+        [
+            ".jpg", ".png", ".spritefont"
+        ];
+
+        private static  readonly string[] ResourceSupportedExtensions =
+        [
+            .. ContentSupportedExtensions,
+            .. new string[]
+            {
+                ".sf", ".scene"
+            },
+        ];
         #endregion
 
         #region Static

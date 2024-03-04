@@ -60,3 +60,26 @@ public class RuntimeSceneLoadException : System.Exception
       System.Runtime.Serialization.SerializationInfo info,
       System.Runtime.Serialization.StreamingContext context) : base(info, context) { }
 }
+
+[Serializable]
+public class InvalidGuidValueException : System.Exception
+{
+    public InvalidGuidValueException() { }
+    public InvalidGuidValueException(string message) : base(message) { }
+    public InvalidGuidValueException(string message, System.Exception inner) : base(message, inner) { }
+    protected InvalidGuidValueException(
+      System.Runtime.Serialization.SerializationInfo info,
+      System.Runtime.Serialization.StreamingContext context) : base(info, context) { }
+}
+
+
+[Serializable]
+public class InvalidGuidException : System.Exception
+{
+    public InvalidGuidException() { }
+    public InvalidGuidException(string message) : base(message) { }
+    public InvalidGuidException(string message, System.Exception inner) : base(message, inner) { }
+    protected InvalidGuidException(
+      System.Runtime.Serialization.SerializationInfo info,
+      System.Runtime.Serialization.StreamingContext context) : base(info, context) { }
+}

@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 
 namespace CruZ.Utility
 {
@@ -6,6 +7,7 @@ namespace CruZ.Utility
     {
         public static bool IsSubPath(string basepath, string subpath)
         {
+            if(!Path.IsPathRooted(basepath) || !Path.IsPathRooted(subpath)) throw new ArgumentException("Path must be rooted");
             var rel = Path.GetRelativePath(basepath, subpath);
             rel.Replace("//", "\\");
             return !rel.StartsWith("..\\") && rel != ".";
