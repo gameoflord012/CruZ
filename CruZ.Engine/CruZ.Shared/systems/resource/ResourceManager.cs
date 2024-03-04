@@ -6,11 +6,14 @@ using CruZ.Utility;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
+using MonoGame.Framework.Content.Pipeline.Builder;
+
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -33,10 +36,16 @@ namespace CruZ.Resource
             _serializer = new Serializer();
             ResourceRoot = resourceRoot;
 
+            Directory.CreateDirectory(Path.GetDirectoryName(ResourceRoot) ?? throw new ArgumentException("resourceRoot"));
+            Directory.CreateDirectory(Path.GetDirectoryName(ContentOutputDir) ?? throw new ArgumentException("resourceRoot"));
+
             _serializer.Converters.Add(new TextureAtlasJsonConverter(this));
             _serializer.Converters.Add(new SerializableJsonConverter());
 
             _guidManager = new(this);
+
+            _pipelineManager = new(ResourceRoot, ContentOutputDir, ContentOutputDir);
+            _pipelineManager.Platform = XNA.Content.Pipeline.TargetPlatform.DesktopGL;
 
             InitResourceDir();
             //_importer.EnableWatch();
@@ -44,7 +53,6 @@ namespace CruZ.Resource
 
         private void InitResourceDir()
         {
-            // iterate through last session imported items
             foreach (var filePath in Directory.EnumerateFiles(ResourceRoot, "*.*", SearchOption.AllDirectories))
             {
                 var extension = Path.GetExtension(filePath);
@@ -56,12 +64,6 @@ namespace CruZ.Resource
                         if (!File.Exists(resourceFile)) File.Delete(filePath);
                         break;
 
-                    // remove last content build
-                    //case ".xnb":
-                    //case ".mgcontent":
-                    //    File.Delete(filePath);
-                    //    break;
-
                     default:
                         // initialize resource if filePath is a resource
                         if (ResourceSupportedExtensions.Contains(Path.GetExtension(filePath).ToLower()))
@@ -70,6 +72,16 @@ namespace CruZ.Resource
                         }
                         break;
                 }
+            }
+
+            foreach (var filePath in Directory.EnumerateFiles(ContentOutputDir, "*.*", SearchOption.AllDirectories).
+                Where(e => 
+                    Path.GetFileName(e) != ".mgcontent" && 
+                    (e.EndsWith(".xnb") || e.EndsWith(".mgcontent"))))
+            {
+                // delete if file name is not guid or resource guid doesn't exists
+                if(!Guid.TryParse(Path.GetFileNameWithoutExtension(filePath), out Guid guid) || !_guidManager.IsConsumed(guid))
+                    File.Delete(filePath);
             }
         }
 
@@ -215,23 +227,24 @@ namespace CruZ.Resource
         private T LoadContent<T>(string resourcePath)
         {
             resourcePath = GetFormattedResourcePath(resourcePath);
-            T resultObject;
+            var contentPath = ContentOutputDir + "\\" + _guidManager.GetGuid(resourcePath);
+
+            BuildContent(resourcePath, contentPath);
 
             try
             {
-                resultObject = GameApplication.GetContent().Load<T>(
-                        ContentOutputDir + "\\" + _guidManager.GetGuid(resourcePath));
+                return GameApplication.GetContent().Load<T>(contentPath);
             }
-            catch (FileNotFoundException)
-            {
-                throw new ContentLoadException();
-            }
-            catch (ContentLoadException)
+            catch
             {
                 throw;
             }
+        }
 
-            return resultObject;
+        private void BuildContent(string resourcePath, string? outputFilePath = null)
+        {
+            resourcePath = GetFormattedResourcePath(resourcePath);
+            _pipelineManager.BuildContent(resourcePath, outputFilePath);
         }
 
         private object LoadContentNonGeneric(string resourcePath, Type ty)
@@ -262,7 +275,7 @@ namespace CruZ.Resource
         private string GetFormattedResourcePath(string resourcePath)
         {
             resourcePath = Path.Combine(ResourceRoot, resourcePath);
-            if (!PathHelper.IsSubPath(ResourceRoot, resourcePath)) 
+            if (!Utility.PathHelper.IsSubPath(ResourceRoot, resourcePath)) 
                 throw new ArgumentException($"Resource Path \"{resourcePath}\" must be a subpath of resource root \"{ResourceRoot}\"");
             return Path.GetFullPath(resourcePath);
         }
@@ -322,7 +335,8 @@ namespace CruZ.Resource
         Serializer _serializer;
         GuidManager<string> _guidManager;
         string _resourceRoot = "res";
-        string ContentOutputDir => $"{_resourceRoot}\\.content\\bin";
+        string ContentOutputDir => $"{_resourceRoot}\\.content\\";
+        PipelineManager _pipelineManager;
 
         private static readonly Type[] ContentSupportedTypes =
         {
@@ -356,7 +370,6 @@ namespace CruZ.Resource
 
             return _managers[resourceDir];
         }
-
         static Dictionary<string, ResourceManager> _managers = [];
         #endregion
     }
