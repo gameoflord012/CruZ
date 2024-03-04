@@ -80,8 +80,6 @@ namespace CruZ.Experiment
             _spriteBatch.End();
 
             GraphicsDevice.SetRenderTarget(null);
-            GraphicsDevice.SetRenderTarget(_renderTarget);
-            GraphicsDevice.SetRenderTarget(null);
 
             GraphicsDevice.Clear(Color.RoyalBlue);
             _spriteBatch.Begin();
@@ -102,12 +100,12 @@ namespace CruZ.Experiment
     {
         static void Main(string[] args)
         {
-            //Game game = new MyGame();
-            //game.Run();
+            Game game = new MyGame();
+            game.Run();
 
-            Console.WriteLine(Environment.CurrentDirectory);
-            Console.WriteLine(Directory.GetCurrentDirectory());
-            Console.WriteLine(AppDomain.CurrentDomain.BaseDirectory);
+            //Console.WriteLine(Environment.CurrentDirectory);
+            //Console.WriteLine(Directory.GetCurrentDirectory());
+            //Console.WriteLine(AppDomain.CurrentDomain.BaseDirectory);
         }
     }
 }

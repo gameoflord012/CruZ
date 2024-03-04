@@ -7,6 +7,12 @@
       "commands": [
         "mgcb"
       ]
+    },
+    "dotnet-mgfxc": {
+      "version": "3.8.1.303",
+      "commands": [
+        "mgfxc"
+      ]
     }
   }
 }

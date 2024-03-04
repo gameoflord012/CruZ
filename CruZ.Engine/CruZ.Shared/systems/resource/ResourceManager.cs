@@ -347,7 +347,7 @@ namespace CruZ.Resource
 
         private static readonly string[] ContentSupportedExtensions =
         [
-            ".jpg", ".png", ".spritefont"
+            ".jpg", ".png", ".spritefont", ".fx"
         ];
 
         private static  readonly string[] ResourceSupportedExtensions =
@@ -355,7 +355,7 @@ namespace CruZ.Resource
             .. ContentSupportedExtensions,
             .. new string[]
             {
-                ".sf", ".scene"
+                ".sf", ".scene",
             },
         ];
         #endregion

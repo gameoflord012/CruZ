@@ -55,7 +55,10 @@ namespace CruZ.Editor.Controls
                 }
                 else
                 {
-                    binWriter.Write(CurrentGameScene.ResourceInfo.ResourceName);
+                    if(CurrentGameScene.ResourceInfo == null)
+                        return false;
+                    else
+                        binWriter.Write(CurrentGameScene.ResourceInfo.ResourceName);
                 }
             }
                 

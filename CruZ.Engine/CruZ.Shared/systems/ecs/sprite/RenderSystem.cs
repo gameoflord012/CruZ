@@ -6,7 +6,6 @@ using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Entities;
 using MonoGame.Extended.Entities.Systems;
 
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -26,6 +25,7 @@ namespace CruZ.Systems
             _lightMapper = mapperService.GetMapper<LightComponent>();
             _spriteBatch = GameApplication.GetSpriteBatch();
             _gd = GameApplication.GetGraphicsDevice();
+            _lightEffect = GameContext.GameResource.Load<Effect>("lightshader.fx");
         }
 
         public void Draw(GameTime gameTime)
@@ -47,6 +47,7 @@ namespace CruZ.Systems
                 _gd.Clear(Color.Transparent);
 
                 #region Process Sprites
+                // render sprite
                 _spriteBatch.Begin(
                             sortMode: SpriteSortMode.FrontToBack,
                             transformMatrix: Camera.Main.ViewMatrix(),
@@ -62,7 +63,8 @@ namespace CruZ.Systems
                 _spriteBatch.End();
                 #endregion
 
-                _spriteBatch.Begin();
+                // render lights
+                _spriteBatch.Begin(effect: _lightEffect);
                 foreach (var light in lights
                     .Where(e => e.SortingLayers.Contains(sortingLayer)))
                 {
@@ -111,5 +113,6 @@ namespace CruZ.Systems
         ComponentMapper<SpriteComponent> _spriteMapper;
         Dictionary<int, RenderTarget2D> _renderTargets = [];
         GraphicsDevice _gd;
+        Effect _lightEffect;
     }
 }
