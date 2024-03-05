@@ -1,0 +1,7 @@
+<Project>
+  <PropertyGroup>
+    <CruZProject>$(MSBuildProjectName)</CruZProject>
+    <BaseOutputPath>..\..\Artifacts\$(CruZProject)</BaseOutputPath>
+  </PropertyGroup>
+</Project>
+
