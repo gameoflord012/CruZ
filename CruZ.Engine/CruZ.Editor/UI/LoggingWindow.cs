@@ -1,7 +1,7 @@
 ﻿using CruZ.Editor.Global;
-using CruZ.Resource;
-using CruZ.Service;
-using CruZ.UI;
+using CruZ.Common.Resource;
+using CruZ.Common.Service;
+using CruZ.Common.UI;
 
 using Microsoft.Xna.Framework.Graphics;
 

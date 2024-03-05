@@ -1,6 +1,6 @@
-﻿using CruZ.ECS;
-using CruZ.GameSystem;
-using CruZ.Utility;
+﻿using CruZ.Common.ECS;
+
+using CruZ.Common.Utility;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
@@ -11,7 +11,9 @@ using System;
 
 namespace CruZ.Game.AnimalGang
 {
-    using CruZ.DataType;
+    using Common.DataType;
+
+    using CruZ.Common.Input;
 
     public class MainCharacter : EntityScript
     {
@@ -31,7 +33,7 @@ namespace CruZ.Game.AnimalGang
         protected override void OnUpdate(GameTime gameTime)
         {
             #region AttackLogics
-            //if (Input.Info.Keyboard.IsKeyDown(Keys.Space))
+            //if (InputManager.Info.Keyboard.IsKeyDown(Keys.Space))
             //{
             //    _attackTimer = 0;
             //    _animation.SelectPlayer("player-sword-attack").Play("attack");
@@ -95,19 +97,19 @@ namespace CruZ.Game.AnimalGang
         {
             Vector3 moveDir = Vector3.Zero;
 
-            if (Input.Info.Keyboard.IsKeyDown(Keys.A))
+            if (InputManager.Info.Keyboard.IsKeyDown(Keys.A))
             {
                 moveDir = new Vector3(-1, 0);
             }
-            if (Input.Info.Keyboard.IsKeyDown(Keys.D))
+            if (InputManager.Info.Keyboard.IsKeyDown(Keys.D))
             {
                 moveDir = new Vector3(1, 0);
             }
-            if (Input.Info.Keyboard.IsKeyDown(Keys.S))
+            if (InputManager.Info.Keyboard.IsKeyDown(Keys.S))
             {
                 moveDir = new Vector3(0, 1);
             }
-            if (Input.Info.Keyboard.IsKeyDown(Keys.W))
+            if (InputManager.Info.Keyboard.IsKeyDown(Keys.W))
             {
                 moveDir = new Vector3(0, -1);
             }

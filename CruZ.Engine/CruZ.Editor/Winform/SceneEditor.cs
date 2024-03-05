@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Windows.Forms;
 
-using Assimp;
-
-using CruZ.ECS;
+using CruZ.Common.ECS;
+using CruZ.Common.Scene;
 using CruZ.Editor.Controls;
 using CruZ.Editor.Service;
 using CruZ.Editor.Utility;

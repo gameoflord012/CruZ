@@ -1,18 +1,15 @@
-﻿using CruZ.Exception;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Input;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Microsoft.Xna.Framework;
 
-namespace CruZ.GameSystem
+using System;
+
+namespace CruZ.Common.Input
 {
     public interface IInputContextProvider
     {
         public event Action<GameTime> InputUpdate;
     }
 
-    public partial class Input
+    public partial class InputManager
     {
         public static event Action<IInputInfo>? MouseScrolled;
         public static event Action<IInputInfo>? MouseMoved;
@@ -23,7 +20,7 @@ namespace CruZ.GameSystem
 
         public static IInputInfo Info => _instance._info;
 
-        static Input? _instance;
+        static InputManager? _instance;
 
         public static void CreateContext(IInputContextProvider contextProvider)
         {

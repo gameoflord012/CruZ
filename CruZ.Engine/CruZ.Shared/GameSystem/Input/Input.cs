@@ -1,20 +1,15 @@
-﻿using CruZ.Utility;
+﻿using CruZ.Common.Utility;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 
-using System;
-using System.Diagnostics;
-using System.Drawing;
-using System.Numerics;
-
-namespace CruZ.GameSystem
+namespace CruZ.Common.Input
 {
-    public partial class Input
+    public partial class InputManager
     {
         public static readonly float MOUSE_CLICK_DURATION = 0.4f;
 
-        public Input(IInputContextProvider contextProvider)
+        public InputManager(IInputContextProvider contextProvider)
         {
             contextProvider.InputUpdate += InputUpdate;
         }
@@ -160,27 +155,27 @@ namespace CruZ.GameSystem
         public bool IsMouseJustDown(MouseKey key)
         {
             return
-                Input.GetMouseState(CurMouse, key) == ButtonState.Pressed &&
-                Input.GetMouseState(PreMouse, key) == ButtonState.Released;
+                InputManager.GetMouseState(CurMouse, key) == ButtonState.Pressed &&
+                InputManager.GetMouseState(PreMouse, key) == ButtonState.Released;
         }
 
         public bool IsMouseJustUp(MouseKey key)
         {
             return
-                Input.GetMouseState(PreMouse, key) == ButtonState.Pressed &&
-                Input.GetMouseState(CurMouse, key) == ButtonState.Released;
+                InputManager.GetMouseState(PreMouse, key) == ButtonState.Pressed &&
+                InputManager.GetMouseState(CurMouse, key) == ButtonState.Released;
         }
 
         public bool IsMouseHeldDown(MouseKey key)
         {
             return
-                Input.GetMouseState(CurMouse, key) == ButtonState.Pressed;
+                InputManager.GetMouseState(CurMouse, key) == ButtonState.Pressed;
         }
 
         public bool IsMouseHeldUp(MouseKey key)
         {
             return
-                Input.GetMouseState(CurMouse, key) == ButtonState.Released;
+                InputManager.GetMouseState(CurMouse, key) == ButtonState.Released;
         }
     }
 

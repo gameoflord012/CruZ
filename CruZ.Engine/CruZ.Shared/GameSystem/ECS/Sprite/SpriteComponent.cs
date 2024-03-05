@@ -1,21 +1,18 @@
-﻿using CruZ.Resource;
-using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework.Graphics;
 using Newtonsoft.Json;
 using System;
 using System.Diagnostics;
 using Microsoft.Xna.Framework;
 using System.ComponentModel;
-using CruZ.Editor.Winform.Ultility;
-using CruZ.Editor.Utility;
-
-
-
+using CruZ.Common.Resource;
 
 #if CRUZ_EDITOR
+using CruZ.Editor.Utility;
+using CruZ.Editor.Winform.Ultility;
 using System.Drawing.Design;
 #endif
 
-namespace CruZ.ECS
+namespace CruZ.Common.ECS
 {
     #region EventArgs
     public class DrawLoopBeginEventArgs : EventArgs
@@ -41,7 +38,7 @@ namespace CruZ.ECS
             return rect;
         }
 
-        public CruZ.DataType.Vector3 GetWorldOrigin()
+        public DataType.Vector3 GetWorldOrigin()
         {
             var worldBounds = GetWorldBounds();
             return new(

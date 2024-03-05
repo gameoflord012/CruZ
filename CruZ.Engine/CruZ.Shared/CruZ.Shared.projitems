@@ -6,7 +6,7 @@
     <SharedGUID>6efba8a9-a407-4029-bdd0-651d22a87386</SharedGUID>
   </PropertyGroup>
   <PropertyGroup Label="Configuration">
-    <Import_RootNamespace>CruZ</Import_RootNamespace>
+    <Import_RootNamespace>CruZ.Common</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
     <MonoGameContentReference Include="$(MSBuildThisFileDirectory)Content\Content.mgcb" />
@@ -17,20 +17,16 @@
     <Compile Include="$(MSBuildThisFileDirectory)GameConstants.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)GameSystem\ECS\Animation\AnimationComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)GameSystem\ECS\ComponentCollection.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)GameSystem\ECS\ComponentHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utility\ComponentHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)GameSystem\ECS\Component.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)GameSystem\Camera.Static.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)GameSystem\ECS\Light\LighComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)GameSystem\ECS\Script\EntityScript.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)GameSystem\ECS\IECSContextProvider.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)GameSystem\Input\IDraggable.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)GameSystem\Input\Input.Static.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)GameSystem\ECS\Transform\TransformEntity.Disposable.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)GameSystem\Resource\GuidManager.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)GameSystem\Resource\ICheckResourcePath.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)GameSystem\Resource\NonContextResourcePath.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)GameSystem\Resource\ResourceInfo.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)GameSystem\Resource\ResourcePath.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)GameSystem\Scene\GameScene.Disposable.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utility\Helper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)GameSystem\Scene\RuntimeSceneMethodAttribute.cs" />
@@ -47,7 +43,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)GameSystem\ECS\ECS.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)GameSystem\ECS\EntityExtension.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)GameSystem\ECS\ECS.Static.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)GameSystem\Serialization\GlobalSerializer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)GameSystem\Serialization\Serializer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)GameSystem\Serialization\TextureAtlasJsonConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DataType\Vector3.cs" />
@@ -65,13 +60,10 @@
     <Compile Include="$(MSBuildThisFileDirectory)GameSystem\Scene\GameScene.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)GameSystem\ECS\Animation\AnimatedSystem.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)GameSystem\PhysicSystem.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)GameSystem\Serialization\ISerializable.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)GameSystem\Serialization\ICustomSerializable.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)GameSystem\Serialization\SerializableJsonConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)GameSystem\ECS\Sprite\SpriteComponent.Serialization.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)GameSystem\ECS\Transform\TransformEntity.Serialization.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)GameSystem\Serialization\TransformEntityCreationConverter.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)GameSystem\Serialization\TransformEntityJsonConverter.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)GameSystem\Serialization\TransformJsonConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)GameSystem\ECS\Sprite\RenderSystem.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utility\PathHelper.cs" />
   </ItemGroup>

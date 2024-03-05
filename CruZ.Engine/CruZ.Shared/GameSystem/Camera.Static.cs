@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace CruZ.GameSystem
+namespace CruZ.Common
 {
     public partial class Camera
     {

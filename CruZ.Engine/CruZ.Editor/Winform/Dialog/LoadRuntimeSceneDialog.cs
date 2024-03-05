@@ -1,4 +1,5 @@
-﻿using CruZ.Scene;
+﻿using CruZ.Common.Scene;
+using CruZ.Scene;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;

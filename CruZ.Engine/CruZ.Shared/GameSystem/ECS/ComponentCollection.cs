@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace CruZ.ECS
+namespace CruZ.Common.ECS
 {
     public class ComponentCollection
     {

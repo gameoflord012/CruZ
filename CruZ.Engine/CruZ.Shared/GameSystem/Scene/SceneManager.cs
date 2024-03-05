@@ -1,11 +1,9 @@
-﻿using CruZ.Exception;
-using CruZ.Resource;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace CruZ.Scene
+namespace CruZ.Common.Scene
 {
     public static partial class SceneManager
     {

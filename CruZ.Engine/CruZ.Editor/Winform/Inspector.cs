@@ -1,6 +1,6 @@
-﻿using Assimp;
-
-using CruZ.ECS;
+﻿using CruZ.Common;
+using CruZ.Common.ECS;
+using CruZ.Common.Scene;
 using CruZ.Editor.Controls;
 using CruZ.Editor.Service;
 using CruZ.Editor.Utility;
@@ -9,9 +9,6 @@ using CruZ.Editor.Winform.Ultility;
 using Microsoft.Xna.Framework;
 
 using System;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Drawing.Design;
 using System.Linq;
 using System.Windows.Forms;
 

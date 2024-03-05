@@ -1,4 +1,4 @@
-﻿using CruZ.Utility;
+﻿using CruZ.Common.Utility;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -6,7 +6,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Text;
 
-namespace CruZ.Serialization
+namespace CruZ.Common.Serialization
 {
     public class Serializer
     {

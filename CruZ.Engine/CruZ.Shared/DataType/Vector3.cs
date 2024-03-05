@@ -1,4 +1,4 @@
-﻿namespace CruZ.DataType
+﻿namespace CruZ.Common.DataType
 {
 #if CRUZ_EDITOR
     [global::System.ComponentModel.TypeConverterAttribute(typeof(CruZ.Editor.Utility.Vector3TypeConverter))]

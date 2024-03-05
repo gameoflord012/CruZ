@@ -1,4 +1,6 @@
-﻿using CruZ.GameSystem;
+﻿
+using CruZ.Common.Input;
+
 using Microsoft.Xna.Framework;
 using MonoGame.Extended;
 using System;
@@ -6,7 +8,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using Draw = System.Drawing;
 
-namespace CruZ.UI
+namespace CruZ.Common.UI
 {
     public partial class UIControl : IDisposable
     {

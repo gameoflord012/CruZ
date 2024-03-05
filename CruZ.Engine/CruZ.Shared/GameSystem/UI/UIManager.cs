@@ -1,10 +1,12 @@
-﻿using CruZ.GameSystem;
+﻿
+using CruZ.Common.Input;
+
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 
-namespace CruZ.UI
+namespace CruZ.Common.UI
 {
     public interface UIContext
     {
@@ -88,7 +90,7 @@ namespace CruZ.UI
             UIInfo info = new();
             
             info.GameTime = gameTime;
-            info.InputInfo = Input.Info;
+            info.InputInfo = InputManager.Info;
             info.SpriteBatch = _spriteBatch;
 
             return info;

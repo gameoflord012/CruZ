@@ -1,4 +1,4 @@
-﻿namespace CruZ.Scene
+﻿namespace CruZ.Common.Scene
 {
     [global::System.AttributeUsageAttribute(global::System.AttributeTargets.Class, Inherited = false, AllowMultiple = false)]
     public class SceneAssetClassAttribute

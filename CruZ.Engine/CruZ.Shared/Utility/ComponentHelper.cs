@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
 
-namespace CruZ.Utility
+namespace CruZ.Common.Utility
 {
     public class ComponentHelper
     {

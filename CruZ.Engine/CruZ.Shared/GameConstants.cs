@@ -1,4 +1,4 @@
-﻿namespace CruZ
+﻿namespace CruZ.Common
 {
     public static class GameConstants
     {

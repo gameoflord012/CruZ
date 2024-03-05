@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace CruZ.Exception;
+namespace CruZ.Common;
 
 [global::System.SerializableAttribute]
 public class LoadResourceFailedException : global::System.Exception

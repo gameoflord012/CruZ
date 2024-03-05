@@ -1,6 +1,6 @@
 using System;
 
-using CruZ.Resource;
+using CruZ.Common.Resource;
 
 using Microsoft.Xna.Framework.Graphics;
 
@@ -8,7 +8,7 @@ using MonoGame.Extended.TextureAtlases;
 
 using Newtonsoft.Json;
 
-namespace CruZ.Serialization
+namespace CruZ.Common.Serialization
 {
     public class TextureAtlasJsonConverter : JsonConverter
     {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 
-namespace CruZ.ECS
+namespace CruZ.Common.ECS
 {
     public abstract class Component
     {

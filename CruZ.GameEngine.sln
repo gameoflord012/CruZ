@@ -51,6 +51,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CruZ.Experiment", "CruZ.Eng
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MonoGame.Effect.Compiler", "ThirdParty\MonoGameModified\Tools\MonoGame.Effect.Compiler\MonoGame.Effect.Compiler.csproj", "{EFF22F07-13A0-4570-B879-6F981C15EE31}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CruZ.Common", "CruZ.Engine\CruZ.Common\CruZ.Common.csproj", "{C7FEB106-63FA-4CD7-8FF1-296C85DDEC95}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -241,6 +243,18 @@ Global
 		{EFF22F07-13A0-4570-B879-6F981C15EE31}.Release|x64.Build.0 = Release|Any CPU
 		{EFF22F07-13A0-4570-B879-6F981C15EE31}.Release|x86.ActiveCfg = Release|Any CPU
 		{EFF22F07-13A0-4570-B879-6F981C15EE31}.Release|x86.Build.0 = Release|Any CPU
+		{C7FEB106-63FA-4CD7-8FF1-296C85DDEC95}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C7FEB106-63FA-4CD7-8FF1-296C85DDEC95}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C7FEB106-63FA-4CD7-8FF1-296C85DDEC95}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{C7FEB106-63FA-4CD7-8FF1-296C85DDEC95}.Debug|x64.Build.0 = Debug|Any CPU
+		{C7FEB106-63FA-4CD7-8FF1-296C85DDEC95}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{C7FEB106-63FA-4CD7-8FF1-296C85DDEC95}.Debug|x86.Build.0 = Debug|Any CPU
+		{C7FEB106-63FA-4CD7-8FF1-296C85DDEC95}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C7FEB106-63FA-4CD7-8FF1-296C85DDEC95}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C7FEB106-63FA-4CD7-8FF1-296C85DDEC95}.Release|x64.ActiveCfg = Release|Any CPU
+		{C7FEB106-63FA-4CD7-8FF1-296C85DDEC95}.Release|x64.Build.0 = Release|Any CPU
+		{C7FEB106-63FA-4CD7-8FF1-296C85DDEC95}.Release|x86.ActiveCfg = Release|Any CPU
+		{C7FEB106-63FA-4CD7-8FF1-296C85DDEC95}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -263,6 +277,7 @@ Global
 		{D6B5D2D7-0449-420C-9C2E-4345FBC31BAF} = {06F0198E-A6EA-4165-9D3B-38A6B36D6687}
 		{6B9ECC4B-78BF-4C12-9C92-5A0BC1EDCECD} = {D6B5D2D7-0449-420C-9C2E-4345FBC31BAF}
 		{EFF22F07-13A0-4570-B879-6F981C15EE31} = {F67C7BE7-F474-4B9B-A17F-1AAAF5D564F4}
+		{C7FEB106-63FA-4CD7-8FF1-296C85DDEC95} = {06F0198E-A6EA-4165-9D3B-38A6B36D6687}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7F9F8BC8-0847-4E84-9AA8-0677A7EED2BA}

@@ -4,7 +4,6 @@ using System.Drawing.Design;
 using System.Windows.Forms;
 
 using CruZ.Editor.Global;
-using CruZ.Resource;
 
 namespace CruZ.Editor.Winform.Ultility
 {

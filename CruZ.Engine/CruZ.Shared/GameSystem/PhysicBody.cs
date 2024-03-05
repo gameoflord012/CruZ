@@ -5,7 +5,7 @@
 //using Box2D.NetStandard.Dynamics.World;
 //using CruZ.GameSystem;
 
-//namespace CruZ.ECS
+//namespace CruZ.ECSManager
 //{
 //    class PhysicBody
 //    {

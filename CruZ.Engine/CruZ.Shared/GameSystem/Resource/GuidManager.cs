@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-using CruZ.Exception;
-
-namespace CruZ.Resource
+namespace CruZ.Common.Resource
 {
     interface IGuidValueProcessor<T>
     {

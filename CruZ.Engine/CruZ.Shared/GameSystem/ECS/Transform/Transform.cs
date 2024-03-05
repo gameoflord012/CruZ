@@ -5,9 +5,9 @@ using Newtonsoft.Json;
 using System;
 using System.ComponentModel;
 
-namespace CruZ.ECS
+namespace CruZ.Common.ECS
 {
-    using CruZ.DataType;
+    using DataType;
 
     public class TransformEventArgs : EventArgs
     {

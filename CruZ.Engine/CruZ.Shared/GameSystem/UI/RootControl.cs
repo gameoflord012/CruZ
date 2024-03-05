@@ -1,4 +1,4 @@
-﻿namespace CruZ.UI
+﻿namespace CruZ.Common.UI
 {
     public class RootControl : UIControl
     {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 using Microsoft.Xna.Framework;
 
-namespace CruZ.ECS
+namespace CruZ.Common.ECS
 {
     class LightComponent : Component
     {

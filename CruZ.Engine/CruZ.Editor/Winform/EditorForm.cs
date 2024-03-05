@@ -1,9 +1,9 @@
-﻿using CruZ.Editor.Controls;
+﻿using CruZ.Common;
+using CruZ.Editor.Controls;
 using CruZ.Editor.Global;
 using CruZ.Editor.Properties;
 using CruZ.Editor.Service;
 using CruZ.Editor.Utility;
-using CruZ.Exception;
 
 using System;
 using System.Linq;

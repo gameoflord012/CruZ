@@ -1,14 +1,14 @@
-﻿using CruZ.ECS;
-using CruZ.Resource;
-using CruZ.Serialization;
-using CruZ.GameSystem;
+﻿using CruZ.Common.ECS;
+using CruZ.Common.Resource;
+using CruZ.Common.Serialization;
+
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Serialization;
+
 using System;
 using System.Collections.Generic;
 
-namespace CruZ
+namespace CruZ.Common.Scene
 {
     public partial class GameScene : IHostResource, ICustomSerializable
     {
@@ -60,7 +60,7 @@ namespace CruZ
 
         public TransformEntity CreateEntity(string name = "New Entity")
         {
-            var e = GameSystem.ECS.CreateEntity();
+            var e = ECSManager.CreateEntity();
             e.Name = name;
             AddEntity(e);
 

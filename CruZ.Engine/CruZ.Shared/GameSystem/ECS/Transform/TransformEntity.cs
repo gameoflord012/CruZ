@@ -1,5 +1,5 @@
-﻿using CruZ.Utility;
-using CruZ.DataType;
+﻿using CruZ.Common.Utility;
+using CruZ.Common.DataType;
 
 using MonoGame.Extended.Entities;
 
@@ -10,7 +10,7 @@ using System.Diagnostics;
 using System.Linq;
 
 
-namespace CruZ.ECS
+namespace CruZ.Common.ECS
 {
     public partial class TransformEntity : IEquatable<TransformEntity>
     {
@@ -126,9 +126,9 @@ namespace CruZ.ECS
         Dictionary<Type, Component>     _tyToComp = new();
         string                          _name = "";
 
-        //private static ECS CreateInstanceFrom(Type ty)
+        //private static ECSManager CreateInstanceFrom(Type ty)
         //{
-        //    return (ECS)PropertyHelper.GetUnitializeObject(ty);
+        //    return (ECSManager)PropertyHelper.GetUnitializeObject(ty);
         //}
 
         public static TransformEntity GetEntity(object component)

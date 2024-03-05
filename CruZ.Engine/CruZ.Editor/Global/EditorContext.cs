@@ -1,8 +1,8 @@
 ﻿using System;
-using System.ComponentModel.Design;
 using System.IO;
 
-using CruZ.Resource;
+using CruZ.Common;
+using CruZ.Common.Resource;
 
 namespace CruZ.Editor.Global
 {

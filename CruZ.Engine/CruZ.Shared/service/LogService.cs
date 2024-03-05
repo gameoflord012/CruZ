@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-using CruZ.Utility;
+using CruZ.Common.Utility;
 
-namespace CruZ.Service
+namespace CruZ.Common.Service
 {
     public class LogService
     {

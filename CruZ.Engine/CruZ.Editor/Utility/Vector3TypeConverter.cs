@@ -5,7 +5,7 @@ using System.Globalization;
 
 namespace CruZ.Editor.Utility
 {
-    using CruZ.DataType;
+    using Common.DataType;
     /// <summary>
     /// Convert Vector3 into string
     /// </summary>

@@ -1,13 +1,13 @@
-﻿using CruZ.Serialization;
-using CruZ.GameSystem;
+﻿using CruZ.Common.Serialization;
+
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Reflection;
 
-namespace CruZ.ECS
+namespace CruZ.Common.ECS
 {
-    using CruZ.DataType;
+    using DataType;
 
     public partial class TransformEntity : ICustomSerializable
     {
@@ -15,7 +15,7 @@ namespace CruZ.ECS
 
         public object ReadJson(JsonReader reader, JsonSerializer serializer)
         {
-            var value = GameSystem.ECS.CreateEntity();
+            var value = ECSManager.CreateEntity();
 
             JObject jObject;
 

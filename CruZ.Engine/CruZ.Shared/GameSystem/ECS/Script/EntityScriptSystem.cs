@@ -1,10 +1,9 @@
-﻿using CruZ.ECS;
-using CruZ.Utility;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
+
 using MonoGame.Extended.Entities;
 using MonoGame.Extended.Entities.Systems;
 
-namespace CruZ.GameSystem
+namespace CruZ.Common.ECS
 {
     public class EntityScriptSystem : EntitySystem, IUpdateSystem, IDrawSystem
     {

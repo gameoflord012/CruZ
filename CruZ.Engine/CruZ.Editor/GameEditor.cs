@@ -1,14 +1,12 @@
-﻿using CruZ.ECS;
+﻿using CruZ.Common.ECS;
 using CruZ.Editor.Global;
 using CruZ.Editor.Service;
 using CruZ.Editor.Utility;
-using CruZ.Exception;
-using CruZ.Resource;
-using CruZ.Scene;
-using CruZ.Service;
-using CruZ.GameSystem;
-using CruZ.UI;
-using CruZ.DataType;
+using CruZ.Common.Resource;
+using CruZ.Common.Scene;
+using CruZ.Common.Service;
+using CruZ.Common.UI;
+using CruZ.Common.DataType;
 
 using Microsoft.Xna.Framework.Graphics;
 
@@ -19,6 +17,8 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using CruZ.Editor.UI;
+using CruZ.Common;
+using CruZ.Common.Input;
 
 
 namespace CruZ.Editor.Controls
@@ -41,10 +41,10 @@ namespace CruZ.Editor.Controls
             _cacheService = new CacheService(Path.Combine(EditorContext.UserProfileDir, "caches\\"));
             _userResource = EditorContext.UserResource;
 
-            Input.MouseScrolled += Input_MouseScroll;
-            Input.MouseMoved += Input_MouseMove;
-            Input.MouseStateChanged += Input_MouseStateChanged;
-            Input.KeyStateChanged += Input_KeyStateChanged;
+            InputManager.MouseScrolled += Input_MouseScroll;
+            InputManager.MouseMoved += Input_MouseMove;
+            InputManager.MouseStateChanged += Input_MouseStateChanged;
+            InputManager.KeyStateChanged += Input_KeyStateChanged;
             UIManager.MouseClick += UI_MouseClick;
         }
 

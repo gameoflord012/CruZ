@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace CruZ
+namespace CruZ.Common
 {
     using Microsoft.Xna.Framework;
 

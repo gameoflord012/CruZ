@@ -1,12 +1,12 @@
-﻿using CruZ.Utility;
+﻿using CruZ.Common.Utility;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Drawing;
 using System.Numerics;
 
-namespace CruZ.GameSystem
+namespace CruZ.Common
 {
-    using CruZ.DataType;
+    using DataType;
 
     public partial class Camera
     {

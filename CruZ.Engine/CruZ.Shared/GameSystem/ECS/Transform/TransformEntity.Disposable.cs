@@ -1,9 +1,6 @@
-﻿using CruZ.ECS;
-using CruZ.GameSystem;
-using MonoGame.Extended.Entities;
-using System;
+﻿using System;
 
-namespace CruZ.ECS
+namespace CruZ.Common.ECS
 {
     public partial class TransformEntity : IDisposable
     {
@@ -15,7 +12,7 @@ namespace CruZ.ECS
         private void RemoveFromWorld()
         {
             SetIsActive(false);
-            GameSystem.ECS.Destroy(_entity);
+            ECSManager.Destroy(_entity);
             RemoveFromWorldEvent?.Invoke(this, EventArgs.Empty);
         }
     }

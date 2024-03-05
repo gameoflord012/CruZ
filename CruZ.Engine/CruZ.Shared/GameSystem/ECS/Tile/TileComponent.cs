@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.Numerics;
 
-namespace CruZ.ECS
+namespace CruZ.Common.ECS
 {
     public class TileComponent : Component
     {

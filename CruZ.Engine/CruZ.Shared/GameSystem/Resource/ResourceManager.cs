@@ -1,7 +1,5 @@
-﻿using CruZ.Exception;
-using CruZ.Serialization;
-using CruZ.Service;
-using CruZ.Utility;
+﻿using CruZ.Common.Serialization;
+using CruZ.Common.Service;
 
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -13,12 +11,11 @@ using Newtonsoft.Json.Linq;
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 
-namespace CruZ.Resource
+namespace CruZ.Common.Resource
 {
     public class ResourceManager : ICustomSerializable, IGuidValueProcessor<string>
     {

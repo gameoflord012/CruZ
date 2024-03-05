@@ -1,8 +1,8 @@
 ﻿using System;
 
-using CruZ.Resource;
+using CruZ.Common.Resource;
 
-namespace CruZ
+namespace CruZ.Common
 {
     public static class GameContext
     {

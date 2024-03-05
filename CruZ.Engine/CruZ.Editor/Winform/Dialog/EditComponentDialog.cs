@@ -1,7 +1,7 @@
-﻿using CruZ.ECS;
-using CruZ.Editor.Controls;
+﻿using CruZ.Common.ECS;
 using CruZ.Editor.Service;
-using CruZ.Utility;
+using CruZ.Common.Utility;
+using CruZ.Common;
 
 using System;
 using System.Linq;

@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using System;
 
-namespace CruZ.GameSystem
+namespace CruZ.Common.ECS
 {
     public interface IECSContextProvider
     {

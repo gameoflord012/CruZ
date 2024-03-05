@@ -1,13 +1,10 @@
-﻿using MonoGame.Extended.Entities;
-using System.Collections.Generic;
-using System;
-using System.Diagnostics;
-using Microsoft.Xna.Framework;
-using CruZ.Serialization;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+﻿using System;
 
-namespace CruZ.ECS
+using Microsoft.Xna.Framework;
+
+using Newtonsoft.Json;
+
+namespace CruZ.Common.ECS
 {
     public class EntityScript : Component
     {

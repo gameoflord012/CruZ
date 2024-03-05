@@ -1,5 +1,5 @@
 ﻿//using Box2D.NetStandard.Dynamics.World;
-//using CruZ.ECS;
+//using CruZ.ECSManager;
 //using Microsoft.Xna.Framework;
 //using MonoGame.Extended.Entities;
 //using MonoGame.Extended.Entities.GameSystem;

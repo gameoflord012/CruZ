@@ -1,6 +1,6 @@
-﻿using CruZ.Service;
-using CruZ.GameSystem;
-using CruZ.UI;
+﻿using CruZ.Common.Service;
+
+using CruZ.Common.UI;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
@@ -10,8 +10,11 @@ using MonoGame.Extended;
 
 using System;
 using System.Collections.Generic;
+using CruZ.Common.Scene;
+using CruZ.Common.ECS;
+using CruZ.Common.Input;
 
-namespace CruZ
+namespace CruZ.Common
 {
     public partial class GameApplication :
         IECSContextProvider, IInputContextProvider, UIContext, IDisposable
@@ -58,8 +61,8 @@ namespace CruZ
             _core.ExitEvent += InternalExit;
             _core.Window.ClientSizeChanged += Window_ClientSizeChanged;
 
-            GameSystem.ECS.CreateContext(this);
-            Input.CreateContext(this);
+            ECSManager.CreateContext(this);
+            InputManager.CreateContext(this);
             UIManager.CreateContext(this);
         }
 

@@ -1,12 +1,12 @@
-﻿using CruZ.ECS;
-using CruZ.Utility;
+﻿using CruZ.Common.ECS;
+
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+
 using MonoGame.Extended.Entities;
 using MonoGame.Extended.Entities.Systems;
-using System;
 
-namespace CruZ.GameSystem
+namespace CruZ.Common.ECS
 {
     class AnimatedSystem : EntitySystem, IUpdateSystem
     {

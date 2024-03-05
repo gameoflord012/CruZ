@@ -3,7 +3,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 
-namespace CruZ.Serialization
+namespace CruZ.Common.Serialization
 {
     public interface ICustomSerializable
     {

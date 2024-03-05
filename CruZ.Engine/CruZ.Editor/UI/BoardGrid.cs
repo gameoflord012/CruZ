@@ -1,7 +1,7 @@
 ﻿using CruZ.Editor.Global;
-using CruZ.GameSystem;
-using CruZ.UI;
-using CruZ.Utility;
+using CruZ.Common.UI;
+using CruZ.Common.Utility;
+using CruZ.Common;
 
 using Microsoft.Xna.Framework.Graphics;
 
@@ -12,7 +12,7 @@ using System.Drawing;
 
 namespace CruZ.Editor.UI
 {
-    using CruZ.DataType;
+    using Common.DataType;
 
     public class BoardGrid : UIControl
     {

@@ -1,4 +1,4 @@
-﻿using CruZ.ECS;
+﻿using CruZ.Common.ECS;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -9,7 +9,7 @@ using MonoGame.Extended.Entities.Systems;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace CruZ.GameSystem
+namespace CruZ.Common.ECS
 {
     internal class RenderSystem : EntitySystem, IUpdateSystem, IDrawSystem
     {

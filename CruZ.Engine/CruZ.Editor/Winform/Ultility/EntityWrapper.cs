@@ -1,9 +1,8 @@
-﻿using CruZ.ECS;
-
-using System.ComponentModel;
+﻿using System.ComponentModel;
 
 namespace CruZ.Editor.Winform.Ultility
 {
+    using Common.ECS;
     public class EntityWrapper
     {
         [TypeConverter(typeof(ExpandableObjectConverter))]
@@ -26,11 +25,11 @@ namespace CruZ.Editor.Winform.Ultility
     [TypeConverter(typeof(ComponentsTypeConverter))]
     public class ComponentsWrapper
     {
-        public ComponentsWrapper(ECS.Component[] comps)
+        public ComponentsWrapper(Component[] comps)
         {
             Components = comps;
         }
 
-        public ECS.Component[] Components { get; set; }
+        public Component[] Components { get; set; }
     }
 }

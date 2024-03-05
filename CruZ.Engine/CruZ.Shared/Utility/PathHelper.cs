@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace CruZ.Utility
+namespace CruZ.Common.Utility
 {
     class PathHelper
     {

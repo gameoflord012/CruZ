@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace CruZ.Resource
+namespace CruZ.Common.Resource
 {
     public interface IHostResource
     {

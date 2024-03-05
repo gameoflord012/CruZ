@@ -1,17 +1,17 @@
-﻿using CruZ.ECS;
-using CruZ.Exception;
+﻿using CruZ.Common.ECS;
+
 using MonoGame.Extended.Entities;
 
-namespace CruZ.GameSystem
+namespace CruZ.Common.ECS
 {
-    public partial class ECS
+    public partial class ECSManager
     {
         public static void CreateContext(IECSContextProvider contextProvider)
         {
-            _instance = new ECS(contextProvider);
+            _instance = new ECSManager(contextProvider);
         }
 
-        private static ECS? _instance;
+        private static ECSManager? _instance;
 
         /// <summary>
         /// Not good idea to call this without proper memory manage

@@ -1,5 +1,5 @@
-﻿using CruZ.Resource;
-using CruZ.Serialization;
+﻿using CruZ.Common.Resource;
+using CruZ.Common.Serialization;
 
 using Microsoft.Xna.Framework;
 
@@ -12,7 +12,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 
-namespace CruZ.ECS
+namespace CruZ.Common.ECS
 {
     public class AnimationPlayer
     {

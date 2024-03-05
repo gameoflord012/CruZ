@@ -1,12 +1,12 @@
-﻿using CruZ.ECS;
+﻿using CruZ.Common.ECS;
 using Microsoft.Xna.Framework;
 using MonoGame.Extended.Entities;
 
-namespace CruZ.GameSystem
+namespace CruZ.Common.ECS
 {
-    public partial class ECS
+    public partial class ECSManager
     {
-        private ECS(IECSContextProvider contextProvider)
+        private ECSManager(IECSContextProvider contextProvider)
         {
             contextProvider.ECSDraw += Draw;
             contextProvider.ECSUpdate += Update;
