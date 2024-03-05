@@ -16,13 +16,13 @@ namespace CruZ.Common.Scene
         public event Action<TransformEntity>? EntityAdded;
         public event Action<TransformEntity>? EntityRemoved;
 
-        public string               Name = "";
+        public string Name = "";
 
         [JsonIgnore]
-        public TransformEntity[] Entities        { get => _entities.ToArray(); }
-        public ResourceInfo? ResourceInfo    { get; set; }
+        public TransformEntity[] Entities { get => _entities.ToArray(); }
+        public ResourceInfo? ResourceInfo { get; set; }
 
-        private GameScene(GameApplication gameApp) 
+        private GameScene(GameApplication gameApp)
         {
             _gameApp = gameApp;
             _gameApp.ExitEvent += Game_Exit;
@@ -39,7 +39,7 @@ namespace CruZ.Common.Scene
 
         public void RemoveEntity(TransformEntity e)
         {
-            if (!_entities.Contains(e)) 
+            if (!_entities.Contains(e))
                 throw new ArgumentException($"Entity \"{e}\" not in scene {this}");
 
             _entities.Remove(e);
@@ -103,10 +103,10 @@ namespace CruZ.Common.Scene
         bool _isActive = false;
 
         [JsonProperty]
-        List<TransformEntity>   _entities = [];
+        List<TransformEntity> _entities = [];
 
         [JsonIgnore]
-        GameApplication         _gameApp;
+        GameApplication _gameApp;
     }
 
     public partial class GameScene

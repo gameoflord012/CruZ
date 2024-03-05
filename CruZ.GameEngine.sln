@@ -47,8 +47,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Sandbox", "Sandbox", "{E7FC
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Game.AnimalGang.DesktopGL", "SandBox\AnimalGang\AnimalGang.DesktopGL\Game.AnimalGang.DesktopGL.csproj", "{2D70A313-7B5D-4E35-A85B-E92DD0D42E14}"
 EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "AnimalGang.Shared", "SandBox\AnimalGang\AnimalGang.Shared\AnimalGang.Shared.shproj", "{42E114A9-8162-4FC3-8301-3CB19FB37EAD}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -248,15 +246,12 @@ Global
 		{14C8E4DD-20CC-4623-BA2D-6B155DAB7BB2} = {06F0198E-A6EA-4165-9D3B-38A6B36D6687}
 		{072BC132-0DE5-4DCF-82A0-89DF60FB1356} = {06F0198E-A6EA-4165-9D3B-38A6B36D6687}
 		{2D70A313-7B5D-4E35-A85B-E92DD0D42E14} = {E7FCC9F8-FD83-4A1C-8405-604EBB242AFA}
-		{42E114A9-8162-4FC3-8301-3CB19FB37EAD} = {E7FCC9F8-FD83-4A1C-8405-604EBB242AFA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7F9F8BC8-0847-4E84-9AA8-0677A7EED2BA}
 	EndGlobalSection
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		CruZ\CruZ.Common\CruZ.Common.projitems*{072bc132-0de5-4dcf-82a0-89df60fb1356}*SharedItemsImports = 5
-		SandBox\AnimalGang\AnimalGang.Shared\AnimalGang.Shared.projitems*{2d70a313-7b5d-4e35-a85b-e92dd0d42e14}*SharedItemsImports = 5
-		SandBox\AnimalGang\AnimalGang.Shared\AnimalGang.Shared.projitems*{42e114a9-8162-4fc3-8301-3cb19fb37ead}*SharedItemsImports = 13
 		CruZ\CruZ.Common\CruZ.Common.projitems*{4cc136c0-6662-4e03-889e-01ff8e478ee1}*SharedItemsImports = 5
 		CruZ\CruZ.Common\CruZ.Common.projitems*{6dc908bf-b996-487d-adf3-619169507e6a}*SharedItemsImports = 13
 	EndGlobalSection

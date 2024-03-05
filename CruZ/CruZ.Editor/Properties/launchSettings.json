@@ -2,7 +2,7 @@
   "profiles": {
     "CruZ.Editor": {
       "commandName": "Project",
-      "commandLineArgs": "-rD:\\monogame-projects\\CruZ_GameEngine\\CruZ.Games\\AnimalGang\\AnimalGang.Shared"
+      "commandLineArgs": "-rD:\\monogame-projects\\CruZ_GameEngine\\SandBox\\AnimalGang\\AnimalGang.DesktopGL"
     }
   }
 }

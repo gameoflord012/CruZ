@@ -14,7 +14,6 @@ namespace AnimalGang
 
     using CruZ.Common.Input;
 
-
     public class MainCharacter : EntityScript
     {
         public float Speed { get => _speed; set => _speed = value; }

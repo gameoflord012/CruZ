@@ -9,19 +9,23 @@ namespace CruZ.Common.Scene
     {
         static SceneManager()
         {
-            Type[] types = Assembly.GetEntryAssembly().GetTypes();
+            Assembly platformAssembly = Assembly.LoadFrom("D:\\monogame-projects\\CruZ_GameEngine\\SandBox\\AnimalGang\\AnimalGang.DesktopGL\\bin\\Debug\\net8.0\\CruZ.DesktopGL.dll");
+            Assembly clientAssembly = Assembly.LoadFrom("D:\\monogame-projects\\CruZ_GameEngine\\SandBox\\AnimalGang\\AnimalGang.DesktopGL\\bin\\Debug\\net8.0\\Game.AnimalGang.DesktopGL.dll");
+            Type sceneAssetClassAttributeType = platformAssembly.GetType("CruZ.Common.Scene." + nameof(SceneAssetClassAttribute), true);
+            Type sceneAssetMethodAttributeType = platformAssembly.GetType("CruZ.Common.Scene." + nameof(SceneAssetMethodAttribute), true);
 
+            Type[] types = clientAssembly.GetTypes();
             var sceneClasses = types
-                .Where(type => Attribute.IsDefined(type, typeof(SceneAssetClassAttribute)));
+                .Where(type => Attribute.IsDefined(type, sceneAssetClassAttributeType));
 
             foreach (var clazz in sceneClasses)
             {
                 foreach (var method in clazz
                     .GetMethods()
-                    .Where(mt => Attribute.IsDefined(mt, typeof(SceneAssetMethodAttribute))))
+                    .Where(mt => Attribute.IsDefined(mt, sceneAssetMethodAttributeType)))
                 {
-                    var classAttribute = clazz.GetCustomAttribute(typeof(SceneAssetClassAttribute)) as SceneAssetClassAttribute;
-                    var methodAttribute = method.GetCustomAttribute(typeof(SceneAssetMethodAttribute)) as SceneAssetMethodAttribute;
+                    var classAttribute = clazz.GetCustomAttribute(sceneAssetClassAttributeType) as SceneAssetClassAttribute;
+                    var methodAttribute = method.GetCustomAttribute(sceneAssetMethodAttributeType) as SceneAssetMethodAttribute;
 
                     var sceneName = classAttribute.AssetClassId + "\\" +
 
