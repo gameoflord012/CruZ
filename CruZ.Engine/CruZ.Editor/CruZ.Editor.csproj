@@ -12,7 +12,7 @@
 	<PropertyGroup>
 		<DefineConstants>$(DefineConstants);CRUZ_EDITOR</DefineConstants>
 		<RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
-		<ApplicationIcon>res\Icon.ico</ApplicationIcon>
+		<ApplicationIcon>Resource\Icon.ico</ApplicationIcon>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
@@ -32,7 +32,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<Content Include="res\**">
+		<Content Include="Resource\**">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</Content>
 	</ItemGroup>

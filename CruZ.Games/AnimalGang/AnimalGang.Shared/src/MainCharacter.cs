@@ -1,14 +1,18 @@
-﻿using CruZ.Components;
-using CruZ.Systems;
+﻿using CruZ.ECS;
+using CruZ.GameSystem;
 using CruZ.Utility;
+
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+
 using MonoGame.Extended;
+
 using System;
-using System.Collections.Generic;
 
 namespace CruZ.Game.AnimalGang
 {
+    using CruZ.DataType;
+
     public class MainCharacter : EntityScript
     {
         public float Speed { get => _speed; set => _speed = value; }

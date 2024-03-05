@@ -1,7 +1,7 @@
-﻿using CruZ.Components;
+﻿using CruZ.ECS;
 using CruZ.Resource;
 using CruZ.Scene;
-using CruZ.Systems;
+using CruZ.GameSystem;
 using CruZ.Utility;
 using Microsoft.Xna.Framework;
 using System.Linq;

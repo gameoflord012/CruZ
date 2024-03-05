@@ -1,8 +1,8 @@
 ﻿using System.Resources;
 
-using CruZ.Components;
+using CruZ.ECS;
 using CruZ.Game.AnimalGang;
-using CruZ.Systems;
+using CruZ.GameSystem;
 
 namespace CruZ.Scene
 {
