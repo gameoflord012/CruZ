@@ -31,9 +31,7 @@ namespace CruZ.Editor.UI
             {
                 _sp = e.GetComponent<SpriteComponent>();
 
-                _sp.DrawLoopEnd += Sprite_DrawLoopEnd;
-                _sp.DrawBegin += Sprite_DrawBegin;
-                _sp.DrawEnd += Sprite_DrawEnd;
+                _sp.BoundingBoxChanged += Sprite_BoundingBoxChanged;
             }
 
             _initialBackgroundCol = BackgroundColor;
@@ -59,16 +57,12 @@ namespace CruZ.Editor.UI
         {
             base.OnDraw(args);
 
-            if (_hasRenderBound)
+            foreach (var origin in _points)
             {
-                // InternalDraw sprite origin
-                foreach (var origin in _origins)
-                {
-                    var screen = Camera.Main.CoordinateToPoint(origin);
+                var screen = Camera.Main.CoordinateToPoint(origin);
 
-                    args.SpriteBatch.DrawCircle(new(screen.X, screen.Y),
-                        EditorConstants.CENTER_CIRCLE_SIZE, 8, XNA.Color.Blue);
-                }
+                args.SpriteBatch.DrawCircle(new(screen.X, screen.Y),
+                    EditorConstants.CENTER_CIRCLE_SIZE, 8, XNA.Color.Blue);
             }
         }
 
@@ -81,33 +75,20 @@ namespace CruZ.Editor.UI
 
             BackgroundColor = _draggableToggle ? _draggableBackgroundCol : _initialBackgroundCol;
 
-            if (!_hasRenderBound)
+            if (_bounds.IsEmpty)
             {
                 var center = Camera.Main.CoordinateToPoint(_e.Transform.Position);
-
                 Width = MIN_BOUND_SIZE;
                 Height = MIN_BOUND_SIZE;
-
                 SetCenter(center);
+                return;
             }
         }
 
-        #region Sprites_Events
-        private void Sprite_DrawBegin()
+        private void Sprite_BoundingBoxChanged(BoundingBox bBox)
         {
-            _origins.Clear();
+            CalcControlBounds(bBox);
         }
-
-        private void Sprite_DrawEnd(DrawEndEventArgs args)
-        {
-            CalcControlBounds(args);
-        }
-
-        private void Sprite_DrawLoopEnd(object? sender, DrawLoopEndEventArgs args)
-        {
-            _origins.Add(args.BeginArgs.GetWorldOrigin());
-        }
-        #endregion
 
         private void Entity_OnRemoveFromWorld(object? sender, EventArgs e)
         {
@@ -119,12 +100,12 @@ namespace CruZ.Editor.UI
             comps.TryGetComponent(ref _sp);
         }
 
-        private void CalcControlBounds(DrawEndEventArgs args)
+        private void CalcControlBounds(BoundingBox bBox)
         {
-            _hasRenderBound = args.HasRenderBounds;
-            if (!_hasRenderBound) return;
+            if(bBox.IsEmpty()) return;
 
-            _bounds = args.RenderBounds;
+            _bounds = bBox.Bound;
+            _points = bBox.Points;
 
             Location = Camera.Main.CoordinateToPoint(new(_bounds.X, _bounds.Y));
 
@@ -187,11 +168,10 @@ namespace CruZ.Editor.UI
         TransformEntity _e;
         SpriteComponent? _sp;
         DRAW.RectangleF _bounds; //World bounds
-        bool _hasRenderBound;
 
         DRAW.Point _dragCenterOffset;
 
-        public List<Vector3> _origins = [];
+        public List<Vector3> _points = [];
 
         bool _dragging = false;
         bool _draggableToggle;

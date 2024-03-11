@@ -25,7 +25,7 @@ namespace CruZ.Common.ECS
             _lightMapper = mapperService.GetMapper<LightComponent>();
             _spriteBatch = GameApplication.GetSpriteBatch();
             _gd = GameApplication.GetGraphicsDevice();
-            _lightEffect = GameContext.GameResource.Load<Effect>("lightshader.fx");
+            _lightEffect = GameContext.GameResource.Load<Effect>("internal\\lightshader.fx");
         }
 
         public void Draw(GameTime gameTime)
@@ -68,7 +68,7 @@ namespace CruZ.Common.ECS
                 foreach (var light in lights
                     .Where(e => e.SortingLayers.Contains(sortingLayer)))
                 {
-                    light.InternalDraw(gameTime);
+                    light.InternalDraw(_spriteBatch, Camera.Main.ViewMatrix());
                 }
                 _spriteBatch.End();
             }

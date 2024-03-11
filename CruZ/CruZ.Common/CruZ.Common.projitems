@@ -58,6 +58,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Serialization\Serializer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Serialization\TextureAtlasJsonConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Service\LogService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UI\IHasBoundBox.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)UI\RootControl.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)UI\UIControl.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)UI\UIManager.cs" />

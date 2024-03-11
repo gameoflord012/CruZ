@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace CruZ.Common.ECS
 {
@@ -11,9 +12,9 @@ namespace CruZ.Common.ECS
 
         public List<int> SortingLayers { get; } = [];
 
-        internal void InternalDraw(GameTime gameTime)
+        internal void InternalDraw(SpriteBatch sp, Matrix view)
         {
-
+            
         }
     }
 }

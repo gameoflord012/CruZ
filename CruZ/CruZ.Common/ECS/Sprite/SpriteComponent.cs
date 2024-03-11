@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework;
 using System.ComponentModel;
 using CruZ.Common.GameSystem.Resource;
 using CruZ.Common.Resource;
+using CruZ.Common.UI;
 
 
 
@@ -57,26 +58,18 @@ namespace CruZ.Common.ECS
         public bool KeepDrawing = false;
         public DrawLoopBeginEventArgs BeginArgs;
     }
-
-    public class DrawEndEventArgs : EventArgs
-    {
-        public DRAW.RectangleF RenderBounds;
-        /// <summary>
-        /// To mark the RenderBounds property is valid to use in <see cref="DrawEndEventArgs"/>
-        /// </summary>
-        public bool HasRenderBounds = false;
-    }
     #endregion
 
     /// <summary>
     /// Game component loaded from specify resource
     /// </summary>
-    public partial class SpriteComponent : Component
+    public partial class SpriteComponent : Component, IHasBoundBox
     {
         public event EventHandler<DrawLoopBeginEventArgs>? DrawLoopBegin;
         public event EventHandler<DrawLoopEndEventArgs>? DrawLoopEnd;
         public event Action? DrawBegin;
-        public event Action<DrawEndEventArgs>? DrawEnd;
+        public event Action? DrawEnd;
+        public event Action<UI.BoundingBox> BoundingBoxChanged;
 
         #region Properties
         public float LayerDepth { get; set; } = 0;
@@ -108,6 +101,34 @@ namespace CruZ.Common.ECS
         public SpriteComponent()
         {
             _resource = GameContext.GameResource;
+
+            DrawBegin += () =>
+            {
+                _boundingBox.Points.Clear();
+                _hasBoundingBox = false;
+            };
+
+            DrawLoopEnd += (sender, args) => 
+            {
+                _boundingBox.Points.Add(args.BeginArgs.GetWorldOrigin());
+
+                if (!_hasBoundingBox)
+                {
+                    _boundingBox.Bound = args.BeginArgs.GetWorldBounds();
+                    _hasBoundingBox = true;
+                }
+                else
+                {
+                    var bounds = args.BeginArgs.GetWorldBounds();
+
+                    _boundingBox.Bound.X = MathF.Min(_boundingBox.Bound.X, bounds.X);
+                    _boundingBox.Bound.Y = MathF.Min(_boundingBox.Bound.Y, bounds.Y);
+                    _boundingBox.Bound.Width = _boundingBox.Bound.Right < bounds.Right ? bounds.Right - _boundingBox.Bound.X : _boundingBox.Bound.Width;
+                    _boundingBox.Bound.Height = _boundingBox.Bound.Bottom < bounds.Bottom ? bounds.Bottom - _boundingBox.Bound.Y : _boundingBox.Bound.Height;
+                }
+            };
+
+            DrawEnd += () => BoundingBoxChanged.Invoke(_hasBoundingBox ? _boundingBox : UI.BoundingBox.Default);
         }
 
         public void LoadTexture(string texturePath)
@@ -120,20 +141,25 @@ namespace CruZ.Common.ECS
                 {
                     Texture = _resource.Load<Texture2D>(_spriteResInfo);
                 }
-                catch(global::System.Exception e)
+                catch(Exception e)
                 {
                     throw new ArgumentException($"Failed to load texture with path \"{texturePath}\"", e);
                 }
             }
         }
 
+        public int CompareLayer(SpriteComponent other)
+        {
+            return SortingLayer == other.SortingLayer ?
+                CalculateLayerDepth().CompareTo(other.CalculateLayerDepth()) :
+                SortingLayer.CompareTo(other.SortingLayer);
+        }
+        
         internal virtual void InternalDraw(SpriteBatch spriteBatch, Matrix viewMatrix)
         {
             Trace.Assert(_e != null);
 
             DrawBegin?.Invoke();
-
-            DrawEndEventArgs drawEnd = new();
 
             while (true)
             {
@@ -178,21 +204,6 @@ namespace CruZ.Common.ECS
 
                     effects: Flip ? SpriteEffects.FlipHorizontally : SpriteEffects.None,
                     layerDepth: beginLoop.LayerDepth);
-
-                    if (!drawEnd.HasRenderBounds)
-                    {
-                        drawEnd.RenderBounds = beginLoop.GetWorldBounds();
-                        drawEnd.HasRenderBounds = true;
-                    }
-                    else
-                    {
-                        var bounds = beginLoop.GetWorldBounds();
-
-                        drawEnd.RenderBounds.X = MathF.Min(drawEnd.RenderBounds.X, bounds.X);
-                        drawEnd.RenderBounds.Y = MathF.Min(drawEnd.RenderBounds.Y, bounds.Y);
-                        drawEnd.RenderBounds.Width = drawEnd.RenderBounds.Right < bounds.Right ? bounds.Right - drawEnd.RenderBounds.X : drawEnd.RenderBounds.Width;
-                        drawEnd.RenderBounds.Height = drawEnd.RenderBounds.Bottom < bounds.Bottom ? bounds.Bottom - drawEnd.RenderBounds.Y : drawEnd.RenderBounds.Height;
-                    }
                 }
 
                 var endLoop = new DrawLoopEndEventArgs();
@@ -202,19 +213,12 @@ namespace CruZ.Common.ECS
                 if (!endLoop.KeepDrawing) break;
             }
 
-            DrawEnd?.Invoke(drawEnd);
+            DrawEnd?.Invoke();
         }
 
         protected override void OnAttached(TransformEntity entity)
         {
             _e = entity;
-        }
-
-        public int CompareLayer(SpriteComponent other)
-        {
-            return SortingLayer == other.SortingLayer ?
-                CalculateLayerDepth().CompareTo(other.CalculateLayerDepth()) :
-                SortingLayer.CompareTo(other.SortingLayer);
         }
 
         private float CalculateLayerDepth()
@@ -227,6 +231,7 @@ namespace CruZ.Common.ECS
         [JsonProperty]
         ResourceInfo? _spriteResInfo;
         ResourceManager _resource;
-
+        UI.BoundingBox _boundingBox = new();
+        bool _hasBoundingBox;
     }
 }
