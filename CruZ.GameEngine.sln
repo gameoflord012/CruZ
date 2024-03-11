@@ -252,7 +252,6 @@ Global
 	EndGlobalSection
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		CruZ\CruZ.Common\CruZ.Common.projitems*{072bc132-0de5-4dcf-82a0-89df60fb1356}*SharedItemsImports = 5
-		CruZ\CruZ.Common\CruZ.Common.projitems*{4cc136c0-6662-4e03-889e-01ff8e478ee1}*SharedItemsImports = 5
 		CruZ\CruZ.Common\CruZ.Common.projitems*{6dc908bf-b996-487d-adf3-619169507e6a}*SharedItemsImports = 13
 	EndGlobalSection
 EndGlobal

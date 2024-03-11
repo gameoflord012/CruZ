@@ -12,16 +12,15 @@ namespace CruZ.Editor
         [STAThread]
         public static void Main(string[] args)
         {
-            string userProjectDir = "";
             Parser.Default.ParseArguments<Options>(args)
             .WithParsed(o =>
             {
-                userProjectDir = o.ProjectRoot;
+                EditorContext.UserProjectDir = o.ProjectRoot;
+                EditorContext.UserProjectBinDir = o.ProjectBinary;
             });
 
-            EditorContext.UserProjectDir = userProjectDir;
             EditorContext.EditorResourceDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resource\\");
-            
+
             EditorForm.Run();
         }
 
@@ -29,6 +28,9 @@ namespace CruZ.Editor
         {
             [Option('r', "root", Required = true)]
             public string ProjectRoot { get; set; }
+
+            [Option('b', "binary", Required = true)]
+            public string ProjectBinary { get; set; }
         }
     }
 }

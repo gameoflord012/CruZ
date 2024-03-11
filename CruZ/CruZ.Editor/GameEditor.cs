@@ -19,6 +19,7 @@ using CruZ.Editor.UI;
 using CruZ.Common;
 using CruZ.Common.Input;
 using CruZ.Common.Resource;
+using CruZ.Editor.Scene;
 
 
 namespace CruZ.Editor.Controls

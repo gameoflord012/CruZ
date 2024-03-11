@@ -1,31 +1,44 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 
-namespace CruZ.Common.Scene
+using CruZ.Common;
+using CruZ.Common.Scene;
+using CruZ.Editor.Global;
+
+namespace CruZ.Editor.Scene
 {
-    public static partial class SceneManager
+    public static class SceneManager
     {
         static SceneManager()
         {
-            Assembly platformAssembly = Assembly.LoadFrom("D:\\monogame-projects\\CruZ_GameEngine\\SandBox\\AnimalGang\\AnimalGang.DesktopGL\\bin\\Debug\\net8.0\\CruZ.DesktopGL.dll");
-            Assembly clientAssembly = Assembly.LoadFrom("D:\\monogame-projects\\CruZ_GameEngine\\SandBox\\AnimalGang\\AnimalGang.DesktopGL\\bin\\Debug\\net8.0\\Game.AnimalGang.DesktopGL.dll");
-            Type sceneAssetClassAttributeType = platformAssembly.GetType("CruZ.Common.Scene." + nameof(SceneAssetClassAttribute), true);
-            Type sceneAssetMethodAttributeType = platformAssembly.GetType("CruZ.Common.Scene." + nameof(SceneAssetMethodAttribute), true);
+            Assembly userAssembly = EditorContext.UserProjectAssembly;
 
-            Type[] types = clientAssembly.GetTypes();
+            Type[] types;
+
+            try
+            {
+                types = userAssembly.GetTypes();
+            }
+            catch (ReflectionTypeLoadException e)
+            {
+
+                throw e;
+            }
+            
             var sceneClasses = types
-                .Where(type => Attribute.IsDefined(type, sceneAssetClassAttributeType));
+                .Where(type => Attribute.IsDefined(type, typeof(SceneAssetClassAttribute)));
 
             foreach (var clazz in sceneClasses)
             {
                 foreach (var method in clazz
                     .GetMethods()
-                    .Where(mt => Attribute.IsDefined(mt, sceneAssetMethodAttributeType)))
+                    .Where(mt => Attribute.IsDefined(mt, typeof(SceneAssetMethodAttribute))))
                 {
-                    var classAttribute = clazz.GetCustomAttribute(sceneAssetClassAttributeType) as SceneAssetClassAttribute;
-                    var methodAttribute = method.GetCustomAttribute(sceneAssetMethodAttributeType) as SceneAssetMethodAttribute;
+                    var classAttribute = clazz.GetCustomAttribute(typeof(SceneAssetClassAttribute)) as SceneAssetClassAttribute;
+                    var methodAttribute = method.GetCustomAttribute(typeof(SceneAssetMethodAttribute)) as SceneAssetMethodAttribute;
 
                     var sceneName = classAttribute.AssetClassId + "\\" +
 
@@ -37,7 +50,6 @@ namespace CruZ.Common.Scene
                     _sceneMethods[sceneName] = method;
                 }
             }
-
         }
 
         public static GameScene GetRuntimeScene(string sceneName)

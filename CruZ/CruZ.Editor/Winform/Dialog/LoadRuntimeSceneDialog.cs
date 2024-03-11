@@ -1,4 +1,4 @@
-﻿using CruZ.Common.Scene;
+﻿using CruZ.Editor.Scene;
 
 using System;
 using System.Windows.Forms;

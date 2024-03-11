@@ -53,7 +53,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Scene\GameScene.Disposable.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Scene\RuntimeSceneClassAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Scene\RuntimeSceneMethodAttribute.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Scene\SceneManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Serialization\ICustomSerializable.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Serialization\SerializableJsonConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Serialization\Serializer.cs" />
