@@ -225,7 +225,17 @@ namespace CruZ.Common.Resource
         private T LoadContent<T>(string resourcePath)
         {
             resourcePath = GetFormattedResourcePath(resourcePath);
-            var contentPath = ContentOutputDir + "\\" + _guidManager.GetGuid(resourcePath);
+            Guid resourceGuid;
+            try
+            {
+                resourceGuid = _guidManager.GetGuid(resourcePath);
+            }
+            catch (InvalidGuidValueException)
+            {
+                throw new ContentLoadException($"resource \"{resourcePath}\" is invalid or unimported");
+            }
+
+            var contentPath = ContentOutputDir + "\\" + resourceGuid;
 
             BuildContent(resourcePath, contentPath);
 

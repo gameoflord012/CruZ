@@ -24,7 +24,7 @@ namespace CruZ.Editor.Global
             {
                 if (_userProjectDir == value) return;
                 _userProjectDir = value;
-                GameContext.GameResourceDir = Path.Combine(_userProjectDir, "res\\");
+                GameContext.GameResourceDir = UserResourceDir;
             }
         }
 
