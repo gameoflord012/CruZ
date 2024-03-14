@@ -38,6 +38,7 @@ namespace AnimalGang
             dungeonFloor_sp.LoadTexture("tiles\\dungeon-floor");
 
             var dungeonWall = scene.CreateEntity();
+            dungeonWall.Name = "dungeonWall";
             dungeonWall.AddComponent(new SpriteComponent());
             dungeonWall.AddComponent(new TileComponent());
             var dungeonWall_sp = dungeonWall.GetComponent<SpriteComponent>();
@@ -95,10 +96,15 @@ namespace AnimalGang
             sp_mainChar.SortingLayer = 1;
             sp_mainChar.YLayerDepth = true;
 
-            var mainChar = scene.CreateEntity();
+            var mainChar = scene.CreateEntity("MainChar");
             mainChar.AddComponent(script_mainChar);
             mainChar.AddComponent(anims_mainChar);
             mainChar.AddComponent(sp_mainChar);
+            //
+            // Light
+            //
+            var light = scene.CreateEntity("Light");
+            light.AddComponent(new LightComponent());
 
             return scene;
         }

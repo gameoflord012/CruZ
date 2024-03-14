@@ -15,12 +15,14 @@ namespace CruZ.Common.ECS
 
         internal void InternalOnAttached(TransformEntity e)
         {
+            AttachedEntity = e;
             OnAttached(e);
             e.ComponentChanged += Entity_ComponentChanged;
         }
 
         internal void InternalOnDetached(TransformEntity e)
         {
+            AttachedEntity = null;
             OnDetached(e);
             e.ComponentChanged -= Entity_ComponentChanged;
         }
@@ -35,6 +37,6 @@ namespace CruZ.Common.ECS
             return GetType().Name;
         }
 
-        protected IServiceProvider _serviceProvider;
+        protected TransformEntity? AttachedEntity { get; private set; }
     }
 }

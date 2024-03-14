@@ -20,7 +20,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)ECS\ECS.Static.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ECS\EntityExtension.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ECS\IECSContextProvider.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)ECS\Light\LighComponent.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ECS\Light\LightComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ECS\Script\EntityScript.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ECS\Script\EntityScriptSystem.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ECS\Sprite\RenderSystem.cs" />

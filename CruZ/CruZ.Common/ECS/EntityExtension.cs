@@ -9,14 +9,16 @@ namespace CruZ.Common.ECS.Ultility
 {
     public static class EntityExtension
     {
-        public static IEnumerable<T> GetAllComponents<T>(this EntitySystem system, ComponentMapper<T> mapper) where T : class
+        public static List<T> GetAllComponents<T>(this EntitySystem system, ComponentMapper<T> mapper) where T : class
         {
+            List<T> comps = [];
             foreach (var e in system.GetActiveEntities())
             {
-                yield return mapper.Get(e);
+                var comp = mapper.Get(e);
+                if(comp != null) comps.Add(comp);
             }
 
-            yield break;
+            return comps;
         }
 
         public static void Attach(this Entity e, object component, Type ty)

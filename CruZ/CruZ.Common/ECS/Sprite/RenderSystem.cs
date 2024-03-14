@@ -31,7 +31,7 @@ namespace CruZ.Common.ECS
         public void Draw(GameTime gameTime)
         {
             List<SpriteComponent> sprites = GetSortedSpriteList();
-            List<LightComponent> lights = _lightMapper.Components.ToList();
+            List<LightComponent> lights = this.GetAllComponents(_lightMapper);
             List<int> sortingLayers = [];
 
             // process sprites
@@ -64,13 +64,11 @@ namespace CruZ.Common.ECS
                 #endregion
 
                 // render lights
-                _spriteBatch.Begin(effect: _lightEffect);
                 foreach (var light in lights
                     .Where(e => e.SortingLayers.Contains(sortingLayer)))
                 {
-                    light.InternalDraw(_spriteBatch, Camera.Main.ViewMatrix());
+                    light.InternalDraw(_spriteBatch, _lightEffect);
                 }
-                _spriteBatch.End();
             }
 
             // render all renderTargets to back buffer
