@@ -49,9 +49,9 @@ namespace CruZ.Common.ECS
                 #region Process Sprites
                 // render sprite
                 _spriteBatch.Begin(
-                            sortMode: SpriteSortMode.FrontToBack,
-                            transformMatrix: Camera.Main.ViewMatrix(),
-                            samplerState: SamplerState.PointClamp);
+                    sortMode: SpriteSortMode.FrontToBack,
+                    transformMatrix: Camera.Main.ViewMatrix(),
+                    samplerState: SamplerState.PointClamp);
                 do
                 {
                     sprites[i].InternalDraw(_spriteBatch, Camera.Main.ViewMatrix());

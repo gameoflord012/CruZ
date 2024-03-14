@@ -8,7 +8,6 @@ namespace CruZ.Common.ECS
         [Browsable(false)]
         public abstract Type ComponentType { get; }
 
-        protected virtual void Initialize() { }
         protected virtual void OnAttached(TransformEntity entity) { }
         protected virtual void OnDetached(TransformEntity entity) { }
         protected virtual void OnComponentChanged(ComponentCollection comps) { }

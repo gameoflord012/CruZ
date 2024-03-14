@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Resources;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -13,21 +12,25 @@ namespace CruZ.Common.ECS
 
         public List<int> SortingLayers { get; } = [];
 
-        protected override void Initialize()
+        public LightComponent()
         {
-            base.Initialize();
-
-            _lightMap = GameContext.GameResource.Load<Texture2D>("internal\\lightmap.png");
+            _lightMap = GameContext.GameResource.Load<Texture2D>("imgs\\homelander.jpg");
+            //_lightMap = GameContext.GameResource.Load<Texture2D>("internal\\lightmap.png");
         }
 
         internal void InternalDraw(SpriteBatch sp, Effect fx)
         {
-            Vector2 position = new(
-                AttachedEntity.Transform.Position.X, 
-                AttachedEntity.Transform.Position.Y);
+            //Vector2 position = new(
+            //    AttachedEntity.Transform.Position.X, 
+            //    AttachedEntity.Transform.Position.Y);
 
+            ////fx.Parameters["LightRadius"]?.SetValue(1f);
+
+            Matrix projection = Matrix.CreateOrthographicOffCenter(0, 200, 200, 0, 0, 1);
+
+            fx.Parameters["view_projection"].SetValue(projection);
             sp.Begin(effect: fx);
-            sp.Draw(_lightMap, position, Color.White);
+            sp.Draw(_lightMap, Vector2.Zero, Color.White);
             sp.End();
         }
 

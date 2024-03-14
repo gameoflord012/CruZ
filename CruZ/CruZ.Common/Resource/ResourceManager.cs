@@ -3,6 +3,7 @@ using CruZ.Common.Serialization;
 using CruZ.Common.Service;
 
 using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Content.Pipeline;
 using Microsoft.Xna.Framework.Graphics;
 
 using MonoGame.Framework.Content.Pipeline.Builder;
@@ -46,6 +47,8 @@ namespace CruZ.Common.Resource
             _pipelineManager.Platform = XNA.Content.Pipeline.TargetPlatform.DesktopGL;
 
             InitResourceDir();
+
+            SetProcessorParam(typeof(Effect), "DebugMode", "Auto");
             //_importer.EnableWatch();
         }
 
@@ -237,7 +240,7 @@ namespace CruZ.Common.Resource
 
             var contentPath = ContentOutputDir + "\\" + resourceGuid;
 
-            BuildContent(resourcePath, contentPath);
+            BuildContent(typeof(T), resourcePath, contentPath);
 
             try
             {
@@ -249,10 +252,10 @@ namespace CruZ.Common.Resource
             }
         }
 
-        private void BuildContent(string resourcePath, string? outputFilePath = null)
+        private void BuildContent(Type ty, string resourcePath, string? outputFilePath = null)
         {
             resourcePath = GetFormattedResourcePath(resourcePath);
-            _pipelineManager.BuildContent(resourcePath, outputFilePath);
+            _pipelineManager.BuildContent(resourcePath, outputFilePath, processorParameters: GetProcessorParam(ty));
         }
 
         private object LoadContentNonGeneric(string resourcePath, Type ty)
@@ -325,6 +328,19 @@ namespace CruZ.Common.Resource
             return Path.Combine(ContentOutputDir, _guidManager.GetGuid(rawResourcePath) + ".mgcontent");
         }
 
+        private void SetProcessorParam(Type ty, string key, string value)
+        {
+            var @params = GetProcessorParam(ty);
+            @params.Add(key, value);
+        }
+
+        private OpaqueDataDictionary GetProcessorParam(Type ty)
+        {
+            if (!_processorParams.ContainsKey(ty))
+                _processorParams[ty] = [];
+            return _processorParams[ty];
+        }
+
         /// <summary>
         /// Get .import file from normal file
         /// </summary>
@@ -345,6 +361,8 @@ namespace CruZ.Common.Resource
         string _resourceRoot = "res";
         string ContentOutputDir => $"{_resourceRoot}\\.content\\";
         PipelineManager _pipelineManager;
+
+        Dictionary<Type, OpaqueDataDictionary> _processorParams = [];
 
         private static readonly Type[] ContentSupportedTypes =
         {

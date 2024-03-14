@@ -104,7 +104,9 @@ namespace AnimalGang
             // Light
             //
             var light = scene.CreateEntity("Light");
-            light.AddComponent(new LightComponent());
+            var lightComp = new LightComponent();
+            lightComp.SortingLayers.Add(0);
+            light.AddComponent(lightComp);
 
             return scene;
         }

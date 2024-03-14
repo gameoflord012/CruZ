@@ -18,7 +18,7 @@ namespace CruZ.Experiment
             base.LoadContent();
 
             _lightTexture = Content.Load<Texture2D>("homelander");
-            _lightEffect = Content.Load<Effect>("shaders\\light-shader");
+            _lightEffect = Content.Load<Effect>("shaders\\7dac5bbe-d4ad-493f-a2d7-7f3a00c95863");
         }
 
         protected override void Initialize()
