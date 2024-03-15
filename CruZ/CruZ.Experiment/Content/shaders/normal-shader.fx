@@ -7,34 +7,42 @@
 #endif
 
 float4x4 view_projection;
+
 sampler TextureSampler : register(s0);
 
-struct VertexInput {
+struct VertexInput
+{
     float4 Position : POSITION0;
     float4 Color : COLOR0;
     float4 TexCoord : TEXCOORD0;
 };
-struct PixelInput {
+
+struct PixelInput
+{
     float4 Position : SV_Position0;
     float4 Color : COLOR0;
     float4 TexCoord : TEXCOORD0;
 };
 
-PixelInput SpriteVertexShader(VertexInput v) {
+PixelInput SpriteVertexShader(VertexInput v)
+{
     PixelInput output;
 
-    output.Position = mul(view_projection, v.Position);
+    output.Position = mul(v.Position, view_projection);
     output.Color = v.Color;
     output.TexCoord = v.TexCoord;
     return output;
 }
-float4 SpritePixelShader(PixelInput p) : SV_TARGET {
-    float4 diffuse = tex2D(TextureSampler, p.TexCoord.xy);
-    return float4(1, 0, 0, 1);
+
+float4 SpritePixelShader(PixelInput p) : SV_TARGET
+{
+    return tex2D(TextureSampler, p.TexCoord.xy);
 }
 
-technique SpriteBatch {
-    pass {
+technique SpriteBatch
+{
+    pass
+    {
         VertexShader = compile VS_SHADERMODEL SpriteVertexShader();
         PixelShader = compile PS_SHADERMODEL SpritePixelShader();
     }

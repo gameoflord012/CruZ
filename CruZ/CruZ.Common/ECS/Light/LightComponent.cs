@@ -28,7 +28,7 @@ namespace CruZ.Common.ECS
 
             Matrix projection = Matrix.CreateOrthographicOffCenter(0, 200, 200, 0, 0, 1);
 
-            fx.Parameters["view_projection"].SetValue(projection);
+            fx.Parameters["view_projection"].SetValue(Camera.Main.ViewMatrix());
             sp.Begin(effect: fx);
             sp.Draw(_lightMap, Vector2.Zero, Color.White);
             sp.End();

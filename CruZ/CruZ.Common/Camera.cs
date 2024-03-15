@@ -18,6 +18,8 @@ namespace CruZ.Common
         {
             ViewPortWidth = viewport.Width;
             ViewPortHeight = viewport.Height;
+            _virtualWidth = ViewPortWidth;
+            _virtualHeight = ViewPortHeight;
         }
 
         public Camera(int vpWidth, int vpHeight) : this(new(0, 0, vpWidth, vpHeight))
@@ -72,6 +74,13 @@ namespace CruZ.Common
                     ViewPortHeight / VirtualHeight, 1);
         }
 
+        public Matrix4x4 ProjectionMatrix()
+        {
+            return
+                Matrix4x4.CreateOrthographicOffCenter(0, VirtualWidth, VirtualHeight, 0, 0, 1);
+        }
+
+
         public Vector2 ScreenToWorldScale()
         {
             return new(
@@ -94,7 +103,7 @@ namespace CruZ.Common
 
         public float VirtualHeight
         {
-            get => (PreserveRatio ? VirtualWidth / Ratio : _virtualHeight) / Zoom.Y;
+            get => (PreserveRatio ? VirtualWidth / Ratio : _virtualHeight / Zoom.Y);
             set { _virtualHeight = value; }
         }
 

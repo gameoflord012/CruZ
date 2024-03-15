@@ -1,4 +1,6 @@
-﻿using Microsoft.Xna.Framework;
+﻿using CruZ.Common;
+
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
@@ -17,8 +19,9 @@ namespace CruZ.Experiment
         {
             base.LoadContent();
 
-            _lightTexture = Content.Load<Texture2D>("homelander");
+            _texture = Content.Load<Texture2D>("homelander");
             _lightEffect = Content.Load<Effect>("shaders\\7dac5bbe-d4ad-493f-a2d7-7f3a00c95863");
+            _normalFx = Content.Load<Effect>("shaders\\normal-shader");
         }
 
         protected override void Initialize()
@@ -27,6 +30,9 @@ namespace CruZ.Experiment
 
             _spriteBatch = new(GraphicsDevice);
             _renderTarget = new(GraphicsDevice, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height);
+            _camera = new(GraphicsDevice.Viewport);
+            _camera.PreserveRatio = true;
+            _vp = GraphicsDevice.Viewport;
         }
 
         protected override void Update(GameTime gameTime)
@@ -58,7 +64,19 @@ namespace CruZ.Experiment
         protected override void Draw(GameTime gameTime)
         {
             base.Draw(gameTime);
+            GraphicsDevice.Clear(Color.Pink);
+            var proj = _camera.ProjectionMatrix();
+            var view = _camera.ViewMatrix();
+            _camera.Zoom = new(_camera.Zoom.X + (float)gameTime.ElapsedGameTime.TotalSeconds, _camera.Zoom.Y, 1);
+            _normalFx.Parameters["view_projection"].SetValue(view * proj);
 
+            _spriteBatch.Begin(effect: _normalFx);
+            _spriteBatch.Draw(_texture, Vector2.Zero, Color.White);
+            _spriteBatch.End();
+        }
+
+        private void LightFxDemo()
+        {
             GraphicsDevice.SetRenderTarget(_renderTarget);
             GraphicsDevice.Clear(Color.Transparent);
 
@@ -72,9 +90,9 @@ namespace CruZ.Experiment
             _lightEffect.Parameters["LightPosition"]?.SetValue(_position);
             _lightEffect.Parameters["LightRadius"]?.SetValue(1f);
             _lightEffect.Parameters["LightColor"]?.SetValue(new Vector4(0, 0, 1, 1));
-             
+
             _spriteBatch.Begin(effect: _lightEffect);
-            _spriteBatch.Draw(_lightTexture, new Vector2(0, 0), Color.Red);
+            _spriteBatch.Draw(_texture, new Vector2(0, 0), Color.Red);
             _spriteBatch.End();
 
             GraphicsDevice.SetRenderTarget(null);
@@ -84,13 +102,16 @@ namespace CruZ.Experiment
             _spriteBatch.Draw(_renderTarget, new Vector2(0, 0), Color.White);
             _spriteBatch.End();
         }
-        
-        Texture2D _lightTexture;
+
+        Texture2D _texture;
         SpriteBatch _spriteBatch;
         Effect _lightEffect;
+        Effect _normalFx;
         GraphicsDeviceManager _gdManager;
+        Camera _camera;
         RenderTarget2D _renderTarget;
         Vector2 _position;
+        Viewport _vp;
     }
 
 
