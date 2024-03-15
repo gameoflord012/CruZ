@@ -2,7 +2,6 @@
 using Newtonsoft.Json;
 using System;
 using System.Diagnostics;
-using Microsoft.Xna.Framework;
 using System.ComponentModel;
 using CruZ.Common.GameSystem.Resource;
 using CruZ.Common.Resource;
@@ -18,48 +17,6 @@ using System.Drawing.Design;
 
 namespace CruZ.Common.ECS
 {
-    #region EventArgs
-    public class DrawLoopBeginEventArgs : EventArgs
-    {
-        public Rectangle SourceRectangle;
-        public NUM.Vector2 Origin;
-        public NUM.Vector2 Position;
-        public NUM.Vector2 Scale;
-        public Texture2D? Texture;
-        public Matrix ViewMatrix;
-        public float LayerDepth = 0;
-        public bool Skip = false;
-
-        public DRAW.RectangleF GetWorldBounds() // in World Coordinate
-        {
-            DRAW.RectangleF rect = new();
-            rect.Width = SourceRectangle.Width * Scale.X;
-            rect.Height = SourceRectangle.Height * Scale.Y;
-            rect.Location = new(
-                Position.X - rect.Width * Origin.X,
-                Position.Y - rect.Height * Origin.Y);
-
-            return rect;
-        }
-
-        public DataType.Vector3 GetWorldOrigin()
-        {
-            var worldBounds = GetWorldBounds();
-            return new(
-                worldBounds.X + worldBounds.Width * Origin.X,
-                worldBounds.Y + worldBounds.Height * Origin.Y,
-                0
-            );
-        }
-    }
-
-    public class DrawLoopEndEventArgs : EventArgs
-    {
-        public bool KeepDrawing = false;
-        public DrawLoopBeginEventArgs BeginArgs;
-    }
-    #endregion
-
     /// <summary>
     /// Game component loaded from specify resource
     /// </summary>
@@ -69,7 +26,7 @@ namespace CruZ.Common.ECS
         public event EventHandler<DrawLoopEndEventArgs>? DrawLoopEnd;
         public event Action? DrawBegin;
         public event Action? DrawEnd;
-        public event Action<UI.BoundingBox> BoundingBoxChanged;
+        public event Action<UIBoundingBox> BoundingBoxChanged;
 
         #region Properties
         public float LayerDepth { get; set; } = 0;
@@ -128,7 +85,7 @@ namespace CruZ.Common.ECS
                 }
             };
 
-            DrawEnd += () => BoundingBoxChanged.Invoke(_hasBoundingBox ? _boundingBox : UI.BoundingBox.Default);
+            DrawEnd += () => BoundingBoxChanged.Invoke(_hasBoundingBox ? _boundingBox : UI.UIBoundingBox.Default);
         }
 
         public void LoadTexture(string texturePath)
@@ -155,7 +112,7 @@ namespace CruZ.Common.ECS
                 SortingLayer.CompareTo(other.SortingLayer);
         }
         
-        internal virtual void InternalDraw(SpriteBatch spriteBatch, Matrix viewMatrix)
+        internal virtual void InternalDraw(SpriteBatch spriteBatch)
         {
             Trace.Assert(_e != null);
 
@@ -165,7 +122,6 @@ namespace CruZ.Common.ECS
             {
                 DrawLoopBeginEventArgs beginLoop = new();
                 beginLoop.Position = new(_e.Transform.Position.X, _e.Transform.Position.Y);
-                beginLoop.ViewMatrix = viewMatrix;
                 beginLoop.LayerDepth = CalculateLayerDepth();
                 beginLoop.Origin = Origin;
                 beginLoop.Scale = new(_e.Transform.Scale.X, _e.Transform.Scale.Y);
@@ -231,7 +187,7 @@ namespace CruZ.Common.ECS
         [JsonProperty]
         ResourceInfo? _spriteResInfo;
         ResourceManager _resource;
-        UI.BoundingBox _boundingBox = new();
+        UI.UIBoundingBox _boundingBox = new();
         bool _hasBoundingBox;
     }
 }

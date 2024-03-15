@@ -18,18 +18,18 @@ namespace CruZ.Common.ECS
 
         public Transform()
         {
-            _position = Vector3.Zero;
-            _scale = Vector3.One;
+            _position = Vector2.Zero;
+            _scale = Vector2.One;
         }
 
         [JsonIgnore, Browsable(false)]
         public Matrix TotalMatrix { get => ScaleMatrix * TranslateMatrix; }
         [JsonIgnore, Browsable(false)]
-        public Matrix TranslateMatrix { get => Matrix.CreateTranslation(_position); }
+        public Matrix TranslateMatrix { get => Matrix.CreateTranslation(_position.X, _position.Y, 0); }
         [JsonIgnore, Browsable(false)]
-        public Matrix ScaleMatrix { get => Matrix.CreateScale(_scale); }
+        public Matrix ScaleMatrix { get => Matrix.CreateScale(_scale.X, _scale.Y, 1); }
 
-        public Vector3 Scale
+        public Vector2 Scale
         {
             get => _scale;
             set
@@ -40,7 +40,7 @@ namespace CruZ.Common.ECS
             }
         }
 
-        public Vector3 Position
+        public Vector2 Position
         {
             get => _position;
             set
@@ -56,7 +56,7 @@ namespace CruZ.Common.ECS
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propName));
         }
 
-        Vector3 _position;
-        Vector3 _scale;
+        Vector2 _position;
+        Vector2 _scale;
     }
 }

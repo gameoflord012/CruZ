@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 
+using CruZ.Common.Utility;
+
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -14,23 +16,29 @@ namespace CruZ.Common.ECS
 
         public LightComponent()
         {
-            _lightMap = GameContext.GameResource.Load<Texture2D>("imgs\\homelander.jpg");
-            //_lightMap = GameContext.GameResource.Load<Texture2D>("internal\\lightmap.png");
+            _lightMap = GameContext.GameResource.Load<Texture2D>("internal\\lightmap.png");
         }
 
-        internal void InternalDraw(SpriteBatch sp, Effect fx)
+        internal void InternalDraw(SpriteBatch sp, Matrix viewProjectionMat)
         {
-            //Vector2 position = new(
-            //    AttachedEntity.Transform.Position.X, 
-            //    AttachedEntity.Transform.Position.Y);
+            var fx = EffectManager.TextureLight;
+            fx.Parameters["view_projection"].SetValue(viewProjectionMat);
 
-            ////fx.Parameters["LightRadius"]?.SetValue(1f);
+            Vector2 pos = (Vector2)AttachedEntity.Transform.Position;
+            Vector2 scale = (Vector2)AttachedEntity.Transform.Scale;
+            Rectangle srcRect = _lightMap.Bounds;
 
-            Matrix projection = Matrix.CreateOrthographicOffCenter(0, 200, 200, 0, 0, 1);
-
-            fx.Parameters["view_projection"].SetValue(Camera.Main.ViewMatrix());
             sp.Begin(effect: fx);
-            sp.Draw(_lightMap, Vector2.Zero, Color.White);
+            sp.Draw(
+                texture: _lightMap, 
+                position: pos, 
+                sourceRectangle: srcRect, 
+                color: 
+                Color.White, 
+                rotation: 0,
+                origin: new Vector2(srcRect.Width / 2f, srcRect.Height / 2f), 
+                scale: scale, 
+                SpriteEffects.None, 0);
             sp.End();
         }
 

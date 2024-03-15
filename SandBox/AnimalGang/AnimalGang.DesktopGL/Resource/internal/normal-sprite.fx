@@ -23,14 +23,15 @@ struct PixelInput {
 PixelInput SpriteVertexShader(VertexInput v) {
     PixelInput output;
 
-    output.Position = mul(view_projection, v.Position);
+    output.Position = mul(v.Position, view_projection);
     output.Color = v.Color;
     output.TexCoord = v.TexCoord;
     return output;
 }
+
 float4 SpritePixelShader(PixelInput p) : SV_TARGET {
     float4 diffuse = tex2D(TextureSampler, p.TexCoord.xy);
-    return float4(1, 0, 0, 1);
+    return diffuse * p.Color;
 }
 
 technique SpriteBatch {

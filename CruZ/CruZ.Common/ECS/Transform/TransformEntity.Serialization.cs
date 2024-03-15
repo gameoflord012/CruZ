@@ -10,6 +10,8 @@ namespace CruZ.Common.ECS
 
     using DataType;
 
+    using Microsoft.Xna.Framework;
+
     public partial class TransformEntity : ICustomSerializable
     {
         public event Action OnDeserializationCompleted;
@@ -22,8 +24,8 @@ namespace CruZ.Common.ECS
 
             jObject = JObject.Load(reader);
 
-            value.Transform.Position = jObject["position"].ToObject<Vector3>(serializer);
-            value.Transform.Scale = jObject["scale"].ToObject<Vector3>(serializer);
+            value.Transform.Position = jObject["position"].ToObject<Vector2>(serializer);
+            value.Transform.Scale = jObject["scale"].ToObject<Vector2>(serializer);
 
             foreach (var comObject in jObject["components"])
             {

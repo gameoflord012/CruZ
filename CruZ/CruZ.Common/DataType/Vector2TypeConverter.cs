@@ -5,7 +5,7 @@ using System.Globalization;
 using System.IO;
 using System.Numerics;
 
-namespace CruZ.Editor.Utility
+namespace CruZ.Common.DataType
 {
     /// <summary>
     /// Convert <see cref="Vector2"/> to <see cref="string"/> and vice-versa

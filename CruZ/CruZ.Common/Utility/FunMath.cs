@@ -24,5 +24,10 @@ namespace CruZ.Common.Utility
         {
             return new(p1.X + p2.X, p1.Y + p2.Y);
         }
+
+        public static float SqrMagnitude(this XNA.Vector2 v)
+        {
+            return v.X * v.X + v.Y * v.Y;
+        }
     }
 }

@@ -92,35 +92,34 @@ namespace AnimalGang
             AttachedEntity.Transform.Position = new(px, py);
         }
 
-        private Vector3 GetMovingInput()
+        private Vector2 GetMovingInput()
         {
-            Vector3 moveDir = Vector3.Zero;
+            Vector2 moveDir = Vector2.Zero;
 
             if (InputManager.Info.Keyboard.IsKeyDown(Keys.A))
             {
-                moveDir = new Vector3(-1, 0);
+                moveDir = new Vector2(-1, 0);
             }
             if (InputManager.Info.Keyboard.IsKeyDown(Keys.D))
             {
-                moveDir = new Vector3(1, 0);
+                moveDir = new Vector2(1, 0);
             }
             if (InputManager.Info.Keyboard.IsKeyDown(Keys.S))
             {
-                moveDir = new Vector3(0, 1);
+                moveDir = new Vector2(0, 1);
             }
             if (InputManager.Info.Keyboard.IsKeyDown(Keys.W))
             {
-                moveDir = new Vector3(0, -1);
+                moveDir = new Vector2(0, -1);
             }
 
             return moveDir;
         }
 
-        private Vector3 GetSnapPos()
+        private Vector2 GetSnapPos()
         {
             return new(
                 FunMath.RoundInt(AttachedEntity.Transform.Position.X),
-                FunMath.RoundInt(AttachedEntity.Transform.Position.Z),
                 FunMath.RoundInt(AttachedEntity.Transform.Position.Y));
         }
 
@@ -128,7 +127,7 @@ namespace AnimalGang
         SpriteComponent _sprite;
 
         float _speed = 6;
-        Vector3 _moveDir;
+        Vector2 _moveDir;
         float _remainDis = 0;
         bool _moving = false;
 

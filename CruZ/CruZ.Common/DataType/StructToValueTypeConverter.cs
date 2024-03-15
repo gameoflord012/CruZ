@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace CruZ.Editor.Utility;
+namespace CruZ.Common.DataType;
 
 /// <summary>
 /// TypeConverter convert struct to value type 

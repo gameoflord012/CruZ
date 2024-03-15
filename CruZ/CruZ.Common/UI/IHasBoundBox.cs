@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+
+using Microsoft.Xna.Framework;
 
 namespace CruZ.Common.UI
 {
-    public struct BoundingBox
+    public struct UIBoundingBox
     {
-        public BoundingBox()
+        public UIBoundingBox()
         {
             Points = [];
             Bound = new(0, 0, 0, 0);
@@ -19,9 +20,9 @@ namespace CruZ.Common.UI
         /// <summary>
         /// Points to be drawn in world coord
         /// </summary>
-        public List<DataType.Vector3> Points;
+        public List<Vector2> Points;
 
-        public static BoundingBox Default => new BoundingBox();
+        public static UIBoundingBox Default => new UIBoundingBox();
 
         public bool IsEmpty()
         {
@@ -32,6 +33,6 @@ namespace CruZ.Common.UI
 
     public interface IHasBoundBox
     {
-        event Action<BoundingBox> BoundingBoxChanged;
+        event Action<UIBoundingBox> BoundingBoxChanged;
     }
 }

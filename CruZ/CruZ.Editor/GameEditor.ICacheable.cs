@@ -38,10 +38,9 @@ namespace CruZ.Editor.Controls
 
                 var zx = binReader.ReadSingle();
                 var zy = binReader.ReadSingle();
-                var zz = binReader.ReadSingle();
 
-                GetMainCamera().Position = new(px, py, pz);
-                GetMainCamera().Zoom = new(zx, zy, zz);
+                GetMainCamera().Position = new(px, py);
+                GetMainCamera().Zoom = new(zx, zy);
             }
 
             return true;
@@ -68,11 +67,9 @@ namespace CruZ.Editor.Controls
             {
                 binWriter.Write(GetMainCamera().Position.X);
                 binWriter.Write(GetMainCamera().Position.Y);
-                binWriter.Write(GetMainCamera().Position.Z);
 
                 binWriter.Write(GetMainCamera().Zoom.X);
                 binWriter.Write(GetMainCamera().Zoom.Y);
-                binWriter.Write(GetMainCamera().Zoom.Z);
             }
 
             return true;

@@ -12,6 +12,8 @@ using System.Drawing;
 
 namespace CruZ.Editor.UI
 {
+    using System.Numerics;
+
     using Common.DataType;
 
     public class BoardGrid : UIControl
@@ -65,8 +67,8 @@ namespace CruZ.Editor.UI
 
                 for (float x = (int)min_x / lineDis * lineDis; x < max_x; x += lineDis)
                 {
-                    var p1 = Camera.Main.CoordinateToPoint(new Vector3(x, min_y));
-                    var p2 = Camera.Main.CoordinateToPoint(new Vector3(x, max_y));
+                    var p1 = Camera.Main.CoordinateToPoint(new Vector2(x, min_y));
+                    var p2 = Camera.Main.CoordinateToPoint(new Vector2(x, max_y));
 
                     spriteBatch.DrawLine(p1.X, p1.Y, p2.X, p2.Y, col);
                 }

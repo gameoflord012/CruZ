@@ -1,4 +1,5 @@
 ﻿using CruZ.Common.ECS.Ultility;
+using CruZ.Common.Utility;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -25,7 +26,6 @@ namespace CruZ.Common.ECS
             _lightMapper = mapperService.GetMapper<LightComponent>();
             _spriteBatch = GameApplication.GetSpriteBatch();
             _gd = GameApplication.GetGraphicsDevice();
-            _lightEffect = GameContext.GameResource.Load<Effect>("internal\\lightshader.fx");
         }
 
         public void Draw(GameTime gameTime)
@@ -46,28 +46,29 @@ namespace CruZ.Common.ECS
                 _gd.SetRenderTarget(renderTarget);
                 _gd.Clear(Color.Transparent);
 
-                #region Process Sprites
+                var fx = EffectManager.NormalSpriteRenderer;
+                fx.Parameters["view_projection"].SetValue(GetViewProjectionMatrix());
+
                 // render sprite
                 _spriteBatch.Begin(
+                    effect: fx,
                     sortMode: SpriteSortMode.FrontToBack,
-                    transformMatrix: Camera.Main.ViewMatrix(),
                     samplerState: SamplerState.PointClamp);
                 do
                 {
-                    sprites[i].InternalDraw(_spriteBatch, Camera.Main.ViewMatrix());
+                    sprites[i].InternalDraw(_spriteBatch);
                     i++;
                 } while (
                     i < sprites.Count &&
                     sprites[i].SortingLayer == sprites[i - 1].SortingLayer);
 
                 _spriteBatch.End();
-                #endregion
 
                 // render lights
                 foreach (var light in lights
                     .Where(e => e.SortingLayers.Contains(sortingLayer)))
                 {
-                    light.InternalDraw(_spriteBatch, _lightEffect);
+                    light.InternalDraw(_spriteBatch, GetViewProjectionMatrix());
                 }
             }
 
@@ -81,6 +82,11 @@ namespace CruZ.Common.ECS
                 _spriteBatch.Draw(renderTarget, new Vector2(0, 0), Color.White);
             }
             _spriteBatch.End();
+        }
+
+        private Matrix GetViewProjectionMatrix()
+        {
+            return Camera.Main.ViewMatrix() * Camera.Main.ProjectionMatrix();
         }
 
         private void GameApp_WindowResize(Viewport viewport)

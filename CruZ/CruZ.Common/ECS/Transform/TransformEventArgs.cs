@@ -6,8 +6,8 @@ namespace CruZ.Common.ECS
 {
     public class TransformEventArgs : EventArgs
     {
-        public Vector3 Position;
-        public Vector3 Scale;
+        public Vector2 Position;
+        public Vector2 Scale;
 
         public static TransformEventArgs Create(Transform t)
         {

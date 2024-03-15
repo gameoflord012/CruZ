@@ -9,6 +9,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using CruZ.Common.ECS.Ultility;
+using Microsoft.Xna.Framework;
 
 
 namespace CruZ.Common.ECS
@@ -27,9 +28,9 @@ namespace CruZ.Common.ECS
         public bool             IsActive    { get => _isActive;     set => SetIsActive(value); }
         public Transform        Transform   { get => _transform;    set => _transform = value; }
         [Browsable(false)]
-        public Vector3          Position    { get => Transform.Position; set => Transform.Position = value; }
+        public Vector2          Position    { get => Transform.Position; set => Transform.Position = value; }
         [Browsable(false)]
-        public Vector3          Scale       { get => Transform.Scale; set => Transform.Scale = value; }
+        public Vector2          Scale       { get => Transform.Scale; set => Transform.Scale = value; }
 
         [Browsable(false)]
         public Component[]     Components  => GetAllComponents(this);

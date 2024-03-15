@@ -1,31 +1,31 @@
 ﻿
 using CruZ.Common.Input;
+using CruZ.Common.Utility;
 
 using Microsoft.Xna.Framework;
-using MonoGame.Extended;
+
+
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using Draw = System.Drawing;
 
 namespace CruZ.Common.UI
 {
     public partial class UIControl : IDisposable
     {
         static readonly int BOUND_THICKNESS = 2;
-        static readonly XNA.Color DEFAULT_BACKGROUND_COLOR = XNA.Color.Red;
+        static readonly Color DEFAULT_BACKGROUND_COLOR = XNA.Color.Red;
 
         #region Properties
         public UIControl? Parent { get => _parent; }
         public UIControl[] Childs => _childs.ToArray();
 
-        public Draw.Point Location
+        public Point Location
         {
             get => new((int)_location.X, (int)_location.Y);
             set { _location.X = value.X; _location.Y = value.Y; }
         }
-        public int Width { get => (int)_size.Width; set => _size.Width = value; }
-        public int Height { get => (int)_size.Height; set => _size.Height = value; }
+        public int Width { get => (int)_size.X; set => _size.X = value; }
+        public int Height { get => (int)_size.Y; set => _size.Y = value; }
 
         public Color BackgroundColor = DEFAULT_BACKGROUND_COLOR;
         public bool Active = true;
@@ -41,9 +41,9 @@ namespace CruZ.Common.UI
             child.OnParentChanged(this);
         }
 
-        public Draw.RectangleF GetRect()
+        public DRAW.RectangleF GetRect()
         {
-            return new Draw.RectangleF(_location.X, _location.Y, _size.Width, _size.Height);
+            return new DRAW.RectangleF(_location.X, _location.Y, _size.X, _size.Y);
         }
 
         public void RemoveChild(UIControl child)
@@ -107,7 +107,7 @@ namespace CruZ.Common.UI
         protected virtual void OnUpdate(UIInfo args) { }
         protected virtual void OnDraw(UIInfo args)
         {
-            args.SpriteBatch.DrawRectangle(_location, _size, BackgroundColor, BOUND_THICKNESS);
+            args.SpriteBatch.DrawRectangle(GetRect(), BackgroundColor, BOUND_THICKNESS);
         }
 
         #region Dragging
@@ -157,7 +157,7 @@ namespace CruZ.Common.UI
         UIControl? _parent;
 
         Vector2 _location = new(0, 0);
-        Size2 _size = new(0, 0);
+        Vector2 _size = new(0, 0);
 
         object? _dragObject;
 

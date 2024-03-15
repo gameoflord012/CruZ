@@ -11,7 +11,10 @@
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)Camera.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Camera.Static.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DataType\StructToValueTypeConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DataType\Vector2TypeConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DataType\Vector3.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DataType\Vector3TypeConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ECS\Animation\AnimatedSystem.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ECS\Animation\AnimationComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ECS\Component.cs" />
@@ -23,6 +26,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)ECS\Light\LightComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ECS\Script\EntityScript.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ECS\Script\EntityScriptSystem.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ECS\Sprite\DrawLoopBeginEventArgs.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ECS\Sprite\DrawLoopEndEventArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ECS\Sprite\RenderSystem.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ECS\Sprite\SpriteComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ECS\Sprite\SpriteComponent.Serialization.cs" />
@@ -63,10 +68,12 @@
     <Compile Include="$(MSBuildThisFileDirectory)UI\UIControl.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)UI\UIManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utility\ComponentHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utility\EffectManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utility\FileHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utility\FunMath.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utility\GameTimeHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utility\Helper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utility\PathHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utility\SpriteBatchExtensions.cs" />
   </ItemGroup>
 </Project>

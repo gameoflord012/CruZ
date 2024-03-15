@@ -11,9 +11,9 @@ using System.Collections.Generic;
 
 namespace CruZ.Editor.UI
 {
-    using Common.DataType;
-
     using CruZ.Common;
+
+    using Microsoft.Xna.Framework;
 
     public class EntityControl : UIControl, ICanUndo
     {
@@ -85,7 +85,7 @@ namespace CruZ.Editor.UI
             }
         }
 
-        private void Sprite_BoundingBoxChanged(BoundingBox bBox)
+        private void Sprite_BoundingBoxChanged(UIBoundingBox bBox)
         {
             CalcControlBounds(bBox);
         }
@@ -100,14 +100,14 @@ namespace CruZ.Editor.UI
             comps.TryGetComponent(ref _sp);
         }
 
-        private void CalcControlBounds(BoundingBox bBox)
+        private void CalcControlBounds(UIBoundingBox bBox)
         {
             if(bBox.IsEmpty()) return;
 
             _bounds = bBox.Bound;
             _points = bBox.Points;
 
-            Location = Camera.Main.CoordinateToPoint(new(_bounds.X, _bounds.Y));
+            Location = Camera.Main.CoordinateToPoint(new Vector2(_bounds.X, _bounds.Y));
 
             var size = new Size2(
                 _bounds.Width * Camera.Main.WorldToScreenScale().X,
@@ -117,14 +117,14 @@ namespace CruZ.Editor.UI
             Height = (int)MathF.Max(MIN_BOUND_SIZE, size.Height);
         }
 
-        private DRAW.Point GetCenter()
+        private Point GetCenter()
         {
             return new(
                 Location.X + (Width + 1) / 2,
                 Location.Y + (Height + 1) / 2);
         }
 
-        private void SetCenter(DRAW.Point p)
+        private void SetCenter(Point p)
         {
             Location = new(
                 p.X - Width / 2,
@@ -137,7 +137,9 @@ namespace CruZ.Editor.UI
             if (Draggable)
             {
                 var ePoint = Camera.Main.CoordinateToPoint(_e.Transform.Position);
-                _dragCenterOffset = ePoint.Minus(args.MousePos());
+                _dragCenterOffset = new(
+                    ePoint.X - args.MousePos().X, 
+                    ePoint.Y - args.MousePos().Y);
                 return this;
             }
             return Draggable ? this : null;
@@ -145,7 +147,10 @@ namespace CruZ.Editor.UI
 
         protected override void OnUpdateDragging(UIInfo info)
         {
-            var ePoint = info.MousePos().Add(_dragCenterOffset);
+            var ePoint = new Point(
+                info.MousePos().X - _dragCenterOffset.X,
+                info.MousePos().Y - _dragCenterOffset.Y);
+
             _e.Transform.Position = Camera.Main.PointToCoordinate(ePoint);
         }
 
@@ -171,7 +176,7 @@ namespace CruZ.Editor.UI
 
         DRAW.Point _dragCenterOffset;
 
-        public List<Vector3> _points = [];
+        public List<Vector2> _points = [];
 
         bool _dragging = false;
         bool _draggableToggle;

@@ -1,14 +1,17 @@
 ﻿using System;
-using System.Drawing;
-using System.Numerics;
 
 using CruZ.Common.Utility;
 
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace CruZ.Common
 {
-    using DataType;
+    public enum ProjectionOffset
+    {
+        Center, // When projection top left at -width / 2, -height / 2
+        Topleft // When projection top left at 0, 0
+    }
 
     public partial class Camera
     {
@@ -27,25 +30,20 @@ namespace CruZ.Common
 
         }
 
-        public Vector3 PointToCoordinate(Vector3 p)
+        public Vector2 PointToCoordinate(Point p)
         {
             var normalize_x = (p.X / ViewPortWidth - 0.5f);
             var normalize_y = (p.Y / ViewPortHeight - 0.5f);
 
-            var coord = new Vector3(normalize_x * VirtualWidth, normalize_y * VirtualHeight, 0);
+            var coord = new Vector2(normalize_x * VirtualWidth, normalize_y * VirtualHeight);
             coord += Position;
 
             return coord;
         }
 
-        public Vector3 PointToCoordinate(Point p)
+        public Point CoordinateToPoint(Vector2 coord)
         {
-            return PointToCoordinate(new Vector3(p.X, p.Y));
-        }
-
-        public Point CoordinateToPoint(Vector3 coord)
-        {
-            coord -= Position;
+            coord -= _position;
 
             var normalize_x = 0.5f + coord.X / VirtualWidth;
             var normalize_y = 0.5f + coord.Y / VirtualHeight;
@@ -55,31 +53,24 @@ namespace CruZ.Common
                 FunMath.RoundInt(normalize_y * ViewPortHeight));
         }
 
-        public Matrix4x4 ViewMatrix()
+        public Matrix ViewMatrix()
         {
-            return
-                // move to camera position
-                // because the camera is facing directly, we have to move the space opposite to camera direction
-                Matrix4x4.CreateTranslation(-Position.X, -Position.Y, -Position.Z) *
+            float scaleX = ViewPortWidth / VirtualWidth;
+            float scaleY = ViewPortHeight / VirtualHeight;
 
-                // center offset instead of top left
-                Matrix4x4.CreateTranslation(
-                    VirtualWidth / 2f,
-                    VirtualHeight / 2f,
-                    0f) *
-
-                // scaling to screen
-                Matrix4x4.CreateScale(
-                    ViewPortWidth / VirtualWidth,
-                    ViewPortHeight / VirtualHeight, 1);
+            var mat = Matrix.Identity;
+            mat *= Matrix.CreateScale(scaleX, scaleY, 1);
+            mat *= Matrix.CreateTranslation(-Position.X * scaleX, -Position.Y * scaleY, 0);
+            return mat;
         }
 
-        public Matrix4x4 ProjectionMatrix()
+        public Matrix ProjectionMatrix()
         {
             return
-                Matrix4x4.CreateOrthographicOffCenter(0, VirtualWidth, VirtualHeight, 0, 0, 1);
+                Matrix.CreateOrthographicOffCenter(
+                    -VirtualWidth / 2f, VirtualWidth / 2f,
+                    VirtualHeight / 2f, -VirtualHeight / 2f, 0, 1);
         }
-
 
         public Vector2 ScreenToWorldScale()
         {
@@ -119,18 +110,18 @@ namespace CruZ.Common
             set { _viewPortHeight = value; }
         }
 
-        public Vector3 Position
+        public Vector2 Position
         {
             get => _position;
             set { _position = value; }
         }
 
-        private Vector3 _position = Vector3.Zero;
+        private Vector2 _position = Vector2.Zero;
 
         public bool PreserveRatio = true;
         public float Ratio => ViewPortWidth / ViewPortHeight;
 
-        public Vector3 Zoom
+        public Vector2 Zoom
         {
             get => _zoom;
             set
@@ -141,7 +132,7 @@ namespace CruZ.Common
             }
         }
 
-        private Vector3 _zoom = new(1, 1);
+        private Vector2 _zoom = new(1, 1);
         private float _viewPortWidth;
         private float _viewPortHeight;
         private float _virtualWidth = 19;

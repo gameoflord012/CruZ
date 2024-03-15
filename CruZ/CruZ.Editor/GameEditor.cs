@@ -20,6 +20,7 @@ using CruZ.Common;
 using CruZ.Common.Input;
 using CruZ.Common.Resource;
 using CruZ.Editor.Scene;
+using Microsoft.Xna.Framework;
 
 
 namespace CruZ.Editor.Controls
@@ -210,7 +211,7 @@ namespace CruZ.Editor.Controls
             if (_isMouseDraggingCamera)
             {
                 var scale = Camera.Main.ScreenToWorldScale();
-                var delt = new Vector3(
+                var delt = new Vector2(
                     (info.CurMouse.Position.X - _mouseStartDragPoint.X) * scale.X,
                     (info.CurMouse.Position.Y - _mouseStartDragPoint.Y) * scale.Y);
 
@@ -413,7 +414,7 @@ namespace CruZ.Editor.Controls
 
         #region Private_Variables
         bool _isMouseDraggingCamera;
-        Vector3 _cameraStartDragCoord;
+        Vector2 _cameraStartDragCoord;
         XNA.Point _mouseStartDragPoint;
 
         GameScene? _currentScene;

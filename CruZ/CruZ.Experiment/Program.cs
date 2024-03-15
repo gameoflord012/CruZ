@@ -32,6 +32,7 @@ namespace CruZ.Experiment
             _renderTarget = new(GraphicsDevice, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height);
             _camera = new(GraphicsDevice.Viewport);
             _camera.PreserveRatio = true;
+            _camera.Zoom = new(0.05f, 0, 1);
             _vp = GraphicsDevice.Viewport;
         }
 
