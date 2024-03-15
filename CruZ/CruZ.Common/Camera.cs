@@ -56,13 +56,17 @@ namespace CruZ.Common
         public Matrix4x4 ViewMatrix()
         {
             return
+                // move to camera position
+                // because the camera is facing directly, we have to move the space opposite to camera direction
                 Matrix4x4.CreateTranslation(-Position.X, -Position.Y, -Position.Z) *
 
+                // center offset instead of top left
                 Matrix4x4.CreateTranslation(
                     VirtualWidth / 2f,
                     VirtualHeight / 2f,
                     0f) *
 
+                // scaling to screen
                 Matrix4x4.CreateScale(
                     ViewPortWidth / VirtualWidth,
                     ViewPortHeight / VirtualHeight, 1);
@@ -84,13 +88,13 @@ namespace CruZ.Common
 
         public float VirtualWidth
         {
-            get => _virtualWidth * Zoom.X;
+            get => _virtualWidth / Zoom.X;
             set { _virtualWidth = value; }
         }
 
         public float VirtualHeight
         {
-            get => (PreserveRatio ? VirtualWidth / Ratio : _virtualHeight) * Zoom.Y;
+            get => (PreserveRatio ? VirtualWidth / Ratio : _virtualHeight) / Zoom.Y;
             set { _virtualHeight = value; }
         }
 
@@ -122,8 +126,8 @@ namespace CruZ.Common
             get => _zoom;
             set
             {
-                value.X = MathF.Max(0.1f, value.X);
-                value.Y = MathF.Max(0.1f, value.Y);
+                value.X = MathF.Max(0.0001f, value.X);
+                value.Y = MathF.Max(0.0001f, value.Y);
                 _zoom = value;
             }
         }

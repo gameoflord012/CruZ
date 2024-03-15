@@ -201,7 +201,7 @@ namespace CruZ.Editor.Controls
         private void Input_MouseScroll(IInputInfo info)
         {
             Camera.Main.Zoom = new(
-                Camera.Main.Zoom.X - info.SrollDelta * 0.001f * Camera.Main.Zoom.X,
+                Camera.Main.Zoom.X + info.SrollDelta * 0.001f * Camera.Main.Zoom.X,
                 Camera.Main.Zoom.Y);
         }
 
