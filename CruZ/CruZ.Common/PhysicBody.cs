@@ -9,7 +9,7 @@
 //{
 //    class PhysicBody
 //    {
-//        public void Initialize(World world)
+//        public void CreateContext(World world)
 //        {
 //            _body = world.CreateBody(new BodyDef());
 //            _fixture = _body.CreateFixture(new FixtureDef());

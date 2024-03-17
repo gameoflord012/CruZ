@@ -11,7 +11,7 @@
 //        {
 //        }
 
-//        public override void Initialize(IComponentMapperService mapperService)
+//        public override void CreateContext(IComponentMapperService mapperService)
 //        {
 //            _entityEventComponentMapper = mapperService.GetMapper<EntityEventComponent>();
 //        }

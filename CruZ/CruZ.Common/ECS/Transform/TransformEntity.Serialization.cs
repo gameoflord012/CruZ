@@ -8,8 +8,6 @@ namespace CruZ.Common.ECS
 {
     using CruZ.Common.Serialization;
 
-    using DataType;
-
     using Microsoft.Xna.Framework;
 
     public partial class TransformEntity : ICustomSerializable

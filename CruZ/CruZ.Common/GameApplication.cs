@@ -16,54 +16,27 @@ using CruZ.Common.Input;
 
 namespace CruZ.Common
 {
-    public partial class GameApplication :
-        IECSContextProvider, IInputContextProvider, UIContext, IDisposable
+    public partial class GameApplication : IDisposable
     {
-        #region Events
-        public event Action<GameTime> DrawUI;
-        public event Action<GameTime> UpdateUI;
-        public event Action InitializeUI;
-
-        public event Action<GameTime> ECSDraw;
-        public event Action<GameTime> ECSUpdate;
-        public event Action InitializeECSSystem;
-
-        public event Action<GameTime> InputUpdate;
-        public event Action<Viewport> WindowResize;
-        public event Action ExitEvent;
-        public event Action<DrawEventArgs> EarlyDraw;
-        public event Action<GameTime> Draw;
-        public event Action<DrawEventArgs> LateDraw;
-
-        public event Action Initializing;
-        public event Action Initialized;
-        #endregion
-
         #region Properties
         public ContentManager Content { get => _core.Content; }
         public GraphicsDevice GraphicsDevice { get => _core.GraphicsDevice; }
         public GameWindow Window => _core.Window;
         public bool ExitCalled { get => _exitCalled; }
-        public bool IsInitialized { get; private set; } = false;
-        public int FpsResult { get => _fpsResult; } 
+        public int FpsResult { get => _fpsResult; }
         #endregion
 
-        private GameApplication()
+        private GameApplication(GameWrapper core)
         {
-            _core = new();
+            _core = core;
+            _core.Initialized += Wrapper_Initialized;
+            _core.BeforeUpdate += Wrapper_BeforeUpdate;
+            _core.AfterDraw += Wrapper_AfterDraw;
+            _core.Window.ClientSizeChanged += Wrapper_WindowResized;
 
-            _core.Content.RootDirectory = ".";
-            _core.IsMouseVisible = true;
-
-            _core.Initializing += InternalInitializing;
-            _core.UpdateEvent += InternalUpdate;
-            _core.DrawEvent += InternalDraw;
-            _core.ExitEvent += InternalExit;
-            _core.Window.ClientSizeChanged += Window_ClientSizeChanged;
-
-            ECSManager.CreateContext(this);
-            InputManager.CreateContext(this);
-            UIManager.CreateContext(this);
+            _ecsController = ECSManager.CreateContext();
+            _inputController = InputManager.CreateContext();
+            _uiController = UIManager.CreateContext();
         }
 
         public void Run()
@@ -80,10 +53,47 @@ namespace CruZ.Common
             }
         }
 
-        private void Window_ClientSizeChanged(object? sender, EventArgs e)
+        #region Event Handlers
+        private void Wrapper_WindowResized(object? sender, EventArgs e)
         {
-            WindowResize?.Invoke(_core.GraphicsDevice.Viewport);
+            WindowResized?.Invoke(_core.GraphicsDevice.Viewport);
         }
+
+        private void Wrapper_BeforeUpdate(GameTime gameTime)
+        {
+            ProcessMarshalRequests();
+
+            _inputController.Update(gameTime);
+            _ecsController.Update(gameTime);
+            _uiController.Update(gameTime);
+        }
+
+        private void Wrapper_AfterDraw(GameTime gameTime)
+        {
+            GraphicsDevice.Clear(Color.Beige);
+            
+            CalculateFps(gameTime);
+            _ecsController.Draw(gameTime);
+            _uiController.Draw(gameTime, _spriteBatch);
+        }
+
+        private void Wrapper_Initialized()
+        {
+            _spriteBatch = new(GraphicsDevice);
+            Camera.Main = new Camera(GraphicsDevice.Viewport);
+
+            _ecsController.Initialize();
+            _uiController.Initialize();
+            Initialized?.Invoke();
+        }
+
+        private void Wrapper_Exit(object? sender, EventArgs e)
+        {
+            _exitCalled = true;
+            Exiting?.Invoke();
+        }
+        #endregion
+
         private void ProcessMarshalRequests()
         {
             foreach (var invoke in _marshalRequests)
@@ -93,58 +103,6 @@ namespace CruZ.Common
 
             _marshalRequests.Clear();
         }
-
-        #region Internals
-        private void InternalUpdate(GameTime gameTime)
-        {
-            ProcessMarshalRequests();
-
-            InputUpdate?.Invoke(gameTime);
-            ECSUpdate?.Invoke(gameTime);
-            UpdateUI?.Invoke(gameTime);
-        }
-
-        private void InternalDraw(GameTime gameTime)
-        {
-            CalculateFps(gameTime);
-
-            GraphicsDevice.Clear(Color.Beige);
-
-            var drawArgs = new DrawEventArgs(_spriteBatch, gameTime);
-            EarlyDraw?.Invoke(drawArgs);
-            Draw?.Invoke(gameTime);
-            ECSDraw?.Invoke(gameTime);
-            LateDraw?.Invoke(drawArgs);
-            DrawUI?.Invoke(gameTime);
-            OnDraw(gameTime);
-        }
-
-        private void InternalInitializing()
-        {
-            IsInitialized = true;
-
-            _spriteBatch = new(GraphicsDevice);
-            Camera.Main = new Camera(GraphicsDevice.Viewport);
-
-            InitializeECSSystem?.Invoke();
-            InitializeUI?.Invoke();
-            Initializing?.Invoke();
-
-            OnInitialize();
-            Initialized?.Invoke();
-        }
-
-        private void InternalExit(object? sender, EventArgs e)
-        {
-            _exitCalled = true;
-
-            ExitEvent?.Invoke();
-            Dispose();
-        } 
-        #endregion
-
-        protected virtual void OnInitialize() { }
-        protected virtual void OnDraw(GameTime gameTime) { }
 
         private void CalculateFps(GameTime gameTime)
         {
@@ -174,12 +132,21 @@ namespace CruZ.Common
                 disposed = true;
                 _core.Dispose();
                 _spriteBatch.Dispose();
+
+                WindowResized = null;
+                Initialized = null;
+                Exiting = null;
+                Drawing = null;
             }
         }
 
-        #region Privates
-        private GameWrapper _core;
-        private SpriteBatch _spriteBatch;
+        #region Private Variables
+        IECSController _ecsController;
+        IInputController _inputController;
+        IUIController _uiController;
+        GameWrapper _core;
+        SpriteBatch _spriteBatch;
+
         bool disposed = false;
         bool _exitCalled = false;
 
@@ -194,24 +161,13 @@ namespace CruZ.Common
     // Static members
     public partial class GameApplication
     {
-        public static Viewport Viewport => _instance.GraphicsDevice.Viewport;
+        // Remembers set events to null in _instance.Dispose()
+        public static event Action<Viewport>? WindowResized;
+        public static event Action? Initialized;
+        public static event Action? Exiting;
+        public static event Action? Drawing;
 
         public static GraphicsDevice GetGraphicsDevice() => _instance.GraphicsDevice;
-
-        public static void RegisterWindowResize(Action<Viewport> windowResize)
-        {
-            _instance.WindowResize += windowResize;
-        }
-
-        public static void RegisterDraw(Action<GameTime> draw)
-        {
-            _instance.Draw += draw;
-        }
-
-        public static void UnregisterDraw(Action<GameTime> draw)
-        {
-            _instance.Draw -= draw;
-        }
 
         /// <summary>
         /// Whether the Game Window is active
@@ -222,14 +178,10 @@ namespace CruZ.Common
             return _instance._core.IsActive;
         }
 
-        public static GameApplication CreateContext()
+        public static GameApplication CreateContext(GameWrapper core)
         {
-            return _instance = new GameApplication();
-        }
-
-        public static GameScene CreateScene()
-        {
-            return GameScene.Create(_instance);
+            if(_instance != null) _instance.Dispose();
+            return _instance = new GameApplication(core);
         }
 
         public static SpriteBatch GetSpriteBatch()

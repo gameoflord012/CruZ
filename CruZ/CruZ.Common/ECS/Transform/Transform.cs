@@ -7,8 +7,6 @@ using System.ComponentModel;
 
 namespace CruZ.Common.ECS
 {
-    using DataType;
-
     [TypeConverter(typeof(ExpandableObjectConverter))]
     public partial class Transform : INotifyPropertyChanged
     {

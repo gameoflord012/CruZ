@@ -1,19 +1,23 @@
-﻿using Microsoft.Xna.Framework;
+﻿using CruZ.Common.ECS.Ultility;
+
+using Microsoft.Xna.Framework;
 
 using MonoGame.Extended.Entities;
 
 namespace CruZ.Common.ECS
 {
-    public partial class ECSManager
+    interface IECSController
     {
-        private ECSManager(IECSContextProvider contextProvider)
-        {
-            contextProvider.ECSDraw += Draw;
-            contextProvider.ECSUpdate += Update;
-            contextProvider.InitializeECSSystem += InitializeSystem;
-        }
+        void Update(GameTime gameTime);
+        void Draw(GameTime gameTime);
+        void Initialize();
+    }
 
-        private void InitializeSystem()
+    public partial class ECSManager : IECSController
+    {
+        private ECSManager() { }
+
+        void IECSController.Initialize()
         {
             _world = new WorldBuilder().
                 //AddSystem(new EntityEventSystem()).
@@ -24,16 +28,37 @@ namespace CruZ.Common.ECS
                 Build();
         }
 
-        private void Update(GameTime gameTime)
+        void IECSController.Update(GameTime gameTime)
         {
             _world.Update(gameTime);
         }
 
-        private void Draw(GameTime gameTime)
+        void IECSController.Draw(GameTime gameTime)
         {
             _world.Draw(gameTime);
         }
 
         World _world;
+
+        internal static IECSController CreateContext()
+        {
+            return _instance = new ECSManager();
+        }
+
+        private static ECSManager? _instance;
+
+        /// <summary>
+        /// Not good idea to call this without proper memory manage
+        /// </summary>
+        /// <returns></returns>
+        internal static TransformEntity CreateEntity()
+        {
+            return _instance._world.CreateTransformEntity();
+        }
+
+        internal static void Destroy(Entity entity)
+        {
+            _instance._world.DestroyEntity(entity);
+        }
     }
 }

@@ -1,6 +1,4 @@
 ﻿using CruZ.Common.Utility;
-using CruZ.Common.DataType;
-
 using MonoGame.Extended.Entities;
 
 using System;

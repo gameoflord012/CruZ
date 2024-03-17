@@ -1,31 +1,22 @@
-﻿using CruZ.Common.Utility;
+﻿using System;
+
+using CruZ.Common.Utility;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 
 namespace CruZ.Common.Input
 {
-    public partial class InputManager
+    interface IInputController
     {
-        public static readonly float MOUSE_CLICK_DURATION = 0.4f;
+        void Update(GameTime gameTime);
+    }
 
-        public InputManager(IInputContextProvider contextProvider)
-        {
-            contextProvider.InputUpdate += InputUpdate;
-        }
+    public partial class InputManager : IInputController
+    {
+        private InputManager() { }
 
-        public int ScrollDelta()
-        {
-            return _info.curMouse.ScrollWheelValue - _info.preMouse.ScrollWheelValue;
-        }
-
-        public DRAW.Point MouseMoveDelta()
-        {
-            var d = _info.curMouse.Position - _info.preMouse.Position;
-            return new(d.X, d.Y);
-        }
-
-        private void InputUpdate(GameTime gameTime)
+        void IInputController.Update(GameTime gameTime)
         {
             _info = new();
 
@@ -65,10 +56,21 @@ namespace CruZ.Common.Input
 
             _info.mouseClick =
                 gameTime.TotalSeconds() - _timeSceneLastDownClick < MOUSE_CLICK_DURATION &&
-                _info.IsMouseJustUp(MouseKey.Left); 
+                _info.IsMouseJustUp(MouseKey.Left);
             #endregion
 
             InvokeEvents();
+        }
+
+        public int ScrollDelta()
+        {
+            return _info.curMouse.ScrollWheelValue - _info.preMouse.ScrollWheelValue;
+        }
+
+        public DRAW.Point MouseMoveDelta()
+        {
+            var d = _info.curMouse.Position - _info.preMouse.Position;
+            return new(d.X, d.Y);
         }
 
         private void InvokeEvents()
@@ -115,8 +117,22 @@ namespace CruZ.Common.Input
         KeyboardState _preKeyboard;
         MouseState _preMouseState;
 
-
         float _timeSceneLastDownClick;
+        const float MOUSE_CLICK_DURATION = 0.4f;
+
+        public static event Action<IInputInfo>? MouseScrolled;
+        public static event Action<IInputInfo>? MouseMoved;
+        public static event Action<IInputInfo>? MouseStateChanged;
+        public static event Action<IInputInfo>? KeyStateChanged;
+
+        public static IInputInfo Info => _instance._info;
+
+        static InputManager? _instance;
+
+        internal static IInputController CreateContext()
+        {
+            return _instance = new();
+        }
     }
 
     public enum MouseKey

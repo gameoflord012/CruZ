@@ -13,7 +13,7 @@
 //            _physicWorld = new();
 //        }
 
-//        public override void Initialize(IComponentMapperService mapperService)
+//        public override void CreateContext(IComponentMapperService mapperService)
 //        {
 //            _physicBodyMapper = mapperService.GetMapper<PhysicBody>();
 
@@ -22,7 +22,7 @@
 //                PhysicBody body = _physicBodyMapper.Get(entityId);
 //                if(!body.IsInitialize)
 //                {
-//                    body.Initialize(_physicWorld);
+//                    body.CreateContext(_physicWorld);
 //                }
 //            }
 //        }

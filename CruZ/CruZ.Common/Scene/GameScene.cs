@@ -22,10 +22,9 @@ namespace CruZ.Common.Scene
         public TransformEntity[] Entities { get => _entities.ToArray(); }
         public ResourceInfo? ResourceInfo { get; set; }
 
-        private GameScene(GameApplication gameApp)
+        private GameScene()
         {
-            _gameApp = gameApp;
-            _gameApp.ExitEvent += Game_Exit;
+            GameApplication.Exiting += Game_Exiting;
         }
 
         public void AddEntity(TransformEntity e)
@@ -68,7 +67,7 @@ namespace CruZ.Common.Scene
             return e;
         }
 
-        private void Game_Exit()
+        private void Game_Exiting()
         {
             Dispose();
         }
@@ -104,16 +103,5 @@ namespace CruZ.Common.Scene
 
         [JsonProperty]
         List<TransformEntity> _entities = [];
-
-        [JsonIgnore]
-        GameApplication _gameApp;
-    }
-
-    public partial class GameScene
-    {
-        public static GameScene Create(GameApplication gameApp)
-        {
-            return new(gameApp);
-        }
     }
 }

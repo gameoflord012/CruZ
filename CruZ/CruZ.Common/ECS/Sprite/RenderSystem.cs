@@ -17,7 +17,7 @@ namespace CruZ.Common.ECS
         public RenderSystem() : base(Aspect.One(
             typeof(SpriteComponent), typeof(LightComponent)))
         {
-            GameApplication.RegisterWindowResize(GameApp_WindowResize);
+            GameApplication.WindowResized += GameApp_WindowResize;
         }
 
         public override void Initialize(IComponentMapperService mapperService)

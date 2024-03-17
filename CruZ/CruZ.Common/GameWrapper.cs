@@ -1,79 +1,56 @@
 ﻿using System;
 
+using Microsoft.Xna.Framework;
+
 namespace CruZ.Common
 {
-    using Microsoft.Xna.Framework;
-
     /// <summary>
-    /// Redirect events or overriden function, this shouldn't include any logic other than that.
+    /// Provides a wrapper for <see cref="Game"/>.
     /// </summary>
-    public partial class GameWrapper : XNA.Game
+    public partial class GameWrapper : Game
     {
-        public event Action?                    Initializing;
-        public event Action?                    InitializeSystemEvent;
-        public event Action?                    LoadContentEvent;
-        public event Action?                    EndRunEvent;
-        public event Action<object, EventArgs>? ExitEvent;
-        public event Action<GameTime>?          UpdateEvent;
-        public event Action<GameTime>?          DrawEvent;
-        public event Action<GameTime>?          LateDrawEvent;
+        public event Action Initialized;
+        public event Action<GameTime>? BeforeUpdate;
+        public event Action<GameTime>? AfterDraw;
 
         //public GraphicsDeviceManager GraphicsDeviceManager => _gdManager;
 
         public GameWrapper()
         {
             _gdManager = new GraphicsDeviceManager(this);
+            Content.RootDirectory = ".";
+            IsMouseVisible = true;
         }
 
-        protected override void EndRun()
-        {
-            base.EndRun();
-            EndRunEvent?.Invoke();
-        }
-
-        protected override void OnExiting(object sender, EventArgs args)
-        {
-            base.OnExiting(sender, args);
-            ExitEvent?.Invoke(sender, args);
-        }
-
-        protected override void LoadContent()
-        {
-            base.LoadContent();
-            LoadContentEvent?.Invoke();
-        }
-
-        protected override void Initialize()
+        protected sealed override void Initialize()
         {
             base.Initialize();
 
-            InitalizeSystem();
-            Initializing?.Invoke();
+            OnInitialize();
+            Initialized?.Invoke();
         }
 
-        private void InitalizeSystem()
+        protected sealed override void Update(GameTime gameTime)
         {
-            InitializeSystemEvent?.Invoke();
-        }
-
-        protected override void Update(GameTime gameTime)
-        {
-            UpdateEvent?.Invoke(gameTime);
             base.Update(gameTime);
 
+            BeforeUpdate?.Invoke(gameTime);
+            OnUpdate(gameTime);
         }
 
-        protected override void Draw(GameTime gameTime)
+        protected sealed override void Draw(GameTime gameTime)
         {
-            InternalDraw(gameTime);
             base.Draw(gameTime);
+
+            OnDraw(gameTime);
+            AfterDraw?.Invoke(gameTime);
         }
 
-        private void InternalDraw(GameTime gameTime)
-        {
-            DrawEvent?.Invoke(gameTime);
-            LateDrawEvent?.Invoke(gameTime);
-        }
+        protected virtual void OnInitialize() { }
+
+        protected virtual void OnUpdate(GameTime gameTime) { }
+
+        protected virtual void OnDraw(GameTime gameTime) { }
 
         private GraphicsDeviceManager _gdManager;
     }

@@ -1,4 +1,8 @@
-﻿using CruZ.Common;
+﻿using System;
+
+using CruZ.Common;
+using CruZ.Common.Input;
+using CruZ.Common.UI;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -6,13 +10,13 @@ using Microsoft.Xna.Framework.Input;
 
 namespace CruZ.Experiment
 {
-    class MyGame : Game
+    class MyGame : GameWrapper
     {
-        public MyGame()
+        public MyGame() : base()
         {
             IsMouseVisible = true;
-            _gdManager = new GraphicsDeviceManager(this);
             Content.RootDirectory = ".\\Content\\bin";
+            GameApplication.CreateContext(this);
         }
 
         protected override void LoadContent()
@@ -24,22 +28,17 @@ namespace CruZ.Experiment
             _normalFx = Content.Load<Effect>("shaders\\normal-shader");
         }
 
-        protected override void Initialize()
+        protected override void OnInitialize()
         {
-            base.Initialize();
-
             _spriteBatch = new(GraphicsDevice);
             _renderTarget = new(GraphicsDevice, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height);
             _camera = new(GraphicsDevice.Viewport);
-            _camera.PreserveRatio = true;
-            _camera.Zoom = new(0.05f, 0, 1);
             _vp = GraphicsDevice.Viewport;
+            _camera.Position = new(-_vp.Width / 2f, -_vp.Height / 2f);
         }
 
-        protected override void Update(GameTime gameTime)
+        protected override void OnUpdate(GameTime gameTime)
         {
-            base.Update(gameTime);
-
             Vector2 dir = new(0, 0);
 
             if (Keyboard.GetState().IsKeyDown(Keys.A))
@@ -62,17 +61,19 @@ namespace CruZ.Experiment
             _position += dir * (float)gameTime.ElapsedGameTime.TotalSeconds;
         }
 
-        protected override void Draw(GameTime gameTime)
+        protected override void OnDraw(GameTime gameTime)
         {
-            base.Draw(gameTime);
             GraphicsDevice.Clear(Color.Pink);
             var proj = _camera.ProjectionMatrix();
             var view = _camera.ViewMatrix();
-            _camera.Zoom = new(_camera.Zoom.X + (float)gameTime.ElapsedGameTime.TotalSeconds, _camera.Zoom.Y, 1);
+
+            Point point = _camera.CoordinateToPoint(new(-_vp.Width, -_vp.Height));
+            Vector2 position = _camera.PointToCoordinate(point);
+
             _normalFx.Parameters["view_projection"].SetValue(view * proj);
 
             _spriteBatch.Begin(effect: _normalFx);
-            _spriteBatch.Draw(_texture, Vector2.Zero, Color.White);
+            _spriteBatch.Draw(_texture, position, Color.White);
             _spriteBatch.End();
         }
 
@@ -122,10 +123,6 @@ namespace CruZ.Experiment
         {
             Game game = new MyGame();
             game.Run();
-
-            //Console.WriteLine(Environment.CurrentDirectory);
-            //Console.WriteLine(Directory.GetCurrentDirectory());
-            //Console.WriteLine(AppDomain.CurrentDomain.BaseDirectory);
         }
     }
 }

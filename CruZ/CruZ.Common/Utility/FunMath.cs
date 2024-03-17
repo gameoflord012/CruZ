@@ -29,5 +29,10 @@ namespace CruZ.Common.Utility
         {
             return v.X * v.X + v.Y * v.Y;
         }
+
+        public static int RoundToInt(this float f)
+        {
+            return (int)(f + 0.5f);
+        }
     }
 }

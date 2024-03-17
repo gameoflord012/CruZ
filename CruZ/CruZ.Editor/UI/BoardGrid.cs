@@ -14,8 +14,6 @@ namespace CruZ.Editor.UI
 {
     using System.Numerics;
 
-    using Common.DataType;
-
     public class BoardGrid : UIControl
     {
         protected override void OnDraw(UIInfo args)

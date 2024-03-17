@@ -6,6 +6,7 @@ using System.ComponentModel;
 using CruZ.Common.GameSystem.Resource;
 using CruZ.Common.Resource;
 using CruZ.Common.UI;
+using Microsoft.Xna.Framework;
 
 
 
@@ -43,7 +44,7 @@ namespace CruZ.Common.ECS
 #if CRUZ_EDITOR
         [TypeConverter(typeof(Vector2TypeConverter))]
 #endif
-        public NUM.Vector2 Origin { get; set; } = new(0.5f, 0.5f);
+        public Vector2 NormalizedOrigin { get; set; } = new(0.5f, 0.5f);
 
 #if CRUZ_EDITOR
         [Editor(typeof(FileUITypeEditor), typeof(UITypeEditor))]
@@ -85,7 +86,7 @@ namespace CruZ.Common.ECS
                 }
             };
 
-            DrawEnd += () => BoundingBoxChanged.Invoke(_hasBoundingBox ? _boundingBox : UI.UIBoundingBox.Default);
+            DrawEnd += () => BoundingBoxChanged.Invoke(_hasBoundingBox ? _boundingBox : UIBoundingBox.Default);
         }
 
         public void LoadTexture(string texturePath)
@@ -123,7 +124,7 @@ namespace CruZ.Common.ECS
                 DrawLoopBeginEventArgs beginLoop = new();
                 beginLoop.Position = new(_e.Transform.Position.X, _e.Transform.Position.Y);
                 beginLoop.LayerDepth = CalculateLayerDepth();
-                beginLoop.Origin = Origin;
+                beginLoop.NormalizedOrigin = NormalizedOrigin;
                 beginLoop.Scale = new(_e.Transform.Scale.X, _e.Transform.Scale.Y);
 
                 if (Texture != null)
@@ -153,8 +154,8 @@ namespace CruZ.Common.ECS
                     color: XNA.Color.White,
                     rotation: 0,
 
-                    origin: new(beginLoop.Origin.X * beginLoop.SourceRectangle.Width,
-                                beginLoop.Origin.Y * beginLoop.SourceRectangle.Height),
+                    origin: new(beginLoop.NormalizedOrigin.X * beginLoop.SourceRectangle.Width,
+                                beginLoop.NormalizedOrigin.Y * beginLoop.SourceRectangle.Height),
 
                     scale: beginLoop.Scale,
 

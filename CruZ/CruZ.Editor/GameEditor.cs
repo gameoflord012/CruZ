@@ -5,8 +5,6 @@ using CruZ.Editor.Utility;
 using CruZ.Common.Scene;
 using CruZ.Common.Service;
 using CruZ.Common.UI;
-using CruZ.Common.DataType;
-
 using Microsoft.Xna.Framework.Graphics;
 
 using System;
@@ -183,7 +181,7 @@ namespace CruZ.Editor.Controls
             _appInitalized_Reset.Set();
         }
 
-        private void GameApp_Exit()
+        private void GameApp_Exiting()
         {
             UnloadCurrentScene();
             _editorForm.SafeInvoke(CleanAppSession);
@@ -326,7 +324,7 @@ namespace CruZ.Editor.Controls
         {
             CleanAppSession();
 
-            _gameApp = GameApplication.CreateContext();
+            _gameApp = GameApplication.CreateContext(new GameWrapper());
             RegisterGameAppEvents();
 
             _gameApp.Run();
@@ -334,11 +332,11 @@ namespace CruZ.Editor.Controls
 
         private void RegisterGameAppEvents()
         {
-            _gameApp.WindowResize += GameApp_WindowResize;
-            _gameApp.Initializing += GameApp_Intialized;
+            GameApplication.WindowResized += GameApp_WindowResize;
+            GameApplication.Initialized += GameApp_Intialized;
+            GameApplication.Exiting += GameApp_Exiting;
             _gameApp.Window.AllowUserResizing = true;
-            _gameApp.ExitEvent += GameApp_Exit;
-            //_gameApp.EarlyDraw += GameApp_EarlyDraw;
+            //_gameApp.BeforeDraw += GameApp_EarlyDraw;
         }
 
         private void InitUIControls()

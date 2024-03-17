@@ -8,69 +8,45 @@ using System.Collections.Generic;
 
 namespace CruZ.Common.UI
 {
-    public interface UIContext
+    //public interface UIContextProvider
+    //{
+    //    event Action<GameTime, SpriteBatch> DrawUI;
+    //    event Action<GameTime> UpdateUI;
+    //    event Action InitializeUI;
+    //    Game GameInstance { get; }
+    //}
+
+    interface IUIController
     {
-        event Action<GameTime>  DrawUI;
-        event Action<GameTime>  UpdateUI;
-        event Action            InitializeUI;
+        void Draw(GameTime gameTime, SpriteBatch spriteBatch);
+        void Update(GameTime gameTime);
+        void Initialize();
     }
 
     public struct UIInfo
     {
-        public GameTime     GameTime;
-        public IInputInfo   InputInfo;
-        public SpriteBatch  SpriteBatch;
+        public GameTime GameTime;
+        public IInputInfo InputInfo;
+        public SpriteBatch? SpriteBatch;
 
         public Point MousePos()
         {
             return new(
-                InputInfo.CurMouse.Position.X, 
+                InputInfo.CurMouse.Position.X,
                 InputInfo.CurMouse.Position.Y);
         }
     }
 
-    public partial class UIManager
+    public partial class UIManager : IUIController
     {
-        UIManager(UIContext context)
+        private UIManager()
         {
-            _context = context;
-
-            _context.DrawUI += Context_DrawUI;
-            _context.UpdateUI += Context_UpdateUI;
-            _context.InitializeUI += Context_Initialize;
+            _root = new();
         }
 
-        private void Context_Initialize()
+        void IUIController.Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            GameApplication.RegisterWindowResize(GameApp_WindowResize);
-            GameApp_WindowResize(GameApplication.Viewport);
-        }
-
-        private void GameApp_WindowResize(Viewport viewport)
-        {
-            Root.Location = new(0, 0);
-            Root.Width = viewport.Width;
-            Root.Height = viewport.Height;
-        }
-
-        private void Context_UpdateUI(GameTime gameTime)
-        {
-            UIInfo info = GetInfo(gameTime);
-
-            if(info.InputInfo.MouseClick && !UIControl.Dragging())
-            {
-                MouseClick?.Invoke(info);
-            }
-
-            foreach (var control in GetTree(_root))
-            {
-                control.InternalUpdate(info);
-            }
-        }
-
-        private void Context_DrawUI(GameTime gameTime)
-        {
-            var args = GetInfo(gameTime);
+            var args = GetInfo(gameTime, spriteBatch);
 
             args.SpriteBatch.Begin();
 
@@ -82,32 +58,60 @@ namespace CruZ.Common.UI
             args.SpriteBatch.End();
         }
 
-        private UIInfo GetInfo(GameTime gameTime)
+        void IUIController.Update(GameTime gameTime)
         {
-            if(_spriteBatch == null)
-                _spriteBatch = GameApplication.GetSpriteBatch();
+            UIInfo info = GetInfo(gameTime, null);
 
+            if (info.InputInfo.MouseClick && !UIControl.Dragging())
+            {
+                MouseClick?.Invoke(info);
+            }
+
+            foreach (var control in GetTree(_root))
+            {
+                control.InternalUpdate(info);
+            }
+        }
+
+        void IUIController.Initialize()
+        {
+            GameApplication.WindowResized += Window_Resized;
+            ResizeRootBounds(GameApplication.GetGraphicsDevice().Viewport);
+        }
+
+        private void Window_Resized(Viewport viewport)
+        {
+            ResizeRootBounds(viewport);
+        }
+
+        private void ResizeRootBounds(Viewport vp)
+        {
+            _root.Location = new(0, 0);
+            _root.Width = vp.Width;
+            _root.Height = vp.Height;
+        }
+
+        private UIInfo GetInfo(GameTime gameTime, SpriteBatch? sp)
+        {
             UIInfo info = new();
-            
+
+            info.SpriteBatch = sp;
             info.GameTime = gameTime;
             info.InputInfo = InputManager.Info;
-            info.SpriteBatch = _spriteBatch;
 
             return info;
         }
 
-        SpriteBatch?    _spriteBatch = null;
-        UIContext       _context;
-        RootControl     _root = new();
+        readonly RootControl _root;
     }
 
     public partial class UIManager
     {
         public static event Action<UIInfo>? MouseClick;
 
-        public static void CreateContext(UIContext context)
+        internal static IUIController CreateContext()
         {
-            _instance = new(context);
+            return _instance = new();
         }
 
         public static UIControl[] GetContains(int mouseX, int mouseY)
@@ -121,7 +125,7 @@ namespace CruZ.Common.UI
 
             foreach (var node in GetTree(root))
             {
-                if(node.GetRect().Contains(mouseX, mouseY))
+                if (node.GetRect().Contains(mouseX, mouseY))
                     contains.Add(node);
             }
 
@@ -137,7 +141,7 @@ namespace CruZ.Common.UI
             List<UIControl> list = [];
             list.Add(control);
 
-            for(int i = 0; i < list.Count; i++)
+            for (int i = 0; i < list.Count; i++)
             {
                 foreach (var child in list[i].Childs)
                 {

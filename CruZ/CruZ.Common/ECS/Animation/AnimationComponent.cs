@@ -65,10 +65,10 @@ namespace CruZ.Common.ECS
         {
             e.Texture = _animatedSprite.TextureRegion.Texture;
             e.SourceRectangle = _animatedSprite.TextureRegion.Bounds;
-            e.Origin =
+            e.NormalizedOrigin =
                 new(
-                _animatedSprite.OriginNormalized.X - 0.5f + e.Origin.X,
-                _animatedSprite.OriginNormalized.Y - 0.5f + e.Origin.Y);
+                _animatedSprite.OriginNormalized.X - 0.5f + e.NormalizedOrigin.X,
+                _animatedSprite.OriginNormalized.Y - 0.5f + e.NormalizedOrigin.Y);
         }
 
         private void Sprite_DrawLoopEnd(object? sender, DrawLoopEndEventArgs e)

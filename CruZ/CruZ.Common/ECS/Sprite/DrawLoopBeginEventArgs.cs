@@ -7,9 +7,9 @@ namespace CruZ.Common.ECS
     public class DrawLoopBeginEventArgs : EventArgs
     {
         public Rectangle SourceRectangle;
-        public NUM.Vector2 Origin;
-        public NUM.Vector2 Position;
-        public NUM.Vector2 Scale;
+        public Vector2 NormalizedOrigin;
+        public Vector2 Position;
+        public Vector2 Scale;
         public Texture2D? Texture;
         public float LayerDepth = 0;
         public bool Skip = false;
@@ -20,8 +20,8 @@ namespace CruZ.Common.ECS
             rect.Width = SourceRectangle.Width * Scale.X;
             rect.Height = SourceRectangle.Height * Scale.Y;
             rect.Location = new(
-                Position.X - rect.Width * Origin.X,
-                Position.Y - rect.Height * Origin.Y);
+                Position.X - rect.Width * NormalizedOrigin.X,
+                Position.Y - rect.Height * NormalizedOrigin.Y);
 
             return rect;
         }
@@ -30,8 +30,8 @@ namespace CruZ.Common.ECS
         {
             var worldBounds = GetWorldBounds();
             return new(
-                worldBounds.X + worldBounds.Width * Origin.X,
-                worldBounds.Y + worldBounds.Height * Origin.Y
+                worldBounds.X + worldBounds.Width * NormalizedOrigin.X,
+                worldBounds.Y + worldBounds.Height * NormalizedOrigin.Y
             );
         }
     }
