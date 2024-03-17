@@ -199,9 +199,7 @@ namespace CruZ.Editor.Controls
 
         private void Input_MouseScroll(IInputInfo info)
         {
-            Camera.Main.Zoom = new(
-                Camera.Main.Zoom.X + info.SrollDelta * 0.001f * Camera.Main.Zoom.X,
-                Camera.Main.Zoom.Y);
+            Camera.Main.Zoom = Camera.Main.Zoom + info.SrollDelta * 0.001f * Camera.Main.Zoom;
         }
 
         private void Input_MouseMove(IInputInfo info)
@@ -213,7 +211,7 @@ namespace CruZ.Editor.Controls
                     (info.CurMouse.Position.X - _mouseStartDragPoint.X) * scale.X,
                     (info.CurMouse.Position.Y - _mouseStartDragPoint.Y) * scale.Y);
 
-                Camera.Main.Position = _cameraStartDragCoord - delt;
+                Camera.Main.CameraOffset = _cameraStartDragCoord - delt;
             }
         }
 
@@ -224,7 +222,7 @@ namespace CruZ.Editor.Controls
             {
                 _isMouseDraggingCamera = true;
                 _mouseStartDragPoint = info.CurMouse.Position;
-                _cameraStartDragCoord = Camera.Main.Position;
+                _cameraStartDragCoord = Camera.Main.CameraOffset;
             }
 
             if (info.IsMouseJustUp(MouseKey.Middle))

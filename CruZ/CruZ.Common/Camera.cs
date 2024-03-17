@@ -36,7 +36,7 @@ namespace CruZ.Common
             var screen = new Vector4(p.X - VirtualWidth / 2f, p.Y - VirtualHeight / 2f, 0, 1);
             var world = Vector4.Transform(screen, inv);
 
-            return new Vector2(world.X / world.W,  world.Y / world.W);
+            return new Vector2(world.X / world.W, world.Y / world.W);
         }
 
         public Point CoordinateToPoint(Vector2 coord)
@@ -45,8 +45,8 @@ namespace CruZ.Common
             var screen = Vector4.Transform(world, ViewMatrix());
 
             return new Point(
-                (screen.X / screen.W + VirtualWidth / 2f).RoundToInt(), 
-                (screen.Y / screen.W + VirtualHeight / 2f).RoundToInt());
+                (screen.X + VirtualWidth / 2f).RoundToInt(),
+                (screen.Y + VirtualHeight / 2f).RoundToInt());
         }
 
         /// <summary>
@@ -55,22 +55,17 @@ namespace CruZ.Common
         /// <returns></returns>
         public Matrix ViewMatrix()
         {
-            float scaleX = ViewPortWidth / VirtualWidth;
-            float scaleY = ViewPortHeight / VirtualHeight;
-
             var mat = Matrix.Identity;
-            mat *= Matrix.CreateScale(scaleX, scaleY, 1);
-            mat *= Matrix.CreateTranslation(-Position.X * scaleX, -Position.Y * scaleY, 0);
-
+            mat *= Matrix.CreateTranslation(-CameraOffset.X, -CameraOffset.Y, 0);
+            mat *= Matrix.CreateScale(Zoom);
             return mat;
         }
 
         public Matrix ProjectionMatrix()
         {
-            return
-                Matrix.CreateOrthographicOffCenter(
-                    -VirtualWidth / 2f, VirtualWidth / 2f,
-                    VirtualHeight / 2f, -VirtualHeight / 2f, 0, 1);
+            return Matrix.CreateOrthographicOffCenter(
+                -VirtualWidth / 2, VirtualWidth / 2,
+                VirtualHeight / 2, -VirtualHeight / 2, 0, 1);
         }
 
         public Vector2 ScreenToWorldScale()
@@ -89,14 +84,14 @@ namespace CruZ.Common
 
         public float VirtualWidth
         {
-            get => _virtualWidth / Zoom.X;
+            get => _virtualWidth;
             set { _virtualWidth = value; }
         }
 
         public float VirtualHeight
         {
-            get => (PreserveRatio ? VirtualWidth / Ratio : _virtualHeight / Zoom.Y);
-            set { _virtualHeight = value; }
+            get => _virtualHeight;
+            set => _virtualHeight = value;
         }
 
         public float ViewPortWidth
@@ -111,29 +106,25 @@ namespace CruZ.Common
             set { _viewPortHeight = value; }
         }
 
-        public Vector2 Position
-        {
-            get => _position;
-            set { _position = value; }
-        }
+        public Vector2 CameraOffset;
+
+        public float Zoom = 1;
+
+        //public Vector2 Position
+        //{
+        //    get => _position;
+        //    set { _position = value; }
+        //}
+
+        //public Vector2 Center
+        //{
+        //    get => new(Position.X + VirtualWidth / 2f, Position.Y + VirtualHeight / 2f);
+        //    set => _position = new(value.X - VirtualWidth / 2f, value.Y - VirtualHeight / 2f);
+        //}
 
         private Vector2 _position = Vector2.Zero;
+        private float _ratio => ViewPortWidth / ViewPortHeight;
 
-        public bool PreserveRatio = true;
-        public float Ratio => ViewPortWidth / ViewPortHeight;
-
-        public Vector2 Zoom
-        {
-            get => _zoom;
-            set
-            {
-                value.X = MathF.Max(0.0001f, value.X);
-                value.Y = MathF.Max(0.0001f, value.Y);
-                _zoom = value;
-            }
-        }
-
-        private Vector2 _zoom = new(1, 1);
         private float _viewPortWidth;
         private float _viewPortHeight;
         private float _virtualWidth = 19;

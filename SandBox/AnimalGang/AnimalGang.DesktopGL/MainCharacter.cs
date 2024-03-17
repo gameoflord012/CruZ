@@ -10,8 +10,6 @@ using System;
 
 namespace AnimalGang
 {
-    using CruZ.Common.DataType;
-
     using CruZ.Common.Input;
 
     public class MainCharacter : EntityScript

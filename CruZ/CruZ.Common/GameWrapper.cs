@@ -42,6 +42,7 @@ namespace CruZ.Common
         {
             base.Draw(gameTime);
 
+            GraphicsDevice.Clear(GameConstants.DEFAULT_BACKGROUND_COLOR);
             OnDraw(gameTime);
             AfterDraw?.Invoke(gameTime);
         }

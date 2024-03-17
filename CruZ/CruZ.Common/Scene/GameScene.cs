@@ -22,7 +22,7 @@ namespace CruZ.Common.Scene
         public TransformEntity[] Entities { get => _entities.ToArray(); }
         public ResourceInfo? ResourceInfo { get; set; }
 
-        private GameScene()
+        public GameScene()
         {
             GameApplication.Exiting += Game_Exiting;
         }

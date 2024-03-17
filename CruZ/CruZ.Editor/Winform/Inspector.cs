@@ -61,7 +61,7 @@ namespace CruZ.Editor
             wrapper?.RefreshComponents();
         }
 
-        private void GameApp_Draw(GameTime time)
+        private void GameApp_Drawing()
         {
             RefreshPropertyGrid();
         }
@@ -91,10 +91,10 @@ namespace CruZ.Editor
                 entities_ComboBox.SelectedItem = e;
             });
 
-            GameApplication.UnregisterDraw(GameApp_Draw);
+            GameApplication.Drawing += GameApp_Drawing;
 
             if (e != null)
-                GameApplication.RegisterDraw(GameApp_Draw);
+                GameApplication.Drawing += GameApp_Drawing;
 
             PropertyGridInvoke(delegate
             {

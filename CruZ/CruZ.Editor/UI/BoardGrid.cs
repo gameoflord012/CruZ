@@ -22,9 +22,10 @@ namespace CruZ.Editor.UI
 
             DrawAxis(args.SpriteBatch);
 
-            var vp_Width = GameApplication.Viewport.Width;
-            var vp_Height = GameApplication.Viewport.Height;
+            var vp_Width = GameApplication.GetGraphicsDevice().Viewport.Width;
+            var vp_Height = GameApplication.GetGraphicsDevice().Viewport.Height;
 
+            // Draw Crosshair
             var center = new PointF(vp_Width / 2f, vp_Height / 2f);
             sp.DrawLine(center.X, center.Y - 10, center.X, center.Y + 10, XNA.Color.Black);
             sp.DrawLine(center.X - 10, center.Y, center.X + 10, center.Y, XNA.Color.Black);
@@ -52,7 +53,7 @@ namespace CruZ.Editor.UI
 
             void DrawBoard(int lineDis, XNA.Color col)
             {
-                var center = Camera.Main.Position;
+                var center = Camera.Main.CameraOffset;
 
                 var x_distance = Camera.Main.VirtualWidth;
                 var y_distance = Camera.Main.VirtualHeight;

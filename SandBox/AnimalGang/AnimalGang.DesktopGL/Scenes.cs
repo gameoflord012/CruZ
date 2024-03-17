@@ -10,7 +10,7 @@ namespace AnimalGang
         [SceneAssetMethod]
         public static GameScene Scene1()
         {
-            var scene = GameApplication.CreateScene();
+            var scene = new GameScene();
 
             var player = scene.CreateEntity();
             player.Name = "Player";
@@ -52,7 +52,7 @@ namespace AnimalGang
         [SceneAssetMethod]
         public static GameScene Scene2()
         {
-            var scene = GameApplication.CreateScene();
+            var scene = new GameScene();
             //
             // ground
             //

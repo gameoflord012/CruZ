@@ -8,6 +8,8 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
+using MonoGame.Extended;
+
 namespace CruZ.Experiment
 {
     class MyGame : GameWrapper
@@ -34,9 +36,11 @@ namespace CruZ.Experiment
             _renderTarget = new(GraphicsDevice, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height);
             _camera = new(GraphicsDevice.Viewport);
             _vp = GraphicsDevice.Viewport;
-            //_camera.Position = new(-_vp.Width / 2f, -_vp.Height / 2f);
-            _uiControl = new UIControl();
 
+            _camera.CameraOffset = new(0, 0);
+            _camera.Zoom = 3;
+
+            _uiControl = new UIControl();
             UIManager.Root.AddChild(_uiControl);
         }
 
@@ -70,8 +74,12 @@ namespace CruZ.Experiment
             var proj = _camera.ProjectionMatrix();
             var view = _camera.ViewMatrix();
 
-            Point point = _camera.CoordinateToPoint(new(-_vp.Width, -_vp.Height));
-            Vector2 position = _camera.PointToCoordinate(point);
+            Point point = _camera.CoordinateToPoint(new(100, 100));
+
+            _spriteBatch.Begin();
+            _spriteBatch.DrawLine(0, 0, point.X, point.Y, Color.White);
+            _spriteBatch.End();
+
             _uiControl.Location = point;
             _uiControl.Width = 100;
             _uiControl.Height = 100;
