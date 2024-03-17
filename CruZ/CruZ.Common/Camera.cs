@@ -71,15 +71,15 @@ namespace CruZ.Common
         public Vector2 ScreenToWorldScale()
         {
             return new(
-                VirtualWidth / ViewPortWidth,
-                VirtualHeight / ViewPortHeight);
+                VirtualWidth / Zoom / ViewPortWidth,
+                VirtualHeight / Zoom / ViewPortHeight);
         }
 
         public Vector2 WorldToScreenScale()
         {
             return new(
-                ViewPortWidth / VirtualWidth,
-                ViewPortHeight / VirtualHeight);
+                ViewPortWidth / (VirtualWidth / Zoom),
+                ViewPortHeight / (VirtualHeight / Zoom));
         }
 
         public float VirtualWidth
