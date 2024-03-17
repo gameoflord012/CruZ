@@ -70,8 +70,6 @@ namespace CruZ.Common
 
         private void Wrapper_AfterDraw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.Beige);
-            
             CalculateFps(gameTime);
             _ecsController.Draw(gameTime);
             _uiController.Draw(gameTime, _spriteBatch);

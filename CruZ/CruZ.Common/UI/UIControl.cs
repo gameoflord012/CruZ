@@ -12,7 +12,7 @@ namespace CruZ.Common.UI
 {
     public partial class UIControl : IDisposable
     {
-        static readonly int BOUND_THICKNESS = 50;
+        static readonly int BOUND_THICKNESS = 3;
         static readonly Color DEFAULT_BACKGROUND_COLOR = XNA.Color.Red;
 
         #region Properties

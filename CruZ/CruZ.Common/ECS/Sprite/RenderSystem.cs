@@ -17,7 +17,7 @@ namespace CruZ.Common.ECS
         public RenderSystem() : base(Aspect.One(
             typeof(SpriteComponent), typeof(LightComponent)))
         {
-            GameApplication.WindowResized += GameApp_WindowResize;
+            
         }
 
         public override void Initialize(IComponentMapperService mapperService)
@@ -40,11 +40,6 @@ namespace CruZ.Common.ECS
             {
                 var sortingLayer = sprites[i].SortingLayer;
                 sortingLayers.Add(sortingLayer);
-
-                var renderTarget = GetRenderTarget(sortingLayer);
-
-                _gd.SetRenderTarget(renderTarget);
-                _gd.Clear(Color.Transparent);
 
                 var fx = EffectManager.NormalSpriteRenderer;
                 fx.Parameters["view_projection"].SetValue(GetViewProjectionMatrix());
@@ -73,34 +68,20 @@ namespace CruZ.Common.ECS
             }
 
             // render all renderTargets to back buffer
-            _gd.SetRenderTarget(null);
-            _gd.Clear(GameConstants.DEFAULT_BACKGROUND_COLOR);
-            _spriteBatch.Begin();
-            foreach (var sortingLayer in sortingLayers)
-            {
-                var renderTarget = GetRenderTarget(sortingLayer);
-                _spriteBatch.Draw(renderTarget, new Vector2(0, 0), Color.White);
-            }
-            _spriteBatch.End();
+            //_gd.SetRenderTarget(null);
+            //_gd.Clear(GameConstants.DEFAULT_BACKGROUND_COLOR);
+            //_spriteBatch.Begin();
+            //foreach (var sortingLayer in sortingLayers)
+            //{
+            //    var renderTarget = GetRenderTarget(sortingLayer);
+            //    _spriteBatch.Draw(renderTarget, new Vector2(0, 0), Color.White);
+            //}
+            //_spriteBatch.End();
         }
 
         private Matrix GetViewProjectionMatrix()
         {
             return Camera.Main.ViewMatrix() * Camera.Main.ProjectionMatrix();
-        }
-
-        private void GameApp_WindowResize(Viewport viewport)
-        {
-            foreach (var renderTarget in _renderTargets.Values)
-                renderTarget.Dispose();
-            _renderTargets.Clear();
-        }
-
-        private RenderTarget2D GetRenderTarget(int sortingLayer)
-        {
-            if (!_renderTargets.ContainsKey(sortingLayer))
-                _renderTargets[sortingLayer] = new RenderTarget2D(_gd, _gd.Viewport.Width, _gd.Viewport.Height);
-            return _renderTargets[sortingLayer];
         }
 
         private List<SpriteComponent> GetSortedSpriteList()
@@ -115,7 +96,6 @@ namespace CruZ.Common.ECS
         SpriteBatch _spriteBatch;
         ComponentMapper<LightComponent> _lightMapper;
         ComponentMapper<SpriteComponent> _spriteMapper;
-        Dictionary<int, RenderTarget2D> _renderTargets = [];
         GraphicsDevice _gd;
         Effect _lightEffect;
     }

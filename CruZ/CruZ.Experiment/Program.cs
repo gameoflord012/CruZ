@@ -34,7 +34,10 @@ namespace CruZ.Experiment
             _renderTarget = new(GraphicsDevice, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height);
             _camera = new(GraphicsDevice.Viewport);
             _vp = GraphicsDevice.Viewport;
-            _camera.Position = new(-_vp.Width / 2f, -_vp.Height / 2f);
+            //_camera.Position = new(-_vp.Width / 2f, -_vp.Height / 2f);
+            _uiControl = new UIControl();
+
+            UIManager.Root.AddChild(_uiControl);
         }
 
         protected override void OnUpdate(GameTime gameTime)
@@ -69,11 +72,14 @@ namespace CruZ.Experiment
 
             Point point = _camera.CoordinateToPoint(new(-_vp.Width, -_vp.Height));
             Vector2 position = _camera.PointToCoordinate(point);
+            _uiControl.Location = point;
+            _uiControl.Width = 100;
+            _uiControl.Height = 100;
 
             _normalFx.Parameters["view_projection"].SetValue(view * proj);
 
             _spriteBatch.Begin(effect: _normalFx);
-            _spriteBatch.Draw(_texture, position, Color.White);
+            _spriteBatch.Draw(_texture, Vector2.Zero, Color.White);
             _spriteBatch.End();
         }
 
@@ -112,6 +118,7 @@ namespace CruZ.Experiment
         GraphicsDeviceManager _gdManager;
         Camera _camera;
         RenderTarget2D _renderTarget;
+        UIControl _uiControl;
         Vector2 _position;
         Viewport _vp;
     }
