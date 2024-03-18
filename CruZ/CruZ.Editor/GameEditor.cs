@@ -103,7 +103,7 @@ namespace CruZ.Editor.Controls
 
         public void LoadSceneFromFile(string file)
         {
-            Check_AppInitialized();
+            CheckAppInitialized();
 
             var scene = _userResource.Load<GameScene>(file);
             scene.Name = Path.GetRelativePath(_userResource.ResourceRoot, file);
@@ -113,7 +113,7 @@ namespace CruZ.Editor.Controls
 
         public void LoadRuntimeScene(string sceneName)
         {
-            Check_AppInitialized();
+            CheckAppInitialized();
 
             try
             {
@@ -305,7 +305,7 @@ namespace CruZ.Editor.Controls
             return null;
         }
 
-        private void Check_AppInitialized()
+        private void CheckAppInitialized()
         {
             if (_gameAppThread != null && _gameAppThread.IsAlive) return;
 

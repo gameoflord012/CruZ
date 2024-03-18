@@ -28,7 +28,6 @@ namespace CruZ.Common.UI
         public int Height { get => (int)_size.Y; set => _size.Y = value; }
 
         public Color BackgroundColor = DEFAULT_BACKGROUND_COLOR;
-        public bool Active = true;
 
         public object? Tag { get; set; } = null;
         #endregion
@@ -59,12 +58,12 @@ namespace CruZ.Common.UI
 
         internal void InternalUpdate(UIInfo args)
         {
-            if(!Active) return;
-
             _args = args;
 
+            // dragging
             ProcessDragging(args);
             
+            // update mouse events
             if (IsMouseHover())
             {
                 if (args.InputInfo.MouseClick && !Dragging())
@@ -78,13 +77,12 @@ namespace CruZ.Common.UI
                 }
             }
 
+            // call update
             OnUpdate(args);
         }
 
         internal void InternalDraw(UIInfo args)
         {
-            if(!Active) return;
-
             _args = args;
             OnDraw(args);
         }
@@ -146,7 +144,6 @@ namespace CruZ.Common.UI
         {
             if(Parent != null)
             {
-                Active = false;
                 Parent.RemoveChild(this);
             }
         }
