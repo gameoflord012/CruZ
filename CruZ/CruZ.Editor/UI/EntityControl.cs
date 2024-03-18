@@ -148,8 +148,8 @@ namespace CruZ.Editor.UI
         protected override void OnUpdateDragging(UIInfo info)
         {
             var ePoint = new Point(
-                info.MousePos().X - _dragCenterOffset.X,
-                info.MousePos().Y - _dragCenterOffset.Y);
+                info.MousePos().X + _dragCenterOffset.X,
+                info.MousePos().Y + _dragCenterOffset.Y);
 
             _e.Transform.Position = Camera.Main.PointToCoordinate(ePoint);
         }
