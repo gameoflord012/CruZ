@@ -16,7 +16,7 @@ namespace CruZ.Common.Scene
         public event Action<TransformEntity>? EntityAdded;
         public event Action<TransformEntity>? EntityRemoved;
 
-        public string Name = "";
+        public string Name = ""; // temporary use name as runtime resource path
 
         [JsonIgnore]
         public TransformEntity[] Entities { get => _entities.ToArray(); }

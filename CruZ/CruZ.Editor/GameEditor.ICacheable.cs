@@ -34,8 +34,6 @@ namespace CruZ.Editor.Controls
             {
                 var px = binReader.ReadSingle();
                 var py = binReader.ReadSingle();
-                var pz = binReader.ReadSingle();
-
                 var z = binReader.ReadSingle();
 
                 GetMainCamera().CameraOffset = new(px, py);
@@ -56,7 +54,7 @@ namespace CruZ.Editor.Controls
                 else
                 {
                     if(CurrentGameScene.ResourceInfo == null)
-                        return false;
+                        binWriter.Write(CurrentGameScene.Name); // temporary use name as runtime resource path
                     else
                         binWriter.Write(CurrentGameScene.ResourceInfo.ResourceName);
                 }
@@ -66,7 +64,6 @@ namespace CruZ.Editor.Controls
             {
                 binWriter.Write(GetMainCamera().CameraOffset.X);
                 binWriter.Write(GetMainCamera().CameraOffset.Y);
-
                 binWriter.Write(GetMainCamera().Zoom);
             }
 
