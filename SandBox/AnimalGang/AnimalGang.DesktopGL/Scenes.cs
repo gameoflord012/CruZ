@@ -27,7 +27,7 @@ namespace AnimalGang
             player.Transform.Scale = new(0.1f, 0.1f);
             var player_sp = player.GetComponent<SpriteComponent>();
             player_sp.SortingLayer = 1;
-            player_sp.YLayerDepth = true;
+            player_sp.SortByY = true;
 
             var dungeonFloor = scene.CreateEntity();
             dungeonFloor.Name = "dungeonFloor";
@@ -44,7 +44,7 @@ namespace AnimalGang
             var dungeonWall_sp = dungeonWall.GetComponent<SpriteComponent>();
             dungeonWall_sp.LoadTexture("tiles\\dungeon-wall");
             dungeonWall_sp.SortingLayer = 1;
-            dungeonWall_sp.YLayerDepth = true;
+            dungeonWall_sp.SortByY = true;
 
             return scene;
         }
@@ -69,7 +69,7 @@ namespace AnimalGang
             var sp_groundObj = new SpriteComponent();
             sp_groundObj.LoadTexture("tiles\\tile3\\home-object-mid.png");
             sp_groundObj.SortingLayer = 1;
-            sp_groundObj.YLayerDepth = true;
+            sp_groundObj.SortByY = true;
 
             var groundObj = scene.CreateEntity("Objects");
             groundObj.AddComponent(sp_groundObj);
@@ -94,7 +94,7 @@ namespace AnimalGang
 
             var sp_mainChar = new SpriteComponent();
             sp_mainChar.SortingLayer = 1;
-            sp_mainChar.YLayerDepth = true;
+            sp_mainChar.SortByY = true;
 
             var mainChar = scene.CreateEntity("MainChar");
             mainChar.AddComponent(script_mainChar);

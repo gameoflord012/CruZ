@@ -73,6 +73,7 @@ namespace CruZ.Common
             CalculateFps(gameTime);
             _ecsController.Draw(gameTime);
             _uiController.Draw(gameTime, _spriteBatch);
+            AfterDrawn?.Invoke();
         }
 
         private void Wrapper_Initialized()
@@ -134,7 +135,7 @@ namespace CruZ.Common
                 WindowResized = null;
                 Initialized = null;
                 Exiting = null;
-                Drawing = null;
+                AfterDrawn = null;
             }
         }
 
@@ -163,7 +164,7 @@ namespace CruZ.Common
         public static event Action<Viewport>? WindowResized;
         public static event Action? Initialized;
         public static event Action? Exiting;
-        public static event Action? Drawing;
+        public static event Action? AfterDrawn;
 
         public static GraphicsDevice GetGraphicsDevice() => _instance.GraphicsDevice;
 

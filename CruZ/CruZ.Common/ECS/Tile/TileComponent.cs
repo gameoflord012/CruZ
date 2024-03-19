@@ -59,7 +59,7 @@ namespace CruZ.Common.ECS
                 delt.X * _e.Transform.Scale.X,
                 delt.Y * _e.Transform.Scale.Y);
 
-            if (_sp.YLayerDepth)
+            if (_sp.SortByY)
             {
                 args.LayerDepth = (args.Position.Y / GameConstants.MAX_WORLD_DISTANCE + 1) / 2;
             }

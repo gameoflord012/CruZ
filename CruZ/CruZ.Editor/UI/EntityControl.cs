@@ -35,18 +35,18 @@ namespace CruZ.Editor.UI
             }
 
             _initialBackgroundCol = BackgroundColor;
-            _shouldRender = false;
+            _isSelected = false;
         }
 
         public void SelectEntity(bool shouldSelect)
         {
-            _shouldRender = shouldSelect;
+            _isSelected = shouldSelect;
             _draggableToggle = false;
         }
 
         protected override void OnDraw(UIInfo args)
         {
-            if(!_shouldRender) return;
+            if(!_isSelected) return;
 
             base.OnDraw(args);
 
@@ -61,19 +61,20 @@ namespace CruZ.Editor.UI
 
         protected override void OnUpdate(UIInfo args)
         {
-            if (args.InputInfo.IsKeyJustDown(XNA.Input.Keys.W))
-            {
-                _draggableToggle = !_draggableToggle;
-            }
-
-            BackgroundColor = _draggableToggle ? _draggableBackgroundCol : _initialBackgroundCol;
-
             if (_bounds.IsEmpty)
             {
                 Width = MIN_BOUND_SIZE;
                 Height = MIN_BOUND_SIZE;
                 var center = Camera.Main.CoordinateToPoint(_e.Transform.Position);
                 SetCenter(center);
+            }
+
+            if (!_isSelected) return;
+
+            if (args.InputInfo.IsKeyJustDown(XNA.Input.Keys.W))
+            {
+                _draggableToggle = !_draggableToggle;
+                BackgroundColor = _draggableToggle ? _draggableBackgroundCol : _initialBackgroundCol;
             }
         }
 
@@ -172,7 +173,7 @@ namespace CruZ.Editor.UI
 
         bool _dragging = false;
         bool _draggableToggle;
-        bool _shouldRender = false;
+        bool _isSelected = false;
         bool Draggable => _draggableToggle;
 
 

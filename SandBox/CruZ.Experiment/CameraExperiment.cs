@@ -1,7 +1,4 @@
-﻿using System;
-
-using CruZ.Common;
-using CruZ.Common.Input;
+﻿using CruZ.Common;
 using CruZ.Common.UI;
 
 using Microsoft.Xna.Framework;
@@ -12,9 +9,9 @@ using MonoGame.Extended;
 
 namespace CruZ.Experiment
 {
-    class MyGame : GameWrapper
+    class CameraExperiment : GameWrapper
     {
-        public MyGame() : base()
+        public CameraExperiment() : base()
         {
             IsMouseVisible = true;
             Content.RootDirectory = ".\\Content\\bin";
@@ -129,15 +126,5 @@ namespace CruZ.Experiment
         UIControl _uiControl;
         Vector2 _position;
         Viewport _vp;
-    }
-
-
-    internal class Program
-    {
-        static void Main(string[] args)
-        {
-            Game game = new MyGame();
-            game.Run();
-        }
     }
 }

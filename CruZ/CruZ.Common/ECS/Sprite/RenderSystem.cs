@@ -86,7 +86,7 @@ namespace CruZ.Common.ECS
 
         private List<SpriteComponent> GetSortedSpriteList()
         {
-            List<SpriteComponent> sprites = this.GetAllComponents(_spriteMapper).ToList();
+            List<SpriteComponent> sprites = this.GetAllComponents(_spriteMapper);
             sprites.Sort((s1, s2) => { return s1.SortingLayer.CompareTo(s2.SortingLayer); });
             return sprites;
         }

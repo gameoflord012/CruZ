@@ -32,7 +32,7 @@ namespace CruZ.Common.ECS
         #region Properties
         public float LayerDepth { get; set; } = 0;
         public int SortingLayer { get; set; } = 0;
-        public bool YLayerDepth { get; set; } = false;
+        public bool SortByY { get; set; } = false;
         public bool Flip { get; set; }
 
         [Browsable(false), JsonIgnore]
@@ -115,17 +115,15 @@ namespace CruZ.Common.ECS
         
         internal virtual void InternalDraw(SpriteBatch spriteBatch)
         {
-            Trace.Assert(_e != null);
-
             DrawBegin?.Invoke();
 
             while (true)
             {
                 DrawLoopBeginEventArgs beginLoop = new();
-                beginLoop.Position = new(_e.Transform.Position.X, _e.Transform.Position.Y);
+                beginLoop.Position = new(AttachedEntity.Transform.Position.X, AttachedEntity.Transform.Position.Y);
                 beginLoop.LayerDepth = CalculateLayerDepth();
                 beginLoop.NormalizedOrigin = NormalizedOrigin;
-                beginLoop.Scale = new(_e.Transform.Scale.X, _e.Transform.Scale.Y);
+                beginLoop.Scale = new(AttachedEntity.Transform.Scale.X, AttachedEntity.Transform.Scale.Y);
 
                 if (Texture != null)
                 {
@@ -173,18 +171,17 @@ namespace CruZ.Common.ECS
             DrawEnd?.Invoke();
         }
 
-        protected override void OnAttached(TransformEntity entity)
-        {
-            _e = entity;
-        }
-
         private float CalculateLayerDepth()
         {
-            return YLayerDepth ? (_e.Transform.Position.Y / GameConstants.MAX_WORLD_DISTANCE + 1) / 2 : LayerDepth;
+            return SortByY ? AttachedEntity.Transform.Position.Y / 2 : LayerDepth;
+        }
+
+        public override string ToString()
+        {
+            return _spriteResInfo != null ? _spriteResInfo.ResourceName : "<None>";
         }
 
         Texture2D? _texture;
-        TransformEntity? _e;
         [JsonProperty]
         ResourceInfo? _spriteResInfo;
         ResourceManager _resource;
