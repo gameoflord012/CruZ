@@ -34,5 +34,18 @@ namespace CruZ.Common.Utility
         {
             return (int)(f + 0.5f);
         }
+
+        public static float[,] GenPerlinNoise(int w, int h)
+        {
+            FastNoiseLite noise = new FastNoiseLite();
+            noise.SetNoiseType(FastNoiseLite.NoiseType.Perlin);
+
+            var noiseData = new float[w, h];
+            for(int i = 0; i < w; i++)
+                for(int j = 0; j < h; j++)
+                    noiseData[i, j] = (noise.GetNoise(i, j) + 1f) / 2f;
+
+            return noiseData;
+        }
     }
 }

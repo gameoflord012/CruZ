@@ -7,6 +7,9 @@
 #endif
 
 float4x4 view_projection;
+float intensity;
+float min_alpha;
+
 sampler TextureSampler : register(s0);
 
 struct VertexInput {
@@ -30,8 +33,13 @@ PixelInput SpriteVertexShader(VertexInput v) {
 }
 
 float4 SpritePixelShader(PixelInput p) : SV_TARGET {
-    float4 diffuse = tex2D(TextureSampler, p.TexCoord.xy);
-    return diffuse * p.Color;
+    float4 basic = tex2D(TextureSampler, p.TexCoord.xy);
+
+    if(basic.a < min_alpha) {
+        discard;
+    }
+
+    return basic + basic * p.Color * intensity;
 }
 
 technique SpriteBatch {

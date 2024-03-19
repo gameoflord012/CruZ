@@ -74,6 +74,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Utility\GameTimeHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utility\Helper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utility\PathHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utility\FastNoiseLite.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utility\SpriteBatchExtensions.cs" />
   </ItemGroup>
 </Project>

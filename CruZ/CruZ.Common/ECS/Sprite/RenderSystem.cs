@@ -63,7 +63,7 @@ namespace CruZ.Common.ECS
                 foreach (var light in lights
                     .Where(e => e.SortingLayers.Contains(sortingLayer)))
                 {
-                    light.InternalDraw(_spriteBatch, GetViewProjectionMatrix());
+                    light.InternalDraw(gameTime, _spriteBatch, GetViewProjectionMatrix());
                 }
             }
 

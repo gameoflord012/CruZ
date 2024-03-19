@@ -22,7 +22,7 @@ namespace CruZ.Experiment
         {
             base.OnInitialize();
 
-            _camera = new Camera(GraphicsDevice.Viewport);
+            _camera = new Camera(Window);
             _sp = new SpriteBatch(GraphicsDevice);
         }
 

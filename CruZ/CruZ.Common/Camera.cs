@@ -17,42 +17,62 @@ namespace CruZ.Common
     {
         //public event Action OnCameraValueChanged;
 
-        public Camera(Viewport viewport)
+        public Camera(GameWindow window)
         {
-            ViewPortWidth = viewport.Width;
-            ViewPortHeight = viewport.Height;
+            ViewPortWidth = window.ClientBounds.Width;
+            ViewPortHeight = window.ClientBounds.Height;
             _virtualWidth = ViewPortWidth;
             _virtualHeight = ViewPortHeight;
-        }
+            _window = window;
 
-        public Camera(int vpWidth, int vpHeight) : this(new(0, 0, vpWidth, vpHeight))
-        {
-
+            window.ClientSizeChanged += Window_ClientSizeChanged;
+            UpdateViewportSize();
         }
 
         public Vector2 PointToCoordinate(Point p)
         {
-            var inv = Matrix.Invert(ViewMatrix());
-            var screen = new Vector4(p.X - VirtualWidth / 2f, p.Y - VirtualHeight / 2f, 0, 1);
-            var world = Vector4.Transform(screen, inv);
+            var ndc = new Vector2(
+                p.X / ViewPortWidth  - 0.5f, 
+                -p.Y / ViewPortHeight - 0.5f);
 
-            return new Vector2(world.X / world.W, world.Y / world.W);
+            var inv = Matrix.Invert(ViewProjectionMatrix());
+            var world = Vector4.Transform(ndc, inv);
+
+            return new Vector2(world.X, world.Y);
         }
 
         public Point CoordinateToPoint(Vector2 coord)
         {
             var world = new Vector4(coord.X, coord.Y, 0, 1);
-            var screen = Vector4.Transform(world, ViewMatrix());
+            var ndc = Vector4.Transform(world, ViewProjectionMatrix());
 
-            return new Point(
-                (screen.X + VirtualWidth / 2f).RoundToInt(),
-                (screen.Y + VirtualHeight / 2f).RoundToInt());
+            // Convert ndc to screen
+            var screen = new Vector2(
+                (ndc.X + 1) / 2f * ViewPortWidth, 
+                (-ndc.Y + 1) / 2f * ViewPortHeight);
+
+            return new Point(screen.X.RoundToInt(), screen.Y.RoundToInt());
+        }
+
+        public Vector2 ScreenToWorldRatio()
+        { 
+            return new(
+                ViewPortWidth * Zoom / VirtualHeight,
+                ViewPortHeight * Zoom / ViewPortHeight
+            );
+
         }
 
         /// <summary>
         /// Convert from world coordinate to camera coodinate, which camera's viewport TL is -size / 2
         /// </summary>
         /// <returns></returns>
+        
+        public Matrix ViewProjectionMatrix()
+        {
+            return ViewMatrix() * ProjectionMatrix();
+        }
+
         public Matrix ViewMatrix()
         {
             var mat = Matrix.Identity;
@@ -67,20 +87,6 @@ namespace CruZ.Common
                 -VirtualWidth / 2, VirtualWidth / 2,
                 VirtualHeight / 2, -VirtualHeight / 2, 
                 -GameConstants.MAX_WORLD_DISTANCE, GameConstants.MAX_WORLD_DISTANCE);
-        }
-
-        public Vector2 ScreenToWorldScale()
-        {
-            return new(
-                VirtualWidth / Zoom / ViewPortWidth,
-                VirtualHeight / Zoom / ViewPortHeight);
-        }
-
-        public Vector2 WorldToScreenScale()
-        {
-            return new(
-                ViewPortWidth / (VirtualWidth / Zoom),
-                ViewPortHeight / (VirtualHeight / Zoom));
         }
 
         public float VirtualWidth
@@ -107,28 +113,25 @@ namespace CruZ.Common
             set { _viewPortHeight = value; }
         }
 
-        public Vector2 CameraOffset;
+        private void Window_ClientSizeChanged(object? sender, EventArgs e)
+        {
+            UpdateViewportSize();
+        }
 
+        private void UpdateViewportSize()
+        {
+            ViewPortWidth = _window.ClientBounds.Width;
+            ViewPortHeight = _window.ClientBounds.Height;
+        }
+
+        public Vector2 CameraOffset;
         public float Zoom = 1;
 
-        //public Vector2 Position
-        //{
-        //    get => _position;
-        //    set { _position = value; }
-        //}
+        float _viewPortWidth;
+        float _viewPortHeight;
+        float _virtualWidth = 19;
+        float _virtualHeight = 10;
 
-        //public Vector2 Center
-        //{
-        //    get => new(Position.X + VirtualWidth / 2f, Position.Y + VirtualHeight / 2f);
-        //    set => _position = new(value.X - VirtualWidth / 2f, value.Y - VirtualHeight / 2f);
-        //}
-
-        private Vector2 _position = Vector2.Zero;
-        private float _ratio => ViewPortWidth / ViewPortHeight;
-
-        private float _viewPortWidth;
-        private float _viewPortHeight;
-        private float _virtualWidth = 19;
-        private float _virtualHeight = 10;
+        GameWindow _window;
     }
 }

@@ -206,12 +206,12 @@ namespace CruZ.Editor.Controls
         {
             if (_isMouseDraggingCamera)
             {
-                var scale = Camera.Main.ScreenToWorldScale();
+                var mousePoint = info.CurMouse.Position;
                 var delt = new Vector2(
-                    (info.CurMouse.Position.X - _mouseStartDragPoint.X) * scale.X,
-                    (info.CurMouse.Position.Y - _mouseStartDragPoint.Y) * scale.Y);
-
-                Camera.Main.CameraOffset = _cameraStartDragCoord - delt;
+                    (_mouseStartDragPoint.X - mousePoint.X) / Camera.Main.ScreenToWorldRatio().X,
+                    (_mouseStartDragPoint.Y - mousePoint.Y) / Camera.Main.ScreenToWorldRatio().Y
+                );
+                Camera.Main.CameraOffset = _cameraStartDragCoord + delt;
             }
         }
 
@@ -404,14 +404,14 @@ namespace CruZ.Editor.Controls
 
         private Camera GetMainCamera()
         {
-            return _mainCamera ??= new Camera(_gameApp.GraphicsDevice.Viewport);
+            return _mainCamera ??= new Camera(_gameApp.Window);
         }
         #endregion
 
         #region Private_Variables
         bool _isMouseDraggingCamera;
         Vector2 _cameraStartDragCoord;
-        XNA.Point _mouseStartDragPoint;
+        Point _mouseStartDragPoint;
 
         GameScene? _currentScene;
         GameScene? _lastScene;

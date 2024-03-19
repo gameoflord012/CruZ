@@ -25,7 +25,7 @@ namespace CruZ.Editor.UI
             var vp_Width = GameApplication.GetGraphicsDevice().Viewport.Width;
             var vp_Height = GameApplication.GetGraphicsDevice().Viewport.Height;
 
-            // Draw Crosshair
+            // draw cross-hair
             var center = new PointF(vp_Width / 2f, vp_Height / 2f);
             sp.DrawLine(center.X, center.Y - 10, center.X, center.Y + 10, XNA.Color.Black);
             sp.DrawLine(center.X - 10, center.Y, center.X + 10, center.Y, XNA.Color.Black);
@@ -33,30 +33,27 @@ namespace CruZ.Editor.UI
 
         private void DrawAxis(SpriteBatch spriteBatch)
         {
-            const int MAX_X_LINE = 25;
+            const int MAX_LINE_IN_SCREEN = 25;
 
-            float maxLineDistance = Camera.Main.ViewPortWidth / MAX_X_LINE;
-            int lineDis = 1;
+            float minLineDistance = Camera.Main.ViewPortWidth / MAX_LINE_IN_SCREEN;
+            int lineWorldDis = 1;
 
-            while (
-                lineDis * 2f *
-                Camera.Main.WorldToScreenScale().X < maxLineDistance)
-            {
-                lineDis *= 2;
-            }
+            // x2 if lineWorldDis not excess minLineDistance
+            while (lineWorldDis * Camera.Main.ScreenToWorldRatio().X < minLineDistance)
+                lineWorldDis *= 2;
 
-            var col = lineDis == 1 ?
+            var col = lineWorldDis == 1 ?
                 EditorConstants.UNIT_BOARD_COLOR :
                 EditorConstants.BOARD_COLOR;
 
-            DrawBoard(FunMath.RoundInt(lineDis), col);
+            DrawBoard(FunMath.RoundInt(lineWorldDis), col);
 
             void DrawBoard(int lineDis, XNA.Color col)
             {
                 var center = Camera.Main.CameraOffset;
 
-                var x_distance = Camera.Main.VirtualWidth;
-                var y_distance = Camera.Main.VirtualHeight;
+                var x_distance = Camera.Main.ViewPortWidth / Camera.Main.ScreenToWorldRatio().X;
+                var y_distance = Camera.Main.ViewPortHeight / Camera.Main.ScreenToWorldRatio().Y;
 
                 var min_x = center.X - x_distance;
                 var max_x = center.X + x_distance;

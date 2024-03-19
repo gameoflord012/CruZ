@@ -79,7 +79,7 @@ namespace CruZ.Common
         private void Wrapper_Initialized()
         {
             _spriteBatch = new(GraphicsDevice);
-            Camera.Main = new Camera(GraphicsDevice.Viewport);
+            Camera.Main = new Camera(Window);
 
             _ecsController.Initialize();
             _uiController.Initialize();

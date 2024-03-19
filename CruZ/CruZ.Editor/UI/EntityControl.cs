@@ -101,13 +101,10 @@ namespace CruZ.Editor.UI
             _points = bBox.Points;
 
             Location = Camera.Main.CoordinateToPoint(new Vector2(_bounds.X, _bounds.Y));
+            var LocationBR = Camera.Main.CoordinateToPoint(new Vector2(_bounds.X + _bounds.Width, _bounds.Y + _bounds.Height));
 
-            var size = new Size2(
-                _bounds.Width * Camera.Main.WorldToScreenScale().X,
-                _bounds.Height * Camera.Main.WorldToScreenScale().Y);
-
-            Width = (int)MathF.Max(MIN_BOUND_SIZE, size.Width);
-            Height = (int)MathF.Max(MIN_BOUND_SIZE, size.Height);
+            Width = LocationBR.X - Location.X;
+            Height = LocationBR.Y - Location.Y;
         }
 
         private Point GetCenter()

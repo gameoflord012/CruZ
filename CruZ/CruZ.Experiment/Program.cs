@@ -10,7 +10,7 @@ namespace CruZ.Experiment
     {
         static void Main(string[] args)
         {
-            Game game = new SpriteBatchLayerDepthExperiment();
+            Game game = new CameraExperiment();
             game.Run();
         }
     }

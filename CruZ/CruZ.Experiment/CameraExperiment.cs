@@ -14,6 +14,7 @@ namespace CruZ.Experiment
         public CameraExperiment() : base()
         {
             IsMouseVisible = true;
+            Window.AllowUserResizing = true;
             Content.RootDirectory = ".\\Content\\bin";
             GameApplication.CreateContext(this);
         }
@@ -31,11 +32,11 @@ namespace CruZ.Experiment
         {
             _spriteBatch = new(GraphicsDevice);
             _renderTarget = new(GraphicsDevice, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height);
-            _camera = new(GraphicsDevice.Viewport);
+            _camera = new(Window);
             _vp = GraphicsDevice.Viewport;
 
             _camera.CameraOffset = new(0, 0);
-            _camera.Zoom = 3;
+            _camera.Zoom = 1;
 
             _uiControl = new UIControl();
             UIManager.Root.AddChild(_uiControl);
@@ -71,7 +72,7 @@ namespace CruZ.Experiment
             var proj = _camera.ProjectionMatrix();
             var view = _camera.ViewMatrix();
 
-            Point point = _camera.CoordinateToPoint(new(100, 100));
+            Point point = _camera.CoordinateToPoint(new(50, 50));
 
             _spriteBatch.Begin();
             _spriteBatch.DrawLine(0, 0, point.X, point.Y, Color.White);
