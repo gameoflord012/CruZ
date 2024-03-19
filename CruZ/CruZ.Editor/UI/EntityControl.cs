@@ -41,7 +41,7 @@ namespace CruZ.Editor.UI
         public void SelectEntity(bool shouldSelect)
         {
             _isSelected = shouldSelect;
-            _draggableToggle = false;
+            Draggable = false;
         }
 
         protected override void OnDraw(UIInfo args)
@@ -73,8 +73,7 @@ namespace CruZ.Editor.UI
 
             if (args.InputInfo.IsKeyJustDown(XNA.Input.Keys.W))
             {
-                _draggableToggle = !_draggableToggle;
-                BackgroundColor = _draggableToggle ? _draggableBackgroundCol : _initialBackgroundCol;
+                Draggable = !Draggable;
             }
         }
 
@@ -160,6 +159,18 @@ namespace CruZ.Editor.UI
         }
         #endregion
 
+        bool Draggable
+        {
+            get => _draggable;
+            set
+            {
+                if (_draggable == value) return;
+
+                _draggable = value;
+                BackgroundColor = _draggable ? _draggableBackgroundCol : _initialBackgroundCol;
+            }
+        }
+
         TransformEntity _e;
         SpriteComponent? _sp;
         DRAW.RectangleF _bounds; //World bounds
@@ -168,12 +179,10 @@ namespace CruZ.Editor.UI
 
         public List<Vector2> _points = [];
 
-        bool _draggableToggle;
         bool _isSelected = false;
-        bool Draggable => _draggableToggle;
+        bool _draggable;
 
-
-        XNA.Color _initialBackgroundCol;
-        XNA.Color _draggableBackgroundCol = XNA.Color.Green;
+        Color _initialBackgroundCol;
+        Color _draggableBackgroundCol = Color.Green;
     }
 }
