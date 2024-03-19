@@ -65,7 +65,8 @@ namespace CruZ.Common
         {
             return Matrix.CreateOrthographicOffCenter(
                 -VirtualWidth / 2, VirtualWidth / 2,
-                VirtualHeight / 2, -VirtualHeight / 2, 0, 1);
+                VirtualHeight / 2, -VirtualHeight / 2, 
+                -GameConstants.MAX_WORLD_DISTANCE, GameConstants.MAX_WORLD_DISTANCE);
         }
 
         public Vector2 ScreenToWorldScale()
