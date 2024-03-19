@@ -32,8 +32,8 @@ namespace CruZ.Common
         public Vector2 PointToCoordinate(Point p)
         {
             var ndc = new Vector2(
-                p.X / ViewPortWidth  - 0.5f, 
-                -p.Y / ViewPortHeight - 0.5f);
+                p.X / ViewPortWidth * 2f - 1f, 
+                -(p.Y / ViewPortHeight * 2f - 1f));
 
             var inv = Matrix.Invert(ViewProjectionMatrix());
             var world = Vector4.Transform(ndc, inv);
@@ -57,10 +57,9 @@ namespace CruZ.Common
         public Vector2 ScreenToWorldRatio()
         { 
             return new(
-                ViewPortWidth * Zoom / VirtualHeight,
-                ViewPortHeight * Zoom / ViewPortHeight
+                ViewPortWidth * Zoom / VirtualWidth,
+                ViewPortHeight * Zoom / VirtualHeight
             );
-
         }
 
         /// <summary>

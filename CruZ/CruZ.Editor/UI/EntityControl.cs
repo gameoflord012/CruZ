@@ -128,8 +128,8 @@ namespace CruZ.Editor.UI
             {
                 var ePoint = Camera.Main.CoordinateToPoint(_e.Transform.Position);
                 _dragCenterOffset = new(
-                    ePoint.X - args.MousePos().X, 
-                    ePoint.Y - args.MousePos().Y);
+                    args.MousePos().X - ePoint.X,
+                    args.MousePos().Y - ePoint.Y);
                 return this;
             }
             return Draggable ? this : null;
@@ -138,8 +138,8 @@ namespace CruZ.Editor.UI
         protected override void OnUpdateDragging(UIInfo info)
         {
             var ePoint = new Point(
-                info.MousePos().X + _dragCenterOffset.X,
-                info.MousePos().Y + _dragCenterOffset.Y);
+                info.MousePos().X - _dragCenterOffset.X,
+                info.MousePos().Y - _dragCenterOffset.Y);
 
             _e.Transform.Position = Camera.Main.PointToCoordinate(ePoint);
         }
@@ -168,7 +168,6 @@ namespace CruZ.Editor.UI
 
         public List<Vector2> _points = [];
 
-        bool _dragging = false;
         bool _draggableToggle;
         bool _isSelected = false;
         bool Draggable => _draggableToggle;
