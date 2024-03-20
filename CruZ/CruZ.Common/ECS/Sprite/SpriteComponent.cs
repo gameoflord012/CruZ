@@ -7,6 +7,7 @@ using CruZ.Common.GameSystem.Resource;
 using CruZ.Common.Resource;
 using CruZ.Common.UI;
 using Microsoft.Xna.Framework;
+using CruZ.Common.Utility;
 
 
 
@@ -66,7 +67,7 @@ namespace CruZ.Common.ECS
                 _hasBoundingBox = false;
             };
 
-            DrawLoopEnd += (sender, args) => 
+            DrawLoopEnd += (sender, args) =>
             {
                 _boundingBox.Points.Add(args.BeginArgs.GetWorldOrigin());
 
@@ -99,7 +100,7 @@ namespace CruZ.Common.ECS
                 {
                     Texture = _resource.Load<Texture2D>(_spriteResInfo);
                 }
-                catch(Exception e)
+                catch (Exception e)
                 {
                     throw new ArgumentException($"Failed to load texture with path \"{texturePath}\"", e);
                 }
@@ -112,11 +113,11 @@ namespace CruZ.Common.ECS
                 CalculateLayerDepth().CompareTo(other.CalculateLayerDepth()) :
                 SortingLayer.CompareTo(other.SortingLayer);
         }
-        
-        internal virtual void InternalDraw(SpriteBatch spriteBatch)
+
+        internal void Render(GameTime gameTime, SpriteBatch spriteBatch, Matrix viewProjectionMatrix)
         {
             DrawBegin?.Invoke();
-
+            
             while (true)
             {
                 DrawLoopBeginEventArgs beginLoop = new();

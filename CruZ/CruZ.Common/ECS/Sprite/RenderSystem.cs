@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 using MonoGame.Extended.Entities;
 using MonoGame.Extended.Entities.Systems;
+using MonoGame.Framework.Content.Pipeline.Builder;
 
 using System.Collections.Generic;
 using System.Linq;
@@ -25,70 +26,58 @@ namespace CruZ.Common.ECS
             _spriteMapper = mapperService.GetMapper<SpriteComponent>();
             _lightMapper = mapperService.GetMapper<LightComponent>();
             _spriteBatch = GameApplication.GetSpriteBatch();
-            _gd = GameApplication.GetGraphicsDevice();
         }
 
         public void Draw(GameTime gameTime)
         {
-            List<SpriteComponent> sprites = GetSortedSpriteList();
-            List<LightComponent> lights = this.GetAllComponents(_lightMapper);
+            List<SpriteComponent> sprites = GetSortedSprites();
+            List<LightComponent> lights = GetSortedLights();
+
             List<int> sortingLayers = [];
+            sortingLayers.AddRangeUnique(sprites.Select(e => e.SortingLayer).ToList());
+            sortingLayers.AddRangeUnique(lights.Select(e => e.SortingLayer).ToList());
+            sortingLayers.Sort();
 
-            // process sprites
-            int i = 0;
-            while (i < sprites.Count)
+            foreach(var sortingLayer in sortingLayers)
             {
-                var sortingLayer = sprites[i].SortingLayer;
-                sortingLayers.Add(sortingLayer);
-
                 var fx = EffectManager.NormalSpriteRenderer;
-                fx.Parameters["view_projection"].SetValue(GetViewProjectionMatrix());
+                fx.Parameters["view_projection"].SetValue(Camera.Main.ViewProjectionMatrix());
 
-                // render sprite
+                // render sprites
                 _spriteBatch.Begin(
                     effect: fx,
                     sortMode: SpriteSortMode.FrontToBack,
                     samplerState: SamplerState.PointClamp);
-                do
+
+                while (sprites.Count > 0 && sprites[0].SortingLayer == sortingLayer)
                 {
-                    sprites[i].InternalDraw(_spriteBatch);
-                    i++;
-                } while (
-                    i < sprites.Count &&
-                    sprites[i].SortingLayer == sprites[i - 1].SortingLayer);
+                    sprites[0].Render(gameTime, _spriteBatch, Camera.Main.ViewProjectionMatrix());
+                    sprites.RemoveAt(0);
+                }
 
                 _spriteBatch.End();
 
-                // render lights
-                foreach (var light in lights
-                    .Where(e => e.SortingLayers.Contains(sortingLayer)))
+                // render light
+                while (lights.Count > 0 && lights[0].SortingLayer == sortingLayer)
                 {
-                    light.InternalDraw(gameTime, _spriteBatch, GetViewProjectionMatrix());
+                    lights[0].Render(gameTime, _spriteBatch, Camera.Main.ViewProjectionMatrix());
+                    lights.RemoveAt(0);
                 }
             }
-
-            // render all renderTargets to back buffer
-            //_gd.SetRenderTarget(null);
-            //_gd.Clear(GameConstants.DEFAULT_BACKGROUND_COLOR);
-            //_spriteBatch.Begin();
-            //foreach (var sortingLayer in sortingLayers)
-            //{
-            //    var renderTarget = GetRenderTarget(sortingLayer);
-            //    _spriteBatch.Draw(renderTarget, new Vector2(0, 0), Color.White);
-            //}
-            //_spriteBatch.End();
         }
 
-        private Matrix GetViewProjectionMatrix()
-        {
-            return Camera.Main.ViewMatrix() * Camera.Main.ProjectionMatrix();
-        }
-
-        private List<SpriteComponent> GetSortedSpriteList()
+        private List<SpriteComponent> GetSortedSprites()
         {
             List<SpriteComponent> sprites = this.GetAllComponents(_spriteMapper);
             sprites.Sort((s1, s2) => { return s1.SortingLayer.CompareTo(s2.SortingLayer); });
             return sprites;
+        }
+
+        private List<LightComponent> GetSortedLights()
+        {
+            var lights = this.GetAllComponents(_lightMapper);
+            lights.Sort((s1, s2) => { return s1.SortingLayer.CompareTo(s2.SortingLayer); });
+            return lights;
         }
 
         public virtual void Update(GameTime gameTime) { }
@@ -96,7 +85,5 @@ namespace CruZ.Common.ECS
         SpriteBatch _spriteBatch;
         ComponentMapper<LightComponent> _lightMapper;
         ComponentMapper<SpriteComponent> _spriteMapper;
-        GraphicsDevice _gd;
-        Effect _lightEffect;
     }
 }

@@ -106,7 +106,7 @@ namespace AnimalGang
             var light = scene.CreateEntity("Light");
             light.Scale = new(0.05f, 0.05f);
             var lightComp = new LightComponent();
-            lightComp.SortingLayers.Add(0);
+            lightComp.SortingLayer = 1;
             light.AddComponent(lightComp);
 
             return scene;

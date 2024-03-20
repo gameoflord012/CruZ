@@ -12,8 +12,7 @@ namespace CruZ.Common.ECS
     {
         public override Type ComponentType => typeof(LightComponent);
 
-        public List<int> SortingLayers { get; } = [];
-
+        public int SortingLayer { get; set; }
         public float LightIntensity { get; set; } = 1f;
 
         public LightComponent()
@@ -23,13 +22,13 @@ namespace CruZ.Common.ECS
             _perlinNoise = FunMath.GenPerlinNoise(_noiseW, _noiseH);
         }
 
-        internal void InternalDraw(GameTime gameTime, SpriteBatch sp, Matrix viewProjectionMat)
+        internal void Render(GameTime gameTime, SpriteBatch spriteBatch, Matrix viewProjectionMatrix)
         {
             var miliSecs = (int)gameTime.TotalGameTime.TotalMilliseconds;
             var rand = _perlinNoise[miliSecs % _noiseW, miliSecs % _noiseH];
 
             var fx = EffectManager.TextureLight;
-            fx.Parameters["view_projection"].SetValue(viewProjectionMat);
+            fx.Parameters["view_projection"].SetValue(viewProjectionMatrix);
             fx.Parameters["intensity"].SetValue(LightIntensity * rand);
             fx.Parameters["min_alpha"].SetValue(0.05f);
 
@@ -37,8 +36,8 @@ namespace CruZ.Common.ECS
             Vector2 scale = AttachedEntity.Transform.Scale;
             Rectangle srcRect = _lightMap.Bounds;
 
-            sp.Begin(effect: fx);
-            sp.Draw(
+            spriteBatch.Begin(effect: fx);
+            spriteBatch.Draw(
                 texture: _lightMap, 
                 position: pos, 
                 sourceRectangle: srcRect, 
@@ -48,7 +47,7 @@ namespace CruZ.Common.ECS
                 origin: new Vector2(srcRect.Width / 2f, srcRect.Height / 2f), 
                 scale: scale, 
                 SpriteEffects.None, 0);
-            sp.End();
+            spriteBatch.End();
         }
 
         Texture2D _lightMap;
