@@ -20,28 +20,28 @@ namespace AnimalGang
             anim.LoadSpriteSheet("anims/player-sword-idle.sf",      "player-sword-idle");
             anim.LoadSpriteSheet("anims/player-sword-attack.sf",    "player-sword-attack");
 
-            player.AddComponent(new SpriteComponent());
+            player.AddComponent(new SpriteRendererComponent());
             player.AddComponent(new MainCharacter());
-            player.GetComponent<SpriteComponent>().LayerDepth = 0.2f;
+            player.GetComponent<SpriteRendererComponent>().LayerDepth = 0.2f;
             player.AddComponent(anim);
             player.Transform.Scale = new(0.1f, 0.1f);
-            var player_sp = player.GetComponent<SpriteComponent>();
+            var player_sp = player.GetComponent<SpriteRendererComponent>();
             player_sp.SortingLayer = 1;
             player_sp.SortByY = true;
 
             var dungeonFloor = scene.CreateEntity();
             dungeonFloor.Name = "dungeonFloor";
-            dungeonFloor.AddComponent(new SpriteComponent());
+            dungeonFloor.AddComponent(new SpriteRendererComponent());
             dungeonFloor.AddComponent(new TileComponent());
-            var dungeonFloor_sp = dungeonFloor.GetComponent<SpriteComponent>();
+            var dungeonFloor_sp = dungeonFloor.GetComponent<SpriteRendererComponent>();
             dungeonFloor_sp.SortingLayer = 0;
             dungeonFloor_sp.LoadTexture("tiles\\dungeon-floor");
 
             var dungeonWall = scene.CreateEntity();
             dungeonWall.Name = "dungeonWall";
-            dungeonWall.AddComponent(new SpriteComponent());
+            dungeonWall.AddComponent(new SpriteRendererComponent());
             dungeonWall.AddComponent(new TileComponent());
-            var dungeonWall_sp = dungeonWall.GetComponent<SpriteComponent>();
+            var dungeonWall_sp = dungeonWall.GetComponent<SpriteRendererComponent>();
             dungeonWall_sp.LoadTexture("tiles\\dungeon-wall");
             dungeonWall_sp.SortingLayer = 1;
             dungeonWall_sp.SortByY = true;
@@ -56,7 +56,7 @@ namespace AnimalGang
             //
             // ground
             //
-            var sp_ground = new SpriteComponent();
+            var sp_ground = new SpriteRendererComponent();
             sp_ground.LoadTexture("tiles\\tile3\\home-ground-behind.png");
             sp_ground.SortingLayer = 0;
 
@@ -66,7 +66,7 @@ namespace AnimalGang
             // 
             // object
             //
-            var sp_groundObj = new SpriteComponent();
+            var sp_groundObj = new SpriteRendererComponent();
             sp_groundObj.LoadTexture("tiles\\tile3\\home-object-mid.png");
             sp_groundObj.SortingLayer = 1;
             sp_groundObj.SortByY = true;
@@ -77,7 +77,7 @@ namespace AnimalGang
             //
             // frontObj
             //
-            var sp_frontObj = new SpriteComponent();
+            var sp_frontObj = new SpriteRendererComponent();
             sp_frontObj.LoadTexture("tiles\\tile3\\home-object-font.png");
             sp_frontObj.SortingLayer = 2;
 
@@ -92,7 +92,7 @@ namespace AnimalGang
             var anims_mainChar = new AnimationComponent();
             anims_mainChar.LoadSpriteSheet("anims\\dark-ninja\\dark-ninja-walk.sf", "ninja-movement");
 
-            var sp_mainChar = new SpriteComponent();
+            var sp_mainChar = new SpriteRendererComponent();
             sp_mainChar.SortingLayer = 1;
             sp_mainChar.SortByY = true;
 
@@ -105,11 +105,19 @@ namespace AnimalGang
             //
             var light = scene.CreateEntity("Light");
             light.Scale = new(0.05f, 0.05f);
-            var lightComp = new LightComponent();
+            var lightComp = new LightRendererComponent();
             lightComp.SortingLayer = 1;
             light.AddComponent(lightComp);
 
             return scene;
         }
+
+        //[SceneAssetMethod]
+        //public static GameScene FlameScene()
+        //{
+        //    var scene = new GameScene();
+
+        //    scene
+        //}
     }
 }

@@ -257,7 +257,7 @@ namespace CruZ.Editor.Controls
 
             eControl.Sort((e1, e2) =>
             {
-                SpriteComponent? sp1 = null, sp2 = null;
+                SpriteRendererComponent? sp1 = null, sp2 = null;
                 e1.AttachEntity.TryGetComponent(ref sp1);
                 e2.AttachEntity.TryGetComponent(ref sp2);
 

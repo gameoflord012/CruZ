@@ -27,10 +27,9 @@ namespace CruZ.Editor.UI
             _e.RemoveFromWorldEvent += Entity_OnRemoveFromWorld;
             _e.ComponentChanged += Entity_ComponentChanged;
 
-            if (e.HasComponent(typeof(SpriteComponent)))
+            if (e.HasComponent(typeof(SpriteRendererComponent)))
             {
-                _sp = e.GetComponent<SpriteComponent>();
-
+                _sp = e.GetComponent<SpriteRendererComponent>();
                 _sp.BoundingBoxChanged += Sprite_BoundingBoxChanged;
             }
 
@@ -172,7 +171,7 @@ namespace CruZ.Editor.UI
         }
 
         TransformEntity _e;
-        SpriteComponent? _sp;
+        SpriteRendererComponent? _sp;
         DRAW.RectangleF _bounds; //World bounds
 
         DRAW.Point _dragCenterOffset;

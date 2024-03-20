@@ -8,21 +8,18 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace CruZ.Common.ECS
 {
-    public class LightComponent : Component
+    public class LightRendererComponent : RendererComponent
     {
-        public override Type ComponentType => typeof(LightComponent);
+        public float LightIntensity { get; set; }
 
-        public int SortingLayer { get; set; }
-        public float LightIntensity { get; set; } = 1f;
-
-        public LightComponent()
+        public LightRendererComponent()
         {
             _lightMap = GameContext.GameResource.Load<Texture2D>("imgs\\dangcongsang.png");
             _noiseW = _noiseH = 2000;
             _perlinNoise = FunMath.GenPerlinNoise(_noiseW, _noiseH);
         }
 
-        internal void Render(GameTime gameTime, SpriteBatch spriteBatch, Matrix viewProjectionMatrix)
+        internal override void Render(GameTime gameTime, SpriteBatch spriteBatch, Matrix viewProjectionMatrix)
         {
             var miliSecs = (int)gameTime.TotalGameTime.TotalMilliseconds;
             var rand = _perlinNoise[miliSecs % _noiseW, miliSecs % _noiseH];

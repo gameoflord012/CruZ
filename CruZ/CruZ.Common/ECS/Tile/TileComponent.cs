@@ -90,6 +90,6 @@ namespace CruZ.Common.ECS
         int _idX, _idY;
 
         TransformEntity _e;
-        SpriteComponent? _sp;
+        SpriteRendererComponent? _sp;
     }
 }

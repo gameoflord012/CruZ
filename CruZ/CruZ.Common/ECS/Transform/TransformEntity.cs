@@ -98,7 +98,11 @@ namespace CruZ.Common.ECS
                 throw new ArgumentException($"Can't pass component type as interface {ty}");
             }
 
-            return _entity.Has(ComponentHelper.GetComponentType(ty));
+            var compTy = ComponentHelper.GetComponentType(ty);
+
+            return 
+                _entity.Has(compTy) &&
+                _tyToComp[compTy].GetType() == ty;
         }
 
         public override string ToString()
@@ -125,11 +129,6 @@ namespace CruZ.Common.ECS
         Transform                       _transform = new();
         Dictionary<Type, Component>     _tyToComp = new();
         string                          _name = "";
-
-        //private static ECSManager CreateInstanceFrom(Type ty)
-        //{
-        //    return (ECSManager)PropertyHelper.GetUnitializeObject(ty);
-        //}
 
         public static TransformEntity GetEntity(object component)
         {

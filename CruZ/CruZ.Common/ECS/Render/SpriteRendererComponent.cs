@@ -1,7 +1,6 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
 using Newtonsoft.Json;
 using System;
-using System.Diagnostics;
 using System.ComponentModel;
 using CruZ.Common.GameSystem.Resource;
 using CruZ.Common.Resource;
@@ -22,7 +21,7 @@ namespace CruZ.Common.ECS
     /// <summary>
     /// Game component loaded from specify resource
     /// </summary>
-    public partial class SpriteComponent : Component, IHasBoundBox
+    public partial class SpriteRendererComponent : RendererComponent, IHasBoundBox
     {
         public event EventHandler<DrawLoopBeginEventArgs>? DrawLoopBegin;
         public event EventHandler<DrawLoopEndEventArgs>? DrawLoopEnd;
@@ -31,13 +30,8 @@ namespace CruZ.Common.ECS
         public event Action<UIBoundingBox> BoundingBoxChanged;
 
         #region Properties
-        public float LayerDepth { get; set; } = 0;
-        public int SortingLayer { get; set; } = 0;
         public bool SortByY { get; set; } = false;
         public bool Flip { get; set; }
-
-        [Browsable(false), JsonIgnore]
-        public override Type ComponentType => typeof(SpriteComponent);
 
         [JsonIgnore, Browsable(false)]
         public Texture2D? Texture { get => _texture; set => _texture = value; }
@@ -57,7 +51,7 @@ namespace CruZ.Common.ECS
         }
         #endregion
 
-        public SpriteComponent()
+        public SpriteRendererComponent()
         {
             _resource = GameContext.GameResource;
 
@@ -107,17 +101,24 @@ namespace CruZ.Common.ECS
             }
         }
 
-        public int CompareLayer(SpriteComponent other)
+        public int CompareLayer(SpriteRendererComponent other)
         {
             return SortingLayer == other.SortingLayer ?
                 CalculateLayerDepth().CompareTo(other.CalculateLayerDepth()) :
                 SortingLayer.CompareTo(other.SortingLayer);
         }
 
-        internal void Render(GameTime gameTime, SpriteBatch spriteBatch, Matrix viewProjectionMatrix)
+        internal override void Render(GameTime gameTime, SpriteBatch spriteBatch, Matrix viewProjectionMatrix)
         {
+            var fx = EffectManager.NormalSpriteRenderer;
+            fx.Parameters["view_projection"].SetValue(viewProjectionMatrix);
+
             DrawBegin?.Invoke();
-            
+            spriteBatch.Begin(
+                effect: EffectManager.NormalSpriteRenderer,
+                sortMode: SpriteSortMode.FrontToBack,
+                samplerState: SamplerState.PointClamp);
+
             while (true)
             {
                 DrawLoopBeginEventArgs beginLoop = new();
@@ -169,6 +170,7 @@ namespace CruZ.Common.ECS
                 if (!endLoop.KeepDrawing) break;
             }
 
+            spriteBatch.End();
             DrawEnd?.Invoke();
         }
 
@@ -186,7 +188,7 @@ namespace CruZ.Common.ECS
         [JsonProperty]
         ResourceInfo? _spriteResInfo;
         ResourceManager _resource;
-        UI.UIBoundingBox _boundingBox = new();
+        UIBoundingBox _boundingBox = new();
         bool _hasBoundingBox;
     }
 }

@@ -122,7 +122,7 @@ namespace AnimalGang
         }
 
         AnimationComponent _animation;
-        SpriteComponent _sprite;
+        SpriteRendererComponent _sprite;
 
         float _speed = 6;
         Vector2 _moveDir;

@@ -34,12 +34,12 @@ namespace CruZ.Common.ECS
             }
         }
 
-        public void Update(GameTime gameTime, SpriteComponent sprite)
+        public void Update(GameTime gameTime, SpriteRendererComponent sprite)
         {
             _animatedSprite.Update(gameTime);
         }
 
-        public void Load(SpriteComponent sprite)
+        public void Load(SpriteRendererComponent sprite)
         {
             if (_sprite == sprite) return;
 
@@ -78,7 +78,7 @@ namespace CruZ.Common.ECS
 
         AnimatedSprite _animatedSprite;
         SpriteSheet _spriteSheet;
-        SpriteComponent? _sprite;
+        SpriteRendererComponent? _sprite;
     }
 }
 
@@ -175,7 +175,7 @@ namespace CruZ.Common.ECS
 
         AnimationPlayer? _currentAnimationPlayer;
         Dictionary<string, AnimationPlayer> _getAnimationPlayer = new();
-        SpriteComponent? _sprite;
+        SpriteRendererComponent? _sprite;
         TransformEntity? _e;
         ResourceManager _resource;
         List<KeyValuePair<string, string>> _loadedResources = [];

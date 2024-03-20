@@ -2,7 +2,7 @@
 
 namespace CruZ.Common.ECS
 {
-    public partial class SpriteComponent
+    public partial class SpriteRendererComponent
     {
         [OnDeserialized]
         void OnDeserialized(StreamingContext context)
