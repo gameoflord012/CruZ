@@ -34,13 +34,11 @@ namespace CruZ.Editor.Global
 
         public static string UserProfileDir { get => Path.Combine(UserProjectDir, EditorConstants.USER_PROFILE_DIR_NAME); }
 
-        //public static Assembly PlatformAssembly => Assembly.LoadFile(Path.Combine(UserProjectBinDir, "CruZ.DesktopGL.dll"));
-
         public static Assembly UserProjectAssembly
         {
             get
             {
-                _userProjectAssembly ??= Assembly.LoadFile(Path.Combine(UserProjectBinDir, "Game.AnimalGang.DesktopGL.dll"));
+                _userProjectAssembly ??= Assembly.LoadFile(Path.Combine(UserProjectBinDir, "Game.AnimalGang.dll"));
                 return _userProjectAssembly;
             }
         }
