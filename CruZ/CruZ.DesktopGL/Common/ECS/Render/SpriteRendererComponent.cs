@@ -7,6 +7,7 @@ using CruZ.Common.Resource;
 using CruZ.Common.UI;
 using Microsoft.Xna.Framework;
 using CruZ.Common.Utility;
+using System.Drawing.Design;
 
 namespace CruZ.Common.ECS
 {

@@ -3,9 +3,7 @@ using System.ComponentModel;
 using System.Drawing.Design;
 using System.Windows.Forms;
 
-using CruZ.Editor.Global;
-
-namespace CruZ.Editor.Winform.Ultility
+namespace CruZ.Common.Utility
 {
     class FileUITypeEditor : UITypeEditor
     {
@@ -18,7 +16,7 @@ namespace CruZ.Editor.Winform.Ultility
         {
             OpenFileDialog openFileDialog = new()
             {
-                InitialDirectory = EditorContext.UserResourceDir,
+                InitialDirectory = GameContext.GameResourceDir,
                 RestoreDirectory = true,
                 Title = "Select File",
                 Filter = "All Files|*.*",
