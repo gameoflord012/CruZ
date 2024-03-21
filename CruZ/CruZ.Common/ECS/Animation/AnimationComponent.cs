@@ -14,11 +14,13 @@ using System.Diagnostics;
 
 namespace CruZ.Common.ECS
 {
+    /// <summary>
+    /// Playing animations in SpriteSheet
+    /// </summary>
     public class AnimationPlayer
     {
         public AnimationPlayer(SpriteSheet spriteSheet)
         {
-            _spriteSheet = spriteSheet;
             _animatedSprite = new AnimatedSprite(spriteSheet);
         }
 
@@ -77,7 +79,6 @@ namespace CruZ.Common.ECS
         }
 
         AnimatedSprite _animatedSprite;
-        SpriteSheet _spriteSheet;
         SpriteRendererComponent? _sprite;
     }
 }
@@ -126,11 +127,6 @@ namespace CruZ.Common.ECS
             return _getAnimationPlayer[key];
         }
 
-        protected override void OnAttached(TransformEntity entity)
-        {
-            _e = entity;
-        }
-
         protected override void OnComponentChanged(ComponentCollection comps)
         {
             comps.TryGetComponent(ref _sprite);
@@ -174,10 +170,9 @@ namespace CruZ.Common.ECS
         }
 
         AnimationPlayer? _currentAnimationPlayer;
-        Dictionary<string, AnimationPlayer> _getAnimationPlayer = new();
         SpriteRendererComponent? _sprite;
-        TransformEntity? _e;
         ResourceManager _resource;
+        Dictionary<string, AnimationPlayer> _getAnimationPlayer = new();
         List<KeyValuePair<string, string>> _loadedResources = [];
     }
 }
