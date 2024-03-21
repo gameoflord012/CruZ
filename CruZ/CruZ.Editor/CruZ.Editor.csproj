@@ -30,7 +30,7 @@
 		<ProjectReference Include="..\..\ThirdParty\MonoGame.Extended\src\cs\MonoGame.Extended.Entities\MonoGame.Extended.Entities.csproj" />
 		<ProjectReference Include="..\..\ThirdParty\MonoGame.Extended\src\cs\MonoGame.Extended\MonoGame.Extended.csproj" />
 		<ProjectReference Include="..\..\ThirdParty\MonoGameModified\MonoGame.Framework.Content.Pipeline\MonoGame.Framework.Content.Pipeline.csproj" />
-		<ProjectReference Include="..\CruZ.DesktopGL\CruZ.DesktopGL.csproj">
+		<ProjectReference Include="..\CruZ.Framework\CruZ.Framework.WindowDX.csproj">
 			<SetConfiguration>Configuration=DebugEditor</SetConfiguration>
 		</ProjectReference>
 	</ItemGroup>

@@ -4,6 +4,6 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\..\..\CruZ\CruZ.DesktopGL\CruZ.DesktopGL.csproj" />
+		<ProjectReference Include="..\..\..\CruZ\CruZ.Framework\CruZ.Framework.WindowDX.csproj" />
 	</ItemGroup>
 </Project>
