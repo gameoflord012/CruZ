@@ -24,7 +24,6 @@ namespace CruZ.Editor.Scene
             }
             catch (ReflectionTypeLoadException e)
             {
-
                 throw e;
             }
             
