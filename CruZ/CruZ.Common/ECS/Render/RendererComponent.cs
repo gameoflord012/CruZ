@@ -13,7 +13,7 @@ namespace CruZ.Common.ECS
         
         public float LayerDepth { get; set; }
         
-        internal virtual void Render(GameTime gameTime, SpriteBatch spriteBatch, Matrix viewProjectionMatrix) { }
+        public virtual void Render(GameTime gameTime, SpriteBatch spriteBatch, Matrix viewProjectionMatrix) { }
 
         public int CompareTo(RendererComponent? other)
         {

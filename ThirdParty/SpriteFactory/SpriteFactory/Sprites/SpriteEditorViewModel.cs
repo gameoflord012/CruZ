@@ -7,7 +7,6 @@ using Catel.Collections;
 using Catel.IoC;
 using Catel.MVVM;
 using Catel.Services;
-using CruZ.Tools.ResourceImporter;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;

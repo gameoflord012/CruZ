@@ -8,14 +8,6 @@ using CruZ.Common.UI;
 using Microsoft.Xna.Framework;
 using CruZ.Common.Utility;
 
-
-
-#if CRUZ_EDITOR
-using CruZ.Editor.Utility;
-using CruZ.Editor.Winform.Ultility;
-using System.Drawing.Design;
-#endif
-
 namespace CruZ.Common.ECS
 {
     /// <summary>
@@ -36,9 +28,7 @@ namespace CruZ.Common.ECS
         [JsonIgnore, Browsable(false)]
         public Texture2D? Texture { get => _texture; set => _texture = value; }
 
-#if CRUZ_EDITOR
         [TypeConverter(typeof(Vector2TypeConverter))]
-#endif
         public Vector2 NormalizedOrigin { get; set; } = new(0.5f, 0.5f);
 
 #if CRUZ_EDITOR
@@ -108,7 +98,7 @@ namespace CruZ.Common.ECS
                 SortingLayer.CompareTo(other.SortingLayer);
         }
 
-        internal override void Render(GameTime gameTime, SpriteBatch spriteBatch, Matrix viewProjectionMatrix)
+        public override void Render(GameTime gameTime, SpriteBatch spriteBatch, Matrix viewProjectionMatrix)
         {
             var fx = EffectManager.NormalSpriteRenderer;
             fx.Parameters["view_projection"].SetValue(viewProjectionMatrix);
