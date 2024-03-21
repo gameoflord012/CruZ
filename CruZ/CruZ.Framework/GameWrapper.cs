@@ -1,6 +1,7 @@
 ﻿using System;
 
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace CruZ.Common
 {
@@ -18,6 +19,7 @@ namespace CruZ.Common
         public GameWrapper()
         {
             _gdManager = new GraphicsDeviceManager(this);
+            _gdManager.GraphicsProfile = GraphicsProfile.HiDef;
             Content.RootDirectory = ".";
             IsMouseVisible = true;
         }

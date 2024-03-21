@@ -44,11 +44,11 @@ namespace CruZ.Common.Resource
             _guidManager = new(this);
 
             _pipelineManager = new(ResourceRoot, ContentOutputDir, ContentOutputDir);
-            _pipelineManager.Platform = XNA.Content.Pipeline.TargetPlatform.DesktopGL;
+            _pipelineManager.Platform = TargetPlatform.Windows;
 
             InitResourceDir();
 
-            SetProcessorParam(typeof(Effect), "DebugMode", "Auto");
+            //SetProcessorParam(typeof(Effect), "DebugMode", "Auto");
             //_importer.EnableWatch();
         }
 
