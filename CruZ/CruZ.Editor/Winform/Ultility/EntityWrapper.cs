@@ -17,7 +17,7 @@ namespace CruZ.Editor.Winform.Ultility
 
         public void RefreshComponents()
         {
-            Components = new(TransformEntity.Components);
+            Components = new(TransformEntity.GetAllComponents());
         }
 
         public ComponentsWrapper Components { get; set; }

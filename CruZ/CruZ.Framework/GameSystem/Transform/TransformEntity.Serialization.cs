@@ -12,7 +12,7 @@ namespace CruZ.Common.ECS
 
     public partial class TransformEntity : ICustomSerializable
     {
-        public event Action OnDeserializationCompleted;
+        public event Action? DeserializationCompleted;
 
         public object ReadJson(JsonReader reader, JsonSerializer serializer)
         {
@@ -40,7 +40,7 @@ namespace CruZ.Common.ECS
                 value.AddComponent(com);
             }
 
-            value.OnDeserializationCompleted?.Invoke();
+            value.DeserializationCompleted?.Invoke();
             return value;
         }
 
@@ -57,7 +57,7 @@ namespace CruZ.Common.ECS
                 writer.WritePropertyName("components");
                 writer.WriteStartArray();
                 {
-                    foreach (var com in GetAllComponents(this))
+                    foreach (var com in GetAllComponents())
                     {
                         writer.WriteStartObject();
                         writer.WritePropertyName("com-type");

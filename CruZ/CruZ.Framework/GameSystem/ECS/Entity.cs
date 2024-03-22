@@ -83,10 +83,15 @@ namespace CruZ.Framework.GameSystem.ECS
             //    _entity.Has(compTy);
         }
 
-        public static Component[] GetAllComponents(TransformEntity e)
+        public Component[] GetAllComponents()
         {
-            throw new NotImplementedException();
-            //return e._tyToComp.Values.ToArray();
+            HashSet<Component> comps = [];
+
+            foreach (var value in components.Values)
+                foreach (var comp in value)
+                    comps.Add(comp);
+
+            return comps.ToArray();
         }
 
         public override string ToString()

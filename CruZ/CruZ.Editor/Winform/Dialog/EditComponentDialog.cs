@@ -38,7 +38,7 @@ namespace CruZ.Editor
             _e = e;
 
             // push in entity's components into the ListBox first
-            foreach (var comp in TransformEntity.GetAllComponents(e))
+            foreach (var comp in e.GetAllComponents())
             {
                 int id = component_ListBox.Items.Count;
 

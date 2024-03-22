@@ -10,8 +10,6 @@ namespace Game.AnimalGang.DesktopGL
 {
     public class FlameRendererComponent : RendererComponent
     {
-        public override Type ComponentType => typeof(RendererComponent);
-
         public FlameRendererComponent()
         {
             _fx = GameContext.GameResource.Load<Effect>("shaders\\flame-shader.fx");
