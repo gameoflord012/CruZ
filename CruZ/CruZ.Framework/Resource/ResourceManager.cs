@@ -238,13 +238,12 @@ namespace CruZ.Common.Resource
                 throw new ContentLoadException($"resource \"{resourcePath}\" is invalid or unimported");
             }
 
-            var contentPath = ContentOutputDir + "\\" + resourceGuid;
-
-            BuildContent(typeof(T), resourcePath, contentPath);
+            var contentFileName = resourceGuid.ToString();
+            BuildContent(typeof(T), resourcePath, contentFileName);
 
             try
             {
-                return GameApplication.GetContent().Load<T>(contentPath);
+                return GameApplication.GetContent().Load<T>(Path.Combine(ContentOutputDir, contentFileName));
             }
             catch
             {
@@ -252,10 +251,14 @@ namespace CruZ.Common.Resource
             }
         }
 
-        private void BuildContent(Type ty, string resourcePath, string? outputFilePath = null)
+        private void BuildContent(Type ty, string resourcePath, string contentFileName)
         {
+            if (!string.IsNullOrEmpty(Path.GetDirectoryName(contentFileName)))
+                throw new ArgumentException("contentFileName not a file name");
+
             resourcePath = GetFormattedResourcePath(resourcePath);
-            _pipelineManager.BuildContent(resourcePath, outputFilePath, processorParameters: GetProcessorParam(ty));
+            _pipelineManager.BuildContent(resourcePath, Path.Combine(ContentOutputDir, contentFileName), processorParameters: GetProcessorParam(ty));
+            _pipelineManager.ContentStats.Write(ContentOutputDir);
         }
 
         private object LoadContentNonGeneric(string resourcePath, Type ty)
