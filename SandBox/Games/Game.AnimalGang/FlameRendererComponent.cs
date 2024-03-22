@@ -1,4 +1,6 @@
-﻿using CruZ.Common;
+﻿using System;
+
+using CruZ.Common;
 using CruZ.Common.ECS;
 
 using Microsoft.Xna.Framework;
@@ -8,6 +10,8 @@ namespace Game.AnimalGang.DesktopGL
 {
     public class FlameRendererComponent : RendererComponent
     {
+        public override Type ComponentType => typeof(RendererComponent);
+
         public FlameRendererComponent()
         {
             _fx = GameContext.GameResource.Load<Effect>("shaders\\flame-shader.fx");

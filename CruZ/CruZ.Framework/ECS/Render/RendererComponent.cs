@@ -5,10 +5,8 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace CruZ.Common.ECS
 {
-    public class RendererComponent : Component, IComparable<RendererComponent>
-    {
-        public override Type ComponentType => typeof(RendererComponent);
-        
+    public abstract class RendererComponent : Component, IComparable<RendererComponent>
+    {        
         public int SortingLayer { get; set; }
         
         public float LayerDepth { get; set; }

@@ -7,6 +7,7 @@ using System;
 using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
+using System.DirectoryServices.ActiveDirectory;
 
 namespace CruZ.Editor
 {
@@ -36,6 +37,7 @@ namespace CruZ.Editor
 
             _e = e;
 
+            // push in entity's components into the ListBox first
             foreach (var comp in TransformEntity.GetAllComponents(e))
             {
                 int id = component_ListBox.Items.Count;
@@ -49,8 +51,9 @@ namespace CruZ.Editor
                 component_ListBox.SetItemCheckState(id, CheckState.Checked);
             }
 
-            var compTypes = Assembly.GetExecutingAssembly()
-                .GetTypes()
+            // push components that isn't avaiable in entity
+            var compTypes = 
+                AppDomain.CurrentDomain.GetAssemblies().SelectMany(a => a.GetTypes())
                 .Where(t => 
                     !t.IsAbstract && 
                     typeof(Component).IsAssignableFrom(t) && 
@@ -75,6 +78,7 @@ namespace CruZ.Editor
                 var boxItem = (BoxItem)component_ListBox.Items[i];
                 var compTy = boxItem.CompType;
 
+                // process checked components
                 if (component_ListBox.GetItemChecked(i))
                 {
                     if (_e.HasComponent(compTy)) continue;
@@ -85,7 +89,7 @@ namespace CruZ.Editor
                         _e.AddComponent(comp);
                     });
                 }
-                else
+                else // process unchecked component
                 {
                     if(!_e.HasComponent(compTy)) continue;
 

@@ -15,7 +15,9 @@ namespace CruZ.Common.ECS
 {
     internal class RenderSystem : EntitySystem, IUpdateSystem, IDrawSystem
     {
-        public RenderSystem() : base(Aspect.All(typeof(RendererComponent)))
+        public RenderSystem() : base(Aspect
+            .One(typeof(LightRendererComponent))
+            .One(typeof(SpriteRendererComponent)))
         {
             
         }

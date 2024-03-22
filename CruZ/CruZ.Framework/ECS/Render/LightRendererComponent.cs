@@ -10,6 +10,7 @@ namespace CruZ.Common.ECS
 {
     public class LightRendererComponent : RendererComponent
     {
+        public override Type ComponentType => typeof(RendererComponent);
         public float LightIntensity { get; set; }
 
         public LightRendererComponent()

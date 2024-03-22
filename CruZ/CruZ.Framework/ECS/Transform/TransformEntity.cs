@@ -68,7 +68,7 @@ namespace CruZ.Common.ECS
 
         public void AddComponent(Component component)
         {
-            if (HasComponent(component.ComponentType))
+            if (HasComponent(component.GetType()))
                 throw new(string.Format("Component {0} already added", component));
 
             _entity.Attach(component, component.ComponentType);
@@ -101,8 +101,7 @@ namespace CruZ.Common.ECS
             var compTy = ComponentHelper.GetComponentType(ty);
 
             return 
-                _entity.Has(compTy) &&
-                _tyToComp[compTy].GetType() == ty;
+                _entity.Has(compTy);
         }
 
         public override string ToString()
