@@ -1,8 +1,11 @@
 ﻿using System;
-using System.ComponentModel;
 using System.Numerics;
 
-namespace CruZ.Common.ECS
+using CruZ.Common.ECS;
+using CruZ.Framework.GameSystem.ECS;
+using CruZ.Framework.GameSystem.Render;
+
+namespace CruZ.Framework.GameSystem.Tile
 {
     public class TileComponent : Component
     {

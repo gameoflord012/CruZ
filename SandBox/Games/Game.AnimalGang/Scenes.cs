@@ -1,6 +1,9 @@
-﻿using CruZ.Common;
-using CruZ.Common.ECS;
+﻿using CruZ.Common.ECS;
 using CruZ.Common.Scene;
+using CruZ.Framework.GameSystem.Animation;
+using CruZ.Framework.GameSystem.Render;
+using CruZ.Framework.GameSystem.Tile;
+using CruZ.Framework.Scene;
 
 namespace AnimalGang
 {

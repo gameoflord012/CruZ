@@ -12,6 +12,8 @@ using System.Collections.Generic;
 namespace CruZ.Editor.UI
 {
     using CruZ.Common;
+    using CruZ.Framework.GameSystem.ECS;
+    using CruZ.Framework.UI;
 
     using Microsoft.Xna.Framework;
 
@@ -24,8 +26,8 @@ namespace CruZ.Editor.UI
         public EntityControl(TransformEntity e)
         {
             _e = e;
-            _e.RemoveFromWorldEvent += Entity_OnRemoveFromWorld;
-            _e.ComponentChanged += Entity_ComponentChanged;
+            _e.RemovedFromWorld += Entity_OnRemoveFromWorld;
+            _e.ComponentsChanged += Entity_ComponentChanged;
 
             if (e.HasComponent(typeof(SpriteRendererComponent)))
             {

@@ -2,7 +2,7 @@
 using System;
 using Microsoft.Xna.Framework;
 
-namespace CruZ.Common.ECS
+namespace CruZ.Framework.GameSystem.Render
 {
     public class DrawLoopBeginEventArgs : EventArgs
     {

@@ -4,9 +4,9 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Reflection;
 
-namespace CruZ.Common.ECS
+namespace CruZ.Framework.GameSystem.ECS
 {
-    using CruZ.Common.Serialization;
+    using CruZ.Framework.Serialization;
 
     using Microsoft.Xna.Framework;
 
@@ -16,7 +16,7 @@ namespace CruZ.Common.ECS
 
         public object ReadJson(JsonReader reader, JsonSerializer serializer)
         {
-            var value = ECSManager.CreateEntity();
+            var value = ECSManager.CreateTransformEntity();
 
             JObject jObject;
 

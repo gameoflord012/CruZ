@@ -2,9 +2,9 @@
 
 using Microsoft.Xna.Framework;
 
-namespace CruZ.Common.ECS
+namespace CruZ.Framework.GameSystem.Script
 {
-    internal class EntityScriptSystem : EntitySystem
+    internal class ScriptSystem : EntitySystem
     {
         public void Draw(GameTime gameTime)
         {
@@ -22,6 +22,6 @@ namespace CruZ.Common.ECS
             //}
         }
 
-        //ComponentMapper<EntityScript> _scriptMapper;
+        //ComponentMapper<ScriptComponent> _scriptMapper;
     }
 }

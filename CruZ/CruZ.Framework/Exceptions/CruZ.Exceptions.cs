@@ -1,26 +1,26 @@
 ﻿using System;
 
-namespace CruZ.Common;
+namespace CruZ.Framework.Exceptions;
 
 [Serializable]
-public class LoadResourceFailedException : System.Exception
+public class LoadResourceFailedException : Exception
 {
     public LoadResourceFailedException() { }
     public LoadResourceFailedException(string message) : base(message) { }
-    public LoadResourceFailedException(string message, System.Exception inner) : base(message, inner) { }
+    public LoadResourceFailedException(string message, Exception inner) : base(message, inner) { }
     protected LoadResourceFailedException(
       System.Runtime.Serialization.SerializationInfo info,
       System.Runtime.Serialization.StreamingContext context) : base(info, context) { }
 }
 
 [Serializable]
-public class MissingContextException : System.Exception
+public class MissingContextException : Exception
 {
     public MissingContextException(Type missingType)
         : this(string.Format("Context for {0} type is not provided", missingType)) { }
 
     public MissingContextException(string message) : base(message) { }
-    public MissingContextException(string message, System.Exception inner) : base(message, inner) { }
+    public MissingContextException(string message, Exception inner) : base(message, inner) { }
 
     protected MissingContextException(
       System.Runtime.Serialization.SerializationInfo info,
@@ -28,22 +28,22 @@ public class MissingContextException : System.Exception
 }
 
 [Serializable]
-public class SystemUninitailizeException : System.Exception
+public class SystemUninitailizeException : Exception
 {
     public SystemUninitailizeException() { }
     public SystemUninitailizeException(string message) : base(message) { }
-    public SystemUninitailizeException(string message, System.Exception inner) : base(message, inner) { }
+    public SystemUninitailizeException(string message, Exception inner) : base(message, inner) { }
     protected SystemUninitailizeException(
       System.Runtime.Serialization.SerializationInfo info,
       System.Runtime.Serialization.StreamingContext context) : base(info, context) { }
 }
 
 [Serializable]
-public class SceneAssetNotFoundException : System.Exception
+public class SceneAssetNotFoundException : Exception
 {
     public SceneAssetNotFoundException() { }
     public SceneAssetNotFoundException(string message) : base(message) { }
-    public SceneAssetNotFoundException(string message, System.Exception inner) : base(message, inner) { }
+    public SceneAssetNotFoundException(string message, Exception inner) : base(message, inner) { }
     protected SceneAssetNotFoundException(
       System.Runtime.Serialization.SerializationInfo info,
       System.Runtime.Serialization.StreamingContext context) : base(info, context) { }
@@ -51,22 +51,22 @@ public class SceneAssetNotFoundException : System.Exception
 
 
 [Serializable]
-public class RuntimeSceneLoadException : System.Exception
+public class RuntimeSceneLoadException : Exception
 {
     public RuntimeSceneLoadException() { }
     public RuntimeSceneLoadException(string message) : base(message) { }
-    public RuntimeSceneLoadException(string message, System.Exception inner) : base(message, inner) { }
+    public RuntimeSceneLoadException(string message, Exception inner) : base(message, inner) { }
     protected RuntimeSceneLoadException(
       System.Runtime.Serialization.SerializationInfo info,
       System.Runtime.Serialization.StreamingContext context) : base(info, context) { }
 }
 
 [Serializable]
-public class InvalidGuidValueException : System.Exception
+public class InvalidGuidValueException : Exception
 {
     public InvalidGuidValueException() { }
     public InvalidGuidValueException(string message) : base(message) { }
-    public InvalidGuidValueException(string message, System.Exception inner) : base(message, inner) { }
+    public InvalidGuidValueException(string message, Exception inner) : base(message, inner) { }
     protected InvalidGuidValueException(
       System.Runtime.Serialization.SerializationInfo info,
       System.Runtime.Serialization.StreamingContext context) : base(info, context) { }
@@ -74,11 +74,11 @@ public class InvalidGuidValueException : System.Exception
 
 
 [Serializable]
-public class InvalidGuidException : System.Exception
+public class InvalidGuidException : Exception
 {
     public InvalidGuidException() { }
     public InvalidGuidException(string message) : base(message) { }
-    public InvalidGuidException(string message, System.Exception inner) : base(message, inner) { }
+    public InvalidGuidException(string message, Exception inner) : base(message, inner) { }
     protected InvalidGuidException(
       System.Runtime.Serialization.SerializationInfo info,
       System.Runtime.Serialization.StreamingContext context) : base(info, context) { }

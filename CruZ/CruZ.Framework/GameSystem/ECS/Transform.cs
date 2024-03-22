@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 using System;
 using System.ComponentModel;
 
-namespace CruZ.Common.ECS
+namespace CruZ.Framework.GameSystem.ECS
 {
     [TypeConverter(typeof(ExpandableObjectConverter))]
     public partial class Transform : INotifyPropertyChanged

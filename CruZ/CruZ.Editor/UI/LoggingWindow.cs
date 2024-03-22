@@ -1,12 +1,12 @@
 ﻿using CruZ.Editor.Global;
-using CruZ.Common.Service;
 using CruZ.Common.UI;
 
 using Microsoft.Xna.Framework.Graphics;
 
 using System;
 using System.Collections.Generic;
-using CruZ.Common.Resource;
+using CruZ.Framework.Service;
+using CruZ.Framework.Resource;
 
 namespace CruZ.Editor.UI
 {

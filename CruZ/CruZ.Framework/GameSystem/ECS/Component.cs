@@ -1,7 +1,4 @@
-﻿using System;
-using System.ComponentModel;
-
-namespace CruZ.Common.ECS
+﻿namespace CruZ.Framework.GameSystem.ECS
 {
     public abstract class Component
     {
@@ -15,14 +12,14 @@ namespace CruZ.Common.ECS
         {
             AttachedEntity = e;
             OnAttached(e);
-            e.ComponentChanged += Entity_ComponentChanged;
+            e.ComponentsChanged += Entity_ComponentChanged;
         }
 
         internal void InternalOnDetached(TransformEntity e)
         {
             AttachedEntity = null;
             OnDetached(e);
-            e.ComponentChanged -= Entity_ComponentChanged;
+            e.ComponentsChanged -= Entity_ComponentChanged;
         }
 
         private void Entity_ComponentChanged(ComponentCollection comps)

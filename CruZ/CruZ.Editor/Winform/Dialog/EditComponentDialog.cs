@@ -1,6 +1,4 @@
-﻿using CruZ.Common.ECS;
-using CruZ.Editor.Service;
-using CruZ.Common.Utility;
+﻿using CruZ.Editor.Service;
 using CruZ.Common;
 
 using System;
@@ -8,6 +6,8 @@ using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
 using System.DirectoryServices.ActiveDirectory;
+using CruZ.Framework.Utility;
+using CruZ.Framework.GameSystem.ECS;
 
 namespace CruZ.Editor
 {

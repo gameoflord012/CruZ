@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace CruZ.Common.ECS
+namespace CruZ.Framework.GameSystem.Render
 {
     public class DrawLoopEndEventArgs : EventArgs
     {

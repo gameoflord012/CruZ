@@ -1,11 +1,12 @@
 ﻿using System;
 
-using CruZ.Common.Utility;
+using CruZ.Common;
+using CruZ.Framework.Utility;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 
-namespace CruZ.Common.Input
+namespace CruZ.Framework.Input
 {
     interface IInputController
     {
@@ -107,7 +108,7 @@ namespace CruZ.Common.Input
                 case MouseKey.Right:
                     return state.RightButton;
                 default:
-                    throw new global::System.Exception();
+                    throw new System.Exception();
             }
         }
 
@@ -150,23 +151,23 @@ namespace CruZ.Common.Input
         internal KeyboardState preKeyboard;
         internal KeyboardState curKeyboard;
 
-        internal int    scrollDelta;
-        internal bool   mouseMoving;
-        internal bool   mouseClick;
-        internal bool   mouseScrolling;
-        internal bool   mouseStateChanges;
-        internal bool   isActive;
+        internal int scrollDelta;
+        internal bool mouseMoving;
+        internal bool mouseClick;
+        internal bool mouseScrolling;
+        internal bool mouseStateChanges;
+        internal bool isActive;
 
         public bool MouseClick => mouseClick;
-        public int  SrollDelta => scrollDelta;
+        public int SrollDelta => scrollDelta;
         public bool MouseMoving => mouseMoving;
 
         public bool MouseStateChanges => mouseStateChanges;
 
-        public KeyboardState    Keyboard => curKeyboard;
-        public KeyboardState    PreKeyboard => preKeyboard;
-        public MouseState       CurMouse => curMouse;
-        public MouseState       PreMouse => preMouse;
+        public KeyboardState Keyboard => curKeyboard;
+        public KeyboardState PreKeyboard => preKeyboard;
+        public MouseState CurMouse => curMouse;
+        public MouseState PreMouse => preMouse;
 
         public bool IsMouseJustDown(MouseKey key)
         {

@@ -35,7 +35,7 @@
 
 //        public static TransformEntity CreateTransformEntity(this World world)
 //        {
-//            var e = world.CreateEntity();
+//            var e = world.CreateTransformEntity();
 //            TransformEntity t_e = new(e);
 //            return t_e;
 //        }

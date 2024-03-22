@@ -1,8 +1,11 @@
-﻿using CruZ.Framework.GameSystem.ECS;
+﻿using CruZ.Common.ECS;
+using CruZ.Framework.GameSystem.Animation;
+using CruZ.Framework.GameSystem.Render;
+using CruZ.Framework.GameSystem.Script;
 
 using Microsoft.Xna.Framework;
 
-namespace CruZ.Common.ECS
+namespace CruZ.Framework.GameSystem.ECS
 {
     interface IECSController
     {
@@ -21,7 +24,7 @@ namespace CruZ.Common.ECS
             _world.
                 AddSystem(new RenderSystem()).
                 AddSystem(new AnimatedSystem()).
-                AddSystem(new EntityScriptSystem());
+                AddSystem(new ScriptSystem());
         }
 
         void IECSController.Update(GameTime gameTime)
@@ -47,7 +50,7 @@ namespace CruZ.Common.ECS
         /// Not good idea to call this without proper memory manage
         /// </summary>
         /// <returns></returns>
-        internal static TransformEntity CreateEntity()
+        internal static TransformEntity CreateTransformEntity()
         {
             return new TransformEntity(_instance._world);
         }

@@ -16,7 +16,7 @@
 //            _entityEventComponentMapper = mapperService.GetMapper<EntityEventComponent>();
 //        }
 
-//        public void Draw(GameTime gameTime)
+//        public void OnDraw(GameTime gameTime)
 //        {
 //            foreach (var entityEvent in this.GetAllComponents(_entityEventComponentMapper))
 //            {
@@ -24,7 +24,7 @@
 //            }
 //        }
 
-//        public void Update(GameTime gameTime)
+//        public void OnUpdate(GameTime gameTime)
 //        {
 //            foreach (var entityEvent in this.GetAllComponents(_entityEventComponentMapper))
 //            {

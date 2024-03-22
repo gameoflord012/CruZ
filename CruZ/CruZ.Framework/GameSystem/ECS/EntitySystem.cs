@@ -12,22 +12,22 @@ namespace CruZ.Framework.GameSystem.ECS
     {
         public virtual void Initialize() { }
 
-        public void DoUpdate(GameTime gameTime)
+        public void Update(GameTime gameTime)
         {
-            Update(gameTime);
+            OnUpdate(gameTime);
         }
 
-        public void DoDraw(GameTime gameTime)
+        public void Draw(GameTime gameTime)
         {
-            Draw(gameTime);
+            OnDraw(gameTime);
         }
 
-        protected virtual void Update(GameTime gameTime)
+        protected virtual void OnUpdate(GameTime gameTime)
         {
 
         }
 
-        protected virtual void Draw(GameTime gameTime)
+        protected virtual void OnDraw(GameTime gameTime)
         {
 
         }

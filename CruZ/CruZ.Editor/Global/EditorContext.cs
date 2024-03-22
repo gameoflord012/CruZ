@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 
-using CruZ.Common;
-using CruZ.Common.Resource;
+using CruZ.Framework;
+using CruZ.Framework.Resource;
 
 namespace CruZ.Editor.Global
 {

@@ -3,7 +3,9 @@ using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 
-namespace Microsoft.Xna.Framework
+using Microsoft.Xna.Framework;
+
+namespace CruZ.Framework.DataType
 {
     /// <summary>
     /// Convert <see cref="Vector2"/> to <see cref="string"/> and vice-versa

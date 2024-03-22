@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace CruZ.Common.ECS
+using CruZ.Framework.GameSystem.ECS;
+
+namespace CruZ.Framework.GameSystem
 {
     public class ComponentCollection
     {

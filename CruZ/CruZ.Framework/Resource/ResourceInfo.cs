@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace CruZ.Common.GameSystem.Resource
+namespace CruZ.Framework.Resource
 {
     public class ResourceInfo
     {

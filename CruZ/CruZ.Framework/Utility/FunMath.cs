@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Numerics;
 
-namespace CruZ.Common.Utility
+namespace CruZ.Framework.Utility
 {
     public static class FunMath
     {
@@ -41,8 +41,8 @@ namespace CruZ.Common.Utility
             noise.SetNoiseType(FastNoiseLite.NoiseType.Perlin);
 
             var noiseData = new float[w, h];
-            for(int i = 0; i < w; i++)
-                for(int j = 0; j < h; j++)
+            for (int i = 0; i < w; i++)
+                for (int j = 0; j < h; j++)
                     noiseData[i, j] = (noise.GetNoise(i, j) + 1f) / 2f;
 
             return noiseData;

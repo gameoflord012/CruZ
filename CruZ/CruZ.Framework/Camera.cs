@@ -1,6 +1,7 @@
 ﻿using System;
 
-using CruZ.Common.Utility;
+using CruZ.Framework;
+using CruZ.Framework.Utility;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;

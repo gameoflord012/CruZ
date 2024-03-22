@@ -4,6 +4,8 @@ namespace CruZ.Editor.Winform.Ultility
 {
     using Common.ECS;
 
+    using CruZ.Framework.GameSystem.ECS;
+
     public class EntityWrapper
     {
         [TypeConverter(typeof(ExpandableObjectConverter))]

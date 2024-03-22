@@ -3,7 +3,9 @@ using System.ComponentModel;
 using System.Drawing.Design;
 using System.Windows.Forms;
 
-namespace CruZ.Common.Utility
+using CruZ.Framework;
+
+namespace CruZ.Framework.Utility
 {
     class FileUITypeEditor : UITypeEditor
     {

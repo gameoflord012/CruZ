@@ -1,18 +1,24 @@
 ﻿using CruZ.Common.ECS;
-using CruZ.Common.Utility;
 
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework;
 
 using MonoGame.Extended;
 
+using CruZ.Framework.GameSystem;
+using CruZ.Framework.GameSystem.Animation;
+using CruZ.Framework.GameSystem.ECS;
+using CruZ.Framework.GameSystem.Script;
+using CruZ.Framework.Input;
+using CruZ.Framework.Utility;
+
 using System;
 
 namespace AnimalGang
 {
-    using CruZ.Common.Input;
+    
 
-    public class MainCharacter : EntityScript
+    public class MainCharacter : ScriptComponent
     {
         public float Speed { get => _speed; set => _speed = value; }
 

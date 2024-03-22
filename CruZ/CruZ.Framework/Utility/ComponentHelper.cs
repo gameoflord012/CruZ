@@ -2,8 +2,9 @@
 using System.Runtime.CompilerServices;
 
 using CruZ.Common.ECS;
+using CruZ.Framework.GameSystem.ECS;
 
-namespace CruZ.Common.Utility
+namespace CruZ.Framework.Utility
 {
     public class ComponentHelper
     {

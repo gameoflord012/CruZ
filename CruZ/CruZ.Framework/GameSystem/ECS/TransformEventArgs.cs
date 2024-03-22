@@ -2,7 +2,7 @@
 
 using System;
 
-namespace CruZ.Common.ECS
+namespace CruZ.Framework.GameSystem.ECS
 {
     public class TransformEventArgs : EventArgs
     {

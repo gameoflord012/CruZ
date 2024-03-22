@@ -1,6 +1,4 @@
-﻿using CruZ.Common.Service;
-
-using CruZ.Common.UI;
+﻿using CruZ.Common.UI;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
@@ -11,8 +9,10 @@ using MonoGame.Extended;
 using System;
 using System.Collections.Generic;
 using CruZ.Common.Scene;
-using CruZ.Common.ECS;
-using CruZ.Common.Input;
+using CruZ.Framework;
+using CruZ.Framework.Service;
+using CruZ.Framework.Input;
+using CruZ.Framework.GameSystem.ECS;
 
 namespace CruZ.Common
 {

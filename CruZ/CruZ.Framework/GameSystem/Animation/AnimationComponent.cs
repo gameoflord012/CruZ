@@ -1,5 +1,9 @@
-﻿using CruZ.Common.Resource;
-using CruZ.Common.Serialization;
+﻿using CruZ.Common.ECS;
+using CruZ.Framework;
+using CruZ.Framework.GameSystem.ECS;
+using CruZ.Framework.GameSystem.Render;
+using CruZ.Framework.Resource;
+using CruZ.Framework.Serialization;
 
 using Microsoft.Xna.Framework;
 
@@ -12,7 +16,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 
-namespace CruZ.Common.ECS
+namespace CruZ.Framework.GameSystem.Animation
 {
     /// <summary>
     /// Playing animations in SpriteSheet
@@ -83,7 +87,7 @@ namespace CruZ.Common.ECS
     }
 }
 
-namespace CruZ.Common.ECS
+namespace CruZ.Framework.GameSystem.Animation
 {
     public class AnimationComponent : Component, ICustomSerializable
     {

@@ -1,12 +1,14 @@
 ﻿using System;
 
+using CruZ.Framework.GameSystem.ECS;
+
 using Microsoft.Xna.Framework;
 
 using Newtonsoft.Json;
 
-namespace CruZ.Common.ECS
+namespace CruZ.Framework.GameSystem.Script
 {
-    public class EntityScript : Component
+    public class ScriptComponent : Component
     {
         protected override void OnAttached(TransformEntity entity)
         {

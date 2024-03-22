@@ -1,6 +1,5 @@
-﻿
-using CruZ.Common.Input;
-using CruZ.Common.Utility;
+﻿using CruZ.Framework.Input;
+using CruZ.Framework.Utility;
 
 using Microsoft.Xna.Framework;
 

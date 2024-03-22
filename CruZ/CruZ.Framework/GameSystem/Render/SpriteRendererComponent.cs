@@ -2,12 +2,14 @@
 using Newtonsoft.Json;
 using System;
 using System.ComponentModel;
-using CruZ.Common.GameSystem.Resource;
-using CruZ.Common.Resource;
-using CruZ.Common.UI;
 using Microsoft.Xna.Framework;
-using CruZ.Common.Utility;
 using System.Drawing.Design;
+using CruZ.Framework.UI;
+using CruZ.Framework.Resource;
+using CruZ.Framework.DataType;
+using CruZ.Framework;
+using CruZ.Framework.GameSystem.Render;
+using CruZ.Framework.Utility;
 
 namespace CruZ.Common.ECS
 {

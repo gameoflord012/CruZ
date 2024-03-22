@@ -1,6 +1,4 @@
-﻿using CruZ.Common.GameSystem.Resource;
-
-namespace CruZ.Common.Resource
+﻿namespace CruZ.Framework.Resource
 {
     public interface IHostResource
     {

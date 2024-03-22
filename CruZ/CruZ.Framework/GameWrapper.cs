@@ -3,7 +3,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace CruZ.Common
+namespace CruZ.Framework
 {
     /// <summary>
     /// Provides a wrapper for <see cref="Game"/>.

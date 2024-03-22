@@ -1,4 +1,4 @@
-﻿namespace CruZ.Common.Scene
+﻿namespace CruZ.Framework.Scene
 {
     [System.AttributeUsage(System.AttributeTargets.Method, Inherited = false, AllowMultiple = false)]
     public class SceneAssetMethodAttribute

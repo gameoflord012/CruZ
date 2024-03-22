@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 
-namespace CruZ.Common.Utility
+namespace CruZ.Framework.Utility
 {
     public static class GameTimeHelper
     {

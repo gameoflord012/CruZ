@@ -1,4 +1,4 @@
-﻿using CruZ.Common.Utility;
+﻿using CruZ.Framework.Utility;
 
 using Newtonsoft.Json;
 
@@ -8,7 +8,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Text;
 
-namespace CruZ.Common.Serialization
+namespace CruZ.Framework.Serialization
 {
     public class Serializer
     {
@@ -62,7 +62,7 @@ namespace CruZ.Common.Serialization
             {
                 o = JsonConvert.DeserializeObject(json, ty, _settings);
             }
-            catch (System.Exception e)
+            catch (Exception e)
             {
                 throw new ArgumentException(string.Format("Problem to deserialize \"{0}\" to type {1}", json, ty), e);
             }

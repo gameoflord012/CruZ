@@ -3,7 +3,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace CruZ.Common.ECS
+namespace CruZ.Framework.GameSystem.Animation
 {
     class AnimatedSystem : EntitySystem
     {
@@ -17,7 +17,7 @@ namespace CruZ.Common.ECS
         {
             //foreach (var spriteRenderer in this.GetAllComponents(_spriteRendererMapper))
             //{
-            //    spriteRenderer.Update(gameTime);
+            //    spriteRenderer.OnUpdate(gameTime);
             //}
         }
 

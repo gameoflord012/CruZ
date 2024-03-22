@@ -1,9 +1,10 @@
-﻿using CruZ.Framework.GameSystem.ECS;
+﻿using CruZ.Common;
+using CruZ.Framework.GameSystem.ECS;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace CruZ.Common.ECS
+namespace CruZ.Framework.GameSystem.Render
 {
     internal class RenderSystem : EntitySystem
     {
@@ -13,7 +14,7 @@ namespace CruZ.Common.ECS
             _spriteBatch = GameApplication.GetSpriteBatch();
         }
 
-        protected override void Draw(GameTime gameTime)
+        protected override void OnDraw(GameTime gameTime)
         {
             //var renderers = this.GetAllComponents(_rendererMapper);
             //renderers.Sort();
@@ -24,7 +25,7 @@ namespace CruZ.Common.ECS
             //}
         }
 
-        protected override void Update(GameTime gameTime) { }
+        protected override void OnUpdate(GameTime gameTime) { }
 
         SpriteBatch _spriteBatch;
     }

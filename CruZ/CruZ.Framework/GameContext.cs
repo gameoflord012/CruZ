@@ -1,8 +1,8 @@
 ﻿using System;
 
-using CruZ.Common.Resource;
+using CruZ.Framework.Resource;
 
-namespace CruZ.Common
+namespace CruZ.Framework
 {
     public static class GameContext
     {
@@ -11,16 +11,16 @@ namespace CruZ.Common
             get => CheckNull(_gameResourceDir);
             set
             {
-                if(_gameResourceDir == value) return;
+                if (_gameResourceDir == value) return;
                 _gameResourceDir = value;
                 _gameResource = ResourceManager.From(_gameResourceDir);
             }
         }
 
-        public static ResourceManager GameResource 
-        { 
-            get => CheckNull(_gameResource); 
-            private set => _gameResource = value; 
+        public static ResourceManager GameResource
+        {
+            get => CheckNull(_gameResource);
+            private set => _gameResource = value;
         }
 
         private static T CheckNull<T>(T? value)

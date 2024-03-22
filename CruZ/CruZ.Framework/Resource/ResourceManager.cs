@@ -1,6 +1,7 @@
-﻿using CruZ.Common.GameSystem.Resource;
-using CruZ.Common.Serialization;
-using CruZ.Common.Service;
+﻿using CruZ.Common;
+using CruZ.Framework.Exceptions;
+using CruZ.Framework.Serialization;
+using CruZ.Framework.Service;
 
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Content.Pipeline;
@@ -17,7 +18,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 
-namespace CruZ.Common.Resource
+namespace CruZ.Framework.Resource
 {
     public class ResourceManager : ICustomSerializable, IGuidValueProcessor<string>
     {

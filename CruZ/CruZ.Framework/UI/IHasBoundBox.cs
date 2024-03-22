@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 using Microsoft.Xna.Framework;
 
-namespace CruZ.Common.UI
+namespace CruZ.Framework.UI
 {
     public struct UIBoundingBox
     {

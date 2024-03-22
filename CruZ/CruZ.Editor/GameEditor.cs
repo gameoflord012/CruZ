@@ -3,7 +3,6 @@ using CruZ.Editor.Global;
 using CruZ.Editor.Service;
 using CruZ.Editor.Utility;
 using CruZ.Common.Scene;
-using CruZ.Common.Service;
 using CruZ.Common.UI;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -15,10 +14,13 @@ using System.Linq;
 using System.Threading;
 using CruZ.Editor.UI;
 using CruZ.Common;
-using CruZ.Common.Input;
-using CruZ.Common.Resource;
 using CruZ.Editor.Scene;
 using Microsoft.Xna.Framework;
+using CruZ.Framework.Service;
+using CruZ.Framework.Input;
+using CruZ.Framework.Resource;
+using CruZ.Framework.GameSystem.ECS;
+using CruZ.Framework.Exceptions;
 
 
 namespace CruZ.Editor.Controls

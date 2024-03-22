@@ -1,10 +1,10 @@
 ﻿using CruZ.Common;
-using CruZ.Common.ECS;
 using CruZ.Common.Scene;
 using CruZ.Editor.Controls;
 using CruZ.Editor.Service;
 using CruZ.Editor.Utility;
 using CruZ.Editor.Winform.Ultility;
+using CruZ.Framework.GameSystem.ECS;
 
 using Microsoft.Xna.Framework;
 

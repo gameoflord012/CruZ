@@ -1,7 +1,7 @@
 ﻿using System;
 
-using CruZ.Common;
-using CruZ.Common.ECS;
+using CruZ.Framework;
+using CruZ.Framework.GameSystem.Render;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;

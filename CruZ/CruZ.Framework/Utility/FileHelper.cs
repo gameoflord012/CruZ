@@ -1,8 +1,8 @@
-﻿using CruZ.Common.Serialization;
+﻿using CruZ.Framework.Serialization;
 
 using System.IO;
 
-namespace CruZ.Common.Utility
+namespace CruZ.Framework.Utility
 {
     public static class FileHelper
     {
@@ -28,7 +28,7 @@ namespace CruZ.Common.Utility
 
         public static void WriteToFile(string file, string content, bool append = true)
         {
-            using(var writer = OpenWrite(file, append))
+            using (var writer = OpenWrite(file, append))
             {
                 writer.Write(content);
             }

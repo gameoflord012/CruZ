@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Windows.Forms;
 
-using CruZ.Common.ECS;
 using CruZ.Common.Scene;
 using CruZ.Editor.Controls;
 using CruZ.Editor.Service;
 using CruZ.Editor.Utility;
+using CruZ.Framework.GameSystem.ECS;
 
 namespace CruZ.Editor
 {

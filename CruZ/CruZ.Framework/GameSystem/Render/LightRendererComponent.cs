@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 
-using CruZ.Common.Utility;
+using CruZ.Framework.Utility;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace CruZ.Common.ECS
+namespace CruZ.Framework.GameSystem.Render
 {
     public class LightRendererComponent : RendererComponent
     {
@@ -35,14 +35,14 @@ namespace CruZ.Common.ECS
 
             spriteBatch.Begin(effect: fx);
             spriteBatch.Draw(
-                texture: _lightMap, 
-                position: pos, 
-                sourceRectangle: srcRect, 
-                color: 
-                Color.Red, 
+                texture: _lightMap,
+                position: pos,
+                sourceRectangle: srcRect,
+                color:
+                Color.Red,
                 rotation: 0,
-                origin: new Vector2(srcRect.Width / 2f, srcRect.Height / 2f), 
-                scale: scale, 
+                origin: new Vector2(srcRect.Width / 2f, srcRect.Height / 2f),
+                scale: scale,
                 SpriteEffects.None, 0);
             spriteBatch.End();
         }

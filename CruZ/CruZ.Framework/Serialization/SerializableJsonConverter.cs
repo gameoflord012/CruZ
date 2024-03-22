@@ -3,7 +3,7 @@
 using System;
 using System.Runtime.CompilerServices;
 
-namespace CruZ.Common.Serialization
+namespace CruZ.Framework.Serialization
 {
     public class SerializableJsonConverter : JsonConverter
     {

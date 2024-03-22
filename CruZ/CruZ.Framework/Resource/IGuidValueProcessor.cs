@@ -1,4 +1,4 @@
-﻿namespace CruZ.Common.Resource
+﻿namespace CruZ.Framework.Resource
 {
     interface IGuidValueProcessor<T>
     {

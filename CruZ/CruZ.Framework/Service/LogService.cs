@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-using CruZ.Common.Utility;
+using CruZ.Framework.Utility;
 
-namespace CruZ.Common.Service
+namespace CruZ.Framework.Service
 {
     public class LogService
     {
@@ -59,6 +59,6 @@ namespace CruZ.Common.Service
         static LogService Main { get => _main ??= new LogService(); }
         #endregion
 
-        const string DefaultString = "Default"; 
+        const string DefaultString = "Default";
     }
 }

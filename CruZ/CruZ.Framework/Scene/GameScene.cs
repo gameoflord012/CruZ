@@ -1,7 +1,6 @@
-﻿using CruZ.Common.ECS;
-using CruZ.Common.GameSystem.Resource;
-using CruZ.Common.Resource;
-using CruZ.Common.Serialization;
+﻿using CruZ.Framework.GameSystem.ECS;
+using CruZ.Framework.Resource;
+using CruZ.Framework.Serialization;
 
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
@@ -60,7 +59,7 @@ namespace CruZ.Common.Scene
 
         public TransformEntity CreateEntity(string name = "New Entity")
         {
-            var e = ECSManager.CreateEntity();
+            var e = ECSManager.CreateTransformEntity();
             e.Name = name;
             AddEntity(e);
 

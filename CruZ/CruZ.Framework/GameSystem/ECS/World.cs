@@ -24,7 +24,7 @@ namespace CruZ.Framework.GameSystem.ECS
 
             foreach (var system in _systems)
             {
-                system.DoUpdate(gameTime);
+                system.Update(gameTime);
             }
         }
 
@@ -34,7 +34,7 @@ namespace CruZ.Framework.GameSystem.ECS
 
             foreach (var system in _systems)
             {
-                system.DoDraw(gameTime);
+                system.Draw(gameTime);
             }
         }
 
@@ -44,12 +44,12 @@ namespace CruZ.Framework.GameSystem.ECS
             _removeQueue.Clear();
         }
 
-        internal List<Entity> RemoveQueue { get => _removeQueue; }
-        public Entity[] Entities { get => _entities.ToArray(); }
+        internal List<TransformEntity> RemoveQueue { get => _removeQueue; }
+        public TransformEntity[] Entities { get => _entities.ToArray(); }
 
-        HashSet<Entity> _entities = [];
+        HashSet<TransformEntity> _entities = [];
         List<EntitySystem> _systems = [];
-        List<Entity> _removeQueue = [];
+        List<TransformEntity> _removeQueue = [];
         int _eCounter = 0;
     }
 }

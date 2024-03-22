@@ -11,4 +11,8 @@
 			<IncludeAssets>all</IncludeAssets>
 		</ProjectReference>
 	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="GameSystem\Transform\" />
+	</ItemGroup>
 </Project>

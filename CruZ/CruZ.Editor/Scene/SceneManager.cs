@@ -7,6 +7,7 @@ using System.Reflection;
 using CruZ.Common;
 using CruZ.Common.Scene;
 using CruZ.Editor.Global;
+using CruZ.Framework.Scene;
 
 namespace CruZ.Editor.Scene
 {
