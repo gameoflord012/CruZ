@@ -2,11 +2,11 @@
 	<PropertyGroup>
 		<TargetFramework>net8.0-windows</TargetFramework>
 		<Nullable>enable</Nullable>
+		<RootNamespace>CruZ.Framework</RootNamespace>
 	</PropertyGroup>
 
 	<ItemGroup>
 		<ProjectReference Include="..\..\ThirdParty\MonoGame.Extended\src\cs\MonoGame.Extended.Animations\MonoGame.Extended.Animations.csproj" />
-		<ProjectReference Include="..\..\ThirdParty\MonoGame.Extended\src\cs\MonoGame.Extended.Entities\MonoGame.Extended.Entities.csproj" />
 		<ProjectReference Include="..\..\ThirdParty\MonoGameModified\MonoGame.Framework\MonoGame.Framework.WindowsDX.csproj">
 			<IncludeAssets>all</IncludeAssets>
 		</ProjectReference>

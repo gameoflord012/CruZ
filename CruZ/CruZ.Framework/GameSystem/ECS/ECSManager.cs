@@ -1,8 +1,6 @@
-﻿using CruZ.Common.ECS.Ultility;
+﻿using CruZ.Framework.GameSystem.ECS;
 
 using Microsoft.Xna.Framework;
-
-using MonoGame.Extended.Entities;
 
 namespace CruZ.Common.ECS
 {
@@ -19,13 +17,11 @@ namespace CruZ.Common.ECS
 
         void IECSController.Initialize()
         {
-            _world = new WorldBuilder().
-                //AddSystem(new EntityEventSystem()).
+            _world = new World();
+            _world.
                 AddSystem(new RenderSystem()).
                 AddSystem(new AnimatedSystem()).
-                //AddSystem(new PhysicSystem()).
-                AddSystem(new EntityScriptSystem()).
-                Build();
+                AddSystem(new EntityScriptSystem());
         }
 
         void IECSController.Update(GameTime gameTime)
@@ -53,12 +49,7 @@ namespace CruZ.Common.ECS
         /// <returns></returns>
         internal static TransformEntity CreateEntity()
         {
-            return _instance._world.CreateTransformEntity();
-        }
-
-        internal static void Destroy(Entity entity)
-        {
-            _instance._world.DestroyEntity(entity);
+            return new TransformEntity(_instance._world);
         }
     }
 }

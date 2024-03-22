@@ -23,8 +23,6 @@ namespace CruZ.Common.ECS
         public event Action<UIBoundingBox> BoundingBoxChanged;
 
         #region Properties
-        public override Type ComponentType => typeof(SpriteRendererComponent);
-
         public bool SortByY { get; set; } = false;
         public bool Flip { get; set; }
 

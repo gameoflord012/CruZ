@@ -8,9 +8,6 @@ namespace CruZ.Common.ECS
 {
     public class EntityScript : Component
     {
-        [JsonIgnore]
-        public override Type ComponentType => typeof(EntityScript);
-
         protected override void OnAttached(TransformEntity entity)
         {
             _e = entity;

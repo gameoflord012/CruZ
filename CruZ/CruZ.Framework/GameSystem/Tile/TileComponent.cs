@@ -6,9 +6,6 @@ namespace CruZ.Common.ECS
 {
     public class TileComponent : Component
     {
-        [Browsable(false)]
-        public override Type ComponentType => typeof(TileComponent);
-
         public bool Debug { get; set; } = false;
         public int TileSize { get; set; } = 16;
 

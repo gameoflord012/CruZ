@@ -87,8 +87,6 @@ namespace CruZ.Common.ECS
 {
     public class AnimationComponent : Component, ICustomSerializable
     {
-        public override Type ComponentType => typeof(AnimationComponent);
-
         public AnimationComponent()
         {
             _resource = GameContext.GameResource;

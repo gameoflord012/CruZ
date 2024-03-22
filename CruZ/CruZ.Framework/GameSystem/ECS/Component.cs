@@ -5,9 +5,6 @@ namespace CruZ.Common.ECS
 {
     public abstract class Component
     {
-        [Browsable(false)]
-        public abstract Type ComponentType { get; }
-
         protected virtual void OnAttached(TransformEntity entity) { }
 
         protected virtual void OnDetached(TransformEntity entity) { }
