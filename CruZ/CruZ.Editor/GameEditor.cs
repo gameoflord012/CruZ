@@ -126,16 +126,22 @@ namespace CruZ.Editor.Controls
             }
         }
 
+        /// <summary>
+        /// Should be called from winform thread
+        /// </summary>
+        /// <exception cref="Exception"></exception>
         public void CleanAppSession()
         {
-            if (_gameApp == null || _gameApp.ExitCalled) return;
+            if (_gameApp == null) return;
             Trace.Assert(_gameAppThread != null);
 
-            OnApplicationClose();
+            OnApplicationBeforeClosing();
 
             _gameApp.Exit();
+            _gameApp.Dispose();
+
             if (!_gameAppThread.Join(5000))
-                throw new global::System.Exception("Can't exit editor app");
+                throw new Exception("Can't exit editor app");
 
             _gameApp = null;
             _gameAppThread = null;
@@ -161,7 +167,7 @@ namespace CruZ.Editor.Controls
         #endregion
 
         #region Event_Handlers
-        private void OnApplicationClose()
+        private void OnApplicationBeforeClosing()
         {
             CacheWrite?.Invoke(this, "LoadedScene");
             CacheWrite?.Invoke(this, "Camera");

@@ -22,7 +22,6 @@ namespace CruZ.Common
         public ContentManager Content { get => _core.Content; }
         public GraphicsDevice GraphicsDevice { get => _core.GraphicsDevice; }
         public GameWindow Window => _core.Window;
-        public bool ExitCalled { get => _exitCalled; }
         public int FpsResult { get => _fpsResult; }
         #endregion
 
@@ -32,6 +31,7 @@ namespace CruZ.Common
             _core.Initialized += Wrapper_Initialized;
             _core.BeforeUpdate += Wrapper_BeforeUpdate;
             _core.AfterDraw += Wrapper_AfterDraw;
+            _core.Exiting += Wrapper_Exiting;
             _core.Window.ClientSizeChanged += Wrapper_WindowResized;
 
             _ecsController = ECSManager.CreateContext();
@@ -46,11 +46,7 @@ namespace CruZ.Common
 
         public void Exit()
         {
-            lock (this)
-            {
-                if (!_exitCalled)
-                    _core.Exit();
-            }
+            _core.Exit();
         }
 
         #region Event Handlers
@@ -86,9 +82,8 @@ namespace CruZ.Common
             Initialized?.Invoke();
         }
 
-        private void Wrapper_Exit(object? sender, EventArgs e)
+        private void Wrapper_Exiting(object? sender, EventArgs e)
         {
-            _exitCalled = true;
             Exiting?.Invoke();
         }
         #endregion
@@ -126,9 +121,9 @@ namespace CruZ.Common
 
         public void Dispose()
         {
-            if (!disposed)
+            if (!_isDispose)
             {
-                disposed = true;
+                _isDispose = true;
                 _core.Dispose();
                 _spriteBatch.Dispose();
 
@@ -146,9 +141,7 @@ namespace CruZ.Common
         GameWrapper _core;
         SpriteBatch _spriteBatch;
 
-        bool disposed = false;
-        bool _exitCalled = false;
-
+        bool _isDispose = false;
         int _fpsResult = 0;
         int _frameCount = 0;
         float _fpsTimer = 0;
@@ -179,7 +172,9 @@ namespace CruZ.Common
 
         public static GameApplication CreateContext(GameWrapper core)
         {
-            if(_instance != null) _instance.Dispose();
+            if(_instance != null && !_instance._isDispose) 
+                throw new InvalidOperationException("Dispose needed before creating new context");
+
             return _instance = new GameApplication(core);
         }
 

@@ -75,7 +75,7 @@ namespace CruZ.Editor
             {
                 //TODO: ResourceManager.Save(_gameEditor.CurrentGameScene);
             }
-            catch (global::System.Exception e)
+            catch (Exception e)
             {
                 DialogHelper.ShowExceptionDialog(e);
             }
