@@ -13,6 +13,6 @@
 	</ItemGroup>
 	
 	<ItemGroup>
-	  <ProjectReference Include="..\CruZ.Framework\CruZ.Framework.WindowDX.csproj" />
+	  <ProjectReference Include="..\CruZ.Framework\CruZ.Framework.WindowsDX.csproj" />
 	</ItemGroup>
 </Project>

@@ -271,7 +271,7 @@ namespace CruZ.Common.Resource
 #pragma warning restore CS8603 // Possible null reference return.
 #pragma warning restore CS8602 // Dereference of a possibly null reference.
             }
-            catch (System.Exception e)
+            catch (Exception e)
             {
                 throw new ContentLoadException($"Cannot load content {resourcePath}", e);
             }

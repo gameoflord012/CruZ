@@ -1,0 +1,3 @@
+[submodule "ThirdParty/MonoGameModified"]
+	path = ThirdParty/MonoGameModified
+	url = https://github.com/gameoflord012/MonoGameModified.git
