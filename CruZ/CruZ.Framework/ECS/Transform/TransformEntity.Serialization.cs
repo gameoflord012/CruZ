@@ -31,11 +31,7 @@ namespace CruZ.Common.ECS
 
                 var comTy = Type.GetType(tyStr, (assName) =>
                 {
-#if CRUZ_EDITOR
-                    return Assembly.Load("CruZ.Editor");
-#else
                     return Assembly.Load(assName);
-#endif
                 }, null) ?? throw new(string.Format("Can't get Type from string \"{0}\"", tyStr));
 
                 object comData = comObject["com-data"].ToObject(comTy, serializer);

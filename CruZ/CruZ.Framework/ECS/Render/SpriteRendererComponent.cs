@@ -32,9 +32,7 @@ namespace CruZ.Common.ECS
         [TypeConverter(typeof(Vector2TypeConverter))]
         public Vector2 NormalizedOrigin { get; set; } = new(0.5f, 0.5f);
 
-#if CRUZ_EDITOR
         [Editor(typeof(FileUITypeEditor), typeof(UITypeEditor))]
-#endif
         public string TexturePath
         {
             get => _spriteResInfo != null ? _spriteResInfo.ResourceName : "";

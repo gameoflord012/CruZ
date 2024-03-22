@@ -1,12 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
-		<Configurations>Debug;Release;DebugEditor</Configurations>
 		<TargetFramework>net8.0-windows</TargetFramework>
 		<Nullable>enable</Nullable>
-	</PropertyGroup>
-
-	<PropertyGroup Condition="'$(Configuration)'=='DebugEditor'">
-		<DefineConstants>$(DefineConstants);CRUZ_EDITOR</DefineConstants>
 	</PropertyGroup>
 
 	<ItemGroup>
