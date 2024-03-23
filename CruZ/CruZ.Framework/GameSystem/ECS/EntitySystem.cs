@@ -1,33 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using Microsoft.Xna.Framework;
-
-namespace CruZ.Framework.GameSystem.ECS
+﻿namespace CruZ.Framework.GameSystem.ECS
 {
     internal class EntitySystem
     {
         public virtual void Initialize() { }
 
-        public void Update(GameTime gameTime)
+        public void Update(EntitySystemEventArgs args)
         {
-            OnUpdate(gameTime);
+            OnUpdate(args);
         }
 
-        public void Draw(GameTime gameTime)
+        public void Draw(EntitySystemEventArgs args)
         {
-            OnDraw(gameTime);
+            OnDraw(args);
         }
 
-        protected virtual void OnUpdate(GameTime gameTime)
+        protected virtual void OnUpdate(EntitySystemEventArgs args)
         {
 
         }
 
-        protected virtual void OnDraw(GameTime gameTime)
+        protected virtual void OnDraw(EntitySystemEventArgs args)
         {
 
         }

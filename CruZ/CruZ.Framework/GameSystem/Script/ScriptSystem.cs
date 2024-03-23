@@ -6,22 +6,16 @@ namespace CruZ.Framework.GameSystem.Script
 {
     internal class ScriptSystem : EntitySystem
     {
-        public void Draw(GameTime gameTime)
+        protected override void OnDraw(EntitySystemEventArgs args)
         {
-            //foreach (var script in this.GetAllComponents(_scriptMapper))
-            //{
-            //    script.InternalDraw(gameTime);
-            //}
+            args.Entity.TryGetComponent(out ScriptComponent? script);
+            script?.InternalDraw(args.GameTime);
         }
 
-        public void Update(GameTime gameTime)
+        protected override void OnUpdate(EntitySystemEventArgs args)
         {
-            //foreach (var script in this.GetAllComponents(_scriptMapper))
-            //{
-            //    script.InternalUpdate(gameTime);
-            //}
+            args.Entity.TryGetComponent(out ScriptComponent? script);
+            script?.InternalUpdate(args.GameTime);
         }
-
-        //ComponentMapper<ScriptComponent> _scriptMapper;
     }
 }

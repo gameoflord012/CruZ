@@ -1,31 +1,32 @@
-﻿using CruZ.Common;
+﻿using System.Linq;
+
+using CruZ.Common;
 using CruZ.Framework.GameSystem.ECS;
 
-using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace CruZ.Framework.GameSystem.Render
 {
     internal class RenderSystem : EntitySystem
     {
-        public override void Initialize(/*IComponentMapperService mapperService*/)
+        public override void Initialize()
         {
-            //_rendererMapper = mapperService.GetMapper<RendererComponent>();
             _spriteBatch = GameApplication.GetSpriteBatch();
         }
 
-        protected override void OnDraw(GameTime gameTime)
+        protected override void OnDraw(EntitySystemEventArgs args)
         {
-            //var renderers = this.GetAllComponents(_rendererMapper);
-            //renderers.Sort();
+            var renderers = args.Entity.GetAllComponents()
+                .Where(e => e is RendererComponent)
+                .Select(e => (RendererComponent)e)
+                .ToList();
 
-            //foreach (var renderer in renderers)
-            //{
-            //    renderer.Render(gameTime, _spriteBatch, Camera.Main.ViewProjectionMatrix());
-            //}
+            renderers.Sort();
+
+            foreach (var renderer in renderers)
+                renderer.Render(
+                    args.GameTime, _spriteBatch, Camera.Main.ViewProjectionMatrix());
         }
-
-        protected override void OnUpdate(GameTime gameTime) { }
 
         SpriteBatch _spriteBatch;
     }

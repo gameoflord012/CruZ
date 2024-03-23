@@ -1,4 +1,5 @@
-﻿using CruZ.Framework.Input;
+﻿using CruZ.Framework;
+using CruZ.Framework.Input;
 using CruZ.Framework.UI;
 
 using Microsoft.Xna.Framework;

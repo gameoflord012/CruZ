@@ -1,7 +1,6 @@
 ﻿using CruZ.Common.ECS;
 using CruZ.Editor.Global;
 using CruZ.Editor.Service;
-using CruZ.Editor.Utility;
 using CruZ.Common.Scene;
 using CruZ.Common.UI;
 using Microsoft.Xna.Framework.Graphics;
@@ -21,6 +20,8 @@ using CruZ.Framework.Input;
 using CruZ.Framework.Resource;
 using CruZ.Framework.GameSystem.ECS;
 using CruZ.Framework.Exceptions;
+using CruZ.Framework;
+using CruZ.Editor.Winform.Utility;
 
 
 namespace CruZ.Editor.Controls
@@ -265,9 +266,8 @@ namespace CruZ.Editor.Controls
 
             eControl.Sort((e1, e2) =>
             {
-                SpriteRendererComponent? sp1 = null, sp2 = null;
-                e1.AttachEntity.TryGetComponent(ref sp1);
-                e2.AttachEntity.TryGetComponent(ref sp2);
+                e1.AttachEntity.TryGetComponent(out SpriteRendererComponent? sp1);
+                e2.AttachEntity.TryGetComponent(out SpriteRendererComponent? sp2);
 
                 if (sp1 == sp2) return 0;
                 if (sp1 == null) return -1;

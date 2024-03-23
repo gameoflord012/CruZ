@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,38 +19,64 @@ namespace CruZ.Framework.GameSystem.ECS
             return this;
         }
 
+        internal void AddEntity(TransformEntity e)
+        {
+            _entitiesToRemove.Remove(e);
+            _entitiesToAdd.Add(e);
+        }
+
+        internal void RemoveEntity(TransformEntity e)
+        {
+            _entitiesToAdd.Remove(e);
+            _entitiesToRemove.Add(e);
+        }
+
+        public void Initialize()
+        {
+            foreach (var system in _systems)
+            {
+                system.Initialize();
+            }
+        }
+
         public void Update(GameTime gameTime)
         {
-            ProcessRemoveQueue();
+            ProcessEntitiesChanges();
 
             foreach (var system in _systems)
             {
-                system.Update(gameTime);
+                foreach (var e in _entities)
+                {
+                    system.Update(new EntitySystemEventArgs(e, gameTime));
+                }
             }
         }
 
         public void Draw(GameTime gameTime)
         {
-            ProcessRemoveQueue();
+            ProcessEntitiesChanges();
 
             foreach (var system in _systems)
             {
-                system.Draw(gameTime);
+                foreach (var e in _entities)
+                {
+                    system.Draw(new EntitySystemEventArgs(e, gameTime));
+                }
             }
         }
 
-        private void ProcessRemoveQueue()
+        private void ProcessEntitiesChanges()
         {
-            foreach (var toRemove in _removeQueue) _entities.Remove(toRemove);
-            _removeQueue.Clear();
+            Trace.Assert(_entitiesToAdd.Intersect(_entitiesToRemove).Count() == 0);
+            _entities.ExceptWith(_entitiesToRemove);
+            _entities.UnionWith(_entitiesToAdd);
         }
 
-        internal List<TransformEntity> RemoveQueue { get => _removeQueue; }
         public TransformEntity[] Entities { get => _entities.ToArray(); }
 
-        HashSet<TransformEntity> _entities = [];
         List<EntitySystem> _systems = [];
-        List<TransformEntity> _removeQueue = [];
-        int _eCounter = 0;
+        HashSet<TransformEntity> _entitiesToRemove = [];
+        HashSet<TransformEntity> _entitiesToAdd = [];
+        HashSet<TransformEntity> _entities = [];
     }
 }

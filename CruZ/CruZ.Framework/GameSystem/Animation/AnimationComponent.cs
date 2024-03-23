@@ -40,7 +40,7 @@ namespace CruZ.Framework.GameSystem.Animation
             }
         }
 
-        public void Update(GameTime gameTime, SpriteRendererComponent sprite)
+        public void Update(GameTime gameTime)
         {
             _animatedSprite.Update(gameTime);
         }
@@ -104,9 +104,9 @@ namespace CruZ.Framework.GameSystem.Animation
             _loadedResources.Add(new(resourcePath, animationPlayerKey));
         }
 
-        public void Update(GameTime gameTime)
+        internal void Update(GameTime gameTime)
         {
-            _currentAnimationPlayer?.Update(gameTime, _sprite);
+            _currentAnimationPlayer?.Update(gameTime);
         }
 
         public AnimationPlayer SelectPlayer(string key)
@@ -131,7 +131,7 @@ namespace CruZ.Framework.GameSystem.Animation
 
         protected override void OnComponentChanged(ComponentCollection comps)
         {
-            comps.TryGetComponent(ref _sprite);
+            comps.TryGetComponent(out _sprite);
         }
 
         public object ReadJson(JsonReader reader, JsonSerializer serializer)

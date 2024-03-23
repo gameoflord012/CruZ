@@ -3,7 +3,7 @@
 using System;
 using System.Windows.Forms;
 
-namespace CruZ.Editor.Utility
+namespace CruZ.Editor.Winform.Utility
 {
     class DialogHelper
     {
@@ -50,7 +50,7 @@ namespace CruZ.Editor.Utility
             }
         }
 
-        public static void ShowExceptionDialog(global::System.Exception ex)
+        public static void ShowExceptionDialog(Exception ex)
         {
             ThreadExceptionDialog exceptionDialog = new(ex);
             exceptionDialog.ShowDialog();

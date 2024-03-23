@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace CruZ.Common
+namespace CruZ.Framework
 {
     public partial class Camera
     {
@@ -8,7 +8,7 @@ namespace CruZ.Common
 
         private static Camera GetMain()
         {
-            if(_mainCamera == null)
+            if (_mainCamera == null)
             {
                 throw new NullReferenceException("Main camera is not assigned");
             }

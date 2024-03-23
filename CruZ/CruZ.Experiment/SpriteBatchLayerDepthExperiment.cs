@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using CruZ.Common;
 using CruZ.Framework;
 
 using Microsoft.Xna.Framework;

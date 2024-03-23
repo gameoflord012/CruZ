@@ -1,27 +1,17 @@
-﻿using CruZ.Framework.GameSystem.ECS;
+﻿using CruZ.Common;
+using CruZ.Framework.GameSystem.ECS;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace CruZ.Framework.GameSystem.Animation
 {
-    class AnimatedSystem : EntitySystem
+    class AnimationSystem : EntitySystem
     {
-        public override void Initialize(/*IComponentMapperService mapperService*/)
+        protected override void OnUpdate(EntitySystemEventArgs args)
         {
-            //_spriteRendererMapper = mapperService.GetMapper<AnimationComponent>();
-            //_spriteBatch = GameApplication.GetSpriteBatch();
+            args.Entity.TryGetComponent(out AnimationComponent? animation);
+            animation?.Update(args.GameTime);
         }
-
-        public virtual void Update(GameTime gameTime)
-        {
-            //foreach (var spriteRenderer in this.GetAllComponents(_spriteRendererMapper))
-            //{
-            //    spriteRenderer.OnUpdate(gameTime);
-            //}
-        }
-
-        SpriteBatch _spriteBatch;
-        //ComponentMapper<AnimationComponent> _spriteRendererMapper;
     }
 }

@@ -16,15 +16,18 @@ namespace CruZ.Framework.GameSystem.ECS
 
     public partial class ECSManager : IECSController
     {
-        private ECSManager() { }
-
-        void IECSController.Initialize()
+        private ECSManager() 
         {
             _world = new World();
             _world.
                 AddSystem(new RenderSystem()).
-                AddSystem(new AnimatedSystem()).
+                AddSystem(new AnimationSystem()).
                 AddSystem(new ScriptSystem());
+        }
+
+        void IECSController.Initialize()
+        {
+            _world.Initialize();
         }
 
         void IECSController.Update(GameTime gameTime)

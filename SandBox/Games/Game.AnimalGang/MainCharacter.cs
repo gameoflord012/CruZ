@@ -29,8 +29,8 @@ namespace AnimalGang
 
         protected override void OnComponentChanged(ComponentCollection comps)
         {
-            comps.TryGetComponent(ref _sprite);
-            comps.TryGetComponent(ref _animation);
+            comps.TryGetComponent(out _sprite);
+            comps.TryGetComponent(out _animation);
         }
 
         protected override void OnUpdate(GameTime gameTime)

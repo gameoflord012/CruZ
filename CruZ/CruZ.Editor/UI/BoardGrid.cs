@@ -13,6 +13,7 @@ namespace CruZ.Editor.UI
 {
     using System.Numerics;
 
+    using CruZ.Framework;
     using CruZ.Framework.Utility;
 
     public class BoardGrid : UIControl

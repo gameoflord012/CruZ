@@ -14,7 +14,7 @@ using CruZ.Framework.Service;
 using CruZ.Framework.Input;
 using CruZ.Framework.GameSystem.ECS;
 
-namespace CruZ.Common
+namespace CruZ.Framework
 {
     public partial class GameApplication : IDisposable
     {
@@ -197,18 +197,5 @@ namespace CruZ.Common
         }
 
         private static GameApplication? _instance;
-    }
-
-    public class DrawEventArgs
-    {
-        public SpriteBatch SpriteBatch;
-
-        public DrawEventArgs(SpriteBatch spriteBatch, GameTime gameTime)
-        {
-            SpriteBatch = spriteBatch;
-            GameTime = gameTime;
-        }
-
-        public GameTime GameTime;
     }
 }

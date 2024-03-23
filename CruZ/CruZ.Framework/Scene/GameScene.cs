@@ -1,4 +1,5 @@
-﻿using CruZ.Framework.GameSystem.ECS;
+﻿using CruZ.Framework;
+using CruZ.Framework.GameSystem.ECS;
 using CruZ.Framework.Resource;
 using CruZ.Framework.Serialization;
 

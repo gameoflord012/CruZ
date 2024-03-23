@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using System.DirectoryServices.ActiveDirectory;
 using CruZ.Framework.Utility;
 using CruZ.Framework.GameSystem.ECS;
+using CruZ.Framework;
 
 namespace CruZ.Editor
 {

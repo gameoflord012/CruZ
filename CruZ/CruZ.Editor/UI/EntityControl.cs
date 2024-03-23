@@ -2,7 +2,6 @@
 using CruZ.Editor.Global;
 using CruZ.Editor.Service;
 using CruZ.Common.UI;
-using CruZ.Common.Utility;
 
 using MonoGame.Extended;
 
@@ -11,7 +10,8 @@ using System.Collections.Generic;
 
 namespace CruZ.Editor.UI
 {
-    using CruZ.Common;
+    using CruZ.Framework;
+    using CruZ.Framework.GameSystem;
     using CruZ.Framework.GameSystem.ECS;
     using CruZ.Framework.UI;
 
@@ -90,7 +90,7 @@ namespace CruZ.Editor.UI
 
         private void Entity_ComponentChanged(ComponentCollection comps)
         {
-            comps.TryGetComponent(ref _sp);
+            comps.TryGetComponent(out _sp);
         }
 
         private void CalcControlBounds(UIBoundingBox bBox)

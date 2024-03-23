@@ -34,7 +34,7 @@ namespace CruZ.Framework.GameSystem.Tile
                 _sp.DrawLoopEnd -= Sprite_DrawLoopEnd;
             }
 
-            comps.TryGetComponent(ref _sp);
+            comps.TryGetComponent(out _sp);
 
             if (_sp != null)
             {

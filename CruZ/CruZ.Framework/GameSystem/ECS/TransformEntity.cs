@@ -17,6 +17,8 @@ namespace CruZ.Framework.GameSystem.ECS
             _world = world;
             Name = "Entity";
             Id = _entityCounter++;
+
+            world.AddEntity(this);
         }
 
         public T GetComponent<T>() where T : Component
@@ -24,9 +26,10 @@ namespace CruZ.Framework.GameSystem.ECS
             return (T)GetComponent(typeof(T));
         }
 
-        public void TryGetComponent<T>(ref T? com) where T : Component
+        public void TryGetComponent<T>(out T? com) where T : Component
         {
             if (HasComponent(typeof(T))) com = GetComponent<T>();
+            else com = null;
         }
 
         public Component GetComponent(Type ty)
@@ -50,9 +53,8 @@ namespace CruZ.Framework.GameSystem.ECS
 
         public void RemoveComponent(Type ty)
         {
-            if(HasComponent(ty))
+            if(!HasComponent(ty))
                 throw new ArgumentException($"{ty} already removed");
-
 
             var comp = GetComponent(ty);
             _components.Remove(ty);
@@ -83,7 +85,7 @@ namespace CruZ.Framework.GameSystem.ECS
 
         public void Dispose()
         {
-            _world.RemoveQueue.Add(this);
+            _world.RemoveEntity(this);
         }
 
         [ReadOnly(true)]

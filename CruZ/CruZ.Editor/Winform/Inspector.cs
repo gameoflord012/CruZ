@@ -1,12 +1,10 @@
-﻿using CruZ.Common;
-using CruZ.Common.Scene;
+﻿using CruZ.Common.Scene;
 using CruZ.Editor.Controls;
 using CruZ.Editor.Service;
-using CruZ.Editor.Utility;
 using CruZ.Editor.Winform.Ultility;
+using CruZ.Editor.Winform.Utility;
+using CruZ.Framework;
 using CruZ.Framework.GameSystem.ECS;
-
-using Microsoft.Xna.Framework;
 
 using System;
 using System.Linq;
@@ -59,6 +57,7 @@ namespace CruZ.Editor
         {
             var wrapper = (EntityWrapper)inspector_PropertyGrid.SelectedObject;
             wrapper?.RefreshComponents();
+            //RefreshPropertyGrid();
         }
 
         private void GameApp_Drawing()
@@ -105,11 +104,11 @@ namespace CruZ.Editor
 
         private void RefreshPropertyGrid()
         {
-            if (!GameApplication.IsActive()) return;
-
             PropertyGridInvoke(delegate
             {
-                inspector_PropertyGrid.Refresh();
+                var focusedControl = ControlHelper.FindFocusedControl(inspector_PropertyGrid);
+                bool isEditingPropertyGrid = focusedControl != null && focusedControl.GetType().ToString() != "GridViewEdit";
+                if (!isEditingPropertyGrid) inspector_PropertyGrid.Refresh();
             });
         }
 
