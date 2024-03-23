@@ -10,12 +10,15 @@ using System.Collections.Generic;
 
 namespace CruZ.Editor.UI
 {
+    using System.Linq;
+
     using CruZ.Framework;
     using CruZ.Framework.GameSystem;
     using CruZ.Framework.GameSystem.ECS;
     using CruZ.Framework.UI;
 
     using Microsoft.Xna.Framework;
+    using SharpDX.Direct3D9;
 
     public class EntityControl : UIControl, ICanUndo
     {
@@ -30,10 +33,7 @@ namespace CruZ.Editor.UI
             _e.ComponentsChanged += Entity_ComponentChanged;
 
             if (e.HasComponent(typeof(SpriteRendererComponent)))
-            {
-                _sp = e.GetComponent<SpriteRendererComponent>();
-                _sp.BoundingBoxChanged += Sprite_BoundingBoxChanged;
-            }
+                UpdateIHasBoundBox((IHasBoundBox)e.GetAllComponents().First(e => e is IHasBoundBox));
 
             _initialBackgroundCol = BackgroundColor;
             _isSelected = false;
@@ -78,7 +78,7 @@ namespace CruZ.Editor.UI
             }
         }
 
-        private void Sprite_BoundingBoxChanged(UIBoundingBox bBox)
+        private void Entity_BoundingBoxChanged(UIBoundingBox bBox)
         {
             CalcControlBounds(bBox);
         }
@@ -90,7 +90,14 @@ namespace CruZ.Editor.UI
 
         private void Entity_ComponentChanged(ComponentCollection comps)
         {
-            comps.TryGetComponent(out _sp);
+            UpdateIHasBoundBox((IHasBoundBox)comps.GetAllComponents().First(e => e is IHasBoundBox));
+        }
+
+        private void UpdateIHasBoundBox(IHasBoundBox iHasBoundBox)
+        {
+            if (_iHasBoundBox != null) _iHasBoundBox.BoundingBoxChanged -= Entity_BoundingBoxChanged;
+            _iHasBoundBox = iHasBoundBox;
+            _iHasBoundBox.BoundingBoxChanged += Entity_BoundingBoxChanged;
         }
 
         private void CalcControlBounds(UIBoundingBox bBox)
@@ -105,13 +112,6 @@ namespace CruZ.Editor.UI
 
             Width = LocationBR.X - Location.X;
             Height = LocationBR.Y - Location.Y;
-        }
-
-        private Point GetCenter()
-        {
-            return new(
-                Location.X + (Width + 1) / 2,
-                Location.Y + (Height + 1) / 2);
         }
 
         private void SetCenter(Point p)
@@ -173,7 +173,7 @@ namespace CruZ.Editor.UI
         }
 
         TransformEntity _e;
-        SpriteRendererComponent? _sp;
+        IHasBoundBox? _iHasBoundBox;
         DRAW.RectangleF _bounds; //World bounds
 
         DRAW.Point _dragCenterOffset;

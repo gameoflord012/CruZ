@@ -80,7 +80,7 @@ namespace CruZ.Framework.GameSystem.ECS
 
         public override string ToString()
         {
-            return $"{Name}: {Id}";
+            return $"{Name}({Id})";
         }
 
         public void Dispose()
