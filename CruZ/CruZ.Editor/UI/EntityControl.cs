@@ -104,8 +104,8 @@ namespace CruZ.Editor.UI
         {
             if(bBox.IsEmpty()) return;
 
-            _bounds = bBox.Bound;
-            _points = bBox.Points;
+            _bounds = bBox.WorldBounds;
+            _points = bBox.WorldOrigins;
 
             Location = Camera.Main.CoordinateToPoint(new Vector2(_bounds.X, _bounds.Y));
             var LocationBR = Camera.Main.CoordinateToPoint(new Vector2(_bounds.X + _bounds.Width, _bounds.Y + _bounds.Height));

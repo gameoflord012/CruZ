@@ -9,24 +9,24 @@ namespace CruZ.Framework.UI
     {
         public UIBoundingBox()
         {
-            Points = [];
-            Bound = new(0, 0, 0, 0);
+            WorldOrigins = [];
+            WorldBounds = new(0, 0, 0, 0);
         }
 
         /// <summary>
-        /// Bound to be drawn in world coord
+        /// WorldBounds to be drawn in world coord
         /// </summary>
-        public DRAW.RectangleF Bound;
+        public DRAW.RectangleF WorldBounds;
         /// <summary>
-        /// Points to be drawn in world coord
+        /// WorldOrigins to be drawn in world coord
         /// </summary>
-        public List<Vector2> Points;
+        public List<Vector2> WorldOrigins;
 
         public static UIBoundingBox Default => new UIBoundingBox();
 
         public bool IsEmpty()
         {
-            return Bound.IsEmpty;
+            return WorldBounds.IsEmpty;
         }
     }
 

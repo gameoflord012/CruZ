@@ -43,7 +43,7 @@ namespace CruZ.Framework.GameSystem.Tile
             }
         }
 
-        private void Sprite_DrawLoopBegin(object? sender, DrawLoopBeginEventArgs args)
+        private void Sprite_DrawLoopBegin(object? sender, DrawArgs args)
         {
             if (Debug && (_idX + _idY) % 2 == 0)
             {

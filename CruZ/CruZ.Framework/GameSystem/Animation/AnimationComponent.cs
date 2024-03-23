@@ -67,7 +67,7 @@ namespace CruZ.Framework.GameSystem.Animation
             _sprite = null;
         }
 
-        private void Sprite_DrawLoopBegin(object? sender, DrawLoopBeginEventArgs e)
+        private void Sprite_DrawLoopBegin(object? sender, DrawArgs e)
         {
             e.Texture = _animatedSprite.TextureRegion.Texture;
             e.SourceRectangle = _animatedSprite.TextureRegion.Bounds;

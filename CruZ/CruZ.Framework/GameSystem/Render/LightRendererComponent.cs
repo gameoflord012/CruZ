@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
+using CruZ.Framework.UI;
 using CruZ.Framework.Utility;
 
 using Microsoft.Xna.Framework;
@@ -8,10 +9,10 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace CruZ.Framework.GameSystem.Render
 {
-    public class LightRendererComponent : RendererComponent
+    public class LightRendererComponent : RendererComponent, IHasBoundBox
     {
-        public float LightIntensity { get; set; }
-
+        public event Action<UIBoundingBox> BoundingBoxChanged;
+     
         public LightRendererComponent()
         {
             _lightMap = GameContext.GameResource.Load<Texture2D>("imgs\\dangcongsang.png");
@@ -29,23 +30,16 @@ namespace CruZ.Framework.GameSystem.Render
             fx.Parameters["intensity"].SetValue(LightIntensity * rand);
             fx.Parameters["min_alpha"].SetValue(0.05f);
 
-            Vector2 pos = AttachedEntity.Transform.Position;
-            Vector2 scale = AttachedEntity.Transform.Scale;
-            Rectangle srcRect = _lightMap.Bounds;
+            DrawArgs drawArgs = new();
+            drawArgs.Apply(AttachedEntity);
+            drawArgs.Apply(_lightMap);
 
             spriteBatch.Begin(effect: fx);
-            spriteBatch.Draw(
-                texture: _lightMap,
-                position: pos,
-                sourceRectangle: srcRect,
-                color:
-                Color.Red,
-                rotation: 0,
-                origin: new Vector2(srcRect.Width / 2f, srcRect.Height / 2f),
-                scale: scale,
-                SpriteEffects.None, 0);
+            spriteBatch.Draw(drawArgs);
             spriteBatch.End();
         }
+
+        public float LightIntensity { get; set; }
 
         Texture2D _lightMap;
         float[,] _perlinNoise;

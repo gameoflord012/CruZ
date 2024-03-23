@@ -1,21 +1,38 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
 using System;
 using Microsoft.Xna.Framework;
+using CruZ.Framework.GameSystem.ECS;
 
 namespace CruZ.Framework.GameSystem.Render
 {
-    public class DrawLoopBeginEventArgs : EventArgs
+    public class DrawArgs : EventArgs
     {
+        public Texture2D? Texture;
         public Rectangle SourceRectangle;
         public Vector2 NormalizedOrigin;
         public Vector2 Position;
         public Vector2 Scale;
-        public Texture2D? Texture;
+        public Color Color = Color.White;
         public float LayerDepth = 0;
+        public bool Flip = false;
         public bool Skip = false;
+
+        public void Apply(TransformEntity entity)
+        {
+            Position = entity.Position;
+            Scale = entity.Scale;
+        }
+
+        public void Apply(Texture2D tex)
+        {
+            Texture = tex;
+            SourceRectangle = tex.Bounds;
+        }
 
         public DRAW.RectangleF GetWorldBounds() // in World Coordinate
         {
+            if(SourceRectangle.IsEmpty) throw new InvalidOperationException("set rect value first");
+
             DRAW.RectangleF rect = new();
             rect.Width = SourceRectangle.Width * Scale.X;
             rect.Height = SourceRectangle.Height * Scale.Y;

@@ -18,7 +18,7 @@ namespace CruZ.Common.ECS
     /// </summary>
     public partial class SpriteRendererComponent : RendererComponent, IHasBoundBox
     {
-        public event EventHandler<DrawLoopBeginEventArgs>? DrawLoopBegin;
+        public event EventHandler<DrawArgs>? DrawLoopBegin;
         public event EventHandler<DrawLoopEndEventArgs>? DrawLoopEnd;
         public event Action? DrawBegin;
         public event Action? DrawEnd;
@@ -45,30 +45,34 @@ namespace CruZ.Common.ECS
         public SpriteRendererComponent()
         {
             _resource = GameContext.GameResource;
+            InitBoundingBoxEventHandlers();
+        }
 
+        private void InitBoundingBoxEventHandlers()
+        {
             DrawBegin += () =>
             {
-                _boundingBox.Points.Clear();
+                _boundingBox.WorldOrigins.Clear();
                 _hasBoundingBox = false;
             };
 
             DrawLoopEnd += (sender, args) =>
             {
-                _boundingBox.Points.Add(args.BeginArgs.GetWorldOrigin());
+                _boundingBox.WorldOrigins.Add(args.DrawArgs.GetWorldOrigin());
 
                 if (!_hasBoundingBox)
                 {
-                    _boundingBox.Bound = args.BeginArgs.GetWorldBounds();
+                    _boundingBox.WorldBounds = args.DrawArgs.GetWorldBounds();
                     _hasBoundingBox = true;
                 }
                 else
                 {
-                    var bounds = args.BeginArgs.GetWorldBounds();
+                    var bounds = args.DrawArgs.GetWorldBounds();
 
-                    _boundingBox.Bound.X = MathF.Min(_boundingBox.Bound.X, bounds.X);
-                    _boundingBox.Bound.Y = MathF.Min(_boundingBox.Bound.Y, bounds.Y);
-                    _boundingBox.Bound.Width = _boundingBox.Bound.Right < bounds.Right ? bounds.Right - _boundingBox.Bound.X : _boundingBox.Bound.Width;
-                    _boundingBox.Bound.Height = _boundingBox.Bound.Bottom < bounds.Bottom ? bounds.Bottom - _boundingBox.Bound.Y : _boundingBox.Bound.Height;
+                    _boundingBox.WorldBounds.X = MathF.Min(_boundingBox.WorldBounds.X, bounds.X);
+                    _boundingBox.WorldBounds.Y = MathF.Min(_boundingBox.WorldBounds.Y, bounds.Y);
+                    _boundingBox.WorldBounds.Width = _boundingBox.WorldBounds.Right < bounds.Right ? bounds.Right - _boundingBox.WorldBounds.X : _boundingBox.WorldBounds.Width;
+                    _boundingBox.WorldBounds.Height = _boundingBox.WorldBounds.Bottom < bounds.Bottom ? bounds.Bottom - _boundingBox.WorldBounds.Y : _boundingBox.WorldBounds.Height;
                 }
             };
 
@@ -101,6 +105,8 @@ namespace CruZ.Common.ECS
 
         public override void Render(GameTime gameTime, SpriteBatch spriteBatch, Matrix viewProjectionMatrix)
         {
+            if(Texture == null) return;
+
             var fx = EffectManager.NormalSpriteRenderer;
             fx.Parameters["view_projection"].SetValue(viewProjectionMatrix);
 
@@ -112,53 +118,24 @@ namespace CruZ.Common.ECS
 
             while (true)
             {
-                DrawLoopBeginEventArgs beginLoop = new();
-                beginLoop.Position = new(AttachedEntity.Transform.Position.X, AttachedEntity.Transform.Position.Y);
-                beginLoop.LayerDepth = CalculateLayerDepth();
-                beginLoop.NormalizedOrigin = NormalizedOrigin;
-                beginLoop.Scale = new(AttachedEntity.Transform.Scale.X, AttachedEntity.Transform.Scale.Y);
+                #region Before Drawloop
+                DrawArgs drawArgs = new();
+                drawArgs.Apply(AttachedEntity);
+                drawArgs.Apply(Texture);
+                drawArgs.LayerDepth = CalculateLayerDepth();
+                drawArgs.NormalizedOrigin = NormalizedOrigin;
+                drawArgs.Color = Color.White;
+                drawArgs.Flip = Flip;
+                DrawLoopBegin?.Invoke(this, drawArgs); 
+                #endregion
 
-                if (Texture != null)
-                {
-                    beginLoop.SourceRectangle = Texture.Bounds;
-                    beginLoop.Texture = Texture;
-                }
+                spriteBatch.Draw(drawArgs);
 
-                DrawLoopBegin?.Invoke(this, beginLoop);
-
-                if (beginLoop.Skip)
-                {
-
-                }
-                else if (beginLoop.Texture == null)
-                {
-
-                }
-                else
-                {
-                    spriteBatch.Draw(
-                    texture: beginLoop.Texture,
-                    position: beginLoop.Position,
-
-                    sourceRectangle: beginLoop.SourceRectangle,
-
-                    color: XNA.Color.White,
-                    rotation: 0,
-
-                    origin: new(beginLoop.NormalizedOrigin.X * beginLoop.SourceRectangle.Width,
-                                beginLoop.NormalizedOrigin.Y * beginLoop.SourceRectangle.Height),
-
-                    scale: beginLoop.Scale,
-
-                    effects: Flip ? SpriteEffects.FlipHorizontally : SpriteEffects.None,
-                    layerDepth: beginLoop.LayerDepth);
-                }
-
-                var endLoop = new DrawLoopEndEventArgs();
-
-                endLoop.BeginArgs = beginLoop;
-                DrawLoopEnd?.Invoke(this, endLoop);
-                if (!endLoop.KeepDrawing) break;
+                #region After Drawloop
+                var drawEndArgs = new DrawLoopEndEventArgs(drawArgs);
+                DrawLoopEnd?.Invoke(this, drawEndArgs);
+                if (!drawEndArgs.KeepDrawing) break; 
+                #endregion
             }
 
             spriteBatch.End();

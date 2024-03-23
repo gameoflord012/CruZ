@@ -5,6 +5,11 @@ namespace CruZ.Framework.GameSystem.Render
     public class DrawLoopEndEventArgs : EventArgs
     {
         public bool KeepDrawing = false;
-        public DrawLoopBeginEventArgs BeginArgs;
+        public DrawArgs DrawArgs { get; }
+
+        public DrawLoopEndEventArgs(DrawArgs drawArgs)
+        {
+            DrawArgs = drawArgs;
+        }
     }
 }
