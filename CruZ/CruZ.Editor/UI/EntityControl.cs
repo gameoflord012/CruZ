@@ -32,8 +32,7 @@ namespace CruZ.Editor.UI
             _e.RemovedFromWorld += Entity_OnRemoveFromWorld;
             _e.ComponentsChanged += Entity_ComponentChanged;
 
-            if (e.HasComponent(typeof(SpriteRendererComponent)))
-                UpdateIHasBoundBox((IHasBoundBox)e.GetAllComponents().First(e => e is IHasBoundBox));
+            UpdateIHasBoundBox((IHasBoundBox)e.GetAllComponents().First(e => e is IHasBoundBox));
 
             _initialBackgroundCol = BackgroundColor;
             _isSelected = false;
@@ -93,11 +92,11 @@ namespace CruZ.Editor.UI
             UpdateIHasBoundBox((IHasBoundBox)comps.GetAllComponents().First(e => e is IHasBoundBox));
         }
 
-        private void UpdateIHasBoundBox(IHasBoundBox iHasBoundBox)
+        private void UpdateIHasBoundBox(IHasBoundBox? iHasBoundBox)
         {
             if (_iHasBoundBox != null) _iHasBoundBox.BoundingBoxChanged -= Entity_BoundingBoxChanged;
             _iHasBoundBox = iHasBoundBox;
-            _iHasBoundBox.BoundingBoxChanged += Entity_BoundingBoxChanged;
+            if(_iHasBoundBox != null) _iHasBoundBox.BoundingBoxChanged += Entity_BoundingBoxChanged;
         }
 
         private void CalcControlBounds(UIBoundingBox bBox)

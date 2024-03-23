@@ -9,7 +9,7 @@ namespace CruZ.Framework.GameSystem.Render
     {
         public Texture2D? Texture;
         public Rectangle SourceRectangle;
-        public Vector2 NormalizedOrigin;
+        public Vector2 NormalizedOrigin = new(0.5f, 0.5f);
         public Vector2 Position;
         public Vector2 Scale;
         public Color Color = Color.White;

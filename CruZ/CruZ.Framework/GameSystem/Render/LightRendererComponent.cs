@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 
 using CruZ.Framework.UI;
 using CruZ.Framework.Utility;
@@ -37,6 +36,9 @@ namespace CruZ.Framework.GameSystem.Render
             spriteBatch.Begin(effect: fx);
             spriteBatch.Draw(drawArgs);
             spriteBatch.End();
+
+            BoundingBoxChanged?.Invoke(new UIBoundingBox(
+                drawArgs.GetWorldBounds(), [drawArgs.GetWorldOrigin()]));
         }
 
         public float LightIntensity { get; set; }
