@@ -1,17 +1,12 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework;
 
-using CruZ.Common.Input;
+namespace CruZ.Experiment;
 
-using Microsoft.Xna.Framework;
-
-namespace CruZ.Experiment
+internal class Program
 {
-    internal class Program
+    static void Main(string[] args)
     {
-        static void Main(string[] args)
-        {
-            Game game = new CameraExperiment();
-            game.Run();
-        }
+        Game game = new RenderTargetExperiment();
+        game.Run();
     }
 }

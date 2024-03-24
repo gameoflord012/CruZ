@@ -5,6 +5,8 @@ using CruZ.Framework.GameSystem.Render;
 using CruZ.Framework.GameSystem.Tile;
 using CruZ.Framework.Scene;
 
+using Game.AnimalGang.DesktopGL;
+
 namespace AnimalGang
 {
     [SceneAssetClass("Scenes")]
@@ -115,12 +117,15 @@ namespace AnimalGang
             return scene;
         }
 
-        //[SceneAssetMethod]
-        //public static GameScene FlameScene()
-        //{
-        //    var scene = new GameScene();
+        [SceneAssetMethod]
+        public static GameScene FlameScene()
+        {
+            var scene = new GameScene();
 
-        //    scene
-        //}
+            var flame = scene.CreateEntity();
+            flame.AddComponent(new FlameRendererComponent());
+
+            return scene;
+        }
     }
 }

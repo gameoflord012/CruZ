@@ -10,7 +10,7 @@ namespace CruZ.Framework
     /// </summary>
     public partial class GameWrapper : Game
     {
-        public event Action Initialized;
+        public event Action AfterInitialize;
         public event Action<GameTime>? BeforeUpdate;
         public event Action<GameTime>? AfterDraw;
 
@@ -20,6 +20,7 @@ namespace CruZ.Framework
         {
             _gdManager = new GraphicsDeviceManager(this);
             _gdManager.GraphicsProfile = GraphicsProfile.HiDef;
+            GraphicsDevice.PresentationParameters.RenderTargetUsage = RenderTargetUsage.PreserveContents;
             Content.RootDirectory = ".";
             IsMouseVisible = true;
         }
@@ -29,7 +30,7 @@ namespace CruZ.Framework
             base.Initialize();
 
             OnInitialize();
-            Initialized?.Invoke();
+            AfterInitialize?.Invoke();
         }
 
         protected sealed override void Update(GameTime gameTime)

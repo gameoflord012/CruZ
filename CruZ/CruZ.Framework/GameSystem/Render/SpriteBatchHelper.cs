@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace CruZ.Framework.GameSystem.Render
 {
-    internal static class SpriteBatchHelper
+    public static class SpriteBatchHelper
     {
         public static void Draw(this SpriteBatch spriteBatch, DrawArgs args)
         {

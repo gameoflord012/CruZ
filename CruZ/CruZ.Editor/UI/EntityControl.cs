@@ -32,7 +32,7 @@ namespace CruZ.Editor.UI
             _e.RemovedFromWorld += Entity_OnRemoveFromWorld;
             _e.ComponentsChanged += Entity_ComponentChanged;
 
-            UpdateIHasBoundBox((IHasBoundBox)e.GetAllComponents().First(e => e is IHasBoundBox));
+            UpdateIHasBoundBox(e.GetAllComponents().FirstOrDefault(e => e is IHasBoundBox) as IHasBoundBox);
 
             _initialBackgroundCol = BackgroundColor;
             _isSelected = false;
@@ -89,7 +89,7 @@ namespace CruZ.Editor.UI
 
         private void Entity_ComponentChanged(ComponentCollection comps)
         {
-            UpdateIHasBoundBox((IHasBoundBox)comps.GetAllComponents().First(e => e is IHasBoundBox));
+            UpdateIHasBoundBox(comps.GetAllComponents().FirstOrDefault(e => e is IHasBoundBox) as IHasBoundBox);
         }
 
         private void UpdateIHasBoundBox(IHasBoundBox? iHasBoundBox)

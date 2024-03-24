@@ -28,7 +28,7 @@ namespace CruZ.Framework
         private GameApplication(GameWrapper core)
         {
             _core = core;
-            _core.Initialized += Wrapper_Initialized;
+            _core.AfterInitialize += Wrapper_Initialized;
             _core.BeforeUpdate += Wrapper_BeforeUpdate;
             _core.AfterDraw += Wrapper_AfterDraw;
             _core.Exiting += Wrapper_Exiting;
