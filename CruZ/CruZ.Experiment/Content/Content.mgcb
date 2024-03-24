@@ -25,6 +25,12 @@
 /processorParam:TextureFormat=Color
 /build:homelander.jpg
 
+#begin shaders/bloom-shader.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:shaders/bloom-shader.fx
+
 #begin shaders/light-shader.fx
 /importer:EffectImporter
 /processor:EffectProcessor

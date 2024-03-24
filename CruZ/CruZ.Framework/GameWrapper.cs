@@ -20,7 +20,6 @@ namespace CruZ.Framework
         {
             _gdManager = new GraphicsDeviceManager(this);
             _gdManager.GraphicsProfile = GraphicsProfile.HiDef;
-            GraphicsDevice.PresentationParameters.RenderTargetUsage = RenderTargetUsage.PreserveContents;
             Content.RootDirectory = ".";
             IsMouseVisible = true;
         }
@@ -28,8 +27,8 @@ namespace CruZ.Framework
         protected sealed override void Initialize()
         {
             base.Initialize();
-
             OnInitialize();
+
             AfterInitialize?.Invoke();
         }
 
