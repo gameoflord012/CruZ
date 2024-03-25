@@ -1,4 +1,5 @@
-﻿using CruZ.Experiment.BloomFilter;
+﻿
+using CruZ.Experiment.Filter;
 
 using Microsoft.Xna.Framework;
 

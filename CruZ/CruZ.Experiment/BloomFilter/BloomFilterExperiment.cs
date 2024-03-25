@@ -9,7 +9,7 @@ using CruZ.Framework;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace CruZ.Experiment.BloomFilter
+namespace CruZ.Experiment.Filter
 {
     internal class BloomFilterExperiment : GameWrapper
     {
@@ -21,12 +21,7 @@ namespace CruZ.Experiment.BloomFilter
         protected override void OnInitialize()
         {
             base.OnInitialize();
-
-            _camera = new Camera(Window);
             _sp = new SpriteBatch(GraphicsDevice);
-            _renderTarget = new RenderTarget2D(
-                GraphicsDevice, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height, false, 
-                SurfaceFormat.Color, DepthFormat.None, 0, RenderTargetUsage.DiscardContents);
             
             GraphicsDevice.PresentationParameters.RenderTargetUsage = RenderTargetUsage.DiscardContents;
         }
@@ -35,34 +30,35 @@ namespace CruZ.Experiment.BloomFilter
         {
             base.LoadContent();
 
-            _filter = new BloomFilter(GraphicsDevice);
-            _filter.LoadContent(Content);
-            _tex = Content.Load<Texture2D>("homelander");
-            _normalFx = Content.Load<Effect>("shaders\\normal-shader");
-
+            _filter = new BloomFilter();
+            _filter.Load(GraphicsDevice, Content, 100, 100);
+            _filter.BloomPreset = BloomFilter.BloomPresets.Focussed;
+            _filter.BloomThreshold = 0f;
+            _filter.BloomStrengthMultiplier = 1.2f;
+            _tex = Content.Load<Texture2D>("sample");
         }
 
         protected override void OnDraw(GameTime gameTime)
         {
             base.OnDraw(gameTime); 
-            
-            GraphicsDevice.SetRenderTarget(_renderTarget);
-
-            _filter.SetTexture(_tex);
-            var _filtered = _filter.GetFiltered();
+          
+            var filtered = _filter.Draw(_tex, _tex.Width, _tex.Height);
 
             GraphicsDevice.SetRenderTarget(null);
-            _sp.Begin();
-            _sp.Draw(_filtered, Vector2.Zero, Color.White);
+            _sp.Begin(transformMatrix: Matrix.CreateScale(0.5f));
+            _sp.Draw(filtered, Vector2.Zero, Color.White);
             _sp.End();
 
         }
 
+        protected override void OnExiting(object sender, EventArgs args)
+        {
+            base.OnExiting(sender, args);
+            _filter.Dispose();
+        }
+
         SpriteBatch _sp;
         Texture2D _tex;
-        Camera _camera;
-        Effect _normalFx;
-        RenderTarget2D _renderTarget;
         BloomFilter _filter;
     }
 }

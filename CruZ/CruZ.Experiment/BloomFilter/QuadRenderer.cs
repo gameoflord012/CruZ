@@ -1,14 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
+#region Using Statements
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace CruZ.Experiment.BloomFilter
+#endregion
+
+namespace CruZ.Experiment.Filter
 {
+    /// <summary>
+    /// Renders a simple quad to the screen. Uncomment the Vertex / Index buffers to make it a static fullscreen quad. 
+    /// The performance effect is barely measurable though and you need to dispose of the buffers when finished!
+    /// </summary>
     public class QuadRenderer
     {
         //buffers for rendering the quad
@@ -18,7 +21,7 @@ namespace CruZ.Experiment.BloomFilter
         //private VertexBuffer _vBuffer;
         //private IndexBuffer _iBuffer;
 
-        public QuadRenderer()
+        public QuadRenderer(GraphicsDevice graphicsDevice)
         {
             _vertexBuffer = new VertexPositionTexture[4];
             _vertexBuffer[0] = new VertexPositionTexture(new Vector3(-1, 1, 1), new Vector2(0, 0));
@@ -33,7 +36,7 @@ namespace CruZ.Experiment.BloomFilter
 
             //_vBuffer.SetData(_vertexBuffer);
             //_iBuffer.SetData(_indexBuffer);
-
+            
         }
 
         public void RenderQuad(GraphicsDevice graphicsDevice, Vector2 v1, Vector2 v2)
@@ -55,7 +58,7 @@ namespace CruZ.Experiment.BloomFilter
 
             //graphicsDevice.SetVertexBuffer(_vBuffer);
             //graphicsDevice.Indices = (_iBuffer);
-
+            
             //graphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0,
             //    0, 2);
         }

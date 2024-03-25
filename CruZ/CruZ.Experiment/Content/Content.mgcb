@@ -25,11 +25,29 @@
 /processorParam:TextureFormat=Color
 /build:homelander.jpg
 
+#begin sample.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:sample.png
+
 #begin shaders/bloom-shader.fx
 /importer:EffectImporter
 /processor:EffectProcessor
 /processorParam:DebugMode=Auto
 /build:shaders/bloom-shader.fx
+
+#begin shaders/BloomFilter/Bloom.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:shaders/BloomFilter/Bloom.fx
 
 #begin shaders/light-shader.fx
 /importer:EffectImporter
