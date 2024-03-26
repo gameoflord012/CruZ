@@ -1,4 +1,4 @@
-#if OPENGL
+﻿#if OPENGL
 #define VS_SHADERMODEL vs_3_0
 #define PS_SHADERMODEL ps_3_0
 #else
@@ -7,8 +7,6 @@
 #endif
 
 float4x4 view_projection;
-float4 flame_color;
-float exposure;
 sampler TextureSampler : register(s0);
 
 struct VertexInput {
@@ -16,7 +14,6 @@ struct VertexInput {
     float4 Color : COLOR0;
     float4 TexCoord : TEXCOORD0;
 };
-
 struct PixelInput {
     float4 Position : SV_Position0;
     float4 Color : COLOR0;
@@ -33,12 +30,10 @@ PixelInput SpriteVertexShader(VertexInput v) {
 }
 
 float4 SpritePixelShader(PixelInput p) : SV_TARGET {
-    float4 base = tex2D(TextureSampler, p.TexCoord.xy); 
-
-    float4 hdr = base * flame_color * p.Color;
-    float3 mapped = float3(1.0, 1.0, 1.0) - exp(-hdr.rgb * exposure);
-
-    return float4(mapped, hdr.a);
+    float4 diffuse = tex2D(TextureSampler, p.TexCoord.xy);
+    diffuse *= p.Color;
+    // diffuse.rgb = pow(diffuse.rgb, 1.0 / 2.2);
+    return diffuse;
 }
 
 technique SpriteBatch {

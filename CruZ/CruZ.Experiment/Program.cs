@@ -9,7 +9,7 @@ internal class Program
 {
     static void Main(string[] args)
     {
-        Game game = new BloomFilterExperiment();
+        Game game = new BlendStateExperiment();
         game.Run();
     }
 }

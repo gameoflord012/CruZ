@@ -83,9 +83,20 @@ namespace CruZ.Framework.GameSystem.ECS
             return $"{Name}({Id})";
         }
 
+        public void RemoveFromWorld()
+        {
+            IsActive = false;
+            _world.RemoveEntity(this);
+        }
+
         public void Dispose()
         {
-            _world.RemoveEntity(this);
+            RemoveFromWorld();
+
+            foreach (var e in GetAllComponents())
+            {
+                e.Dispose();
+            }
         }
 
         [ReadOnly(true)]

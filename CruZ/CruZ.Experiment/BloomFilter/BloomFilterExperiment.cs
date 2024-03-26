@@ -31,11 +31,10 @@ namespace CruZ.Experiment.Filter
             base.LoadContent();
 
             _filter = new BloomFilter();
-            _filter.Load(GraphicsDevice, Content, 100, 100);
-            _filter.BloomPreset = BloomFilter.BloomPresets.Focussed;
-            _filter.BloomThreshold = 0f;
-            _filter.BloomStrengthMultiplier = 1.2f;
-            _tex = Content.Load<Texture2D>("sample");
+            _filter.Load(GraphicsDevice, Content);
+            _filter.BloomPreset = BloomFilter.BloomPresets.Wide;
+            _filter.BloomThreshold = 1f;
+            _tex = Content.Load<Texture2D>("homelander");
         }
 
         protected override void OnDraw(GameTime gameTime)

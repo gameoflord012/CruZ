@@ -1,6 +1,8 @@
-﻿namespace CruZ.Framework.GameSystem.ECS
+﻿using System;
+
+namespace CruZ.Framework.GameSystem.ECS
 {
-    public abstract class Component
+    public abstract class Component : IDisposable
     {
         protected virtual void OnAttached(TransformEntity entity) { }
 
@@ -30,6 +32,16 @@
         public override string ToString()
         {
             return GetType().Name;
+        }
+
+        public void Dispose()
+        {
+            OnDispose();
+        }
+
+        protected virtual void OnDispose()
+        {
+
         }
 
         protected TransformEntity? AttachedEntity { get; private set; }

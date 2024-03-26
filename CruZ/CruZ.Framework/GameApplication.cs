@@ -13,18 +13,13 @@ using CruZ.Framework;
 using CruZ.Framework.Service;
 using CruZ.Framework.Input;
 using CruZ.Framework.GameSystem.ECS;
+using CruZ.Framework.Utility;
+using System.IO;
 
 namespace CruZ.Framework
 {
     public partial class GameApplication : IDisposable
     {
-        #region Properties
-        public ContentManager Content { get => _core.Content; }
-        public GraphicsDevice GraphicsDevice { get => _core.GraphicsDevice; }
-        public GameWindow Window => _core.Window;
-        public int FpsResult { get => _fpsResult; }
-        #endregion
-
         private GameApplication(GameWrapper core)
         {
             _core = core;
@@ -49,7 +44,7 @@ namespace CruZ.Framework
             _core.Exit();
         }
 
-        #region Event Handlers
+        #region event handlers
         private void Wrapper_WindowResized(object? sender, EventArgs e)
         {
             WindowResized?.Invoke(_core.GraphicsDevice.Viewport);
@@ -75,6 +70,7 @@ namespace CruZ.Framework
         private void Wrapper_Initialized()
         {
             _spriteBatch = new(GraphicsDevice);
+            _core.GraphicsDevice.PresentationParameters.RenderTargetUsage = RenderTargetUsage.PreserveContents;
             Camera.Main = new Camera(Window);
 
             _ecsController.Initialize();
@@ -126,6 +122,8 @@ namespace CruZ.Framework
                 _isDispose = true;
                 _core.Dispose();
                 _spriteBatch.Dispose();
+                Disposables.ForEach(e => e.Dispose());
+                Disposables.Clear();
 
                 WindowResized = null;
                 Initialized = null;
@@ -134,7 +132,12 @@ namespace CruZ.Framework
             }
         }
 
-        #region Private Variables
+        #region variables
+        public ContentManager Content { get => _core.Content; }
+        public GraphicsDevice GraphicsDevice { get => _core.GraphicsDevice; }
+        public GameWindow Window => _core.Window;
+        public int FpsResult { get => _fpsResult; }
+
         IECSController _ecsController;
         IInputController _inputController;
         IUIController _uiController;
@@ -196,6 +199,7 @@ namespace CruZ.Framework
             }
         }
 
+        public static List<IDisposable> Disposables = [];
         private static GameApplication? _instance;
     }
 }

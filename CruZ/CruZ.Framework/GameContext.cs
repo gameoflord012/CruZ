@@ -1,6 +1,8 @@
 ﻿using System;
+using System.IO;
 
 using CruZ.Framework.Resource;
+using CruZ.Framework.Utility;
 
 namespace CruZ.Framework
 {
@@ -14,6 +16,7 @@ namespace CruZ.Framework
                 if (_gameResourceDir == value) return;
                 _gameResourceDir = value;
                 _gameResource = ResourceManager.From(_gameResourceDir);
+                InitializeInternalResource();
             }
         }
 
@@ -26,6 +29,15 @@ namespace CruZ.Framework
         private static T CheckNull<T>(T? value)
         {
             return value ?? throw new InvalidOperationException("Set value first");
+        }
+
+
+        private static void InitializeInternalResource()
+        {
+            PathHelper.UpdateFolderContents(
+                Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resource\\Internal\\"),
+                Path.Combine(_gameResourceDir, ".internal\\"),
+                "*", true, true);
         }
 
         static string? _gameResourceDir;

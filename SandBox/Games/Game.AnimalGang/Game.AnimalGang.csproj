@@ -2,6 +2,11 @@
 	<PropertyGroup>
 		<TargetFramework>net8.0-windows</TargetFramework>
 	</PropertyGroup>
+	<ItemGroup>
+	  <Compile Remove="Resource\internal\**" />
+	  <EmbeddedResource Remove="Resource\internal\**" />
+	  <None Remove="Resource\internal\**" />
+	</ItemGroup>
 
 	<ItemGroup>
 		<ProjectReference Include="..\..\..\CruZ\CruZ.Framework\CruZ.Framework.WindowsDX.csproj" />

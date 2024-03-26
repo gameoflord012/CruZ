@@ -45,7 +45,7 @@ namespace CruZ.Framework.GameSystem.ECS
 
             foreach (var system in _systems)
             {
-                foreach (var e in _entities)
+                foreach (var e in _entities) if(e.IsActive)
                 {
                     system.Update(new EntitySystemEventArgs(e, gameTime));
                 }
@@ -58,7 +58,7 @@ namespace CruZ.Framework.GameSystem.ECS
 
             foreach (var system in _systems)
             {
-                foreach (var e in _entities)
+                foreach (var e in _entities) if(e.IsActive)
                 {
                     system.Draw(new EntitySystemEventArgs(e, gameTime));
                 }

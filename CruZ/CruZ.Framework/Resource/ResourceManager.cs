@@ -76,6 +76,7 @@ namespace CruZ.Framework.Resource
                 }
             }
 
+            // enumerates .xnb and .mgcontent files
             foreach (var filePath in Directory.EnumerateFiles(ContentOutputDir, "*.*", SearchOption.AllDirectories).
                 Where(e =>
                     Path.GetFileName(e) != ".mgcontent" &&
@@ -266,14 +267,10 @@ namespace CruZ.Framework.Resource
         {
             try
             {
-#pragma warning disable CS8602 // Dereference of a possibly null reference.
-#pragma warning disable CS8603 // Possible null reference return.
                 return typeof(ResourceManager).
                     GetMethod(nameof(LoadContent), BindingFlags.NonPublic | BindingFlags.Instance).
                     MakeGenericMethod(ty).
                     Invoke(this, [resourcePath]);
-#pragma warning restore CS8603 // Possible null reference return.
-#pragma warning restore CS8602 // Dereference of a possibly null reference.
             }
             catch (Exception e)
             {

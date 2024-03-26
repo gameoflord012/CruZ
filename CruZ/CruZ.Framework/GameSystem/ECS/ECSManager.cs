@@ -14,7 +14,7 @@ namespace CruZ.Framework.GameSystem.ECS
         void Initialize();
     }
 
-    public partial class ECSManager : IECSController
+    public class ECSManager : IECSController
     {
         private ECSManager() 
         {
