@@ -47,6 +47,7 @@ namespace CruZ.Framework
         #region event handlers
         private void Wrapper_WindowResized(object? sender, EventArgs e)
         {
+            GraphicsDevice.PresentationParameters.RenderTargetUsage = RenderTargetUsage.PreserveContents;
             WindowResized?.Invoke(_core.GraphicsDevice.Viewport);
         }
 

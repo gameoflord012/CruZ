@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 namespace CruZ.Framework.GameSystem.Render
 {
-    internal class GuassianBloomFilter : IDisposable
+    public class GuassianBloomFilter : IDisposable
     {
         public GuassianBloomFilter(GraphicsDevice gd)
         {
@@ -16,70 +16,132 @@ namespace CruZ.Framework.GameSystem.Render
             _renderer = new QuadRenderer(gd);
 
             _passTextureParam = _fx.Parameters["PassTexture"];
-            _bloomDistanceParam = _fx.Parameters["BloomDistance"];
+            _originalTextureParam = _fx.Parameters["OriginalTexture"];
+            _thresholdParam = _fx.Parameters["Threshold"];
+            _exposureParam = _fx.Parameters["Exposure"];
+            _colorParam = _fx.Parameters["Color"];
+
+            ChoosePreset1();
         }
 
-        public Texture2D GetFilter(Texture2D tex)
+        public Texture2D GetFilter(Texture2D tex, float resolutionMultiplier = 1)
         {
             PrepareRenderTargets(tex);
+            var initialRenderTarget = _gd.GetRenderTargets();
 
-            _bloomDistanceParam.SetValue(2f);
+            Vector4[] debug = new Vector4[_width * _height];
+
+            _gd.BlendState = BlendState.Opaque;
+
+            _originalTextureParam.SetValue(tex);
+
             _passTextureParam.SetValue(tex);
-            _gd.SetRenderTarget(_renderTargetEx);
-            _fx.Techniques["ExtractBlur"].Passes[0].Apply();
+            _gd.SetRenderTarget(_rtEx);
+            _fx.CurrentTechnique.Passes[0].Apply(); // Xtract pass
             _renderer.RenderQuad(_gd, -Vector2.One, Vector2.One);
 
-            _passTextureParam.SetValue(_renderTargetEx);
-            _gd.SetRenderTarget(_renderTargetBlurV);
-            _fx.Techniques["ExtractBlur"].Passes[1].Apply(); // Blur Vertical
-            _renderer.RenderQuad(_gd, -Vector2.One, Vector2.One);
+            var rtLastBlur = _rtEx;
+            for (int i = 0; i < BlurCount; i++)
+            {
+                _passTextureParam.SetValue(rtLastBlur);
+                _gd.SetRenderTarget(_rtBlurV);
+                _fx.CurrentTechnique.Passes[1].Apply(); // Blur Vertical
+                _renderer.RenderQuad(_gd, -Vector2.One, Vector2.One);
 
-            _passTextureParam.SetValue(_renderTargetBlurV);
-            _gd.SetRenderTarget(_renderTargetBlurH);
-            _fx.Techniques["ExtractBlur"].Passes[2].Apply(); // Blur Horizontal
-            _renderer.RenderQuad(_gd, -Vector2.One, Vector2.One);
+                _rtBlurV.GetData(debug);
 
-            return _renderTargetBlurH;
+                _passTextureParam.SetValue(_rtBlurV);
+                _gd.SetRenderTarget(_rtBlurH);
+                _fx.CurrentTechnique.Passes[2].Apply(); // Blur Horizontal
+                _renderer.RenderQuad(_gd, -Vector2.One, Vector2.One);
+
+                _rtBlurH.GetData(debug);
+
+                rtLastBlur = _rtBlurH;
+            }
+
+            if(ShouldBlend)
+            {
+                _passTextureParam.SetValue(_rtBlurH);
+                _gd.SetRenderTarget(_rtBlend);
+                _fx.CurrentTechnique.Passes[3].Apply(); // Blend
+                _renderer.RenderQuad(_gd, -Vector2.One, Vector2.One);
+            }
+            
+            _gd.SetRenderTargets(initialRenderTarget);
+            return ShouldBlend ? _rtBlend : _rtBlurH;
         }
 
-        private void PrepareRenderTargets(Texture2D tex)
+        private void PrepareRenderTargets(Texture2D tex, float )
         {
-            if (tex.Width == _width || tex.Height == _height) return;
-            _width = tex.Width;
-            _height = tex.Height;
+            if (tex.Width != _width || tex.Height != _height)
+            {
+                _width = tex.Width;
+                _height = tex.Height;
 
-            _renderTargetEx?.Dispose();
-            _renderTargetBlurV?.Dispose();
-            _renderTargetBlurH?.Dispose();
+                _rtEx?.Dispose();
+                _rtBlurV?.Dispose();
+                _rtBlurH?.Dispose();
+                _rtBlend?.Dispose();
 
-            _renderTargetEx = new RenderTarget2D(_gd, _width, _height, false, SurfaceFormat.Color, DepthFormat.None, 0, RenderTargetUsage.DiscardContents);
-            _renderTargetBlurV = new RenderTarget2D(_gd, _width, _height, false, SurfaceFormat.Color, DepthFormat.None, 0, RenderTargetUsage.DiscardContents);
-            _renderTargetBlurH = new RenderTarget2D(_gd, _width, _height, false, SurfaceFormat.Color, DepthFormat.None, 0, RenderTargetUsage.DiscardContents);
+                _rtEx = new RenderTarget2D(_gd, _width, _height, false, SurfaceFormat.Vector4, DepthFormat.None, 0, RenderTargetUsage.DiscardContents);
+                _rtBlurV = new RenderTarget2D(_gd, _width, _height, false, SurfaceFormat.Vector4, DepthFormat.None, 0, RenderTargetUsage.DiscardContents);
+                _rtBlurH = new RenderTarget2D(_gd, _width, _height, false, SurfaceFormat.Vector4, DepthFormat.None, 0, RenderTargetUsage.DiscardContents);
+                _rtBlend = new RenderTarget2D(_gd, _width, _height, false, SurfaceFormat.Vector4, DepthFormat.None, 0, RenderTargetUsage.DiscardContents);            }
         }
 
-        public float BloomDistance 
-        { 
-            get => _bloomDistanceParam.GetValueSingle(); 
-            set => _bloomDistanceParam.SetValue(value); 
+        private void ChoosePreset1()
+        {
+            _exposureParam.SetValue(5f);
+            _thresholdParam.SetValue(0.5f);
+            _colorParam.SetValue(new Vector4(1, 1, 1, 1));
+            BlurCount = 5;
+        }
+        
+        public float Threshold
+        {
+            get => _thresholdParam.GetValueSingle();
+            set => _thresholdParam.SetValue(value);
         }
 
-        GraphicsDevice _gd;
+        public float Exposure
+        {
+            get => _exposureParam.GetValueSingle();
+            set => _exposureParam.SetValue(value);
+        }
+
+        public Vector4 Color
+        {
+            get => _colorParam.GetValueVector4();
+            set => _colorParam.SetValue(value);
+        }
+
+        public bool ShouldBlend = true;
+
+        public int BlurCount = 5;
+
         Effect _fx;
+        GraphicsDevice _gd;
         QuadRenderer _renderer;
-        RenderTarget2D _renderTargetEx;
-        RenderTarget2D _renderTargetBlurV;
-        RenderTarget2D _renderTargetBlurH;
+
+        RenderTarget2D _rtEx;
+        RenderTarget2D _rtBlurV;
+        RenderTarget2D _rtBlurH;
+        RenderTarget2D _rtBlend;
 
         EffectParameter _passTextureParam;
-        EffectParameter _bloomDistanceParam;
+        EffectParameter _originalTextureParam;
+        EffectParameter _thresholdParam;
+        EffectParameter _exposureParam;
+        EffectParameter _colorParam;
 
         int _width, _height;
 
         public void Dispose()
         {
-            _renderTargetEx.Dispose();
-            _renderTargetBlurV.Dispose();
-            _renderTargetBlurH.Dispose();
+            _rtEx.Dispose();
+            _rtBlurV.Dispose();
+            _rtBlurH.Dispose();
         }
     }
 }

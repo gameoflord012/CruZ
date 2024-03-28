@@ -7,115 +7,101 @@ using CruZ.Framework.Utility;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using SharpDX.Direct2D1.Effects;
+
 namespace Game.AnimalGang.DesktopGL
 {
     public class FlameRendererComponent : RendererComponent
     {
         public FlameRendererComponent()
         {
-            _fx = GameContext.GameResource.Load<Effect>("shaders\\flame-shader.fx");
-            _tex = GameContext.GameResource.Load<Texture2D>("imgs\\GAP\\Flame01.png");
+            _fx = EffectManager.NormalSpriteRenderer;
+            _tex = GameContext.GameResource.Load<Texture2D>("imgs\\homelander.jpg");
             _gd = GameApplication.GetGraphicsDevice();
-
-            _bloom.BloomPreset = BloomFilter.BloomPresets.Wide;
-            _bloom.BloomUseLuminance = false;
+            _bloom = new GuassianBloomFilter(_gd);
         }
 
         public override void Render(GameTime gameTime, SpriteBatch spriteBatch, Matrix viewProjectionMatrix)
         {
+            // prepare filtering render target
             UpdateResolution();
-
-            DrawArgs drawArgs = new();
-            drawArgs.Apply(AttachedEntity);
-
-            _gd.SetRenderTarget(_renderTarget);
+            _gd.SetRenderTarget(_rt);
             _gd.Clear(Color.Transparent);
 
-            _fx.Parameters["view_projection"].SetValue(viewProjectionMatrix);
-            _fx.Parameters["flame_color"].SetValue(_flameColor);
-            _fx.Parameters["exposure"].SetValue(Exposure);
-            spriteBatch.Begin(effect: _fx, sortMode: SpriteSortMode.Immediate);
+            // setup draw args
+            DrawArgs drawArgs = new();
+            drawArgs.Apply(AttachedEntity);
             drawArgs.Apply(_tex);
+
+            // render original texture on filtering render target
+            _fx.Parameters["view_projection"].SetValue(viewProjectionMatrix);
+            spriteBatch.Begin(SpriteSortMode.Immediate, effect: _fx);
             spriteBatch.Draw(drawArgs);
             spriteBatch.End();
 
-            if(!BloomDisable)
-            {
-                var filtered = _bloom.Draw(_renderTarget, _renderTarget.Width, _renderTarget.Height);
-                spriteBatch.Begin(SpriteSortMode.Immediate, blendState: BlendState.Additive);
-                spriteBatch.Draw(filtered, Vector2.Zero, Color.White);
-                spriteBatch.End();
-            }
-            
+            // apply bloom on that render target
+            var filter = _bloom.GetFilter(_rt);
+
+            // render the filter to screen :))
             _gd.SetRenderTarget(null);
-            spriteBatch.Begin(sortMode: SpriteSortMode.Immediate, BlendState.AlphaBlend);
-            spriteBatch.Draw(_renderTarget, Vector2.Zero, Color.White);
+            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
+            spriteBatch.Draw(filter, Vector2.Zero, Color.White);
             spriteBatch.End();
         }
 
         private void UpdateResolution()
         {
-            if(_renderTarget == null || _gd.Viewport.Width != _renderTarget.Width || _gd.Viewport.Height != _renderTarget.Height)
-            _renderTarget = new RenderTarget2D(_gd, _gd.Viewport.Width, _gd.Viewport.Height,
-                false, SurfaceFormat.Color, DepthFormat.None, 0, RenderTargetUsage.DiscardContents);
+            if (_rt == null || _gd.Viewport.Width != _rt.Width || _gd.Viewport.Height != _rt.Height)
+            {
+                _rt?.Dispose();
+                _rt = new RenderTarget2D(_gd, _gd.Viewport.Width, _gd.Viewport.Height,
+                    false, SurfaceFormat.Color, DepthFormat.None, 0, RenderTargetUsage.PreserveContents);
+            }
         }
 
-        public Vector4 FlameColor
-        {
-            get => _flameColor;
-            set => _flameColor = value;
-        }
-
-        public float Exposure
-        {
-            get;
-            set;
-        }
-
-        public float Threshold
-        {
-            get => _bloom.BloomThreshold;
-            set => _bloom.BloomThreshold = MathHelper.Clamp(value, 0f, 1f);
-        }
-
-        public float StreakLength
-        {
-            get => _bloom.BloomStreakLength;
-            set => _bloom.BloomStreakLength = value;
-        }
-
-        public float StrengthMultiplier
-        {
-            get => _bloom.BloomStrengthMultiplier;
-            set => _bloom.BloomStrengthMultiplier = value;
-        }
-
-        public bool BloomDisable
-        { 
-            get;
-            set;
-        }
-
-        public bool TexDisable
-        {
-            get;
-            set;
-        }
 
         protected override void OnDispose()
         {
             base.OnDispose();
 
-            _renderTarget.Dispose();
-            _fx.Dispose();
+            _rt.Dispose();
             _bloom.Dispose();
         }
 
-        Effect _fx;
-        Texture2D _tex;
-        RenderTarget2D _renderTarget;
-        GraphicsDevice _gd;
+        public float Exposure
+        {
+            get => _bloom.Exposure;
+            set => _bloom.Exposure = value;
+        }
 
-        Vector4 _flameColor = new(1, 1, 1, 1);
+        public float Threshold
+        {
+            get => _bloom.Threshold;
+            set => _bloom.Threshold = value;
+        }
+
+        public Vector4 BloomColor
+        {
+            get => _bloom.Color;
+            set => _bloom.Color = value;
+        }
+
+        public bool ShouldBlend
+        {
+            get => _bloom.ShouldBlend;
+            set => _bloom.ShouldBlend = value;
+        }
+
+        public int BlurCount
+        {
+            get => _bloom.BlurCount;
+            set => _bloom.BlurCount = value;
+        }
+
+        Texture2D _tex;
+        RenderTarget2D _rt;
+        GraphicsDevice _gd;
+        GuassianBloomFilter _bloom;
+        Effect _fx;
     }
 }
