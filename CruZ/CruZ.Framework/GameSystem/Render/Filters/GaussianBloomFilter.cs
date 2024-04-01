@@ -71,6 +71,8 @@ namespace CruZ.Framework.GameSystem.Render
             _upsamplePass.Apply(); // Upsample
             _renderer.RenderQuad(_gd, -Vector2.One, Vector2.One);
 
+            var debug = GetTextureData<Vector4>(resultFilter);
+
         FINISHED:
             _gd.SetRenderTargets(initialRenderTarget);
             return resultFilter;

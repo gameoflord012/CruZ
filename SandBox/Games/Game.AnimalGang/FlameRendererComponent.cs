@@ -7,8 +7,6 @@ using CruZ.Framework.Utility;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-using SharpDX.Direct2D1.Effects;
-
 namespace Game.AnimalGang.DesktopGL
 {
     public class FlameRendererComponent : RendererComponent
@@ -19,6 +17,12 @@ namespace Game.AnimalGang.DesktopGL
             _tex = GameContext.GameResource.Load<Texture2D>("imgs\\GAP\\Flame01.png");
             _gd = GameApplication.GetGraphicsDevice();
             _bloom = new GuassianBloomFilter(_gd);
+
+            _additiveBlend = new BlendState();
+            _additiveBlend.AlphaSourceBlend = Blend.Zero;
+            _additiveBlend.ColorSourceBlend = Blend.One;
+            _additiveBlend.AlphaDestinationBlend = Blend.DestinationAlpha;
+            _additiveBlend.ColorDestinationBlend = Blend.DestinationAlpha;
         }
 
         public override void Render(GameTime gameTime, SpriteBatch spriteBatch, Matrix viewProjectionMatrix)
@@ -32,7 +36,7 @@ namespace Game.AnimalGang.DesktopGL
             drawArgs.Apply(AttachedEntity);
             drawArgs.Apply(_tex);
 
-            // render original texture on filtering render target
+            // render original texture to a render target
             _fx.Parameters["view_projection"].SetValue(viewProjectionMatrix);
             spriteBatch.Begin(SpriteSortMode.Immediate, effect: _fx);
             spriteBatch.Draw(drawArgs);
@@ -41,18 +45,15 @@ namespace Game.AnimalGang.DesktopGL
             // apply bloom on that render target
             var filter = _bloom.GetFilter(_rt, ResolutionScale);
 
-            // render the filter to screen :))
+            // then additive blending
+            spriteBatch.Begin(SpriteSortMode.Immediate, _additiveBlend);
+            spriteBatch.Draw(filter, Vector2.Zero, Color.White);
+            spriteBatch.End();
+
+            // render the rt to screen :))
             _gd.SetRenderTarget(null);
-            spriteBatch.Begin(SpriteSortMode.Immediate);
-
-            // draw the original texture
-            _gd.BlendState = BlendState.AlphaBlend;
-            if (Mode != 1) spriteBatch.Draw(_rt, Vector2.Zero, Color.White);
-
-            // then apply bloom with additive blending
-            _gd.BlendState = BlendState.Additive;
-            if (Mode != 0) spriteBatch.Draw(filter, Vector2.Zero, Color.White);
-
+            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
+            spriteBatch.Draw(_rt, Vector2.Zero, Color.White);
             spriteBatch.End();
         }
 
@@ -132,5 +133,7 @@ namespace Game.AnimalGang.DesktopGL
         GraphicsDevice _gd;
         GuassianBloomFilter _bloom;
         Effect _fx;
+
+        BlendState _additiveBlend;
     }
 }

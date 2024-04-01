@@ -48,14 +48,14 @@ PixelInput VS(VertexInput v)
 
 float4 ExtractPS(PixelInput p) : SV_TARGET
 {
-	float4 texCol = PassTexture.Sample(LinearSampler, p.TexCoord.xy) * Color;
+	float4 texCol = PassTexture.Sample(LinearSampler, p.TexCoord.xy);
 	float brightness = dot(texCol.rgb, float3(0.2126, 0.7152, 0.0722));
 
     if(brightness > Threshold)
-        return float4(
-			(texCol.rgb * texCol.a) * 
-			(Color .rgb * Color .a) * 
-			Intensity , 1.0);
+        return float4((
+			(texCol.rgb * texCol.a) *
+			(Color .rgb * Color .a)) 
+			* Intensity , 1.0);
     else
         return float4(0, 0, 0, 1);
 }
