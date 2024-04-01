@@ -228,7 +228,7 @@ namespace CruZ.Experiment.Filter
         /// <param name="content"></param>
         /// <param name="width">initial value for creating the rendertargets</param>
         /// <param name="height">initial value for creating the rendertargets</param>
-        /// <param name="renderTargetFormat">The intended format for the rendertargets. For normal, non-hdr, applications color or rgba1010102 are fine NOTE: For OpenGL, SurfaceFormat.Color is recommended for non-HDR applications.</param>
+        /// <param name="renderTargetFormat">The intended format for the rendertargets. For normal, non-hdr, applications color or rgba1010102 are fine NOTE: For OpenGL, SurfaceFormat.BlendColor is recommended for non-HDR applications.</param>
         /// <param name="quadRenderer">if you already have quadRenderer you may reuse it here</param>
         public void Load(GraphicsDevice graphicsDevice, ContentManager content, SurfaceFormat renderTargetFormat = SurfaceFormat.Color)
         {
@@ -268,7 +268,7 @@ namespace CruZ.Experiment.Filter
             //BlendStateBloom.ColorBlendFunction = BlendFunction.Add;
             //BlendStateBloom.ColorSourceBlend = Blend.BlendFactor;
             //BlendStateBloom.ColorDestinationBlend = Blend.BlendFactor;
-            //BlendStateBloom.BlendFactor = new Color(0.5f, 0.5f, 0.5f);
+            //BlendStateBloom.BlendFactor = new BlendColor(0.5f, 0.5f, 0.5f);
 
             //Default threshold.
             BloomThreshold = 0.8f;
@@ -569,7 +569,7 @@ namespace CruZ.Experiment.Filter
 
         /// <summary>
         /// Update the InverseResolution of the used rendertargets. This should be the InverseResolution of the processed image
-        /// We use SurfaceFormat.Color, but you can use higher precision buffers obviously.
+        /// We use SurfaceFormat.BlendColor, but you can use higher precision buffers obviously.
         /// </summary>
         /// <param name="width">width of the image</param>
         /// <param name="height">height of the image</param>

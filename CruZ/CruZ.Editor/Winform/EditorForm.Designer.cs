@@ -49,7 +49,7 @@ namespace CruZ.Editor
             menuStrip.SuspendLayout();
             inspectorTab.SuspendLayout();
             sceneTab.SuspendLayout();
-            ((global::System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
             splitContainer1.Panel2.SuspendLayout();
             splitContainer1.SuspendLayout();
@@ -117,7 +117,7 @@ namespace CruZ.Editor
             inspectorTab.Location = new Point(4, 24);
             inspectorTab.Name = "inspectorTab";
             inspectorTab.Padding = new Padding(3);
-            inspectorTab.Size = new Size(369, 228);
+            inspectorTab.Size = new Size(369, 374);
             inspectorTab.TabIndex = 0;
             inspectorTab.Text = "Inspector";
             inspectorTab.UseVisualStyleBackColor = true;
@@ -127,7 +127,7 @@ namespace CruZ.Editor
             entityInspector.Dock = DockStyle.Fill;
             entityInspector.Location = new Point(3, 3);
             entityInspector.Name = "entityInspector";
-            entityInspector.Size = new Size(363, 222);
+            entityInspector.Size = new Size(363, 368);
             entityInspector.TabIndex = 0;
             // 
             // sceneTab
@@ -136,7 +136,7 @@ namespace CruZ.Editor
             sceneTab.Location = new Point(4, 24);
             sceneTab.Name = "sceneTab";
             sceneTab.Padding = new Padding(3);
-            sceneTab.Size = new Size(369, 70);
+            sceneTab.Size = new Size(369, 125);
             sceneTab.TabIndex = 1;
             sceneTab.Text = "Scene Hierarchy";
             sceneTab.UseVisualStyleBackColor = true;
@@ -146,7 +146,7 @@ namespace CruZ.Editor
             sceneEditor.Dock = DockStyle.Fill;
             sceneEditor.Location = new Point(3, 3);
             sceneEditor.Name = "sceneEditor";
-            sceneEditor.Size = new Size(363, 64);
+            sceneEditor.Size = new Size(363, 119);
             sceneEditor.TabIndex = 0;
             // 
             // splitContainer1
@@ -163,8 +163,8 @@ namespace CruZ.Editor
             // splitContainer1.Panel2
             // 
             splitContainer1.Panel2.Controls.Add(tabControlBottom);
-            splitContainer1.Size = new Size(377, 358);
-            splitContainer1.SplitterDistance = 98;
+            splitContainer1.Size = new Size(377, 559);
+            splitContainer1.SplitterDistance = 153;
             splitContainer1.TabIndex = 5;
             // 
             // tabControlTop
@@ -174,7 +174,7 @@ namespace CruZ.Editor
             tabControlTop.Location = new Point(0, 0);
             tabControlTop.Name = "tabControlTop";
             tabControlTop.SelectedIndex = 0;
-            tabControlTop.Size = new Size(377, 98);
+            tabControlTop.Size = new Size(377, 153);
             tabControlTop.TabIndex = 5;
             // 
             // tabControlBottom
@@ -184,14 +184,14 @@ namespace CruZ.Editor
             tabControlBottom.Location = new Point(0, 0);
             tabControlBottom.Name = "tabControlBottom";
             tabControlBottom.SelectedIndex = 0;
-            tabControlBottom.Size = new Size(377, 256);
+            tabControlBottom.Size = new Size(377, 402);
             tabControlBottom.TabIndex = 6;
             // 
             // EditorForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(377, 385);
+            ClientSize = new Size(377, 586);
             Controls.Add(menuStrip);
             Controls.Add(splitContainer1);
             MainMenuStrip = menuStrip;
@@ -204,7 +204,7 @@ namespace CruZ.Editor
             sceneTab.ResumeLayout(false);
             splitContainer1.Panel1.ResumeLayout(false);
             splitContainer1.Panel2.ResumeLayout(false);
-            ((global::System.ComponentModel.ISupportInitialize)splitContainer1).EndInit();
+            ((System.ComponentModel.ISupportInitialize)splitContainer1).EndInit();
             splitContainer1.ResumeLayout(false);
             tabControlTop.ResumeLayout(false);
             tabControlBottom.ResumeLayout(false);

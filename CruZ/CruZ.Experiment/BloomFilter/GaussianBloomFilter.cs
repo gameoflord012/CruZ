@@ -27,13 +27,13 @@ namespace CruZ.Experiment.Filter
 
             _tex = tex;
             _renderTargetEx?.Dispose();
-            _renderTargetBlurV?.Dispose();
-            _renderTargetBlurH?.Dispose();
+            //_renderTargetBlurV?.Dispose();
+            //_renderTargetBlurH?.Dispose();
 
-            _renderTargetEx = new RenderTarget2D(_gd, tex.Width, tex.Height, false, SurfaceFormat.Color, DepthFormat.None, 0, RenderTargetUsage.DiscardContents);
-            _renderTargetBlurV = new RenderTarget2D(_gd, tex.Width, tex.Height, false, SurfaceFormat.Color, DepthFormat.None, 0, RenderTargetUsage.DiscardContents);
-            _renderTargetBlurH = new RenderTarget2D(_gd, tex.Width, tex.Height, false, SurfaceFormat.Color, DepthFormat.None, 0, RenderTargetUsage.DiscardContents);
-            _rendterTargetBlending = new RenderTarget2D(_gd, tex.Width, tex.Height, false, SurfaceFormat.Color, DepthFormat.None, 0, RenderTargetUsage.DiscardContents);
+            //_renderTargetBlurV = new RenderTarget2D(_gd, tex.Width, tex.Height, true, SurfaceFormat.Vector4, DepthFormat.None, 0, RenderTargetUsage.DiscardContents);
+            //_renderTargetBlurH = new RenderTarget2D(_gd, tex.Width, tex.Height, true, SurfaceFormat.Vector4, DepthFormat.None, 0, RenderTargetUsage.DiscardContents);
+            _renderTargetEx = new RenderTarget2D(_gd, tex.Width, tex.Height, true, SurfaceFormat.Vector4, DepthFormat.None, 0, RenderTargetUsage.DiscardContents);
+            _rendterTargetBlending = new RenderTarget2D(_gd, tex.Width, tex.Height, true, SurfaceFormat.Vector4, DepthFormat.None, 0, RenderTargetUsage.DiscardContents);
         }
 
         public Texture2D GetFiltered()
@@ -68,9 +68,8 @@ namespace CruZ.Experiment.Filter
         GraphicsDevice _gd;
         Effect _fx;
         QuadRenderer _renderer;
+
         RenderTarget2D _renderTargetEx;
-        RenderTarget2D _renderTargetBlurV;
-        RenderTarget2D _renderTargetBlurH;
         RenderTarget2D _rendterTargetBlending;
 
         EffectParameter _passTexture;

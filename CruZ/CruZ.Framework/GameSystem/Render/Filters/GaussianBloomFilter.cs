@@ -3,7 +3,6 @@
 using CruZ.Framework.Utility;
 
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 namespace CruZ.Framework.GameSystem.Render
 {
@@ -16,132 +15,157 @@ namespace CruZ.Framework.GameSystem.Render
             _renderer = new QuadRenderer(gd);
 
             _passTextureParam = _fx.Parameters["PassTexture"];
-            _originalTextureParam = _fx.Parameters["OriginalTexture"];
             _thresholdParam = _fx.Parameters["Threshold"];
-            _exposureParam = _fx.Parameters["Exposure"];
+            _intensityParam = _fx.Parameters["Intensity"];
             _colorParam = _fx.Parameters["Color"];
+            _samplingOffset = _fx.Parameters["SamplingOffset"];
+
+            _extractPass = _fx.CurrentTechnique.Passes[0];
+            _downsamplePass = _fx.CurrentTechnique.Passes[1];
+            _upsamplePass = _fx.CurrentTechnique.Passes[2];
+
+            _overrideBlend = new BlendState();
+            _overrideBlend.AlphaSourceBlend = Blend.One;
+            _overrideBlend.ColorSourceBlend = Blend.One;
+            _overrideBlend.AlphaDestinationBlend = Blend.Zero;
+            _overrideBlend.ColorDestinationBlend = Blend.Zero;
 
             ChoosePreset1();
         }
 
-        public Texture2D GetFilter(Texture2D tex, float resolutionMultiplier = 1)
+        public Texture2D GetFilter(Texture2D tex, float resolutionScale = 1)
         {
-            PrepareRenderTargets(tex);
+            Texture2D resultFilter;
             var initialRenderTarget = _gd.GetRenderTargets();
 
-            Vector4[] debug = new Vector4[_width * _height];
+            PrepareRenderTargets(tex, resolutionScale);
+            _gd.BlendState = _overrideBlend;
+            _samplingOffset.SetValue(new Vector2(
+                1f / tex.Width * Radius, 
+                1f / tex.Height * Radius));
+            resultFilter = _rtMip0;
 
-            _gd.BlendState = BlendState.Opaque;
-
-            _originalTextureParam.SetValue(tex);
-
+            //
+            // Extract bright pixels
+            //
             _passTextureParam.SetValue(tex);
-            _gd.SetRenderTarget(_rtEx);
-            _fx.CurrentTechnique.Passes[0].Apply(); // Xtract pass
+            _gd.SetRenderTarget(_rtMip0);
+            _extractPass.Apply(); 
             _renderer.RenderQuad(_gd, -Vector2.One, Vector2.One);
 
-            var rtLastBlur = _rtEx;
-            for (int i = 0; i < BlurCount; i++)
-            {
-                _passTextureParam.SetValue(rtLastBlur);
-                _gd.SetRenderTarget(_rtBlurV);
-                _fx.CurrentTechnique.Passes[1].Apply(); // Blur Vertical
-                _renderer.RenderQuad(_gd, -Vector2.One, Vector2.One);
+            if(ExitPhase == 0) goto FINISHED;
 
-                _rtBlurV.GetData(debug);
+            //
+            // Downsample
+            //
+            _passTextureParam.SetValue(_rtMip0);
+            _gd.SetRenderTarget(_rtMip1);
+            _downsamplePass.Apply(); // Blur Vertical
+            _renderer.RenderQuad(_gd, -Vector2.One, Vector2.One);
 
-                _passTextureParam.SetValue(_rtBlurV);
-                _gd.SetRenderTarget(_rtBlurH);
-                _fx.CurrentTechnique.Passes[2].Apply(); // Blur Horizontal
-                _renderer.RenderQuad(_gd, -Vector2.One, Vector2.One);
+            //
+            // Upsample
+            //
+            _passTextureParam.SetValue(_rtMip1);
+            _gd.SetRenderTarget(_rtMip0);
+            _upsamplePass.Apply(); // Upsample
+            _renderer.RenderQuad(_gd, -Vector2.One, Vector2.One);
 
-                _rtBlurH.GetData(debug);
-
-                rtLastBlur = _rtBlurH;
-            }
-
-            if(ShouldBlend)
-            {
-                _passTextureParam.SetValue(_rtBlurH);
-                _gd.SetRenderTarget(_rtBlend);
-                _fx.CurrentTechnique.Passes[3].Apply(); // Blend
-                _renderer.RenderQuad(_gd, -Vector2.One, Vector2.One);
-            }
-            
+        FINISHED:
             _gd.SetRenderTargets(initialRenderTarget);
-            return ShouldBlend ? _rtBlend : _rtBlurH;
+            return resultFilter;
         }
 
-        private void PrepareRenderTargets(Texture2D tex, float )
+        private T[] GetTextureData<T>(Texture2D tex) where T : struct
         {
-            if (tex.Width != _width || tex.Height != _height)
+            T[] data = new T[tex.Width * tex.Height];
+            tex.GetData(data);
+            return data;
+        }
+
+        private void PrepareRenderTargets(Texture2D tex, float resolutionScale)
+        {
+            var scaledWidth = (int)(tex.Width * resolutionScale);
+            var scaledHeight = (int)(tex.Height * resolutionScale);
+
+            if (scaledWidth != _width || scaledHeight != _height)
             {
-                _width = tex.Width;
-                _height = tex.Height;
+                _width = scaledWidth;
+                _height = scaledHeight;
 
-                _rtEx?.Dispose();
-                _rtBlurV?.Dispose();
-                _rtBlurH?.Dispose();
-                _rtBlend?.Dispose();
+                DisposeRenderTargets();
 
-                _rtEx = new RenderTarget2D(_gd, _width, _height, false, SurfaceFormat.Vector4, DepthFormat.None, 0, RenderTargetUsage.DiscardContents);
-                _rtBlurV = new RenderTarget2D(_gd, _width, _height, false, SurfaceFormat.Vector4, DepthFormat.None, 0, RenderTargetUsage.DiscardContents);
-                _rtBlurH = new RenderTarget2D(_gd, _width, _height, false, SurfaceFormat.Vector4, DepthFormat.None, 0, RenderTargetUsage.DiscardContents);
-                _rtBlend = new RenderTarget2D(_gd, _width, _height, false, SurfaceFormat.Vector4, DepthFormat.None, 0, RenderTargetUsage.DiscardContents);            }
+                _rtMip0 = new RenderTarget2D(_gd, tex.Width, tex.Height, false, SurfaceFormat.Vector4, DepthFormat.None, 0, RenderTargetUsage.DiscardContents);
+                _rtMip1 = new RenderTarget2D(_gd, _width, _height, false, SurfaceFormat.Vector4, DepthFormat.None, 0, RenderTargetUsage.DiscardContents);
+            }
         }
 
         private void ChoosePreset1()
         {
-            _exposureParam.SetValue(5f);
+            _intensityParam.SetValue(1f);
             _thresholdParam.SetValue(0.5f);
             _colorParam.SetValue(new Vector4(1, 1, 1, 1));
-            BlurCount = 5;
+            Radius = 2f;
         }
-        
+
         public float Threshold
         {
             get => _thresholdParam.GetValueSingle();
             set => _thresholdParam.SetValue(value);
         }
 
-        public float Exposure
+        public float Intensity
         {
-            get => _exposureParam.GetValueSingle();
-            set => _exposureParam.SetValue(value);
+            get => _intensityParam.GetValueSingle();
+            set => _intensityParam.SetValue(value);
         }
 
-        public Vector4 Color
+        public Vector4 BlendColor
         {
             get => _colorParam.GetValueVector4();
             set => _colorParam.SetValue(value);
         }
 
-        public bool ShouldBlend = true;
+        public int ExitPhase = -1;
 
-        public int BlurCount = 5;
+        public float Radius = 1f;
+
+        //public float WeightMultiplier
+        //{
+        //    get => _weightMultiplierParam.GetValueSingle();
+        //    set => _weightMultiplierParam.SetValue(value);
+        //}
 
         Effect _fx;
         GraphicsDevice _gd;
         QuadRenderer _renderer;
 
-        RenderTarget2D _rtEx;
-        RenderTarget2D _rtBlurV;
-        RenderTarget2D _rtBlurH;
-        RenderTarget2D _rtBlend;
-
         EffectParameter _passTextureParam;
-        EffectParameter _originalTextureParam;
         EffectParameter _thresholdParam;
-        EffectParameter _exposureParam;
+        EffectParameter _intensityParam;
         EffectParameter _colorParam;
+        EffectParameter _samplingOffset;
+
+        EffectPass _extractPass;
+        EffectPass _downsamplePass;
+        EffectPass _upsamplePass;
 
         int _width, _height;
 
+        RenderTarget2D _rtMip0;
+        RenderTarget2D _rtMip1;
+
+        BlendState _overrideBlend;
+
+        private void DisposeRenderTargets()
+        {
+            _rtMip0?.Dispose();
+            _rtMip1?.Dispose();
+        }
+
         public void Dispose()
         {
-            _rtEx.Dispose();
-            _rtBlurV.Dispose();
-            _rtBlurH.Dispose();
+            DisposeRenderTargets();
         }
     }
 }
