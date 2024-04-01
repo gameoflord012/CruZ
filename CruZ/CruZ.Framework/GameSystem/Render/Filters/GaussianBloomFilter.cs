@@ -24,12 +24,6 @@ namespace CruZ.Framework.GameSystem.Render
             _downsamplePass = _fx.CurrentTechnique.Passes[1];
             _upsamplePass = _fx.CurrentTechnique.Passes[2];
 
-            _overrideBlend = new BlendState();
-            _overrideBlend.AlphaSourceBlend = Blend.One;
-            _overrideBlend.ColorSourceBlend = Blend.One;
-            _overrideBlend.AlphaDestinationBlend = Blend.Zero;
-            _overrideBlend.ColorDestinationBlend = Blend.Zero;
-
             ChoosePreset1();
         }
 
@@ -39,7 +33,7 @@ namespace CruZ.Framework.GameSystem.Render
             var initialRenderTarget = _gd.GetRenderTargets();
 
             PrepareRenderTargets(tex, resolutionScale);
-            _gd.BlendState = _overrideBlend;
+            _gd.BlendState = BlendState.Opaque;
             _samplingOffset.SetValue(new Vector2(
                 1f / tex.Width * Radius, 
                 1f / tex.Height * Radius));
@@ -60,7 +54,7 @@ namespace CruZ.Framework.GameSystem.Render
             //
             _passTextureParam.SetValue(_rtMip0);
             _gd.SetRenderTarget(_rtMip1);
-            _downsamplePass.Apply(); // Blur Vertical
+            _downsamplePass.Apply();
             _renderer.RenderQuad(_gd, -Vector2.One, Vector2.One);
 
             //
@@ -156,8 +150,6 @@ namespace CruZ.Framework.GameSystem.Render
 
         RenderTarget2D _rtMip0;
         RenderTarget2D _rtMip1;
-
-        BlendState _overrideBlend;
 
         private void DisposeRenderTargets()
         {

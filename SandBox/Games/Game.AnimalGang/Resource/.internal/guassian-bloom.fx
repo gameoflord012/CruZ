@@ -52,12 +52,9 @@ float4 ExtractPS(PixelInput p) : SV_TARGET
 	float brightness = dot(texCol.rgb, float3(0.2126, 0.7152, 0.0722));
 
     if(brightness > Threshold)
-        return float4((
-			(texCol.rgb * texCol.a) *
-			(Color .rgb * Color .a)) 
-			* Intensity , 1.0);
+        return texCol * Color;
     else
-        return float4(0, 0, 0, 1);
+        return float4(0, 0, 0, 0);
 }
 
 float4 Box(float4 p0, float4 p1, float4 p2, float4 p3)
@@ -90,14 +87,14 @@ float4 DownsamplePS(PixelInput p) : SV_TARGET
 		Box(out5, out6, out7, cen ) * 0.125f + 
 		Box(in0 , in1 , in2 , in3 ) * 0.5f;
 
-    return float4(result.rgb, 1);
+    return result;
 } 
 
 
 float4 UpsamplePS(PixelInput p) : SV_TARGET
 {
 	float4 texCol = PassTexture.Sample(LinearSampler, p.TexCoord.xy);
-	return float4(texCol.rgb, 1);
+	return texCol;
 }
 
 technique

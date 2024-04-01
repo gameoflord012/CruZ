@@ -17,12 +17,6 @@ namespace Game.AnimalGang.DesktopGL
             _tex = GameContext.GameResource.Load<Texture2D>("imgs\\GAP\\Flame01.png");
             _gd = GameApplication.GetGraphicsDevice();
             _bloom = new GuassianBloomFilter(_gd);
-
-            _additiveBlend = new BlendState();
-            _additiveBlend.AlphaSourceBlend = Blend.Zero;
-            _additiveBlend.ColorSourceBlend = Blend.One;
-            _additiveBlend.AlphaDestinationBlend = Blend.DestinationAlpha;
-            _additiveBlend.ColorDestinationBlend = Blend.DestinationAlpha;
         }
 
         public override void Render(GameTime gameTime, SpriteBatch spriteBatch, Matrix viewProjectionMatrix)
@@ -46,7 +40,7 @@ namespace Game.AnimalGang.DesktopGL
             var filter = _bloom.GetFilter(_rt, ResolutionScale);
 
             // then additive blending
-            spriteBatch.Begin(SpriteSortMode.Immediate, _additiveBlend);
+            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
             spriteBatch.Draw(filter, Vector2.Zero, Color.White);
             spriteBatch.End();
 
@@ -115,18 +109,6 @@ namespace Game.AnimalGang.DesktopGL
             get => _bloom.ExitPhase;
             set => _bloom.ExitPhase = value;
         }
-
-        //public float Stride
-        //{
-        //    get => _bloom.Radius;
-        //    set => _bloom.Radius = value;
-        //}
-
-        //public float WeightMultiplier
-        //{
-        //    get => _bloom.WeightMultiplier;
-        //    set => _bloom.WeightMultiplier = value;
-        //}
 
         Texture2D _tex;
         RenderTarget2D _rt;
