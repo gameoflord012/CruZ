@@ -70,12 +70,6 @@ namespace Game.AnimalGang.DesktopGL
             _bloom.Dispose();
         }
 
-        public float Intensity
-        {
-            get => _bloom.Intensity;
-            set => _bloom.Intensity = value;
-        }
-
         public float Threshold
         {
             get => _bloom.Threshold;

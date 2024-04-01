@@ -16,7 +16,6 @@ namespace CruZ.Framework.GameSystem.Render
 
             _passTextureParam = _fx.Parameters["PassTexture"];
             _thresholdParam = _fx.Parameters["Threshold"];
-            _intensityParam = _fx.Parameters["Intensity"];
             _colorParam = _fx.Parameters["Color"];
             _samplingOffset = _fx.Parameters["SamplingOffset"];
 
@@ -62,7 +61,7 @@ namespace CruZ.Framework.GameSystem.Render
             //
             _passTextureParam.SetValue(_rtMip1);
             _gd.SetRenderTarget(_rtMip0);
-            _upsamplePass.Apply(); // Upsample
+            _upsamplePass.Apply();
             _renderer.RenderQuad(_gd, -Vector2.One, Vector2.One);
 
             var debug = GetTextureData<Vector4>(resultFilter);
@@ -98,7 +97,6 @@ namespace CruZ.Framework.GameSystem.Render
 
         private void ChoosePreset1()
         {
-            _intensityParam.SetValue(1f);
             _thresholdParam.SetValue(0.5f);
             _colorParam.SetValue(new Vector4(1, 1, 1, 1));
             Radius = 2f;
@@ -108,12 +106,6 @@ namespace CruZ.Framework.GameSystem.Render
         {
             get => _thresholdParam.GetValueSingle();
             set => _thresholdParam.SetValue(value);
-        }
-
-        public float Intensity
-        {
-            get => _intensityParam.GetValueSingle();
-            set => _intensityParam.SetValue(value);
         }
 
         public Vector4 BlendColor
@@ -126,19 +118,12 @@ namespace CruZ.Framework.GameSystem.Render
 
         public float Radius = 1f;
 
-        //public float WeightMultiplier
-        //{
-        //    get => _weightMultiplierParam.GetValueSingle();
-        //    set => _weightMultiplierParam.SetValue(value);
-        //}
-
         Effect _fx;
         GraphicsDevice _gd;
         QuadRenderer _renderer;
 
         EffectParameter _passTextureParam;
         EffectParameter _thresholdParam;
-        EffectParameter _intensityParam;
         EffectParameter _colorParam;
         EffectParameter _samplingOffset;
 

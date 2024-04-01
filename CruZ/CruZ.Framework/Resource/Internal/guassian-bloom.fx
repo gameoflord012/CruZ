@@ -11,7 +11,6 @@ Texture2D PassTexture;
 float Threshold;
 float2 SamplingOffset;
 float4 Color;
-float Intensity;
 
 SamplerState LinearSampler
 {
