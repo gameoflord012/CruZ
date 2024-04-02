@@ -160,19 +160,19 @@ namespace CruZ.Framework.Resource
         #endregion
 
         #region Interface Implementations
-        public string GetProcessedGuidValue(string value)
+        string IGuidValueProcessor<string>.GetProcessedGuidValue(string value)
         {
-            return GetFormattedResourcePath(value);
+            return GetFormattedResourcePath(value).ToLower();
         }
 
-        public object ReadJson(JsonReader reader, JsonSerializer serializer)
+        object ICustomSerializable.ReadJson(JsonReader reader, JsonSerializer serializer)
         {
             JObject jO = JObject.Load(reader);
             var root = jO[nameof(ResourceRoot)].Value<string>();
             return From(root);
         }
 
-        public void WriteJson(JsonWriter writer, JsonSerializer serializer)
+        void ICustomSerializable.WriteJson(JsonWriter writer, JsonSerializer serializer)
         {
             writer.WriteStartObject();
             writer.WritePropertyName(nameof(ResourceRoot));

@@ -39,23 +39,23 @@ namespace CruZ.Framework.Utility
             {
                 if (_bloom == null || _bloom.IsDisposed)
                 {
-                    _bloom = GameContext.GameResource.Load<Effect>(".internal\\Bloom.fx");
+                    _bloom = GameContext.GameResource.Load<Effect>(".internal\\bloom.fx");
                     GameApplication.Disposables.Add(_bloom);
                 }
                 return _bloom;
             }
         }
 
-        public static Effect GaussianBloom
+        public static Effect ReinhardTonemap
         {
             get
             {
-                if (_guassianBloom == null || _guassianBloom.IsDisposed)
+                if (_reinhardTonemap == null || _reinhardTonemap.IsDisposed)
                 {
-                    _guassianBloom = GameContext.GameResource.Load<Effect>(".internal\\guassian-bloom.fx");
-                    GameApplication.Disposables.Add(_guassianBloom);
+                    _reinhardTonemap = GameContext.GameResource.Load<Effect>(".internal\\reinhard-tonemap.fx");
+                    GameApplication.Disposables.Add(_reinhardTonemap);
                 }
-                return _guassianBloom;
+                return _reinhardTonemap;
             }
         }
 
@@ -63,5 +63,6 @@ namespace CruZ.Framework.Utility
         static Effect? _normalSpriteRenderer;
         static Effect? _texutreLight;
         static Effect? _bloom;
+        static Effect? _reinhardTonemap;
     }
 }

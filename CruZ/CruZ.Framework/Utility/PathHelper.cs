@@ -36,7 +36,7 @@ namespace CruZ.Framework.Utility
                         Directory.CreateDirectory(destFile.DirectoryName);
                     }
 
-                    if (srcFile.LastWriteTime > destFile.LastWriteTime || !destFile.Exists)
+                    if (!destFile.Exists || srcFile.LastWriteTime > destFile.LastWriteTime)
                     {
                         File.Copy(srcFile.FullName, destFile.FullName, true);
                     }

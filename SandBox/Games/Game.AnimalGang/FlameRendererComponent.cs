@@ -2,6 +2,7 @@
 
 using CruZ.Framework;
 using CruZ.Framework.GameSystem.Render;
+using CruZ.Framework.GameSystem.Render.Filters;
 using CruZ.Framework.Utility;
 
 using Microsoft.Xna.Framework;
@@ -16,7 +17,8 @@ namespace Game.AnimalGang.DesktopGL
             _fx = EffectManager.NormalSpriteRenderer;
             _tex = GameContext.GameResource.Load<Texture2D>("imgs\\GAP\\Flame01.png");
             _gd = GameApplication.GetGraphicsDevice();
-            _bloom = new GuassianBloomFilter(_gd);
+            _bloom = new BloomFilter();
+            _tonemap = new TonemapFilter();
         }
 
         public override void Render(GameTime gameTime, SpriteBatch spriteBatch, Matrix viewProjectionMatrix)
@@ -25,29 +27,38 @@ namespace Game.AnimalGang.DesktopGL
             _gd.SetRenderTarget(_rt);
             _gd.Clear(Color.Transparent);
 
-            // setup draw args for the original texture
+            // setup draw args
             DrawArgs drawArgs = new();
             drawArgs.Apply(AttachedEntity);
             drawArgs.Apply(_tex);
 
-            // render original texture to a render target
+            // render original texture to _rt
             _fx.Parameters["view_projection"].SetValue(viewProjectionMatrix);
             spriteBatch.Begin(SpriteSortMode.Immediate, effect: _fx);
             spriteBatch.Draw(drawArgs);
             spriteBatch.End();
 
-            // apply bloom on that render target
-            var filter = _bloom.GetFilter(_rt, ResolutionScale);
+            // get bloom filter from _rt
+            var filter = _bloom.GetFilter(_rt);
 
-            // then additive blending
-            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
-            spriteBatch.Draw(filter, Vector2.Zero, Color.White);
-            spriteBatch.End();
+            if(Mode == 1) _gd.Clear(Color.Transparent);
 
-            // render the rt to screen :))
+            // then blending to the _rt
+            if(Mode != 0)
+            {
+                spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
+                spriteBatch.Draw(filter, Vector2.Zero, Color.White);
+                spriteBatch.End();
+            }
+
+            // get tone map filter
+            _tonemap.Color = BloomColor;
+            var tonemap = _tonemap.GetFilter(_rt);
+
+            // render tone map result to screen :))
             _gd.SetRenderTarget(null);
             spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
-            spriteBatch.Draw(_rt, Vector2.Zero, Color.White);
+            spriteBatch.Draw(tonemap, Vector2.Zero, Color.White);
             spriteBatch.End();
         }
 
@@ -60,7 +71,6 @@ namespace Game.AnimalGang.DesktopGL
                     false, SurfaceFormat.Color, DepthFormat.None, 0, RenderTargetUsage.PreserveContents);
             }
         }
-
 
         protected override void OnDispose()
         {
@@ -76,17 +86,11 @@ namespace Game.AnimalGang.DesktopGL
             set => _bloom.Threshold = value;
         }
 
-        public float ResolutionScale
+        public Vector4 BloomColor
         {
             get;
             set;
-        } = 0.5f;
-
-        public Vector4 BloomColor
-        {
-            get => _bloom.BlendColor;
-            set => _bloom.BlendColor = value;
-        }
+        } = new(1, 1, 1, 1);
 
         /// <summary>
         /// Mode 0: Show texture only <br/>
@@ -104,12 +108,16 @@ namespace Game.AnimalGang.DesktopGL
             set => _bloom.ExitPhase = value;
         }
 
+        public float[] BloomRadiuses
+        {
+            get => _bloom.BloomRadiuses;
+        }
+
         Texture2D _tex;
         RenderTarget2D _rt;
         GraphicsDevice _gd;
-        GuassianBloomFilter _bloom;
+        BloomFilter _bloom;
+        TonemapFilter _tonemap;
         Effect _fx;
-
-        BlendState _additiveBlend;
     }
 }

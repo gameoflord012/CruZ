@@ -17,18 +17,4 @@
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</Content>
 	</ItemGroup>
-
-	<ItemGroup>
-	  <None Remove="Resource\Internal\guassian-bloom.fx" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Content Include="Resource\Internal\guassian-bloom.fx">
-	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	  </Content>
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="GameSystem\Transform\" />
-	</ItemGroup>
 </Project>

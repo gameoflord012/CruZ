@@ -30,16 +30,21 @@ namespace CruZ.Framework.GameSystem.Render
             _vertexBuffer[3] = new VertexPositionTexture(new Vector3(1, -1, 1), new Vector2(1, 1));
 
             _indexBuffer = new short[] { 0, 3, 2, 0, 1, 3 };
+            _gd = graphicsDevice;
 
             //_vBuffer = new VertexBuffer(graphicsDevice, VertexPositionTexture.VertexDeclaration, 4, BufferUsage.WriteOnly);
             //_iBuffer = new IndexBuffer(graphicsDevice, IndexElementSize.SixteenBits, 6, BufferUsage.WriteOnly);
 
             //_vBuffer.SetData(_vertexBuffer);
             //_iBuffer.SetData(_indexBuffer);
-
         }
 
-        public void RenderQuad(GraphicsDevice graphicsDevice, Vector2 v1, Vector2 v2)
+        public void RenderFullScreen()
+        {
+            RenderQuad(-Vector2.One, Vector2.One);
+        }
+
+        public void RenderQuad(Vector2 v1, Vector2 v2)
         {
             _vertexBuffer[0].Position.X = v1.X;
             _vertexBuffer[0].Position.Y = v2.Y;
@@ -53,7 +58,7 @@ namespace CruZ.Framework.GameSystem.Render
             _vertexBuffer[3].Position.X = v2.X;
             _vertexBuffer[3].Position.Y = v1.Y;
 
-            graphicsDevice.DrawUserIndexedPrimitives
+            _gd.DrawUserIndexedPrimitives
                 (PrimitiveType.TriangleList, _vertexBuffer, 0, 4, _indexBuffer, 0, 2);
 
             //graphicsDevice.SetVertexBuffer(_vBuffer);
@@ -62,5 +67,7 @@ namespace CruZ.Framework.GameSystem.Render
             //graphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0,
             //    0, 2);
         }
+
+        GraphicsDevice _gd;
     }
 }
