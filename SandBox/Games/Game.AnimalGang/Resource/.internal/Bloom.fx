@@ -1,4 +1,9 @@
-﻿#if OPENGL
+﻿/*
+HDR bloom fx
+ommit the alpha channel
+*/
+
+#if OPENGL
 #define VS_SHADERMODEL vs_3_0
 #define PS_SHADERMODEL ps_3_0
 #else
@@ -8,19 +13,20 @@
 
 Texture2D PassTexture;
 
-float Threshold;
 float2 SamplingOffset;
+float Threshold;
+float UpsampleAlpha;
 
 SamplerState LinearSampler
 {
-    Texture = <PassTexture>;  // Assigning the texture named "PassTexture" to the sampler state
+    Texture = <PassTexture>;
 
-    MagFilter = LINEAR;         // Setting magnification filter to LINEAR
-    MinFilter = LINEAR;         // Setting minification filter to LINEAR
-    Mipfilter = LINEAR;         // Setting mipmapping filter to LINEAR
+    MagFilter = LINEAR;
+    MinFilter = LINEAR;
+    Mipfilter = LINEAR; 
 
-    AddressU = CLAMP;           // Setting addressing mode for U coordinate to CLAMP
-    AddressV = CLAMP;           // Setting addressing mode for V coordinate to CLAMP
+    AddressU = CLAMP;
+    AddressV = CLAMP;
 };
 
 struct VertexInput
@@ -52,7 +58,7 @@ float4 ExtractPS(PixelInput p) : SV_TARGET
     if(brightness > Threshold)
         return texCol;
     else
-        return float4(0, 0, 0, 0);
+        return float4(0, 0, 0, 1);
 }
 
 float4 Box(float4 p0, float4 p1, float4 p2, float4 p3)
@@ -85,7 +91,7 @@ float4 DownsamplePS(PixelInput p) : SV_TARGET
 		Box(out5, out6, out7, cen ) * 0.125f + 
 		Box(in0 , in1 , in2 , in3 ) * 0.5f;
 
-    return result;
+    return float4(result.rgb, 1);
 } 
 
 
@@ -102,10 +108,12 @@ float4 UpsamplePS(PixelInput p) : SV_TARGET
 	float4 out6 = PassTexture.Sample(LinearSampler, p.TexCoord.xy + SamplingOffset * float2(+1, -1));
 	float4 out7 = PassTexture.Sample(LinearSampler, p.TexCoord.xy + SamplingOffset * float2( 0, -1));
 
-	return (
-		cen * 4 +
-		(out1 + out3 + out5 + out7) * 2.0 +
-		(out0 + out2 + out4 + out6)) / 16.0;
+	float4 result = cen * 4;
+	result += (out1 + out3 + out5 + out7) * 2;
+	result += (out0 + out2 + out4 + out6);
+	result = result / 16;
+
+    return float4(result.rgb, UpsampleAlpha);
 }
 
 technique

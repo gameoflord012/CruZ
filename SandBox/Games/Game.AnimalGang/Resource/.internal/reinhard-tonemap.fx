@@ -6,6 +6,7 @@
 #define PS_SHADERMODEL ps_4_0
 #endif
 
+float MaxLuminance;
 float4 Color;
 Texture2D Texture;
 
@@ -42,10 +43,24 @@ PixelInput VS(VertexInput v)
     return output;
 }
 
+float luminance(float4 v)
+{
+    return dot(v.rgb, float3(1, 1, 1));
+}
+
+float4 change_luminance(float4 c_in, float l_out)
+{
+    float l_in = luminance(c_in);
+    return float4(c_in.rgb * (l_out / l_in), c_in.a);
+}
+
 float4 ReinHardPS(PixelInput p) : SV_TARGET
 {
-	float4 color = Color * Texture.Sample(LinearSampler, p.TexCoord.xy);
-    return float4(color.rgb / (1 + color.rgb), color.a);
+    float4 v = Color * Texture.Sample(LinearSampler, p.TexCoord.xy);
+    float l_old = luminance(v);
+    float numerator = l_old * (1.0f + (l_old / (MaxLuminance * MaxLuminance)));
+    float l_new = numerator / (1.0f + l_old);
+    return change_luminance(v, l_new);
 }
 
 technique

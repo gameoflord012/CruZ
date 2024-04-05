@@ -25,7 +25,7 @@ namespace Game.AnimalGang.DesktopGL
         {
             UpdateRenderTargetsResolution();
             _gd.SetRenderTarget(_rt);
-            _gd.Clear(Color.Transparent);
+            _gd.Clear(Color.Black);
 
             // setup draw args
             DrawArgs drawArgs = new();
@@ -38,20 +38,20 @@ namespace Game.AnimalGang.DesktopGL
             spriteBatch.Draw(drawArgs);
             spriteBatch.End();
 
-            // get bloom filter from _rt
-            var filter = _bloom.GetFilter(_rt);
+            // get bloom bloomFilter from _rt
+            var bloomFilter = _bloom.GetFilter(_rt);
 
             if(Mode == 1) _gd.Clear(Color.Transparent);
 
             // then blending to the _rt
-            if(Mode != 0)
+            if (Mode != 0)
             {
                 spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
-                spriteBatch.Draw(filter, Vector2.Zero, Color.White);
+                spriteBatch.Draw(bloomFilter, Vector2.Zero, Color.White);
                 spriteBatch.End();
             }
 
-            // get tone map filter
+            // get tone map bloomFilter
             _tonemap.Color = BloomColor;
             var tonemap = _tonemap.GetFilter(_rt);
 
@@ -86,6 +86,12 @@ namespace Game.AnimalGang.DesktopGL
             set => _bloom.Threshold = value;
         }
 
+        public float MaxLuminance
+        {
+            get => _tonemap.MaxLuminance;
+            set => _tonemap.MaxLuminance = value;
+        }
+
         public Vector4 BloomColor
         {
             get;
@@ -94,7 +100,7 @@ namespace Game.AnimalGang.DesktopGL
 
         /// <summary>
         /// Mode 0: Show texture only <br/>
-        /// Mode 1: Show filter only
+        /// Mode 1: Show bloomFilter only
         /// </summary>
         public int Mode
         {
@@ -111,6 +117,11 @@ namespace Game.AnimalGang.DesktopGL
         public float[] BloomRadiuses
         {
             get => _bloom.BloomRadiuses;
+        }
+
+        public float[] BloomStrengths
+        {
+            get => _bloom.BloomStrengths;
         }
 
         Texture2D _tex;

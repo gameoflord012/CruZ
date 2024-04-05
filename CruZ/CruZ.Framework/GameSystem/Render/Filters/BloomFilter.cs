@@ -18,6 +18,7 @@ namespace CruZ.Framework.GameSystem.Render
             _passTextureParam = _fx.Parameters["PassTexture"];
             _thresholdParam = _fx.Parameters["Threshold"];
             _samplingOffsetParam = _fx.Parameters["SamplingOffset"];
+            _upsampleAlphaParam = _fx.Parameters["UpsampleAlpha"];
 
             _extractPass = _fx.CurrentTechnique.Passes[0];
             _downsamplePass = _fx.CurrentTechnique.Passes[1];
@@ -30,6 +31,7 @@ namespace CruZ.Framework.GameSystem.Render
         {
             _thresholdParam.SetValue(0.5f);
             _bloomRadiuses = [1, 1, 1, 1, 1, 1, 1, 1];
+            _bloomStrengths = [1, 1, 1, 1];
             ExitPhase = 4;
         }
 
@@ -68,8 +70,10 @@ namespace CruZ.Framework.GameSystem.Render
             {
                 PassTexture = _rtMips[ExitPhase - i];
                 BloomRadius = _bloomRadiuses[4 + i];
+                UpsampleAlpha = 1f - _bloomStrengths[i];
                 _gd.SetRenderTarget(_rtMips[ExitPhase - i - 1]);
-                _gd.BlendState = BlendState.AlphaBlend; // add up to previous blend
+                _gd.BlendState = BlendState.AlphaBlend; // add up to previous bloom
+
                 _upsamplePass.Apply();
                 _renderer.RenderFullScreen();
             }
@@ -103,6 +107,8 @@ namespace CruZ.Framework.GameSystem.Render
             }
         }
 
+        public float[] BloomStrengths { get => _bloomStrengths; }
+
         public float[] BloomRadiuses { get => _bloomRadiuses; }
 
         public float Threshold
@@ -122,6 +128,12 @@ namespace CruZ.Framework.GameSystem.Render
                 _bloomRadius = value;
                 UpdateSamplingOffset();
             }
+        }
+
+        float UpsampleAlpha
+        {
+            get => _upsampleAlphaParam.GetValueSingle();
+            set => _upsampleAlphaParam.SetValue(value);
         }
 
         Texture2D PassTexture
@@ -149,6 +161,7 @@ namespace CruZ.Framework.GameSystem.Render
         EffectParameter _passTextureParam;
         EffectParameter _thresholdParam;
         EffectParameter _samplingOffsetParam;
+        EffectParameter _upsampleAlphaParam;
 
         EffectPass _extractPass;
         EffectPass _downsamplePass;
@@ -159,6 +172,7 @@ namespace CruZ.Framework.GameSystem.Render
 
         RenderTarget2D[] _rtMips = new RenderTarget2D[5];
         float[] _bloomRadiuses = new float[8];
+        float[] _bloomStrengths = new float[4];
 
         private void DisposeRenderTargets()
         {

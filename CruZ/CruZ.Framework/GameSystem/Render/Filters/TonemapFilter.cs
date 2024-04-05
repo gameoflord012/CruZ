@@ -21,6 +21,7 @@ namespace CruZ.Framework.GameSystem.Render.Filters
             _fx.CurrentTechnique.Passes[0].Apply();
             _fx.Parameters["Texture"].SetValue(tex);
             _fx.Parameters["Color"].SetValue(Color);
+            _fx.Parameters["MaxLuminance"].SetValue(MaxLuminance);
             _gd.SetRenderTarget(_rt);
             _gd.BlendState = BlendState.Opaque;
             _quadRenderer.RenderFullScreen();
@@ -41,6 +42,8 @@ namespace CruZ.Framework.GameSystem.Render.Filters
         }
 
         public Vector4 Color = new(1, 1, 1, 1);
+
+        public float MaxLuminance = 1;
 
         QuadRenderer _quadRenderer;
         RenderTarget2D? _rt;
