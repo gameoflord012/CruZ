@@ -31,6 +31,8 @@ namespace CruZ.Editor
                 InvalidatedEvents.EntityComponentChanged,
                 InvalidatedEvents.SelectingEntityChanged);
 
+            inspector_PropertyGrid.PropertySort = PropertySort.Categorized;
+
             RegisterEvents();
         }
 

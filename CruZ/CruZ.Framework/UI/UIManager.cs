@@ -10,14 +10,6 @@ using System.Collections.Generic;
 
 namespace CruZ.Common.UI
 {
-    //public interface UIContextProvider
-    //{
-    //    event Action<GameTime, SpriteBatch> DrawUI;
-    //    event Action<GameTime> UpdateUI;
-    //    event Action InitializeUI;
-    //    Game GameInstance { get; }
-    //}
-
     interface IUIController
     {
         void Draw(GameTime gameTime, SpriteBatch spriteBatch);
@@ -48,16 +40,16 @@ namespace CruZ.Common.UI
 
         void IUIController.Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            var args = GetInfo(gameTime, spriteBatch);
+            var uiInfo = GetInfo(gameTime, spriteBatch);
 
-            args.SpriteBatch.Begin();
+            uiInfo.SpriteBatch.Begin();
 
             foreach (var control in GetTree(_root))
             {
-                control.InternalDraw(args);
+                control.InternalDraw(uiInfo);
             }
 
-            args.SpriteBatch.End();
+            uiInfo.SpriteBatch.End();
         }
 
         void IUIController.Update(GameTime gameTime)

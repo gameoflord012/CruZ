@@ -45,22 +45,20 @@ PixelInput VS(VertexInput v)
 
 float luminance(float4 v)
 {
-    return dot(v.rgb, float3(1, 1, 1));
-}
-
-float4 change_luminance(float4 c_in, float l_out)
-{
-    float l_in = luminance(c_in);
-    return float4(c_in.rgb * (l_out / l_in), c_in.a);
+    return dot(v.rgb, float3(0.2126, 0.7152, 0.0722));
 }
 
 float4 ReinHardPS(PixelInput p) : SV_TARGET
 {
     float4 v = Color * Texture.Sample(LinearSampler, p.TexCoord.xy);
     float l_old = luminance(v);
-    float numerator = l_old * (1.0f + (l_old / (MaxLuminance * MaxLuminance)));
-    float l_new = numerator / (1.0f + l_old);
-    return change_luminance(v, l_new);
+
+    if(l_old == 0) return v;
+
+    float numerator = l_old * (1.0 + (l_old / (MaxLuminance * MaxLuminance)));
+    float l_new = numerator / (1.0 + l_old);
+
+    return v / l_old * l_new;
 }
 
 technique

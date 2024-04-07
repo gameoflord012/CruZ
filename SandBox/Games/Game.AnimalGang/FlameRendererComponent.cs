@@ -19,13 +19,21 @@ namespace Game.AnimalGang.DesktopGL
             _gd = GameApplication.GetGraphicsDevice();
             _bloom = new BloomFilter();
             _tonemap = new TonemapFilter();
+
+            _bloomFilterBlend = new BlendState(); // pixel = vec4(s.rgb + d.rgb, d.a)
+            _bloomFilterBlend.ColorDestinationBlend = Blend.One;
+            _bloomFilterBlend.AlphaDestinationBlend = Blend.DestinationAlpha;
+            _bloomFilterBlend.ColorSourceBlend = Blend.One;
+            _bloomFilterBlend.AlphaSourceBlend = Blend.Zero;
         }
 
         public override void Render(GameTime gameTime, SpriteBatch spriteBatch, Matrix viewProjectionMatrix)
         {
             UpdateRenderTargetsResolution();
             _gd.SetRenderTarget(_rt);
-            _gd.Clear(Color.Black);
+            _gd.Clear(Color.Transparent);
+
+            Texture2D finalTex = _rt;
 
             // setup draw args
             DrawArgs drawArgs = new();
@@ -38,27 +46,35 @@ namespace Game.AnimalGang.DesktopGL
             spriteBatch.Draw(drawArgs);
             spriteBatch.End();
 
+            var debug = TextureHelper.GetTextureData<Vector4>(_rt);
+            if(RenderMode == RenderModes.Texture) goto FINISHED;
+
             // get bloom bloomFilter from _rt
             var bloomFilter = _bloom.GetFilter(_rt);
+            if (RenderMode == RenderModes.BloomFilter) _gd.Clear(Color.Transparent);
 
-            if(Mode == 1) _gd.Clear(Color.Transparent);
+            // apply bloom on _rt
+            spriteBatch.Begin(SpriteSortMode.Immediate, _bloomFilterBlend);
+            spriteBatch.Draw(bloomFilter, Vector2.Zero, Color.White);
+            spriteBatch.End();
 
-            // then blending to the _rt
-            if (Mode != 0)
-            {
-                spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
-                spriteBatch.Draw(bloomFilter, Vector2.Zero, Color.White);
-                spriteBatch.End();
-            }
+            debug = TextureHelper.GetTextureData<Vector4>(_rt);
+            debug = TextureHelper.GetTextureData<Vector4>(bloomFilter);
+            if (RenderMode == RenderModes.BloomFilter) goto FINISHED;
 
-            // get tone map bloomFilter
+            //get tone map bloomFilter
             _tonemap.Color = BloomColor;
             var tonemap = _tonemap.GetFilter(_rt);
+            finalTex = tonemap;
 
-            // render tone map result to screen :))
+            debug = TextureHelper.GetTextureData<Vector4>(tonemap);
+
+        FINISHED:
             _gd.SetRenderTarget(null);
-            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
-            spriteBatch.Draw(tonemap, Vector2.Zero, Color.White);
+            if(BackgroundMode == BackgroundModes.Black) _gd.Clear(Color.Black);
+
+            spriteBatch.Begin(SpriteSortMode.Immediate);
+            spriteBatch.Draw(finalTex, Vector2.Zero, Color.White);
             spriteBatch.End();
         }
 
@@ -68,7 +84,7 @@ namespace Game.AnimalGang.DesktopGL
             {
                 _rt?.Dispose();
                 _rt = new RenderTarget2D(_gd, _gd.Viewport.Width, _gd.Viewport.Height,
-                    false, SurfaceFormat.Color, DepthFormat.None, 0, RenderTargetUsage.PreserveContents);
+                    false, SurfaceFormat.Vector4, DepthFormat.None, 0, RenderTargetUsage.PreserveContents);
             }
         }
 
@@ -78,6 +94,7 @@ namespace Game.AnimalGang.DesktopGL
 
             _rt.Dispose();
             _bloom.Dispose();
+            _bloomFilterBlend.Dispose();
         }
 
         public float Threshold
@@ -102,11 +119,30 @@ namespace Game.AnimalGang.DesktopGL
         /// Mode 0: Show texture only <br/>
         /// Mode 1: Show bloomFilter only
         /// </summary>
-        public int Mode
+        public RenderModes RenderMode
         {
             get;
             set;
-        } = -1;
+        } = RenderModes.Tonemap;
+
+        public BackgroundModes BackgroundMode
+        {
+            get;
+            set;
+        } = BackgroundModes.BackBuffer;
+
+        public enum RenderModes
+        {
+            Texture,
+            BloomFilter,
+            Tonemap
+        }
+
+        public enum BackgroundModes
+        {
+            Black,
+            BackBuffer
+        }
 
         public int BloomPhase
         {
@@ -130,5 +166,7 @@ namespace Game.AnimalGang.DesktopGL
         BloomFilter _bloom;
         TonemapFilter _tonemap;
         Effect _fx;
+
+        BlendState _bloomFilterBlend;
     }
 }

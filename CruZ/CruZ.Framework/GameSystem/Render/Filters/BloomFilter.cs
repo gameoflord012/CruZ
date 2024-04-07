@@ -83,13 +83,6 @@ namespace CruZ.Framework.GameSystem.Render
             return resultFilter;
         }
 
-        private T[] GetTextureData<T>(Texture2D tex) where T : struct
-        {
-            T[] data = new T[tex.Width * tex.Height];
-            tex.GetData(data);
-            return data;
-        }
-
         private void PrepareRenderTargets(Texture2D tex)
         {
             if (tex.Width != _width || tex.Height != _height)
