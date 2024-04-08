@@ -1,6 +1,8 @@
-﻿namespace CruZ.Framework.GameSystem.ECS
+﻿using System;
+
+namespace CruZ.Framework.GameSystem.ECS
 {
-    internal class EntitySystem
+    internal class EntitySystem : IDisposable
     {
         public virtual void Initialize() { }
 
@@ -23,5 +25,12 @@
         {
 
         }
+
+        public void Dispose()
+        {
+            OnDispose();
+        }
+
+        protected virtual void OnDispose() { }
     }
 }

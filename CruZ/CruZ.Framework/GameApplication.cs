@@ -47,7 +47,6 @@ namespace CruZ.Framework
         #region event handlers
         private void Wrapper_WindowResized(object? sender, EventArgs e)
         {
-            GraphicsDevice.PresentationParameters.RenderTargetUsage = RenderTargetUsage.PreserveContents;
             WindowResized?.Invoke(_core.GraphicsDevice.Viewport);
         }
 
@@ -180,11 +179,6 @@ namespace CruZ.Framework
                 throw new InvalidOperationException("Dispose needed before creating new context");
 
             return _instance = new GameApplication(core);
-        }
-
-        public static SpriteBatch GetSpriteBatch()
-        {
-            return _instance._spriteBatch;
         }
 
         public static ContentManager GetContent()

@@ -8,17 +8,18 @@ using CruZ.Framework.Utility;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using MonoGame.Extended;
+
 namespace Game.AnimalGang.DesktopGL
 {
     public class FlameRendererComponent : RendererComponent
     {
         public FlameRendererComponent()
         {
-            _fx = EffectManager.NormalSpriteRenderer;
             _tex = GameContext.GameResource.Load<Texture2D>("imgs\\GAP\\Flame01.png");
             _gd = GameApplication.GetGraphicsDevice();
             _bloom = new BloomFilter();
-            _tonemap = new TonemapFilter();
+            _quadRenderer = new QuadRenderer(_gd);
 
             _bloomFilterBlend = new BlendState(); // pixel = vec4(s.rgb + d.rgb, d.a)
             _bloomFilterBlend.ColorDestinationBlend = Blend.One;
@@ -27,55 +28,57 @@ namespace Game.AnimalGang.DesktopGL
             _bloomFilterBlend.AlphaSourceBlend = Blend.Zero;
         }
 
-        public override void Render(GameTime gameTime, SpriteBatch spriteBatch, Matrix viewProjectionMatrix)
+        public override void Render(RendererEventArgs e)
         {
             UpdateRenderTargetsResolution();
             _gd.SetRenderTarget(_rt);
             _gd.Clear(Color.Transparent);
 
-            Texture2D finalTex = _rt;
-
+            //
             // setup draw args
+            //
             DrawArgs drawArgs = new();
             drawArgs.Apply(AttachedEntity);
             drawArgs.Apply(_tex);
 
+            //
             // render original texture to _rt
-            _fx.Parameters["view_projection"].SetValue(viewProjectionMatrix);
-            spriteBatch.Begin(SpriteSortMode.Immediate, effect: _fx);
-            spriteBatch.Draw(drawArgs);
-            spriteBatch.End();
+            //
+            var fx = EffectManager.NormalSpriteRenderer;
+            fx.Parameters["view_projection"].SetValue(e.ViewProjectionMatrix);
+            fx.Parameters["hdrColor"].SetValue(Vector4.One);
+            e.SpriteBatch.Begin(SpriteSortMode.Immediate, effect: fx);
+            e.SpriteBatch.Draw(drawArgs);
+            e.SpriteBatch.End();
 
-            var debug = TextureHelper.GetTextureData<Vector4>(_rt);
-            if(RenderMode == RenderModes.Texture) goto FINISHED;
+            if(RenderMode == RenderModes.TextureOnly) goto FINISHED;
 
+            //
             // get bloom bloomFilter from _rt
+            //
             var bloomFilter = _bloom.GetFilter(_rt);
-            if (RenderMode == RenderModes.BloomFilter) _gd.Clear(Color.Transparent);
+            if (RenderMode == RenderModes.BloomOnly) _gd.Clear(Color.Transparent);
 
+            //
             // apply bloom on _rt
-            spriteBatch.Begin(SpriteSortMode.Immediate, _bloomFilterBlend);
-            spriteBatch.Draw(bloomFilter, Vector2.Zero, Color.White);
-            spriteBatch.End();
-
-            debug = TextureHelper.GetTextureData<Vector4>(_rt);
-            debug = TextureHelper.GetTextureData<Vector4>(bloomFilter);
-            if (RenderMode == RenderModes.BloomFilter) goto FINISHED;
-
-            //get tone map bloomFilter
-            _tonemap.Color = BloomColor;
-            var tonemap = _tonemap.GetFilter(_rt);
-            finalTex = tonemap;
-
-            debug = TextureHelper.GetTextureData<Vector4>(tonemap);
-
+            //
+            e.SpriteBatch.Begin(SpriteSortMode.Immediate, _bloomFilterBlend);
+            e.SpriteBatch.Draw(bloomFilter, Vector2.Zero, Color.White);
+            e.SpriteBatch.End();
         FINISHED:
-            _gd.SetRenderTarget(null);
-            if(BackgroundMode == BackgroundModes.Black) _gd.Clear(Color.Black);
+            var debug = TextureHelper.GetTextureData<Vector4>(_rt);
 
-            spriteBatch.Begin(SpriteSortMode.Immediate);
-            spriteBatch.Draw(finalTex, Vector2.Zero, Color.White);
-            spriteBatch.End();
+            //
+            // blend with sprite rt
+            // 
+            fx = EffectManager.NormalSpriteRenderer;
+            fx.Parameters["view_projection"].SetValue(Matrix.Identity);
+            fx.Parameters["hdrColor"].SetValue(BloomColor);
+            fx.CurrentTechnique.Passes[0].Apply();
+            _gd.Textures[0] = _rt;
+            _gd.SetRenderTarget(e.SpriteRenderTarget);
+            _gd.BlendState = BlendState.AlphaBlend;
+            _quadRenderer.RenderFullScreen();
         }
 
         private void UpdateRenderTargetsResolution()
@@ -105,15 +108,15 @@ namespace Game.AnimalGang.DesktopGL
 
         public float MaxLuminance
         {
-            get => _tonemap.MaxLuminance;
-            set => _tonemap.MaxLuminance = value;
+            get => PostProcessingSettings.MaxLuminance;
+            set => PostProcessingSettings.MaxLuminance = value;
         }
 
         public Vector4 BloomColor
         {
             get;
             set;
-        } = new(1, 1, 1, 1);
+        } = new(4f, 1.25f, 0.6f, 0.8f);
 
         /// <summary>
         /// Mode 0: Show texture only <br/>
@@ -123,25 +126,19 @@ namespace Game.AnimalGang.DesktopGL
         {
             get;
             set;
-        } = RenderModes.Tonemap;
+        } = RenderModes.All;
 
-        public BackgroundModes BackgroundMode
-        {
-            get;
-            set;
-        } = BackgroundModes.BackBuffer;
+        //public bool ApplyTonemap
+        //{
+        //    get;
+        //    set;
+        //} = true;
 
         public enum RenderModes
         {
-            Texture,
-            BloomFilter,
-            Tonemap
-        }
-
-        public enum BackgroundModes
-        {
-            Black,
-            BackBuffer
+            TextureOnly,
+            BloomOnly,
+            All,
         }
 
         public int BloomPhase
@@ -164,9 +161,8 @@ namespace Game.AnimalGang.DesktopGL
         RenderTarget2D _rt;
         GraphicsDevice _gd;
         BloomFilter _bloom;
-        TonemapFilter _tonemap;
-        Effect _fx;
 
         BlendState _bloomFilterBlend;
+        QuadRenderer _quadRenderer;
     }
 }

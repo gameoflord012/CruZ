@@ -9,7 +9,7 @@ using Microsoft.Xna.Framework;
 
 namespace CruZ.Framework.GameSystem.ECS
 {
-    internal class World
+    internal class World : IDisposable
     {
         public World() { }
 
@@ -70,6 +70,12 @@ namespace CruZ.Framework.GameSystem.ECS
             Trace.Assert(_entitiesToAdd.Intersect(_entitiesToRemove).Count() == 0);
             _entities.ExceptWith(_entitiesToRemove);
             _entities.UnionWith(_entitiesToAdd);
+        }
+
+        public void Dispose()
+        {
+            _systems.ForEach(e => e.Dispose());
+            foreach (var e in Entities) e.Dispose();
         }
 
         public TransformEntity[] Entities { get => _entities.ToArray(); }

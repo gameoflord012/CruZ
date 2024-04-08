@@ -6,9 +6,9 @@
 #define PS_SHADERMODEL ps_4_0
 #endif
 
+Texture2D ScreenTexture;
 float MaxLuminance;
-float4 Color;
-Texture2D Texture;
+// float4 Color;
 
 SamplerState LinearSampler
 {
@@ -50,7 +50,7 @@ float luminance(float4 v)
 
 float4 ReinHardPS(PixelInput p) : SV_TARGET
 {
-    float4 v = Color * Texture.Sample(LinearSampler, p.TexCoord.xy);
+    float4 v = ScreenTexture.Sample(LinearSampler, p.TexCoord.xy);
     float l_old = luminance(v);
 
     if(l_old == 0) return v;
@@ -58,7 +58,7 @@ float4 ReinHardPS(PixelInput p) : SV_TARGET
     float numerator = l_old * (1.0 + (l_old / (MaxLuminance * MaxLuminance)));
     float l_new = numerator / (1.0 + l_old);
 
-    return v / l_old * l_new;
+    return float4(v.rgb / l_old * l_new, 1);
 }
 
 technique

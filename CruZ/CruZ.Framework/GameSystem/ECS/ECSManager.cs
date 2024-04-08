@@ -1,4 +1,6 @@
-﻿using CruZ.Common.ECS;
+﻿using System;
+
+using CruZ.Common.ECS;
 using CruZ.Framework.GameSystem.Animation;
 using CruZ.Framework.GameSystem.Render;
 using CruZ.Framework.GameSystem.Script;
@@ -14,7 +16,7 @@ namespace CruZ.Framework.GameSystem.ECS
         void Initialize();
     }
 
-    public class ECSManager : IECSController
+    public class ECSManager : IECSController, IDisposable
     {
         private ECSManager() 
         {
@@ -56,6 +58,11 @@ namespace CruZ.Framework.GameSystem.ECS
         internal static TransformEntity CreateTransformEntity()
         {
             return new TransformEntity(_instance._world);
+        }
+
+        public void Dispose()
+        {
+            _world.Dispose();
         }
     }
 }

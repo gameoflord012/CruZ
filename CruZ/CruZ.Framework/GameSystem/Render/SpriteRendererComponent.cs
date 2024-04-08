@@ -103,16 +103,17 @@ namespace CruZ.Common.ECS
                 SortingLayer.CompareTo(other.SortingLayer);
         }
 
-        public override void Render(GameTime gameTime, SpriteBatch spriteBatch, Matrix viewProjectionMatrix)
+        public override void Render(RendererEventArgs e)
         {
             if(Texture == null) return;
 
             var fx = EffectManager.NormalSpriteRenderer;
-            fx.Parameters["view_projection"].SetValue(viewProjectionMatrix);
+            fx.Parameters["view_projection"].SetValue(e.ViewProjectionMatrix);
+            fx.Parameters["hdrColor"].SetValue(new Vector4(1, 1, 1, 1));
 
             DrawBegin?.Invoke();
-            spriteBatch.Begin(
-                effect: EffectManager.NormalSpriteRenderer,
+            e.SpriteBatch.Begin(
+                effect: fx,
                 sortMode: SpriteSortMode.FrontToBack,
                 samplerState: SamplerState.PointClamp);
 
@@ -129,7 +130,7 @@ namespace CruZ.Common.ECS
                 DrawLoopBegin?.Invoke(this, drawArgs); 
                 #endregion
 
-                spriteBatch.Draw(drawArgs);
+                e.SpriteBatch.Draw(drawArgs);
 
                 #region After Drawloop
                 var drawEndArgs = new DrawLoopEndEventArgs(drawArgs);
@@ -138,7 +139,7 @@ namespace CruZ.Common.ECS
                 #endregion
             }
 
-            spriteBatch.End();
+            e.SpriteBatch.End();
             DrawEnd?.Invoke();
         }
 

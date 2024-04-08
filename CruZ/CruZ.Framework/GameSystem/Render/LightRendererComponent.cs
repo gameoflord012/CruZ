@@ -19,13 +19,13 @@ namespace CruZ.Framework.GameSystem.Render
             _perlinNoise = FunMath.GenPerlinNoise(_noiseW, _noiseH);
         }
 
-        public override void Render(GameTime gameTime, SpriteBatch spriteBatch, Matrix viewProjectionMatrix)
+        public override void Render(RendererEventArgs e)
         {
-            var miliSecs = (int)gameTime.TotalGameTime.TotalMilliseconds;
+            var miliSecs = (int)e.GameTime.TotalGameTime.TotalMilliseconds;
             var rand = _perlinNoise[miliSecs % _noiseW, miliSecs % _noiseH];
 
             var fx = EffectManager.TextureLight;
-            fx.Parameters["view_projection"].SetValue(viewProjectionMatrix);
+            fx.Parameters["view_projection"].SetValue(e.ViewProjectionMatrix);
             fx.Parameters["intensity"].SetValue(LightIntensity * rand);
             fx.Parameters["min_alpha"].SetValue(0.05f);
 
@@ -33,9 +33,9 @@ namespace CruZ.Framework.GameSystem.Render
             drawArgs.Apply(AttachedEntity);
             drawArgs.Apply(_lightMap);
 
-            spriteBatch.Begin(effect: fx);
-            spriteBatch.Draw(drawArgs);
-            spriteBatch.End();
+            e.SpriteBatch.Begin(effect: fx);
+            e.SpriteBatch.Draw(drawArgs);
+            e.SpriteBatch.End();
 
             BoundingBoxChanged?.Invoke(new UIBoundingBox(
                 drawArgs.GetWorldBounds(), [drawArgs.GetWorldOrigin()]));

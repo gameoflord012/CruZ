@@ -14,14 +14,13 @@ namespace CruZ.Framework
         public event Action<GameTime>? BeforeUpdate;
         public event Action<GameTime>? AfterDraw;
 
-        //public GraphicsDeviceManager GraphicsDeviceManager => _gdManager;
-
         public GameWrapper()
         {
             _gdManager = new GraphicsDeviceManager(this);
             _gdManager.GraphicsProfile = GraphicsProfile.HiDef;
             Content.RootDirectory = ".";
             IsMouseVisible = true;
+            Window.ClientSizeChanged += OnClientSizeChanged;
         }
 
         protected sealed override void Initialize()
@@ -45,9 +44,15 @@ namespace CruZ.Framework
             base.Draw(gameTime);
 
             GraphicsDevice.SetRenderTarget(null);
-            GraphicsDevice.Clear(GameConstants.DEFAULT_BACKGROUND_COLOR);
             OnDraw(gameTime);
             AfterDraw?.Invoke(gameTime);
+            GraphicsDevice.SetRenderTarget(null);
+        }
+
+        private void OnClientSizeChanged(object? sender, EventArgs e)
+        {
+            GraphicsDevice.PresentationParameters.RenderTargetUsage = 
+                RenderTargetUsage.PreserveContents; // update render target usage after rt back buffer changing
         }
 
         protected virtual void OnInitialize() { }

@@ -13,7 +13,7 @@ namespace CruZ.Framework.GameSystem.Render
 
         public float LayerDepth { get; set; }
 
-        public virtual void Render(GameTime gameTime, SpriteBatch spriteBatch, Matrix viewProjectionMatrix) { }
+        public virtual void Render(RendererEventArgs args) { }
 
         public int CompareTo(RendererComponent? other)
         {
