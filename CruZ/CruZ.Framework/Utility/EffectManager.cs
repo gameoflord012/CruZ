@@ -46,16 +46,16 @@ namespace CruZ.Framework.Utility
             }
         }
 
-        public static Effect ReinhardTonemap
+        public static Effect PostProcessing
         {
             get
             {
-                if (_reinhardTonemap == null || _reinhardTonemap.IsDisposed)
+                if (_postprocessing == null || _postprocessing.IsDisposed)
                 {
-                    _reinhardTonemap = GameContext.GameResource.Load<Effect>(".internal\\reinhard-tonemap.fx");
-                    GameApplication.Disposables.Add(_reinhardTonemap);
+                    _postprocessing = GameContext.GameResource.Load<Effect>(".internal\\postprocessing.fx");
+                    GameApplication.Disposables.Add(_postprocessing);
                 }
-                return _reinhardTonemap;
+                return _postprocessing;
             }
         }
 
@@ -63,6 +63,6 @@ namespace CruZ.Framework.Utility
         static Effect? _normalSpriteRenderer;
         static Effect? _texutreLight;
         static Effect? _bloom;
-        static Effect? _reinhardTonemap;
+        static Effect? _postprocessing;
     }
 }

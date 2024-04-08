@@ -141,11 +141,11 @@ namespace CruZ.Editor.Controls
             OnApplicationBeforeClosing();
 
             _gameApp.Exit();
-            _gameApp.Dispose();
 
             if (!_gameAppThread.Join(5000))
                 throw new Exception("Can't exit editor app");
 
+            _gameApp?.Dispose();
             _gameApp = null;
             _gameAppThread = null;
         }

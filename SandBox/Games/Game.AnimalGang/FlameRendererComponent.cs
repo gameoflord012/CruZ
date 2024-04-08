@@ -1,14 +1,9 @@
-﻿using System;
-
-using CruZ.Framework;
+﻿using CruZ.Framework;
 using CruZ.Framework.GameSystem.Render;
-using CruZ.Framework.GameSystem.Render.Filters;
 using CruZ.Framework.Utility;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-
-using MonoGame.Extended;
 
 namespace Game.AnimalGang.DesktopGL
 {
@@ -65,6 +60,7 @@ namespace Game.AnimalGang.DesktopGL
             e.SpriteBatch.Begin(SpriteSortMode.Immediate, _bloomFilterBlend);
             e.SpriteBatch.Draw(bloomFilter, Vector2.Zero, Color.White);
             e.SpriteBatch.End();
+
         FINISHED:
             var debug = TextureHelper.GetTextureData<Vector4>(_rt);
 
@@ -112,27 +108,23 @@ namespace Game.AnimalGang.DesktopGL
             set => PostProcessingSettings.MaxLuminance = value;
         }
 
+        public float Brightness
+        {
+            get => PostProcessingSettings.Brightness;
+            set => PostProcessingSettings.Brightness = value;
+        }
+
         public Vector4 BloomColor
         {
             get;
             set;
         } = new(4f, 1.25f, 0.6f, 0.8f);
 
-        /// <summary>
-        /// Mode 0: Show texture only <br/>
-        /// Mode 1: Show bloomFilter only
-        /// </summary>
         public RenderModes RenderMode
         {
             get;
             set;
         } = RenderModes.All;
-
-        //public bool ApplyTonemap
-        //{
-        //    get;
-        //    set;
-        //} = true;
 
         public enum RenderModes
         {

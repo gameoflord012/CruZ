@@ -1,18 +1,20 @@
 ﻿using CruZ.Framework.Utility;
 
-using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace CruZ.Framework.GameSystem.Render.Filters
 {
-    public class TonemapFilter
+    public class PostProcessingFilter
     {
-        public TonemapFilter()
+        public PostProcessingFilter()
         {
             _gd = GameApplication.GetGraphicsDevice();
             _quadRenderer = new(_gd);
-            _fx = EffectManager.ReinhardTonemap;
+            _fx = EffectManager.PostProcessing;
         }
+
+        public float MaxLuminance = 1;
+        public float Brightness = 1;
 
         public Texture2D GetFilter(Texture2D tex)
         {
@@ -21,7 +23,7 @@ namespace CruZ.Framework.GameSystem.Render.Filters
             _fx.CurrentTechnique.Passes[0].Apply();
             _fx.Parameters["ScreenTexture"].SetValue(tex);
             _fx.Parameters["MaxLuminance"].SetValue(MaxLuminance);
-            //_fx.Parameters["Color"].SetValue(HdrColor);
+            _fx.Parameters["Brightness"].SetValue(Brightness);
             _gd.SetRenderTarget(_rt);
             _gd.BlendState = BlendState.Opaque;
             _quadRenderer.RenderFullScreen();
@@ -40,10 +42,6 @@ namespace CruZ.Framework.GameSystem.Render.Filters
                 _rt = new RenderTarget2D(_gd, _width, _height, false, SurfaceFormat.Vector4, DepthFormat.None, 0, RenderTargetUsage.PreserveContents);
             }
         }
-
-        public float MaxLuminance = 1;
-
-        //public Vector4 HdrColor = Vector4.One;
 
         QuadRenderer _quadRenderer;
         RenderTarget2D? _rt;

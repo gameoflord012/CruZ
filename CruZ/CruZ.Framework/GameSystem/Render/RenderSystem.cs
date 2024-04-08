@@ -18,7 +18,7 @@ namespace CruZ.Framework.GameSystem.Render
         {
             _gd = GameApplication.GetGraphicsDevice();
             _spriteBatch = new SpriteBatch(_gd);
-            _tonemap = new TonemapFilter();
+            _postprocessing = new PostProcessingFilter();
             UpdateRenderTargetResolution(_gd.Viewport);
             GameApplication.WindowResized += UpdateRenderTargetResolution;
         }
@@ -56,8 +56,9 @@ namespace CruZ.Framework.GameSystem.Render
             //
             // post processing
             //
-            _tonemap.MaxLuminance = MaxLuminance;
-            var tonemapFilter = _tonemap.GetFilter(_rtSprite);
+            _postprocessing.MaxLuminance = PostProcessingSettings.MaxLuminance;
+            _postprocessing.Brightness = PostProcessingSettings.Brightness;
+            var tonemapFilter = _postprocessing.GetFilter(_rtSprite);
             var debug = TextureHelper.GetTextureData<Vector4>(_rtSprite);
             debug = TextureHelper.GetTextureData<Vector4>(tonemapFilter);
 
@@ -80,17 +81,21 @@ namespace CruZ.Framework.GameSystem.Render
         RenderTarget2D _rtSprite;
         SpriteBatch _spriteBatch;
         GraphicsDevice _gd;
-        TonemapFilter _tonemap;
-
-        public static float MaxLuminance = 1;
+        PostProcessingFilter _postprocessing;
     }
 
     public static class PostProcessingSettings
     {
         public static float MaxLuminance
         {
-            get => RenderSystem.MaxLuminance;
-            set => RenderSystem.MaxLuminance = value;
-        }
+            get;
+            set;
+        } = 4f;
+
+        public static float Brightness
+        {
+            get;
+            set;
+        } = 2f;
     }
 }
