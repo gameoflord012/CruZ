@@ -1,4 +1,6 @@
-﻿using CruZ.Common;
+﻿using System.Linq;
+
+using CruZ.Common;
 using CruZ.Framework.GameSystem.ECS;
 
 using Microsoft.Xna.Framework;
@@ -10,8 +12,11 @@ namespace CruZ.Framework.GameSystem.Animation
     {
         protected override void OnUpdate(EntitySystemEventArgs args)
         {
-            args.Entity.TryGetComponent(out AnimationComponent? animation);
-            animation?.Update(args.GameTime);
+            foreach (var animation in
+                args.ActiveEntities.GetAllComponents<AnimationComponent>())
+            {
+                animation?.Update(args.GameTime);
+            }
         }
     }
 }

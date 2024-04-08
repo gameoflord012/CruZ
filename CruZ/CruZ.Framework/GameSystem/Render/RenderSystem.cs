@@ -30,27 +30,24 @@ namespace CruZ.Framework.GameSystem.Render
 
         protected override void OnDraw(EntitySystemEventArgs args)
         {
-            var rendererArgs = new RendererEventArgs(
-                args.GameTime, 
+            var rendererComponents = args.
+                ActiveEntities.GetAllComponents<RendererComponent>(GetComponentMode.Inherit);
+
+            rendererComponents.Sort();
+
+            _gd.SetRenderTarget(_rtSprite);
+            _gd.Clear(GameConstants.GAME_BACKGROUND_COLOR);
+
+            var eventArgs = new RendererEventArgs(
+                args.GameTime,
                 _spriteBatch,
                 Camera.Main.ViewProjectionMatrix(),
                 _rtSprite);
 
-            var renderers = args.Entity.GetAllComponents()
-                .Where(e => e is RendererComponent)
-                .Select(e => (RendererComponent)e)
-                .ToList();
-
-            renderers.Sort();
-
-            _gd.SetRenderTarget(_rtSprite);
-            //_gd.Clear(Color.White);
-            _gd.Clear(GameConstants.GAME_BACKGROUND_COLOR);
-
-            foreach (var renderer in renderers)
+            foreach (var renderer in rendererComponents)
             {
                 _gd.SetRenderTarget(_rtSprite); // make sure the rt is unchanged 
-                renderer.Render(rendererArgs);
+                renderer.Render(eventArgs);
             }
 
             //

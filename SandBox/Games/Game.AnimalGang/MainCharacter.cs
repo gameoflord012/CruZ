@@ -4,8 +4,6 @@ using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework;
 
 using MonoGame.Extended;
-
-using CruZ.Framework.GameSystem;
 using CruZ.Framework.GameSystem.Animation;
 using CruZ.Framework.GameSystem.ECS;
 using CruZ.Framework.GameSystem.Script;
@@ -16,7 +14,7 @@ using System;
 
 namespace AnimalGang
 {
-    
+
 
     public class MainCharacter : ScriptComponent
     {

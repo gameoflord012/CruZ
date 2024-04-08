@@ -39,30 +39,29 @@ namespace CruZ.Framework.GameSystem.ECS
             }
         }
 
-        public void Update(GameTime gameTime)
+        public void SystemsUpdate(GameTime gameTime)
         {
             ProcessEntitiesChanges();
 
             foreach (var system in _systems)
             {
-                foreach (var e in _entities) if(e.IsActive)
-                {
-                    system.Update(new EntitySystemEventArgs(e, gameTime));
-                }
+                system.Update(new EntitySystemEventArgs(GetActiveEntities(), gameTime));
             }
         }
 
-        public void Draw(GameTime gameTime)
+        public void SystemsDraw(GameTime gameTime)
         {
             ProcessEntitiesChanges();
 
             foreach (var system in _systems)
             {
-                foreach (var e in _entities) if(e.IsActive)
-                {
-                    system.Draw(new EntitySystemEventArgs(e, gameTime));
-                }
+                system.Draw(new EntitySystemEventArgs(GetActiveEntities(), gameTime));
             }
+        }
+
+        private List<TransformEntity> GetActiveEntities()
+        {
+            return _entities.Where(e => e.IsActive).ToList();
         }
 
         private void ProcessEntitiesChanges()

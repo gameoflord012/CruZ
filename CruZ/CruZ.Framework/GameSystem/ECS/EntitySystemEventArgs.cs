@@ -10,12 +10,12 @@ namespace CruZ.Framework.GameSystem.ECS
 {
     internal class EntitySystemEventArgs : EventArgs
     {
-        public readonly TransformEntity Entity;
+        public readonly EntityCollection ActiveEntities;
         public readonly GameTime GameTime;
 
-        public EntitySystemEventArgs(TransformEntity entity, GameTime gameTime)
+        public EntitySystemEventArgs(List<TransformEntity> activeEntities, GameTime gameTime)
         {
-            Entity = entity;
+            ActiveEntities = new EntityCollection(activeEntities);
             GameTime = gameTime;
         }
     }

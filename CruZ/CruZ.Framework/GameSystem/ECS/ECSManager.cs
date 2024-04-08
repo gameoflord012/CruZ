@@ -34,12 +34,12 @@ namespace CruZ.Framework.GameSystem.ECS
 
         void IECSController.Update(GameTime gameTime)
         {
-            _world.Update(gameTime);
+            _world.SystemsUpdate(gameTime);
         }
 
         void IECSController.Draw(GameTime gameTime)
         {
-            _world.Draw(gameTime);
+            _world.SystemsDraw(gameTime);
         }
 
         World _world;

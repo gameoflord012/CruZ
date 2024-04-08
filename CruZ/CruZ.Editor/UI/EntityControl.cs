@@ -13,11 +13,11 @@ namespace CruZ.Editor.UI
     using System.Linq;
 
     using CruZ.Framework;
-    using CruZ.Framework.GameSystem;
     using CruZ.Framework.GameSystem.ECS;
     using CruZ.Framework.UI;
 
     using Microsoft.Xna.Framework;
+
     using SharpDX.Direct3D9;
 
     public class EntityControl : UIControl, ICanUndo

@@ -8,14 +8,20 @@ namespace CruZ.Framework.GameSystem.Script
     {
         protected override void OnDraw(EntitySystemEventArgs args)
         {
-            args.Entity.TryGetComponent(out ScriptComponent? script);
-            script?.InternalDraw(args.GameTime);
+            foreach (var script in
+                args.ActiveEntities.GetAllComponents<ScriptComponent>())
+            {
+                script?.InternalDraw(args.GameTime);
+            }
         }
 
         protected override void OnUpdate(EntitySystemEventArgs args)
         {
-            args.Entity.TryGetComponent(out ScriptComponent? script);
-            script?.InternalUpdate(args.GameTime);
+            foreach (var script in
+                args.ActiveEntities.GetAllComponents<ScriptComponent>())
+            {
+                script?.InternalUpdate(args.GameTime);
+            }
         }
     }
 }
