@@ -89,41 +89,18 @@ namespace CruZ.Framework.Resource
         }
 
         #region Public Functions
-        public void Create(string resourcePath, object resObj, bool replaceIfExists = false)
+        public void Create(string resourcePath, object resObj)
         {
             resourcePath = GetFormattedResourcePath(resourcePath);
-            object? existsResource = null;
-
-            if (!replaceIfExists)
-            {
-                try
-                {
-                    existsResource = Load(resourcePath, resObj.GetType());
-                }
-                catch
-                {
-                    LogService.PushMsg(
-                        $"Failed to load resource \"{resourcePath}\", new one will be created", "ResourceManager");
-                }
-            }
-
-            if (existsResource == null)
-            {
-                _serializer.SerializeToFile(resObj, Path.Combine(ResourceRoot, resourcePath));
-            }
-
-            if (existsResource is IDisposable iDisposable)
-                iDisposable.Dispose();
-
-            InitResourceHost(resObj, resourcePath);
+            InitResource(resObj, resourcePath);
         }
 
-        public void Save(IHostResource host)
+        public void Save(IResource resource)
         {
-            if (host.ResourceInfo == null)
-                throw new ArgumentException($"Can't save {host} resource, use create resource first");
+            if (resource.ResourceInfo == null)
+                throw new ArgumentException($"Can't save {resource} resource, use create resource first");
 
-            Create(host.ResourceInfo.ResourceName, host, true);
+            Create(resource.ResourceInfo.ResourceName, resource);
         }
 
         public T Load<T>(string resourcePath)
@@ -201,7 +178,7 @@ namespace CruZ.Framework.Resource
                 resObj = LoadResource(resourcePath, ty);
             }
 
-            InitResourceHost(resObj, resourcePath);
+            InitResource(resObj, resourcePath);
             return resObj;
         }
 
@@ -278,10 +255,10 @@ namespace CruZ.Framework.Resource
             }
         }
 
-        private void InitResourceHost(object resObj, string resourcePath)
+        private void InitResource(object resObj, string resourcePath)
         {
             var info = RetriveResourceInfo(resourcePath);
-            if (resObj is IHostResource host) host.ResourceInfo = info;
+            if (resObj is IResource host) host.ResourceInfo = info;
         }
 
         private string GetFormattedResourcePath(string resourcePath)

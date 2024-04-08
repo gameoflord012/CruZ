@@ -1,0 +1,41 @@
+{
+  "Name": "Scenes\\FlameScene",
+  "_entities": [
+    {
+      "position": "0, 0",
+      "scale": "1, 1",
+      "components": [
+        {
+          "com-type": "Game.AnimalGang.DesktopGL.FlameRendererComponent, Game.AnimalGang, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+          "com-data": {
+            "Threshold": 0.5,
+            "MaxLuminance": 4.0,
+            "Brightness": 2.0,
+            "BloomColor": "4, 1.25, 0.6, 0.8",
+            "RenderMode": 2,
+            "BloomPhase": 4,
+            "BloomRadiuses": [
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ],
+            "BloomStrengths": [
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ],
+            "SortingLayer": 0,
+            "LayerDepth": 0.0
+          }
+        }
+      ]
+    }
+  ],
+  "ResourceInfo": null
+}

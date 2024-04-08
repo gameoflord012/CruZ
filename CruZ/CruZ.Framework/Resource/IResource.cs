@@ -1,6 +1,6 @@
 ﻿namespace CruZ.Framework.Resource
 {
-    public interface IHostResource
+    public interface IResource
     {
         ResourceInfo? ResourceInfo { get; set; }
     }

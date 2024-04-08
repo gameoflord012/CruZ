@@ -94,8 +94,7 @@ namespace CruZ.Editor
 
             EditorContext.UserResource.Create(
                 savePath,
-                _gameEditor.CurrentGameScene,
-                true);
+                _gameEditor.CurrentGameScene);
 
             _gameEditor.LoadSceneFromFile(savePath);
         }

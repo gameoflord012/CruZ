@@ -11,7 +11,7 @@ using System.Collections.Generic;
 
 namespace CruZ.Common.Scene
 {
-    public partial class GameScene : IHostResource, ICustomSerializable
+    public partial class GameScene : IResource, ICustomSerializable
     {
         public event Action<TransformEntity>? EntityAdded;
         public event Action<TransformEntity>? EntityRemoved;
