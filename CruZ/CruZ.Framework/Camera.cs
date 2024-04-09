@@ -109,18 +109,6 @@ namespace CruZ.Framework
                 -GameConstants.MAX_WORLD_DISTANCE, GameConstants.MAX_WORLD_DISTANCE);
         }
 
-        public float VirtualWidth
-        {
-            get => _virtualWidth;
-            set { _virtualWidth = value; }
-        }
-
-        public float VirtualHeight
-        {
-            get => _virtualHeight;
-            set => _virtualHeight = value;
-        }
-
         public float ViewPortWidth
         {
             get => _viewPortWidth;
@@ -150,8 +138,36 @@ namespace CruZ.Framework
         public Vector2 CameraOffset;
         public float Zoom = 1;
 
+        /// <summary>
+        /// If true, the virtual height will be calculated relative to virtual width and the screen ratio <br/>
+        /// By doing so, the camera will not stretch render objects and preserves it ratio while allowing to resize the window <br/>
+        /// Will ommit the set value on virtual height
+        /// </summary>
+        public bool PreserveScreenRatio = false;
+
+        private float ScreenRatio => _viewPortWidth / -_virtualHeight;
+
+        /// <summary>
+        /// Projection width
+        /// </summary>
+        public float VirtualWidth
+        {
+            get => _virtualWidth;
+            set { _virtualWidth = value; }
+        }
+
+        /// <summary>
+        /// Projection height
+        /// </summary>
+        public float VirtualHeight
+        {
+            get => PreserveScreenRatio ? _virtualWidth / ScreenRatio : _virtualHeight;
+            set => _virtualHeight = value;
+        }
+
         float _viewPortWidth;
         float _viewPortHeight;
+
         float _virtualWidth = 19;
         float _virtualHeight = 10;
 

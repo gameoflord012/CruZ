@@ -6,19 +6,9 @@ namespace CruZ.Framework
     {
         private static Camera? _mainCamera;
 
-        private static Camera GetMain()
-        {
-            if (_mainCamera == null)
-            {
-                throw new NullReferenceException("Main camera is not assigned");
-            }
-
-            return _mainCamera;
-        }
-
         public static Camera Main
         {
-            get => GetMain();
+            get => _mainCamera ?? throw new InvalidOperationException("Main camera is not assigned");
             set => _mainCamera = value;
         }
     }

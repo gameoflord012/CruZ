@@ -72,6 +72,7 @@ namespace CruZ.Framework
             _spriteBatch = new(GraphicsDevice);
             _core.GraphicsDevice.PresentationParameters.RenderTargetUsage = RenderTargetUsage.PreserveContents;
             Camera.Main = new Camera(Window);
+            Camera.Main.PreserveScreenRatio = true;
 
             _ecsController.Initialize();
             _uiController.Initialize();

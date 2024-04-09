@@ -40,7 +40,6 @@ namespace CruZ.Editor.Controls
         public GameEditor(EditorForm form)
         {
             _editorForm = form;
-            _thisThreadId = Thread.CurrentThread.ManagedThreadId;
             _cacheService = new CacheService(Path.Combine(EditorContext.UserProfileDir, "caches\\"));
             _userResource = EditorContext.UserResource;
 
@@ -174,21 +173,13 @@ namespace CruZ.Editor.Controls
             CacheWrite?.Invoke(this, "Camera");
         }
 
-        private void GameApp_WindowResize(Viewport viewport)
+        private void Game_Intialized()
         {
-            GetMainCamera().ViewPortWidth = viewport.Width;
-            GetMainCamera().ViewPortHeight = viewport.Height;
-        }
-
-        private void GameApp_Intialized()
-        {
-            Camera.Main = GetMainCamera();
             CacheRead?.Invoke(this, "Camera");
-
             _appInitalized_Reset.Set();
         }
 
-        private void GameApp_Exiting()
+        private void Game_Exiting()
         {
             UnloadCurrentScene();
             _editorForm.SafeInvoke(CleanAppSession);
@@ -336,9 +327,8 @@ namespace CruZ.Editor.Controls
 
         private void RegisterGameAppEvents()
         {
-            GameApplication.WindowResized += GameApp_WindowResize;
-            GameApplication.Initialized += GameApp_Intialized;
-            GameApplication.Exiting += GameApp_Exiting;
+            GameApplication.Initialized += Game_Intialized;
+            GameApplication.Exiting += Game_Exiting;
             _gameApp.Window.AllowUserResizing = true;
             //_gameApp.BeforeDraw += GameApp_EarlyDraw;
         }
@@ -407,11 +397,6 @@ namespace CruZ.Editor.Controls
 
             InitUIControls();
         }
-
-        private Camera GetMainCamera()
-        {
-            return _mainCamera ??= new Camera(_gameApp.Window);
-        }
         #endregion
 
         #region Private_Variables
@@ -421,13 +406,11 @@ namespace CruZ.Editor.Controls
 
         GameScene? _currentScene;
         GameScene? _lastScene;
-        Camera? _mainCamera;
         TransformEntity? _currentSelect;
         GameApplication? _gameApp;
 
         Thread? _gameAppThread;
         ManualResetEvent _appInitalized_Reset = new(false);
-        int _thisThreadId;
 
         List<EntityControl> _eControls = [];
         LoggingWindow _infoTextWindow;
