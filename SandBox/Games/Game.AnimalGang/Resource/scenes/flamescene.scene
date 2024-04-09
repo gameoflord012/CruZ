@@ -1,5 +1,5 @@
 {
-  "Name": "Scenes\\FlameScene",
+  "Name": "scenes\\flamescene.scene",
   "_entities": [
     {
       "position": "0, 0",
@@ -37,5 +37,8 @@
       ]
     }
   ],
-  "ResourceInfo": null
+  "Info": {
+    "Guid": "76e50f26-069b-43b1-b9d2-03757e1e2f28",
+    "ResourceName": "D:\\monogame-projects\\CruZ_GameEngine\\SandBox\\Games\\Game.AnimalGang\\Resource\\scenes\\flamescene.scene"
+  }
 }

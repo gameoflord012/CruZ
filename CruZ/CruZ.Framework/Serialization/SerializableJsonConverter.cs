@@ -16,7 +16,8 @@ namespace CruZ.Framework.Serialization
         // TODO: Fix this
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
-            var defaultConstructor = objectType.GetConstructor(BindingFlags.NonPublic | BindingFlags.Instance, []) ?? 
+            var defaultConstructor = objectType.GetConstructor(
+                BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance, []) ?? 
                 throw new ArgumentException($"{objectType} need to provide a default constructor");
 
             var customSerializable = (ICustomSerializable)defaultConstructor.Invoke([]);
