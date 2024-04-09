@@ -35,27 +35,27 @@ namespace CruZ.Framework.Input
                 _timeSceneLastDownClick = gameTime.TotalSeconds();
             }
 
-            _info.preMouse = _preMouseState;
+            _info.PreMouse = _preMouseState;
             _preMouseState = Mouse.GetState();
-            _info.curMouse = Mouse.GetState();
+            _info.CurMouse = Mouse.GetState();
 
-            _info.preKeyboard = _preKeyboard;
+            _info.PreKeyboard = _preKeyboard;
             _preKeyboard = Keyboard.GetState();
-            _info.curKeyboard = Keyboard.GetState();
+            _info.CurKeyboard = Keyboard.GetState();
             #endregion
 
             // Can call IsMouseJustUp/Down after this line
 
             #region Update Input Actions
-            _info.scrollDelta = ScrollDelta();
-            _info.mouseScrolling = ScrollDelta() != 0;
-            _info.mouseMoving = DoesMouseMove();
-            _info.mouseStateChanges = DoesMouseStateChange();
+            _info.ScrollDelta = ScrollDelta();
+            _info.IsMouseScrolling = ScrollDelta() != 0;
+            _info.IsMouseMoving = DoesMouseMove();
+            _info.IsMouseStateChange = DoesMouseStateChange();
 
             if (_info.IsMouseJustDown(MouseKey.Left))
                 _timeSceneLastDownClick = gameTime.TotalSeconds();
 
-            _info.mouseClick =
+            _info.IsMouseClick =
                 gameTime.TotalSeconds() - _timeSceneLastDownClick < MOUSE_CLICK_DURATION &&
                 _info.IsMouseJustUp(MouseKey.Left);
             #endregion
@@ -65,36 +65,36 @@ namespace CruZ.Framework.Input
 
         public int ScrollDelta()
         {
-            return _info.curMouse.ScrollWheelValue - _info.preMouse.ScrollWheelValue;
+            return _info.CurMouse.ScrollWheelValue - _info.PreMouse.ScrollWheelValue;
         }
 
-        public DRAW.Point MouseMoveDelta()
+        public Point MouseMoveDelta()
         {
-            var d = _info.curMouse.Position - _info.preMouse.Position;
+            var d = _info.CurMouse.Position - _info.PreMouse.Position;
             return new(d.X, d.Y);
         }
 
         private void InvokeEvents()
         {
-            if (_info.mouseMoving) MouseMoved?.Invoke(_info);
-            if (_info.mouseScrolling) MouseScrolled?.Invoke(_info);
-            if (_info.mouseStateChanges) MouseStateChanged?.Invoke(_info);
+            if (_info.IsMouseMoving) MouseMoved?.Invoke(_info);
+            if (_info.IsMouseScrolling) MouseScrolled?.Invoke(_info);
+            if (_info.IsMouseStateChange) MouseStateChanged?.Invoke(_info);
 
-            if (_info.preKeyboard.GetHashCode() != _info.curKeyboard.GetHashCode())
+            if (_info.PreKeyboard.GetHashCode() != _info.CurKeyboard.GetHashCode())
                 KeyStateChanged?.Invoke(_info);
         }
 
         private bool DoesMouseStateChange()
         {
             return
-                GetMouseState(_info.curMouse, MouseKey.Left) != GetMouseState(_info.preMouse, MouseKey.Left) ||
-                GetMouseState(_info.curMouse, MouseKey.Middle) != GetMouseState(_info.preMouse, MouseKey.Middle) ||
-                GetMouseState(_info.curMouse, MouseKey.Right) != GetMouseState(_info.preMouse, MouseKey.Right);
+                GetMouseState(_info.CurMouse, MouseKey.Left) != GetMouseState(_info.PreMouse, MouseKey.Left) ||
+                GetMouseState(_info.CurMouse, MouseKey.Middle) != GetMouseState(_info.PreMouse, MouseKey.Middle) ||
+                GetMouseState(_info.CurMouse, MouseKey.Right) != GetMouseState(_info.PreMouse, MouseKey.Right);
         }
 
         private bool DoesMouseMove()
         {
-            return MouseMoveDelta() != new DRAW.Point(0, 0);
+            return MouseMoveDelta() != new Point(0, 0);
         }
 
         internal static ButtonState GetMouseState(MouseState state, MouseKey key)
@@ -108,7 +108,7 @@ namespace CruZ.Framework.Input
                 case MouseKey.Right:
                     return state.RightButton;
                 default:
-                    throw new System.Exception();
+                    throw new Exception();
             }
         }
 
@@ -145,29 +145,28 @@ namespace CruZ.Framework.Input
 
     struct InputInfo : IInputInfo
     {
-        internal MouseState curMouse;
-        internal MouseState preMouse;
+        internal MouseState CurMouse;
+        internal MouseState PreMouse;
 
-        internal KeyboardState preKeyboard;
-        internal KeyboardState curKeyboard;
+        internal KeyboardState PreKeyboard;
+        internal KeyboardState CurKeyboard;
 
-        internal int scrollDelta;
-        internal bool mouseMoving;
-        internal bool mouseClick;
-        internal bool mouseScrolling;
-        internal bool mouseStateChanges;
-        internal bool isActive;
+        internal int ScrollDelta;
+        internal bool IsMouseMoving;
+        internal bool IsMouseClick;
+        internal bool IsMouseScrolling;
+        internal bool IsMouseStateChange;
 
-        public bool MouseClick => mouseClick;
-        public int SrollDelta => scrollDelta;
-        public bool MouseMoving => mouseMoving;
+        bool IInputInfo.MouseClick => IsMouseClick;
+        int IInputInfo.SrollDelta => ScrollDelta;
+        bool IInputInfo.MouseMoving => IsMouseMoving;
 
-        public bool MouseStateChanges => mouseStateChanges;
+        public bool MouseStateChanges => IsMouseStateChange;
 
-        public KeyboardState Keyboard => curKeyboard;
-        public KeyboardState PreKeyboard => preKeyboard;
-        public MouseState CurMouse => curMouse;
-        public MouseState PreMouse => preMouse;
+        KeyboardState IInputInfo.Keyboard => CurKeyboard;
+        KeyboardState IInputInfo.PreKeyboard => PreKeyboard;
+        MouseState IInputInfo.CurMouse => CurMouse;
+        MouseState IInputInfo.PreMouse => PreMouse;
 
         public bool IsMouseJustDown(MouseKey key)
         {
@@ -220,7 +219,7 @@ namespace CruZ.Framework.Input
             return PreKeyboard.IsKeyUp(key) && Keyboard.IsKeyDown(key);
         }
 
-        DRAW.Point MousePos()
+        Point MousePos()
         {
             return new(CurMouse.X, CurMouse.Y);
         }
