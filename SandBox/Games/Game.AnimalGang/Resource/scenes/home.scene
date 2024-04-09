@@ -1,87 +1,81 @@
 {
-  "Name": "",
+  "Name": "Scenes\\Scene2",
   "_entities": [
     {
-      "position": "0, 0, 0",
-      "scale": "0.0625, 0.0625, 0",
+      "position": "0, 0",
+      "scale": "0.0625, 0.0625",
       "components": [
         {
-          "com-type": "CruZ.Components.SpriteComponent, CruZ.Editor, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+          "com-type": "CruZ.Common.ECS.SpriteRendererComponent, CruZ.Framework.WindowsDX, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
           "com-data": {
             "_spriteResInfo": {
-              "ResourceName": "tiles\\tile3\\home-ground-behind",
-              "IsRuntime": false
+              "Guid": "ca2f25dc-d3b2-466c-bd77-dbdb7bb0f450",
+              "ResourceName": "D:\\monogame-projects\\CruZ_GameEngine\\SandBox\\Games\\Game.AnimalGang\\Resource\\tiles\\tile3\\home-ground-behind.png"
             },
-            "LayerDepth": 0.0,
+            "SortByY": false,
+            "Flip": false,
+            "NormalizedOrigin": "0.5, 0.5",
+            "TexturePath": "D:\\monogame-projects\\CruZ_GameEngine\\SandBox\\Games\\Game.AnimalGang\\Resource\\tiles\\tile3\\home-ground-behind.png",
             "SortingLayer": 0,
-            "YLayerDepth": false,
-            "Flip": false,
-            "Origin": {
-              "X": 0.5,
-              "Y": 0.5
-            }
+            "LayerDepth": 0.0
           }
         }
       ]
     },
     {
-      "position": "0, 0, 0",
-      "scale": "0.0625, 0.0625, 0",
+      "position": "0, 0",
+      "scale": "0.0625, 0.0625",
       "components": [
         {
-          "com-type": "CruZ.Components.SpriteComponent, CruZ.Editor, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+          "com-type": "CruZ.Common.ECS.SpriteRendererComponent, CruZ.Framework.WindowsDX, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
           "com-data": {
             "_spriteResInfo": {
-              "ResourceName": "tiles\\tile3\\home-object-mid",
-              "IsRuntime": false
+              "Guid": "a1bf01c6-2be3-4561-9e29-61df5c5d9c13",
+              "ResourceName": "D:\\monogame-projects\\CruZ_GameEngine\\SandBox\\Games\\Game.AnimalGang\\Resource\\tiles\\tile3\\home-object-mid.png"
             },
-            "LayerDepth": 0.0,
+            "SortByY": true,
+            "Flip": false,
+            "NormalizedOrigin": "0.5, 0.5",
+            "TexturePath": "D:\\monogame-projects\\CruZ_GameEngine\\SandBox\\Games\\Game.AnimalGang\\Resource\\tiles\\tile3\\home-object-mid.png",
             "SortingLayer": 1,
-            "YLayerDepth": true,
-            "Flip": false,
-            "Origin": {
-              "X": 0.5,
-              "Y": 0.5
-            }
+            "LayerDepth": 0.0
           }
         }
       ]
     },
     {
-      "position": "0, 0, 0",
-      "scale": "0.0625, 0.0625, 0",
+      "position": "0, 0",
+      "scale": "0.0625, 0.0625",
       "components": [
         {
-          "com-type": "CruZ.Components.SpriteComponent, CruZ.Editor, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+          "com-type": "CruZ.Common.ECS.SpriteRendererComponent, CruZ.Framework.WindowsDX, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
           "com-data": {
             "_spriteResInfo": {
-              "ResourceName": "tiles\\tile3\\home-object-font",
-              "IsRuntime": false
+              "Guid": "cdb3dbd2-0d6a-4d7a-b590-cb0de8995ced",
+              "ResourceName": "D:\\monogame-projects\\CruZ_GameEngine\\SandBox\\Games\\Game.AnimalGang\\Resource\\tiles\\tile3\\home-object-font.png"
             },
-            "LayerDepth": 0.0,
-            "SortingLayer": 2,
-            "YLayerDepth": false,
+            "SortByY": false,
             "Flip": false,
-            "Origin": {
-              "X": 0.5,
-              "Y": 0.5
-            }
+            "NormalizedOrigin": "0.5, 0.5",
+            "TexturePath": "D:\\monogame-projects\\CruZ_GameEngine\\SandBox\\Games\\Game.AnimalGang\\Resource\\tiles\\tile3\\home-object-font.png",
+            "SortingLayer": 2,
+            "LayerDepth": 0.0
           }
         }
       ]
     },
     {
-      "position": "-0.5, -0.5, 0",
-      "scale": "1, 1, 1",
+      "position": "0, 0",
+      "scale": "1, 1",
       "components": [
         {
-          "com-type": "CruZ.Games.AnimalGang.MainCharacter, CruZ.Editor, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+          "com-type": "AnimalGang.MainCharacter, Game.AnimalGang, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
           "com-data": {
             "Speed": 6.0
           }
         },
         {
-          "com-type": "CruZ.Components.AnimationComponent, CruZ.Editor, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+          "com-type": "CruZ.Framework.GameSystem.Animation.AnimationComponent, CruZ.Framework.WindowsDX, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
           "com-data": {
             "animation-players": [
               {
@@ -92,24 +86,36 @@
           }
         },
         {
-          "com-type": "CruZ.Components.SpriteComponent, CruZ.Editor, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+          "com-type": "CruZ.Common.ECS.SpriteRendererComponent, CruZ.Framework.WindowsDX, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
           "com-data": {
             "_spriteResInfo": null,
-            "LayerDepth": 0.0,
-            "SortingLayer": 1,
-            "YLayerDepth": true,
+            "SortByY": true,
             "Flip": false,
-            "Origin": {
-              "X": 0.5,
-              "Y": 0.5
-            }
+            "NormalizedOrigin": "0.5, 0.5",
+            "TexturePath": "",
+            "SortingLayer": 1,
+            "LayerDepth": 0.0
+          }
+        }
+      ]
+    },
+    {
+      "position": "0, 0",
+      "scale": "0.05, 0.05",
+      "components": [
+        {
+          "com-type": "CruZ.Framework.GameSystem.Render.LightRendererComponent, CruZ.Framework.WindowsDX, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+          "com-data": {
+            "LightIntensity": 0.0,
+            "SortingLayer": 1,
+            "LayerDepth": 0.0
           }
         }
       ]
     }
   ],
-  "ResourceInfo": {
-    "ResourceName": "D:\\monogame-projects\\CruZ_GameEngine\\CruZ.Games\\AnimalGang\\AnimalGang.Shared\\res\\scenes\\home.scene",
-    "IsRuntime": false
+  "Info": {
+    "Guid": "d405b298-9693-4c09-9686-605f74f5bbd2",
+    "ResourceName": "D:\\monogame-projects\\CruZ_GameEngine\\SandBox\\Games\\Game.AnimalGang\\Resource\\scenes\\home.scene"
   }
 }

@@ -20,7 +20,7 @@ namespace CruZ.Common.Scene
 
         [JsonIgnore]
         public TransformEntity[] Entities { get => _entities.ToArray(); }
-        public ResourceInfo? ResourceInfo { get; set; }
+        ResourceInfo? IResource.Info { get; set; }
 
         public GameScene()
         {
@@ -88,15 +88,15 @@ namespace CruZ.Common.Scene
             writer.WritePropertyName(nameof(_entities));
             serializer.Serialize(writer, _entities);
 
-            writer.WritePropertyName(nameof(ResourceInfo));
-            serializer.Serialize(writer, ResourceInfo);
+            writer.WritePropertyName(nameof(IResource.Info));
+            serializer.Serialize(writer, ((IResource)this).Info);
 
             writer.WriteEnd();
         }
 
         public override string ToString()
         {
-            return string.IsNullOrEmpty(Name) ? ResourceInfo.ResourceName : Name;
+            return string.IsNullOrEmpty(Name) ? ((IResource)this).Info.ResourceName : Name;
         }
 
         bool _isActive = false;

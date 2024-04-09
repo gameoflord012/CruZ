@@ -35,12 +35,6 @@ namespace CruZ.Editor.Global
 
         public static Assembly GameAssembly { get => _gameAssembly ?? throw new InvalidOperationException("Invalid Context"); set => _gameAssembly = value; }
 
-        public static Func<AssemblyName, Assembly?> AssemblyResolver
-        {
-            get => GameContext.AssemblyResolver;
-            set => GameContext.AssemblyResolver = value;
-        }
-
         public static string EditorResourceDir
         {
             get

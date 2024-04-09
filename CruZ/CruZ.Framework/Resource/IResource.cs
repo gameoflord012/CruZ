@@ -2,6 +2,6 @@
 {
     public interface IResource
     {
-        ResourceInfo? ResourceInfo { get; set; }
+        ResourceInfo? Info { get; internal set; }
     }
 }

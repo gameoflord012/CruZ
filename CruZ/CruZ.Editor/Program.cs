@@ -39,11 +39,6 @@ namespace CruZ.Editor
             });
 
             EditorContext.EditorResourceDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resource\\");
-
-            EditorContext.AssemblyResolver = (assName) =>
-                AppDomain.CurrentDomain.GetAssemblies()
-                    .First(e => e.FullName == assName.FullName);
-
             EditorForm.Run();
         }
 

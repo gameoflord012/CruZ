@@ -12,6 +12,8 @@ namespace CruZ.Framework.GameSystem.ECS
         public event EventHandler? RemovedFromWorld;
         public event Action<ComponentCollection>? ComponentsChanged;
 
+        private TransformEntity() { } // ICustomSerialzable reflection call
+
         internal TransformEntity(World world)
         {
             _world = world;

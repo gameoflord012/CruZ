@@ -1,7 +1,12 @@
-﻿using CruZ.Common;
+﻿/*
+ Resource States
+    1. Resource file is created
+    2. The resource is imported by calling ImportResourcePath() then it will have guid
+    3. ResourceInfo will be available by calling RetrieveResourceInfo
+ */
+
 using CruZ.Framework.Exceptions;
 using CruZ.Framework.Serialization;
-using CruZ.Framework.Service;
 
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Content.Pipeline;
@@ -70,7 +75,7 @@ namespace CruZ.Framework.Resource
                         // initialize resource if filePath is a resource
                         if (ResourceSupportedExtensions.Contains(Path.GetExtension(filePath).ToLower()))
                         {
-                            InitImportingResource(filePath);
+                            ImportResourcePath(filePath);
                         }
                         break;
                 }
@@ -92,15 +97,15 @@ namespace CruZ.Framework.Resource
         public void Create(string resourcePath, object resObj)
         {
             resourcePath = GetFormattedResourcePath(resourcePath);
-            InitResource(resObj, resourcePath);
+            _serializer.SerializeToFile(resObj, Path.Combine(ResourceRoot, resourcePath));
+            InitResourceObject(resObj, resourcePath, true);
         }
 
-        public void Save(IResource resource)
+        public bool TrySave(IResource resource)
         {
-            if (resource.ResourceInfo == null)
-                throw new ArgumentException($"Can't save {resource} resource, use create resource first");
-
-            Create(resource.ResourceInfo.ResourceName, resource);
+            if (resource.Info == null) return false;
+            Create(resource.Info.ResourceName, resource);
+            return true;
         }
 
         public T Load<T>(string resourcePath)
@@ -118,6 +123,9 @@ namespace CruZ.Framework.Resource
             return Load<T>(resourceInfo.Guid);
         }
 
+        /// <summary>
+        /// Get <see cref="ResourceInfo"/> with given imported resource path
+        /// </summary>
         public ResourceInfo RetriveResourceInfo(string resourcePath)
         {
             resourcePath = GetFormattedResourcePath(resourcePath);
@@ -178,7 +186,7 @@ namespace CruZ.Framework.Resource
                 resObj = LoadResource(resourcePath, ty);
             }
 
-            InitResource(resObj, resourcePath);
+            InitResourceObject(resObj, resourcePath);
             return resObj;
         }
 
@@ -255,10 +263,11 @@ namespace CruZ.Framework.Resource
             }
         }
 
-        private void InitResource(object resObj, string resourcePath)
+        private void InitResourceObject(object resObj, string resourcePath, bool autoImportResourcePath = false)
         {
+            if(autoImportResourcePath) ImportResourcePath(resourcePath);
             var info = RetriveResourceInfo(resourcePath);
-            if (resObj is IResource host) host.ResourceInfo = info;
+            if (resObj is IResource resource) resource.Info = info;
         }
 
         private string GetFormattedResourcePath(string resourcePath)
@@ -273,7 +282,7 @@ namespace CruZ.Framework.Resource
         /// Read Guid or auto-generated new Guid and .import files
         /// </summary>
         /// <param name="resourcePath"></param>
-        private void InitImportingResource(string resourcePath)
+        private void ImportResourcePath(string resourcePath)
         {
             resourcePath = GetFormattedResourcePath(resourcePath);
             Guid guid;

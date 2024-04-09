@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 
 using System;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 
 namespace CruZ.Framework.Serialization
@@ -15,8 +16,12 @@ namespace CruZ.Framework.Serialization
         // TODO: Fix this
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
-            var uninitialObject = (ICustomSerializable)RuntimeHelpers.GetUninitializedObject(objectType);
-            var value = uninitialObject.ReadJson(reader, serializer);
+            var defaultConstructor = objectType.GetConstructor(BindingFlags.NonPublic | BindingFlags.Instance, []) ?? 
+                throw new ArgumentException($"{objectType} need to provide a default constructor");
+
+            var customSerializable = (ICustomSerializable)defaultConstructor.Invoke([]);
+            var value = customSerializable.ReadJson(reader, serializer);
+
             return value;
         }
 

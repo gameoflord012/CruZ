@@ -64,9 +64,7 @@ namespace CruZ.Editor.Controls
 
             if (_currentScene == null) return;
 
-            // Check whether the resource is load from ResourceManager
-            if (_currentScene.ResourceInfo != null)
-                EditorContext.UserResource.Save(_currentScene);
+            EditorContext.UserResource.TrySave(_currentScene);
 
             _currentScene.Dispose();
             _currentScene = null;

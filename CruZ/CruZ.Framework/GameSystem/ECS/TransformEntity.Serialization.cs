@@ -1,17 +1,13 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
+using CruZ.Framework.Serialization;
+
+using Microsoft.Xna.Framework;
 using System;
-using System.Reflection;
 
 namespace CruZ.Framework.GameSystem.ECS
 {
-    using System.Diagnostics;
-
-    using CruZ.Framework.Serialization;
-
-    using Microsoft.Xna.Framework;
-
     public partial class TransformEntity : ICustomSerializable
     {
         public event Action? DeserializationCompleted;
@@ -27,15 +23,15 @@ namespace CruZ.Framework.GameSystem.ECS
             value.Transform.Position = jObject["position"].ToObject<Vector2>(serializer);
             value.Transform.Scale = jObject["scale"].ToObject<Vector2>(serializer);
 
-            foreach (var comObject in jObject["components"])
+            foreach (var comJObject in jObject["components"])
             {
-                var tyStr = comObject["com-type"].Value<string>();
+                var comRawType = comJObject["com-type"].Value<string>();
 
-                var comTy = Type.GetType(tyStr, GameContext.AssemblyResolver, null) ?? 
-                    throw new(string.Format("Can't get Type from string \"{0}\"", tyStr));
+                var comTy = Type.GetType(comRawType, GameContext.AssemblyResolver, null) ?? 
+                    throw new JsonSerializationException($"Can't load {comRawType} in current Domain");
 
-                object comData = comObject["com-data"].ToObject(comTy, serializer);
-                var com = (Component)comData;
+                var com = (Component)comJObject["com-data"].ToObject(comTy, serializer) ??
+                    throw new JsonSerializationException($"Can't deserialize com-data to type {comTy}");
 
                 value.AddComponent(com);
             }

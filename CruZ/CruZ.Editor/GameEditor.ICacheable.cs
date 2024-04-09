@@ -2,6 +2,7 @@
 using System.IO;
 
 using CruZ.Editor.Service;
+using CruZ.Framework.Resource;
 
 namespace CruZ.Editor.Controls
 {
@@ -53,10 +54,10 @@ namespace CruZ.Editor.Controls
                 }
                 else
                 {
-                    if(CurrentGameScene.ResourceInfo == null)
+                    if(((IResource)CurrentGameScene).Info == null)
                         binWriter.Write(CurrentGameScene.Name); // temporary use name as runtime resource path
                     else
-                        binWriter.Write(CurrentGameScene.ResourceInfo.ResourceName);
+                        binWriter.Write(((IResource)CurrentGameScene).Info.ResourceName);
                 }
             }
                 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 
 using CruZ.Framework.Resource;
@@ -29,8 +30,8 @@ namespace CruZ.Framework
 
         public static Func<AssemblyName, Assembly?> AssemblyResolver 
         { 
-            get => _assemblyResolver ?? throw new InvalidOperationException("Invalid Context"); 
-            set => _assemblyResolver = value; 
+            get => (resolvingAss) => AppDomain.CurrentDomain.GetAssemblies()
+                    .First(domainAss => domainAss.FullName == resolvingAss.FullName);
         }
 
         private static T CheckNull<T>(T? value)
@@ -48,6 +49,5 @@ namespace CruZ.Framework
 
         static string? _gameResourceDir;
         static ResourceManager? _gameResource;
-        static Func<AssemblyName, Assembly?>? _assemblyResolver;
     }
 }

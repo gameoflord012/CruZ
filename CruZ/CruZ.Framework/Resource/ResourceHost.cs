@@ -1,7 +1,7 @@
-﻿namespace CruZ.Framework.Resource
-{
-    public class ResourceHost : IResource
-    {
-        public ResourceInfo? ResourceInfo { get; set; }
-    }
-}
+﻿//namespace CruZ.Framework.Resource
+//{
+//    public class ResourceHost : IResource
+//    {
+//        public ResourceInfo? Info { get; set; }
+//    }
+//}
