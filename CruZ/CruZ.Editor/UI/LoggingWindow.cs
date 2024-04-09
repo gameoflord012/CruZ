@@ -18,9 +18,10 @@ namespace CruZ.Editor.UI
         {
             Location = new(5, 3);
 
+            _fontScale = 0.5f;
             _resource = EditorContext.EditorResource;
             _font = _resource.Load<SpriteFont>("font\\editorfont.spritefont");
-            _lineSpacing = _font.LineSpacing * _scale;
+            _lineSpacing = _font.LineSpacing * _fontScale;
             _curRow = 0;
         }
 
@@ -28,11 +29,13 @@ namespace CruZ.Editor.UI
         {
             _sb = info.SpriteBatch;
             _curRow = 0;
-            DrawString(LogService.GetMsg("Fps"));
+            DrawString(LogManager.GetMsg("Fps"));
             _curRow++;
-            DrawString(LogService.GetMsg("Scene"));
+            DrawString(LogManager.GetMsg("Scene"));
             _curRow++;
-            DrawString(LogService.GetMsg("Default"));
+            DrawString(LogManager.GetMsg("CursorCoord"));
+            _curRow++;
+            DrawString(LogManager.GetMsg("Default"));
         }
 
         private void DrawString(string s)
@@ -42,7 +45,7 @@ namespace CruZ.Editor.UI
                 new XNA.Vector2(
                     Location.X, Location.Y + _curRow * _lineSpacing),
                 XNA.Color.Black
-                , 0, new XNA.Vector2(0, 0), _scale, SpriteEffects.None, 0
+                , 0, new XNA.Vector2(0, 0), _fontScale, SpriteEffects.None, 0
                 );
         }
 
@@ -50,7 +53,7 @@ namespace CruZ.Editor.UI
         SpriteBatch? _sb;
         float _lineSpacing;
         float _curRow;
-        float _scale = 0.7f;
+        float _fontScale;
 
         ResourceManager _resource;
     }

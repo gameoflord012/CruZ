@@ -7,24 +7,24 @@ using CruZ.Framework.Utility;
 
 namespace CruZ.Framework.Service
 {
-    public class LogService
+    public class LogManager
     {
         public static string LogRoot = ".";
 
-        public static void SetMsg(string newMsg, string key = DefaultString, bool updateLogFile = false)
+        public static void SetMsg(string theMsg, string msgKey = DefaultString, bool updateLogFile = false)
         {
-            Main._msgs[key] = newMsg;
+            Main._msgs[msgKey] = theMsg;
 
             if (updateLogFile)
-                FileHelper.WriteToFile(Path.Combine(LogRoot, key + ".log"),
-                    newMsg, false);
+                FileHelper.WriteToFile(Path.Combine(LogRoot, msgKey + ".log"),
+                    theMsg, false);
         }
 
-        public static void PushMsg(string newMsg, string key = DefaultString, bool updateLogFile = false)
+        public static void AppendMsg(string theMsg, string msgKey = DefaultString, bool updateLogFile = false)
         {
             StringBuilder sb = new();
 
-            var prevMsg = GetMsg(key);
+            var prevMsg = GetMsg(msgKey);
 
             if (!string.IsNullOrEmpty(prevMsg))
             {
@@ -32,9 +32,9 @@ namespace CruZ.Framework.Service
                 sb.Append(Environment.NewLine);
             }
 
-            sb.Append(newMsg);
+            sb.Append(theMsg);
 
-            SetMsg(sb.ToString(), key, updateLogFile);
+            SetMsg(sb.ToString(), msgKey, updateLogFile);
         }
 
         public static string GetMsg(string key = DefaultString)
@@ -55,8 +55,8 @@ namespace CruZ.Framework.Service
 
         #region Privates
         Dictionary<string, string> _msgs = new();
-        static LogService _main;
-        static LogService Main { get => _main ??= new LogService(); }
+        static LogManager _main;
+        static LogManager Main { get => _main ??= new LogManager(); }
         #endregion
 
         const string DefaultString = "Default";

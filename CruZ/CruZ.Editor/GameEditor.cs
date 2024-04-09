@@ -96,7 +96,7 @@ namespace CruZ.Editor.Controls
                         _currentSelect = null;
                     }
 
-                    LogService.SetMsg(value != null ? value.ToString() : "");
+                    LogManager.SetMsg(value != null ? value.ToString() : "");
                     SelectingEntityChanged?.Invoke(value);
                 }
             }
@@ -403,7 +403,7 @@ namespace CruZ.Editor.Controls
             _currentScene.SetActive(true);
             CurrentSceneChanged?.Invoke(_currentScene);
 
-            LogService.SetMsg(_currentScene.ToString(), "Scene");
+            LogManager.SetMsg(_currentScene.ToString(), "Scene");
 
             InitUIControls();
         }

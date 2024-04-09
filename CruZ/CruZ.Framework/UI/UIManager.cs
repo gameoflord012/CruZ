@@ -126,10 +126,6 @@ namespace CruZ.Common.UI
             return contains.ToArray();
         }
 
-        //public static object? s_GlobalDragObject { get => _instance._dragObject; set => _instance._dragObject = value; }
-
-        //public static bool Dragging() { return s_GlobalDragObject != null; }
-
         private static UIControl[] GetTree(UIControl control)
         {
             List<UIControl> list = [];

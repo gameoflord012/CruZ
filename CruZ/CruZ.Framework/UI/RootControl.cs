@@ -6,7 +6,7 @@ namespace CruZ.Framework.UI
     {
         protected override void OnDraw(UIInfo args)
         {
-            base.OnDraw(args);
+
         }
     }
 }

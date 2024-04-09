@@ -111,7 +111,7 @@ namespace CruZ.Framework
                 _fpsResult = _frameCount / seconds;
                 _frameCount = 0;
 
-                LogService.SetMsg($"Fps: {_fpsResult}", "Fps");
+                LogManager.SetMsg($"Fps: {_fpsResult}", "Fps");
             }
         }
 

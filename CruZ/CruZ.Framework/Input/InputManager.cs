@@ -1,6 +1,7 @@
 ﻿using System;
 
 using CruZ.Common;
+using CruZ.Framework.Service;
 using CruZ.Framework.Utility;
 
 using Microsoft.Xna.Framework;
@@ -61,6 +62,11 @@ namespace CruZ.Framework.Input
             #endregion
 
             InvokeEvents();
+
+            //
+            // update log
+            //
+            LogManager.SetMsg(_info.CurMouse.Position.ToString(), "CursorCoord");
         }
 
         public int ScrollDelta()
