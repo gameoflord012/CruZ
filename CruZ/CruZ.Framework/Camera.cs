@@ -30,6 +30,12 @@ namespace CruZ.Framework
 
         public Vector2 PointToCoordinate(Point p)
         {
+            /*
+            first get ndc from point, then ndc can be convert
+            back to world coordinate by apply inverse view projection matrix
+            which use to get ndc in the first place
+             */
+
             var ndc = new Vector2(
                 p.X / ViewPortWidth * 2f - 1f, 
                 -(p.Y / ViewPortHeight * 2f - 1f));
@@ -42,6 +48,10 @@ namespace CruZ.Framework
 
         public Point CoordinateToPoint(Vector2 coord)
         {
+            /*
+            first get screen ndc from world coordinate
+            then from ndc convert to screen coord
+             */
             var world = new Vector4(coord.X, coord.Y, 0, 1);
             var ndc = Vector4.Transform(world, ViewProjectionMatrix());
 
@@ -53,6 +63,9 @@ namespace CruZ.Framework
             return new Point(screen.X.RoundToInt(), screen.Y.RoundToInt());
         }
 
+        /// <summary>
+        /// A ratio use to convert from world magnitude to world magnitude if multiply with it
+        /// </summary>
         public Vector2 ScreenToWorldRatio()
         { 
             return new(
@@ -71,6 +84,10 @@ namespace CruZ.Framework
             return ViewMatrix() * ProjectionMatrix();
         }
 
+        /// <summary>
+        /// Centered world coordinate to camera offset then apply scale, 
+        /// so it will zoom in the sreen center
+        /// </summary>
         public Matrix ViewMatrix()
         {
             var mat = Matrix.Identity;
@@ -79,6 +96,11 @@ namespace CruZ.Framework
             return mat;
         }
 
+        /// <summary>
+        /// Create orthographic projection with given rect <br/>
+        /// Rect's TL = (-VirtualWidth / 2, -VirtualHeight / 2) <br/>
+        /// Rect's BR is opposite
+        /// </summary>
         public Matrix ProjectionMatrix()
         {
             return Matrix.CreateOrthographicOffCenter(
@@ -122,6 +144,9 @@ namespace CruZ.Framework
             ViewPortHeight = _window.ClientBounds.Height;
         }
 
+        /// <summary>
+        /// CameraOffset's camera center in world coordinate
+        /// </summary>
         public Vector2 CameraOffset;
         public float Zoom = 1;
 
