@@ -145,7 +145,7 @@ namespace CruZ.Framework
         /// </summary>
         public bool PreserveScreenRatio = false;
 
-        private float ScreenRatio => _viewPortWidth / -_virtualHeight;
+        private float ScreenRatio => _viewPortWidth / _viewPortHeight;
 
         /// <summary>
         /// Projection width
