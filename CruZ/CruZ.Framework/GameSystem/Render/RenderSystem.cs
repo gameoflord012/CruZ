@@ -56,8 +56,8 @@ namespace CruZ.Framework.GameSystem.Render
             _postprocessing.MaxLuminance = PostProcessingSettings.MaxLuminance;
             _postprocessing.Brightness = PostProcessingSettings.Brightness;
             var tonemapFilter = _postprocessing.GetFilter(_rtSprite);
-            var debug = TextureHelper.GetTextureData<Vector4>(_rtSprite);
-            debug = TextureHelper.GetTextureData<Vector4>(tonemapFilter);
+            //var debug = TextureHelper.GetTextureData<Vector4>(_rtSprite);
+            //debug = TextureHelper.GetTextureData<Vector4>(tonemapFilter);
 
             //
             //render to back buffer

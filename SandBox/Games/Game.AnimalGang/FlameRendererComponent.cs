@@ -62,7 +62,7 @@ namespace Game.AnimalGang.DesktopGL
             e.SpriteBatch.End();
 
         FINISHED:
-            var debug = TextureHelper.GetTextureData<Vector4>(_rt);
+            //var debug = TextureHelper.GetTextureData<Vector4>(_rt);
 
             //
             // blend with sprite rt
