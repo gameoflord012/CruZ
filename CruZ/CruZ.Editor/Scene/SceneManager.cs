@@ -16,7 +16,7 @@ namespace CruZ.Editor.Scene
     {
         static SceneManager()
         {
-            Assembly userAssembly = EditorContext.UserProjectAssembly;
+            Assembly userAssembly = EditorContext.GameAssembly;
 
             Type[] types;
 

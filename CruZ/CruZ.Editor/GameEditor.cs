@@ -319,7 +319,7 @@ namespace CruZ.Editor.Controls
 
             _appInitalized_Reset.Reset();
             var newSession = new Thread(StartNewAppSession);
-            newSession.Name = "EditorApp session";
+            newSession.Name = "Editor Session";
             newSession.Start();
             _appInitalized_Reset.WaitOne();
 

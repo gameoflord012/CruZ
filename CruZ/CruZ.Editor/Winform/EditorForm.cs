@@ -90,13 +90,11 @@ namespace CruZ.Editor
             }
 
             var savePath = DialogHelper.GetSaveScenePath();
-            if (savePath == null) return;
+            if (string.IsNullOrEmpty(savePath)) return;
 
             EditorContext.UserResource.Create(
                 savePath,
                 _gameEditor.CurrentGameScene);
-
-            _gameEditor.LoadSceneFromFile(savePath);
         }
 
         private void LoadScene_Clicked(object sender, EventArgs e)

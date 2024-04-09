@@ -6,6 +6,8 @@ using System.Reflection;
 
 namespace CruZ.Framework.GameSystem.ECS
 {
+    using System.Diagnostics;
+
     using CruZ.Framework.Serialization;
 
     using Microsoft.Xna.Framework;
@@ -29,10 +31,8 @@ namespace CruZ.Framework.GameSystem.ECS
             {
                 var tyStr = comObject["com-type"].Value<string>();
 
-                var comTy = Type.GetType(tyStr, (assName) =>
-                {
-                    return Assembly.Load(assName);
-                }, null) ?? throw new(string.Format("Can't get Type from string \"{0}\"", tyStr));
+                var comTy = Type.GetType(tyStr, GameContext.AssemblyResolver, null) ?? 
+                    throw new(string.Format("Can't get Type from string \"{0}\"", tyStr));
 
                 object comData = comObject["com-data"].ToObject(comTy, serializer);
                 var com = (Component)comData;

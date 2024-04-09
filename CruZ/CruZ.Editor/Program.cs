@@ -4,6 +4,8 @@ using CruZ.Editor.Global;
 
 using System;
 using System.IO;
+using System.Linq;
+using System.Reflection;
 
 namespace CruZ.Editor
 {
@@ -15,11 +17,32 @@ namespace CruZ.Editor
             Parser.Default.ParseArguments<Options>(args)
             .WithParsed(o =>
             {
-                EditorContext.UserProjectDir = o.ProjectRoot;
-                EditorContext.UserProjectBinDir = o.ProjectBinary;
+                EditorContext.GameProjectDir = o.ProjectRoot;
+                EditorContext.GameAssembly = Assembly.LoadFile(o.GameAssembly);
+            }).WithNotParsed(errors =>
+            {
+                string errorMsg = "";
+
+                foreach (var e in errors)
+                {
+                    if (e is MissingRequiredOptionError missingOptionError)
+                    {
+                        errorMsg += $"Missing command line option value: \"{missingOptionError.NameInfo.LongName}\"\n";
+                    }
+                    else
+                    {
+                        errorMsg += e.ToString() + Environment.NewLine;
+                    }
+                }
+
+                throw new ArgumentException(errorMsg);
             });
 
             EditorContext.EditorResourceDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resource\\");
+
+            EditorContext.AssemblyResolver = (assName) =>
+                AppDomain.CurrentDomain.GetAssemblies()
+                    .First(e => e.FullName == assName.FullName);
 
             EditorForm.Run();
         }
@@ -27,10 +50,10 @@ namespace CruZ.Editor
         public class Options
         {
             [Option('r', "root", Required = true)]
-            public string ProjectRoot { get; set; }
+            public string ProjectRoot { get; set; } = "";
 
-            [Option('b', "binary", Required = true)]
-            public string ProjectBinary { get; set; }
+            [Option('a', "assembly", Required = true)]
+            public string GameAssembly { get; set; } = "";
         }
     }
 }

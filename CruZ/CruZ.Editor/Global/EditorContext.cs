@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 
 using CruZ.Framework;
@@ -10,7 +11,7 @@ namespace CruZ.Editor.Global
 {
     static class EditorContext
     {
-        public static string UserProjectDir
+        public static string GameProjectDir
         {
             get
             {
@@ -28,19 +29,16 @@ namespace CruZ.Editor.Global
             }
         }
 
-        public static string UserProjectBinDir { get; internal set; }
-        
-        public static string UserResourceDir { get => Path.Combine(UserProjectDir, "Resource\\"); }
+        public static string UserResourceDir { get => Path.Combine(GameProjectDir, "Resource\\"); }
 
-        public static string UserProfileDir { get => Path.Combine(UserProjectDir, EditorConstants.USER_PROFILE_DIR_NAME); }
+        public static string UserProfileDir { get => Path.Combine(GameProjectDir, EditorConstants.USER_PROFILE_DIR_NAME); }
 
-        public static Assembly UserProjectAssembly
+        public static Assembly GameAssembly { get => _gameAssembly ?? throw new InvalidOperationException("Invalid Context"); set => _gameAssembly = value; }
+
+        public static Func<AssemblyName, Assembly?> AssemblyResolver
         {
-            get
-            {
-                _userProjectAssembly ??= Assembly.LoadFile(Path.Combine(UserProjectBinDir, "Game.AnimalGang.dll"));
-                return _userProjectAssembly;
-            }
+            get => GameContext.AssemblyResolver;
+            set => GameContext.AssemblyResolver = value;
         }
 
         public static string EditorResourceDir
@@ -75,6 +73,6 @@ namespace CruZ.Editor.Global
         static string? _userProjectDir;
         static string? _editorResourceDir;
         static ResourceManager? _editorResource;
-        static Assembly? _userProjectAssembly;
+        static Assembly? _gameAssembly;
     }
 }

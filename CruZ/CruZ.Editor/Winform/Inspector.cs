@@ -37,7 +37,7 @@ namespace CruZ.Editor
         }
 
         #region Event_Handlers
-        private void EditorApp_CurrentSceneChanged(GameScene? scene)
+        private void Editor_CurrentSceneChanged(GameScene? scene)
         {
             UpdateEntityComboBox(scene);
         }
@@ -45,7 +45,7 @@ namespace CruZ.Editor
         /// 
         /// </summary>
         /// <param name="e"></param>
-        private void EditorApp_SelectingEntityChanged(TransformEntity? e)
+        private void Editor_SelectingEntityChanged(TransformEntity? e)
         {
             UpdatePropertyGrid(e);
         }
@@ -124,9 +124,9 @@ namespace CruZ.Editor
             entities_ComboBox.SelectedIndexChanged += Entities_ComboBox_SelectedIndexChanged;
             inspector_PropertyGrid.Invalidated += Inspector_Invalidated;
 
-            _editor.SelectingEntityChanged += EditorApp_SelectingEntityChanged;
+            _editor.SelectingEntityChanged += Editor_SelectingEntityChanged;
 
-            _editor.CurrentSceneChanged += EditorApp_CurrentSceneChanged;
+            _editor.CurrentSceneChanged += Editor_CurrentSceneChanged;
             if (_editor.CurrentGameScene != null)
             {
                 UpdateEntityComboBox(_editor.CurrentGameScene);
