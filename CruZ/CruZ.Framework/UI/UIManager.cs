@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 
-namespace CruZ.Common.UI
+namespace CruZ.Framework.UI
 {
     interface IUIController
     {

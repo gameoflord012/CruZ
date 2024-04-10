@@ -7,15 +7,17 @@ using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 
-namespace CruZ.Common.UI
+namespace CruZ.Framework.UI
 {
     public partial class UIControl : IDisposable
     {
         static readonly int BOUND_THICKNESS = 3;
-        static readonly Color DEFAULT_BACKGROUND_COLOR = XNA.Color.Red;
+
+        static readonly Color DEFAULT_BACKGROUND_COLOR = Color.Red;
 
         #region Properties
         public UIControl? Parent { get => _parent; }
+
         public UIControl[] Childs => _childs.ToArray();
 
         public Point Location
@@ -23,7 +25,9 @@ namespace CruZ.Common.UI
             get => new((int)_location.X, (int)_location.Y);
             set { _location.X = value.X; _location.Y = value.Y; }
         }
+
         public int Width { get => (int)_size.X; set => _size.X = value; }
+
         public int Height { get => (int)_size.Y; set => _size.Y = value; }
 
         public Color BackgroundColor = DEFAULT_BACKGROUND_COLOR;
@@ -93,15 +97,17 @@ namespace CruZ.Common.UI
 
         protected void ReleaseDrag()
         {
-            s_GlobalDragObject = null;
+            _globalDragObject = null;
         }
 
-        protected virtual void OnMouseClick(UIInfo args)
-        {
-        }
+        protected virtual void OnMouseClick(UIInfo args) { }
+
         protected virtual void OnMouseStateChange(UIInfo args) { }
+
         protected virtual void OnParentChanged(UIControl? parent) { }
+
         protected virtual void OnUpdate(UIInfo args) { }
+
         protected virtual void OnDraw(UIInfo args)
         {
             args.SpriteBatch.DrawRectangle(GetRect(), BackgroundColor, BOUND_THICKNESS);
@@ -109,8 +115,11 @@ namespace CruZ.Common.UI
 
         #region Dragging
         protected virtual object? OnStartDragging(UIInfo args) => null;
+
         protected virtual void OnUpdateDragging(UIInfo args) { }
+
         protected virtual bool OnReleaseDragging() => true;
+
 
         private void ProcessDragging(UIInfo args)
         {
@@ -120,11 +129,11 @@ namespace CruZ.Common.UI
                 args.InputInfo.MouseMoving)
             {
                 _dragObject = OnStartDragging(args);
-                s_GlobalDragObject = _dragObject;
+                _globalDragObject = _dragObject;
             }
 
             
-            if(Dragging() && s_GlobalDragObject == _dragObject)
+            if(Dragging() && _globalDragObject == _dragObject)
             {
                 OnUpdateDragging(args);
 
@@ -133,7 +142,7 @@ namespace CruZ.Common.UI
                     if(OnReleaseDragging())
                     {
                         _dragObject = null;
-                        s_GlobalDragObject = null;
+                        _globalDragObject = null;
                     }
                 }
             }
@@ -163,7 +172,7 @@ namespace CruZ.Common.UI
 
     public partial class UIControl
     {
-        private static object? s_GlobalDragObject = null;
-        public static bool Dragging() { return s_GlobalDragObject != null; }
+        private static object? _globalDragObject = null;
+        public static bool Dragging() { return _globalDragObject != null; }
     }
 }
