@@ -58,10 +58,13 @@ namespace CruZ.Common.Scene
             }
         }
 
-        public TransformEntity CreateEntity(string name = "New Entity")
+        public TransformEntity CreateEntity(string? name = null, TransformEntity? parent = null)
         {
             var e = ECSManager.CreateTransformEntity();
-            e.Name = name;
+
+            if(!string.IsNullOrEmpty(name)) e.Name = name;
+            e.Parent = parent;
+
             AddEntity(e);
 
             return e;

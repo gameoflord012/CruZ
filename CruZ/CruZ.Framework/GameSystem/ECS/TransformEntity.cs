@@ -17,8 +17,8 @@ namespace CruZ.Framework.GameSystem.ECS
         internal TransformEntity(World world)
         {
             _world = world;
-            Name = "Entity";
             Id = _entityCounter++;
+            Name = $"New Entity({Id})";
 
             world.AddEntity(this);
         }
@@ -82,7 +82,7 @@ namespace CruZ.Framework.GameSystem.ECS
 
         public override string ToString()
         {
-            return $"{Name}({Id})";
+            return Name;
         }
 
         public void RemoveFromWorld()

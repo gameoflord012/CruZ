@@ -145,12 +145,12 @@ namespace CruZ.Editor.Controls
             _gameAppThread = null;
         }
 
-        public TransformEntity CreateNewEntity()
+        public TransformEntity CreateNewEntity(TransformEntity? parent = null)
         {
             if (_currentScene == null)
                 throw new InvalidOperationException("Can't create new entity when Scene is not loaded");
 
-            var newEntity = _currentScene.CreateEntity();
+            var newEntity = _currentScene.CreateEntity(null, parent);
 
             UpdateEntityControls();
 

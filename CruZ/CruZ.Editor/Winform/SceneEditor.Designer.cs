@@ -28,14 +28,15 @@
         /// </summary>
         private void InitializeComponent()
         {
-            components = new global::System.ComponentModel.Container();
-            sceneEntity_ContextMenuStrip = new global::System.Windows.Forms.ContextMenuStrip(components);
-            editEntity_ToolStripMenuItem = new global::System.Windows.Forms.ToolStripMenuItem();
-            scene_TreeView = new global::System.Windows.Forms.TreeView();
-            sceneEditor_Panel = new global::System.Windows.Forms.Panel();
-            sceneRoot_ContextMenuStrip = new global::System.Windows.Forms.ContextMenuStrip(components);
-            addEntity_ToolStripMenuItem = new global::System.Windows.Forms.ToolStripMenuItem();
-            removeEntity_ToolStripMenuItem = new global::System.Windows.Forms.ToolStripMenuItem();
+            components = new System.ComponentModel.Container();
+            sceneEntity_ContextMenuStrip = new System.Windows.Forms.ContextMenuStrip(components);
+            removeEntity_ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            editEntity_ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            scene_TreeView = new System.Windows.Forms.TreeView();
+            sceneEditor_Panel = new System.Windows.Forms.Panel();
+            sceneRoot_ContextMenuStrip = new System.Windows.Forms.ContextMenuStrip(components);
+            addEntity_SceneRoot_ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            addEntity_RootChild_ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             sceneEntity_ContextMenuStrip.SuspendLayout();
             sceneEditor_Panel.SuspendLayout();
             sceneRoot_ContextMenuStrip.SuspendLayout();
@@ -43,19 +44,25 @@
             // 
             // sceneEntity_ContextMenuStrip
             // 
-            sceneEntity_ContextMenuStrip.Items.AddRange(new global::System.Windows.Forms.ToolStripItem[] { removeEntity_ToolStripMenuItem, editEntity_ToolStripMenuItem });
+            sceneEntity_ContextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { addEntity_RootChild_ToolStripMenuItem, removeEntity_ToolStripMenuItem, editEntity_ToolStripMenuItem });
             sceneEntity_ContextMenuStrip.Name = "scene_ContextMenuStrip";
-            sceneEntity_ContextMenuStrip.Size = new DRAW.Size(181, 70);
+            sceneEntity_ContextMenuStrip.Size = new DRAW.Size(162, 70);
+            // 
+            // removeEntity_ToolStripMenuItem
+            // 
+            removeEntity_ToolStripMenuItem.Name = "removeEntity_ToolStripMenuItem";
+            removeEntity_ToolStripMenuItem.Size = new DRAW.Size(161, 22);
+            removeEntity_ToolStripMenuItem.Text = "Remove Entity";
             // 
             // editEntity_ToolStripMenuItem
             // 
             editEntity_ToolStripMenuItem.Name = "editEntity_ToolStripMenuItem";
-            editEntity_ToolStripMenuItem.Size = new DRAW.Size(180, 22);
+            editEntity_ToolStripMenuItem.Size = new DRAW.Size(161, 22);
             editEntity_ToolStripMenuItem.Text = "Edit Component";
             // 
             // scene_TreeView
             // 
-            scene_TreeView.Dock = global::System.Windows.Forms.DockStyle.Fill;
+            scene_TreeView.Dock = System.Windows.Forms.DockStyle.Fill;
             scene_TreeView.Location = new DRAW.Point(0, 0);
             scene_TreeView.Name = "scene_TreeView";
             scene_TreeView.Size = new DRAW.Size(331, 196);
@@ -64,7 +71,7 @@
             // sceneEditor_Panel
             // 
             sceneEditor_Panel.Controls.Add(scene_TreeView);
-            sceneEditor_Panel.Dock = global::System.Windows.Forms.DockStyle.Fill;
+            sceneEditor_Panel.Dock = System.Windows.Forms.DockStyle.Fill;
             sceneEditor_Panel.Location = new DRAW.Point(0, 0);
             sceneEditor_Panel.Name = "sceneEditor_Panel";
             sceneEditor_Panel.Size = new DRAW.Size(331, 196);
@@ -72,26 +79,26 @@
             // 
             // sceneRoot_ContextMenuStrip
             // 
-            sceneRoot_ContextMenuStrip.Items.AddRange(new global::System.Windows.Forms.ToolStripItem[] { addEntity_ToolStripMenuItem });
+            sceneRoot_ContextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { addEntity_SceneRoot_ToolStripMenuItem });
             sceneRoot_ContextMenuStrip.Name = "scene_ContextMenuStrip";
             sceneRoot_ContextMenuStrip.Size = new DRAW.Size(130, 26);
             // 
-            // addEntity_ToolStripMenuItem
+            // addEntity_SceneRoot_ToolStripMenuItem
             // 
-            addEntity_ToolStripMenuItem.Name = "addEntity_ToolStripMenuItem";
-            addEntity_ToolStripMenuItem.Size = new DRAW.Size(129, 22);
-            addEntity_ToolStripMenuItem.Text = "Add Entity";
+            addEntity_SceneRoot_ToolStripMenuItem.Name = "addEntity_SceneRoot_ToolStripMenuItem";
+            addEntity_SceneRoot_ToolStripMenuItem.Size = new DRAW.Size(129, 22);
+            addEntity_SceneRoot_ToolStripMenuItem.Text = "Add Entity";
             // 
-            // removeEntity_ToolStripMenuItem
+            // addEntity_RootChild_ToolStripMenuItem
             // 
-            removeEntity_ToolStripMenuItem.Name = "removeEntity_ToolStripMenuItem";
-            removeEntity_ToolStripMenuItem.Size = new DRAW.Size(180, 22);
-            removeEntity_ToolStripMenuItem.Text = "Remove Entity";
+            addEntity_RootChild_ToolStripMenuItem.Name = "addEntity_RootChild_ToolStripMenuItem";
+            addEntity_RootChild_ToolStripMenuItem.Size = new DRAW.Size(161, 22);
+            addEntity_RootChild_ToolStripMenuItem.Text = "Add Entity";
             // 
             // SceneEditor
             // 
             AutoScaleDimensions = new DRAW.SizeF(7F, 15F);
-            AutoScaleMode = global::System.Windows.Forms.AutoScaleMode.Font;
+            AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             Controls.Add(sceneEditor_Panel);
             Name = "SceneEditor";
             Size = new DRAW.Size(331, 196);
@@ -107,8 +114,9 @@
         private global::System.Windows.Forms.ToolStripMenuItem editEntity_ToolStripMenuItem;
         private global::System.Windows.Forms.TreeView scene_TreeView;
         private global::System.Windows.Forms.Panel sceneEditor_Panel;
-        private global::System.Windows.Forms.ToolStripMenuItem addEntity_ToolStripMenuItem;
+        private global::System.Windows.Forms.ToolStripMenuItem addEntity_SceneRoot_ToolStripMenuItem;
         private global::System.Windows.Forms.ContextMenuStrip sceneRoot_ContextMenuStrip;
         private global::System.Windows.Forms.ToolStripMenuItem removeEntity_ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem addEntity_RootChild_ToolStripMenuItem;
     }
 }

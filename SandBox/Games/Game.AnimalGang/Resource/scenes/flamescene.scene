@@ -1,5 +1,5 @@
 {
-  "Name": "Scenes\\FlameScene",
+  "Name": "scenes\\flamescene.scene",
   "_entities": [
     {
       "position": "0, 0",
@@ -12,7 +12,7 @@
             "MaxLuminance": 4.0,
             "Brightness": 2.0,
             "BloomColor": "4, 1.25, 0.6, 0.8",
-            "RenderMode": 0,
+            "RenderMode": 2,
             "BloomPhase": 4,
             "BloomRadiuses": [
               1.0,

@@ -9,7 +9,7 @@ using System.Collections.Generic;
 
 namespace CruZ.Framework.UI
 {
-    public partial class UIControl : IDisposable
+    public partial class UIControl
     {
         static readonly int BOUND_THICKNESS = 3;
 
@@ -200,10 +200,7 @@ namespace CruZ.Framework.UI
 
         UIInfo _args;
         #endregion
-    }
 
-    public partial class UIControl
-    {
         private static object? _globalDragObject = null;
         public static bool Dragging() { return _globalDragObject != null; }
     }

@@ -21,7 +21,7 @@ namespace CruZ.Editor.Controls
 
                 if (!string.IsNullOrEmpty(lastSceneFile))
                 {
-                    if(Path.GetExtension(lastSceneFile) == "scene")
+                    if(Path.GetExtension(lastSceneFile) == ".scene")
                     {
                         LoadSceneFromFile(lastSceneFile);
                     }

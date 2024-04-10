@@ -23,7 +23,8 @@ namespace CruZ.Editor
             scene_TreeView.BeforeLabelEdit += SceneTree_BeforeLabelEdit;
             scene_TreeView.AfterLabelEdit += SceneTree_AfterLabelEdit;
 
-            addEntity_ToolStripMenuItem.Click += AddEntity_ToolStripMenuItem_Click;
+            addEntity_SceneRoot_ToolStripMenuItem.Click += AddEntity_ToolStripMenuItem_Click;
+            addEntity_RootChild_ToolStripMenuItem.Click += AddEntity_ToolStripMenuItem_Click;
             editEntity_ToolStripMenuItem.Click += EditEntity_ToolStripMenuItem_Clicked;
             removeEntity_ToolStripMenuItem.Click += RemoveEntity_ToolStripMenuItem_Click;
         }
@@ -85,15 +86,21 @@ namespace CruZ.Editor
             editCompDialog.ShowDialog();
         }
         
-        private void AddEntity_ToolStripMenuItem_Click(object? sender, EventArgs e)
+        private void AddEntity_ToolStripMenuItem_Click(object? sender, EventArgs args)
         {
-            _editor.CreateNewEntity();
+            var parent = GetSelectedEntityInSceneTree();
+            _editor.CreateNewEntity(parent);
         }
 
         private void RemoveEntity_ToolStripMenuItem_Click(object? sender, EventArgs args)
         {
-            var e = (TransformEntity)scene_TreeView.SelectedNode.Tag;
+            var e = GetSelectedEntityInSceneTree();
             _editor.RemoveEntity(e);
+        }
+
+        private TransformEntity GetSelectedEntityInSceneTree()
+        {
+            return (TransformEntity)scene_TreeView.SelectedNode.Tag;
         }
         #endregion
 
