@@ -102,20 +102,53 @@ namespace CruZ.Framework.GameSystem.ECS
         }
 
         [ReadOnly(true)]
-        public string Name { get => _name; set => _name = value; }
-        public int Id { get; private set; }
-        public bool IsActive { get => _isActive; set => _isActive = value; }
-        public TransformEntity? Parent { get => _parent; set => _parent = value; }
+        public string Name 
+        { 
+            get => _name; 
+            set => _name = value; 
+        }
 
-        public Transform Transform { get => _transform; set => _transform = value; }
-        public Vector2 Position { get => Transform.Position; set => Transform.Position = value; }
-        public Vector2 Scale { get => Transform.Scale; set => Transform.Scale = value; }
+        public int Id 
+        { 
+            get; 
+            private set; 
+        }
+
+        public bool IsActive 
+        { 
+            get => _isActive; 
+            set => _isActive = value; 
+        }
+
+        public TransformEntity? Parent
+        { 
+            get => _parent; 
+            set => _parent = value;
+        }
+
+        public Transform Transform 
+        { 
+            get => _transform; 
+            set => _transform = value; 
+        }
+        
+        public Vector2 Position 
+        { 
+            get => Transform.Position; 
+            set => Transform.Position = value; 
+        }
+        
+        public Vector2 Scale 
+        { 
+            get => Transform.Scale; 
+            set => Transform.Scale = value; 
+        }
 
         string _name = "";
         bool _isActive = false;
+        TransformEntity? _parent;
 
         Dictionary<Type, Component> _components = [];
-        TransformEntity? _parent;
         Transform _transform = new();
         World _world;
 

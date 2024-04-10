@@ -31,6 +31,7 @@ namespace CruZ.Editor.Controls
     public partial class GameEditor
     {
         public event Action<GameScene?>? CurrentSceneChanged;
+
         public event Action<TransformEntity?>? SelectingEntityChanged;
 
         public GameScene? CurrentGameScene => _currentScene;

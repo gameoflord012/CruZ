@@ -77,9 +77,8 @@ namespace CruZ.Editor
 
                 if (scene == null) return;
 
-                for (int i = 0; i < scene.Entities.Count(); i++)
+                foreach (var e in scene.Entities)
                 {
-                    var e = scene.Entities[i];
                     entities_ComboBox.Items.Add(e);
                 }
             });

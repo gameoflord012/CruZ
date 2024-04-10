@@ -49,7 +49,7 @@ namespace CruZ.Editor
 
         private void SceneTree_BeforeLabelEdit(object? sender, NodeLabelEditEventArgs args)
         {
-            if (args.Node == _root_TreeNode) args.CancelEdit = true;
+            if (args.Node == _sceneTreeRoot) args.CancelEdit = true;
         }
 
         private void SceneTree_AfterLabelEdit(object? sender, NodeLabelEditEventArgs args)
@@ -119,6 +119,10 @@ namespace CruZ.Editor
             {
                 if(scene_TreeView.Tag == currentScene) return;
 
+                //
+                // scene_treeview tag is current game scene
+                // so we can unregisted old scene events
+                //
                 if(scene_TreeView.Tag != null)
                 {
                     var oldScene = (GameScene)scene_TreeView.Tag;
@@ -126,22 +130,30 @@ namespace CruZ.Editor
                     oldScene.EntityRemoved -= CurrentScene_EntityRemoved;
                 }
 
+                //
+                // Clean previous tree data
+                //
                 scene_TreeView.Tag = currentScene;
                 scene_TreeView.Nodes.Clear();
                 _entityToNode.Clear();
-                _root_TreeNode = null;
+                _sceneTreeRoot = null;
 
                 if (currentScene == null) return;
 
                 currentScene.EntityAdded += CurrentScene_EntityAdded;
                 currentScene.EntityRemoved += CurrentScene_EntityRemoved;
 
+                //
                 // init tree root
-                _root_TreeNode = scene_TreeView.Nodes.Add(currentScene.ToString());
-                _root_TreeNode.ContextMenuStrip = sceneRoot_ContextMenuStrip;
+                //
+                _sceneTreeRoot = scene_TreeView.Nodes.Add(currentScene.ToString());
+                _sceneTreeRoot.ContextMenuStrip = sceneRoot_ContextMenuStrip;
 
-                // update new added entity
-                foreach (var e in currentScene.Entities)
+                //
+                // update new added entity, make sure parent alway get added first
+                //
+                var sortedEntities = TransformEntityHelper.SortByDepth(currentScene.Entities);
+                foreach (var e in sortedEntities)
                 {
                     AddSceneNode(e);
                 }
@@ -162,9 +174,25 @@ namespace CruZ.Editor
         {
             if(_entityToNode.ContainsKey(e)) return;
 
-            var entityNode = _root_TreeNode.Nodes.Add(e.ToString());
+            var parentNode = _sceneTreeRoot;
+
+            if(e.Parent == null)
+            {
+                // ignore
+            }
+            else if(_entityToNode.ContainsKey(e.Parent))
+            {
+                parentNode = _entityToNode[e.Parent];
+            }
+            else
+            {
+                throw new InvalidOperationException("Parent node have to be added before children");
+            }
+            
+
+            var entityNode = parentNode.Nodes.Add(e.ToString());
             entityNode.ContextMenuStrip = sceneEntity_ContextMenuStrip;
-            entityNode.Tag = e;
+            entityNode.Tag = e; 
 
             _entityToNode[e] = entityNode;
         }
@@ -176,7 +204,7 @@ namespace CruZ.Editor
         }
         #endregion
 
-        TreeNode? _root_TreeNode;
+        TreeNode? _sceneTreeRoot;
         GameEditor _editor;
         Dictionary<TransformEntity, TreeNode> _entityToNode = [];
     }
