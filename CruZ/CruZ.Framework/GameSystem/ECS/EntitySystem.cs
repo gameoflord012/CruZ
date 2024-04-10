@@ -4,7 +4,7 @@ namespace CruZ.Framework.GameSystem.ECS
 {
     internal class EntitySystem : IDisposable
     {
-        public virtual void Initialize() { }
+        public virtual void OnInitialize() { }
 
         public void Update(EntitySystemEventArgs args)
         {

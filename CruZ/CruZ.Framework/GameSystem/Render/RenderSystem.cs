@@ -14,7 +14,7 @@ namespace CruZ.Framework.GameSystem.Render
 {
     internal class RenderSystem : EntitySystem
     {
-        public override void Initialize()
+        public override void OnInitialize()
         {
             _gd = GameApplication.GetGraphicsDevice();
             _spriteBatch = new SpriteBatch(_gd);

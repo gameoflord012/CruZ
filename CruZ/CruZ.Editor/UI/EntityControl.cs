@@ -1,7 +1,5 @@
-﻿using CruZ.Common.ECS;
-using CruZ.Editor.Global;
+﻿using CruZ.Editor.Global;
 using CruZ.Editor.Service;
-using CruZ.Common.UI;
 
 using MonoGame.Extended;
 
@@ -17,8 +15,6 @@ namespace CruZ.Editor.UI
     using CruZ.Framework.UI;
 
     using Microsoft.Xna.Framework;
-
-    using SharpDX.Direct3D9;
 
     public class EntityControl : UIControl, ICanUndo
     {

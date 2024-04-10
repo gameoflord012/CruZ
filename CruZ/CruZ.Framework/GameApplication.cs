@@ -9,7 +9,6 @@ using System.Collections.Generic;
 using CruZ.Framework.Service;
 using CruZ.Framework.Input;
 using CruZ.Framework.GameSystem.ECS;
-using CruZ.Framework.UI;
 
 namespace CruZ.Framework
 {
@@ -26,7 +25,6 @@ namespace CruZ.Framework
 
             _ecsController = ECSManager.CreateContext();
             _inputController = InputManager.CreateContext();
-            _uiController = UIManager.CreateContext();
         }
 
         public void Run()
@@ -51,14 +49,12 @@ namespace CruZ.Framework
 
             _inputController.Update(gameTime);
             _ecsController.Update(gameTime);
-            _uiController.Update(gameTime);
         }
 
         private void Wrapper_AfterDraw(GameTime gameTime)
         {
             CalculateFps(gameTime);
             _ecsController.Draw(gameTime);
-            _uiController.Draw(gameTime, _spriteBatch);
             AfterDrawn?.Invoke();
         }
 
@@ -70,7 +66,6 @@ namespace CruZ.Framework
             Camera.Main.PreserveScreenRatio = true;
 
             _ecsController.Initialize();
-            _uiController.Initialize();
             Initialized?.Invoke();
         }
 
@@ -136,7 +131,6 @@ namespace CruZ.Framework
 
         IECSController _ecsController;
         IInputController _inputController;
-        IUIController _uiController;
         GameWrapper _core;
         SpriteBatch _spriteBatch;
 

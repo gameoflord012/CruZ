@@ -2,8 +2,6 @@
 using CruZ.Editor.Global;
 using CruZ.Editor.Service;
 using CruZ.Common.Scene;
-using CruZ.Common.UI;
-using Microsoft.Xna.Framework.Graphics;
 
 using System;
 using System.Collections.Generic;
@@ -12,7 +10,6 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using CruZ.Editor.UI;
-using CruZ.Common;
 using CruZ.Editor.Scene;
 using Microsoft.Xna.Framework;
 using CruZ.Framework.Service;
@@ -22,6 +19,7 @@ using CruZ.Framework.GameSystem.ECS;
 using CruZ.Framework.Exceptions;
 using CruZ.Framework;
 using CruZ.Editor.Winform.Utility;
+using CruZ.Framework.UI;
 
 
 namespace CruZ.Editor.Controls
@@ -247,7 +245,7 @@ namespace CruZ.Editor.Controls
         #region Private_Functions
         private void FindEntityToSelect(UIInfo info)
         {
-            var contains = UIManager.GetContains(info.MousePos().X, info.MousePos().Y);
+            var contains = UIManager.Root.GetControlsUnderPoint(info.MousePos().X, info.MousePos().Y);
 
             var eControl = contains
                 .Where(e => e is EntityControl)

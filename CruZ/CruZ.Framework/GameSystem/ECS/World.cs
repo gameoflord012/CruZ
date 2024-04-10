@@ -35,7 +35,7 @@ namespace CruZ.Framework.GameSystem.ECS
         {
             foreach (var system in _systems)
             {
-                system.Initialize();
+                system.OnInitialize();
             }
         }
 

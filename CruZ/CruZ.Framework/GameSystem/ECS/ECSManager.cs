@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Diagnostics;
 
 using CruZ.Common.ECS;
 using CruZ.Framework.GameSystem.Animation;
 using CruZ.Framework.GameSystem.Render;
 using CruZ.Framework.GameSystem.Script;
+using CruZ.Framework.UI;
 
 using Microsoft.Xna.Framework;
 
@@ -24,7 +26,8 @@ namespace CruZ.Framework.GameSystem.ECS
             _world.
                 AddSystem(new RenderSystem()).
                 AddSystem(new AnimationSystem()).
-                AddSystem(new ScriptSystem());
+                AddSystem(new ScriptSystem()).
+                AddSystem(UISystem.CreateContext());
         }
 
         void IECSController.Initialize()
@@ -46,6 +49,8 @@ namespace CruZ.Framework.GameSystem.ECS
 
         internal static IECSController CreateContext()
         {
+            if(_instance != null && !_instance._isDisposed)
+                throw new InvalidOperationException("Require dispose");
             return _instance = new ECSManager();
         }
 
@@ -62,7 +67,14 @@ namespace CruZ.Framework.GameSystem.ECS
 
         public void Dispose()
         {
-            _world.Dispose();
+            if(!_isDisposed)
+            {
+                _isDisposed = true;
+                _world.Dispose();
+            }
+            
         }
+
+        bool _isDisposed = false;
     }
 }

@@ -14,7 +14,7 @@ namespace CruZ.Framework.Input
         void Update(GameTime gameTime);
     }
 
-    public partial class InputManager : IInputController
+    public class InputManager : IInputController
     {
         private InputManager() { }
 

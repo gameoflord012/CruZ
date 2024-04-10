@@ -59,6 +59,38 @@ namespace CruZ.Framework.UI
             child.OnParentChanged(null);
         }
 
+        /// <summary>
+        /// Get all children controls and itself under mouse point
+        /// </summary>
+        public UIControl[] GetControlsUnderPoint(int pointX, int mouseY)
+        {
+            List<UIControl> contains = [];
+
+            foreach (var node in GetTree())
+            {
+                if (node.GetRect().Contains(pointX, mouseY))
+                    contains.Add(node);
+            }
+
+            return contains.ToArray();
+        }
+
+        public UIControl[] GetTree()
+        {
+            List<UIControl> list = [];
+            list.Add(this);
+
+            for (int i = 0; i < list.Count; i++)
+            {
+                foreach (var child in list[i].Childs)
+                {
+                    list.Add(child);
+                }
+            }
+
+            return list.ToArray();
+        }
+
         internal void InternalUpdate(UIInfo args)
         {
             _args = args;
