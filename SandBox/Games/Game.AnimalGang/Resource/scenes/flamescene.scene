@@ -1,94 +1,63 @@
 {
-  "Name": "scenes\\flamescene.scene",
-  "_entities": [
-    {
-      "position": "318.99323, -683.7305",
-      "scale": "1, 1",
-      "components": [
-        {
-          "com-type": "Game.AnimalGang.DesktopGL.FlameRendererComponent, Game.AnimalGang, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
-          "com-data": {
-            "Threshold": 0.5,
-            "MaxLuminance": 4.0,
-            "Brightness": 2.0,
-            "BloomColor": "4, 1.25, 0.6, 0.8",
-            "RenderMode": 2,
-            "BloomPhase": 4,
-            "BloomRadiuses": [
-              1.0,
-              1.0,
-              1.0,
-              1.0,
-              1.0,
-              1.0,
-              1.0,
-              1.0
-            ],
-            "BloomStrengths": [
-              1.0,
-              1.0,
-              1.0,
-              1.0
-            ],
-            "SortingLayer": 0,
-            "LayerDepth": 0.0
+  "Name": "Scenes\\FlameScene",
+  "_entities": {
+    "$id": "1",
+    "$values": [
+      {
+        "Parent": null,
+        "Position": "0, 0",
+        "Scale": "1, 1",
+        "Components": [
+          {
+            "ComponentType": "Game.AnimalGang.DesktopGL.FlameRendererComponent, Game.AnimalGang, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+            "ComponentData": {
+              "$id": "2",
+              "Threshold": 0.5,
+              "MaxLuminance": 4.0,
+              "Brightness": 2.0,
+              "BloomColor": "4, 1.25, 0.6, 0.8",
+              "RenderMode": 2,
+              "BloomPhase": 4,
+              "BloomRadiuses": [
+                1.0,
+                1.0,
+                1.0,
+                1.0,
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "BloomStrengths": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "SortingLayer": 0,
+              "LayerDepth": 0.0
+            }
           }
-        }
-      ]
-    },
-    {
-      "position": "-1597.8954, -311.30646",
-      "scale": "1, 1",
-      "components": []
-    },
-    {
-      "position": "-984.49115, -765.88293",
-      "scale": "1, 1",
-      "components": []
-    },
-    {
-      "position": "-1028.3057, 570.46216",
-      "scale": "1, 1",
-      "components": [
-        {
-          "com-type": "Game.AnimalGang.DesktopGL.FlameRendererComponent, Game.AnimalGang, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
-          "com-data": {
-            "Threshold": 0.5,
-            "MaxLuminance": 4.0,
-            "Brightness": 2.0,
-            "BloomColor": "4, 1.25, 0.6, 0.8",
-            "RenderMode": 2,
-            "BloomPhase": 4,
-            "BloomRadiuses": [
-              1.0,
-              1.0,
-              1.0,
-              1.0,
-              1.0,
-              1.0,
-              1.0,
-              1.0
-            ],
-            "BloomStrengths": [
-              1.0,
-              1.0,
-              1.0,
-              1.0
-            ],
-            "SortingLayer": 0,
-            "LayerDepth": 0.0
-          }
-        }
-      ]
-    },
-    {
-      "position": "0, 0",
-      "scale": "1, 1",
-      "components": []
-    }
-  ],
-  "Info": {
-    "Guid": "76e50f26-069b-43b1-b9d2-03757e1e2f28",
-    "ResourceName": "D:\\monogame-projects\\CruZ_GameEngine\\SandBox\\Games\\Game.AnimalGang\\Resource\\scenes\\flamescene.scene"
+        ]
+      },
+      {
+        "Parent": {
+          "Parent": null,
+          "Position": "0, 0",
+          "Scale": "1, 1",
+          "Components": [
+            {
+              "ComponentType": "Game.AnimalGang.DesktopGL.FlameRendererComponent, Game.AnimalGang, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+              "ComponentData": {
+                "$ref": "2"
+              }
+            }
+          ]
+        },
+        "Position": "0, 0",
+        "Scale": "1, 1",
+        "Components": []
+      }
+    ]
   }
 }

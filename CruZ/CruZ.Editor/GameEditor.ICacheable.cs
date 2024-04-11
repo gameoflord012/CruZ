@@ -2,6 +2,7 @@
 using System.IO;
 
 using CruZ.Editor.Service;
+using CruZ.Editor.Winform.Utility;
 using CruZ.Framework;
 using CruZ.Framework.Resource;
 
@@ -18,17 +19,23 @@ namespace CruZ.Editor.Controls
             if(key == "LoadedScene")
             {
                 var lastSceneFile = binReader.ReadString();
-
-                if (!string.IsNullOrEmpty(lastSceneFile))
+                try
                 {
-                    if(Path.GetExtension(lastSceneFile) == ".scene")
+                    if (!string.IsNullOrEmpty(lastSceneFile))
                     {
-                        LoadSceneFromFile(lastSceneFile);
+                        if (Path.GetExtension(lastSceneFile) == ".scene")
+                        {
+                            LoadSceneFromFile(lastSceneFile);
+                        }
+                        else
+                        {
+                            LoadRuntimeScene(lastSceneFile);
+                        }
                     }
-                    else
-                    {
-                        LoadRuntimeScene(lastSceneFile);
-                    }
+                }
+                catch (Exception e)
+                {
+                    DialogHelper.ShowExceptionDialog(e);
                 }
             }
 

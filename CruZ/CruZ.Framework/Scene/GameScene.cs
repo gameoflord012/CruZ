@@ -84,16 +84,13 @@ namespace CruZ.Common.Scene
         public void WriteJson(JsonWriter writer, JsonSerializer serializer)
         {
             writer.WriteStartObject();
+            {
+                writer.WritePropertyName(nameof(Name));
+                serializer.Serialize(writer, Name);
 
-            writer.WritePropertyName(nameof(Name));
-            serializer.Serialize(writer, Name);
-
-            writer.WritePropertyName(nameof(_entities));
-            serializer.Serialize(writer, _entities);
-
-            writer.WritePropertyName(nameof(IResource.Info));
-            serializer.Serialize(writer, ((IResource)this).Info);
-
+                writer.WritePropertyName(nameof(_entities));
+                serializer.Serialize(writer, _entities);
+            }
             writer.WriteEnd();
         }
 

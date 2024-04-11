@@ -19,6 +19,8 @@ namespace CruZ.Framework.Serialization
             _settings = new();
             _settings.Formatting = Formatting.Indented;
             _settings.ReferenceLoopHandling = ReferenceLoopHandling.Error;
+            _settings.PreserveReferencesHandling = PreserveReferencesHandling.All;
+            _settings.NullValueHandling = NullValueHandling.Ignore;
         }
 
         public void SerializeToFile(object o, string filePath)

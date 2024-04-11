@@ -8,6 +8,7 @@ using System;
 
 namespace CruZ.Framework.GameSystem.ECS
 {
+    [JsonObject(IsReference = true)]
     public partial class TransformEntity : ICustomSerializable
     {
         public event Action? DeserializationCompleted;
@@ -16,21 +17,20 @@ namespace CruZ.Framework.GameSystem.ECS
         {
             var value = ECSManager.CreateTransformEntity();
 
-            JObject jObject;
+            JObject jObject = JObject.Load(reader);
 
-            jObject = JObject.Load(reader);
+            value.Parent = jObject["Parent"].ToObject<TransformEntity?>(serializer);
+            value.Transform.Position = jObject["Position"].ToObject<Vector2>(serializer);
+            value.Transform.Scale = jObject["Scale"].ToObject<Vector2>(serializer);
 
-            value.Transform.Position = jObject["position"].ToObject<Vector2>(serializer);
-            value.Transform.Scale = jObject["scale"].ToObject<Vector2>(serializer);
-
-            foreach (var comJObject in jObject["components"])
+            foreach (var comJObject in jObject["Components"])
             {
-                var comRawType = comJObject["com-type"].Value<string>();
+                var comRawType = comJObject["ComponentType"].Value<string>();
 
                 var comTy = Type.GetType(comRawType, GameContext.AssemblyResolver, null) ?? 
                     throw new JsonSerializationException($"Can't load {comRawType} in current Domain");
 
-                var com = (Component)comJObject["com-data"].ToObject(comTy, serializer) ??
+                var com = (Component)comJObject["ComponentData"].ToObject(comTy, serializer) ??
                     throw new JsonSerializationException($"Can't deserialize com-data to type {comTy}");
 
                 value.AddComponent(com);
@@ -44,22 +44,25 @@ namespace CruZ.Framework.GameSystem.ECS
         {
             writer.WriteStartObject();
             {
-                writer.WritePropertyName("position");
+                writer.WritePropertyName("Parent");
+                serializer.Serialize(writer, Parent);
+
+                writer.WritePropertyName("Position");
                 serializer.Serialize(writer, Transform.Position);
 
-                writer.WritePropertyName("scale");
+                writer.WritePropertyName("Scale");
                 serializer.Serialize(writer, Transform.Scale);
 
-                writer.WritePropertyName("components");
+                writer.WritePropertyName("Components");
                 writer.WriteStartArray();
                 {
                     foreach (var com in GetAllComponents())
                     {
                         writer.WriteStartObject();
-                        writer.WritePropertyName("com-type");
+                        writer.WritePropertyName("ComponentType");
                         writer.WriteValue(com.GetType().AssemblyQualifiedName);
 
-                        writer.WritePropertyName("com-data");
+                        writer.WritePropertyName("ComponentData");
                         serializer.Serialize(writer, com, com.GetType());
                         writer.WriteEnd();
                     }
