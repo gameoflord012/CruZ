@@ -1,10 +1,4 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-
-using System;
-using System.Collections.Generic;
-
-namespace CruZ.Framework.Serialization
+﻿namespace CruZ.Framework.Serialization
 {
     public interface ICustomSerializable
     {

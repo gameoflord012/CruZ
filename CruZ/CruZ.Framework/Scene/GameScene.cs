@@ -3,9 +3,6 @@ using CruZ.Framework.GameSystem.ECS;
 using CruZ.Framework.Resource;
 using CruZ.Framework.Serialization;
 
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
-
 using System;
 using System.Collections.Generic;
 

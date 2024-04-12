@@ -4,8 +4,6 @@ using CruZ.Framework.GameSystem.ECS;
 
 using Microsoft.Xna.Framework;
 
-using Newtonsoft.Json;
-
 namespace CruZ.Framework.GameSystem.Script
 {
     public class ScriptComponent : Component
