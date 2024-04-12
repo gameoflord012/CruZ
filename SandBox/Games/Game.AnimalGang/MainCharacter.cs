@@ -3,7 +3,6 @@
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework;
 
-using MonoGame.Extended;
 using CruZ.Framework.GameSystem.Animation;
 using CruZ.Framework.GameSystem.ECS;
 using CruZ.Framework.GameSystem.Script;
@@ -49,10 +48,10 @@ namespace AnimalGang
 
             if(_remainDis >= 0)
             {
-                _remainDis -= _speed * gameTime.GetElapsedSeconds();
+                _remainDis -= _speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
 
                 AttachedEntity.Transform.Position +=
-                    _moveDir * _speed * gameTime.GetElapsedSeconds();
+                    _moveDir * _speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
             }
             else
             {

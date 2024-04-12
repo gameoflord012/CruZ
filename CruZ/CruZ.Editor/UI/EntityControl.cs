@@ -1,7 +1,6 @@
 ﻿using CruZ.Editor.Global;
 using CruZ.Editor.Service;
-
-using MonoGame.Extended;
+using CruZ.Framework.Utility;
 
 using System;
 using System.Collections.Generic;
@@ -51,7 +50,7 @@ namespace CruZ.Editor.UI
                 var screen = Camera.Main.CoordinateToPoint(origin);
 
                 args.SpriteBatch.DrawCircle(new(screen.X, screen.Y),
-                    EditorConstants.CENTER_CIRCLE_SIZE, 8, XNA.Color.Blue);
+                    EditorConstants.CENTER_CIRCLE_SIZE, 8, Color.Blue);
             }
         }
 

@@ -5,14 +5,14 @@ namespace CruZ.Framework.Utility
 {
     public static class SpriteBatchHelper
     {
-        public static void DrawRectangle(this SpriteBatch spriteBatch, DRAW.RectangleF rectangle, Color color, float thickness = 1f, float layerDepth = 0)
-        {
-            MonoGame.Extended.ShapeExtensions.DrawRectangle(
-                spriteBatch,
-                new(rectangle.X, rectangle.Y, rectangle.Width, rectangle.Height),
-                color,
-                thickness,
-                layerDepth);
-        }
+        //public static void DrawRectangle(this SpriteBatch spriteBatch, DRAW.RectangleF rectangle, Color color, float thickness = 1f, float layerDepth = 0)
+        //{
+        //    MonoGame.Extended.ShapeExtensions.DrawRectangle(
+        //        spriteBatch,
+        //        new(rectangle.X, rectangle.Y, rectangle.Width, rectangle.Height),
+        //        color,
+        //        thickness,
+        //        layerDepth);
+        //}
     }
 }
