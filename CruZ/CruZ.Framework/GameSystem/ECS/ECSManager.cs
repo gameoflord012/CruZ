@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
 
-using CruZ.Common.ECS;
 using CruZ.Framework.GameSystem.Animation;
 using CruZ.Framework.GameSystem.Render;
 using CruZ.Framework.GameSystem.Script;
@@ -11,14 +10,7 @@ using Microsoft.Xna.Framework;
 
 namespace CruZ.Framework.GameSystem.ECS
 {
-    interface IECSController
-    {
-        void Update(GameTime gameTime);
-        void Draw(GameTime gameTime);
-        void Initialize();
-    }
-
-    public class ECSManager : IECSController, IDisposable
+    internal class ECSManager : IDisposable
     {
         private ECSManager() 
         {
@@ -30,24 +22,24 @@ namespace CruZ.Framework.GameSystem.ECS
                 AddSystem(UISystem.CreateContext());
         }
 
-        void IECSController.Initialize()
+        internal void Initialize()
         {
             _world.Initialize();
         }
 
-        void IECSController.Update(GameTime gameTime)
+        internal void Update(GameTime gameTime)
         {
             _world.SystemsUpdate(gameTime);
         }
 
-        void IECSController.Draw(GameTime gameTime)
+        internal void Draw(GameTime gameTime)
         {
             _world.SystemsDraw(gameTime);
         }
 
         World _world;
 
-        internal static IECSController CreateContext()
+        internal static ECSManager CreateContext()
         {
             if(_instance != null && !_instance._isDisposed)
                 throw new InvalidOperationException("Require dispose");

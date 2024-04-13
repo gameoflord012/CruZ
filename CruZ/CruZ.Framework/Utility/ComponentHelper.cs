@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Runtime.CompilerServices;
 
-using CruZ.Common.ECS;
 using CruZ.Framework.GameSystem.ECS;
 
 namespace CruZ.Framework.Utility
@@ -15,7 +13,7 @@ namespace CruZ.Framework.Utility
             return comp;
         }
 
-        //public static Type GetComponentType(Type ty)
+        //public static Type GetTypeFromString(Type ty)
         //{
         //    CheckTypeValid(ty);
 

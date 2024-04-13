@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Reflection;
 
-using CruZ.Common;
-using CruZ.Common.Scene;
 using CruZ.Editor.Global;
 using CruZ.Framework.Exceptions;
 using CruZ.Framework.Scene;

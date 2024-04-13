@@ -1,4 +1,6 @@
 using System;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 using CruZ.Framework.Resource;
 
@@ -8,9 +10,9 @@ using MonoGame.Extended.TextureAtlases;
 
 namespace CruZ.Framework.Serialization
 {
-    public class TextureAtlasJsonConverter : JsonConverter
+    internal class TextureAtlasJsonConverter : JsonConverter<TextureAtlas>
     {
-        private class InlineTextureAtlas
+        internal class InlineTextureAtlas
         {
             public string Texture { get; set; }
             public int RegionWidth { get; set; }
@@ -19,36 +21,27 @@ namespace CruZ.Framework.Serialization
             [JsonIgnore]
             public Guid TextureGuid => new Guid(_textureGuid);
 
-            [JsonProperty(PropertyName = "textureGuid")]
+            [JsonInclude, JsonPropertyName("textureGuid")]
             private string _textureGuid { get; set; }
         }
 
-        public TextureAtlasJsonConverter(ResourceManager resource)
+        public TextureAtlasJsonConverter(ResourceManager resourceManager)
         {
-            _resource = resource;
+            _resource = resourceManager;
         }
 
-        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+        public override void Write(Utf8JsonWriter writer, TextureAtlas value, JsonSerializerOptions options)
         {
+            throw new NotImplementedException();
         }
 
-        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+        public override TextureAtlas? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
-            if (reader.ValueType == typeof(string))
-            {
-                throw new NotImplementedException();
-            }
-            else
-            {
-                var inlineAtlas = serializer.Deserialize<InlineTextureAtlas>(reader);
-                var texture = _resource.Load<Texture2D>(inlineAtlas.TextureGuid);
-                return TextureAtlas.Create(texture, inlineAtlas.RegionWidth, inlineAtlas.RegionHeight);
-            }
-        }
+            var helperConverter = (JsonConverter<InlineTextureAtlas>)options.GetConverter(typeof(InlineTextureAtlas));
 
-        public override bool CanConvert(Type objectType)
-        {
-            return objectType == typeof(TextureAtlas);
+            var inlineAtlas = helperConverter.Read(ref reader, typeToConvert, options);
+            var texture = _resource.Load<Texture2D>(inlineAtlas.TextureGuid);
+            return TextureAtlas.Create(texture, inlineAtlas.RegionWidth, inlineAtlas.RegionHeight);
         }
 
         ResourceManager _resource;

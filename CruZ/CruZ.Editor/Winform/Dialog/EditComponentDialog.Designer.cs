@@ -1,4 +1,6 @@
-﻿namespace CruZ.Editor
+﻿using System.Drawing;
+
+namespace CruZ.Editor
 {
     partial class EditComponentDialog
     {
@@ -36,9 +38,9 @@
             // ok_Button
             // 
             ok_Button.Anchor = global::System.Windows.Forms.AnchorStyles.Bottom | global::System.Windows.Forms.AnchorStyles.Right;
-            ok_Button.Location = new DRAW.Point(185, 153);
+            ok_Button.Location = new Point(185, 153);
             ok_Button.Name = "ok_Button";
-            ok_Button.Size = new DRAW.Size(75, 23);
+            ok_Button.Size = new Size(75, 23);
             ok_Button.TabIndex = 1;
             ok_Button.Text = "OK";
             ok_Button.UseVisualStyleBackColor = true;
@@ -46,9 +48,9 @@
             // component_Label
             // 
             component_Label.AutoSize = true;
-            component_Label.Location = new DRAW.Point(12, 9);
+            component_Label.Location = new Point(12, 9);
             component_Label.Name = "component_Label";
-            component_Label.Size = new DRAW.Size(76, 15);
+            component_Label.Size = new Size(76, 15);
             component_Label.TabIndex = 2;
             component_Label.Text = "Components";
             // 
@@ -56,16 +58,16 @@
             // 
             component_ListBox.Anchor = global::System.Windows.Forms.AnchorStyles.Top | global::System.Windows.Forms.AnchorStyles.Bottom | global::System.Windows.Forms.AnchorStyles.Left | global::System.Windows.Forms.AnchorStyles.Right;
             component_ListBox.FormattingEnabled = true;
-            component_ListBox.Location = new DRAW.Point(12, 27);
+            component_ListBox.Location = new Point(12, 27);
             component_ListBox.Name = "component_ListBox";
-            component_ListBox.Size = new DRAW.Size(248, 112);
+            component_ListBox.Size = new Size(248, 112);
             component_ListBox.TabIndex = 4;
             // 
             // EditComponentDialog
             // 
-            AutoScaleDimensions = new DRAW.SizeF(7F, 15F);
+            AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = global::System.Windows.Forms.AutoScaleMode.Font;
-            ClientSize = new DRAW.Size(272, 188);
+            ClientSize = new Size(272, 188);
             Controls.Add(component_ListBox);
             Controls.Add(component_Label);
             Controls.Add(ok_Button);

@@ -4,26 +4,24 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Text;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace CruZ.Framework.Serialization
 {
     public class Serializer
     {
-        public IList<JsonConverter> Converters { get => _settings.Converters; set => _settings.Converters = value; }
+        public IList<JsonConverter> Converters { get => _options.Converters; }
 
         public Serializer()
         {
-            _settings = new();
-            _settings.Formatting = Formatting.Indented;
-            _settings.ReferenceLoopHandling = ReferenceLoopHandling.Error;
-            _settings.PreserveReferencesHandling = PreserveReferencesHandling.All;
-            _settings.NullValueHandling = NullValueHandling.Ignore;
+            _options = new();
+            _options.WriteIndented = true;
         }
 
         public void SerializeToFile(object o, string filePath)
         {
-            var json = JsonConvert.SerializeObject(o, _settings);
+            var json = JsonSerializer.Serialize(o, _options);
             using (var writer = FileHelper.OpenWrite(filePath, false))
             {
                 writer.WriteLine(json);
@@ -60,7 +58,7 @@ namespace CruZ.Framework.Serialization
 
             try
             {
-                o = JsonConvert.DeserializeObject(json, ty, _settings);
+                o = JsonSerializer.Serialize(json, ty, _options);
             }
             catch (Exception e)
             {
@@ -72,6 +70,6 @@ namespace CruZ.Framework.Serialization
             return o;
         }
 
-        JsonSerializerSettings _settings;
+        JsonSerializerOptions _options;
     }
 }

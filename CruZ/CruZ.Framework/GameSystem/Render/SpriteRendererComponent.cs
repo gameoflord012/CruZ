@@ -5,12 +5,13 @@ using Microsoft.Xna.Framework;
 using System.Drawing.Design;
 using CruZ.Framework.UI;
 using CruZ.Framework.Resource;
-using CruZ.Framework.DataType;
 using CruZ.Framework;
 using CruZ.Framework.GameSystem.Render;
 using CruZ.Framework.Utility;
+using System.Text.Json.Serialization;
+using CruZ.Framework.Serialization;
 
-namespace CruZ.Common.ECS
+namespace CruZ.Framework.GameSystem.ECS
 {
     /// <summary>
     /// Game component loaded from specify resource
@@ -153,7 +154,7 @@ namespace CruZ.Common.ECS
         }
 
         Texture2D? _texture;
-        [JsonProperty]
+        [JsonInclude]
         ResourceInfo? _spriteResInfo;
         ResourceManager _resource;
         UIBoundingBox _boundingBox = new();

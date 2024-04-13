@@ -1,6 +1,4 @@
-﻿using CruZ.Common.ECS;
-
-using Microsoft.Xna.Framework.Input;
+﻿using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework;
 
 using CruZ.Framework.GameSystem.Animation;

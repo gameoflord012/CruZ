@@ -2,6 +2,7 @@
 
 using System;
 using System.ComponentModel;
+using System.Text.Json.Serialization;
 
 namespace CruZ.Framework.GameSystem.ECS
 {

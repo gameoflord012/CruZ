@@ -1,11 +1,5 @@
-﻿using System;
-using System.Diagnostics;
-using System.Linq;
-
-using CruZ.Common;
-using CruZ.Framework.GameSystem.ECS;
+﻿using CruZ.Framework.GameSystem.ECS;
 using CruZ.Framework.GameSystem.Render.Filters;
-using CruZ.Framework.Utility;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;

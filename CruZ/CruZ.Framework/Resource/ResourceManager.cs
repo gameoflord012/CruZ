@@ -5,7 +5,6 @@
     3. ResourceInfo will be available by calling RetrieveResourceInfo
  */
 
-using CruZ.Framework.Exceptions;
 using CruZ.Framework.Serialization;
 
 using Microsoft.Xna.Framework.Content;
@@ -19,10 +18,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text.Json;
 
 namespace CruZ.Framework.Resource
 {
-    public class ResourceManager : ICustomSerializable, IGuidValueProcessor<string>
+    public class ResourceManager : IGuidValueProcessor<string>
     {
         public string ResourceRoot
         {
@@ -42,7 +42,7 @@ namespace CruZ.Framework.Resource
             Directory.CreateDirectory(Path.GetDirectoryName(ContentOutputDir) ?? throw new ArgumentException("resourceRoot"));
 
             _serializer.Converters.Add(new TextureAtlasJsonConverter(this));
-            _serializer.Converters.Add(new SerializableJsonConverter());
+            _serializer.Converters.Add(new ComponentJsonConverter());
 
             _guidManager = new(this);
 
@@ -147,20 +147,20 @@ namespace CruZ.Framework.Resource
             return GetFormattedResourcePath(value).ToLower();
         }
 
-        object ICustomSerializable.ReadJson(JsonReader reader, JsonSerializer serializer)
-        {
-            JObject jO = JObject.Load(reader);
-            var root = jO[nameof(ResourceRoot)].Value<string>();
-            return From(root);
-        }
+        //object IJsonSerializable.ReadJson(JsonReader reader, JsonSerializer serializer)
+        //{
+        //    JObject jO = JObject.Load(reader);
+        //    var root = jO[nameof(ResourceRoot)].Value<string>();
+        //    return From(root);
+        //}
 
-        void ICustomSerializable.WriteJson(JsonWriter writer, JsonSerializer serializer)
-        {
-            writer.WriteStartObject();
-            writer.WritePropertyName(nameof(ResourceRoot));
-            writer.WriteValue(ResourceRoot);
-            writer.WriteEnd();
-        }
+        //void IJsonSerializable.WriteJson(JsonWriter writer, JsonSerializer serializer)
+        //{
+        //    writer.WriteStartObject();
+        //    writer.WritePropertyName(nameof(ResourceRoot));
+        //    writer.WriteValue(ResourceRoot);
+        //    writer.WriteEnd();
+        //}
         #endregion
 
         #region Private Functions
@@ -201,7 +201,7 @@ namespace CruZ.Framework.Resource
             {
                 throw new FileNotFoundException(string.Format("Can't find resource file {0}", fullResourcePath));
             }
-            catch (JsonReaderException)
+            catch (JsonException)
             {
                 throw new LoadResourceFailedException($"Can't load resource \"{fullResourcePath}\" due to invalid resource formatting or not available in content");
             }

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace CruZ.Common.Scene
+namespace CruZ.Framework.Scene
 {
     public partial class GameScene : IDisposable
     {

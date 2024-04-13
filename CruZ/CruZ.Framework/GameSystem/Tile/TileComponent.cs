@@ -1,7 +1,5 @@
-﻿using System;
-using System.Numerics;
+﻿using System.Numerics;
 
-using CruZ.Common.ECS;
 using CruZ.Framework.GameSystem.ECS;
 using CruZ.Framework.GameSystem.Render;
 

@@ -1,14 +1,13 @@
-﻿using CruZ.Framework;
-using CruZ.Framework.GameSystem.ECS;
+﻿using CruZ.Framework.GameSystem.ECS;
 using CruZ.Framework.Resource;
-using CruZ.Framework.Serialization;
 
 using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
-namespace CruZ.Common.Scene
+namespace CruZ.Framework.Scene
 {
-    public partial class GameScene : IResource, ICustomSerializable
+    public partial class GameScene : IResource
     {
         public event Action<TransformEntity>? EntityAdded;
         public event Action<TransformEntity>? EntityRemoved;
@@ -72,24 +71,24 @@ namespace CruZ.Common.Scene
             Dispose();
         }
 
-        public object ReadJson(JsonReader reader, JsonSerializer serializer)
-        {
-            serializer.Populate(reader, this);
-            return this;
-        }
+        //public object ReadJson(JsonReader reader, JsonSerializer serializer)
+        //{
+        //    serializer.Populate(reader, this);
+        //    return this;
+        //}
 
-        public void WriteJson(JsonWriter writer, JsonSerializer serializer)
-        {
-            writer.WriteStartObject();
-            {
-                writer.WritePropertyName(nameof(Name));
-                serializer.Serialize(writer, Name);
+        //public void WriteJson(JsonWriter writer, JsonSerializer serializer)
+        //{
+        //    writer.WriteStartObject();
+        //    {
+        //        writer.WritePropertyName(nameof(Name));
+        //        serializer.Serialize(writer, Name);
 
-                writer.WritePropertyName(nameof(_entities));
-                serializer.Serialize(writer, _entities);
-            }
-            writer.WriteEnd();
-        }
+        //        writer.WritePropertyName(nameof(_entities));
+        //        serializer.Serialize(writer, _entities);
+        //    }
+        //    writer.WriteEnd();
+        //}
 
         public override string ToString()
         {
@@ -98,7 +97,7 @@ namespace CruZ.Common.Scene
 
         bool _isActive = false;
 
-        [JsonProperty]
+        [JsonInclude]
         List<TransformEntity> _entities = [];
     }
 }

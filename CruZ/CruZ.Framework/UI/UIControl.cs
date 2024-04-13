@@ -7,6 +7,8 @@ using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 
+using RectangleF = System.Drawing.RectangleF;
+
 namespace CruZ.Framework.UI
 {
     public partial class UIControl
@@ -43,9 +45,9 @@ namespace CruZ.Framework.UI
             child.OnParentChanged(this);
         }
 
-        public DRAW.RectangleF GetRect()
+        public RectangleF GetRect()
         {
-            return new DRAW.RectangleF(_location.X, _location.Y, _size.X, _size.Y);
+            return new RectangleF(_location.X, _location.Y, _size.X, _size.Y);
         }
 
         public void RemoveChild(UIControl child)

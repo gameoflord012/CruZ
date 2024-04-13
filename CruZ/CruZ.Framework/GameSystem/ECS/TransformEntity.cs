@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
+using System.Text.Json.Serialization;
 
 using Microsoft.Xna.Framework;
 
 namespace CruZ.Framework.GameSystem.ECS
 {
-    public partial class TransformEntity : IDisposable
+    public partial class TransformEntity : IDisposable, IJsonOnDeserialized, IJsonOnSerializing
     {
         public event EventHandler? RemovedFromWorld;
         public event Action<ComponentCollection>? ComponentsChanged;
@@ -91,16 +93,6 @@ namespace CruZ.Framework.GameSystem.ECS
             _world.RemoveEntity(this);
         }
 
-        public void Dispose()
-        {
-            RemoveFromWorld();
-
-            foreach (var e in GetAllComponents())
-            {
-                e.Dispose();
-            }
-        }
-
         [ReadOnly(true)]
         public string Name 
         { 
@@ -153,5 +145,41 @@ namespace CruZ.Framework.GameSystem.ECS
         World _world;
 
         static int _entityCounter = 0;
+
+        public void OnSerializing()
+        {
+            _serializationData.Components.Clear();
+            foreach (var component in _components.Values)
+            {
+                _serializationData.Components.Add(component);
+            }
+        }
+
+        public void OnDeserialized()
+        {
+            foreach (var component in _serializationData.Components)
+            {
+                AddComponent(component);
+            }
+        }
+
+        [JsonInclude]
+        SerializationData _serializationData = new();
+
+        private class SerializationData
+        {
+            [JsonInclude]
+            internal List<Component> Components = [];
+        }
+
+        public void Dispose()
+        {
+            RemoveFromWorld();
+
+            foreach (var e in GetAllComponents())
+            {
+                e.Dispose();
+            }
+        }
     }
 }

@@ -23,7 +23,7 @@ namespace CruZ.Framework
             _core.Exiting += Wrapper_Exiting;
             _core.Window.ClientSizeChanged += Wrapper_WindowResized;
 
-            _ecsController = ECSManager.CreateContext();
+            _ecs = ECSManager.CreateContext();
             _inputController = InputManager.CreateContext();
         }
 
@@ -48,13 +48,13 @@ namespace CruZ.Framework
             ProcessMarshalRequests();
 
             _inputController.Update(gameTime);
-            _ecsController.Update(gameTime);
+            _ecs.Update(gameTime);
         }
 
         private void Wrapper_AfterDraw(GameTime gameTime)
         {
             CalculateFps(gameTime);
-            _ecsController.Draw(gameTime);
+            _ecs.Draw(gameTime);
             AfterDrawn?.Invoke();
         }
 
@@ -65,7 +65,7 @@ namespace CruZ.Framework
             Camera.Main = new Camera(Window);
             Camera.Main.PreserveScreenRatio = true;
 
-            _ecsController.Initialize();
+            _ecs.Initialize();
             Initialized?.Invoke();
         }
 
@@ -113,6 +113,7 @@ namespace CruZ.Framework
                 _isDispose = true;
                 _core.Dispose();
                 _spriteBatch.Dispose();
+                _ecs.Dispose();
                 Disposables.ForEach(e => e.Dispose());
                 Disposables.Clear();
 
@@ -129,7 +130,7 @@ namespace CruZ.Framework
         public GameWindow Window => _core.Window;
         public int FpsResult { get => _fpsResult; }
 
-        IECSController _ecsController;
+        ECSManager _ecs;
         IInputController _inputController;
         GameWrapper _core;
         SpriteBatch _spriteBatch;

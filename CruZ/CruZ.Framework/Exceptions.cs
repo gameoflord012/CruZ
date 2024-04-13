@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace CruZ.Framework.Exceptions;
+namespace CruZ.Framework;
 
 [Serializable]
 public class LoadResourceFailedException : Exception

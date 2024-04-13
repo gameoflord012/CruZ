@@ -1,63 +1,49 @@
 {
-  "Name": "Scenes\\FlameScene",
-  "_entities": {
-    "$id": "1",
-    "$values": [
-      {
-        "Parent": null,
-        "Position": "0, 0",
-        "Scale": "1, 1",
+  "_entities": [
+    {
+      "Name": "New Entity(0)",
+      "Id": 0,
+      "IsActive": true,
+      "Parent": null,
+      "Transform": {
+        "Scale": {},
+        "Position": {}
+      },
+      "Position": {},
+      "Scale": {},
+      "_serializationData": {
         "Components": [
           {
-            "ComponentType": "Game.AnimalGang.DesktopGL.FlameRendererComponent, Game.AnimalGang, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+            "ComponentType": "Game.AnimalGang.DesktopGL.FlameRendererComponent",
             "ComponentData": {
-              "$id": "2",
               "Threshold": 0.5,
-              "MaxLuminance": 4.0,
-              "Brightness": 2.0,
-              "BloomColor": "4, 1.25, 0.6, 0.8",
+              "MaxLuminance": 4,
+              "Brightness": 2,
+              "BloomColor": {},
               "RenderMode": 2,
               "BloomPhase": 4,
               "BloomRadiuses": [
-                1.0,
-                1.0,
-                1.0,
-                1.0,
-                1.0,
-                1.0,
-                1.0,
-                1.0
+                1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1
               ],
               "BloomStrengths": [
-                1.0,
-                1.0,
-                1.0,
-                1.0
+                1,
+                1,
+                1,
+                1
               ],
               "SortingLayer": 0,
-              "LayerDepth": 0.0
+              "LayerDepth": 0
             }
           }
         ]
-      },
-      {
-        "Parent": {
-          "Parent": null,
-          "Position": "0, 0",
-          "Scale": "1, 1",
-          "Components": [
-            {
-              "ComponentType": "Game.AnimalGang.DesktopGL.FlameRendererComponent, Game.AnimalGang, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
-              "ComponentData": {
-                "$ref": "2"
-              }
-            }
-          ]
-        },
-        "Position": "0, 0",
-        "Scale": "1, 1",
-        "Components": []
       }
-    ]
-  }
+    }
+  ]
 }

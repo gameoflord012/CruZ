@@ -1,35 +1,34 @@
-﻿using Newtonsoft.Json;
+﻿
+//using System;
+//using System.Reflection;
+//using System.Text.Json;
+//using System.Text.Json.Serialization;
 
-using System;
-using System.Reflection;
-using System.Runtime.CompilerServices;
+//namespace CruZ.Framework.Serialization
+//{
+//    public class SerializableJsonConverter : JsonConverter<IJsonSerializable>
+//    {
+//        public override bool CanConvert(Type objectType)
+//        {
+//            return typeof(IJsonSerializable).IsAssignableFrom(objectType);
+//        }
 
-namespace CruZ.Framework.Serialization
-{
-    public class SerializableJsonConverter : JsonConverter
-    {
-        public override bool CanConvert(Type objectType)
-        {
-            return typeof(ICustomSerializable).IsAssignableFrom(objectType);
-        }
+//        public override IJsonSerializable? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+//        {
+//            var defaultConstructor = typeToConvert.GetConstructor(
+//                BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance, []) ??
+//                throw new ArgumentException($"{typeToConvert} need to provide a default constructor");
 
-        // TODO: Fix this
-        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
-        {
-            var defaultConstructor = objectType.GetConstructor(
-                BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance, []) ?? 
-                throw new ArgumentException($"{objectType} need to provide a default constructor");
+//            var customSerializable = (IJsonSerializable)defaultConstructor.Invoke([]);
+//            var value = (IJsonSerializable)customSerializable.ReadJson(ref reader, typeToConvert, options);
 
-            var customSerializable = (ICustomSerializable)defaultConstructor.Invoke([]);
-            var value = customSerializable.ReadJson(reader, serializer);
+//            return value;
+//        }
 
-            return value;
-        }
-
-        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
-        {
-            var serializable = (ICustomSerializable)value;
-            serializable.WriteJson(writer, serializer);
-        }
-    }
-}
+//        public override void Write(Utf8JsonWriter writer, IJsonSerializable value, JsonSerializerOptions options)
+//        {
+//            var serializable = value;
+//            serializable.WriteJson(writer, value, options);
+//        }
+//    }
+//}

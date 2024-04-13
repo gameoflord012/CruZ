@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 
-using CruZ.Framework.Exceptions;
-
 namespace CruZ.Framework.Resource
 {
     class GuidManager<T>

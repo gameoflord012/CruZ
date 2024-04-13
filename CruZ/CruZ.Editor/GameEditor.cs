@@ -1,7 +1,5 @@
-﻿using CruZ.Common.ECS;
-using CruZ.Editor.Global;
+﻿using CruZ.Editor.Global;
 using CruZ.Editor.Service;
-using CruZ.Common.Scene;
 
 using System;
 using System.Collections.Generic;
@@ -20,6 +18,9 @@ using CruZ.Framework.Exceptions;
 using CruZ.Framework;
 using CruZ.Editor.Winform.Utility;
 using CruZ.Framework.UI;
+using CruZ.Framework.Scene;
+
+using Keys = Microsoft.Xna.Framework.Input.Keys;
 
 
 namespace CruZ.Editor.Controls
@@ -230,8 +231,8 @@ namespace CruZ.Editor.Controls
 
         private void Input_KeyStateChanged(IInputInfo info)
         {
-            if (info.Keyboard.IsKeyDown(XNA.Input.Keys.LeftControl) &&
-                info.IsKeyJustDown(XNA.Input.Keys.Z))
+            if (info.Keyboard.IsKeyDown(Keys.LeftControl) &&
+                info.IsKeyJustDown(Keys.Z))
             {
                 Debug.WriteLine("Undo");
             }

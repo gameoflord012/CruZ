@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using CruZ.Framework.Service;
 using CruZ.Framework.Resource;
 using CruZ.Framework.UI;
+using Microsoft.Xna.Framework;
 
 namespace CruZ.Editor.UI
 {
@@ -40,10 +41,10 @@ namespace CruZ.Editor.UI
         {
             _sb?.DrawString(
                 _font, s,
-                new XNA.Vector2(
+                new Vector2(
                     Location.X, Location.Y + _curRow * _lineSpacing),
-                XNA.Color.Black
-                , 0, new XNA.Vector2(0, 0), _fontScale, SpriteEffects.None, 0
+                Color.Black
+                , 0, new Vector2(0, 0), _fontScale, SpriteEffects.None, 0
                 );
         }
 

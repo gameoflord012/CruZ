@@ -5,16 +5,19 @@ using CruZ.Framework.Utility;
 using System;
 using System.Collections.Generic;
 
+using System.Linq;
+
+using CruZ.Framework;
+using CruZ.Framework.GameSystem.ECS;
+using CruZ.Framework.UI;
+
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
+
+using RectangleF = System.Drawing.RectangleF;
+
 namespace CruZ.Editor.UI
 {
-    using System.Linq;
-
-    using CruZ.Framework;
-    using CruZ.Framework.GameSystem.ECS;
-    using CruZ.Framework.UI;
-
-    using Microsoft.Xna.Framework;
-
     public class EntityControl : UIControl, ICanUndo
     {
         static readonly int MIN_BOUND_SIZE = 25;
@@ -66,7 +69,7 @@ namespace CruZ.Editor.UI
 
             if (!_isSelected) return;
 
-            if (args.InputInfo.IsKeyJustDown(XNA.Input.Keys.W))
+            if (args.InputInfo.IsKeyJustDown(Keys.W))
             {
                 Draggable = !Draggable;
             }
@@ -168,9 +171,9 @@ namespace CruZ.Editor.UI
 
         TransformEntity _e;
         IHasBoundBox? _iHasBoundBox;
-        DRAW.RectangleF _bounds; //World bounds
+        RectangleF _bounds; //World bounds
 
-        DRAW.Point _dragCenterOffset;
+        Point _dragCenterOffset;
 
         public List<Vector2> _points = [];
 

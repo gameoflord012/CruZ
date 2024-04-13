@@ -1,5 +1,6 @@
 ﻿using System;
-using System.Numerics;
+
+using Microsoft.Xna.Framework;
 
 namespace CruZ.Framework.Utility
 {
@@ -15,17 +16,17 @@ namespace CruZ.Framework.Utility
             return RoundInt(MathF.Ceiling(f));
         }
 
-        public static DRAW.Point Minus(this DRAW.Point p1, DRAW.Point p2)
+        public static Point Minus(this Point p1, Point p2)
         {
             return new(p1.X - p2.X, p1.Y - p2.Y);
         }
 
-        public static DRAW.Point Add(this DRAW.Point p1, DRAW.Point p2)
+        public static Point Add(this Point p1, Point p2)
         {
             return new(p1.X + p2.X, p1.Y + p2.Y);
         }
 
-        public static float SqrMagnitude(this XNA.Vector2 v)
+        public static float SqrMagnitude(this Vector2 v)
         {
             return v.X * v.X + v.Y * v.Y;
         }

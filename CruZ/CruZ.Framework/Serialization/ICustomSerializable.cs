@@ -1,8 +1,11 @@
-﻿namespace CruZ.Framework.Serialization
-{
-    public interface ICustomSerializable
-    {
-        public object ReadJson(JsonReader reader, JsonSerializer serializer);
-        public void WriteJson(JsonWriter writer, JsonSerializer serializer);
-    }
-}
+﻿//using System.Text.Json;
+//using System;
+
+//namespace CruZ.Framework.Serialization
+//{
+//    public interface IJsonSerializable
+//    {
+//        public object ReadJson(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options);
+//        public void WriteJson(Utf8JsonWriter writer, IJsonSerializable value, JsonSerializerOptions options);
+//    }
+//}

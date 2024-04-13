@@ -5,7 +5,7 @@ using System.Globalization;
 
 using Microsoft.Xna.Framework;
 
-namespace CruZ.Framework.DataType
+namespace CruZ.Framework.Serialization
 {
     /// <summary>
     /// Convert <see cref="Vector2"/> to <see cref="string"/> and vice-versa

@@ -3,6 +3,8 @@ using System;
 using Microsoft.Xna.Framework;
 using CruZ.Framework.GameSystem.ECS;
 
+using RectangleF = System.Drawing.RectangleF;
+
 namespace CruZ.Framework.GameSystem.Render
 {
     public class DrawArgs : EventArgs
@@ -29,11 +31,11 @@ namespace CruZ.Framework.GameSystem.Render
             SourceRectangle = tex.Bounds;
         }
 
-        public DRAW.RectangleF GetWorldBounds() // in World Coordinate
+        public RectangleF GetWorldBounds() // in World Coordinate
         {
             if(SourceRectangle.IsEmpty) throw new InvalidOperationException("set rect value first");
 
-            DRAW.RectangleF rect = new();
+            RectangleF rect = new();
             rect.Width = SourceRectangle.Width * Scale.X;
             rect.Height = SourceRectangle.Height * Scale.Y;
             rect.Location = new(

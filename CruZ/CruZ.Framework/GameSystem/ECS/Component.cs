@@ -1,7 +1,11 @@
 ﻿using System;
+using System.Text.Json.Serialization;
+
+using CruZ.Framework.Serialization;
 
 namespace CruZ.Framework.GameSystem.ECS
 {
+    [JsonConverter(typeof(ComponentJsonConverter))]
     public abstract class Component : IDisposable
     {
         protected virtual void OnAttached(TransformEntity entity) { }
@@ -44,6 +48,28 @@ namespace CruZ.Framework.GameSystem.ECS
 
         }
 
+        //public object ReadJson(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+        //public void WriteJson(Utf8JsonWriter writer, IJsonSerializable value, JsonSerializerOptions options)
+        //{
+
+
+        //    writer.WriteStartObject();
+        //    {
+        //        writer.WritePropertyName("ComponentType");
+        //        writer.WriteStringValue(this.GetType().FullName);
+
+        //        writer.WritePropertyName("ComponentData");
+        //        var converter = options.GetConverter(this.GetType());
+        //        JsonSerializer.Serialize(this, )
+        //    }
+        //    writer.WriteEndObject();
+        //}
+
+        [JsonIgnore]
         protected TransformEntity? AttachedEntity { get; private set; }
     }
 }

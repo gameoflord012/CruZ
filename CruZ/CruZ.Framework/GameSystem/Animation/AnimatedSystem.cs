@@ -1,10 +1,4 @@
-﻿using System.Linq;
-
-using CruZ.Common;
-using CruZ.Framework.GameSystem.ECS;
-
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
+﻿using CruZ.Framework.GameSystem.ECS;
 
 namespace CruZ.Framework.GameSystem.Animation
 {

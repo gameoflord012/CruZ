@@ -4,7 +4,7 @@ using CruZ.Framework.Utility;
 using Microsoft.Xna.Framework.Graphics;
 using System.Drawing;
 
-
+using Color = Microsoft.Xna.Framework.Color;
 
 namespace CruZ.Editor.UI
 {
@@ -27,8 +27,8 @@ namespace CruZ.Editor.UI
 
             // draw cross-hair
             var center = new PointF(vp_Width / 2f, vp_Height / 2f);
-            sp.DrawLine(center.X, center.Y - 10, center.X, center.Y + 10, XNA.Color.Black);
-            sp.DrawLine(center.X - 10, center.Y, center.X + 10, center.Y, XNA.Color.Black);
+            sp.DrawLine(center.X, center.Y - 10, center.X, center.Y + 10, Color.Black);
+            sp.DrawLine(center.X - 10, center.Y, center.X + 10, center.Y, Color.Black);
         }
 
         private void DrawAxis(SpriteBatch spriteBatch)
@@ -48,7 +48,7 @@ namespace CruZ.Editor.UI
 
             DrawBoard(FunMath.RoundInt(lineWorldDis), col);
 
-            void DrawBoard(int lineDis, XNA.Color col)
+            void DrawBoard(int lineDis, Color col)
             {
                 var center = Camera.Main.CameraOffset;
 

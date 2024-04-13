@@ -1,9 +1,6 @@
-﻿using CruZ.Common.ECS;
-using CruZ.Framework;
-using CruZ.Framework.GameSystem.ECS;
+﻿using CruZ.Framework.GameSystem.ECS;
 using CruZ.Framework.GameSystem.Render;
 using CruZ.Framework.Resource;
-using CruZ.Framework.Serialization;
 
 using Microsoft.Xna.Framework;
 
@@ -11,7 +8,7 @@ using MonoGame.Extended.Sprites;
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
+using System.Text.Json.Serialization;
 
 namespace CruZ.Framework.GameSystem.Animation
 {
@@ -86,7 +83,7 @@ namespace CruZ.Framework.GameSystem.Animation
 
 namespace CruZ.Framework.GameSystem.Animation
 {
-    public class AnimationComponent : Component, ICustomSerializable
+    public class AnimationComponent : Component, IJsonOnDeserialized
     {
         public AnimationComponent()
         {
@@ -131,47 +128,63 @@ namespace CruZ.Framework.GameSystem.Animation
             comps.TryGetComponent(out _sprite);
         }
 
-        public object ReadJson(JsonReader reader, JsonSerializer serializer)
+        public void OnDeserialized()
         {
-            var jObject = JObject.Load(reader);
-
-            foreach (var player in jObject["animation-players"])
-            {
-                string? uri = player["resource-uri"].Value<string>();
-                string? playerKey = player["animation-player-key"].Value<string>();
-
-                if (string.IsNullOrEmpty(uri)) continue;
-                Trace.Assert(playerKey != null);
-
-                LoadSpriteSheet(uri, playerKey);
-            }
-
-            return this;
-        }
-
-        public void WriteJson(JsonWriter writer, JsonSerializer serializer)
-        {
-            writer.WriteStartObject();
-
-            writer.WritePropertyName("animation-players");
-            writer.WriteStartArray();
             foreach (var resource in _loadedResources)
             {
-                writer.WriteStartObject();
-                writer.WritePropertyName("resource-uri");
-                writer.WriteValue(resource.Key);
-                writer.WritePropertyName("animation-player-key");
-                writer.WriteValue(resource.Value);
-                writer.WriteEndObject();
+                LoadSpriteSheet(resource.Value, resource.Key);
             }
-            writer.WriteEnd();
-            writer.WriteEnd();
         }
+
+        //public object ReadJson(JsonReader reader, JsonSerializer serializer)
+        //{
+        //    var jObject = JObject.Load(reader);
+
+        //    foreach (var player in jObject["animation-players"])
+        //    {
+        //        string? uri = player["resource-uri"].Value<string>();
+        //        string? playerKey = player["animation-player-key"].Value<string>();
+
+        //        if (string.IsNullOrEmpty(uri)) continue;
+        //        Trace.Assert(playerKey != null);
+
+        //        LoadSpriteSheet(uri, playerKey);
+        //    }
+
+        //    return this;
+        //}
+
+
+        //public void WriteJson(JsonWriter writer, JsonSerializer serializer)
+        //{
+        //    writer.WriteStartObject();
+
+        //    writer.WritePropertyName("animation-players");
+        //    writer.WriteStartArray();
+        //    foreach (var resource in _loadedResources)
+        //    {
+        //        writer.WriteStartObject();
+        //        writer.WritePropertyName("resource-uri");
+        //        writer.WriteValue(resource.Key);
+        //        writer.WritePropertyName("animation-player-key");
+        //        writer.WriteValue(resource.Value);
+        //        writer.WriteEndObject();
+        //    }
+        //    writer.WriteEnd();
+        //    writer.WriteEnd();
+        //}
 
         AnimationPlayer? _currentAnimationPlayer;
         SpriteRendererComponent? _sprite;
         ResourceManager _resource;
         Dictionary<string, AnimationPlayer> _getAnimationPlayer = new();
+
+        /// <summary>
+        /// store list of loaded animation
+        /// Key: resource path of animation
+        /// Value: animation key
+        /// </summary>
+        [JsonInclude]
         List<KeyValuePair<string, string>> _loadedResources = [];
     }
 }
