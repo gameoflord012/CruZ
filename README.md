@@ -2,6 +2,9 @@
 
 GameEngine from MonoGame madafaka
 
+# Submodules
+git submodule update --init
+
 # Setup Content.mgcb for new game project
 
 1. Create manifest file
