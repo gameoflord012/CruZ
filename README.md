@@ -3,7 +3,7 @@
 GameEngine from MonoGame madafaka
 
 # Submodules
-git submodule update --init
+git submodule update --init --recursive
 
 # Setup Content.mgcb for new game project
 
