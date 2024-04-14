@@ -9,6 +9,9 @@ using System.Text.Json.Serialization;
 
 namespace CruZ.Framework.Serialization
 {
+    /// <summary>
+    /// Json Serializer wrapper for <see cref="JsonSerializer"/>
+    /// </summary>
     public class Serializer
     {
         public IList<JsonConverter> Converters { get => _options.Converters; }
@@ -18,11 +21,15 @@ namespace CruZ.Framework.Serialization
         {
             _options = new();
             _options.WriteIndented = true;
+            _referenceHandler = new ResetReferenceHandler();
+            _options.ReferenceHandler = _referenceHandler;
         }
 
         public void SerializeToFile(object o, string filePath)
         {
             var json = JsonSerializer.Serialize(o, _options);
+            _referenceHandler.Reset(); // reset reference caches after serialization
+
             using (var writer = FileHelper.OpenWrite(filePath, false))
             {
                 writer.WriteLine(json);
@@ -59,7 +66,8 @@ namespace CruZ.Framework.Serialization
 
             try
             {
-                o = JsonSerializer.Serialize(json, ty, _options);
+                o = JsonSerializer.Deserialize(json, ty, _options)!;
+                _referenceHandler.Reset(); // reset reference caches after serialization
             }
             catch (Exception e)
             {
@@ -72,5 +80,6 @@ namespace CruZ.Framework.Serialization
         }
 
         JsonSerializerOptions _options;
+        ResetReferenceHandler _referenceHandler;
     }
 }

@@ -1,13 +1,15 @@
 ﻿using CruZ.Framework.GameSystem.ECS;
 using CruZ.Framework.Resource;
-
+using CruZ.Framework.Serialization;
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Text.Json.Serialization;
 
 namespace CruZ.Framework.Scene
 {
-    public partial class GameScene : IResource
+    [JsonConverter(typeof(TransformEntityJsonConverter))]
+    public class GameScene : IResource, IDisposable, IJsonOnSerializing, IJsonOnDeserialized
     {
         public event Action<TransformEntity>? EntityAdded;
         public event Action<TransformEntity>? EntityRemoved;
@@ -15,7 +17,7 @@ namespace CruZ.Framework.Scene
         public string Name = ""; // temporary use name as runtime resource path
 
         [JsonIgnore]
-        public TransformEntity[] Entities { get => _entities.ToArray(); }
+        public IImmutableList<TransformEntity> Entities { get => _entities.ToImmutableList(); }
         ResourceInfo? IResource.Info { get; set; }
 
         public GameScene()
@@ -66,38 +68,45 @@ namespace CruZ.Framework.Scene
             return e;
         }
 
+        public void OnSerializing()
+        {
+            // sorted entities so that the parent get serialize first then its children
+            _entitiesToSerialize.Clear();
+            _entitiesToSerialize = TransformEntityHelper.SortByDepth(_entitiesToSerialize.ToImmutableList());
+        }
+
+        public void OnDeserialized()
+        {
+            foreach (var entity in _entitiesToSerialize)
+            {
+                AddEntity(entity);
+            }
+        }
+
+        bool _isActive = false;
+
+        List<TransformEntity> _entities = [];
+        [JsonInclude]
+        List<TransformEntity> _entitiesToSerialize = [];
+
         private void Game_Exiting()
         {
             Dispose();
         }
 
-        //public object ReadJson(JsonReader reader, JsonSerializer serializer)
-        //{
-        //    serializer.Populate(reader, this);
-        //    return this;
-        //}
+        public void Dispose()
+        {
+            SetActive(false);
 
-        //public void WriteJson(JsonWriter writer, JsonSerializer serializer)
-        //{
-        //    writer.WriteStartObject();
-        //    {
-        //        writer.WritePropertyName(nameof(Name));
-        //        serializer.Serialize(writer, Name);
-
-        //        writer.WritePropertyName(nameof(_entities));
-        //        serializer.Serialize(writer, _entities);
-        //    }
-        //    writer.WriteEnd();
-        //}
+            foreach (var e in _entities)
+            {
+                e.Dispose();
+            }
+        }
 
         public override string ToString()
         {
             return string.IsNullOrEmpty(Name) ? ((IResource)this).Info.ResourceName : Name;
         }
-
-        bool _isActive = false;
-
-        [JsonInclude]
-        List<TransformEntity> _entities = [];
     }
 }

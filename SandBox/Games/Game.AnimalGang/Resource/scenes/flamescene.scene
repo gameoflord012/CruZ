@@ -16,43 +16,40 @@
         },
         "Position": "0, 0",
         "Scale": "1, 1",
-        "_serializationData": {
+        "_componentsToSerialize": {
           "$id": "5",
-          "Components": {
-            "$id": "6",
-            "$values": [
-              {
-                "ComponentType": "Game.AnimalGang.DesktopGL.FlameRendererComponent",
-                "ComponentData": {
-                  "$id": "1",
-                  "Threshold": 0.5,
-                  "MaxLuminance": 4,
-                  "Brightness": 2,
-                  "BloomColor": {},
-                  "RenderMode": 2,
-                  "BloomPhase": 4,
-                  "BloomRadiuses": [
-                    1,
-                    1,
-                    1,
-                    1,
-                    1,
-                    1,
-                    1,
-                    1
-                  ],
-                  "BloomStrengths": [
-                    1,
-                    1,
-                    1,
-                    1
-                  ],
-                  "SortingLayer": 0,
-                  "LayerDepth": 0
-                }
+          "$values": [
+            {
+              "ComponentType": "Game.AnimalGang.DesktopGL.FlameRendererComponent",
+              "ComponentData": {
+                "$id": "6",
+                "Threshold": 0.5,
+                "MaxLuminance": 4,
+                "Brightness": 2,
+                "BloomColor": {},
+                "RenderMode": 2,
+                "BloomPhase": 4,
+                "BloomRadiuses": [
+                  1,
+                  1,
+                  1,
+                  1,
+                  1,
+                  1,
+                  1,
+                  1
+                ],
+                "BloomStrengths": [
+                  1,
+                  1,
+                  1,
+                  1
+                ],
+                "SortingLayer": 0,
+                "LayerDepth": 0
               }
-            ]
-          }
+            }
+          ]
         }
       },
       {
@@ -70,12 +67,69 @@
         },
         "Position": "0, 0",
         "Scale": "1, 1",
-        "_serializationData": {
+        "_componentsToSerialize": {
           "$id": "9",
-          "Components": {
-            "$id": "10",
-            "$values": []
-          }
+          "$values": []
+        }
+      },
+      {
+        "$id": "10",
+        "Name": "New Entity(2)",
+        "Id": 2,
+        "IsActive": true,
+        "Parent": {
+          "$ref": "3"
+        },
+        "Transform": {
+          "$id": "11",
+          "Scale": "1, 1",
+          "Position": "0, 0"
+        },
+        "Position": "0, 0",
+        "Scale": "1, 1",
+        "_componentsToSerialize": {
+          "$id": "12",
+          "$values": []
+        }
+      },
+      {
+        "$id": "13",
+        "Name": "New Entity(3)",
+        "Id": 3,
+        "IsActive": true,
+        "Parent": {
+          "$ref": "10"
+        },
+        "Transform": {
+          "$id": "14",
+          "Scale": "1, 1",
+          "Position": "0, 0"
+        },
+        "Position": "0, 0",
+        "Scale": "1, 1",
+        "_componentsToSerialize": {
+          "$id": "15",
+          "$values": []
+        }
+      },
+      {
+        "$id": "16",
+        "Name": "New Entity(4)",
+        "Id": 4,
+        "IsActive": true,
+        "Parent": {
+          "$ref": "7"
+        },
+        "Transform": {
+          "$id": "17",
+          "Scale": "1, 1",
+          "Position": "0, 0"
+        },
+        "Position": "0, 0",
+        "Scale": "1, 1",
+        "_componentsToSerialize": {
+          "$id": "18",
+          "$values": []
         }
       }
     ]
