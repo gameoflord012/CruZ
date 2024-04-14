@@ -54,29 +54,6 @@
             ]
           }
         }
-      },
-      {
-        "$id": "7",
-        "Name": "New Entity(1)",
-        "Id": 1,
-        "IsActive": true,
-        "Parent": {
-          "$ref": "3"
-        },
-        "Transform": {
-          "$id": "8",
-          "Scale": "1, 1",
-          "Position": "0, 0"
-        },
-        "Position": "0, 0",
-        "Scale": "1, 1",
-        "_serializationData": {
-          "$id": "9",
-          "Components": {
-            "$id": "10",
-            "$values": []
-          }
-        }
       }
     ]
   }
