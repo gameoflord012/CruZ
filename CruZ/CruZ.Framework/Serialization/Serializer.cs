@@ -12,6 +12,7 @@ namespace CruZ.Framework.Serialization
     public class Serializer
     {
         public IList<JsonConverter> Converters { get => _options.Converters; }
+        public JsonSerializerOptions Options { get => _options; }
 
         public Serializer()
         {

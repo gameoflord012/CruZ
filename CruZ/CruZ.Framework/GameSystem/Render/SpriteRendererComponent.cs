@@ -30,8 +30,6 @@ namespace CruZ.Framework.GameSystem.ECS
 
         [JsonIgnore, Browsable(false)]
         public Texture2D? Texture { get => _texture; set => _texture = value; }
-
-        [TypeConverter(typeof(Vector2TypeConverter))]
         public Vector2 NormalizedOrigin { get; set; } = new(0.5f, 0.5f);
 
         [Editor(typeof(FileUITypeEditor), typeof(UITypeEditor))]

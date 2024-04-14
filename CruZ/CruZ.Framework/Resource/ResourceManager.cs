@@ -19,6 +19,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace CruZ.Framework.Resource
 {
@@ -43,6 +44,8 @@ namespace CruZ.Framework.Resource
 
             _serializer.Converters.Add(new TextureAtlasJsonConverter(this));
             _serializer.Converters.Add(new ComponentJsonConverter());
+            _serializer.Converters.Add(new Vector2JsonConverter());
+            _serializer.Options.ReferenceHandler = ReferenceHandler.Preserve;
 
             _guidManager = new(this);
 

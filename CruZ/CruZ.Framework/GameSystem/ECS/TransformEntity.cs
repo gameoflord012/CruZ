@@ -9,7 +9,7 @@ using Microsoft.Xna.Framework;
 
 namespace CruZ.Framework.GameSystem.ECS
 {
-    public partial class TransformEntity : IDisposable, IJsonOnDeserialized, IJsonOnSerializing
+    public class TransformEntity : IDisposable, IJsonOnDeserialized, IJsonOnSerializing
     {
         public event EventHandler? RemovedFromWorld;
         public event Action<ComponentCollection>? ComponentsChanged;
@@ -148,6 +148,7 @@ namespace CruZ.Framework.GameSystem.ECS
 
         public void OnSerializing()
         {
+            // put component to serialize data
             _serializationData.Components.Clear();
             foreach (var component in _components.Values)
             {
@@ -157,6 +158,7 @@ namespace CruZ.Framework.GameSystem.ECS
 
         public void OnDeserialized()
         {
+            // from serialize data, restore components
             foreach (var component in _serializationData.Components)
             {
                 AddComponent(component);

@@ -1,49 +1,83 @@
 {
-  "_entities": [
-    {
-      "Name": "New Entity(0)",
-      "Id": 0,
-      "IsActive": true,
-      "Parent": null,
-      "Transform": {
-        "Scale": {},
-        "Position": {}
-      },
-      "Position": {},
-      "Scale": {},
-      "_serializationData": {
-        "Components": [
-          {
-            "ComponentType": "Game.AnimalGang.DesktopGL.FlameRendererComponent",
-            "ComponentData": {
-              "Threshold": 0.5,
-              "MaxLuminance": 4,
-              "Brightness": 2,
-              "BloomColor": {},
-              "RenderMode": 2,
-              "BloomPhase": 4,
-              "BloomRadiuses": [
-                1,
-                1,
-                1,
-                1,
-                1,
-                1,
-                1,
-                1
-              ],
-              "BloomStrengths": [
-                1,
-                1,
-                1,
-                1
-              ],
-              "SortingLayer": 0,
-              "LayerDepth": 0
-            }
+  "$id": "1",
+  "_entities": {
+    "$id": "2",
+    "$values": [
+      {
+        "$id": "3",
+        "Name": "New Entity(0)",
+        "Id": 0,
+        "IsActive": true,
+        "Parent": null,
+        "Transform": {
+          "$id": "4",
+          "Scale": "1, 1",
+          "Position": "0, 0"
+        },
+        "Position": "0, 0",
+        "Scale": "1, 1",
+        "_serializationData": {
+          "$id": "5",
+          "Components": {
+            "$id": "6",
+            "$values": [
+              {
+                "ComponentType": "Game.AnimalGang.DesktopGL.FlameRendererComponent",
+                "ComponentData": {
+                  "$id": "1",
+                  "Threshold": 0.5,
+                  "MaxLuminance": 4,
+                  "Brightness": 2,
+                  "BloomColor": {},
+                  "RenderMode": 2,
+                  "BloomPhase": 4,
+                  "BloomRadiuses": [
+                    1,
+                    1,
+                    1,
+                    1,
+                    1,
+                    1,
+                    1,
+                    1
+                  ],
+                  "BloomStrengths": [
+                    1,
+                    1,
+                    1,
+                    1
+                  ],
+                  "SortingLayer": 0,
+                  "LayerDepth": 0
+                }
+              }
+            ]
           }
-        ]
+        }
+      },
+      {
+        "$id": "7",
+        "Name": "New Entity(1)",
+        "Id": 1,
+        "IsActive": true,
+        "Parent": {
+          "$ref": "3"
+        },
+        "Transform": {
+          "$id": "8",
+          "Scale": "1, 1",
+          "Position": "0, 0"
+        },
+        "Position": "0, 0",
+        "Scale": "1, 1",
+        "_serializationData": {
+          "$id": "9",
+          "Components": {
+            "$id": "10",
+            "$values": []
+          }
+        }
       }
-    }
-  ]
+    ]
+  }
 }
