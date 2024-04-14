@@ -1,6 +1,4 @@
-﻿using CruZ.Editor.Global;
-
-using System;
+﻿using System;
 using System.Windows.Forms;
 
 namespace CruZ.Editor.Winform.Utility

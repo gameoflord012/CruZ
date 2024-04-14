@@ -1,6 +1,4 @@
-﻿using CruZ.Editor.Global;
-
-using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
 using CruZ.Framework.Service;
 using CruZ.Framework.Resource;

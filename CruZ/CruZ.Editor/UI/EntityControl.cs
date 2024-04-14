@@ -1,5 +1,4 @@
-﻿using CruZ.Editor.Global;
-using CruZ.Editor.Service;
+﻿using CruZ.Editor.Service;
 using CruZ.Framework.Utility;
 
 using System;

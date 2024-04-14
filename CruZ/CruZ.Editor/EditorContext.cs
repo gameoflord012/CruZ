@@ -7,7 +7,7 @@ using System.Reflection;
 using CruZ.Framework;
 using CruZ.Framework.Resource;
 
-namespace CruZ.Editor.Global
+namespace CruZ.Editor
 {
     static class EditorContext
     {

@@ -1,5 +1,4 @@
-﻿using CruZ.Editor.Global;
-using CruZ.Editor.Service;
+﻿using CruZ.Editor.Service;
 
 using System;
 using System.Collections.Generic;
@@ -14,7 +13,6 @@ using CruZ.Framework.Service;
 using CruZ.Framework.Input;
 using CruZ.Framework.Resource;
 using CruZ.Framework.GameSystem.ECS;
-using CruZ.Framework.Exceptions;
 using CruZ.Framework;
 using CruZ.Editor.Winform.Utility;
 using CruZ.Framework.UI;

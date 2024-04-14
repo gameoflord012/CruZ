@@ -2,7 +2,7 @@
   "profiles": {
     "CruZ.Editor": {
       "commandName": "Project",
-      "commandLineArgs": "-rD:/monogame-projects/CruZ_GameEngine/SandBox/Games/Game.AnimalGang/ -aD:/monogame-projects/CruZ_GameEngine/SandBox/Games/Artifacts/Game.AnimalGang/Debug/net8.0-windows/Game.AnimalGang.dll"
+      "commandLineArgs": "-rD:/Mono/CruZ_GameEngine/SandBox/Games/Game.AnimalGang/ -aD:/Mono/CruZ_GameEngine/SandBox/Games/Artifacts/Game.AnimalGang/Debug/net8.0-windows/Game.AnimalGang.dll"
     }
   }
 }

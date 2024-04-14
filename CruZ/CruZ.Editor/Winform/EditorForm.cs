@@ -1,9 +1,7 @@
 ﻿using CruZ.Editor.Controls;
-using CruZ.Editor.Global;
 using CruZ.Editor.Service;
 using CruZ.Editor.Winform.Utility;
-using CruZ.Framework.Exceptions;
-
+using CruZ.Framework;
 using System;
 using System.Linq;
 using System.Windows.Forms;

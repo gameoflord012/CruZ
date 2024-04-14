@@ -1,6 +1,6 @@
 ﻿using Color = Microsoft.Xna.Framework.Color;
 
-namespace CruZ.Editor.Global
+namespace CruZ.Editor
 {
     static class EditorConstants
     {

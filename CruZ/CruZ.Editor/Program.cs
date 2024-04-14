@@ -1,10 +1,7 @@
 ﻿using CommandLine;
 
-using CruZ.Editor.Global;
-
 using System;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 
 namespace CruZ.Editor

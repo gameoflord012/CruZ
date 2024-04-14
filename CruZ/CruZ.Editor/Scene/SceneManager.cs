@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-
-using CruZ.Editor.Global;
-using CruZ.Framework.Exceptions;
+using CruZ.Framework;
 using CruZ.Framework.Scene;
 
 namespace CruZ.Editor.Scene

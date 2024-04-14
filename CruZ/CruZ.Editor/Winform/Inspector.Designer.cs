@@ -1,4 +1,6 @@
-﻿namespace CruZ.Editor
+﻿using System.Drawing;
+
+namespace CruZ.Editor
 {
     partial class Inspector
     {
@@ -39,25 +41,25 @@
             // 
             entities_ComboBox.Anchor = global::System.Windows.Forms.AnchorStyles.Top | global::System.Windows.Forms.AnchorStyles.Left | global::System.Windows.Forms.AnchorStyles.Right;
             entities_ComboBox.FormattingEnabled = true;
-            entities_ComboBox.Location = new DRAW.Point(0, 17);
+            entities_ComboBox.Location = new Point(0, 17);
             entities_ComboBox.Name = "entities_ComboBox";
-            entities_ComboBox.Size = new DRAW.Size(288, 23);
+            entities_ComboBox.Size = new Size(288, 23);
             entities_ComboBox.TabIndex = 1;
             // 
             // entities_Label
             // 
-            entities_Label.Location = new DRAW.Point(0, 0);
+            entities_Label.Location = new Point(0, 0);
             entities_Label.Name = "entities_Label";
-            entities_Label.Size = new DRAW.Size(334, 17);
+            entities_Label.Size = new Size(334, 17);
             entities_Label.TabIndex = 2;
             entities_Label.Text = "Entities";
             // 
             // inspector_PropertyGrid
             // 
             inspector_PropertyGrid.Anchor = global::System.Windows.Forms.AnchorStyles.Top | global::System.Windows.Forms.AnchorStyles.Bottom | global::System.Windows.Forms.AnchorStyles.Left | global::System.Windows.Forms.AnchorStyles.Right;
-            inspector_PropertyGrid.Location = new DRAW.Point(0, 46);
+            inspector_PropertyGrid.Location = new Point(0, 46);
             inspector_PropertyGrid.Name = "inspector_PropertyGrid";
-            inspector_PropertyGrid.Size = new DRAW.Size(290, 187);
+            inspector_PropertyGrid.Size = new Size(290, 187);
             inspector_PropertyGrid.TabIndex = 0;
             // 
             // inspector_Panel
@@ -66,18 +68,18 @@
             inspector_Panel.Controls.Add(entities_Label);
             inspector_Panel.Controls.Add(inspector_PropertyGrid);
             inspector_Panel.Dock = global::System.Windows.Forms.DockStyle.Fill;
-            inspector_Panel.Location = new DRAW.Point(0, 0);
+            inspector_Panel.Location = new Point(0, 0);
             inspector_Panel.Name = "inspector_Panel";
-            inspector_Panel.Size = new DRAW.Size(288, 233);
+            inspector_Panel.Size = new Size(288, 233);
             inspector_Panel.TabIndex = 4;
             // 
             // Inspector
             // 
-            AutoScaleDimensions = new DRAW.SizeF(7F, 15F);
+            AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = global::System.Windows.Forms.AutoScaleMode.Font;
             Controls.Add(inspector_Panel);
             Name = "EntityInspector";
-            Size = new DRAW.Size(288, 233);
+            Size = new Size(288, 233);
             inspector_Panel.ResumeLayout(false);
             ResumeLayout(false);
         }
