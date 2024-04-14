@@ -45,7 +45,7 @@ namespace CruZ.Framework.Resource
             _serializer.Converters.Add(new TextureAtlasJsonConverter(this));
             _serializer.Converters.Add(new ComponentJsonConverter());
             _serializer.Converters.Add(new Vector2JsonConverter());
-            _serializer.Options.ReferenceHandler = ReferenceHandler.Preserve;
+            _serializer.Options.MakeReadOnly();
 
             _guidManager = new(this);
 

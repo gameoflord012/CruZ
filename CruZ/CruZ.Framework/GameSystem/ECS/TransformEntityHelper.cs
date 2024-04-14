@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,7 +12,7 @@ namespace CruZ.Framework.GameSystem.ECS
         /// <summary>
         /// Parent alway first the children
         /// </summary>
-        public static List<TransformEntity> SortByDepth(TransformEntity[] entities)
+        public static List<TransformEntity> SortByDepth(IImmutableList<TransformEntity> entities)
         {
             List<TransformEntity> sorted = [];
             HashSet<TransformEntity> visited = [];

@@ -4,17 +4,16 @@ using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text.Json.Serialization;
-
+using CruZ.Framework.Serialization;
 using Microsoft.Xna.Framework;
 
 namespace CruZ.Framework.GameSystem.ECS
 {
+    [JsonConverter(typeof(TransformEntityJsonConverter))]
     public class TransformEntity : IDisposable, IJsonOnDeserialized, IJsonOnSerializing
     {
         public event EventHandler? RemovedFromWorld;
         public event Action<ComponentCollection>? ComponentsChanged;
-
-        private TransformEntity() { } // ICustomSerialzable reflection call
 
         internal TransformEntity(World world)
         {
@@ -149,30 +148,24 @@ namespace CruZ.Framework.GameSystem.ECS
         public void OnSerializing()
         {
             // put component to serialize data
-            _serializationData.Components.Clear();
+            _componentsToSerialize.Clear();
             foreach (var component in _components.Values)
             {
-                _serializationData.Components.Add(component);
+                _componentsToSerialize.Add(component);
             }
         }
 
         public void OnDeserialized()
         {
             // from serialize data, restore components
-            foreach (var component in _serializationData.Components)
+            foreach (var component in _componentsToSerialize)
             {
                 AddComponent(component);
             }
         }
 
         [JsonInclude]
-        SerializationData _serializationData = new();
-
-        private class SerializationData
-        {
-            [JsonInclude]
-            internal List<Component> Components = [];
-        }
+        List<Component> _componentsToSerialize = [];
 
         public void Dispose()
         {
