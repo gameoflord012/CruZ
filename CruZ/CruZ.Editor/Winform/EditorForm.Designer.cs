@@ -32,6 +32,7 @@ namespace CruZ.Editor
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(EditorForm));
             file_Menu = new ToolStripMenuItem();
             scene_Menu = new ToolStripMenuItem();
             openScene_MenuButton = new ToolStripMenuItem();
@@ -194,6 +195,7 @@ namespace CruZ.Editor
             ClientSize = new Size(377, 586);
             Controls.Add(menuStrip);
             Controls.Add(splitContainer1);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             MainMenuStrip = menuStrip;
             Margin = new Padding(3, 2, 3, 2);
             Name = "EditorForm";

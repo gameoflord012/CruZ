@@ -11,7 +11,7 @@
 	</PropertyGroup>
 
 	<PropertyGroup>
-		<ApplicationIcon>Resource\Icon.ico</ApplicationIcon>
+		<ApplicationIcon>Resource\kuromi.ico</ApplicationIcon>
 	</PropertyGroup>
 
 	<ItemGroup>
