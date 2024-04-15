@@ -1,59 +1,117 @@
 {
   "$id": "1",
-  "_entities": {
+  "_entitiesToSerialize": {
     "$id": "2",
     "$values": [
       {
         "$id": "3",
         "Name": "New Entity(0)",
-        "Id": 0,
-        "IsActive": true,
         "Parent": null,
         "Transform": {
           "$id": "4",
-          "Scale": "1, 1",
-          "Position": "0, 0"
-        },
-        "Position": "0, 0",
-        "Scale": "1, 1",
-        "_serializationData": {
-          "$id": "5",
-          "Components": {
-            "$id": "6",
-            "$values": [
-              {
-                "ComponentType": "Game.AnimalGang.DesktopGL.FlameRendererComponent",
-                "ComponentData": {
-                  "$id": "1",
-                  "Threshold": 0.5,
-                  "MaxLuminance": 4,
-                  "Brightness": 2,
-                  "BloomColor": {},
-                  "RenderMode": 2,
-                  "BloomPhase": 4,
-                  "BloomRadiuses": [
-                    1,
-                    1,
-                    1,
-                    1,
-                    1,
-                    1,
-                    1,
-                    1
-                  ],
-                  "BloomStrengths": [
-                    1,
-                    1,
-                    1,
-                    1
-                  ],
-                  "SortingLayer": 0,
-                  "LayerDepth": 0
-                }
-              }
-            ]
+          "Scale": {
+            "X": 1,
+            "Y": 1
+          },
+          "Position": {
+            "X": 0,
+            "Y": 0
           }
-        }
+        },
+        "Components": [
+          {
+            "ComponentType": "Game.AnimalGang.DesktopGL.FlameRendererComponent, Game.AnimalGang, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+            "ComponentData": {
+              "$id": "5",
+              "Threshold": 0.5,
+              "MaxLuminance": 4,
+              "Brightness": 2,
+              "BloomColor": {
+                "X": 4,
+                "Y": 1.25,
+                "Z": 0.6,
+                "W": 0.8
+              },
+              "RenderMode": 2,
+              "BloomPhase": 4,
+              "BloomRadiuses": [
+                1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1
+              ],
+              "BloomStrengths": [
+                1,
+                1,
+                1,
+                1
+              ],
+              "SortingLayer": 0,
+              "LayerDepth": 0
+            }
+          }
+        ]
+      },
+      {
+        "$id": "6",
+        "Name": "New Entity(1)",
+        "Parent": {
+          "$ref": "3"
+        },
+        "Transform": {
+          "$id": "7",
+          "Scale": {
+            "X": 1,
+            "Y": 1
+          },
+          "Position": {
+            "X": 0,
+            "Y": 0
+          }
+        },
+        "Components": []
+      },
+      {
+        "$id": "8",
+        "Name": "New Entity(2)",
+        "Parent": {
+          "$ref": "3"
+        },
+        "Transform": {
+          "$id": "9",
+          "Scale": {
+            "X": 1,
+            "Y": 1
+          },
+          "Position": {
+            "X": 0,
+            "Y": 0
+          }
+        },
+        "Components": []
+      },
+      {
+        "$id": "10",
+        "Name": "New Entity(3)",
+        "Parent": {
+          "$ref": "8"
+        },
+        "Transform": {
+          "$id": "11",
+          "Scale": {
+            "X": 1,
+            "Y": 1
+          },
+          "Position": {
+            "X": 0,
+            "Y": 0
+          }
+        },
+        "Components": []
       }
     ]
   }

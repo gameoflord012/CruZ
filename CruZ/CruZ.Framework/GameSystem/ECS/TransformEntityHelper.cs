@@ -10,7 +10,7 @@ namespace CruZ.Framework.GameSystem.ECS
     public class TransformEntityHelper
     {
         /// <summary>
-        /// Parent alway first the children
+        /// parent index alway smaller than its children
         /// </summary>
         public static List<TransformEntity> SortByDepth(IImmutableList<TransformEntity> entities)
         {

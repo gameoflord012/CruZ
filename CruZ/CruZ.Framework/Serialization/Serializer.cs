@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Text.Json.Serialization.Metadata;
 
 namespace CruZ.Framework.Serialization
 {
@@ -21,6 +22,7 @@ namespace CruZ.Framework.Serialization
         {
             _options = new();
             _options.WriteIndented = true;
+            _options.TypeInfoResolver = new DefaultJsonTypeInfoResolver();
             _referenceHandler = new ResetReferenceHandler();
             _options.ReferenceHandler = _referenceHandler;
         }

@@ -7,11 +7,10 @@ using System.Text.Json.Serialization;
 namespace CruZ.Framework.GameSystem.ECS
 {
     [TypeConverter(typeof(ExpandableObjectConverter))]
-    public partial class Transform : INotifyPropertyChanged
+    public partial class Transform
     {
         public event EventHandler<TransformEventArgs> OnPositionChanged;
         public event EventHandler<TransformEventArgs> OnScaleChanged;
-        public event PropertyChangedEventHandler? PropertyChanged;
 
         public Transform()
         {
@@ -46,11 +45,6 @@ namespace CruZ.Framework.GameSystem.ECS
                 OnPositionChanged?.Invoke(this, TransformEventArgs.Create(this));
                 //InvokeChanged(nameof(Position));
             }
-        }
-
-        private void InvokeChanged(string propName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propName));
         }
 
         Vector2 _position;

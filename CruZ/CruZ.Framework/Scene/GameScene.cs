@@ -8,7 +8,6 @@ using System.Text.Json.Serialization;
 
 namespace CruZ.Framework.Scene
 {
-    [JsonConverter(typeof(TransformEntityJsonConverter))]
     public class GameScene : IResource, IDisposable, IJsonOnSerializing, IJsonOnDeserialized
     {
         public event Action<TransformEntity>? EntityAdded;
@@ -72,7 +71,7 @@ namespace CruZ.Framework.Scene
         {
             // sorted entities so that the parent get serialize first then its children
             _entitiesToSerialize.Clear();
-            _entitiesToSerialize = TransformEntityHelper.SortByDepth(_entitiesToSerialize.ToImmutableList());
+            _entitiesToSerialize = TransformEntityHelper.SortByDepth(Entities);
         }
 
         public void OnDeserialized()

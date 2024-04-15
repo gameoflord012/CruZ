@@ -2,35 +2,37 @@
 using System;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-
+using System.Text.Json.Serialization.Metadata;
 namespace CruZ.Framework.Serialization
 {
     internal class Vector2JsonConverter : JsonConverter<Vector2>
     {
         public override Vector2 Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
-            string str = reader.GetString() ?? throw new JsonException();
-            string[] splits = str.Split(',');
-            Vector2 v2 = new Vector2();
+            Vector2 v2 = new();
 
-            if (float.TryParse(splits[0], out float x))
+            using(var document = JsonDocument.ParseValue(ref reader))
             {
-                v2.X = x;
-            }
-            else throw new JsonException();
+                var root = document.RootElement;
 
-            if (float.TryParse(splits[1], out float y))
-            {
-                v2.Y = y;
+                v2.X = root.GetProperty("X").GetSingle();
+                v2.Y = root.GetProperty("Y").GetSingle();
             }
-            else throw new JsonException();
 
             return v2;
         }
 
         public override void Write(Utf8JsonWriter writer, Vector2 value, JsonSerializerOptions options)
         {
-            writer.WriteStringValue($"{value.X}, {value.Y}");
+            writer.WriteStartObject();
+            {
+                writer.WritePropertyName("X");
+                writer.WriteNumberValue(value.X);
+
+                writer.WritePropertyName("Y");
+                writer.WriteNumberValue(value.Y);
+            }
+            writer.WriteEndObject();
         }
     }
 }

@@ -1,5 +1,5 @@
 ﻿using CruZ.Framework.GameSystem.ECS;
-using CruZ.Framework.Scene;
+
 using System;
 using System.Collections.Generic;
 using System.Text.Json;
@@ -12,8 +12,39 @@ namespace CruZ.Framework.Serialization
         public override TransformEntity? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
             TransformEntity entity = ECSManager.CreateTransformEntity();
-            var converter = JsonSerializerOptions.Default.GetConverter(typeof(TransformEntity));
-            JsonSerializer.P
+            var resolver = options.ReferenceHandler!.CreateResolver();
+
+            using (JsonDocument document = JsonDocument.ParseValue(ref reader))
+            {
+                JsonElement root = document.RootElement;
+
+                if (root.TryGetProperty("$id", out JsonElement idNode))
+                {
+                    var refId = idNode.GetString()!;
+                    resolver.AddReference(refId, entity);
+
+                    entity.Name = root.GetProperty(nameof(entity.Name)).GetString()!;
+
+                    var parentNode = root.GetProperty(nameof(entity.Parent));
+                    entity.Parent = JsonSerializer.Deserialize<TransformEntity?>(parentNode, options);
+
+                    var transformNode = root.GetProperty(nameof(entity.Transform));
+                    entity.Transform = JsonSerializer.Deserialize<Transform>(transformNode, options)!;
+
+                    var componentsNode = root.GetProperty(nameof(entity.Components));
+                    foreach (var componentNode in componentsNode.EnumerateArray())
+                    {
+                        var component = JsonSerializer.Deserialize<Component>(componentNode, options)!;
+                        entity.AddComponent(component);
+                    }
+                }
+                else if(root.TryGetProperty("$ref", out JsonElement refNode))
+                {
+                    var refId = refNode.GetString()!;
+                    entity = (TransformEntity)resolver.ResolveReference(refId);
+                }
+            }
+
             return entity;
         }
 
@@ -21,10 +52,35 @@ namespace CruZ.Framework.Serialization
         {
             writer.WriteStartObject();
             {
+                string refId = options.ReferenceHandler!.CreateResolver().GetReference(value, out bool alreadyExists);
 
+                if (alreadyExists)
+                {
+                    writer.WriteString("$ref", refId);
+                }
+                else
+                {
+                    writer.WriteString("$id", refId);
+
+                    writer.WritePropertyName(nameof(value.Name));
+                    writer.WriteStringValue(value.Name);
+
+                    writer.WritePropertyName(nameof(value.Parent));
+                    JsonSerializer.Serialize(writer, value.Parent, options);
+
+                    writer.WritePropertyName(nameof(value.Transform));
+                    JsonSerializer.Serialize(writer, value.Transform, options);
+
+                    writer.WritePropertyName(nameof(value.Components));
+
+                    writer.WriteStartArray();
+                    {
+                        foreach (var component in value.Components) JsonSerializer.Serialize(writer, component, options);
+                    }
+                    writer.WriteEndArray();
+                }
             }
             writer.WriteEndObject();
-            JsonSerializer.Serialize(writer, value, typeof(TransformEntity), options);
         }
     }
 }

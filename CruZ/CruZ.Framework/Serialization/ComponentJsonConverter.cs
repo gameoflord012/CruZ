@@ -30,7 +30,7 @@ namespace CruZ.Framework.Serialization
             writer.WriteStartObject();
             {
                 writer.WritePropertyName("ComponentType");
-                writer.WriteStringValue(value.GetType().FullName);
+                writer.WriteStringValue(value.GetType().AssemblyQualifiedName);
 
                 writer.WritePropertyName("ComponentData");
                 JsonSerializer.Serialize(writer, value, value.GetType(), options);

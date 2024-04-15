@@ -9,21 +9,38 @@ namespace CruZ.Framework.Serialization
     {
         public override Vector4 Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
-            string str = reader.GetString() ?? throw new JsonException();
-            string[] splits = str.Split(',');
-            Vector4 v = new();
+            Vector4 v4 = new();
 
-            v.X = float.Parse(splits[0]);
-            v.Y = float.Parse(splits[1]);
-            v.Z = float.Parse(splits[2]);
-            v.W = float.Parse(splits[3]);
+            using (var document = JsonDocument.ParseValue(ref reader))
+            {
+                var root = document.RootElement;
 
-            return v;
+                v4.X = root.GetProperty("X").GetSingle();
+                v4.Y = root.GetProperty("Y").GetSingle();
+                v4.Z = root.GetProperty("Z").GetSingle();
+                v4.W = root.GetProperty("W").GetSingle();
+            }
+
+            return v4;
         }
 
         public override void Write(Utf8JsonWriter writer, Vector4 value, JsonSerializerOptions options)
         {
-            writer.WriteStringValue($"{value.X}, {value.Y}, {value.Z}, {value.W}");
+            writer.WriteStartObject();
+            {
+                writer.WritePropertyName("X");
+                writer.WriteNumberValue(value.X);
+
+                writer.WritePropertyName("Y");
+                writer.WriteNumberValue(value.Y);
+
+                writer.WritePropertyName("Z");
+                writer.WriteNumberValue(value.Z);
+
+                writer.WritePropertyName("W");
+                writer.WriteNumberValue(value.W);
+            }
+            writer.WriteEndObject();
         }
     }
 }

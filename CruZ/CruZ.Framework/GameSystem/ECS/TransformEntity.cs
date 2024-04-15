@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -10,7 +11,7 @@ using Microsoft.Xna.Framework;
 namespace CruZ.Framework.GameSystem.ECS
 {
     [JsonConverter(typeof(TransformEntityJsonConverter))]
-    public class TransformEntity : IDisposable, IJsonOnDeserialized, IJsonOnSerializing
+    public class TransformEntity : IDisposable
     {
         public event EventHandler? RemovedFromWorld;
         public event Action<ComponentCollection>? ComponentsChanged;
@@ -122,13 +123,13 @@ namespace CruZ.Framework.GameSystem.ECS
             get => _transform; 
             set => _transform = value; 
         }
-        
+
         public Vector2 Position 
         { 
             get => Transform.Position; 
             set => Transform.Position = value; 
         }
-        
+
         public Vector2 Scale 
         { 
             get => Transform.Scale; 
@@ -139,34 +140,13 @@ namespace CruZ.Framework.GameSystem.ECS
         bool _isActive = false;
         TransformEntity? _parent;
 
+        internal IImmutableList<Component> Components { get => _components.Values.ToImmutableList(); }
+
         Dictionary<Type, Component> _components = [];
         Transform _transform = new();
         World _world;
 
         static int _entityCounter = 0;
-
-        public void OnSerializing()
-        {
-            // put component to serialize data
-            _componentsToSerialize.Clear();
-            foreach (var component in _components.Values)
-            {
-                _componentsToSerialize.Add(component);
-            }
-        }
-
-        public void OnDeserialized()
-        {
-            // from serialize data, restore components
-            foreach (var component in _componentsToSerialize)
-            {
-                AddComponent(component);
-            }
-        }
-
-        [JsonInclude]
-        List<Component> _componentsToSerialize = [];
-
         public void Dispose()
         {
             RemoveFromWorld();

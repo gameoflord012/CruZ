@@ -43,7 +43,9 @@ namespace CruZ.Framework.Resource
             Directory.CreateDirectory(Path.GetDirectoryName(ContentOutputDir) ?? throw new ArgumentException("resourceRoot"));
 
             _serializer.Converters.Add(new TextureAtlasJsonConverter(this));
+            _serializer.Converters.Add(new TransformEntityJsonConverter());
             _serializer.Converters.Add(new ComponentJsonConverter());
+            _serializer.Converters.Add(new Vector4JsonConverter());
             _serializer.Converters.Add(new Vector2JsonConverter());
             _serializer.Options.MakeReadOnly();
 
