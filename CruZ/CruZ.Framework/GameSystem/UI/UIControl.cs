@@ -8,7 +8,7 @@ using System.Collections.Generic;
 
 using RectangleF = System.Drawing.RectangleF;
 
-namespace CruZ.Framework.UI
+namespace CruZ.Framework.GameSystem.UI
 {
     public class UIControl
     {
@@ -47,7 +47,7 @@ namespace CruZ.Framework.UI
 
         public void RemoveChild(UIControl child)
         {
-            if(!_childs.Remove(child))
+            if (!_childs.Remove(child))
             {
                 throw new ArgumentException($"Fail to remove {child} ui control from {this}");
             }
@@ -94,7 +94,7 @@ namespace CruZ.Framework.UI
 
             // dragging
             ProcessDragging(args);
-            
+
             // update mouse events
             if (IsMouseHover())
             {
@@ -160,14 +160,14 @@ namespace CruZ.Framework.UI
                 _globalDragObject = _dragObject;
             }
 
-            
-            if(Dragging() && _globalDragObject == _dragObject)
+
+            if (Dragging() && _globalDragObject == _dragObject)
             {
                 OnUpdateDragging(args);
 
-                if(args.InputInfo.IsMouseHeldUp(MouseKey.Left))
+                if (args.InputInfo.IsMouseHeldUp(MouseKey.Left))
                 {
-                    if(OnReleaseDragging())
+                    if (OnReleaseDragging())
                     {
                         _dragObject = null;
                         _globalDragObject = null;
@@ -178,7 +178,7 @@ namespace CruZ.Framework.UI
 
         public void Dispose()
         {
-            if(Parent != null)
+            if (Parent != null)
             {
                 Parent.RemoveChild(this);
             }

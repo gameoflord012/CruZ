@@ -1,8 +1,7 @@
-﻿using CruZ.Framework.UI;
-using System;
+﻿using System;
 using System.Collections.Generic;
 
-namespace CruZ.Framework.UI
+namespace CruZ.Framework.GameSystem.UI
 {
     /// <summary>
     /// Exposed API of UISystem

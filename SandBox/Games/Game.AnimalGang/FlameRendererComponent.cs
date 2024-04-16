@@ -1,5 +1,6 @@
 ﻿using CruZ.Framework;
 using CruZ.Framework.GameSystem.Render;
+using CruZ.Framework.GameSystem.Render.Filters;
 using CruZ.Framework.Utility;
 
 using Microsoft.Xna.Framework;

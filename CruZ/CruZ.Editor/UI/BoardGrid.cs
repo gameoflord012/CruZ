@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
+
 using System.Drawing;
 
 using Color = Microsoft.Xna.Framework.Color;
@@ -8,7 +9,7 @@ namespace CruZ.Editor.UI;
 using System.Numerics;
 
 using CruZ.Framework;
-using CruZ.Framework.UI;
+using CruZ.Framework.GameSystem.UI;
 using CruZ.Framework.Utility;
 
 public class BoardGrid : UIControl

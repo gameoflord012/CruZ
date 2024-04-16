@@ -5,7 +5,7 @@ using CruZ.Framework.Utility;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace CruZ.Framework.GameSystem.Render
+namespace CruZ.Framework.GameSystem.Render.Filters
 {
     public class BloomFilter : IDisposable
     {
@@ -47,10 +47,10 @@ namespace CruZ.Framework.GameSystem.Render
             PassTexture = tex;
             _gd.SetRenderTarget(_rtMips[0]);
             _gd.BlendState = BlendState.Opaque; // override the last content
-            _extractPass.Apply(); 
+            _extractPass.Apply();
             _renderer.RenderFullScreen();
 
-            if(ExitPhase == 0) goto FINISHED;
+            if (ExitPhase == 0) goto FINISHED;
             //
             // Downsample
             //
@@ -92,10 +92,10 @@ namespace CruZ.Framework.GameSystem.Render
 
                 DisposeRenderTargets();
 
-                _rtMips[0] = new RenderTarget2D(_gd, _width     , _height     , true, SurfaceFormat.Vector4, DepthFormat.None, 0, RenderTargetUsage.PreserveContents);
-                _rtMips[1] = new RenderTarget2D(_gd, _width / 2 , _height / 2 , true, SurfaceFormat.Vector4, DepthFormat.None, 0, RenderTargetUsage.PreserveContents);
-                _rtMips[2] = new RenderTarget2D(_gd, _width / 4 , _height / 4 , true, SurfaceFormat.Vector4, DepthFormat.None, 0, RenderTargetUsage.PreserveContents);
-                _rtMips[3] = new RenderTarget2D(_gd, _width / 8 , _height / 8 , true, SurfaceFormat.Vector4, DepthFormat.None, 0, RenderTargetUsage.PreserveContents);
+                _rtMips[0] = new RenderTarget2D(_gd, _width, _height, true, SurfaceFormat.Vector4, DepthFormat.None, 0, RenderTargetUsage.PreserveContents);
+                _rtMips[1] = new RenderTarget2D(_gd, _width / 2, _height / 2, true, SurfaceFormat.Vector4, DepthFormat.None, 0, RenderTargetUsage.PreserveContents);
+                _rtMips[2] = new RenderTarget2D(_gd, _width / 4, _height / 4, true, SurfaceFormat.Vector4, DepthFormat.None, 0, RenderTargetUsage.PreserveContents);
+                _rtMips[3] = new RenderTarget2D(_gd, _width / 8, _height / 8, true, SurfaceFormat.Vector4, DepthFormat.None, 0, RenderTargetUsage.PreserveContents);
                 _rtMips[4] = new RenderTarget2D(_gd, _width / 16, _height / 16, true, SurfaceFormat.Vector4, DepthFormat.None, 0, RenderTargetUsage.PreserveContents);
             }
         }

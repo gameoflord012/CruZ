@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace CruZ.Framework.UI
+namespace CruZ.Framework.GameSystem.UI
 {
     public class UIRoot
     {
@@ -12,7 +12,7 @@ namespace CruZ.Framework.UI
 
         public UIControl AddBranch(string branchName)
         {
-            if(_uiBranches.ContainsKey(branchName)) throw new InvalidOperationException();
+            if (_uiBranches.ContainsKey(branchName)) throw new InvalidOperationException();
             var branch = new UIControl();
             Control.AddChild(branch);
             return _uiBranches[branchName] = branch;

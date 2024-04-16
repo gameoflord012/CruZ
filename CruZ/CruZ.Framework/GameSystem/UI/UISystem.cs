@@ -7,7 +7,7 @@ using CruZ.Framework.Input;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace CruZ.Framework.UI
+namespace CruZ.Framework.GameSystem.UI
 {
     internal class UISystem : EntitySystem
     {

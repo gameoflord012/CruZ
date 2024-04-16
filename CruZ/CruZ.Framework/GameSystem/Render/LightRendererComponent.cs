@@ -1,6 +1,6 @@
 ﻿using System;
 
-using CruZ.Framework.UI;
+using CruZ.Framework.GameSystem.UI;
 using CruZ.Framework.Utility;
 
 using Microsoft.Xna.Framework;

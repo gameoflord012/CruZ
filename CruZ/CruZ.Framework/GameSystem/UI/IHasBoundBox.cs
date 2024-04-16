@@ -4,7 +4,7 @@ using System.Drawing;
 
 using Microsoft.Xna.Framework;
 
-namespace CruZ.Framework.UI
+namespace CruZ.Framework.GameSystem.UI
 {
     public struct UIBoundingBox
     {

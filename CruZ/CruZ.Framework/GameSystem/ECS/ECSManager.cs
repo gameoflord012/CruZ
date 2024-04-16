@@ -4,7 +4,7 @@ using System.Diagnostics;
 using CruZ.Framework.GameSystem.Animation;
 using CruZ.Framework.GameSystem.Render;
 using CruZ.Framework.GameSystem.Script;
-using CruZ.Framework.UI;
+using CruZ.Framework.GameSystem.UI;
 
 using Microsoft.Xna.Framework;
 
