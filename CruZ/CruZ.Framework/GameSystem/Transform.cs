@@ -9,9 +9,6 @@ namespace CruZ.Framework.GameSystem
     [TypeConverter(typeof(ExpandableObjectConverter))]
     public partial class Transform
     {
-        public event EventHandler<TransformEventArgs> OnPositionChanged;
-        public event EventHandler<TransformEventArgs> OnScaleChanged;
-
         public Transform()
         {
             _position = Vector2.Zero;
@@ -31,8 +28,6 @@ namespace CruZ.Framework.GameSystem
             set
             {
                 _scale = value;
-                OnScaleChanged?.Invoke(this, TransformEventArgs.Create(this));
-                //InvokeChanged(nameof(Scale));
             }
         }
 
@@ -42,8 +37,6 @@ namespace CruZ.Framework.GameSystem
             set
             {
                 _position = value;
-                OnPositionChanged?.Invoke(this, TransformEventArgs.Create(this));
-                //InvokeChanged(nameof(Position));
             }
         }
 
