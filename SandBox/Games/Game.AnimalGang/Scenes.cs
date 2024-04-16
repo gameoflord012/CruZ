@@ -3,6 +3,7 @@ using CruZ.Framework.GameSystem.ECS;
 using CruZ.Framework.GameSystem.Render;
 using CruZ.Framework.GameSystem.Scene;
 using CruZ.Framework.GameSystem.Tile;
+using CruZ.Framework.GameSystem.UI;
 
 using Game.AnimalGang.DesktopGL;
 
@@ -123,6 +124,24 @@ namespace AnimalGang
 
             var flame = scene.CreateEntity();
             flame.AddComponent(new FlameRendererComponent());
+
+            return scene;
+        }
+
+        [SceneAssetMethod]
+        public static GameScene UIScene()
+        {
+
+            var btn = new ButtonControl();
+            btn.Width = 100;
+            btn.Height = 100;
+
+            var uiCom = new UIComponent();
+            uiCom.EntryControl.AddChild(btn);
+
+            var scene = new GameScene();
+            var entity = scene.CreateEntity();
+            entity.AddComponent(uiCom);
 
             return scene;
         }

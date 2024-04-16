@@ -16,6 +16,6 @@ namespace CruZ.Framework.GameSystem.UI
             EntryControl = new UIControl();
         }
 
-        internal UIControl EntryControl { get; private set; }
+        public UIControl EntryControl { get; private set; }
     }
 }

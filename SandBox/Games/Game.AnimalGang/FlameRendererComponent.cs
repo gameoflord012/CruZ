@@ -88,9 +88,9 @@ namespace Game.AnimalGang.DesktopGL
             }
         }
 
-        protected override void OnDispose()
+        public override void Dispose()
         {
-            base.OnDispose();
+            base.Dispose();
 
             _rt.Dispose();
             _bloom.Dispose();

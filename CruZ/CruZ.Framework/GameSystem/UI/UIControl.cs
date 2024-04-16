@@ -26,9 +26,9 @@ namespace CruZ.Framework.GameSystem.UI
             set { _location.X = value.X; _location.Y = value.Y; }
         }
 
-        public int Width { get => (int)_size.X; set => _size.X = value; }
+        public int Width { get => _size.X.RoundToInt(); set => _size.X = value; }
 
-        public int Height { get => (int)_size.Y; set => _size.Y = value; }
+        public int Height { get => _size.Y.RoundToInt(); set => _size.Y = value; }
 
         public Color BackgroundColor = DEFAULT_BACKGROUND_COLOR;
 
