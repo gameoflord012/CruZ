@@ -1,6 +1,4 @@
-﻿using CruZ.Framework.GameSystem.ECS;
-
-namespace CruZ.Framework.GameSystem.Animation
+﻿namespace CruZ.Framework.GameSystem.Animation
 {
     class AnimationSystem : EntitySystem
     {

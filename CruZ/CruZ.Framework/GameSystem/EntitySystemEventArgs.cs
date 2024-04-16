@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 using Microsoft.Xna.Framework;
 
-namespace CruZ.Framework.GameSystem.ECS
+namespace CruZ.Framework.GameSystem
 {
     internal class EntitySystemEventArgs : EventArgs
     {

@@ -8,7 +8,7 @@ using System;
 using System.Collections.Generic;
 using CruZ.Framework.Service;
 using CruZ.Framework.Input;
-using CruZ.Framework.GameSystem.ECS;
+using CruZ.Framework.GameSystem;
 
 namespace CruZ.Framework
 {

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CruZ.Framework.GameSystem.ECS
+namespace CruZ.Framework.GameSystem
 {
     public class TransformEntityHelper
     {
@@ -17,7 +17,7 @@ namespace CruZ.Framework.GameSystem.ECS
             List<TransformEntity> sorted = [];
             HashSet<TransformEntity> visited = [];
 
-            foreach(var current in entities)
+            foreach (var current in entities)
             {
                 ClimbUp(visited, sorted, current);
             }
@@ -29,7 +29,7 @@ namespace CruZ.Framework.GameSystem.ECS
         {
             visited.Add(current);
 
-            if(current.Parent == null || visited.Contains(current.Parent))
+            if (current.Parent == null || visited.Contains(current.Parent))
             {
                 // ignore
             }

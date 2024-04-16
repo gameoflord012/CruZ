@@ -8,11 +8,11 @@ using CruZ.Framework.GameSystem.UI;
 
 using Microsoft.Xna.Framework;
 
-namespace CruZ.Framework.GameSystem.ECS
+namespace CruZ.Framework.GameSystem
 {
     internal class ECSManager : IDisposable
     {
-        private ECSManager() 
+        private ECSManager()
         {
             _world = new World();
             _world.
@@ -41,7 +41,7 @@ namespace CruZ.Framework.GameSystem.ECS
 
         internal static ECSManager CreateContext()
         {
-            if(_instance != null && !_instance._isDisposed)
+            if (_instance != null && !_instance._isDisposed)
                 throw new InvalidOperationException("Require dispose");
             return _instance = new ECSManager();
         }
@@ -59,12 +59,12 @@ namespace CruZ.Framework.GameSystem.ECS
 
         public void Dispose()
         {
-            if(!_isDisposed)
+            if (!_isDisposed)
             {
                 _isDisposed = true;
                 _world.Dispose();
             }
-            
+
         }
 
         bool _isDisposed = false;

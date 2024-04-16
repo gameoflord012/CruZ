@@ -5,8 +5,8 @@ using System.Windows.Forms;
 using CruZ.Editor.Controls;
 using CruZ.Editor.Service;
 using CruZ.Editor.Winform.Utility;
-using CruZ.Framework.GameSystem.ECS;
-using CruZ.Framework.Scene;
+using CruZ.Framework.GameSystem;
+using CruZ.Framework.GameSystem.Scene;
 
 namespace CruZ.Editor
 {

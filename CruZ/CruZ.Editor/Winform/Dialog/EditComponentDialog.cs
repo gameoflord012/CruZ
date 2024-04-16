@@ -4,8 +4,8 @@ using System;
 using System.Linq;
 using System.Windows.Forms;
 using CruZ.Framework.Utility;
-using CruZ.Framework.GameSystem.ECS;
 using CruZ.Framework;
+using CruZ.Framework.GameSystem;
 
 namespace CruZ.Editor
 {

@@ -3,7 +3,7 @@ using System.ComponentModel;
 
 namespace CruZ.Editor.Winform.Ultility
 {
-    using CruZ.Framework.GameSystem.ECS;
+    using CruZ.Framework.GameSystem;
 
     public class ComponentsPropertyDescriptor : PropertyDescriptor
     {

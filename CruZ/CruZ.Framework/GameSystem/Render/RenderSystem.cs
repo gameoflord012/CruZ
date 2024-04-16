@@ -1,5 +1,4 @@
-﻿using CruZ.Framework.GameSystem.ECS;
-using CruZ.Framework.GameSystem.Render.Filters;
+﻿using CruZ.Framework.GameSystem.Render.Filters;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;

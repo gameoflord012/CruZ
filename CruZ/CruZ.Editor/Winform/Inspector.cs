@@ -3,8 +3,8 @@ using CruZ.Editor.Service;
 using CruZ.Editor.Winform.Ultility;
 using CruZ.Editor.Winform.Utility;
 using CruZ.Framework;
-using CruZ.Framework.GameSystem.ECS;
-using CruZ.Framework.Scene;
+using CruZ.Framework.GameSystem;
+using CruZ.Framework.GameSystem.Scene;
 
 using System;
 using System.Windows.Forms;

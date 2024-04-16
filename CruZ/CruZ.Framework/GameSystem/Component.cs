@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 using CruZ.Framework.Serialization;
 
-namespace CruZ.Framework.GameSystem.ECS
+namespace CruZ.Framework.GameSystem
 {
     [JsonConverter(typeof(ComponentJsonConverter))]
     public abstract class Component : IDisposable

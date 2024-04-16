@@ -15,10 +15,11 @@ using CruZ.Framework.Resource;
 using CruZ.Framework.GameSystem.ECS;
 using CruZ.Framework;
 using CruZ.Editor.Winform.Utility;
-using CruZ.Framework.Scene;
 
 using Keys = Microsoft.Xna.Framework.Input.Keys;
 using CruZ.Framework.GameSystem.UI;
+using CruZ.Framework.GameSystem;
+using CruZ.Framework.GameSystem.Scene;
 
 
 namespace CruZ.Editor.Controls

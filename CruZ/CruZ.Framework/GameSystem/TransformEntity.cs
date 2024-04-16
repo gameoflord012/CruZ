@@ -10,7 +10,7 @@ using CruZ.Framework.Serialization;
 
 using Microsoft.Xna.Framework;
 
-namespace CruZ.Framework.GameSystem.ECS
+namespace CruZ.Framework.GameSystem
 {
     [JsonConverter(typeof(TransformEntityJsonConverter))]
     public class TransformEntity : IDisposable
@@ -119,9 +119,9 @@ namespace CruZ.Framework.GameSystem.ECS
             get => _parent;
             set
             {
-                if(_parent == value) return;
+                if (_parent == value) return;
 
-                if(_parent != null)
+                if (_parent != null)
                     _parent.RemovedFromWorld -= Parent_RemovedFromWorld;
 
                 _parent = value;

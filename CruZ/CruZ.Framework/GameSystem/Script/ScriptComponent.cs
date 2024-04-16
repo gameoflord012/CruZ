@@ -1,7 +1,5 @@
 ﻿using System;
 
-using CruZ.Framework.GameSystem.ECS;
-
 using Microsoft.Xna.Framework;
 
 namespace CruZ.Framework.GameSystem.Script

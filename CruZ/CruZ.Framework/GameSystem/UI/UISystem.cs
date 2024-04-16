@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 
-using CruZ.Framework.GameSystem.ECS;
 using CruZ.Framework.Input;
 
 using Microsoft.Xna.Framework;

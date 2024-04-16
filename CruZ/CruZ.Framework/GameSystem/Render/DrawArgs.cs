@@ -1,7 +1,6 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
 using System;
 using Microsoft.Xna.Framework;
-using CruZ.Framework.GameSystem.ECS;
 
 using RectangleF = System.Drawing.RectangleF;
 

@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+
 using CruZ.Framework;
-using CruZ.Framework.Scene;
+using CruZ.Framework.GameSystem.Scene;
 
 namespace CruZ.Editor.Scene
 {

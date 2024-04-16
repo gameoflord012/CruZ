@@ -8,6 +8,7 @@ using CruZ.Framework.Input;
 using CruZ.Framework.Utility;
 
 using System;
+using CruZ.Framework.GameSystem;
 
 namespace AnimalGang
 {

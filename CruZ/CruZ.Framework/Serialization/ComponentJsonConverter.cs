@@ -3,7 +3,7 @@ using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
 
-using CruZ.Framework.GameSystem.ECS;
+using CruZ.Framework.GameSystem;
 
 namespace CruZ.Framework.Serialization
 {

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CruZ.Framework.GameSystem.ECS
+namespace CruZ.Framework.GameSystem
 {
     internal class EntityCollection
     {
@@ -17,7 +17,7 @@ namespace CruZ.Framework.GameSystem.ECS
         {
             List<T> result = [];
 
-            if(mode == GetComponentMode.ExactType)
+            if (mode == GetComponentMode.ExactType)
             {
                 foreach (var e in _entities)
                 {
@@ -29,13 +29,13 @@ namespace CruZ.Framework.GameSystem.ECS
             {
                 foreach (var e in _entities)
                 {
-                    foreach(var com in e.GetAllComponents())
+                    foreach (var com in e.GetAllComponents())
                     {
-                        if(com is T) result.Add((T)com);
+                        if (com is T) result.Add((T)com);
                     }
                 }
             }
-            
+
 
             return result;
         }

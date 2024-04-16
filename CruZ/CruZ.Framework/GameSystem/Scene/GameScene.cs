@@ -1,12 +1,12 @@
-﻿using CruZ.Framework.GameSystem.ECS;
-using CruZ.Framework.Resource;
+﻿using CruZ.Framework.Resource;
 using CruZ.Framework.Serialization;
+
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Text.Json.Serialization;
 
-namespace CruZ.Framework.Scene
+namespace CruZ.Framework.GameSystem.Scene
 {
     public class GameScene : IResource, IDisposable, IJsonOnSerializing, IJsonOnDeserialized
     {
@@ -59,7 +59,7 @@ namespace CruZ.Framework.Scene
         {
             var e = ECSManager.CreateTransformEntity();
 
-            if(!string.IsNullOrEmpty(name)) e.Name = name;
+            if (!string.IsNullOrEmpty(name)) e.Name = name;
             e.Parent = parent;
 
             AddEntity(e);

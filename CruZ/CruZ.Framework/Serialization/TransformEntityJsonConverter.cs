@@ -1,4 +1,4 @@
-﻿using CruZ.Framework.GameSystem.ECS;
+﻿using CruZ.Framework.GameSystem;
 
 using System;
 using System.Collections.Generic;

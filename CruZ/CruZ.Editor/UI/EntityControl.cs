@@ -7,13 +7,13 @@ using System.Collections.Generic;
 using System.Linq;
 
 using CruZ.Framework;
-using CruZ.Framework.GameSystem.ECS;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 
 using RectangleF = System.Drawing.RectangleF;
 using CruZ.Framework.GameSystem.UI;
+using CruZ.Framework.GameSystem;
 
 namespace CruZ.Editor.UI
 {
