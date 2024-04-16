@@ -5,11 +5,13 @@ using Microsoft.Xna.Framework;
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 
 using RectangleF = System.Drawing.RectangleF;
 
 namespace CruZ.Framework.GameSystem.UI
 {
+    [TypeConverter(typeof(ExpandableObjectConverter))]
     public class UIControl
     {
         static readonly int BOUND_THICKNESS = 3;

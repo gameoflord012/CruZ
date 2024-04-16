@@ -131,10 +131,9 @@ namespace AnimalGang
         [SceneAssetMethod]
         public static GameScene UIScene()
         {
-
             var btn = new ButtonControl();
-            btn.Width = 100;
-            btn.Height = 100;
+            btn.Width = 200;
+            btn.Height = 200;
 
             var uiCom = new UIComponent();
             uiCom.EntryControl.AddChild(btn);

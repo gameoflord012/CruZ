@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace CruZ.Framework.GameSystem.UI
+﻿namespace CruZ.Framework.GameSystem.UI
 {
     /// <summary>
     /// Allow embeded UIControl to a component
