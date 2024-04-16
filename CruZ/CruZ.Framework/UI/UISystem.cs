@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 using CruZ.Framework.GameSystem.ECS;
 using CruZ.Framework.Input;
@@ -13,6 +14,7 @@ namespace CruZ.Framework.UI
         private UISystem()
         {
             _root = new();
+            _root.AddBranch("Main");
         }
 
         public override void OnInitialize()
@@ -24,9 +26,9 @@ namespace CruZ.Framework.UI
 
         private void ResizeRootBounds(Viewport vp)
         {
-            _root.Location = new(0, 0);
-            _root.Width = vp.Width;
-            _root.Height = vp.Height;
+            _root.Control.Location = new(0, 0);
+            _root.Control.Width = vp.Width;
+            _root.Control.Height = vp.Height;
         }
 
         private void Window_Resized(Viewport viewport)
@@ -43,7 +45,7 @@ namespace CruZ.Framework.UI
                 MouseClick?.Invoke(info);
             }
 
-            foreach (var control in _root.GetTree())
+            foreach (var control in _root.Control.GetTree())
             {
                 control.InternalUpdate(info);
             }
@@ -55,7 +57,7 @@ namespace CruZ.Framework.UI
 
             _spriteBatch.Begin();
 
-            foreach (var control in _root.GetTree())
+            foreach (var control in _root.Control.GetTree())
             {
                 control.InternalDraw(uiInfo);
             }
@@ -74,7 +76,7 @@ namespace CruZ.Framework.UI
             return info;
         }
 
-        readonly RootControl _root;
+        UIRoot _root;
         SpriteBatch _spriteBatch = null!;
         bool _isDisposed = false;
 
@@ -95,6 +97,6 @@ namespace CruZ.Framework.UI
         }
 
         private static UISystem? _instance;
-        public static RootControl Root => _instance._root;
+        public static UIRoot Root => _instance._root;
     }
 }

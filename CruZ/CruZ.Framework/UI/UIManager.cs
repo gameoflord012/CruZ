@@ -15,6 +15,6 @@ namespace CruZ.Framework.UI
             remove => UISystem.MouseClick -= value;
         }
 
-        public static UIControl Root => UISystem.Root;
+        public static UIRoot Root => UISystem.Root;
     }
 }

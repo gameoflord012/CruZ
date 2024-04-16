@@ -162,7 +162,7 @@ namespace CruZ.Editor.Controls
             if (_entityControlPool.Count == 0)
             {
                 var newControl = new EntityControl();
-                UIManager.Root.AddChild(newControl);
+                _editorUIBranch.AddChild(newControl);
                 _entityControlPool.Push(newControl);
             }
 
@@ -255,12 +255,13 @@ namespace CruZ.Editor.Controls
         private void InitUIControls()
         {
             // orders of ui gettin added is effect which is drawing first
+            _editorUIBranch = UIManager.Root.AddBranch("Editor");
 
             _boardGrid = new BoardGrid();
-            UIManager.Root.AddChild(_boardGrid);
+            _editorUIBranch.AddChild(_boardGrid);
 
             _infoWindow = new LoggingWindow();
-            UIManager.Root.AddChild(_infoWindow);
+            _editorUIBranch.AddChild(_infoWindow);
 
             _entityControlPool = [];
         }
@@ -321,8 +322,8 @@ namespace CruZ.Editor.Controls
 
         private void FindEntityToSelect(UIInfo info)
         {
-            var contains = 
-                UIManager.Root.GetRaycastControls(info.MousePos().X, info.MousePos().Y);
+            var contains =
+                _editorUIBranch.GetRaycastControls(info.MousePos().X, info.MousePos().Y);
 
             var eControl = contains
                 .Where(e => e is EntityControl).Cast<EntityControl>()
@@ -341,7 +342,7 @@ namespace CruZ.Editor.Controls
                 return sp1.CompareLayer(sp2);
             });
 
-            if (eControl.Count == 0)
+            if (eControl.Count() == 0)
             {
                 SelectedEntity = null;
                 return;
@@ -351,7 +352,7 @@ namespace CruZ.Editor.Controls
 
             if (_currentSelectEntity != null)
             {
-                for (int i = 0; i < eControl.Count; i++)
+                for (int i = 0; i < eControl.Count(); i++)
                 {
                     if (eControl[i] == _fromEntityToControl[_currentSelectEntity])
                     {
@@ -397,6 +398,8 @@ namespace CruZ.Editor.Controls
         }
 
         #region Private_Variables
+        UIControl _editorUIBranch;
+
         bool _isMouseDraggingCamera;
         Vector2 _cameraStartDragCoord;
         Point _mouseStartDragPoint;

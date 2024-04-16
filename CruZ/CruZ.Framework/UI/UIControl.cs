@@ -3,7 +3,6 @@ using CruZ.Framework.Utility;
 
 using Microsoft.Xna.Framework;
 
-
 using System;
 using System.Collections.Generic;
 
@@ -17,7 +16,6 @@ namespace CruZ.Framework.UI
 
         static readonly Color DEFAULT_BACKGROUND_COLOR = Color.Red;
 
-        #region Properties
         public UIControl? Parent { get => _parent; }
 
         public UIControl[] Childs => _childs.ToArray();
@@ -33,9 +31,6 @@ namespace CruZ.Framework.UI
         public int Height { get => (int)_size.Y; set => _size.Y = value; }
 
         public Color BackgroundColor = DEFAULT_BACKGROUND_COLOR;
-
-        public object? Tag { get; set; } = null;
-        #endregion
 
         public void AddChild(UIControl child)
         {
@@ -153,7 +148,6 @@ namespace CruZ.Framework.UI
         protected virtual void OnUpdateDragging(UIInfo args) { }
 
         protected virtual bool OnReleaseDragging() => true;
-
 
         private void ProcessDragging(UIInfo args)
         {
