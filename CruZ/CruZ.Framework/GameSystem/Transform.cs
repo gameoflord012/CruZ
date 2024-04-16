@@ -7,7 +7,7 @@ using System.Text.Json.Serialization;
 namespace CruZ.Framework.GameSystem
 {
     [TypeConverter(typeof(ExpandableObjectConverter))]
-    public partial class Transform
+    public class Transform
     {
         public Transform()
         {

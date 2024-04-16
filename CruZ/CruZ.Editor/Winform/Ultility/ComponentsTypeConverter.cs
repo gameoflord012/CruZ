@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace CruZ.Editor.Winform.Ultility
 {
-    public class ComponentsTypeConverter : ExpandableObjectConverter
+    public class ComponentsWrapperTypeConverter : ExpandableObjectConverter
     {
         public override PropertyDescriptorCollection GetProperties(ITypeDescriptorContext? context, object value, Attribute[]? attributes)
         {
@@ -16,7 +16,7 @@ namespace CruZ.Editor.Winform.Ultility
             for (int i = 0; i < comps.Components.Count(); i++)
             {
                 props.Add(
-                    new ComponentsPropertyDescriptor(
+                    new ComponentPropertyDescriptor(
                         comps.Components, i,
                         comps.Components[i].GetType().Name,
                         [new TypeConverterAttribute(typeof(ExpandableObjectConverter))]
@@ -25,17 +25,6 @@ namespace CruZ.Editor.Winform.Ultility
             }
 
             return props;
-        }
-
-        public override object? ConvertTo(ITypeDescriptorContext? context, CultureInfo? culture, object? value, Type destinationType)
-        {
-            if (destinationType == typeof(string))
-            {
-                var wrapper = (ComponentsWrapper)value;
-                return $"{wrapper.Components.Count()} Components";
-            }
-
-            return base.ConvertTo(context, culture, value, destinationType);
         }
     }
 }

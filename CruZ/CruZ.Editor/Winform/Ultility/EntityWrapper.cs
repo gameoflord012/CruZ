@@ -4,7 +4,7 @@ namespace CruZ.Editor.Winform.Ultility
 {
     using CruZ.Framework.GameSystem;
 
-    public class EntityWrapper
+    internal class EntityWrapper
     {
         [TypeConverter(typeof(ExpandableObjectConverter))]
         public TransformEntity TransformEntity { get; }
@@ -17,13 +17,13 @@ namespace CruZ.Editor.Winform.Ultility
 
         public void RefreshComponents()
         {
-            Components = new(TransformEntity.GetAllComponents());
+            Components = new ComponentsWrapper(TransformEntity.GetAllComponents());
         }
 
-        public ComponentsWrapper Components { get; set; }
+        public ComponentsWrapper Components { get; private set; } = null!;
     }
 
-    [TypeConverter(typeof(ComponentsTypeConverter))]
+    [TypeConverter(typeof(ComponentsWrapperTypeConverter))]
     public class ComponentsWrapper
     {
         public ComponentsWrapper(Component[] comps)
@@ -32,5 +32,10 @@ namespace CruZ.Editor.Winform.Ultility
         }
 
         public Component[] Components { get; set; }
+
+        public override string ToString()
+        {
+            return $"{Components.Length} Components";
+        }
     }
 }
