@@ -11,7 +11,7 @@ using RectangleF = System.Drawing.RectangleF;
 
 namespace CruZ.Framework.UI
 {
-    public partial class UIControl
+    public class UIControl
     {
         static readonly int BOUND_THICKNESS = 3;
 
@@ -64,7 +64,7 @@ namespace CruZ.Framework.UI
         /// <summary>
         /// Get all children controls and itself under mouse point
         /// </summary>
-        public UIControl[] GetControlsUnderPoint(int pointX, int mouseY)
+        public UIControl[] GetRaycastControls(int pointX, int mouseY)
         {
             List<UIControl> contains = [];
 

@@ -69,8 +69,8 @@
             "Y": 1
           },
           "Position": {
-            "X": 0,
-            "Y": 0
+            "X": 907.0741,
+            "Y": -673.4652
           }
         },
         "Components": []
@@ -88,8 +88,8 @@
             "Y": 1
           },
           "Position": {
-            "X": 0,
-            "Y": 0
+            "X": -1083.4694,
+            "Y": -1024.131
           }
         },
         "Components": []
@@ -102,6 +102,25 @@
         },
         "Transform": {
           "$id": "11",
+          "Scale": {
+            "X": 1,
+            "Y": 1
+          },
+          "Position": {
+            "X": 0,
+            "Y": 0
+          }
+        },
+        "Components": []
+      },
+      {
+        "$id": "12",
+        "Name": "New Entity(7)",
+        "Parent": {
+          "$ref": "6"
+        },
+        "Transform": {
+          "$id": "13",
           "Scale": {
             "X": 1,
             "Y": 1

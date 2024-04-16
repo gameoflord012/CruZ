@@ -17,16 +17,10 @@ namespace CruZ.Editor
         {
             InitializeComponent();
 
-            //Icon = EditorResource.Icon;
             Text = "CruZ Engine";
             _gameEditor = new(this);
-        }
-
-        private void Init()
-        {
-            _gameEditor.Init();
-            entityInspector.Init(_gameEditor);
-            sceneEditor.Init(_gameEditor);
+            entityInspector.Editor = _gameEditor;
+            sceneEditor.Editor = _gameEditor;
         }
 
         #region Overrides
@@ -45,6 +39,11 @@ namespace CruZ.Editor
             }
 
             return base.ProcessCmdKey(ref msg, keyData);
+        }
+
+        protected override void OnLoad(EventArgs e)
+        {
+            _gameEditor.LoadLastSessionCaches();
         }
 
         protected override void OnFormClosing(FormClosingEventArgs e)
@@ -126,10 +125,7 @@ namespace CruZ.Editor
         public static void Run()
         {
             if (_instance != null) throw new InvalidOperationException("Already Ran");
-
             _instance = new EditorForm();
-            _instance.Init();
-
             Application.Run(_instance);
         }
 

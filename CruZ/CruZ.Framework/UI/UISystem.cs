@@ -75,7 +75,7 @@ namespace CruZ.Framework.UI
         }
 
         readonly RootControl _root;
-        SpriteBatch _spriteBatch;
+        SpriteBatch _spriteBatch = null!;
         bool _isDisposed = false;
 
         protected override void OnDispose()

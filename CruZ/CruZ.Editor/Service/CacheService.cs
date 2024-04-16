@@ -15,28 +15,7 @@ namespace CruZ.Editor.Service
             CacheRoot = cacheRoot;
         }
 
-        public void Register(ICacheable cacheable)
-        {
-            _cacheControls.Add(cacheable);
-
-            cacheable.CacheRead -= Cacheable_CacheRead;
-            cacheable.CacheRead += Cacheable_CacheRead;
-
-            cacheable.CacheWrite -= Cacheable_CacheWrite;
-            cacheable.CacheWrite += Cacheable_CacheWrite;
-        }
-
-        private void Cacheable_CacheWrite(ICacheable cache, string key)
-        {
-            WriteCache(cache, key);
-        }
-
-        private void Cacheable_CacheRead(ICacheable cache, string key)
-        {
-            ReadCache(cache, key);
-        }
-
-        private void ReadCache(ICacheable cacheControl, string key)
+        public void ReadCache(ICacheable cacheControl, string key)
         {
             var cachePath = GetCachePath(cacheControl, key);
 
@@ -57,7 +36,7 @@ namespace CruZ.Editor.Service
             }
         }
 
-        private void WriteCache(ICacheable cacheControl, string key)
+        public void WriteCache(ICacheable cacheControl, string key)
         {
             var cachePath = GetCachePath(cacheControl, key);
 

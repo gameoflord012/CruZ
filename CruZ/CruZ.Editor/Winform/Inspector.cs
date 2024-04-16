@@ -16,12 +16,8 @@ namespace CruZ.Editor
         public Inspector()
         {
             InitializeComponent();
-        }
 
-        public void Init(GameEditor editor)
-        {
-            _editor = editor;
-
+            inspector_PropertyGrid.PropertySort = PropertySort.Categorized;
             entities_ComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
 
             InvalidateService.Register
@@ -30,9 +26,8 @@ namespace CruZ.Editor
                 InvalidatedEvents.EntityComponentChanged,
                 InvalidatedEvents.SelectingEntityChanged);
 
-            inspector_PropertyGrid.PropertySort = PropertySort.Categorized;
-
-            RegisterEvents();
+            entities_ComboBox.SelectedIndexChanged += Entities_ComboBox_SelectedIndexChanged;
+            inspector_PropertyGrid.Invalidated += Inspector_Invalidated;
         }
 
         #region Event_Handlers
@@ -40,10 +35,7 @@ namespace CruZ.Editor
         {
             UpdateEntityComboBox(scene);
         }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="e"></param>
+
         private void Editor_SelectingEntityChanged(TransformEntity? e)
         {
             UpdatePropertyGrid(e);
@@ -51,7 +43,7 @@ namespace CruZ.Editor
 
         private void Entities_ComboBox_SelectedIndexChanged(object? sender, EventArgs e)
         {
-            _editor.SelectedEntity = (TransformEntity)entities_ComboBox.SelectedItem;
+            Editor.SelectedEntity = (TransformEntity)entities_ComboBox.SelectedItem;
         }
 
         private void Inspector_Invalidated(object? sender, InvalidateEventArgs e)
@@ -117,21 +109,27 @@ namespace CruZ.Editor
             inspector_PropertyGrid.SafeInvoke(action);
         }
 
-        private void RegisterEvents()
-        {
-            entities_ComboBox.SelectedIndexChanged += Entities_ComboBox_SelectedIndexChanged;
-            inspector_PropertyGrid.Invalidated += Inspector_Invalidated;
-
-            _editor.SelectingEntityChanged += Editor_SelectingEntityChanged;
-
-            _editor.CurrentSceneChanged += Editor_CurrentSceneChanged;
-            if (_editor.CurrentGameScene != null)
+        public GameEditor Editor 
+        { 
+            get => _editor ?? throw new NullReferenceException(); 
+            set 
             {
-                UpdateEntityComboBox(_editor.CurrentGameScene);
+                if(_editor == value) return;
+
+                if(_editor != null)
+                {
+                    _editor.SelectingEntityChanged -= Editor_SelectingEntityChanged;
+                    _editor.CurrentSceneChanged -= Editor_CurrentSceneChanged;
+                }
+                
+                _editor = value;
+
+                _editor.SelectingEntityChanged += Editor_SelectingEntityChanged;
+                _editor.CurrentSceneChanged += Editor_CurrentSceneChanged;
             }
         }
 
-        GameEditor _editor;
+        GameEditor? _editor;
         #endregion
     }
 }

@@ -29,22 +29,9 @@ namespace CruZ.Editor
             removeEntity_ToolStripMenuItem.Click += RemoveEntity_ToolStripMenuItem_Click;
         }
 
-        public void Init(GameEditor editor)
-        {
-            FindForm().FormClosing += EditorForm_FormClosing;
-
-            _editor = editor;
-            _editor.SelectingEntityChanged += EditorApp_SelectedEntityChanged;
-            _editor.CurrentSceneChanged += EditorApp_CurrentSceneChanged;
-
-            UpdateSceneTree(_editor.SelectedEntity);
-            UpdateSceneTree(_editor.CurrentGameScene);
-        }
-
-        #region Event Handlers
         private void SceneTree_BeforeSelect(object? sender, TreeViewCancelEventArgs e)
         {
-            _editor.SelectedEntity = (TransformEntity)e.Node.Tag;
+            Editor.SelectedEntity = (TransformEntity)e.Node.Tag;
         }
 
         private void SceneTree_BeforeLabelEdit(object? sender, NodeLabelEditEventArgs args)
@@ -74,37 +61,30 @@ namespace CruZ.Editor
             UpdateSceneTree(scene);
         }
 
-        private void EditorForm_FormClosing(object? sender, FormClosingEventArgs e)
-        {
-            _editor.CurrentSceneChanged -= EditorApp_CurrentSceneChanged;
-        }
-        
         private void EditEntity_ToolStripMenuItem_Clicked(object? sender, EventArgs args)
         {
             var e = (TransformEntity)scene_TreeView.SelectedNode.Tag;
             var editCompDialog = new EditComponentDialog(e);
             editCompDialog.ShowDialog();
         }
-        
+
         private void AddEntity_ToolStripMenuItem_Click(object? sender, EventArgs args)
         {
             var parent = GetSelectedEntityInSceneTree();
-            _editor.CreateNewEntity(parent);
+            Editor.CreateNewEntity(parent);
         }
 
         private void RemoveEntity_ToolStripMenuItem_Click(object? sender, EventArgs args)
         {
             var e = GetSelectedEntityInSceneTree();
-            _editor.RemoveEntity(e);
+            Editor.RemoveEntity(e);
         }
 
         private TransformEntity GetSelectedEntityInSceneTree()
         {
             return (TransformEntity)scene_TreeView.SelectedNode.Tag;
         }
-        #endregion
 
-        #region Private Functions
         private void UpdateSceneTree(TransformEntity? selectedEntity)
         {
             scene_TreeView.SafeInvoke(delegate
@@ -117,13 +97,13 @@ namespace CruZ.Editor
         {
             scene_TreeView.SafeInvoke(delegate
             {
-                if(scene_TreeView.Tag == currentScene) return;
+                if (scene_TreeView.Tag == currentScene) return;
 
                 //
                 // scene_treeview tag is current game scene
                 // so we can unregisted old scene events
                 //
-                if(scene_TreeView.Tag != null)
+                if (scene_TreeView.Tag != null)
                 {
                     var oldScene = (GameScene)scene_TreeView.Tag;
                     oldScene.EntityAdded -= CurrentScene_EntityAdded;
@@ -172,15 +152,15 @@ namespace CruZ.Editor
 
         private void AddSceneNode(TransformEntity e)
         {
-            if(_entityToNode.ContainsKey(e)) return;
+            if (_entityToNode.ContainsKey(e)) return;
 
             var parentNode = _sceneTreeRoot;
 
-            if(e.Parent == null)
+            if (e.Parent == null)
             {
                 // ignore
             }
-            else if(_entityToNode.ContainsKey(e.Parent))
+            else if (_entityToNode.ContainsKey(e.Parent))
             {
                 parentNode = _entityToNode[e.Parent];
             }
@@ -188,24 +168,46 @@ namespace CruZ.Editor
             {
                 throw new InvalidOperationException("Parent node have to be added before children");
             }
-            
+
 
             var entityNode = parentNode.Nodes.Add(e.ToString());
             entityNode.ContextMenuStrip = sceneEntity_ContextMenuStrip;
-            entityNode.Tag = e; 
+            entityNode.Tag = e;
 
             _entityToNode[e] = entityNode;
         }
 
         private void RemoveSceneNode(TransformEntity e)
         {
-            _entityToNode[e].Remove();
+            this.SafeInvoke(_entityToNode[e].Remove);
             _entityToNode.Remove(e);
         }
-        #endregion
 
         TreeNode? _sceneTreeRoot;
-        GameEditor _editor;
         Dictionary<TransformEntity, TreeNode> _entityToNode = [];
+
+        internal GameEditor Editor
+        {
+            get => _editor ?? throw new NullReferenceException();
+            set
+            {
+                if(_editor == value) return;
+
+                if(_editor != null)
+                {
+                    _editor.SelectingEntityChanged -= EditorApp_SelectedEntityChanged;
+                    _editor.CurrentSceneChanged -= EditorApp_CurrentSceneChanged;
+                }
+
+                _editor = value;
+
+                _editor.SelectingEntityChanged += EditorApp_SelectedEntityChanged;
+                _editor.CurrentSceneChanged += EditorApp_CurrentSceneChanged;
+
+                UpdateSceneTree(_editor.SelectedEntity);
+                UpdateSceneTree(_editor.CurrentGameScene);
+            }
+        }
+        GameEditor? _editor;
     }
 }

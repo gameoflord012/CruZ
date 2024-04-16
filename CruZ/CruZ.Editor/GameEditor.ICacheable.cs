@@ -10,11 +10,9 @@ namespace CruZ.Editor.Controls
 {
     public partial class GameEditor : ICacheable
     {
-        public event Action<ICacheable, string>? CacheRead;
-        public event Action<ICacheable, string>? CacheWrite;
         public string UniquedCachedDir => "EditorApplication";
 
-        public bool ReadCache(BinaryReader binReader, string key)
+        bool ICacheable.ReadCache(BinaryReader binReader, string key)
         {
             if(key == "LoadedScene")
             {
@@ -52,7 +50,7 @@ namespace CruZ.Editor.Controls
             return true;
         }
 
-        public bool WriteCache(BinaryWriter binWriter, string key)
+        bool ICacheable.WriteCache(BinaryWriter binWriter, string key)
         {
             if(key == "LoadedScene")
             {

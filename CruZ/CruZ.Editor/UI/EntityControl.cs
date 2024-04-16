@@ -21,29 +21,73 @@ namespace CruZ.Editor.UI
     {
         static readonly int MIN_BOUND_SIZE = 25;
 
-        public TransformEntity AttachEntity { get => _e; }
-
-        public EntityControl(TransformEntity e)
+        public EntityControl()
         {
-            _e = e;
-            _e.RemovedFromWorld += Entity_OnRemoveFromWorld;
-            _e.ComponentsChanged += Entity_ComponentChanged;
-
-            UpdateIHasBoundBox(e.GetAllComponents().FirstOrDefault(e => e is IHasBoundBox) as IHasBoundBox);
-
             _initialBackgroundCol = BackgroundColor;
-            _isSelected = false;
         }
 
-        public void SelectEntity(bool shouldSelect)
+        public TransformEntity? AttachEntity
         {
-            _isSelected = shouldSelect;
-            Draggable = false;
+            get => _attachedEntity;
+            set
+            {
+                if (_attachedEntity == value) return;
+
+                if (_attachedEntity != null)
+                {
+                    _attachedEntity.RemovedFromWorld -= Entity_OnRemoveFromWorld;
+                    _attachedEntity.ComponentsChanged -= Entity_ComponentChanged;
+                }
+
+                _attachedEntity = value;
+
+                if (_attachedEntity != null)
+                {
+                    _attachedEntity.RemovedFromWorld += Entity_OnRemoveFromWorld;
+                    _attachedEntity.ComponentsChanged += Entity_ComponentChanged;
+
+                    var iHasBoundBox = ExtractIHasBoundBox(_attachedEntity);
+                    UpdateIHasBoundBox(iHasBoundBox);
+                }
+            }
+        }
+
+        TransformEntity? _attachedEntity;
+
+        public bool CanInteract
+        {
+            get => _canInteract;
+            set
+            {
+                if(_canInteract == value) return;
+                Draggable = false;
+                _canInteract = value;
+            }
+        }
+
+        bool _canInteract = false;
+
+        private void Entity_ComponentChanged(ComponentCollection comps)
+        {
+            if (_attachedEntity != null)
+                UpdateIHasBoundBox(ExtractIHasBoundBox(_attachedEntity));
+        }
+
+        private IHasBoundBox? ExtractIHasBoundBox(TransformEntity entity)
+        {
+            return entity.GetAllComponents().FirstOrDefault(e => e is IHasBoundBox) as IHasBoundBox;
+        }
+
+        private void UpdateIHasBoundBox(IHasBoundBox? iHasBoundBox)
+        {
+            if (_iHasBoundBox != null) _iHasBoundBox.BoundingBoxChanged -= Entity_BoundingBoxChanged;
+            _iHasBoundBox = iHasBoundBox;
+            if (_iHasBoundBox != null) _iHasBoundBox.BoundingBoxChanged += Entity_BoundingBoxChanged;
         }
 
         protected override void OnDraw(UIInfo args)
         {
-            if(!_isSelected) return;
+            if (_attachedEntity == null || !_canInteract) return;
 
             base.OnDraw(args);
 
@@ -58,15 +102,17 @@ namespace CruZ.Editor.UI
 
         protected override void OnUpdate(UIInfo args)
         {
+            if (_attachedEntity == null) return;
+
             if (_bounds.IsEmpty)
             {
                 Width = MIN_BOUND_SIZE;
                 Height = MIN_BOUND_SIZE;
-                var center = Camera.Main.CoordinateToPoint(_e.Transform.Position);
+                var center = Camera.Main.CoordinateToPoint(_attachedEntity.Transform.Position);
                 SetCenter(center);
             }
 
-            if (!_isSelected) return;
+            if (!_canInteract) return;
 
             if (args.InputInfo.IsKeyJustDown(Keys.W))
             {
@@ -84,21 +130,9 @@ namespace CruZ.Editor.UI
             if (Parent != null) Parent.RemoveChild(this);
         }
 
-        private void Entity_ComponentChanged(ComponentCollection comps)
-        {
-            UpdateIHasBoundBox(comps.GetAllComponents().FirstOrDefault(e => e is IHasBoundBox) as IHasBoundBox);
-        }
-
-        private void UpdateIHasBoundBox(IHasBoundBox? iHasBoundBox)
-        {
-            if (_iHasBoundBox != null) _iHasBoundBox.BoundingBoxChanged -= Entity_BoundingBoxChanged;
-            _iHasBoundBox = iHasBoundBox;
-            if(_iHasBoundBox != null) _iHasBoundBox.BoundingBoxChanged += Entity_BoundingBoxChanged;
-        }
-
         private void CalcControlBounds(UIBoundingBox bBox)
         {
-            if(bBox.IsEmpty()) return;
+            if (bBox.IsEmpty()) return;
 
             _bounds = bBox.WorldBounds;
             _points = bBox.WorldOrigins;
@@ -117,12 +151,17 @@ namespace CruZ.Editor.UI
                 p.Y - Height / 2);
         }
 
-        #region DRAGGING
+        IHasBoundBox? _iHasBoundBox;
+        RectangleF _bounds; //World bounds
+        List<Vector2> _points = [];
+
         protected override object? OnStartDragging(UIInfo args)
         {
+            if (_attachedEntity == null || !_canInteract) return null;
+
             if (Draggable)
             {
-                var ePoint = Camera.Main.CoordinateToPoint(_e.Transform.Position);
+                var ePoint = Camera.Main.CoordinateToPoint(_attachedEntity.Transform.Position);
                 _dragCenterOffset = new(
                     args.MousePos().X - ePoint.X,
                     args.MousePos().Y - ePoint.Y);
@@ -137,8 +176,23 @@ namespace CruZ.Editor.UI
                 info.MousePos().X - _dragCenterOffset.X,
                 info.MousePos().Y - _dragCenterOffset.Y);
 
-            _e.Transform.Position = Camera.Main.PointToCoordinate(ePoint);
+            _attachedEntity!.Transform.Position = Camera.Main.PointToCoordinate(ePoint);
         }
+
+        bool Draggable
+        {
+            get => _draggable;
+            set
+            {
+                if (_draggable == value) return;
+
+                _draggable = value;
+                BackgroundColor = _draggable ? _draggableBackgroundCol : _initialBackgroundCol;
+            }
+        }
+
+        Point _dragCenterOffset;
+        bool _draggable;
 
         public object CaptureState()
         {
@@ -154,30 +208,6 @@ namespace CruZ.Editor.UI
         {
             throw new NotImplementedException();
         }
-        #endregion
-
-        bool Draggable
-        {
-            get => _draggable;
-            set
-            {
-                if (_draggable == value) return;
-
-                _draggable = value;
-                BackgroundColor = _draggable ? _draggableBackgroundCol : _initialBackgroundCol;
-            }
-        }
-
-        TransformEntity _e;
-        IHasBoundBox? _iHasBoundBox;
-        RectangleF _bounds; //World bounds
-
-        Point _dragCenterOffset;
-
-        public List<Vector2> _points = [];
-
-        bool _isSelected = false;
-        bool _draggable;
 
         Color _initialBackgroundCol;
         Color _draggableBackgroundCol = Color.Green;

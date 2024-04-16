@@ -5,7 +5,9 @@ using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text.Json.Serialization;
+
 using CruZ.Framework.Serialization;
+
 using Microsoft.Xna.Framework;
 
 namespace CruZ.Framework.GameSystem.ECS
@@ -38,7 +40,7 @@ namespace CruZ.Framework.GameSystem.ECS
 
         public Component GetComponent(Type ty)
         {
-            if(!HasComponent(ty))
+            if (!HasComponent(ty))
                 throw new ArgumentException($"Don't have component of type {ty}");
 
             return _components[ty];
@@ -57,7 +59,7 @@ namespace CruZ.Framework.GameSystem.ECS
 
         public void RemoveComponent(Type ty)
         {
-            if(!HasComponent(ty))
+            if (!HasComponent(ty))
                 throw new ArgumentException($"{ty} already removed");
 
             var comp = GetComponent(ty);
@@ -94,46 +96,62 @@ namespace CruZ.Framework.GameSystem.ECS
         }
 
         [ReadOnly(true)]
-        public string Name 
-        { 
-            get => _name; 
-            set => _name = value; 
+        public string Name
+        {
+            get => _name;
+            set => _name = value;
         }
 
-        public int Id 
-        { 
-            get; 
-            private set; 
+        public int Id
+        {
+            get;
+            private set;
         }
 
-        public bool IsActive 
-        { 
-            get => _isActive; 
-            set => _isActive = value; 
+        public bool IsActive
+        {
+            get => _isActive;
+            set => _isActive = value;
         }
 
         public TransformEntity? Parent
-        { 
-            get => _parent; 
-            set => _parent = value;
+        {
+            get => _parent;
+            set
+            {
+                if(_parent == value) return;
+
+                if(_parent != null)
+                    _parent.RemovedFromWorld -= Parent_RemovedFromWorld;
+
+                _parent = value;
+
+                if (_parent != null)
+                    _parent.RemovedFromWorld += Parent_RemovedFromWorld;
+            }
         }
 
-        public Transform Transform 
-        { 
-            get => _transform; 
-            set => _transform = value; 
+        private void Parent_RemovedFromWorld(object? sender, EventArgs e)
+        {
+            Parent = null;
         }
 
-        public Vector2 Position 
-        { 
-            get => Transform.Position; 
-            set => Transform.Position = value; 
+        public Transform Transform
+        {
+            get => _transform;
+            set => _transform = value;
         }
 
-        public Vector2 Scale 
-        { 
-            get => Transform.Scale; 
-            set => Transform.Scale = value; 
+        public Vector2 Position
+        {
+            get => Transform.Position;
+            set => Transform.Position = value;
+        }
+
+        public Vector2 Scale
+        {
+            get => Transform.Scale;
+            set => Transform.Scale = value;
         }
 
         string _name = "";

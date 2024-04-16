@@ -8,6 +8,8 @@
 		<UseWindowsForms>true</UseWindowsForms>
 		<ApplicationHighDpiMode>SystemAware</ApplicationHighDpiMode>
 		<ForceDesignerDpiUnaware>true</ForceDesignerDpiUnaware>
+
+		<DefineConstants>$(DefineConstants);CRUZ_EDITOR</DefineConstants>
 	</PropertyGroup>
 
 	<PropertyGroup>
@@ -25,8 +27,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\CruZ.Framework\CruZ.Framework.WindowsDX.csproj">
-			<SetConfiguration>Configuration=DebugEditor</SetConfiguration>
-		</ProjectReference>
+		<ProjectReference Include="..\CruZ.Framework\CruZ.Framework.WindowsDX.csproj" />
 	</ItemGroup>
 </Project>

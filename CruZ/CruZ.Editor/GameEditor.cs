@@ -24,8 +24,7 @@ using Keys = Microsoft.Xna.Framework.Input.Keys;
 namespace CruZ.Editor.Controls
 {
     /// <summary>
-    /// Handle editing on <see cref="GameApplication"/>, 
-    /// also a wrapper of it.
+    /// Handle editing operations on <see cref="GameApplication"/>
     /// </summary>
     public partial class GameEditor
     {
@@ -47,61 +46,24 @@ namespace CruZ.Editor.Controls
             InputManager.KeyStateChanged += Input_KeyStateChanged;
             UIManager.MouseClick += UI_MouseClick;
         }
-
-        public void Init()
+        
+        /// <summary>
+        /// Initialize editor UIControls and reading cache
+        /// </summary>
+        /// 
+        public void LoadLastSessionCaches()
         {
-            _cacheService.Register(this);
-            CacheRead?.Invoke(this, "LoadedScene");
+            _cacheService.ReadCache(this, "LoadedScene");
         }
 
-        #region Public_Functions
-        public void UnloadCurrentScene()
-        {
-            SelectedEntity = null;
-
-            if (_currentScene == null) return;
-
-            EditorContext.UserResource.TrySave(_currentScene);
-
-            _currentScene.Dispose();
-            _currentScene = null;
-
-            CurrentSceneChanged?.Invoke(null);
-        }
-
-        public TransformEntity? SelectedEntity
-        {
-            get => _currentSelect != null ? _currentSelect : null;
-            set
-            {
-                lock (this)
-                {
-                    if (_currentSelect != null && value == _currentSelect)
-                        return;
-
-                    // Disable previous EntityControl
-                    if (_currentSelect != null)
-                        GetEntityControl(_currentSelect).SelectEntity(false);
-
-                    if (value != null)
-                    {
-                        _currentSelect = value;
-                        GetEntityControl(_currentSelect).SelectEntity(true);
-                    }
-                    else
-                    {
-                        _currentSelect = null;
-                    }
-
-                    LogManager.SetMsg(value != null ? value.ToString() : "");
-                    SelectingEntityChanged?.Invoke(value);
-                }
-            }
-        }
+        Stack<EntityControl> _entityControlPool = [];
+        Dictionary<TransformEntity, EntityControl> _fromEntityToControl = [];
+        BoardGrid _boardGrid = null!;
+        LoggingWindow _infoWindow = null!;
 
         public void LoadSceneFromFile(string file)
         {
-            CheckAppInitialized();
+            WaitGameInitialized();
 
             var scene = _userResource.Load<GameScene>(file);
             scene.Name = Path.GetRelativePath(_userResource.ResourceRoot, file);
@@ -111,7 +73,7 @@ namespace CruZ.Editor.Controls
 
         public void LoadRuntimeScene(string sceneName)
         {
-            CheckAppInitialized();
+            WaitGameInitialized();
 
             try
             {
@@ -121,6 +83,123 @@ namespace CruZ.Editor.Controls
             {
                 DialogHelper.ShowExceptionDialog(e);
                 throw;
+            }
+        }
+
+        private void LoadScene(GameScene scene)
+        {
+            if (scene == _currentScene) return;
+
+            UnloadCurrentScene();
+
+            _currentScene = scene;
+
+            _currentScene.EntityAdded += Scene_EntityAdded;
+            _currentScene.EntityRemoved += Scene_EntityRemoved;
+            _currentScene.SetActive(true);
+
+            OnSceneLoaded();
+            CurrentSceneChanged?.Invoke(_currentScene);
+        }
+
+        public void UnloadCurrentScene()
+        {
+            OnSceneUnloading();
+
+            if (_currentScene == null) return;
+
+            _currentScene.EntityAdded -= Scene_EntityAdded;
+            _currentScene.EntityRemoved -= Scene_EntityRemoved;
+
+            _currentScene.SetActive(false);
+            _currentScene.Dispose();
+            _currentScene = null;
+
+            CurrentSceneChanged?.Invoke(null);
+        }
+
+        /// <summary>
+        /// Call before unloading scene, _currentScene is now still the old scene
+        /// </summary>
+        private void OnSceneUnloading()
+        {
+            SelectedEntity = null;
+
+            if(_currentScene != null) 
+                EditorContext.UserResource.TrySave(_currentScene);
+
+            // Clear entity controls which belong to unloading scene
+            foreach(var entity in _fromEntityToControl.Keys)
+            {
+                RemoveEntity(entity);
+            }
+        }
+
+        private void OnSceneLoaded()
+        {
+            LogManager.SetMsg(_currentScene == null ? "<Empty>" : _currentScene.ToString(), "Scene");
+
+            foreach (var entity in _currentScene!.Entities)
+            {
+                AddEntityControl(entity);
+            }
+        }
+
+        private void Scene_EntityAdded(TransformEntity e)
+        {
+            AddEntityControl(e);
+        }
+
+        private void Scene_EntityRemoved(TransformEntity e)
+        {
+            RemoveEntityControl(e);
+        }
+
+        private void AddEntityControl(TransformEntity e)
+        {
+            if (_fromEntityToControl.ContainsKey(e)) return;
+
+            if (_entityControlPool.Count == 0)
+            {
+                var newControl = new EntityControl();
+                UIManager.Root.AddChild(newControl);
+                _entityControlPool.Push(newControl);
+            }
+
+            var entityControl = _entityControlPool.Pop();
+            entityControl.AttachEntity = e;
+            _fromEntityToControl[e] = entityControl;
+        }
+
+        private void RemoveEntityControl(TransformEntity e)
+        {
+            if (!_fromEntityToControl.ContainsKey(e)) return;
+
+            var eControl = _fromEntityToControl[e];
+            _fromEntityToControl.Remove(e);
+
+            eControl.AttachEntity = null;
+            eControl.CanInteract = false;
+            _entityControlPool.Push(eControl);
+        } 
+
+        public TransformEntity? SelectedEntity
+        {
+            get => _currentSelectEntity;
+            set
+            {
+                if (_currentSelectEntity == value) return;
+
+                if(_currentSelectEntity != null)
+                    _fromEntityToControl[_currentSelectEntity].CanInteract = false;
+
+                _currentSelectEntity = value;
+
+                if (_currentSelectEntity != null)
+                    _fromEntityToControl[_currentSelectEntity].CanInteract = true;
+
+                LogManager.SetMsg(_currentSelectEntity != null ? _currentSelectEntity.ToString() : "");
+                SelectingEntityChanged?.Invoke(value);
             }
         }
 
@@ -151,9 +230,6 @@ namespace CruZ.Editor.Controls
                 throw new InvalidOperationException("Can't create new entity when Scene is not loaded");
 
             var newEntity = _currentScene.CreateEntity(null, parent);
-
-            UpdateEntityControls();
-
             return newEntity;
         }
 
@@ -162,35 +238,37 @@ namespace CruZ.Editor.Controls
             _currentScene.RemoveEntity(e);
             e.Dispose();
         }
-        #endregion
 
-        #region Event_Handlers
         private void OnApplicationBeforeClosing()
         {
-            CacheWrite?.Invoke(this, "LoadedScene");
-            CacheWrite?.Invoke(this, "Camera");
+            _cacheService.WriteCache(this, "LoadedScene");
+            _cacheService.WriteCache(this, "Camera");
         }
 
         private void Game_Intialized()
         {
-            CacheRead?.Invoke(this, "Camera");
+            _cacheService.ReadCache(this, "Camera");
+            InitUIControls();
             _appInitalized_Reset.Set();
+        }
+
+        private void InitUIControls()
+        {
+            // orders of ui gettin added is effect which is drawing first
+
+            _boardGrid = new BoardGrid();
+            UIManager.Root.AddChild(_boardGrid);
+
+            _infoWindow = new LoggingWindow();
+            UIManager.Root.AddChild(_infoWindow);
+
+            _entityControlPool = [];
         }
 
         private void Game_Exiting()
         {
             UnloadCurrentScene();
             _editorForm.SafeInvoke(CleanAppSession);
-        }
-
-        private void Scene_EntityAdded(TransformEntity e)
-        {
-            AddEntityControl(e);
-        }
-
-        private void Scene_EntityRemoved(TransformEntity e)
-        {
-            RemoveEntityControl(e);
         }
 
         private void Input_MouseScroll(IInputInfo info)
@@ -240,21 +318,21 @@ namespace CruZ.Editor.Controls
         {
             FindEntityToSelect(info);
         }
-        #endregion
 
-        #region Private_Functions
         private void FindEntityToSelect(UIInfo info)
         {
-            var contains = UIManager.Root.GetControlsUnderPoint(info.MousePos().X, info.MousePos().Y);
+            var contains = 
+                UIManager.Root.GetRaycastControls(info.MousePos().X, info.MousePos().Y);
 
             var eControl = contains
-                .Where(e => e is EntityControl)
-                .Select(e => (EntityControl)e).ToList();
+                .Where(e => e is EntityControl).Cast<EntityControl>()
+                .Where(e => _fromEntityToControl.ContainsValue(e))
+                .ToList();
 
             eControl.Sort((e1, e2) =>
             {
-                e1.AttachEntity.TryGetComponent(out SpriteRendererComponent? sp1);
-                e2.AttachEntity.TryGetComponent(out SpriteRendererComponent? sp2);
+                e1.AttachEntity!.TryGetComponent(out SpriteRendererComponent? sp1);
+                e2.AttachEntity!.TryGetComponent(out SpriteRendererComponent? sp2);
 
                 if (sp1 == sp2) return 0;
                 if (sp1 == null) return -1;
@@ -263,7 +341,7 @@ namespace CruZ.Editor.Controls
                 return sp1.CompareLayer(sp2);
             });
 
-            if (eControl.Count() == 0)
+            if (eControl.Count == 0)
             {
                 SelectedEntity = null;
                 return;
@@ -271,11 +349,11 @@ namespace CruZ.Editor.Controls
 
             int idx = 0;
 
-            if (_currentSelect != null)
+            if (_currentSelectEntity != null)
             {
-                for (int i = 0; i < eControl.Count(); i++)
+                for (int i = 0; i < eControl.Count; i++)
                 {
-                    if (eControl[i] == GetEntityControl(_currentSelect))
+                    if (eControl[i] == _fromEntityToControl[_currentSelectEntity])
                     {
                         idx = i;
                         break;
@@ -287,30 +365,17 @@ namespace CruZ.Editor.Controls
             SelectedEntity = eControl[idx].AttachEntity;
         }
 
-        private EntityControl? GetEntityControl(TransformEntity e)
-        {
-            foreach (var control in _eControls)
-            {
-                if (control.AttachEntity == e)
-                {
-                    return control;
-                }
-            }
-
-            return null;
-        }
-
-        private void CheckAppInitialized()
+        private void WaitGameInitialized()
         {
             if (_gameAppThread != null && _gameAppThread.IsAlive) return;
 
             _appInitalized_Reset.Reset();
-            var newSession = new Thread(StartNewAppSession);
-            newSession.Name = "Editor Session";
-            newSession.Start();
-            _appInitalized_Reset.WaitOne();
 
-            _gameAppThread = newSession;
+            _gameAppThread = new Thread(StartNewAppSession);
+            _gameAppThread.Name = "Editor Session";
+            _gameAppThread.Start();
+
+            _appInitalized_Reset.WaitOne(); // wait until game initialize
         }
 
         private void StartNewAppSession()
@@ -331,87 +396,18 @@ namespace CruZ.Editor.Controls
             //_gameApp.BeforeDraw += GameApp_EarlyDraw;
         }
 
-        private void InitUIControls()
-        {
-            // orders of ui gettin added is effect which is drawing first
-
-            UIManager.Root.AddChild(new BoardGrid());
-
-            UpdateEntityControls();
-
-            #region InfoTextWindow
-            _infoTextWindow = new LoggingWindow();
-            UIManager.Root.AddChild(_infoTextWindow);
-            #endregion
-        }
-
-        private void UpdateEntityControls()
-        {
-            _eControls.Clear();
-
-            if (_currentScene == null) return;
-
-            if (_lastScene != null)
-            {
-                _lastScene.EntityAdded -= Scene_EntityAdded; ;
-                _lastScene.EntityRemoved -= Scene_EntityRemoved;
-            }
-
-            _currentScene.EntityAdded += Scene_EntityAdded;
-            _currentScene.EntityRemoved += Scene_EntityRemoved;
-
-            foreach (var e in _currentScene.Entities)
-            {
-                AddEntityControl(e);
-            }
-        }
-
-        private void AddEntityControl(TransformEntity e)
-        {
-            if (GetEntityControl(e) != null) return;
-
-            var eControl = new EntityControl(e);
-            UIManager.Root.AddChild(eControl);
-            _eControls.Add(eControl);
-        }
-
-        private void RemoveEntityControl(TransformEntity e)
-        {
-            GetEntityControl(e)?.Dispose();
-        }
-
-        private void LoadScene(GameScene scene)
-        {
-            if (scene == _currentScene) return;
-
-            UnloadCurrentScene();
-
-            _lastScene = _currentScene;
-            _currentScene = scene;
-            _currentScene.SetActive(true);
-            CurrentSceneChanged?.Invoke(_currentScene);
-
-            LogManager.SetMsg(_currentScene.ToString(), "Scene");
-
-            InitUIControls();
-        }
-        #endregion
-
         #region Private_Variables
         bool _isMouseDraggingCamera;
         Vector2 _cameraStartDragCoord;
         Point _mouseStartDragPoint;
 
         GameScene? _currentScene;
-        GameScene? _lastScene;
-        TransformEntity? _currentSelect;
+        TransformEntity? _currentSelectEntity;
         GameApplication? _gameApp;
 
         Thread? _gameAppThread;
-        ManualResetEvent _appInitalized_Reset = new(false);
+        ManualResetEvent _appInitalized_Reset = new(false); // wait handler for game initialize event
 
-        List<EntityControl> _eControls = [];
-        LoggingWindow _infoTextWindow;
         EditorForm _editorForm;
 
         CacheService _cacheService;

@@ -9,7 +9,7 @@ namespace CruZ.Framework.UI
     {
         public GameTime GameTime;
         public IInputInfo InputInfo;
-        public SpriteBatch? SpriteBatch;
+        public SpriteBatch SpriteBatch;
 
         public Point MousePos()
         {
