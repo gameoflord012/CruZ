@@ -61,10 +61,9 @@ namespace CruZ.Framework.GameSystem.Render
             _spriteBatch.End();
         }
 
-        protected override void OnDispose()
+        public override void Dispose()
         {
-            base.OnDispose();
-
+            base.Dispose();
             _rtSprite.Dispose();
         }
 

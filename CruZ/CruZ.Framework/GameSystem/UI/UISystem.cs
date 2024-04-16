@@ -37,7 +37,8 @@ namespace CruZ.Framework.GameSystem.UI
 
         protected override void OnUpdate(EntitySystemEventArgs args)
         {
-            UIInfo info = GetInfo(args.GameTime);
+            UpdateUIComponents(args.ActiveEntities.GetAllComponents<UIComponent>());
+            var info = CreateUIInfo(args.GameTime);
 
             if (info.InputInfo.MouseClick && !UIControl.Dragging())
             {
@@ -52,19 +53,39 @@ namespace CruZ.Framework.GameSystem.UI
 
         protected override void OnDraw(EntitySystemEventArgs args)
         {
-            var uiInfo = GetInfo(args.GameTime);
+            UpdateUIComponents(args.ActiveEntities.GetAllComponents<UIComponent>());
+            var uiInfo = CreateUIInfo(args.GameTime);
 
             _spriteBatch.Begin();
-
             foreach (var control in _root.Control.GetTree())
             {
                 control.InternalDraw(uiInfo);
             }
-
             _spriteBatch.End();
         }
 
-        private UIInfo GetInfo(GameTime gameTime)
+        private void UpdateUIComponents(List<UIComponent> newComponents)
+        {
+            // unroot previous UIComponents
+            foreach (var component in _rootedUIComponents)
+            {
+                _root.Control.RemoveChild(component.EntryControl);
+            }
+
+            _rootedUIComponents.Clear();
+
+            // root new UIComponents
+            foreach (var uiComponent in newComponents)
+            {
+                _root.Control.AddChild(uiComponent.EntryControl);
+                _rootedUIComponents.Add(uiComponent);
+            }
+        }
+
+        // components that attached to main branch
+        List<UIComponent> _rootedUIComponents = [];
+
+        private UIInfo CreateUIInfo(GameTime gameTime)
         {
             UIInfo info = new();
 
@@ -79,9 +100,9 @@ namespace CruZ.Framework.GameSystem.UI
         SpriteBatch _spriteBatch = null!;
         bool _isDisposed = false;
 
-        protected override void OnDispose()
+        public override void Dispose()
         {
-            base.OnDispose();
+            base.Dispose();
             _isDisposed = true;
             _spriteBatch?.Dispose();
         }

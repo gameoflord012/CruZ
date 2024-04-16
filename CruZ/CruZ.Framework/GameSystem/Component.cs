@@ -38,36 +38,7 @@ namespace CruZ.Framework.GameSystem
             return GetType().Name;
         }
 
-        public void Dispose()
-        {
-            OnDispose();
-        }
-
-        protected virtual void OnDispose()
-        {
-
-        }
-
-        //public object ReadJson(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
-        //{
-        //    throw new NotImplementedException();
-        //}
-
-        //public void WriteJson(Utf8JsonWriter writer, IJsonSerializable value, JsonSerializerOptions options)
-        //{
-
-
-        //    writer.WriteStartObject();
-        //    {
-        //        writer.WritePropertyName("ComponentType");
-        //        writer.WriteStringValue(this.GetType().FullName);
-
-        //        writer.WritePropertyName("ComponentData");
-        //        var converter = options.GetConverter(this.GetType());
-        //        JsonSerializer.Serialize(this, )
-        //    }
-        //    writer.WriteEndObject();
-        //}
+        public virtual void Dispose() { }
 
         [JsonIgnore]
         protected TransformEntity? AttachedEntity { get; private set; }

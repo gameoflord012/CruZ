@@ -59,13 +59,13 @@ namespace CruZ.Framework.GameSystem.UI
         /// <summary>
         /// Get all children controls and itself under mouse point
         /// </summary>
-        public UIControl[] GetRaycastControls(int pointX, int mouseY)
+        public UIControl[] GetRaycastControls(int pointX, int pointY)
         {
             List<UIControl> contains = [];
 
             foreach (var node in GetTree())
             {
-                if (node.GetRect().Contains(pointX, mouseY))
+                if (node.GetRect().Contains(pointX, pointY))
                     contains.Add(node);
             }
 

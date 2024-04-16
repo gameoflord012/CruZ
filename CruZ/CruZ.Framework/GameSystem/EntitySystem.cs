@@ -26,11 +26,6 @@ namespace CruZ.Framework.GameSystem
 
         }
 
-        public void Dispose()
-        {
-            OnDispose();
-        }
-
-        protected virtual void OnDispose() { }
+        public virtual void Dispose() { }
     }
 }
