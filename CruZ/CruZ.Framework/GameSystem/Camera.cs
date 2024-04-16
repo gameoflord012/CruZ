@@ -4,7 +4,7 @@ using CruZ.Framework.Utility;
 
 using Microsoft.Xna.Framework;
 
-namespace CruZ.Framework
+namespace CruZ.Framework.GameSystem
 {
     public enum ProjectionOffset
     {
@@ -12,9 +12,14 @@ namespace CruZ.Framework
         Topleft // When projection top left at 0, 0
     }
 
-    public partial class Camera
+    public class Camera
     {
-        //public event Action OnCameraValueChanged;
+        private static Camera? _mainCamera;
+        public static Camera Main
+        {
+            get => _mainCamera ?? throw new InvalidOperationException("Main camera is not assigned");
+            set => _mainCamera = value;
+        }
 
         public Camera(GameWindow window)
         {
@@ -37,7 +42,7 @@ namespace CruZ.Framework
              */
 
             var ndc = new Vector2(
-                p.X / ViewPortWidth * 2f - 1f, 
+                p.X / ViewPortWidth * 2f - 1f,
                 -(p.Y / ViewPortHeight * 2f - 1f));
 
             var inv = Matrix.Invert(ViewProjectionMatrix());
@@ -57,7 +62,7 @@ namespace CruZ.Framework
 
             // Convert ndc to screen
             var screen = new Vector2(
-                (ndc.X + 1) / 2f * ViewPortWidth, 
+                (ndc.X + 1) / 2f * ViewPortWidth,
                 (-ndc.Y + 1) / 2f * ViewPortHeight);
 
             return new Point(screen.X.RoundToInt(), screen.Y.RoundToInt());
@@ -67,7 +72,7 @@ namespace CruZ.Framework
         /// A ratio use to convert from world magnitude to world magnitude if multiply with it
         /// </summary>
         public Vector2 ScreenToWorldRatio()
-        { 
+        {
             return new(
                 ViewPortWidth * Zoom / VirtualWidth,
                 ViewPortHeight * Zoom / VirtualHeight
@@ -78,7 +83,7 @@ namespace CruZ.Framework
         /// Convert from world coordinate to camera coodinate, which camera's viewport TL is -size / 2
         /// </summary>
         /// <returns></returns>
-        
+
         public Matrix ViewProjectionMatrix()
         {
             return ViewMatrix() * ProjectionMatrix();
@@ -105,7 +110,7 @@ namespace CruZ.Framework
         {
             return Matrix.CreateOrthographicOffCenter(
                 -VirtualWidth / 2, VirtualWidth / 2,
-                VirtualHeight / 2, -VirtualHeight / 2, 
+                VirtualHeight / 2, -VirtualHeight / 2,
                 -GameConstants.MAX_WORLD_DISTANCE, GameConstants.MAX_WORLD_DISTANCE);
         }
 

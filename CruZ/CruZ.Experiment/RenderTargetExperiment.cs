@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 using CruZ.Framework;
+using CruZ.Framework.GameSystem;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;

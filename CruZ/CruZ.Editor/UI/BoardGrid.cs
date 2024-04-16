@@ -9,6 +9,7 @@ namespace CruZ.Editor.UI;
 using System.Numerics;
 
 using CruZ.Framework;
+using CruZ.Framework.GameSystem;
 using CruZ.Framework.GameSystem.UI;
 using CruZ.Framework.Utility;
 

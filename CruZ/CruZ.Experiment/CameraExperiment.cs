@@ -1,6 +1,7 @@
 ﻿using CruZ.Common;
 using CruZ.Common.UI;
 using CruZ.Framework;
+using CruZ.Framework.GameSystem;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;

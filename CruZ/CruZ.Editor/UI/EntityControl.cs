@@ -6,8 +6,6 @@ using System.Collections.Generic;
 
 using System.Linq;
 
-using CruZ.Framework;
-
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 

@@ -1,6 +1,7 @@
 ﻿using AnimalGang;
 
 using CruZ.Framework;
+using CruZ.Framework.GameSystem;
 
 namespace Game.AnimalGang
 {
