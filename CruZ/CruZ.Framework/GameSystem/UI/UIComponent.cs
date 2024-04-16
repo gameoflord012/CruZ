@@ -6,7 +6,10 @@ using System.Threading.Tasks;
 
 namespace CruZ.Framework.GameSystem.UI
 {
-    internal class UIComponent : Component
+    /// <summary>
+    /// Allow embeded UIControl to a component
+    /// </summary>
+    public class UIComponent : Component
     {
         public UIComponent()
         {
