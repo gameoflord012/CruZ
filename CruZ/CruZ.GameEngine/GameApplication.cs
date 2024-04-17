@@ -2,11 +2,8 @@
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
-using MonoGame.Extended;
-
 using System;
 using System.Collections.Generic;
-using CruZ.GameEngine;
 using CruZ.GameEngine.GameSystem;
 using CruZ.GameEngine.Service;
 using CruZ.GameEngine.Input;
