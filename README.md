@@ -1,6 +1,6 @@
 # CruZ GameEngine
 
-GameEngine from MonoGame madafaka
+An game engine using MonoGame Framework
 
 # Submodules
 git submodule update --init --recursive
