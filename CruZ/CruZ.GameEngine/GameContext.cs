@@ -41,9 +41,9 @@ namespace CruZ.Framework
 
         private static void InitializeInternalResource()
         {
-            PathHelper.UpdateFolderContents(
+            PathHelper.CopyFolder(
                 Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resource\\Internal\\"),
-                Path.Combine(_gameResourceDir, ".internal\\"),
+                Path.Combine(GameResourceDir, ".internal\\"),
                 "*", true, true);
         }
 

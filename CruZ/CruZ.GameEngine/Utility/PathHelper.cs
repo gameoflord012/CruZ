@@ -13,7 +13,7 @@ namespace CruZ.Framework.Utility
             return !rel.StartsWith("..\\") && rel != ".";
         }
 
-        public static void UpdateFolderContents(string sourceFolder, string destinationFolder, string pattern = "*", Boolean createFolders = false, Boolean recurseFolders = false)
+        public static void CopyFolder(string sourceFolder, string destinationFolder, string pattern = "*", Boolean createFolders = false, Boolean recurseFolders = false)
         {
             try
             {
@@ -50,7 +50,7 @@ namespace CruZ.Framework.Utility
                     if (!srcFile.Exists) dstFile.Delete();
                 }
             }
-            catch (Exception ex)
+            catch
             {
                 throw;
             }

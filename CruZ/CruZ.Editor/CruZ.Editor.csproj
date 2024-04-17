@@ -27,6 +27,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\CruZ.Framework\CruZ.Framework.WindowsDX.csproj" />
+		<ProjectReference Include="..\CruZ.GameEngine\CruZ.GameEngine.WindowsDX.csproj" />
 	</ItemGroup>
 </Project>

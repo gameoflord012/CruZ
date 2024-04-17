@@ -10,6 +10,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\..\..\CruZ\CruZ.Framework\CruZ.Framework.WindowsDX.csproj" />
+		<ProjectReference Include="..\..\..\CruZ\CruZ.GameEngine\CruZ.GameEngine.WindowsDX.csproj" />
 	</ItemGroup>
 </Project>
