@@ -45,6 +45,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CruZ.Framework.WindowsDX", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Game.AnimalGang", "SandBox\Games\Game.AnimalGang\Game.AnimalGang.csproj", "{82EB0A7C-6D46-40CA-8B59-94C7D4E33DDA}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MonoGame.Extended.Content.Pipeline", "ThirdParty\MonoGame.Extended\src\cs\MonoGame.Extended.Content.Pipeline\MonoGame.Extended.Content.Pipeline.csproj", "{E0EBC729-50F5-4CC2-9441-BF6EDC485408}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -175,6 +177,18 @@ Global
 		{82EB0A7C-6D46-40CA-8B59-94C7D4E33DDA}.Release|x64.Build.0 = Release|Any CPU
 		{82EB0A7C-6D46-40CA-8B59-94C7D4E33DDA}.Release|x86.ActiveCfg = Release|Any CPU
 		{82EB0A7C-6D46-40CA-8B59-94C7D4E33DDA}.Release|x86.Build.0 = Release|Any CPU
+		{E0EBC729-50F5-4CC2-9441-BF6EDC485408}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E0EBC729-50F5-4CC2-9441-BF6EDC485408}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E0EBC729-50F5-4CC2-9441-BF6EDC485408}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{E0EBC729-50F5-4CC2-9441-BF6EDC485408}.Debug|x64.Build.0 = Debug|Any CPU
+		{E0EBC729-50F5-4CC2-9441-BF6EDC485408}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{E0EBC729-50F5-4CC2-9441-BF6EDC485408}.Debug|x86.Build.0 = Debug|Any CPU
+		{E0EBC729-50F5-4CC2-9441-BF6EDC485408}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E0EBC729-50F5-4CC2-9441-BF6EDC485408}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E0EBC729-50F5-4CC2-9441-BF6EDC485408}.Release|x64.ActiveCfg = Release|Any CPU
+		{E0EBC729-50F5-4CC2-9441-BF6EDC485408}.Release|x64.Build.0 = Release|Any CPU
+		{E0EBC729-50F5-4CC2-9441-BF6EDC485408}.Release|x86.ActiveCfg = Release|Any CPU
+		{E0EBC729-50F5-4CC2-9441-BF6EDC485408}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -191,6 +205,7 @@ Global
 		{1FD1AD15-5CDF-4C99-B969-AE7E3596EA0C} = {06F0198E-A6EA-4165-9D3B-38A6B36D6687}
 		{9249B6BC-33EE-4DBC-9308-739B1EB77618} = {06F0198E-A6EA-4165-9D3B-38A6B36D6687}
 		{82EB0A7C-6D46-40CA-8B59-94C7D4E33DDA} = {E7FCC9F8-FD83-4A1C-8405-604EBB242AFA}
+		{E0EBC729-50F5-4CC2-9441-BF6EDC485408} = {AADF9D08-3C4F-4C12-9417-AC5E3DCAD41C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7F9F8BC8-0847-4E84-9AA8-0677A7EED2BA}
