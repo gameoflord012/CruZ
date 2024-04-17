@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 
-namespace CruZ.Framework
+namespace CruZ.GameEngine
 {
     public static class GameConstants
     {

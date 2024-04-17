@@ -1,8 +1,8 @@
-﻿using CruZ.Framework.Serialization;
+﻿using CruZ.GameEngine.Serialization;
 
 using System.IO;
 
-namespace CruZ.Framework.Utility
+namespace CruZ.GameEngine.Utility
 {
     public static class FileHelper
     {

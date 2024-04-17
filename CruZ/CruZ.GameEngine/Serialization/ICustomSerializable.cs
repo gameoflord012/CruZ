@@ -1,7 +1,7 @@
 ﻿//using System.Text.Json;
 //using System;
 
-//namespace CruZ.Framework.Serialization
+//namespace CruZ.GameEngine.Serialization
 //{
 //    public interface IJsonSerializable
 //    {

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace CruZ.Framework.GameSystem
+namespace CruZ.GameEngine.GameSystem
 {
     internal class EntitySystem : IDisposable
     {

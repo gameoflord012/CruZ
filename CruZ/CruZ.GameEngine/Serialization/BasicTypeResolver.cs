@@ -6,7 +6,7 @@
 //using System.Text.Json.Serialization.Metadata;
 //using System.Threading.Tasks;
 
-//namespace CruZ.Framework.Serialization
+//namespace CruZ.GameEngine.Serialization
 //{
 //    internal class BasicTypeResolver : IJsonTypeInfoResolver
 //    {

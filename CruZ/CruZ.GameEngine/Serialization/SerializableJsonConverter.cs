@@ -4,7 +4,7 @@
 //using System.Text.Json;
 //using System.Text.Json.Serialization;
 
-//namespace CruZ.Framework.Serialization
+//namespace CruZ.GameEngine.Serialization
 //{
 //    public class SerializableJsonConverter : JsonConverter<IJsonSerializable>
 //    {

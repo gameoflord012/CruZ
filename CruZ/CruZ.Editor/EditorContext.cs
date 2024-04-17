@@ -4,8 +4,8 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 
-using CruZ.Framework;
-using CruZ.Framework.Resource;
+using CruZ.GameEngine;
+using CruZ.GameEngine.Resource;
 
 namespace CruZ.Editor
 {

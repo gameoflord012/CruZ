@@ -1,14 +1,13 @@
 ﻿using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework;
-
-using CruZ.Framework.GameSystem.Animation;
-using CruZ.Framework.GameSystem.ECS;
-using CruZ.Framework.GameSystem.Script;
-using CruZ.Framework.Input;
-using CruZ.Framework.Utility;
+using CruZ.GameEngine.GameSystem.ECS;
 
 using System;
-using CruZ.Framework.GameSystem;
+using CruZ.GameEngine.GameSystem;
+using CruZ.GameEngine.GameSystem.Script;
+using CruZ.GameEngine.GameSystem.Animation;
+using CruZ.GameEngine.Input;
+using CruZ.GameEngine.Utility;
 
 namespace AnimalGang
 {

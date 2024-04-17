@@ -2,13 +2,13 @@ using System;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-using CruZ.Framework.Resource;
+using CruZ.GameEngine.Resource;
 
 using Microsoft.Xna.Framework.Graphics;
 
 using MonoGame.Extended.TextureAtlases;
 
-namespace CruZ.Framework.Serialization
+namespace CruZ.GameEngine.Serialization
 {
     internal class TextureAtlasJsonConverter : JsonConverter<TextureAtlas>
     {

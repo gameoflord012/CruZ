@@ -6,11 +6,12 @@ using MonoGame.Extended;
 
 using System;
 using System.Collections.Generic;
-using CruZ.Framework.Service;
-using CruZ.Framework.Input;
-using CruZ.Framework.GameSystem;
+using CruZ.GameEngine;
+using CruZ.GameEngine.GameSystem;
+using CruZ.GameEngine.Service;
+using CruZ.GameEngine.Input;
 
-namespace CruZ.Framework
+namespace CruZ.GameEngine
 {
     public partial class GameApplication : IDisposable
     {

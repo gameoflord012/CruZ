@@ -8,10 +8,10 @@ namespace CruZ.Editor.UI;
 
 using System.Numerics;
 
-using CruZ.Framework;
-using CruZ.Framework.GameSystem;
-using CruZ.Framework.GameSystem.UI;
-using CruZ.Framework.Utility;
+using CruZ.GameEngine;
+using CruZ.GameEngine.GameSystem;
+using CruZ.GameEngine.GameSystem.UI;
+using CruZ.GameEngine.Utility;
 
 public class BoardGrid : UIControl
 {

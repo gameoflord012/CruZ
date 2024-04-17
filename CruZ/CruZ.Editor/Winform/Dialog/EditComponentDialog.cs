@@ -3,9 +3,9 @@
 using System;
 using System.Linq;
 using System.Windows.Forms;
-using CruZ.Framework.Utility;
-using CruZ.Framework;
-using CruZ.Framework.GameSystem;
+using CruZ.GameEngine;
+using CruZ.GameEngine.Utility;
+using CruZ.GameEngine.GameSystem;
 
 namespace CruZ.Editor
 {

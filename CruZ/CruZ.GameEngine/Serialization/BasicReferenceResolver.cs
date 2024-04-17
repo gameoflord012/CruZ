@@ -2,7 +2,7 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace CruZ.Framework.Serialization
+namespace CruZ.GameEngine.Serialization
 {
     /// <summary>
     /// This basic implemetation is from https://learn.microsoft.com/en-us/dotnet/standard/serialization/system-text-json/preserve-references

@@ -1,11 +1,12 @@
 ﻿using System;
 
-using CruZ.Framework.Utility;
+using CruZ.GameEngine;
+using CruZ.GameEngine.Utility;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace CruZ.Framework.GameSystem.Render.Filters
+namespace CruZ.GameEngine.GameSystem.Render.Filters
 {
     public class BloomFilter : IDisposable
     {

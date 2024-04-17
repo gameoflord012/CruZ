@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace CruZ.Framework.GameSystem.UI
+namespace CruZ.GameEngine.GameSystem.UI
 {
     public class UIRoot
     {

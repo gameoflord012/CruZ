@@ -3,15 +3,15 @@ using System;
 using System.ComponentModel;
 using Microsoft.Xna.Framework;
 using System.Drawing.Design;
-using CruZ.Framework.Resource;
-using CruZ.Framework;
-using CruZ.Framework.GameSystem.Render;
-using CruZ.Framework.Utility;
 using System.Text.Json.Serialization;
-using CruZ.Framework.Serialization;
-using CruZ.Framework.GameSystem.UI;
+using CruZ.GameEngine.Serialization;
+using CruZ.GameEngine.Resource;
+using CruZ.GameEngine.GameSystem.UI;
+using CruZ.GameEngine.GameSystem.Render;
+using CruZ.GameEngine;
+using CruZ.GameEngine.Utility;
 
-namespace CruZ.Framework.GameSystem.ECS
+namespace CruZ.GameEngine.GameSystem.ECS
 {
     /// <summary>
     /// Game component loaded from specify resource

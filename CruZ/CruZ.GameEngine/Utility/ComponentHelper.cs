@@ -1,8 +1,8 @@
 ﻿using System;
 
-using CruZ.Framework.GameSystem;
+using CruZ.GameEngine.GameSystem;
 
-namespace CruZ.Framework.Utility
+namespace CruZ.GameEngine.Utility
 {
     public class ComponentHelper
     {

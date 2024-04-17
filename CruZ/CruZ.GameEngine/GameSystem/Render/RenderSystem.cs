@@ -1,9 +1,10 @@
-﻿using CruZ.Framework.GameSystem.Render.Filters;
+﻿using CruZ.GameEngine;
+using CruZ.GameEngine.GameSystem.Render.Filters;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace CruZ.Framework.GameSystem.Render
+namespace CruZ.GameEngine.GameSystem.Render
 {
     internal class RenderSystem : EntitySystem
     {

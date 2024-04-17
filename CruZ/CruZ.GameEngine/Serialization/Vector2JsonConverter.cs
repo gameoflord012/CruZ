@@ -1,9 +1,10 @@
 ﻿using Microsoft.Xna.Framework;
+
 using System;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Text.Json.Serialization.Metadata;
-namespace CruZ.Framework.Serialization
+namespace CruZ.GameEngine.Serialization
 {
     internal class Vector2JsonConverter : JsonConverter<Vector2>
     {
@@ -11,7 +12,7 @@ namespace CruZ.Framework.Serialization
         {
             Vector2 v2 = new();
 
-            using(var document = JsonDocument.ParseValue(ref reader))
+            using (var document = JsonDocument.ParseValue(ref reader))
             {
                 var root = document.RootElement;
 

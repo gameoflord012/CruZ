@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Text.Json.Serialization;
 
-using CruZ.Framework.Serialization;
+using CruZ.GameEngine.Serialization;
 
-namespace CruZ.Framework.GameSystem
+namespace CruZ.GameEngine.GameSystem
 {
     [JsonConverter(typeof(ComponentJsonConverter))]
     public abstract class Component : IDisposable

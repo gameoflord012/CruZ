@@ -1,12 +1,14 @@
-﻿using CruZ.Framework.Resource;
-using CruZ.Framework.Serialization;
+﻿using CruZ.GameEngine;
+using CruZ.GameEngine.Serialization;
+using CruZ.GameEngine.GameSystem;
+using CruZ.GameEngine.Resource;
 
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Text.Json.Serialization;
 
-namespace CruZ.Framework.GameSystem.Scene
+namespace CruZ.GameEngine.GameSystem.Scene
 {
     public class GameScene : IResource, IDisposable, IJsonOnSerializing, IJsonOnDeserialized
     {

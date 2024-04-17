@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 using Microsoft.Xna.Framework.Graphics;
 
-namespace CruZ.Framework.GameSystem.Render
+namespace CruZ.GameEngine.GameSystem.Render
 {
     public static class SpriteBatchHelper
     {

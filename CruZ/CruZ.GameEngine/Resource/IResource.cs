@@ -1,4 +1,4 @@
-﻿namespace CruZ.Framework.Resource
+﻿namespace CruZ.GameEngine.Resource
 {
     public interface IResource
     {

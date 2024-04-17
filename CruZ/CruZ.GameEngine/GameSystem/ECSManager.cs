@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Diagnostics;
 
-using CruZ.Framework.GameSystem.Animation;
-using CruZ.Framework.GameSystem.Render;
-using CruZ.Framework.GameSystem.Script;
-using CruZ.Framework.GameSystem.UI;
+using CruZ.GameEngine.GameSystem.Animation;
+using CruZ.GameEngine.GameSystem.Render;
+using CruZ.GameEngine.GameSystem.Script;
+using CruZ.GameEngine.GameSystem.UI;
 
 using Microsoft.Xna.Framework;
 
-namespace CruZ.Framework.GameSystem
+namespace CruZ.GameEngine.GameSystem
 {
     internal class ECSManager : IDisposable
     {

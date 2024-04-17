@@ -1,6 +1,6 @@
 ﻿using System.Runtime.Serialization;
 
-namespace CruZ.Framework.GameSystem.ECS
+namespace CruZ.GameEngine.GameSystem.ECS
 {
     public partial class SpriteRendererComponent
     {

@@ -1,9 +1,10 @@
-﻿using CruZ.Framework;
-using CruZ.Framework.GameSystem.Render;
+﻿using CruZ.GameEngine;
+using CruZ.GameEngine.GameSystem.Render;
+using CruZ.GameEngine;
 
 using Microsoft.Xna.Framework.Graphics;
 
-namespace CruZ.Framework.Utility
+namespace CruZ.GameEngine.Utility
 {
     public class EffectManager
     {

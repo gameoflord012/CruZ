@@ -3,7 +3,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace CruZ.Framework
+namespace CruZ.GameEngine
 {
     /// <summary>
     /// Provides a wrapper for <see cref="Game"/>.
@@ -51,7 +51,7 @@ namespace CruZ.Framework
 
         private void OnClientSizeChanged(object? sender, EventArgs e)
         {
-            GraphicsDevice.PresentationParameters.RenderTargetUsage = 
+            GraphicsDevice.PresentationParameters.RenderTargetUsage =
                 RenderTargetUsage.PreserveContents; // update render target usage after rt back buffer changing
         }
 

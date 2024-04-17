@@ -1,9 +1,10 @@
 ﻿using Microsoft.Xna.Framework;
+
 using System;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace CruZ.Framework.Serialization
+namespace CruZ.GameEngine.Serialization
 {
     internal class Vector4JsonConverter : JsonConverter<Vector4>
     {

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CruZ.Framework.GameSystem
+namespace CruZ.GameEngine.GameSystem
 {
     internal class EntityCollection
     {

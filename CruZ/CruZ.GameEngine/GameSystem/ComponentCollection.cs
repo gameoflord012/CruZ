@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace CruZ.Framework.GameSystem
+namespace CruZ.GameEngine.GameSystem
 {
     public class ComponentCollection
     {

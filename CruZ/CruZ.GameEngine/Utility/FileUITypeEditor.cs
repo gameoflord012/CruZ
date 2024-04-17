@@ -3,9 +3,9 @@ using System.ComponentModel;
 using System.Drawing.Design;
 using System.Windows.Forms;
 
-using CruZ.Framework;
+using CruZ.GameEngine;
 
-namespace CruZ.Framework.Utility
+namespace CruZ.GameEngine.Utility
 {
     class FileUITypeEditor : UITypeEditor
     {

@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
 
-namespace CruZ.Framework.Utility
+namespace CruZ.GameEngine.Utility
 {
     public class TextureHelper
     {

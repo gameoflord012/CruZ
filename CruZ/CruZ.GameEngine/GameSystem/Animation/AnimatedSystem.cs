@@ -1,4 +1,6 @@
-﻿namespace CruZ.Framework.GameSystem.Animation
+﻿using CruZ.GameEngine.GameSystem;
+
+namespace CruZ.GameEngine.GameSystem.Animation
 {
     class AnimationSystem : EntitySystem
     {

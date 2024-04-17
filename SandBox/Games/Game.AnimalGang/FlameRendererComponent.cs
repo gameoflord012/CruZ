@@ -1,7 +1,8 @@
-﻿using CruZ.Framework;
-using CruZ.Framework.GameSystem.Render;
-using CruZ.Framework.GameSystem.Render.Filters;
-using CruZ.Framework.Utility;
+﻿using CruZ.GameEngine;
+using CruZ.GameEngine;
+using CruZ.GameEngine.GameSystem.Render;
+using CruZ.GameEngine.GameSystem.Render.Filters;
+using CruZ.GameEngine.Utility;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;

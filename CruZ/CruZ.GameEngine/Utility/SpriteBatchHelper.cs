@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace CruZ.Framework.Utility
+namespace CruZ.GameEngine.Utility
 {
     public static class SpriteBatchHelper
     {

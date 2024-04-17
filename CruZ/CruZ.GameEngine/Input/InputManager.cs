@@ -1,12 +1,13 @@
 ﻿using System;
 
-using CruZ.Framework.Service;
-using CruZ.Framework.Utility;
+using CruZ.GameEngine;
+using CruZ.GameEngine.Service;
+using CruZ.GameEngine.Utility;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 
-namespace CruZ.Framework.Input
+namespace CruZ.GameEngine.Input
 {
     interface IInputController
     {

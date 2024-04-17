@@ -1,6 +1,8 @@
-﻿using Microsoft.Xna.Framework;
+﻿using CruZ.GameEngine.GameSystem;
 
-namespace CruZ.Framework.GameSystem.Script
+using Microsoft.Xna.Framework;
+
+namespace CruZ.GameEngine.GameSystem.Script
 {
     internal class ScriptSystem : EntitySystem
     {

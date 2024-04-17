@@ -1,9 +1,10 @@
 ﻿using System.Numerics;
 
-using CruZ.Framework.GameSystem.ECS;
-using CruZ.Framework.GameSystem.Render;
+using CruZ.GameEngine.GameSystem.ECS;
+using CruZ.GameEngine.GameSystem;
+using CruZ.GameEngine.GameSystem.Render;
 
-namespace CruZ.Framework.GameSystem.Tile
+namespace CruZ.GameEngine.GameSystem.Tile
 {
     public class TileComponent : Component
     {

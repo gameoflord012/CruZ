@@ -5,7 +5,9 @@
     3. ResourceInfo will be available by calling RetrieveResourceInfo
  */
 
-using CruZ.Framework.Serialization;
+using CruZ.GameEngine;
+using CruZ.GameEngine;
+using CruZ.GameEngine.Serialization;
 
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Content.Pipeline;
@@ -21,7 +23,7 @@ using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace CruZ.Framework.Resource
+namespace CruZ.GameEngine.Resource
 {
     public class ResourceManager : IGuidValueProcessor<string>
     {
@@ -267,7 +269,7 @@ namespace CruZ.Framework.Resource
 
         private void InitResourceObject(object resObj, string resourcePath, bool autoImportResourcePath = false)
         {
-            if(autoImportResourcePath) ImportResourcePath(resourcePath);
+            if (autoImportResourcePath) ImportResourcePath(resourcePath);
             var info = RetriveResourceInfo(resourcePath);
             if (resObj is IResource resource) resource.Info = info;
         }

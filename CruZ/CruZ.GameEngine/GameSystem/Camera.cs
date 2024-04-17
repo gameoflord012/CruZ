@@ -1,10 +1,11 @@
 ﻿using System;
 
-using CruZ.Framework.Utility;
+using CruZ.GameEngine;
+using CruZ.GameEngine.Utility;
 
 using Microsoft.Xna.Framework;
 
-namespace CruZ.Framework.GameSystem
+namespace CruZ.GameEngine.GameSystem
 {
     public enum ProjectionOffset
     {

@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 #endregion
 
-namespace CruZ.Framework.GameSystem.Render.Filters
+namespace CruZ.GameEngine.GameSystem.Render.Filters
 {
     /// <summary>
     /// Renders a simple quad to the screen. Uncomment the Vertex / Index buffers to make it a static fullscreen quad. 

@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 
-using CruZ.Framework.Input;
+using CruZ.GameEngine;
+using CruZ.GameEngine.Input;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace CruZ.Framework.GameSystem.UI
+namespace CruZ.GameEngine.GameSystem.UI
 {
     internal class UISystem : EntitySystem
     {

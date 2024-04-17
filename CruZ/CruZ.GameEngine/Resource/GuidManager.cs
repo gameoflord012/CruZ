@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace CruZ.Framework.Resource
+namespace CruZ.GameEngine.Resource
 {
     class GuidManager<T>
     {

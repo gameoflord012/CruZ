@@ -1,6 +1,8 @@
-﻿using CruZ.Framework.GameSystem.ECS;
-using CruZ.Framework.GameSystem.Render;
-using CruZ.Framework.Resource;
+﻿using CruZ.GameEngine.GameSystem.ECS;
+using CruZ.GameEngine;
+using CruZ.GameEngine.GameSystem;
+using CruZ.GameEngine.GameSystem.Render;
+using CruZ.GameEngine.Resource;
 
 using Microsoft.Xna.Framework;
 
@@ -10,7 +12,7 @@ using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
-namespace CruZ.Framework.GameSystem.Animation
+namespace CruZ.GameEngine.GameSystem.Animation
 {
     /// <summary>
     /// Playing animations in SpriteSheet
@@ -81,7 +83,7 @@ namespace CruZ.Framework.GameSystem.Animation
     }
 }
 
-namespace CruZ.Framework.GameSystem.Animation
+namespace CruZ.GameEngine.GameSystem.Animation
 {
     public class AnimationComponent : Component, IJsonOnDeserialized
     {

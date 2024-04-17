@@ -1,5 +1,4 @@
 ﻿using CruZ.Editor.Service;
-using CruZ.Framework.Utility;
 
 using System;
 using System.Collections.Generic;
@@ -10,8 +9,9 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 
 using RectangleF = System.Drawing.RectangleF;
-using CruZ.Framework.GameSystem.UI;
-using CruZ.Framework.GameSystem;
+using CruZ.GameEngine.GameSystem.UI;
+using CruZ.GameEngine.GameSystem;
+using CruZ.GameEngine.Utility;
 
 namespace CruZ.Editor.UI
 {

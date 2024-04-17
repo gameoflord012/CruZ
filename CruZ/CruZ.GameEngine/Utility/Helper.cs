@@ -1,7 +1,7 @@
 ﻿using System.Runtime.CompilerServices;
 using System;
 
-namespace CruZ.Framework.Utility
+namespace CruZ.GameEngine.Utility
 {
     class Helper
     {

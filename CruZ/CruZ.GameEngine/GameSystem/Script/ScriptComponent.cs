@@ -2,7 +2,7 @@
 
 using Microsoft.Xna.Framework;
 
-namespace CruZ.Framework.GameSystem.Script
+namespace CruZ.GameEngine.GameSystem.Script
 {
     public class ScriptComponent : Component
     {

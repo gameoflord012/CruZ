@@ -3,10 +3,10 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 
-using CruZ.Framework.Resource;
-using CruZ.Framework.Utility;
+using CruZ.GameEngine.Resource;
+using CruZ.GameEngine.Utility;
 
-namespace CruZ.Framework
+namespace CruZ.GameEngine
 {
     public static class GameContext
     {
@@ -28,8 +28,8 @@ namespace CruZ.Framework
             private set => _gameResource = value;
         }
 
-        public static Func<AssemblyName, Assembly?> AssemblyResolver 
-        { 
+        public static Func<AssemblyName, Assembly?> AssemblyResolver
+        {
             get => (resolvingAss) => AppDomain.CurrentDomain.GetAssemblies()
                     .First(domainAss => domainAss.FullName == resolvingAss.FullName);
         }

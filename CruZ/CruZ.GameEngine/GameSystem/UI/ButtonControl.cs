@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 
-namespace CruZ.Framework.GameSystem.UI
+namespace CruZ.GameEngine.GameSystem.UI
 {
     public class ButtonControl : UIControl
     {

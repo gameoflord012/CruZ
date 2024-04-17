@@ -1,9 +1,9 @@
-﻿using CruZ.Framework.GameSystem.Animation;
-using CruZ.Framework.GameSystem.ECS;
-using CruZ.Framework.GameSystem.Render;
-using CruZ.Framework.GameSystem.Scene;
-using CruZ.Framework.GameSystem.Tile;
-using CruZ.Framework.GameSystem.UI;
+﻿using CruZ.GameEngine.GameSystem.Animation;
+using CruZ.GameEngine.GameSystem.ECS;
+using CruZ.GameEngine.GameSystem.Render;
+using CruZ.GameEngine.GameSystem.Tile;
+using CruZ.GameEngine.GameSystem.UI;
+using CruZ.GameEngine.GameSystem.Scene;
 
 using Game.AnimalGang.DesktopGL;
 

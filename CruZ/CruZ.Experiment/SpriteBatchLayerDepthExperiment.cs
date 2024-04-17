@@ -4,8 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using CruZ.Framework;
-using CruZ.Framework.GameSystem;
+using CruZ.GameEngine;
+using CruZ.GameEngine.GameSystem;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;

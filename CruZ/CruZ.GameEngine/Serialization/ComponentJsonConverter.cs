@@ -3,9 +3,9 @@ using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
 
-using CruZ.Framework.GameSystem;
+using CruZ.GameEngine.GameSystem;
 
-namespace CruZ.Framework.Serialization
+namespace CruZ.GameEngine.Serialization
 {
     internal class ComponentJsonConverter : JsonConverter<Component>
     {
@@ -16,7 +16,7 @@ namespace CruZ.Framework.Serialization
             string componentTypeInStr = json["ComponentType"].GetValue<string>();
             Type componentType = GetTypeFromString(componentTypeInStr);
 
-            return JsonSerializer.Deserialize(json["ComponentData"], componentType, options) as Component;
+            return json["ComponentData"].Deserialize(componentType, options) as Component;
         }
 
         private static Type GetTypeFromString(string componentTypeInString)

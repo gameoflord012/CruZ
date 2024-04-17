@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -7,7 +8,7 @@ using MonoGame.Extended.Shapes;
 
 using RectangleF = System.Drawing.RectangleF;
 
-namespace CruZ.Framework.Utility
+namespace CruZ.GameEngine.Utility
 {
     /// <summary>
     ///     Sprite batch extensions for drawing primitive shapes
@@ -44,7 +45,7 @@ namespace CruZ.Framework.Utility
         /// /// <param name="layerDepth">The depth of the layer of this shape</param>
         public static void DrawPolygon(this SpriteBatch spriteBatch, Vector2 position, Polygon polygon, Color color, float thickness = 1f, float layerDepth = 0)
         {
-            DrawPolygon(spriteBatch, position, polygon.Vertices, color, thickness, layerDepth);
+            spriteBatch.DrawPolygon(position, polygon.Vertices, color, thickness, layerDepth);
         }
 
         /// <summary>
@@ -64,7 +65,7 @@ namespace CruZ.Framework.Utility
 
             if (points.Count == 1)
             {
-                DrawPoint(spriteBatch, points[0], color, (int)thickness);
+                spriteBatch.DrawPoint(points[0], color, (int)thickness);
                 return;
             }
 
@@ -93,9 +94,8 @@ namespace CruZ.Framework.Utility
         /// <param name="layerDepth">The depth of the layer of this shape</param>
         public static void FillRectangle(this SpriteBatch spriteBatch, RectangleF rectangle, Color color, float layerDepth = 0)
         {
-            FillRectangle(spriteBatch, 
-                new Vector2(rectangle.X, rectangle.Y), 
-                new Vector2(rectangle.Size.Width, rectangle.Size.Height), 
+            spriteBatch.FillRectangle(new Vector2(rectangle.X, rectangle.Y),
+                new Vector2(rectangle.Size.Width, rectangle.Size.Height),
                 color, layerDepth);
         }
 
@@ -124,7 +124,7 @@ namespace CruZ.Framework.Utility
         /// <param name="layerDepth">The depth of the layer of this shape</param>
         public static void FillRectangle(this SpriteBatch spriteBatch, float x, float y, float width, float height, Color color, float layerDepth = 0)
         {
-            FillRectangle(spriteBatch, new Vector2(x, y), new Vector2(width, height), color, layerDepth);
+            spriteBatch.FillRectangle(new Vector2(x, y), new Vector2(width, height), color, layerDepth);
         }
 
         /// <summary>
@@ -161,7 +161,7 @@ namespace CruZ.Framework.Utility
         /// <param name="layerDepth">The depth of the layer of this shape</param>
         public static void DrawRectangle(this SpriteBatch spriteBatch, Vector2 location, Vector2 size, Color color, float thickness = 1f, float layerDepth = 0)
         {
-            DrawRectangle(spriteBatch, new RectangleF(location.X, location.Y, size.X, size.Y), color, thickness, layerDepth);
+            spriteBatch.DrawRectangle(new RectangleF(location.X, location.Y, size.X, size.Y), color, thickness, layerDepth);
         }
 
 
@@ -170,7 +170,7 @@ namespace CruZ.Framework.Utility
         /// </summary>
         public static void DrawRectangle(this SpriteBatch spriteBatch, float x, float y, float width, float height, Color color, float thickness = 1f, float layerDepth = 0)
         {
-            DrawRectangle(spriteBatch, new RectangleF(x, y, width, height), color, thickness, layerDepth);
+            spriteBatch.DrawRectangle(new RectangleF(x, y, width, height), color, thickness, layerDepth);
         }
 
         /// <summary>
@@ -186,7 +186,7 @@ namespace CruZ.Framework.Utility
         /// <param name="layerDepth">The depth of the layer of this shape</param>
         public static void DrawLine(this SpriteBatch spriteBatch, float x1, float y1, float x2, float y2, Color color, float thickness = 1f, float layerDepth = 0)
         {
-            DrawLine(spriteBatch, new Vector2(x1, y1), new Vector2(x2, y2), color, thickness, layerDepth);
+            spriteBatch.DrawLine(new Vector2(x1, y1), new Vector2(x2, y2), color, thickness, layerDepth);
         }
 
         /// <summary>
@@ -206,7 +206,7 @@ namespace CruZ.Framework.Utility
             // calculate the angle between the two vectors
             var angle = (float)Math.Atan2(point2.Y - point1.Y, point2.X - point1.X);
 
-            DrawLine(spriteBatch, point1, distance, angle, color, thickness, layerDepth);
+            spriteBatch.DrawLine(point1, distance, angle, color, thickness, layerDepth);
         }
 
         /// <summary>
@@ -231,7 +231,7 @@ namespace CruZ.Framework.Utility
         /// </summary>
         public static void DrawPoint(this SpriteBatch spriteBatch, float x, float y, Color color, float size = 1f, float layerDepth = 0)
         {
-            DrawPoint(spriteBatch, new Vector2(x, y), color, size, layerDepth);
+            spriteBatch.DrawPoint(new Vector2(x, y), color, size, layerDepth);
         }
 
         /// <summary>
@@ -270,7 +270,7 @@ namespace CruZ.Framework.Utility
         /// <param name="layerDepth">The depth of the layer of this shape</param>
         public static void DrawCircle(this SpriteBatch spriteBatch, Vector2 center, float radius, int sides, Color color, float thickness = 1f, float layerDepth = 0)
         {
-            DrawPolygon(spriteBatch, center, CreateCircle(radius, sides), color, thickness, layerDepth);
+            spriteBatch.DrawPolygon(center, CreateCircle(radius, sides), color, thickness, layerDepth);
         }
 
         /// <summary>
@@ -286,7 +286,7 @@ namespace CruZ.Framework.Utility
         /// <param name="layerDepth">The depth of the layer of this shape</param>
         public static void DrawCircle(this SpriteBatch spriteBatch, float x, float y, float radius, int sides, Color color, float thickness = 1f, float layerDepth = 0)
         {
-            DrawPolygon(spriteBatch, new Vector2(x, y), CreateCircle(radius, sides), color, thickness, layerDepth);
+            spriteBatch.DrawPolygon(new Vector2(x, y), CreateCircle(radius, sides), color, thickness, layerDepth);
         }
 
         /// <summary>
@@ -301,7 +301,7 @@ namespace CruZ.Framework.Utility
         /// <param name="layerDepth">The depth of the layer of this shape</param>
         public static void DrawEllipse(this SpriteBatch spriteBatch, Vector2 center, Vector2 radius, int sides, Color color, float thickness = 1f, float layerDepth = 0)
         {
-            DrawPolygon(spriteBatch, center, CreateEllipse(radius.X, radius.Y, sides), color, thickness, layerDepth);
+            spriteBatch.DrawPolygon(center, CreateEllipse(radius.X, radius.Y, sides), color, thickness, layerDepth);
         }
 
         private static Vector2[] CreateCircle(double radius, int sides)

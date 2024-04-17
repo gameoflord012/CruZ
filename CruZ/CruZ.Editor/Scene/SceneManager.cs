@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-using CruZ.Framework;
-using CruZ.Framework.GameSystem.Scene;
+using CruZ.GameEngine;
+using CruZ.GameEngine.GameSystem.Scene;
 
 namespace CruZ.Editor.Scene
 {

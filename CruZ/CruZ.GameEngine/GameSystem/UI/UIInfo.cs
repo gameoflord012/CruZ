@@ -1,9 +1,9 @@
-﻿using CruZ.Framework.Input;
+﻿using CruZ.GameEngine.Input;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace CruZ.Framework.GameSystem.UI
+namespace CruZ.GameEngine.GameSystem.UI
 {
     public struct UIInfo
     {

@@ -3,8 +3,8 @@ using System.IO;
 
 using CruZ.Editor.Service;
 using CruZ.Editor.Winform.Utility;
-using CruZ.Framework.GameSystem;
-using CruZ.Framework.Resource;
+using CruZ.GameEngine.GameSystem;
+using CruZ.GameEngine.Resource;
 
 namespace CruZ.Editor.Controls
 {

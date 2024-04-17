@@ -1,4 +1,4 @@
-﻿namespace CruZ.Framework.GameSystem.UI
+﻿namespace CruZ.GameEngine.GameSystem.UI
 {
     /// <summary>
     /// Allow embeded UIControl to a component

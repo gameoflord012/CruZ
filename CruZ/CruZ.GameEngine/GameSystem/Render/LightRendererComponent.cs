@@ -1,17 +1,17 @@
 ﻿using System;
 
-using CruZ.Framework.GameSystem.UI;
-using CruZ.Framework.Utility;
+using CruZ.GameEngine.GameSystem.UI;
+using CruZ.GameEngine.Utility;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace CruZ.Framework.GameSystem.Render
+namespace CruZ.GameEngine.GameSystem.Render
 {
     public class LightRendererComponent : RendererComponent, IHasBoundBox
     {
         public event Action<UIBoundingBox> BoundingBoxChanged;
-     
+
         public LightRendererComponent()
         {
             _lightMap = GameContext.GameResource.Load<Texture2D>("imgs\\dangcongsang.png");

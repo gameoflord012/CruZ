@@ -9,17 +9,18 @@ using System.Threading;
 using CruZ.Editor.UI;
 using CruZ.Editor.Scene;
 using Microsoft.Xna.Framework;
-using CruZ.Framework.Service;
-using CruZ.Framework.Input;
-using CruZ.Framework.Resource;
-using CruZ.Framework.GameSystem.ECS;
-using CruZ.Framework;
+using CruZ.GameEngine.GameSystem.ECS;
+using CruZ.GameEngine;
 using CruZ.Editor.Winform.Utility;
 
 using Keys = Microsoft.Xna.Framework.Input.Keys;
-using CruZ.Framework.GameSystem.UI;
-using CruZ.Framework.GameSystem;
-using CruZ.Framework.GameSystem.Scene;
+using CruZ.GameEngine.GameSystem.UI;
+using CruZ.GameEngine;
+using CruZ.GameEngine.GameSystem;
+using CruZ.GameEngine.Resource;
+using CruZ.GameEngine.Service;
+using CruZ.GameEngine.GameSystem.Scene;
+using CruZ.GameEngine.Input;
 
 
 namespace CruZ.Editor.Controls

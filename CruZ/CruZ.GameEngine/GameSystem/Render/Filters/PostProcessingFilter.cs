@@ -1,8 +1,9 @@
-﻿using CruZ.Framework.Utility;
+﻿using CruZ.GameEngine;
+using CruZ.GameEngine.Utility;
 
 using Microsoft.Xna.Framework.Graphics;
 
-namespace CruZ.Framework.GameSystem.Render.Filters
+namespace CruZ.GameEngine.GameSystem.Render.Filters
 {
     public class PostProcessingFilter
     {
@@ -33,7 +34,7 @@ namespace CruZ.Framework.GameSystem.Render.Filters
 
         private void PrepareRenderTarget(Texture2D tex)
         {
-            if(_rt == null || _width != tex.Width || _height != tex.Height)
+            if (_rt == null || _width != tex.Width || _height != tex.Height)
             {
                 _width = tex.Width;
                 _height = tex.Height;

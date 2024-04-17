@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace CruZ.Framework;
+namespace CruZ.GameEngine;
 
 [Serializable]
 public class LoadResourceFailedException : Exception

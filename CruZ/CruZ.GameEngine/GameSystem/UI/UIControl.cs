@@ -1,5 +1,5 @@
-﻿using CruZ.Framework.Input;
-using CruZ.Framework.Utility;
+﻿using CruZ.GameEngine.Input;
+using CruZ.GameEngine.Utility;
 
 using Microsoft.Xna.Framework;
 
@@ -9,7 +9,7 @@ using System.ComponentModel;
 
 using RectangleF = System.Drawing.RectangleF;
 
-namespace CruZ.Framework.GameSystem.UI
+namespace CruZ.GameEngine.GameSystem.UI
 {
     [TypeConverter(typeof(ExpandableObjectConverter))]
     public class UIControl

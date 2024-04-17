@@ -2,7 +2,7 @@
 
 namespace CruZ.Editor.Winform.Ultility
 {
-    using CruZ.Framework.GameSystem;
+    using CruZ.GameEngine.GameSystem;
 
     internal class EntityWrapper
     {

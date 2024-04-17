@@ -1,9 +1,9 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
-using CruZ.Framework.Service;
-using CruZ.Framework.Resource;
 using Microsoft.Xna.Framework;
-using CruZ.Framework.GameSystem.UI;
+using CruZ.GameEngine.GameSystem.UI;
+using CruZ.GameEngine.Resource;
+using CruZ.GameEngine.Service;
 
 namespace CruZ.Editor.UI
 {

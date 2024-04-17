@@ -4,7 +4,7 @@ using System;
 using System.ComponentModel;
 using System.Text.Json.Serialization;
 
-namespace CruZ.Framework.GameSystem
+namespace CruZ.GameEngine.GameSystem
 {
     [TypeConverter(typeof(ExpandableObjectConverter))]
     public class Transform

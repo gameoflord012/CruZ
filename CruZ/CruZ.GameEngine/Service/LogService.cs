@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-using CruZ.Framework.Utility;
+using CruZ.GameEngine.Utility;
 
-namespace CruZ.Framework.Service
+namespace CruZ.GameEngine.Service
 {
     public class LogManager
     {

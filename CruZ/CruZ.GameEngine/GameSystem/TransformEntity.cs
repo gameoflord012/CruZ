@@ -6,11 +6,11 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text.Json.Serialization;
 
-using CruZ.Framework.Serialization;
+using CruZ.GameEngine.Serialization;
 
 using Microsoft.Xna.Framework;
 
-namespace CruZ.Framework.GameSystem
+namespace CruZ.GameEngine.GameSystem
 {
     [JsonConverter(typeof(TransformEntityJsonConverter))]
     public class TransformEntity : IDisposable

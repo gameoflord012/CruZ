@@ -1,4 +1,4 @@
-﻿using CruZ.Framework.Utility;
+﻿using CruZ.GameEngine.Utility;
 
 using System;
 using System.Collections.Generic;
@@ -8,7 +8,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Text.Json.Serialization.Metadata;
 
-namespace CruZ.Framework.Serialization
+namespace CruZ.GameEngine.Serialization
 {
     /// <summary>
     /// Json Serializer wrapper for <see cref="JsonSerializer"/>

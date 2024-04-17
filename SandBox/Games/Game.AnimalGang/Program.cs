@@ -1,7 +1,8 @@
 ﻿using AnimalGang;
 
-using CruZ.Framework;
-using CruZ.Framework.GameSystem;
+using CruZ.GameEngine;
+using CruZ.GameEngine;
+using CruZ.GameEngine.GameSystem;
 
 namespace Game.AnimalGang
 {

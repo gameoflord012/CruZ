@@ -1,11 +1,11 @@
-﻿using CruZ.Framework.GameSystem;
+﻿using CruZ.GameEngine.GameSystem;
 
 using System;
 using System.Collections.Generic;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace CruZ.Framework.Serialization
+namespace CruZ.GameEngine.Serialization
 {
     internal class TransformEntityJsonConverter : JsonConverter<TransformEntity>
     {
@@ -26,19 +26,19 @@ namespace CruZ.Framework.Serialization
                     entity.Name = root.GetProperty(nameof(entity.Name)).GetString()!;
 
                     var parentNode = root.GetProperty(nameof(entity.Parent));
-                    entity.Parent = JsonSerializer.Deserialize<TransformEntity?>(parentNode, options);
+                    entity.Parent = parentNode.Deserialize<TransformEntity?>(options);
 
                     var transformNode = root.GetProperty(nameof(entity.Transform));
-                    entity.Transform = JsonSerializer.Deserialize<Transform>(transformNode, options)!;
+                    entity.Transform = transformNode.Deserialize<Transform>(options)!;
 
                     var componentsNode = root.GetProperty(nameof(entity.Components));
                     foreach (var componentNode in componentsNode.EnumerateArray())
                     {
-                        var component = JsonSerializer.Deserialize<Component>(componentNode, options)!;
+                        var component = componentNode.Deserialize<Component>(options)!;
                         entity.AddComponent(component);
                     }
                 }
-                else if(root.TryGetProperty("$ref", out JsonElement refNode))
+                else if (root.TryGetProperty("$ref", out JsonElement refNode))
                 {
                     var refId = refNode.GetString()!;
                     entity = (TransformEntity)resolver.ResolveReference(refId);

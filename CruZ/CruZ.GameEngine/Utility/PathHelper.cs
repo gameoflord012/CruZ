@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace CruZ.Framework.Utility
+namespace CruZ.GameEngine.Utility
 {
     class PathHelper
     {
@@ -13,7 +13,7 @@ namespace CruZ.Framework.Utility
             return !rel.StartsWith("..\\") && rel != ".";
         }
 
-        public static void CopyFolder(string sourceFolder, string destinationFolder, string pattern = "*", Boolean createFolders = false, Boolean recurseFolders = false)
+        public static void CopyFolder(string sourceFolder, string destinationFolder, string pattern = "*", bool createFolders = false, bool recurseFolders = false)
         {
             try
             {
@@ -22,7 +22,7 @@ namespace CruZ.Framework.Utility
                 sourceFolder = Path.GetFullPath(sourceFolder);
                 destinationFolder = Path.GetFullPath(destinationFolder);
 
-                SearchOption so = (recurseFolders ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly);
+                SearchOption so = recurseFolders ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly;
 
                 foreach (string file in Directory.GetFiles(sourceFolder, pattern, so))
                 {
