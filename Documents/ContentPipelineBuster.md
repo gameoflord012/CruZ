@@ -10,7 +10,7 @@ Assets can be from various format, for example texture can be ***.png .jpg*** so
 
 ### Process phase
 
-After importing phase, unprocess content get process with the appropriate processor. The default content processor is defined in ***ContentImporterAttribute.DefaultProcessor***. The processor is inherited from ***ContentProcessor.cs** with ***ContentProcessorAttribute.cs***.
+After importing phase, unprocess content get process with the appropriate processor. The default content processor is defined in ***ContentImporterAttribute.DefaultProcessor***. The processor is inherited from ***ContentProcessor.cs*** with ***ContentProcessorAttribute.cs***.
 
 Before procsesing resource, a processor can accept many arguments for different settings. For example, setting for texture mipmap generation or quality of the audio.
 
