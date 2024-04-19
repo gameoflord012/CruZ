@@ -2,6 +2,7 @@ using System;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
+using CruZ.GameEngine.GameSystem;
 using CruZ.GameEngine.Resource;
 
 using Microsoft.Xna.Framework.Graphics;
