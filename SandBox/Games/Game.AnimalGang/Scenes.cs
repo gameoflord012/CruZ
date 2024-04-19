@@ -21,9 +21,9 @@ namespace AnimalGang
             player.Name = "Player";
 
             var anim = new AnimationComponent();
-            anim.LoadSpriteSheet("anims/player-walk.sf",            "player-normal");
-            anim.LoadSpriteSheet("anims/player-sword-idle.sf",      "player-sword-idle");
-            anim.LoadSpriteSheet("anims/player-sword-attack.sf",    "player-sword-attack");
+            anim.LoadAnimationPlayer("anims/player-walk.sf",            "player-normal");
+            anim.LoadAnimationPlayer("anims/player-sword-idle.sf",      "player-sword-idle");
+            anim.LoadAnimationPlayer("anims/player-sword-attack.sf",    "player-sword-attack");
 
             player.AddComponent(new SpriteRendererComponent());
             player.AddComponent(new MainCharacter());
@@ -95,7 +95,7 @@ namespace AnimalGang
             var script_mainChar = new MainCharacter();
             
             var anims_mainChar = new AnimationComponent();
-            anims_mainChar.LoadSpriteSheet("anims\\dark-ninja\\dark-ninja-walk.sf", "ninja-movement");
+            anims_mainChar.LoadAnimationPlayer("anims\\dark-ninja\\dark-ninja-walk.sf", "ninja-movement");
 
             var sp_mainChar = new SpriteRendererComponent();
             sp_mainChar.SortingLayer = 1;

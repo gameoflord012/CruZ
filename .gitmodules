@@ -1,3 +1,6 @@
 [submodule "ThirdParty/MonoGameModified"]
 	path = ThirdParty/MonoGameModified
 	url = https://github.com/gameoflord012/MonoGameModified.git
+[submodule "ThirdParty/monogame-aseprite"]
+	path = ThirdParty/monogame-aseprite
+	url = https://github.com/gameoflord012/monogame-aseprite.git

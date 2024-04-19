@@ -7,8 +7,6 @@ using CruZ.GameEngine.Resource;
 
 using Microsoft.Xna.Framework.Graphics;
 
-using MonoGame.Extended.TextureAtlases;
-
 namespace CruZ.GameEngine.Serialization
 {
     internal class TextureAtlasJsonConverter : JsonConverter<TextureAtlas>

@@ -1,87 +1,12 @@
 ﻿using CruZ.GameEngine.GameSystem.ECS;
-using CruZ.GameEngine;
-using CruZ.GameEngine.GameSystem;
 using CruZ.GameEngine.GameSystem.Render;
 using CruZ.GameEngine.Resource;
 
 using Microsoft.Xna.Framework;
 
-using MonoGame.Extended.Sprites;
-
 using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
-
-namespace CruZ.GameEngine.GameSystem.Animation
-{
-    /// <summary>
-    /// Playing animations in SpriteSheet
-    /// </summary>
-    public class AnimationPlayer
-    {
-        public AnimationPlayer(SpriteSheet spriteSheet)
-        {
-            _animatedSprite = new AnimatedSprite(spriteSheet);
-        }
-
-        public void Play(string animationName)
-        {
-            try
-            {
-                _animatedSprite.Play(animationName);
-            }
-            catch (KeyNotFoundException e)
-            {
-                throw new(string.Format("Cant found animation with key {0}", animationName), e);
-            }
-        }
-
-        public void Update(GameTime gameTime)
-        {
-            _animatedSprite.Update(gameTime);
-        }
-
-        public void Load(SpriteRendererComponent sprite)
-        {
-            if (_sprite == sprite) return;
-
-            UnLoad();
-            _sprite = sprite;
-
-            _sprite.DrawLoopBegin += Sprite_DrawLoopBegin;
-            _sprite.DrawLoopEnd += Sprite_DrawLoopEnd;
-        }
-
-        public void UnLoad()
-        {
-            if (_sprite != null)
-            {
-                _sprite.DrawLoopBegin -= Sprite_DrawLoopBegin;
-                _sprite.DrawLoopEnd -= Sprite_DrawLoopEnd;
-            }
-
-            _sprite = null;
-        }
-
-        private void Sprite_DrawLoopBegin(object? sender, DrawArgs e)
-        {
-            e.Texture = _animatedSprite.TextureRegion.Texture;
-            e.SourceRectangle = _animatedSprite.TextureRegion.Bounds;
-            e.NormalizedOrigin =
-                new(
-                _animatedSprite.OriginNormalized.X - 0.5f + e.NormalizedOrigin.X,
-                _animatedSprite.OriginNormalized.Y - 0.5f + e.NormalizedOrigin.Y);
-        }
-
-        private void Sprite_DrawLoopEnd(object? sender, DrawLoopEndEventArgs e)
-        {
-
-        }
-
-        AnimatedSprite _animatedSprite;
-        SpriteRendererComponent? _sprite;
-    }
-}
 
 namespace CruZ.GameEngine.GameSystem.Animation
 {
@@ -92,27 +17,18 @@ namespace CruZ.GameEngine.GameSystem.Animation
             _resource = GameContext.GameResource;
         }
 
-        public void LoadSpriteSheet(string resourcePath, string animationPlayerKey)
+        public void LoadAnimationPlayer(string resourcePath, string animationPlayerKey)
         {
-            var spriteSheet = _resource.Load<SpriteSheet>(resourcePath);
+            var spriteSheet = _resource.Load<AnimatedSprite>(resourcePath);
 
             _getAnimationPlayer[animationPlayerKey] = new AnimationPlayer(spriteSheet);
             _loadedResources.Add(new(resourcePath, animationPlayerKey));
         }
 
-        internal void Update(GameTime gameTime)
-        {
-            _currentAnimationPlayer?.Update(gameTime);
-        }
-
         public AnimationPlayer SelectPlayer(string key)
         {
-            if (_currentAnimationPlayer == GetPlayer(key))
-                return _currentAnimationPlayer;
-
-            _currentAnimationPlayer?.UnLoad();
-            _currentAnimationPlayer = GetPlayer(key);
-            _currentAnimationPlayer.Load(_sprite);
+            if (_currentAnimationPlayer != GetPlayer(key))
+                return _currentAnimationPlayer = GetPlayer(key);
 
             return _currentAnimationPlayer;
         }
@@ -127,57 +43,35 @@ namespace CruZ.GameEngine.GameSystem.Animation
 
         protected override void OnComponentChanged(ComponentCollection comps)
         {
-            comps.TryGetComponent(out _sprite);
+            if (_renderer != null)
+                _renderer.DrawLoopBegin -= SpriteRenderer_DrawLoopBegin;
+
+            comps.TryGetComponent(out _renderer);
+
+            if (_renderer != null)
+                _renderer.DrawLoopBegin += SpriteRenderer_DrawLoopBegin;
         }
 
-        public void OnDeserialized()
+        internal void Update(GameTime gameTime)
+        {
+            _currentAnimationPlayer?.Update(gameTime);
+        }
+
+        private void SpriteRenderer_DrawLoopBegin(object? sender, DrawArgs e)
+        {
+            _currentAnimationPlayer?.Draw(e);
+        }
+
+        void IJsonOnDeserialized.OnDeserialized()
         {
             foreach (var resource in _loadedResources)
             {
-                LoadSpriteSheet(resource.Value, resource.Key);
+                LoadAnimationPlayer(resource.Value, resource.Key);
             }
         }
 
-        //public object ReadJson(JsonReader reader, JsonSerializer serializer)
-        //{
-        //    var jObject = JObject.Load(reader);
-
-        //    foreach (var player in jObject["animation-players"])
-        //    {
-        //        string? uri = player["resource-uri"].Value<string>();
-        //        string? playerKey = player["animation-player-key"].Value<string>();
-
-        //        if (string.IsNullOrEmpty(uri)) continue;
-        //        Trace.Assert(playerKey != null);
-
-        //        LoadSpriteSheet(uri, playerKey);
-        //    }
-
-        //    return this;
-        //}
-
-
-        //public void WriteJson(JsonWriter writer, JsonSerializer serializer)
-        //{
-        //    writer.WriteStartObject();
-
-        //    writer.WritePropertyName("animation-players");
-        //    writer.WriteStartArray();
-        //    foreach (var resource in _loadedResources)
-        //    {
-        //        writer.WriteStartObject();
-        //        writer.WritePropertyName("resource-uri");
-        //        writer.WriteValue(resource.Key);
-        //        writer.WritePropertyName("animation-player-key");
-        //        writer.WriteValue(resource.Value);
-        //        writer.WriteEndObject();
-        //    }
-        //    writer.WriteEnd();
-        //    writer.WriteEnd();
-        //}
-
         AnimationPlayer? _currentAnimationPlayer;
-        SpriteRendererComponent? _sprite;
+        SpriteRendererComponent? _renderer;
         ResourceManager _resource;
         Dictionary<string, AnimationPlayer> _getAnimationPlayer = new();
 

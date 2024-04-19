@@ -4,8 +4,6 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-using MonoGame.Extended.Shapes;
-
 using RectangleF = System.Drawing.RectangleF;
 
 namespace CruZ.GameEngine.Utility
@@ -31,21 +29,6 @@ namespace CruZ.GameEngine.Utility
             }
 
             return _whitePixelTexture;
-        }
-
-        /// <summary>
-        ///     Draws a closed polygon from a <see cref="Polygon" /> shape
-        /// </summary>
-        /// <param name="spriteBatch">The destination drawing surface</param>
-        /// ///
-        /// <param name="position">Where to position the polygon</param>
-        /// <param name="polygon">The polygon to draw</param>
-        /// <param name="color">The color to use</param>
-        /// <param name="thickness">The thickness of the lines</param>
-        /// /// <param name="layerDepth">The depth of the layer of this shape</param>
-        public static void DrawPolygon(this SpriteBatch spriteBatch, Vector2 position, Polygon polygon, Color color, float thickness = 1f, float layerDepth = 0)
-        {
-            spriteBatch.DrawPolygon(position, polygon.Vertices, color, thickness, layerDepth);
         }
 
         /// <summary>
