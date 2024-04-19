@@ -13,6 +13,7 @@
 	</ItemGroup>
 	
 	<ItemGroup>
+	  <ProjectReference Include="..\..\ThirdParty\monogame-aseprite\source\MonoGame.Aseprite\MonoGame.Aseprite.csproj" />
 	  <ProjectReference Include="..\CruZ.GameEngine\CruZ.GameEngine.WindowsDX.csproj" />
 	</ItemGroup>
 </Project>
