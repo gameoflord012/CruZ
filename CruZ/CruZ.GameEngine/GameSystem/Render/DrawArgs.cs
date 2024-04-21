@@ -7,7 +7,7 @@ using CruZ.GameEngine.GameSystem;
 
 namespace CruZ.GameEngine.GameSystem.Render
 {
-    public class DrawArgs : EventArgs
+    public class DrawSpriteArgs
     {
         public Texture2D? Texture;
         public Rectangle SourceRectangle;

@@ -6,8 +6,9 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\..\ThirdParty\monogame-aseprite\source\MonoGame.Aseprite\MonoGame.Aseprite.csproj" PrivateAssets="all" />
-		<ProjectReference Include="..\..\ThirdParty\MonoGameModified\MonoGame.Framework.Content.Pipeline\MonoGame.Framework.Content.Pipeline.csproj" PrivateAssets="all"/>
+		<ProjectReference Include="..\..\ThirdParty\monogame-aseprite\source\MonoGame.Aseprite.Content.Pipeline\MonoGame.Aseprite.Content.Pipeline.csproj" />
+		<ProjectReference Include="..\..\ThirdParty\monogame-aseprite\source\MonoGame.Aseprite\MonoGame.Aseprite.csproj" />
+		<ProjectReference Include="..\..\ThirdParty\MonoGameModified\MonoGame.Framework.Content.Pipeline\MonoGame.Framework.Content.Pipeline.csproj" PrivateAssets="all" />
 		<ProjectReference Include="..\..\ThirdParty\MonoGameModified\MonoGame.Framework\MonoGame.Framework.WindowsDX.csproj" />
 
 		<!--this mother fucker be remove soon-->

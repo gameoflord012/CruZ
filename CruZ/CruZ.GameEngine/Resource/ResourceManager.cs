@@ -1,17 +1,7 @@
-﻿/*
- Resource States
-    1. Resource file is created
-    2. The resource is imported by calling ImportResourcePath() then it will have guid
-    3. ResourceInfo will be available by calling RetrieveResourceInfo
- */
-
-using CruZ.GameEngine;
-using CruZ.GameEngine;
-using CruZ.GameEngine.Serialization;
+﻿using CruZ.GameEngine.Serialization;
 
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Content.Pipeline;
-using Microsoft.Xna.Framework.Graphics;
 
 using MonoGame.Framework.Content.Pipeline.Builder;
 
@@ -21,10 +11,12 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text.Json;
-using System.Text.Json.Serialization;
 
 namespace CruZ.GameEngine.Resource
 {
+    /// <summary>
+    /// For external content pipeline to work, the dll must be presented in domain base dir
+    /// </summary>
     public class ResourceManager : IGuidValueProcessor<string>
     {
         public string ResourceRoot
@@ -55,11 +47,17 @@ namespace CruZ.GameEngine.Resource
 
             _pipelineManager = new(ResourceRoot, ContentOutputDir, ContentOutputDir);
             _pipelineManager.Platform = TargetPlatform.Windows;
+            AddPipelineAssemblies();
 
             InitResourceDir();
+        }
 
-            //SetProcessorParam(typeof(Effect), "DebugMode", "Auto");
-            //_importer.EnableWatch();
+        private void AddPipelineAssemblies()
+        {
+            foreach (var assembly in Directory.EnumerateFiles(AppDomain.CurrentDomain.BaseDirectory, "*.dll"))
+            {
+                _pipelineManager.AddAssembly(assembly);
+            }
         }
 
         private void InitResourceDir()
@@ -97,12 +95,11 @@ namespace CruZ.GameEngine.Resource
             }
         }
 
-        #region Public Functions
         public void Create(string resourcePath, object resObj)
         {
             resourcePath = GetFormattedResourcePath(resourcePath);
             _serializer.SerializeToFile(resObj, Path.Combine(ResourceRoot, resourcePath));
-            InitResourceObject(resObj, resourcePath, true);
+            InitResourceInstance(resObj, resourcePath, true);
         }
 
         public bool TrySave(IResource resource)
@@ -114,12 +111,17 @@ namespace CruZ.GameEngine.Resource
 
         public T Load<T>(string resourcePath)
         {
-            return (T)Load(resourcePath, typeof(T));
+            return (T)Load(resourcePath, typeof(T), out _);
+        }
+
+        public T Load<T>(string resourcePath, out ResourceInfo info)
+        {
+            return (T)Load(resourcePath, typeof(T), out info);
         }
 
         public T Load<T>(Guid guid)
         {
-            return (T)Load(_guidManager.GetValue(guid), typeof(T));
+            return (T)Load(_guidManager.GetValue(guid), typeof(T), out _);
         }
 
         public T Load<T>(ResourceInfo resourceInfo)
@@ -146,42 +148,21 @@ namespace CruZ.GameEngine.Resource
                 throw new ArgumentException($"Resource \"{resourcePath}\" maybe unimported");
             }
         }
-        #endregion
 
-        #region Interface Implementations
         string IGuidValueProcessor<string>.GetProcessedGuidValue(string value)
         {
             return GetFormattedResourcePath(value).ToLower();
         }
 
-        //object IJsonSerializable.ReadJson(JsonReader reader, JsonSerializer serializer)
-        //{
-        //    JObject jO = JObject.Load(reader);
-        //    var root = jO[nameof(ResourceRoot)].Value<string>();
-        //    return From(root);
-        //}
-
-        //void IJsonSerializable.WriteJson(JsonWriter writer, JsonSerializer serializer)
-        //{
-        //    writer.WriteStartObject();
-        //    writer.WritePropertyName(nameof(ResourceRoot));
-        //    writer.WriteValue(ResourceRoot);
-        //    writer.WriteEnd();
-        //}
-        #endregion
-
-        #region Private Functions
         /// <summary>
-        /// Load resource with relative or full path, the resource fileName should within the .resObj folder
+        /// Load resource with relative or full path, the resource fileName should within the .resourceInstance folder
         /// </summary>
-        /// <param root="resourcePath">May be fullpath or relative path to resource root</param>
-        /// <param root="ty"></param>
         /// <returns></returns>
-        private object Load(string resourcePath, Type ty)
+        private object Load(string resourcePath, Type ty, out ResourceInfo info)
         {
             object? resObj;
 
-            if (ContentSupportedTypes.Contains(ty))
+            if (ContentSupportedExtensions.Contains(Path.GetExtension(resourcePath)))
             {
                 resObj = LoadContentNonGeneric(resourcePath, ty);
             }
@@ -190,7 +171,7 @@ namespace CruZ.GameEngine.Resource
                 resObj = LoadResource(resourcePath, ty);
             }
 
-            InitResourceObject(resObj, resourcePath);
+            info = InitResourceInstance(resObj, resourcePath);
             return resObj;
         }
 
@@ -267,11 +248,12 @@ namespace CruZ.GameEngine.Resource
             }
         }
 
-        private void InitResourceObject(object resObj, string resourcePath, bool autoImportResourcePath = false)
+        private ResourceInfo InitResourceInstance(object resourceInstance, string resourcePath, bool autoImportResourcePath = false)
         {
             if (autoImportResourcePath) ImportResourcePath(resourcePath);
             var info = RetriveResourceInfo(resourcePath);
-            if (resObj is IResource resource) resource.Info = info;
+            if (resourceInstance is IResource resource) resource.Info = info;
+            return info;
         }
 
         private string GetFormattedResourcePath(string resourcePath)
@@ -344,7 +326,6 @@ namespace CruZ.GameEngine.Resource
             if (!File.Exists(dotImport)) return false;
             return Guid.TryParse(File.ReadLines(dotImport).First(), out guid);
         }
-        #endregion
 
         #region Private Variables
         Serializer _serializer;
@@ -355,16 +336,9 @@ namespace CruZ.GameEngine.Resource
 
         Dictionary<Type, OpaqueDataDictionary> _processorParams = [];
 
-        private static readonly Type[] ContentSupportedTypes =
-        {
-            typeof(Texture2D),
-            typeof(SpriteFont),
-            typeof(Effect)
-        };
-
         private static readonly string[] ContentSupportedExtensions =
         [
-            ".jpg", ".png", ".spritefont", ".fx"
+            ".jpg", ".png", ".spritefont", ".fx", ".aseprite"
         ];
 
         private static readonly string[] ResourceSupportedExtensions =

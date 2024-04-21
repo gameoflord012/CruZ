@@ -42,7 +42,7 @@ namespace CruZ.GameEngine.GameSystem.Tile
             }
         }
 
-        private void Sprite_DrawLoopBegin(object? sender, DrawArgs args)
+        private void Sprite_DrawLoopBegin(object? sender, DrawSpriteArgs args)
         {
             if (Debug && (_idX + _idY) % 2 == 0)
             {

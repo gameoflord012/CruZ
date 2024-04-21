@@ -18,7 +18,7 @@ namespace CruZ.GameEngine.GameSystem.ECS
     /// </summary>
     public partial class SpriteRendererComponent : RendererComponent, IHasBoundBox
     {
-        public event EventHandler<DrawArgs>? DrawLoopBegin;
+        public event EventHandler<DrawSpriteArgs>? DrawLoopBegin;
         public event EventHandler<DrawLoopEndEventArgs>? DrawLoopEnd;
         public event Action? DrawBegin;
         public event Action? DrawEnd;
@@ -103,8 +103,6 @@ namespace CruZ.GameEngine.GameSystem.ECS
 
         public override void Render(RendererEventArgs e)
         {
-            if(Texture == null) return;
-
             var fx = EffectManager.NormalSpriteRenderer;
             fx.Parameters["view_projection"].SetValue(e.ViewProjectionMatrix);
             fx.Parameters["hdrColor"].SetValue(new Vector4(1, 1, 1, 1));
@@ -118,9 +116,9 @@ namespace CruZ.GameEngine.GameSystem.ECS
             while (true)
             {
                 #region Before Drawloop
-                DrawArgs drawArgs = new();
+                DrawSpriteArgs drawArgs = new();
+                if(Texture != null) drawArgs.Apply(Texture);
                 drawArgs.Apply(AttachedEntity);
-                drawArgs.Apply(Texture);
                 drawArgs.LayerDepth = CalculateLayerDepth();
                 drawArgs.NormalizedOrigin = NormalizedOrigin;
                 drawArgs.Color = Color.White;

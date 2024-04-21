@@ -1,8 +1,13 @@
-﻿using CruZ.GameEngine.GameSystem.ECS;
+﻿using AsepriteDotNet.Aseprite;
+using AsepriteDotNet.Aseprite.Types;
+
+using CruZ.GameEngine.GameSystem.ECS;
 using CruZ.GameEngine.GameSystem.Render;
 using CruZ.GameEngine.Resource;
 
 using Microsoft.Xna.Framework;
+
+using MonoGame.Aseprite;
 
 using System;
 using System.Collections.Generic;
@@ -17,28 +22,54 @@ namespace CruZ.GameEngine.GameSystem.Animation
             _resource = GameContext.GameResource;
         }
 
-        public void LoadAnimationPlayer(string resourcePath, string animationPlayerKey)
+        public void LoadAnimationFile(string asepriteFile)
         {
-            var spriteSheet = _resource.Load<AnimatedSprite>(resourcePath);
-
-            _getAnimationPlayer[animationPlayerKey] = new AnimationPlayer(spriteSheet);
-            _loadedResources.Add(new(resourcePath, animationPlayerKey));
+             LoadAsepriteFile(_resource.Load<AsepriteFile>(asepriteFile, out _asepriteResourceInfo));
         }
 
-        public AnimationPlayer SelectPlayer(string key)
+        private void LoadAsepriteFile(AsepriteFile file)
         {
-            if (_currentAnimationPlayer != GetPlayer(key))
-                return _currentAnimationPlayer = GetPlayer(key);
+            _file = file;
+            _animations.Clear();
 
-            return _currentAnimationPlayer;
+            var spriteSheet = _file.CreateSpriteSheet(GameApplication.GetGraphicsDevice());
+
+            foreach (var tag in file.Tags)
+            {
+                var animation = spriteSheet.CreateAnimatedSprite(tag.Name);
+                _animations.Add(tag.Name, animation);
+            }
         }
 
-        private AnimationPlayer GetPlayer(string key)
+        void IJsonOnDeserialized.OnDeserialized()
         {
-            if (!_getAnimationPlayer.ContainsKey(key))
-                throw new ArgumentException($"No animation with key {key}");
+            LoadAsepriteFile(_resource.Load<AsepriteFile>(_asepriteResourceInfo));
+        }
 
-            return _getAnimationPlayer[key];
+        public void PlayAnimation(string animationTag)
+        {
+            _currentAnimation?.Stop();
+            _currentAnimation = GetAnimation(animationTag);
+            _currentAnimation.Play();
+        }
+
+        private AnimatedSprite GetAnimation(string tag)
+        {
+            if(!_animations.ContainsKey(tag)) throw new ArgumentException();
+            return _animations[tag];
+        }
+
+        internal void Update(GameTime gameTime)
+        {
+            _currentAnimation?.Update(gameTime);
+        }
+
+        private void SpriteRenderer_DrawLoopBegin(object? sender, DrawSpriteArgs e)
+        {
+            if(_currentAnimation == null) return;
+
+            e.Texture = _currentAnimation.TextureRegion.Texture;
+            e.SourceRectangle = _currentAnimation.TextureRegion.Bounds;
         }
 
         protected override void OnComponentChanged(ComponentCollection comps)
@@ -52,28 +83,11 @@ namespace CruZ.GameEngine.GameSystem.Animation
                 _renderer.DrawLoopBegin += SpriteRenderer_DrawLoopBegin;
         }
 
-        internal void Update(GameTime gameTime)
-        {
-            _currentAnimationPlayer?.Update(gameTime);
-        }
-
-        private void SpriteRenderer_DrawLoopBegin(object? sender, DrawArgs e)
-        {
-            _currentAnimationPlayer?.Draw(e);
-        }
-
-        void IJsonOnDeserialized.OnDeserialized()
-        {
-            foreach (var resource in _loadedResources)
-            {
-                LoadAnimationPlayer(resource.Value, resource.Key);
-            }
-        }
-
-        AnimationPlayer? _currentAnimationPlayer;
+        AnimatedSprite? _currentAnimation;
         SpriteRendererComponent? _renderer;
         ResourceManager _resource;
-        Dictionary<string, AnimationPlayer> _getAnimationPlayer = new();
+        Dictionary<string, AnimatedSprite> _animations = [];
+        AsepriteFile _file;
 
         /// <summary>
         /// store list of loaded animation
@@ -81,6 +95,6 @@ namespace CruZ.GameEngine.GameSystem.Animation
         /// Value: animation key
         /// </summary>
         [JsonInclude]
-        List<KeyValuePair<string, string>> _loadedResources = [];
+        ResourceInfo _asepriteResourceInfo;
     }
 }

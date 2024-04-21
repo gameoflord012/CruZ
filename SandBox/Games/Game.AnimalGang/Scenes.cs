@@ -21,9 +21,9 @@ namespace AnimalGang
             player.Name = "Player";
 
             var anim = new AnimationComponent();
-            anim.LoadAnimationPlayer("anims/player-walk.sf",            "player-normal");
-            anim.LoadAnimationPlayer("anims/player-sword-idle.sf",      "player-sword-idle");
-            anim.LoadAnimationPlayer("anims/player-sword-attack.sf",    "player-sword-attack");
+            //anim.LoadAnimationFile("anims/player-walk.sf",            "player-normal");
+            //anim.LoadAnimationFile("anims/player-sword-idle.sf",      "player-sword-idle");
+            //anim.LoadAnimationFile("anims/player-sword-attack.sf",    "player-sword-attack");
 
             player.AddComponent(new SpriteRendererComponent());
             player.AddComponent(new MainCharacter());
@@ -95,7 +95,7 @@ namespace AnimalGang
             var script_mainChar = new MainCharacter();
             
             var anims_mainChar = new AnimationComponent();
-            anims_mainChar.LoadAnimationPlayer("anims\\dark-ninja\\dark-ninja-walk.sf", "ninja-movement");
+            //anims_mainChar.LoadAnimationFile("anims\\dark-ninja\\dark-ninja-walk.sf", "ninja-movement");
 
             var sp_mainChar = new SpriteRendererComponent();
             sp_mainChar.SortingLayer = 1;
@@ -141,6 +141,24 @@ namespace AnimalGang
             var scene = new GameScene();
             var entity = scene.CreateEntity();
             entity.AddComponent(uiCom);
+
+            return scene;
+        }
+
+        [SceneAssetMethod]
+        public static GameScene AsepriteScenes()
+        {
+            var scene = new GameScene();
+
+            var anim = new AnimationComponent();
+            anim.LoadAnimationFile("art\\Sprite-0001.aseprite");
+            anim.PlayAnimation("idle");
+
+            var player = scene.CreateEntity();
+            player.Name = "Player";
+            player.AddComponent(new SpriteRendererComponent());
+            player.AddComponent(anim);
+
 
             return scene;
         }

@@ -34,7 +34,7 @@ namespace AnimalGang
             //if (InputManager.Info.Keyboard.IsKeyDown(Keys.Space))
             //{
             //    _attackTimer = 0;
-            //    _animation.SelectPlayer("player-sword-attack").Play("attack");
+            //    _animation.SelectTag("player-sword-attack").Play("attack");
             //}
 
             //if (_attackTimer < _attackDuration)
@@ -66,7 +66,7 @@ namespace AnimalGang
             #region AnimationLogics
             //if (_moveDir.SqrMagnitude() > 0.1f)
             //{
-            //    _animation.SelectPlayer("player-normal").Play("walk");
+            //    _animation.SelectTag("player-normal").Play("walk");
 
             //    if (MathF.Abs(_moveDir.X) > 0.1)
             //    {
@@ -75,7 +75,7 @@ namespace AnimalGang
             //}
             //else
             //{
-            //    _animation.SelectPlayer("player-sword-idle").Play("idle");
+            //    _animation.SelectTag("player-sword-idle").Play("idle");
             //} 
             #endregion
         }

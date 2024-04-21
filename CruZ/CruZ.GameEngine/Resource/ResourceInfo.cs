@@ -12,7 +12,7 @@ namespace CruZ.GameEngine.Resource
             ResourceName = resourceName;
         }
 
-        public static ResourceInfo Create(Guid guid, string resourceName)
+        internal static ResourceInfo Create(Guid guid, string resourceName)
         {
             return new ResourceInfo(guid, resourceName);
         }

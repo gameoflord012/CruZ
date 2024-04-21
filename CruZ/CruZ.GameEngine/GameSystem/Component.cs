@@ -5,6 +5,9 @@ using CruZ.GameEngine.Serialization;
 
 namespace CruZ.GameEngine.GameSystem
 {
+    /// <summary>
+    /// Base class for Components, every component should have non-parameter constructor
+    /// </summary>
     [JsonConverter(typeof(ComponentJsonConverter))]
     public abstract class Component : IDisposable
     {
@@ -16,14 +19,14 @@ namespace CruZ.GameEngine.GameSystem
 
         internal void InternalOnAttached(TransformEntity e)
         {
-            AttachedEntity = e;
+            _attachedEntity = e;
             OnAttached(e);
             e.ComponentsChanged += Entity_ComponentChanged;
         }
 
         internal void InternalOnDetached(TransformEntity e)
         {
-            AttachedEntity = null;
+            _attachedEntity = null;
             OnDetached(e);
             e.ComponentsChanged -= Entity_ComponentChanged;
         }
@@ -41,6 +44,7 @@ namespace CruZ.GameEngine.GameSystem
         public virtual void Dispose() { }
 
         [JsonIgnore]
-        protected TransformEntity? AttachedEntity { get; private set; }
+        protected TransformEntity AttachedEntity { get => _attachedEntity ?? throw new InvalidOperationException(); }
+        private TransformEntity? _attachedEntity;
     }
 }

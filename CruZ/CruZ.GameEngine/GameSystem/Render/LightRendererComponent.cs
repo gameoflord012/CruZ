@@ -29,7 +29,7 @@ namespace CruZ.GameEngine.GameSystem.Render
             fx.Parameters["intensity"].SetValue(LightIntensity * rand);
             fx.Parameters["min_alpha"].SetValue(0.05f);
 
-            DrawArgs drawArgs = new();
+            DrawSpriteArgs drawArgs = new();
             drawArgs.Apply(AttachedEntity);
             drawArgs.Apply(_lightMap);
 
