@@ -70,7 +70,7 @@ namespace AnimalGang
 
             //    if (MathF.Abs(_moveDir.X) > 0.1)
             //    {
-            //        _sprite.Flip = _moveDir.X < 0;
+            //        _sprite.FlipHorizontally = _moveDir.X < 0;
             //    }
             //}
             //else

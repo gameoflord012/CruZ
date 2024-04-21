@@ -8,19 +8,9 @@
 
 float4x4 view_projection;
 float4 hdrColor;
+
 Texture2D ScreenTexture : register(t0);
-
-SamplerState LinearSampler
-{
-    Texture = <ScreenTexture>;
-
-    MagFilter = LINEAR;
-    MinFilter = LINEAR;
-    Mipfilter = LINEAR; 
-
-    AddressU = CLAMP;
-    AddressV = CLAMP;
-};
+SamplerState Sampler : register(s0);
 
 struct VertexInput {
     float4 Position : POSITION0;
@@ -40,7 +30,7 @@ PixelInput SpriteVertexShader(VertexInput v) {
 }
 
 float4 SpritePixelShader(PixelInput p) : SV_TARGET {
-    float4 diffuse = ScreenTexture.Sample(LinearSampler, p.TexCoord.xy);
+    float4 diffuse = ScreenTexture.Sample(Sampler, p.TexCoord.xy);
     diffuse *= hdrColor;
     return diffuse;
 }

@@ -3,20 +3,21 @@ using System;
 using Microsoft.Xna.Framework;
 
 using RectangleF = System.Drawing.RectangleF;
-using CruZ.GameEngine.GameSystem;
+using MonoGame.Aseprite;
 
 namespace CruZ.GameEngine.GameSystem.Render
 {
-    public class DrawSpriteArgs
+    public class DrawArgs
     {
         public Texture2D? Texture;
         public Rectangle SourceRectangle;
-        public Vector2 NormalizedOrigin = new(0.5f, 0.5f);
+        public Vector2 NormalizedOrigin;
         public Vector2 Position;
         public Vector2 Scale;
+        public float Rotation = 0;
         public Color Color = Color.White;
         public float LayerDepth = 0;
-        public bool Flip = false;
+        public SpriteEffects SpriteEffect = SpriteEffects.None;
         public bool Skip = false;
 
         public void Apply(TransformEntity entity)
@@ -29,6 +30,18 @@ namespace CruZ.GameEngine.GameSystem.Render
         {
             Texture = tex;
             SourceRectangle = tex.Bounds;
+        }
+
+        public void Apply(Sprite sprite)
+        {
+            Texture = sprite.TextureRegion.Texture;
+            SourceRectangle = sprite.TextureRegion.Bounds;
+            Color = sprite.Color * sprite.Transparency;
+            Rotation = sprite.Rotation;
+            NormalizedOrigin.X = sprite.Origin.X / Texture.Width;
+            NormalizedOrigin.Y = sprite.Origin.Y / Texture.Height;
+            Scale = sprite.Scale;
+            LayerDepth = sprite.LayerDepth;
         }
 
         public RectangleF GetWorldBounds() // in World Coordinate

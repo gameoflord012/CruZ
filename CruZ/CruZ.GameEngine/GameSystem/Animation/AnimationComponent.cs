@@ -64,12 +64,13 @@ namespace CruZ.GameEngine.GameSystem.Animation
             _currentAnimation?.Update(gameTime);
         }
 
-        private void SpriteRenderer_DrawLoopBegin(object? sender, DrawSpriteArgs e)
+        private void SpriteRenderer_DrawLoopBegin(object? sender, DrawArgs e)
         {
             if(_currentAnimation == null) return;
 
-            e.Texture = _currentAnimation.TextureRegion.Texture;
-            e.SourceRectangle = _currentAnimation.TextureRegion.Bounds;
+            e.Apply(_currentAnimation);
+            //e.Texture = _currentAnimation.TextureRegion.Texture;
+            //e.SourceRectangle = _currentAnimation.TextureRegion.Bounds;
         }
 
         protected override void OnComponentChanged(ComponentCollection comps)

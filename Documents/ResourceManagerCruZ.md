@@ -9,3 +9,5 @@ To import the resource in to memmory, the process as follow:
 
 1. Read the resource file and put it in immediate object
 2. The immediate object is now loaded into empty instance
+
+## ResourceReader.cs

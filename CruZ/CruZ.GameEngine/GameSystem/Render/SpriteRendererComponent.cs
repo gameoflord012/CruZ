@@ -18,15 +18,15 @@ namespace CruZ.GameEngine.GameSystem.ECS
     /// </summary>
     public partial class SpriteRendererComponent : RendererComponent, IHasBoundBox
     {
-        public event EventHandler<DrawSpriteArgs>? DrawLoopBegin;
+        public event EventHandler<DrawArgs>? DrawLoopBegin;
         public event EventHandler<DrawLoopEndEventArgs>? DrawLoopEnd;
         public event Action? DrawBegin;
         public event Action? DrawEnd;
-        public event Action<UIBoundingBox> BoundingBoxChanged;
+        public event Action<UIBoundingBox>? BoundingBoxChanged;
 
         #region Properties
         public bool SortByY { get; set; } = false;
-        public bool Flip { get; set; }
+        public bool FlipHorizontally { get; set; }
 
         [JsonIgnore, Browsable(false)]
         public Texture2D? Texture { get => _texture; set => _texture = value; }
@@ -116,13 +116,13 @@ namespace CruZ.GameEngine.GameSystem.ECS
             while (true)
             {
                 #region Before Drawloop
-                DrawSpriteArgs drawArgs = new();
+                DrawArgs drawArgs = new();
                 if(Texture != null) drawArgs.Apply(Texture);
                 drawArgs.Apply(AttachedEntity);
                 drawArgs.LayerDepth = CalculateLayerDepth();
                 drawArgs.NormalizedOrigin = NormalizedOrigin;
                 drawArgs.Color = Color.White;
-                drawArgs.Flip = Flip;
+                drawArgs.SpriteEffect = FlipHorizontally ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
                 DrawLoopBegin?.Invoke(this, drawArgs); 
                 #endregion
 
