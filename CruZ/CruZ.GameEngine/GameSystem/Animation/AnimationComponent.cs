@@ -1,5 +1,4 @@
 ﻿using AsepriteDotNet.Aseprite;
-using AsepriteDotNet.Aseprite.Types;
 
 using CruZ.GameEngine.GameSystem.ECS;
 using CruZ.GameEngine.GameSystem.Render;
