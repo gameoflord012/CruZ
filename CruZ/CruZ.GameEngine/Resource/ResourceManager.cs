@@ -54,10 +54,7 @@ namespace CruZ.GameEngine.Resource
 
         private void AddPipelineAssemblies()
         {
-            foreach (var assembly in Directory.EnumerateFiles(AppDomain.CurrentDomain.BaseDirectory, "*.dll"))
-            {
-                _pipelineManager.AddAssembly(assembly);
-            }
+            _pipelineManager.AddAssembly(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "MonoGame.Aseprite.Content.Pipeline.dll"));
         }
 
         private void InitResourceDir()
