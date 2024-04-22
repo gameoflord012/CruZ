@@ -68,7 +68,7 @@ namespace CruZ.GameEngine.Resource
 
         private void InitResourceDir()
         {
-            foreach (var filePath in DirectoryHelper.EnumerateFiles(ResourceRoot, [REF_DIR_NAME]))
+            foreach (var filePath in DirectoryHelper.EnumerateFiles(ResourceRoot, [REF_DIR_NAME, ".content"]))
             {
                 var extension = Path.GetExtension(filePath);
 

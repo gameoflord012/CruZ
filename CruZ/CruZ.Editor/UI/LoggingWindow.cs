@@ -4,6 +4,8 @@ using Microsoft.Xna.Framework;
 using CruZ.GameEngine.GameSystem.UI;
 using CruZ.GameEngine.Resource;
 using CruZ.GameEngine.Service;
+using MonoGame.Extended.BitmapFonts;
+using CruZ.GameEngine;
 
 namespace CruZ.Editor.UI
 {
@@ -16,9 +18,9 @@ namespace CruZ.Editor.UI
             Location = new(5, 3);
 
             _fontScale = 0.5f;
-            _resource = EditorContext.EditorResource;
-            _font = _resource.Load<SpriteFont>(".resourceref\\Internal\\font\\editorfont.spritefont");
-            _lineSpacing = _font.LineSpacing * _fontScale;
+            _resource = GameContext.GameResource;
+            _font = _resource.Load<BitmapFont>(".resourceref\\Internal\\Fonts\\Fixedsys.fnt");
+            _lineSpacing = _font.LineHeight * _fontScale;
             _curRow = 0;
         }
 
@@ -46,7 +48,7 @@ namespace CruZ.Editor.UI
                 );
         }
 
-        SpriteFont _font;
+        BitmapFont _font;
         SpriteBatch? _sb;
         float _lineSpacing;
         float _curRow;

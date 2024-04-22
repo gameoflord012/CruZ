@@ -11,10 +11,8 @@ namespace CruZ.GameEngine.Resource
 {
     internal class DirectoryHelper
     {
-        public static IEnumerable<string> EnumerateFiles(string dir, string[] excludeDirs)
+        public static IEnumerable<string> EnumerateFiles(string dir, string[] excludeDirNames)
         {
-
-            List<string> DirList = new List<string>();
             // enumerate only files in this directory (no sub directories)
             foreach (string file in Directory.EnumerateFiles(
                    dir, "*.*", SearchOption.TopDirectoryOnly))
@@ -23,11 +21,13 @@ namespace CruZ.GameEngine.Resource
             }
 
             // now recurse the subdirectories
-            foreach (string subdir in Directory.GetDirectories(
-                   dir, "*", SearchOption.TopDirectoryOnly).
-                Where(sd => sd != "." && sd != ".." && !DirList.Contains(sd)))
+            foreach (string subDir in Directory.GetDirectories(
+                   dir, "*", SearchOption.TopDirectoryOnly))
             {
-                EnumerateFiles(Path.Combine(dir, subdir), excludeDirs);
+                var dirName = subDir.Substring(subDir.LastIndexOf("\\") + 1);
+                if(dirName == "." || dirName == ".." || excludeDirNames.Contains(dirName)) continue;
+                foreach (var subfile in EnumerateFiles(subDir, excludeDirNames))
+                    yield return subfile;
             }
         }
     }
