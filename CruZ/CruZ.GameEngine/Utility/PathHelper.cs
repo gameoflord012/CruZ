@@ -13,7 +13,26 @@ namespace CruZ.GameEngine.Utility
             return !rel.StartsWith("..\\") && rel != ".";
         }
 
-        public static void CopyFolder(string sourceFolder, string destinationFolder, string pattern = "*", bool createFolders = false, bool recurseFolders = false)
+        // TEST: 
+        //public static string Normalized(string path)
+        //{
+        //    string normalized;
+
+        //    if(Path.IsPathRooted(path))
+        //    {
+        //        normalized = Path.GetFullPath(path, "D");
+        //        normalized = normalized.Remove(0, 3); // remove D:\
+        //    }
+        //    else
+        //    {
+        //        normalized = Path.GetFullPath(path);
+        //    }
+
+        //    normalized = normalized.TrimEnd('\\');
+        //    return normalized;
+        //}
+
+        public static void UpdateFolder(string sourceFolder, string destinationFolder, string pattern = "*", bool createFolders = false, bool recursively = false)
         {
             try
             {
@@ -22,7 +41,7 @@ namespace CruZ.GameEngine.Utility
                 sourceFolder = Path.GetFullPath(sourceFolder);
                 destinationFolder = Path.GetFullPath(destinationFolder);
 
-                SearchOption so = recurseFolders ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly;
+                SearchOption so = recursively ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly;
 
                 foreach (string file in Directory.GetFiles(sourceFolder, pattern, so))
                 {

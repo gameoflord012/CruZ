@@ -33,7 +33,7 @@ namespace CruZ.GameEngine
             get => (resolvingAss) => AppDomain.CurrentDomain.GetAssemblies()
                     .First(domainAss => domainAss.FullName == resolvingAss.FullName);
         }
-
+         
         private static T CheckNull<T>(T? value)
         {
             return value ?? throw new InvalidOperationException("Set value first");
@@ -41,10 +41,9 @@ namespace CruZ.GameEngine
 
         private static void InitializeInternalResource()
         {
-            PathHelper.CopyFolder(
-                Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resource\\Internal\\"),
-                Path.Combine(GameResourceDir, ".internal\\"),
-                "*", true, true);
+            _gameResource!.UpdateReferenceData(
+                ResourceManager.From(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resource\\Internal\\")),
+                "Internal");
         }
 
         static string? _gameResourceDir;

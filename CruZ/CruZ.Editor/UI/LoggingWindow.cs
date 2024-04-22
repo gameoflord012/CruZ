@@ -17,7 +17,7 @@ namespace CruZ.Editor.UI
 
             _fontScale = 0.5f;
             _resource = EditorContext.EditorResource;
-            _font = _resource.Load<SpriteFont>("font\\editorfont.spritefont");
+            _font = _resource.Load<SpriteFont>(".resourceref\\Internal\\font\\editorfont.spritefont");
             _lineSpacing = _font.LineSpacing * _fontScale;
             _curRow = 0;
         }
