@@ -7,3 +7,6 @@
 [submodule "Thirdparty/MonoGameExtended"]
 	path = Thirdparty/MonoGameExtended
 	url = https://github.com/gameoflord012/MonoGame.Extended.git
+[submodule "ThirdParty/MonoGameExtended"]
+	path = ThirdParty/MonoGameExtended
+	url = https://github.com/gameoflord012/MonoGame.Extended.git
