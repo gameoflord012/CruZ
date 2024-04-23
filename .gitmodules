@@ -6,4 +6,4 @@
 	url = https://github.com/gameoflord012/monogame-aseprite.git
 [submodule "ThirdParty/MonoGameExtended"]
 	path = ThirdParty/MonoGameExtended
-	url = https://github.com/gameoflord012/CruZ.git
+	url = https://github.com/gameoflord012/MonoGame.Extended.git
