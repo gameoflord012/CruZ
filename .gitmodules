@@ -4,9 +4,6 @@
 [submodule "ThirdParty/monogame-aseprite"]
 	path = ThirdParty/monogame-aseprite
 	url = https://github.com/gameoflord012/monogame-aseprite.git
-[submodule "Thirdparty/MonoGameExtended"]
-	path = Thirdparty/MonoGameExtended
-	url = https://github.com/gameoflord012/MonoGame.Extended.git
 [submodule "ThirdParty/MonoGameExtended"]
 	path = ThirdParty/MonoGameExtended
-	url = https://github.com/gameoflord012/MonoGame.Extended.git
+	url = https://github.com/gameoflord012/CruZ.git

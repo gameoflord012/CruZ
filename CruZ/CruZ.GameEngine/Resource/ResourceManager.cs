@@ -255,46 +255,23 @@ namespace CruZ.GameEngine.Resource
         private T LoadContent<T>(string resourcePath)
         {
             resourcePath = GetFormattedResourcePath(resourcePath);
-            Guid resourceGuid;
-            try
-            {
-                resourceGuid = _guidManager.GetGuid(resourcePath);
-            }
-            catch (InvalidGuidValueException)
-            {
-                throw new ContentLoadException($"resource \"{resourcePath}\" is invalid or unimported");
-            }
+            var content = GameApplication.GetContent();
 
-            var contentFileName = resourceGuid.ToString();
-            BuildContent(typeof(T), resourcePath, contentFileName);
-
-            try
-            {
-                var content = GameApplication.GetContent();
-                content.RootDirectory = ContentOutputDir;
-                content.AssetNameResolver = ResolveAssetName;
-                var loaded = content.Load<T>(Path.Combine(ContentOutputDir, contentFileName));
-                content.AssetNameResolver = null;
-                return loaded;
-            }
-            catch
-            {
-                throw;
-            }
+            // Setup content context
+            content.RootDirectory = ContentOutputDir;
+            content.AssetNameResolver = ResolveAssetName;
+            
+            var loaded = content.Load<T>(resourcePath);
+            
+            // Return content context to default
+            content.AssetNameResolver = null;
+            content.RootDirectory = ".";
+            
+            return loaded;
         }
 
         private string ResolveAssetName(string assetName, Type assetType)
         {
-            var guidStr = Path.GetRelativePath(ContentOutputDir, assetName);
-
-            if (Guid.TryParse(guidStr, out Guid guid) && _guidManager.HasGuild(guid))
-            {
-                // if assetName is a imported guid we do nothing
-                return assetName;
-            }
-
-            // if assetName is a path, it maybe from thirdparty's dependencies,
-            // we need to build it and return guid path instead
             assetName = GetFormattedResourcePath(assetName);
 
             if (string.IsNullOrEmpty(Path.GetExtension(assetName)))
