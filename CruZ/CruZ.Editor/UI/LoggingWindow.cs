@@ -17,7 +17,7 @@ namespace CruZ.Editor.UI
         {
             Location = new(5, 3);
 
-            _fontScale = 0.5f;
+            _fontScale = 0.7f;
             _resource = GameContext.GameResource;
             _font = _resource.Load<BitmapFont>(".resourceref\\Internal\\Fonts\\Fixedsys.fnt");
             _lineSpacing = _font.LineHeight * _fontScale;
@@ -41,10 +41,9 @@ namespace CruZ.Editor.UI
         {
             _sb?.DrawString(
                 _font, s,
-                new Vector2(
-                    Location.X, Location.Y + _curRow * _lineSpacing),
-                Color.Black
-                , 0, new Vector2(0, 0), _fontScale, SpriteEffects.None, 0
+                new Vector2(Location.X, Location.Y + _curRow * _lineSpacing),
+                Color.Black, 
+                0, new Vector2(0, 0), _fontScale, SpriteEffects.None, 0
                 );
         }
 

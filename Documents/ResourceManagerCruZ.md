@@ -5,9 +5,6 @@ Contents are .xnb files.
 
 Resource can depend on multiple orther resources and also depend on Content (ie. which is the lowest dependency in hierachy).
 
-To import the resource in to memmory, the process as follow:
-
-1. Read the resource file and put it in immediate object
-2. The immediate object is now loaded into empty instance
+Content may depend on another content, by specify the content file name or the guid and its reference must in the same directory of its.
 
 ## ResourceReader.cs
