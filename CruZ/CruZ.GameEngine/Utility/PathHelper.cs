@@ -13,6 +13,11 @@ namespace CruZ.GameEngine.Utility
             return !rel.StartsWith("..\\") && rel != ".";
         }
 
+        public static ReadOnlySpan<char> RemoveExtension(ReadOnlySpan<char> path)
+        {
+            return path.Slice(0, path.LastIndexOf("."));
+        }
+
         // TEST: 
         //public static string Normalized(string path)
         //{

@@ -64,6 +64,7 @@ namespace CruZ.GameEngine.Resource
         {
             _pipelineManager.AddAssembly(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "MonoGame.Aseprite.Content.Pipeline.dll"));
             _pipelineManager.AddAssembly(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "MonoGame.Extended.Content.Pipeline.dll"));
+            _pipelineManager.AddAssembly(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "MonoGame.Extended.dll"));
         }
 
         private void InitResourceDir()
@@ -191,7 +192,7 @@ namespace CruZ.GameEngine.Resource
 
         private ResourceManager GetManagerFromReferencePath(string referencePath)
         {
-            return 
+            return
                 string.IsNullOrEmpty(referencePath) ? this :
                 From(Path.Combine(ResourceRoot, referencePath));
         }
@@ -269,12 +270,49 @@ namespace CruZ.GameEngine.Resource
 
             try
             {
-                return GameApplication.GetContent().Load<T>(Path.Combine(ContentOutputDir, contentFileName));
+                var content = GameApplication.GetContent();
+                content.RootDirectory = ContentOutputDir;
+                content.AssetNameResolver = ResolveAssetName;
+                var loaded = content.Load<T>(Path.Combine(ContentOutputDir, contentFileName));
+                content.AssetNameResolver = null;
+                return loaded;
             }
             catch
             {
                 throw;
             }
+        }
+
+        private string ResolveAssetName(string assetName, Type assetType)
+        {
+            var guidStr = Path.GetRelativePath(ContentOutputDir, assetName);
+
+            if (Guid.TryParse(guidStr, out Guid guid) && _guidManager.HasGuild(guid))
+            {
+                // if assetName is a imported guid we do nothing
+                return assetName;
+            }
+
+            // if assetName is a path, it maybe from thirdparty's dependencies,
+            // we need to build it and return guid path instead
+            assetName = GetFormattedResourcePath(assetName);
+
+            if (string.IsNullOrEmpty(Path.GetExtension(assetName)))
+            {
+                // find extension if assetName is not provided
+
+                assetName = Directory.EnumerateFiles(
+                    Path.GetDirectoryName(assetName)!, Path.GetFileName(assetName) + ".*", SearchOption.TopDirectoryOnly)
+                    .FirstOrDefault(string.Empty);
+                
+                if(string.IsNullOrEmpty(assetName))
+                    throw new ArgumentException($"Can't resolve '{assetName}'");
+            }
+
+            var resolved = _guidManager.GetGuid(assetName).ToString();
+            BuildContent(assetType, assetName, resolved); // to make sure it is built to the .xnb
+
+            return resolved;
         }
 
         private void BuildContent(Type ty, string resourcePath, string contentFileName)
@@ -292,9 +330,9 @@ namespace CruZ.GameEngine.Resource
             try
             {
                 return typeof(ResourceManager).
-                    GetMethod(nameof(LoadContent), BindingFlags.NonPublic | BindingFlags.Instance).
+                    GetMethod(nameof(LoadContent), BindingFlags.NonPublic | BindingFlags.Instance)!.
                     MakeGenericMethod(ty).
-                    Invoke(this, [resourcePath]);
+                    Invoke(this, [resourcePath])!;
             }
             catch (Exception e)
             {
@@ -330,7 +368,7 @@ namespace CruZ.GameEngine.Resource
         /// Read Guid or auto-generated new Guid and .import files
         /// </summary>
         /// <param name="resourcePath"></param>
-        private void ImportResourcePath(string resourcePath)
+        private Guid ImportResourcePath(string resourcePath)
         {
             resourcePath = GetFormattedResourcePath(resourcePath);
             Guid guid;
@@ -351,6 +389,7 @@ namespace CruZ.GameEngine.Resource
             }
 
             _guidManager.ConsumeGuid(guid, resourcePath);
+            return guid;
         }
 
         //public ResourceManager CreateResourceReference(string referencePath)
@@ -364,7 +403,7 @@ namespace CruZ.GameEngine.Resource
 
         public void UpdateReferenceData(ResourceManager resourceRef, string referenceId)
         {
-            if(referenceId.Contains(REF_DIR_NAME))
+            if (referenceId.Contains(REF_DIR_NAME))
                 throw new ArgumentException($"referenceId should not contain special name '{REF_DIR_NAME}'");
 
             PathHelper.UpdateFolder(

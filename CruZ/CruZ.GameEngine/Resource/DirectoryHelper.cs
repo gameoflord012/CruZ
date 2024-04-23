@@ -26,8 +26,8 @@ namespace CruZ.GameEngine.Resource
             {
                 var dirName = subDir.Substring(subDir.LastIndexOf("\\") + 1);
                 if(dirName == "." || dirName == ".." || excludeDirNames.Contains(dirName)) continue;
-                foreach (var subfile in EnumerateFiles(subDir, excludeDirNames))
-                    yield return subfile;
+                foreach (var subDirFile in EnumerateFiles(subDir, excludeDirNames))
+                    yield return subDirFile;
             }
         }
     }

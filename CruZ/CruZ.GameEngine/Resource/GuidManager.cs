@@ -44,6 +44,11 @@ namespace CruZ.GameEngine.Resource
             return _getGuidFromValue[value];
         }
 
+        public bool HasGuild(Guid guid)
+        {
+            return _getValueFromGuid.ContainsKey(guid);
+        }
+
         public void RemovedGuid(Guid guid)
         {
             if (!IsConsumed(guid)) throw new ArgumentException("Guid not included");

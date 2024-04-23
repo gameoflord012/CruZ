@@ -18,7 +18,6 @@ namespace CruZ.GameEngine
         {
             _gdManager = new GraphicsDeviceManager(this);
             _gdManager.GraphicsProfile = GraphicsProfile.HiDef;
-            Content.RootDirectory = ".";
             IsMouseVisible = true;
             Window.ClientSizeChanged += OnClientSizeChanged;
         }
