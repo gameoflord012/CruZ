@@ -8,6 +8,8 @@ using Microsoft.Xna.Framework;
 
 using MonoGame.Aseprite;
 
+using SharpDX.MediaFoundation;
+
 using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
@@ -16,6 +18,11 @@ namespace CruZ.GameEngine.GameSystem.Animation
 {
     public class AnimationComponent : Component, IJsonOnDeserialized
     {
+        /// <summary>
+        /// If true, the rendering sprite will only 1 unit in world coordinate
+        /// </summary>
+        public bool FitToWorldUnit { get; set; }
+
         public AnimationComponent()
         {
             _resource = GameContext.GameResource;
@@ -59,7 +66,6 @@ namespace CruZ.GameEngine.GameSystem.Animation
 
             _currentAnimation?.Stop();
             _currentAnimation = GetAnimation(animationTag);
-            _currentAnimationTag = animationTag;
             _currentAnimation.Play();
         }
 
@@ -67,7 +73,7 @@ namespace CruZ.GameEngine.GameSystem.Animation
         {
             tag = tag.ToLower();
 
-            if (!_animations.TryGetValue(tag, out AnimatedSprite? value)) 
+            if (!_animations.TryGetValue(tag, out AnimatedSprite? value))
                 throw new ArgumentException(tag);
 
             return value;
@@ -84,6 +90,19 @@ namespace CruZ.GameEngine.GameSystem.Animation
             var defaultArgs = args.DefaultDrawArgs;
             defaultArgs.Apply(_currentAnimation);
             defaultArgs.Apply(AttachedEntity);
+
+            if(FitToWorldUnit)
+            {
+                defaultArgs.Scale =
+                new Vector2(
+                    1f / (_currentAnimation.TextureRegion.Bounds.Width),
+                    1f / _currentAnimation.TextureRegion.Bounds.Height);
+            }
+            else
+            {
+                defaultArgs.Scale = Vector2.One;
+            }
+
             args.DrawRequests.Add(defaultArgs);
         }
 
@@ -105,7 +124,6 @@ namespace CruZ.GameEngine.GameSystem.Animation
         SpriteRendererComponent? _renderer;
 
         AnimatedSprite? _currentAnimation;
-        string _currentAnimationTag;
 
         ResourceManager _resource;
         Dictionary<string, AnimatedSprite> _animations = [];

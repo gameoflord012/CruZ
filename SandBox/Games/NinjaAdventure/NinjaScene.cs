@@ -2,8 +2,6 @@
 using CruZ.GameEngine.GameSystem.ECS;
 using CruZ.GameEngine.GameSystem.Scene;
 
-using static Assimp.Metadata;
-
 namespace NinjaAdventure
 {
     [SceneFactoryClass]

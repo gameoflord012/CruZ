@@ -16,11 +16,12 @@ namespace NinjaAdventure
         public NinjaCharacter(GameScene scene, SpriteRendererComponent spriteRenderer)
         {
             _gameScene = scene;
-            Entity = scene.CreateEntity();
+            Entity = scene.CreateEntity("Ninja");
 
             _animation = new AnimationComponent();
             {
                 _animation.Renderer = spriteRenderer;
+                _animation.FitToWorldUnit = true;
                 _animation.LoadAnimationFile("art\\NinjaAnim.aseprite");
             }
             Entity.AddComponent(_animation);
@@ -119,7 +120,7 @@ namespace NinjaAdventure
         Vector2 _facingDirection;
         bool _inputFireSuriken;
 
-        float _speed = 75;
+        float _speed = 4;
 
         AnimationComponent _animation;
         ScriptComponent _scriptComponent;

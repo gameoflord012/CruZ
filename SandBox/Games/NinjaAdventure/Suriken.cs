@@ -16,19 +16,20 @@ namespace NinjaAdventure
     {
         public Suriken(GameScene gameScene, SpriteRendererComponent surikenRenderer, Vector2 origin, Vector2 directions)
         {
+            _surikenRenderer = surikenRenderer;
+            _surikenRenderer.DrawRequestsFetching += Renderer_DrawRequestsFetching;
+            _direction = directions;
+
             Entity = gameScene.CreateEntity();
+            Entity.Name = $"Suriken {Entity.Id}";
             Entity.Transform.Position = origin;
             Entity.Transform.Scale = new Vector2(0.3f, 0.3f);
-            this._surikenRenderer = surikenRenderer;
-            _direction = directions;
 
             var script = new ScriptComponent();
             {
                 script.Updating += Script_Updating;
             }
             Entity.AddComponent(script);
-
-            surikenRenderer.DrawRequestsFetching += Renderer_DrawRequestsFetching;
 
             _surikenTex = GameContext.GameResource.Load<Texture2D>("art\\suriken\\01.png");
         }
@@ -44,6 +45,7 @@ namespace NinjaAdventure
             var drawArgs = args.DefaultDrawArgs;
             drawArgs.Apply(Entity);
             drawArgs.Apply(_surikenTex);
+            drawArgs.Scale = new Vector2(1f / _surikenTex.Width, 1f / _surikenTex.Height);
 
             if (!args.IsDrawRequestOutOfScreen(drawArgs))
             {
@@ -61,7 +63,7 @@ namespace NinjaAdventure
         Texture2D _surikenTex;
         SpriteRendererComponent _surikenRenderer;
         Vector2 _direction;
-        float _moveSpeed = 200;
+        float _moveSpeed = 12f;
         float _rotationSpeed = 20f;
 
         public event Action? BecomeUseless;
