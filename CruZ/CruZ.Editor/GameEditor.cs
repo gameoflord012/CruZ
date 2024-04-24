@@ -18,9 +18,9 @@ using CruZ.GameEngine.GameSystem.UI;
 using CruZ.GameEngine;
 using CruZ.GameEngine.GameSystem;
 using CruZ.GameEngine.Resource;
-using CruZ.GameEngine.Service;
 using CruZ.GameEngine.GameSystem.Scene;
 using CruZ.GameEngine.Input;
+using CruZ.GameEngine.Utility;
 
 
 namespace CruZ.Editor.Controls
@@ -237,7 +237,7 @@ namespace CruZ.Editor.Controls
 
         public void RemoveEntity(TransformEntity e)
         {
-            _currentScene.RemoveEntity(e);
+            _currentScene.RemoveAndDisposeEntity(e);
             e.Dispose();
         }
 

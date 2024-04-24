@@ -1,7 +1,6 @@
 ﻿using System;
 
 using CruZ.GameEngine;
-using CruZ.GameEngine.Service;
 using CruZ.GameEngine.Utility;
 
 using Microsoft.Xna.Framework;
@@ -223,6 +222,11 @@ namespace CruZ.GameEngine.Input
         bool IsKeyJustDown(Keys key)
         {
             return PreKeyboard.IsKeyUp(key) && Keyboard.IsKeyDown(key);
+        }
+
+        bool IsKeyHeldDown(Keys key)
+        {
+            return Keyboard.IsKeyDown(key);
         }
 
         Point MousePos()

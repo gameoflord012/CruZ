@@ -123,7 +123,7 @@ namespace CruZ.Editor.UI
             CalcControlBounds(bBox);
         }
 
-        private void Entity_OnRemoveFromWorld(object? sender, EventArgs e)
+        private void Entity_OnRemoveFromWorld(TransformEntity e)
         {
             if (Parent != null) Parent.RemoveChild(this);
         }

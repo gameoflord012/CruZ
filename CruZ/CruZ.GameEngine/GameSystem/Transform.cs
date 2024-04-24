@@ -15,13 +15,6 @@ namespace CruZ.GameEngine.GameSystem
             _scale = Vector2.One;
         }
 
-        [JsonIgnore, Browsable(false)]
-        public Matrix TotalMatrix { get => ScaleMatrix * TranslateMatrix; }
-        [JsonIgnore, Browsable(false)]
-        public Matrix TranslateMatrix { get => Matrix.CreateTranslation(_position.X, _position.Y, 0); }
-        [JsonIgnore, Browsable(false)]
-        public Matrix ScaleMatrix { get => Matrix.CreateScale(_scale.X, _scale.Y, 1); }
-
         public Vector2 Scale
         {
             get => _scale;
@@ -38,6 +31,12 @@ namespace CruZ.GameEngine.GameSystem
             {
                 _position = value;
             }
+        }
+
+        public float Rotation
+        {
+            get; 
+            set;
         }
 
         Vector2 _position;

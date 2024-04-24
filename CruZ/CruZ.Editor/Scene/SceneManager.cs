@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 
@@ -10,39 +11,23 @@ namespace CruZ.Editor.Scene
 {
     public static class SceneManager
     {
-        static SceneManager()
+        static void FindUserAssemblyScene()
         {
             Assembly userAssembly = EditorContext.GameAssembly;
+            Type[] types = userAssembly.GetTypes();
 
-            Type[] types;
-
-            try
-            {
-                types = userAssembly.GetTypes();
-            }
-            catch (ReflectionTypeLoadException e)
-            {
-                throw e;
-            }
-            
             var sceneClasses = types
-                .Where(type => Attribute.IsDefined(type, typeof(SceneAssetClassAttribute)));
+                .Where(type => Attribute.IsDefined(type, typeof(SceneFactoryClassAttribute)));
 
             foreach (var clazz in sceneClasses)
             {
                 foreach (var method in clazz
-                    .GetMethods()
-                    .Where(mt => Attribute.IsDefined(mt, typeof(SceneAssetMethodAttribute))))
+                    .GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static)
+                    .Where(mt => Attribute.IsDefined(mt, typeof(SceneFactoryMethodAttribute))))
                 {
-                    var classAttribute = clazz.GetCustomAttribute(typeof(SceneAssetClassAttribute)) as SceneAssetClassAttribute;
-                    var methodAttribute = method.GetCustomAttribute(typeof(SceneAssetMethodAttribute)) as SceneAssetMethodAttribute;
-
-                    var sceneName = classAttribute.AssetClassId + "\\" +
-
-                                    (string.IsNullOrEmpty(methodAttribute.AssetMethodId) ?
-                                        "" : methodAttribute.AssetMethodId + "\\") +
-
-                                    method.Name;
+                    var classAttribute = (SceneFactoryClassAttribute)clazz.GetCustomAttribute(typeof(SceneFactoryClassAttribute))!;
+                    var methodAttribute = (SceneFactoryMethodAttribute)method.GetCustomAttribute(typeof(SceneFactoryMethodAttribute))!;
+                    var sceneName = Path.Combine(classAttribute.Id, methodAttribute.Id, method.Name);
 
                     _sceneMethods[sceneName] = method;
                 }
@@ -51,6 +36,8 @@ namespace CruZ.Editor.Scene
 
         public static GameScene GetRuntimeScene(string sceneName)
         {
+            FindUserAssemblyScene();
+
             if (!_sceneMethods.ContainsKey(sceneName))
                 throw new SceneAssetNotFoundException($"Runtime Scene {sceneName} not available");
 
@@ -59,7 +46,8 @@ namespace CruZ.Editor.Scene
 
             try
             {
-                scene = (GameScene)method.Invoke(null, null);
+                object? instance = method.IsStatic ? null : Activator.CreateInstance(method.DeclaringType!)!;
+                scene = (GameScene)method.Invoke(instance, null)!;
                 scene.Name = sceneName;
             }
             catch (Exception e)
@@ -72,6 +60,8 @@ namespace CruZ.Editor.Scene
 
         public static string[] GetSceneNames()
         {
+            FindUserAssemblyScene();
+
             return _sceneMethods.Keys.ToArray();
         }
 

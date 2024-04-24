@@ -3,6 +3,7 @@
 using CruZ.GameEngine.GameSystem.ECS;
 using CruZ.GameEngine.GameSystem;
 using CruZ.GameEngine.GameSystem.Render;
+using System;
 
 namespace CruZ.GameEngine.GameSystem.Tile
 {
@@ -18,28 +19,32 @@ namespace CruZ.GameEngine.GameSystem.Tile
 
         protected override void OnDetached(TransformEntity entity)
         {
-            if (_sp != null)
-            {
-                _sp.DrawLoopBegin -= Sprite_DrawLoopBegin;
-                _sp.DrawLoopEnd -= Sprite_DrawLoopEnd;
-            }
+            throw new NotImplementedException();
+
+            //if (_sp != null)
+            //{
+            //    _sp.DrawLoopBegin -= Sprite_DrawLoopBegin;
+            //    _sp.DrawLoopEnd -= Sprite_DrawLoopEnd;
+            //}
         }
 
         protected override void OnComponentChanged(ComponentCollection comps)
         {
-            if (_sp != null)
-            {
-                _sp.DrawLoopBegin -= Sprite_DrawLoopBegin;
-                _sp.DrawLoopEnd -= Sprite_DrawLoopEnd;
-            }
+            throw new NotImplementedException();
 
-            comps.TryGetComponent(out _sp);
+            //if (_sp != null)
+            //{
+            //    _sp.DrawLoopBegin -= Sprite_DrawLoopBegin;
+            //    _sp.DrawLoopEnd -= Sprite_DrawLoopEnd;
+            //}
 
-            if (_sp != null)
-            {
-                _sp.DrawLoopBegin += Sprite_DrawLoopBegin;
-                _sp.DrawLoopEnd += Sprite_DrawLoopEnd;
-            }
+            //comps.TryGetComponent(out _sp);
+
+            //if (_sp != null)
+            //{
+            //    _sp.DrawLoopBegin += Sprite_DrawLoopBegin;
+            //    _sp.DrawLoopEnd += Sprite_DrawLoopEnd;
+            //}
         }
 
         private void Sprite_DrawLoopBegin(object? sender, DrawArgs args)

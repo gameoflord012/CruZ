@@ -6,13 +6,18 @@ namespace CruZ.GameEngine.GameSystem.Script
 {
     public class ScriptComponent : Component
     {
+        public event Action<GameTime>? Drawing;
+        public event Action<GameTime>? Updating;
+
         internal void InternalDraw(GameTime gameTime)
         {
+            Drawing?.Invoke(gameTime);
             OnDraw(gameTime);
         }
 
         internal void InternalUpdate(GameTime gameTime)
         {
+            Updating?.Invoke(gameTime);
             OnUpdate(gameTime);
         }
 

@@ -17,8 +17,7 @@ namespace CruZ.GameEngine.GameSystem.Render
     {
         public static void Draw(this SpriteBatch spriteBatch, DrawArgs args)
         {
-            if(args.Skip) return;
-            if(args.Texture == null) throw new ArgumentException("Texture null");
+            if(args.Skip || args.Texture == null) return;
             
             spriteBatch.Draw(
                 args.Texture, 
@@ -26,7 +25,7 @@ namespace CruZ.GameEngine.GameSystem.Render
                 args.SourceRectangle, 
                 args.Color, 
                 args.Rotation,
-                new Vector2(args.NormalizedOrigin.X * args.Texture.Width, args.NormalizedOrigin.Y * args.Texture.Height),
+                new Vector2(args.NormalizedOrigin.X * args.SourceRectangle.Width, args.NormalizedOrigin.Y * args.SourceRectangle.Height),
                 args.Scale,
                 args.SpriteEffect,
                 args.LayerDepth);

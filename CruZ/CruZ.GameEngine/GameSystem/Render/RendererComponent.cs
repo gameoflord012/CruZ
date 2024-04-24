@@ -7,11 +7,14 @@ namespace CruZ.GameEngine.GameSystem.Render
 {
     public abstract class RendererComponent : Component, IComparable<RendererComponent>
     {
+        /// <summary>
+        /// Priority value of which SpriteComponent being proccess first
+        /// </summary>
         public int SortingLayer { get; set; }
 
         public float LayerDepth { get; set; }
 
-        public virtual void Render(RendererEventArgs args) { }
+        public virtual void Render(RenderSystemEventArgs args) { }
 
         public int CompareTo(RendererComponent? other)
         {

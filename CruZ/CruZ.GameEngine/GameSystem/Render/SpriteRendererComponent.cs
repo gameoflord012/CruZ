@@ -4,12 +4,12 @@ using System.ComponentModel;
 using Microsoft.Xna.Framework;
 using System.Drawing.Design;
 using System.Text.Json.Serialization;
-using CruZ.GameEngine.Serialization;
 using CruZ.GameEngine.Resource;
 using CruZ.GameEngine.GameSystem.UI;
 using CruZ.GameEngine.GameSystem.Render;
-using CruZ.GameEngine;
 using CruZ.GameEngine.Utility;
+using System.Collections.Generic;
+using System.Collections.Immutable;
 
 namespace CruZ.GameEngine.GameSystem.ECS
 {
@@ -18,8 +18,6 @@ namespace CruZ.GameEngine.GameSystem.ECS
     /// </summary>
     public partial class SpriteRendererComponent : RendererComponent, IHasBoundBox
     {
-        public event EventHandler<DrawArgs>? DrawLoopBegin;
-        public event EventHandler<DrawLoopEndEventArgs>? DrawLoopEnd;
         public event Action? DrawBegin;
         public event Action? DrawEnd;
         public event Action<UIBoundingBox>? BoundingBoxChanged;
@@ -51,30 +49,42 @@ namespace CruZ.GameEngine.GameSystem.ECS
             DrawBegin += () =>
             {
                 _boundingBox.WorldOrigins.Clear();
-                _hasBoundingBox = false;
+                _boundingBox.WorldBounds = default;
             };
 
-            DrawLoopEnd += (sender, args) =>
+            DrawRequestsFetched += (fetchedDrawRequests) =>            
             {
-                _boundingBox.WorldOrigins.Add(args.DrawArgs.GetWorldOrigin());
-
-                if (!_hasBoundingBox)
+                foreach (var request in fetchedDrawRequests)
                 {
-                    _boundingBox.WorldBounds = args.DrawArgs.GetWorldBounds();
-                    _hasBoundingBox = true;
-                }
-                else
-                {
-                    var bounds = args.DrawArgs.GetWorldBounds();
+                    // add origin
 
-                    _boundingBox.WorldBounds.X = MathF.Min(_boundingBox.WorldBounds.X, bounds.X);
-                    _boundingBox.WorldBounds.Y = MathF.Min(_boundingBox.WorldBounds.Y, bounds.Y);
-                    _boundingBox.WorldBounds.Width = _boundingBox.WorldBounds.Right < bounds.Right ? bounds.Right - _boundingBox.WorldBounds.X : _boundingBox.WorldBounds.Width;
-                    _boundingBox.WorldBounds.Height = _boundingBox.WorldBounds.Bottom < bounds.Bottom ? bounds.Bottom - _boundingBox.WorldBounds.Y : _boundingBox.WorldBounds.Height;
+                    if( // ignore if it is an invalid request
+                        request.Texture == null ||
+                        request.GetWorldBounds().Width == 0 && request.GetWorldBounds().Height == 0)
+                        continue;
+
+                    _boundingBox.WorldOrigins.Add(request.GetWorldOrigin());
+
+                    if (_boundingBox.WorldBounds.IsEmpty)
+                    {
+                        _boundingBox.WorldBounds = request.GetWorldBounds(); // Assign if worldbounds is uninitialized
+                    }
+                    else
+                    {
+                        var bounds = request.GetWorldBounds();
+
+                        //
+                        // we expand the bounding box accroding to requests
+                        //
+                        _boundingBox.WorldBounds.X = MathF.Min(_boundingBox.WorldBounds.X, bounds.X);
+                        _boundingBox.WorldBounds.Y = MathF.Min(_boundingBox.WorldBounds.Y, bounds.Y);
+                        _boundingBox.WorldBounds.Width = _boundingBox.WorldBounds.Right < bounds.Right ? bounds.Right - _boundingBox.WorldBounds.X : _boundingBox.WorldBounds.Width;
+                        _boundingBox.WorldBounds.Height = _boundingBox.WorldBounds.Bottom < bounds.Bottom ? bounds.Bottom - _boundingBox.WorldBounds.Y : _boundingBox.WorldBounds.Height;
+                    }
                 }
             };
 
-            DrawEnd += () => BoundingBoxChanged?.Invoke(_hasBoundingBox ? _boundingBox : UIBoundingBox.Default);
+            DrawEnd += () => BoundingBoxChanged?.Invoke(_boundingBox);
         }
 
         public void LoadTexture(string texturePath)
@@ -101,7 +111,7 @@ namespace CruZ.GameEngine.GameSystem.ECS
                 SortingLayer.CompareTo(other.SortingLayer);
         }
 
-        public override void Render(RendererEventArgs e)
+        public override void Render(RenderSystemEventArgs e)
         {
             var fx = EffectManager.NormalSpriteRenderer;
             fx.Parameters["view_projection"].SetValue(e.ViewProjectionMatrix);
@@ -113,30 +123,38 @@ namespace CruZ.GameEngine.GameSystem.ECS
                 sortMode: SpriteSortMode.FrontToBack,
                 samplerState: SamplerState.PointClamp);
 
-            while (true)
+            List<DrawArgs> drawRequest = [];
+            FetchDrawRequests(drawRequest, e.ViewProjectionMatrix);
+
+            foreach (var request in drawRequest)
             {
-                #region Before Drawloop
-                DrawArgs drawArgs = new();
-                if(Texture != null) drawArgs.Apply(Texture);
-                drawArgs.Apply(AttachedEntity);
-                drawArgs.LayerDepth = CalculateLayerDepth();
-                drawArgs.NormalizedOrigin = NormalizedOrigin;
-                drawArgs.Color = Color.White;
-                drawArgs.SpriteEffect = FlipHorizontally ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
-                DrawLoopBegin?.Invoke(this, drawArgs); 
-                #endregion
-
-                e.SpriteBatch.Draw(drawArgs);
-
-                #region After Drawloop
-                var drawEndArgs = new DrawLoopEndEventArgs(drawArgs);
-                DrawLoopEnd?.Invoke(this, drawEndArgs);
-                if (!drawEndArgs.KeepDrawing) break; 
-                #endregion
+                e.SpriteBatch.Draw(request);
             }
 
             e.SpriteBatch.End();
             DrawEnd?.Invoke();
+        }
+
+        /// <summary>
+        /// default draw request and list of draw request
+        /// </summary>
+        public event Action<FetchingDrawRequestsEventArgs>? DrawRequestsFetching;
+        public event Action<IImmutableList<DrawArgs>>? DrawRequestsFetched;
+
+        private void FetchDrawRequests(List<DrawArgs> drawRequests, Matrix viewProjectionMat)
+        {
+            DrawArgs defaultArgs = new();
+            
+            if (Texture != null) defaultArgs.Apply(Texture);
+            defaultArgs.Apply(AttachedEntity);
+
+            defaultArgs.LayerDepth = CalculateLayerDepth();
+            defaultArgs.NormalizedOrigin = NormalizedOrigin;
+            defaultArgs.Color = Color.White;
+            defaultArgs.SpriteEffect = FlipHorizontally ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
+            
+            DrawRequestsFetching?.Invoke(new FetchingDrawRequestsEventArgs(defaultArgs, drawRequests, viewProjectionMat));
+            DrawRequestsFetched?.Invoke(drawRequests.ToImmutableList());
         }
 
         private float CalculateLayerDepth()
@@ -154,6 +172,5 @@ namespace CruZ.GameEngine.GameSystem.ECS
         ResourceInfo? _spriteResInfo;
         ResourceManager _resource;
         UIBoundingBox _boundingBox = new();
-        bool _hasBoundingBox;
     }
 }

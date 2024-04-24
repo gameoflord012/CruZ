@@ -7,14 +7,16 @@ using MonoGame.Aseprite;
 
 namespace CruZ.GameEngine.GameSystem.Render
 {
-    public class DrawArgs
+    public struct DrawArgs
     {
-        public Texture2D? Texture;
+        public DrawArgs() { }
+
+        public Texture2D? Texture = null;
         public Rectangle SourceRectangle;
         public Vector2 NormalizedOrigin;
         public Vector2 Position;
         public Vector2 Scale;
-        public float Rotation = 0;
+        public float Rotation;
         public Color Color = Color.White;
         public float LayerDepth = 0;
         public SpriteEffects SpriteEffect = SpriteEffects.None;
@@ -22,8 +24,9 @@ namespace CruZ.GameEngine.GameSystem.Render
 
         public void Apply(TransformEntity entity)
         {
-            Position = entity.Position;
-            Scale = entity.Scale;
+            Position = entity.Transform.Position;
+            Scale = entity.Transform.Scale;
+            Rotation = entity.Transform.Rotation;
         }
 
         public void Apply(Texture2D tex)
@@ -38,17 +41,14 @@ namespace CruZ.GameEngine.GameSystem.Render
             SourceRectangle = sprite.TextureRegion.Bounds;
             Color = sprite.Color * sprite.Transparency;
             Rotation = sprite.Rotation;
-            NormalizedOrigin.X = sprite.Origin.X / Texture.Width;
-            NormalizedOrigin.Y = sprite.Origin.Y / Texture.Height;
             Scale = sprite.Scale;
             LayerDepth = sprite.LayerDepth;
         }
 
         public RectangleF GetWorldBounds() // in World Coordinate
         {
-            if (SourceRectangle.IsEmpty) throw new InvalidOperationException("set rect value first");
-
             RectangleF rect = new();
+
             rect.Width = SourceRectangle.Width * Scale.X;
             rect.Height = SourceRectangle.Height * Scale.Y;
             rect.Location = new(

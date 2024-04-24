@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using CruZ.GameEngine.GameSystem.UI;
 using CruZ.GameEngine.Resource;
-using CruZ.GameEngine.Service;
 using MonoGame.Extended.BitmapFonts;
 using CruZ.GameEngine;
+using CruZ.GameEngine.Utility;
 
 namespace CruZ.Editor.UI
 {
@@ -28,13 +28,15 @@ namespace CruZ.Editor.UI
         {
             _sb = info.SpriteBatch;
             _curRow = 0;
-            DrawString(LogManager.GetMsg("Fps"));
+            DrawString(LogManager.GetMsgFormmated("Fps"));
             _curRow++;
-            DrawString(LogManager.GetMsg("Scene"));
+            DrawString(LogManager.GetMsgFormmated("Scene"));
             _curRow++;
-            DrawString(LogManager.GetMsg("CursorCoord"));
+            DrawString(LogManager.GetMsgFormmated("CursorCoord"));
             _curRow++;
-            DrawString(LogManager.GetMsg("Default"));
+            DrawString(LogManager.GetMsgFormmated("CameraWorldCoord"));
+            _curRow++;
+            DrawString(LogManager.GetMsgFormmated("Default"));
         }
 
         private void DrawString(string s)

@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-using CruZ.GameEngine.Utility;
-
-namespace CruZ.GameEngine.Service
+namespace CruZ.GameEngine.Utility
 {
     public class LogManager
     {
@@ -41,6 +39,11 @@ namespace CruZ.GameEngine.Service
         {
             if (!Main._msgs.ContainsKey(key)) return "";
             return Main._msgs[key];
+        }
+
+        public static string GetMsgFormmated(string key = DefaultString)
+        {
+            return $"{key} : {GetMsg(key)}";
         }
 
         //public static void FlushToDebug()

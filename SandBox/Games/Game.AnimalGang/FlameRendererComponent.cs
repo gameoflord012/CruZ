@@ -25,7 +25,7 @@ namespace Game.AnimalGang.DesktopGL
             _bloomFilterBlend.AlphaSourceBlend = Blend.Zero;
         }
 
-        public override void Render(RendererEventArgs e)
+        public override void Render(RenderSystemEventArgs e)
         {
             UpdateRenderTargetsResolution();
             _gd.SetRenderTarget(_rt);

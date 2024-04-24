@@ -141,7 +141,18 @@ namespace CruZ.GameEngine.GameSystem
         /// <summary>
         /// CameraOffset's camera center in world coordinate
         /// </summary>
-        public Vector2 CameraOffset;
+        public Vector2 CameraOffset
+        {
+            get => _cameraOffset;
+            set
+            {
+                _cameraOffset = value;
+                var cameraWorldCoord = PointToCoordinate(new Point((int)_viewPortWidth / 2, (int)ViewPortHeight / 2));
+                LogManager.SetMsg($"<{cameraWorldCoord.X} {cameraWorldCoord.Y}>", "CameraWorldCoord");
+            }
+        }
+
+        public Vector2 _cameraOffset;
         public float Zoom = 1;
 
         /// <summary>

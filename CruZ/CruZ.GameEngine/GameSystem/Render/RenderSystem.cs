@@ -27,12 +27,13 @@ namespace CruZ.GameEngine.GameSystem.Render
             var rendererComponents = args.
                 ActiveEntities.GetAllComponents<RendererComponent>(GetComponentMode.Inherit);
 
+            // sort by sorting layeyrs, lowest SortingLayer value get processed first
             rendererComponents.Sort();
 
             _gd.SetRenderTarget(_rtSprite);
             _gd.Clear(GameConstants.GAME_BACKGROUND_COLOR);
 
-            var eventArgs = new RendererEventArgs(
+            var eventArgs = new RenderSystemEventArgs(
                 args.GameTime,
                 _spriteBatch,
                 Camera.Main.ViewProjectionMatrix(),

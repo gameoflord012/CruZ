@@ -1,8 +1,13 @@
 {
   "profiles": {
-    "CruZ.Editor": {
+    "Game.AnimalGang": {
       "commandName": "Project",
       "commandLineArgs": "-rD:/monogame-projects/CruZ_GameEngine/SandBox/Games/Game.AnimalGang/ -aD:/monogame-projects/CruZ_GameEngine/SandBox/Games/Artifacts/Game.AnimalGang/Debug/net8.0-windows/Game.AnimalGang.dll"
+    },
+
+    "NinjaAdventure": {
+      "commandName": "Project",
+      "commandLineArgs": "-rD:/monogame-projects/CruZ_GameEngine/SandBox/Games/NinjaAdventure/ -aD:/monogame-projects/CruZ_GameEngine/SandBox/Games/Artifacts/NinjaAdventure/Debug/net8.0-windows/NinjaAdventure.dll"
     }
   }
 }

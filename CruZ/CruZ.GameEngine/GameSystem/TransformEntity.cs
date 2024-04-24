@@ -15,7 +15,7 @@ namespace CruZ.GameEngine.GameSystem
     [JsonConverter(typeof(TransformEntityJsonConverter))]
     public class TransformEntity : IDisposable
     {
-        public event EventHandler? RemovedFromWorld;
+        public event Action<TransformEntity>? RemovedFromWorld;
         public event Action<ComponentCollection>? ComponentsChanged;
 
         internal TransformEntity(World world)
@@ -93,6 +93,7 @@ namespace CruZ.GameEngine.GameSystem
         {
             IsActive = false;
             _world.RemoveEntity(this);
+            RemovedFromWorld?.Invoke(this);
         }
 
         [ReadOnly(true)]
@@ -131,7 +132,7 @@ namespace CruZ.GameEngine.GameSystem
             }
         }
 
-        private void Parent_RemovedFromWorld(object? sender, EventArgs e)
+        private void Parent_RemovedFromWorld(TransformEntity parent)
         {
             Parent = null;
         }
@@ -167,6 +168,9 @@ namespace CruZ.GameEngine.GameSystem
         static int _entityCounter = 0;
         public void Dispose()
         {
+            if (Disposed) return;
+            Disposed = true;
+
             RemoveFromWorld();
 
             foreach (var e in GetAllComponents())
@@ -174,5 +178,7 @@ namespace CruZ.GameEngine.GameSystem
                 e.Dispose();
             }
         }
+
+        public bool Disposed { get; private set; }
     }
 }

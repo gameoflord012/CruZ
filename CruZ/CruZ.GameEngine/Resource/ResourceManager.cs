@@ -1,15 +1,16 @@
-﻿using CruZ.GameEngine.Serialization;
+﻿using AsepriteDotNet.Aseprite;
+
+using CruZ.GameEngine.Serialization;
 
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Content.Pipeline;
+using Microsoft.Xna.Framework.Graphics;
 
+using MonoGame.Extended.BitmapFonts;
 using MonoGame.Framework.Content.Pipeline.Builder;
-
-using SharpDX.MediaFoundation;
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -105,7 +106,18 @@ namespace CruZ.GameEngine.Resource
 
         private static readonly string[] ContentSupportedExtensions =
         [
-            ".jpg", ".png", ".spritefont", ".fx", ".aseprite", ".fnt"
+            ".jpg", ".png", // texture file
+            ".fx", 
+            ".aseprite", 
+            ".fnt"
+        ];
+
+        private static readonly Type[] ContentSupportedTypes =
+        [
+            typeof(Texture2D),
+            typeof(AsepriteFile),
+            typeof(Effect),
+            typeof(BitmapFont)
         ];
 
         private static readonly string[] ResourceSupportedExtensions =
@@ -217,7 +229,7 @@ namespace CruZ.GameEngine.Resource
 
             object? resInstance;
 
-            if (ContentSupportedExtensions.Contains(Path.GetExtension(resourcePath)))
+            if (ContentSupportedTypes.Contains(ty))
             {
                 resInstance = manager.LoadContentNonGeneric(resourcePath, ty);
             }

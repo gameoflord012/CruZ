@@ -1,14 +1,14 @@
 ﻿namespace CruZ.GameEngine.GameSystem.Scene
 {
     [System.AttributeUsage(System.AttributeTargets.Method, Inherited = false, AllowMultiple = false)]
-    public class SceneAssetMethodAttribute
+    public class SceneFactoryMethodAttribute
         : System.Attribute
     {
-        public SceneAssetMethodAttribute(string assetMethodId = "")
+        public SceneFactoryMethodAttribute(string Id = "")
         {
-            AssetMethodId = assetMethodId;
+            this.Id = Id;
         }
 
-        public string AssetMethodId { get; }
+        public string Id { get; }
     }
 }

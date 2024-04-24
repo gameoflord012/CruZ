@@ -5,8 +5,8 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using CruZ.GameEngine.GameSystem;
-using CruZ.GameEngine.Service;
 using CruZ.GameEngine.Input;
+using CruZ.GameEngine.Utility;
 
 namespace CruZ.GameEngine
 {

@@ -26,24 +26,35 @@ namespace CruZ.GameEngine.GameSystem.Scene
             GameApplication.Exiting += Game_Exiting;
         }
 
-        public void AddEntity(TransformEntity e)
+        private void AddEntity(TransformEntity e)
         {
             if (_entities.Contains(e)) return;
             _entities.Add(e);
+
             e.IsActive = _isActive;
+            e.RemovedFromWorld += Entity_RemovedFromWorld;
 
             EntityAdded?.Invoke(e);
         }
 
-        public void RemoveEntity(TransformEntity e)
+
+        public void RemoveAndDisposeEntity(TransformEntity e)
         {
             if (!_entities.Contains(e))
                 throw new ArgumentException($"Entity \"{e}\" not in scene {this}");
 
             _entities.Remove(e);
-            e.IsActive = _isActive;
+
+            e.IsActive = false;
+            e.RemovedFromWorld -= Entity_RemovedFromWorld;
+            e.Dispose();
 
             EntityRemoved?.Invoke(e);
+        }
+
+        private void Entity_RemovedFromWorld(TransformEntity removedEntity)
+        {
+            RemoveAndDisposeEntity(removedEntity);
         }
 
         public void SetActive(bool isActive)

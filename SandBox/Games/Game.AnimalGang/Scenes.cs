@@ -9,10 +9,10 @@ using Game.AnimalGang.DesktopGL;
 
 namespace AnimalGang
 {
-    [SceneAssetClass("Scenes")]
+    [SceneFactoryClass("Scenes")]
     public class Scenes
     {
-        [SceneAssetMethod]
+        [SceneFactoryMethod]
         public static GameScene Scene1()
         {
             var scene = new GameScene();
@@ -54,7 +54,7 @@ namespace AnimalGang
             return scene;
         }
 
-        [SceneAssetMethod]
+        [SceneFactoryMethod]
         public static GameScene Scene2()
         {
             var scene = new GameScene();
@@ -117,7 +117,7 @@ namespace AnimalGang
             return scene;
         }
 
-        [SceneAssetMethod]
+        [SceneFactoryMethod]
         public static GameScene FlameScene()
         {
             var scene = new GameScene();
@@ -128,7 +128,7 @@ namespace AnimalGang
             return scene;
         }
 
-        [SceneAssetMethod]
+        [SceneFactoryMethod]
         public static GameScene UIScene()
         {
             var btn = new ButtonControl();
@@ -145,7 +145,7 @@ namespace AnimalGang
             return scene;
         }
 
-        [SceneAssetMethod]
+        [SceneFactoryMethod]
         public static GameScene AsepriteScenes()
         {
             var scene = new GameScene();

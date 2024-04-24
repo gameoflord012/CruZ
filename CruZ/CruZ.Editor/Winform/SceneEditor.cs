@@ -106,8 +106,8 @@ namespace CruZ.Editor
                 if (scene_TreeView.Tag != null)
                 {
                     var oldScene = (GameScene)scene_TreeView.Tag;
-                    oldScene.EntityAdded -= CurrentScene_EntityAdded;
-                    oldScene.EntityRemoved -= CurrentScene_EntityRemoved;
+                    oldScene.EntityAdded -= Scene_EntityAdded;
+                    oldScene.EntityRemoved -= Scene_EntityRemoved;
                 }
 
                 //
@@ -120,8 +120,8 @@ namespace CruZ.Editor
 
                 if (currentScene == null) return;
 
-                currentScene.EntityAdded += CurrentScene_EntityAdded;
-                currentScene.EntityRemoved += CurrentScene_EntityRemoved;
+                currentScene.EntityAdded += Scene_EntityAdded;
+                currentScene.EntityRemoved += Scene_EntityRemoved;
 
                 //
                 // init tree root
@@ -140,12 +140,12 @@ namespace CruZ.Editor
             });
         }
 
-        void CurrentScene_EntityAdded(TransformEntity entity)
+        void Scene_EntityAdded(TransformEntity entity)
         {
-            AddSceneNode(entity);
+            this.SafeInvoke(() => AddSceneNode(entity));
         }
 
-        void CurrentScene_EntityRemoved(TransformEntity entity)
+        void Scene_EntityRemoved(TransformEntity entity)
         {
             RemoveSceneNode(entity);
         }
@@ -179,8 +179,12 @@ namespace CruZ.Editor
 
         private void RemoveSceneNode(TransformEntity e)
         {
-            this.SafeInvoke(_entityToNode[e].Remove);
-            _entityToNode.Remove(e);
+            this.SafeInvoke(() =>
+            {
+                _entityToNode[e].Remove();
+                _entityToNode.Remove(e);
+            });
+
         }
 
         TreeNode? _sceneTreeRoot;
@@ -191,9 +195,9 @@ namespace CruZ.Editor
             get => _editor ?? throw new NullReferenceException();
             set
             {
-                if(_editor == value) return;
+                if (_editor == value) return;
 
-                if(_editor != null)
+                if (_editor != null)
                 {
                     _editor.SelectingEntityChanged -= EditorApp_SelectedEntityChanged;
                     _editor.CurrentSceneChanged -= EditorApp_CurrentSceneChanged;

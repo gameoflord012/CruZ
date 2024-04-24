@@ -19,7 +19,7 @@ namespace CruZ.GameEngine.GameSystem.Render
             _perlinNoise = FunMath.GenPerlinNoise(_noiseW, _noiseH);
         }
 
-        public override void Render(RendererEventArgs e)
+        public override void Render(RenderSystemEventArgs e)
         {
             var miliSecs = (int)e.GameTime.TotalGameTime.TotalMilliseconds;
             var rand = _perlinNoise[miliSecs % _noiseW, miliSecs % _noiseH];

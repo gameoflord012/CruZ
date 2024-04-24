@@ -23,7 +23,7 @@ namespace CruZ.GameEngine.GameSystem.Animation
 
         public void LoadAnimationFile(string asepriteFile)
         {
-             LoadAsepriteFile(_resource.Load<AsepriteFile>(asepriteFile, out _asepriteResourceInfo));
+            LoadAsepriteFile(_resource.Load<AsepriteFile>(asepriteFile, out _asepriteResourceInfo));
         }
 
         private void LoadAsepriteFile(AsepriteFile file)
@@ -36,7 +36,12 @@ namespace CruZ.GameEngine.GameSystem.Animation
             foreach (var tag in file.Tags)
             {
                 var animation = spriteSheet.CreateAnimatedSprite(tag.Name);
-                _animations.Add(tag.Name, animation);
+
+                // Setting
+                animation.OriginX = animation.TextureRegion.Bounds.Width / 2f;
+                animation.OriginY = animation.TextureRegion.Bounds.Height / 2f;
+
+                _animations.Add(tag.Name.ToLower(), animation);
             }
         }
 
@@ -47,15 +52,25 @@ namespace CruZ.GameEngine.GameSystem.Animation
 
         public void PlayAnimation(string animationTag)
         {
+            animationTag = animationTag.ToLower();
+
+            if (_currentAnimation != null && animationTag == _currentAnimation.Name)
+                return;
+
             _currentAnimation?.Stop();
             _currentAnimation = GetAnimation(animationTag);
+            _currentAnimationTag = animationTag;
             _currentAnimation.Play();
         }
 
         private AnimatedSprite GetAnimation(string tag)
         {
-            if(!_animations.ContainsKey(tag)) throw new ArgumentException();
-            return _animations[tag];
+            tag = tag.ToLower();
+
+            if (!_animations.TryGetValue(tag, out AnimatedSprite? value)) 
+                throw new ArgumentException(tag);
+
+            return value;
         }
 
         internal void Update(GameTime gameTime)
@@ -63,28 +78,35 @@ namespace CruZ.GameEngine.GameSystem.Animation
             _currentAnimation?.Update(gameTime);
         }
 
-        private void SpriteRenderer_DrawLoopBegin(object? sender, DrawArgs e)
+        private void SpriteRenderer_FetchingDrawRequests(FetchingDrawRequestsEventArgs args)
         {
-            if(_currentAnimation == null) return;
-
-            e.Apply(_currentAnimation);
-            //e.Texture = _currentAnimation.TextureRegion.Texture;
-            //e.SourceRectangle = _currentAnimation.TextureRegion.Bounds;
+            if (_currentAnimation == null) return;
+            var defaultArgs = args.DefaultDrawArgs;
+            defaultArgs.Apply(_currentAnimation);
+            defaultArgs.Apply(AttachedEntity);
+            args.DrawRequests.Add(defaultArgs);
         }
 
-        protected override void OnComponentChanged(ComponentCollection comps)
+        public SpriteRendererComponent Renderer
         {
-            if (_renderer != null)
-                _renderer.DrawLoopBegin -= SpriteRenderer_DrawLoopBegin;
+            get => _renderer ?? throw new NullReferenceException();
+            set
+            {
+                if (_renderer != null)
+                    _renderer.DrawRequestsFetching -= SpriteRenderer_FetchingDrawRequests;
 
-            comps.TryGetComponent(out _renderer);
+                _renderer = value;
 
-            if (_renderer != null)
-                _renderer.DrawLoopBegin += SpriteRenderer_DrawLoopBegin;
+                if (_renderer != null)
+                    _renderer.DrawRequestsFetching += SpriteRenderer_FetchingDrawRequests;
+            }
         }
+
+        SpriteRendererComponent? _renderer;
 
         AnimatedSprite? _currentAnimation;
-        SpriteRendererComponent? _renderer;
+        string _currentAnimationTag;
+
         ResourceManager _resource;
         Dictionary<string, AnimatedSprite> _animations = [];
         AsepriteFile _file;

@@ -69,6 +69,8 @@ namespace CruZ.GameEngine.GameSystem
             Trace.Assert(_entitiesToAdd.Intersect(_entitiesToRemove).Count() == 0);
             _entities.ExceptWith(_entitiesToRemove);
             _entities.UnionWith(_entitiesToAdd);
+            _entitiesToRemove.Clear();
+            _entitiesToAdd.Clear();
         }
 
         public void Dispose()

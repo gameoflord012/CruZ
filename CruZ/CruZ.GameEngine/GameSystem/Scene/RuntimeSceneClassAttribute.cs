@@ -1,14 +1,14 @@
 ﻿namespace CruZ.GameEngine.GameSystem.Scene
 {
     [System.AttributeUsage(System.AttributeTargets.Class, Inherited = false, AllowMultiple = false)]
-    public class SceneAssetClassAttribute
+    public class SceneFactoryClassAttribute
         : System.Attribute
     {
-        public SceneAssetClassAttribute(string assetClassId = "")
+        public SceneFactoryClassAttribute(string Id = "")
         {
-            AssetClassId = assetClassId;
+            this.Id = Id;
         }
 
-        public string AssetClassId { get; }
+        public string Id { get; }
     }
 }
