@@ -21,22 +21,26 @@ namespace CruZ.Editor.UI
             _resource = GameContext.GameResource;
             _font = _resource.Load<BitmapFont>(".resourceref\\Internal\\Fonts\\Fixedsys.fnt");
             _lineSpacing = _font.LineHeight * _fontScale;
-            _curRow = 0;
         }
 
         protected override void OnDraw(UIInfo info)
         {
             _sb = info.SpriteBatch;
-            _curRow = 0;
-            DrawString(LogManager.GetMsgFormmated("Fps"));
-            _curRow++;
-            DrawString(LogManager.GetMsgFormmated("Scene"));
-            _curRow++;
-            DrawString(LogManager.GetMsgFormmated("CursorCoord"));
-            _curRow++;
-            DrawString(LogManager.GetMsgFormmated("CameraWorldCoord"));
-            _curRow++;
-            DrawString(LogManager.GetMsgFormmated("Default"));
+            _curRow = -1;
+
+            DrawLogMsg("Fps");
+            DrawLogMsg("Scene");
+            DrawLogMsg("CursorCoord");
+            DrawLogMsg("CameraWorldCoord");
+        }
+
+        private void DrawLogMsg(string key)
+        {
+            if(!string.IsNullOrEmpty(LogManager.GetMsg(key)))
+            {
+                _curRow++;
+                DrawString(LogManager.GetMsgFormmated(key));
+            }
         }
 
         private void DrawString(string s)

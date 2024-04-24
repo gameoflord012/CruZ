@@ -57,7 +57,7 @@ namespace CruZ.GameEngine.GameSystem.Animation
             LoadAsepriteFile(_resource.Load<AsepriteFile>(_asepriteResourceInfo));
         }
 
-        public void PlayAnimation(string animationTag)
+        public void PlayAnimation(string animationTag, int loopCount = 0)
         {
             animationTag = animationTag.ToLower();
 
@@ -66,7 +66,7 @@ namespace CruZ.GameEngine.GameSystem.Animation
 
             _currentAnimation?.Stop();
             _currentAnimation = GetAnimation(animationTag);
-            _currentAnimation.Play();
+            _currentAnimation.Play(loopCount);
         }
 
         private AnimatedSprite GetAnimation(string tag)
@@ -121,9 +121,15 @@ namespace CruZ.GameEngine.GameSystem.Animation
             }
         }
 
-        SpriteRendererComponent? _renderer;
+        public AnimatedSprite? CurrentAnimation
+        {
+            get => _currentAnimation; 
+            private set => _currentAnimation = value;
+        }
 
         AnimatedSprite? _currentAnimation;
+        
+        SpriteRendererComponent? _renderer;
 
         ResourceManager _resource;
         Dictionary<string, AnimatedSprite> _animations = [];

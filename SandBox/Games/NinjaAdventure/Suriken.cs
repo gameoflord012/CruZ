@@ -38,6 +38,9 @@ namespace NinjaAdventure
         {
             Entity.Transform.Rotation += _rotationSpeed * gameTime.GetElapsedSeconds();
             Entity.Transform.Position += _direction * gameTime.GetElapsedSeconds() * _moveSpeed;
+
+            _disappearTime -= gameTime.GetElapsedSeconds();
+            if(_disappearTime < 0) MarkUseless();
         }
 
         private void Renderer_DrawRequestsFetching(FetchingDrawRequestsEventArgs args)
@@ -54,17 +57,24 @@ namespace NinjaAdventure
             else
             {
                 //Debugger.Break();
-                BecomeUseless?.Invoke();
+                MarkUseless();
             }
+        }
+
+        private void MarkUseless()
+        {
+            BecomeUseless?.Invoke();
         }
 
         public TransformEntity Entity;
 
         Texture2D _surikenTex;
         SpriteRendererComponent _surikenRenderer;
+
         Vector2 _direction;
         float _moveSpeed = 12f;
         float _rotationSpeed = 20f;
+        float _disappearTime = 5f; // seconds
 
         public event Action? BecomeUseless;
 

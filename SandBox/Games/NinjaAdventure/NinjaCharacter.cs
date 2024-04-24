@@ -18,13 +18,13 @@ namespace NinjaAdventure
             _gameScene = scene;
             Entity = scene.CreateEntity("Ninja");
 
-            _animation = new AnimationComponent();
+            _animationComponent = new AnimationComponent();
             {
-                _animation.Renderer = spriteRenderer;
-                _animation.FitToWorldUnit = true;
-                _animation.LoadAnimationFile("art\\NinjaAnim.aseprite");
+                _animationComponent.Renderer = spriteRenderer;
+                _animationComponent.FitToWorldUnit = true;
+                _animationComponent.LoadAnimationFile("art\\NinjaAnim.aseprite");
             }
-            Entity.AddComponent(_animation);
+            Entity.AddComponent(_animationComponent);
 
             _scriptComponent = new ScriptComponent();
             {
@@ -46,44 +46,57 @@ namespace NinjaAdventure
             //
             // movement update
             //
-            Entity.Transform.Position += _inputMovement * gameTime.GetElapsedSeconds() * _speed;
-            if (_inputMovement.LengthSquared() > 0.01f) _facingDirection = _inputMovement;
+            if(!_isAttackAnimationPlaying) // don't move when attacking
+                Entity.Transform.Position += _inputMovement * gameTime.GetElapsedSeconds() * _speed;
 
             //
             // spawning suriken
             //
             if (_inputFireSuriken)
             {
-                var suriken = new Suriken(_gameScene, _surikenRenderer, Entity.Position, _facingDirection);
+                var suriken = new Suriken(_gameScene, _surikenRenderer, Entity.Position, _inputMovement);
                 suriken.BecomeUseless += suriken.Dispose;
-                _inputFireSuriken = false;
             }
 
             //
             // animations
             //
-            string movingAnimation = GetMovingAnimationName();
-            _animation.PlayAnimation(movingAnimation);
+            string facingString = GetFacingDirectionString();
+            
+            if(_inputFireSuriken)
+            {
+                _animationComponent.PlayAnimation($"attack-{facingString}", 1);
+                _isAttackAnimationPlaying = true;
+                _animationComponent.CurrentAnimation!.OnAnimationEnd = 
+                    (animation) => _isAttackAnimationPlaying = false;
+            }
+            
+            if(!_isAttackAnimationPlaying) // we don't want moving animation playing when player attacking
+            {
+                _animationComponent.PlayAnimation($"walk-{facingString}");
+            }
+
+            if (_inputFireSuriken) _inputFireSuriken = false;
         }
 
-        private string GetMovingAnimationName()
+        private string GetFacingDirectionString()
         {
-            if (Vector2.Dot(_facingDirection, Vector2.UnitX) == 1) // facing right
+            if (Vector2.Dot(_inputMovement, Vector2.UnitX) == 1) // facing right
             {
-                return "walk-right";
+                return "right";
             }
 
-            if (Vector2.Dot(_facingDirection, Vector2.UnitX) == -1) // facing left
+            if (Vector2.Dot(_inputMovement, Vector2.UnitX) == -1) // facing left
             {
-                return "walk-left";
+                return "left";
             }
 
-            if (Vector2.Dot(_facingDirection, Vector2.UnitY) == -1) // facing back
+            if (Vector2.Dot(_inputMovement, Vector2.UnitY) == -1) // facing back
             {
-                return "walk-back";
+                return "back";
             }
 
-            return "walk-front";
+            return "front";
         }
 
         private void Input_KeyStateChanged(IInputInfo inputInfo)
@@ -117,12 +130,13 @@ namespace NinjaAdventure
         List<Suriken> surikens = [];
 
         Vector2 _inputMovement;
-        Vector2 _facingDirection;
+
         bool _inputFireSuriken;
+        bool _isAttackAnimationPlaying;
 
         float _speed = 4;
 
-        AnimationComponent _animation;
+        AnimationComponent _animationComponent;
         ScriptComponent _scriptComponent;
         SpriteRendererComponent _surikenRenderer;
 
