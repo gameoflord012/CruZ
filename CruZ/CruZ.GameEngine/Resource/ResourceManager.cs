@@ -270,7 +270,7 @@ namespace CruZ.GameEngine.Resource
             return loaded;
         }
 
-        private string ResolveAssetName(string assetName, Type assetType)
+        private string ResolveAssetName(string assetName, Type assetType, ContentManager content)
         {
             assetName = GetFormattedResourcePath(assetName);
 
@@ -289,7 +289,7 @@ namespace CruZ.GameEngine.Resource
             var resolved = _guidManager.GetGuid(assetName).ToString();
             BuildContent(assetType, assetName, resolved); // to make sure it is built to the .xnb
 
-            return resolved;
+            return Path.Combine(content.RootDirectory, resolved);
         }
 
         private void BuildContent(Type ty, string resourcePath, string contentFileName)
