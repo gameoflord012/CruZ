@@ -13,7 +13,7 @@ namespace CruZ.GameEngine.GameSystem
 {
     internal class ECSManager : IDisposable
     {
-        internal static event Action<ECSManager>? InstanceChanged;
+        internal static event Action<ECSManager?, ECSManager>? InstanceChanged;
 
         private ECSManager()
         {
@@ -49,9 +49,10 @@ namespace CruZ.GameEngine.GameSystem
             if (_instance != null && !_instance._isDisposed)
                 throw new InvalidOperationException("Require dispose");
 
-            _instance = new ECSManager();
-            InstanceChanged?.Invoke(_instance);
-            return _instance;
+            var newInstance = new ECSManager();
+
+            InstanceChanged?.Invoke(_instance, newInstance);
+            return _instance = newInstance;
         }
 
         private static ECSManager? _instance;

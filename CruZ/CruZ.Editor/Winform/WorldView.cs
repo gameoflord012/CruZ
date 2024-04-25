@@ -74,9 +74,9 @@ namespace CruZ.Editor
         //    return (TransformEntity)world_TreeView.SelectedNode.Tag;
         //}
 
-        private void ECSManager_InstanceChanged(ECSManager ecs)
+        private void ECSManager_InstanceChanged(ECSManager? oldECS, ECSManager ecs)
         {
-            InitTree(ecs.World);
+            InitTree(oldECS?.World, ecs.World);
         }
 
         private void EditorApp_SelectedEntityChanged(TransformEntity? e)
@@ -92,7 +92,7 @@ namespace CruZ.Editor
             });
         }
 
-        private void InitTree(World world)
+        private void InitTree(World? oldWorld, World world)
         {
             world_TreeView.SafeInvoke(delegate
             {
@@ -101,9 +101,8 @@ namespace CruZ.Editor
                 //
                 // unregister event from old instnace
                 //
-                if (world_TreeView.Tag != null)
+                if (oldWorld != null)
                 {
-                    var oldWorld = (World)world_TreeView.Tag;
                     oldWorld.EntityAdded -= OnEntityAdded;
                     oldWorld.EntityRemoved -= OnEntityRemoved;
                 }
@@ -113,7 +112,6 @@ namespace CruZ.Editor
                 world_TreeView.Tag = world;
                 world_TreeView.Nodes.Clear();
                 _entityToNode.Clear();
-                _treeRoot = null;
                 //
                 // init data with new World
                 //
@@ -122,7 +120,6 @@ namespace CruZ.Editor
                 //
                 // init tree root
                 //
-                _treeRoot = world_TreeView.Nodes.Add("ABOVE EVERYTHINGS");
                 //_treeRoot.ContextMenuStrip = world_ContextMenuStrip;
                 //
                 // update new added entity, make sure parent alway get added first
@@ -152,26 +149,19 @@ namespace CruZ.Editor
         {
             if (_entityToNode.ContainsKey(e)) return;
 
-            var parentNode = _treeRoot;
+            TreeNode entityNode;
 
             if (e.Parent == null)
             {
-                // ignore
-            }
-            else if (_entityToNode.ContainsKey(e.Parent))
-            {
-                parentNode = _entityToNode[e.Parent];
+                entityNode = world_TreeView.Nodes.Add(e.ToString());
             }
             else
             {
-                throw new InvalidOperationException("Parent node have to be added before children");
+                var parentNode = _entityToNode[e.Parent];
+                entityNode = parentNode.Nodes.Add(e.ToString());
             }
 
-
-            var entityNode = parentNode.Nodes.Add(e.ToString());
-            //entityNode.ContextMenuStrip = entity_ContextMenuStrip;
             entityNode.Tag = e;
-
             _entityToNode[e] = entityNode;
         }
 
@@ -185,7 +175,6 @@ namespace CruZ.Editor
 
         }
 
-        TreeNode? _treeRoot;
         Dictionary<TransformEntity, TreeNode> _entityToNode = [];
 
         internal GameEditor Editor

@@ -44,8 +44,30 @@ namespace CruZ.Editor.Controls
             InputManager.MouseStateChanged += Input_MouseStateChanged;
             InputManager.KeyStateChanged += Input_KeyStateChanged;
             UIManager.MouseClick += UI_MouseClick;
+
+            ECSManager.InstanceChanged += ECSManager_InstanceChanged;
         }
-        
+
+        private void RegisterGameAppEvents()
+        {
+            GameApplication.Initialized += Game_Intialized;
+            GameApplication.Exiting += Game_Exiting;
+            _gameApp!.Window.AllowUserResizing = true;
+            //_gameApp.BeforeDraw += GameApp_EarlyDraw;
+        }
+
+        private void ECSManager_InstanceChanged(ECSManager? oldECS, ECSManager newECS)
+        {
+            if(oldECS != null)
+            {
+                oldECS.World.EntityAdded -= World_EntityAdded;
+                oldECS.World.EntityRemoved -= World_EntityRemoved;
+            }
+
+            newECS.World.EntityAdded += World_EntityAdded;
+            newECS.World.EntityRemoved += World_EntityRemoved;
+        }
+
         /// <summary>
         /// Initialize editor UIControls and reading cache
         /// </summary>
@@ -79,6 +101,8 @@ namespace CruZ.Editor.Controls
 
         public void LoadSceneFromFile(string file)
         {
+            throw new NotImplementedException();
+
             WaitGameInitialized();
 
             var scene = _userResource.Load<GameScene>(file);
@@ -106,67 +130,79 @@ namespace CruZ.Editor.Controls
         {
             if (scene == _currentScene) return;
 
-            UnloadCurrentScene();
-
             _currentScene = scene;
-
-            _currentScene.EntityAdded += Scene_EntityAdded;
-            _currentScene.EntityRemoved += Scene_EntityRemoved;
-            _currentScene.SetActive(true);
-
-            OnSceneLoaded();
             CurrentSceneChanged?.Invoke(_currentScene);
         }
-
-        public void UnloadCurrentScene()
+        
+        private void WaitGameInitialized()
         {
-            OnSceneUnloading();
+            if (_gameAppThread != null && _gameAppThread.IsAlive) return;
 
-            if (_currentScene == null) return;
+            _appInitalized_Reset.Reset();
 
-            _currentScene.EntityAdded -= Scene_EntityAdded;
-            _currentScene.EntityRemoved -= Scene_EntityRemoved;
+            _gameAppThread = new Thread(StartNewAppSession);
+            _gameAppThread.Name = "Editor Session";
+            _gameAppThread.Start();
 
-            _currentScene.SetActive(false);
-            _currentScene.Dispose();
-            _currentScene = null;
-
-            CurrentSceneChanged?.Invoke(null);
+            _appInitalized_Reset.WaitOne(); // wait until game initialize
         }
+
+        private void StartNewAppSession()
+        {
+            CleanAppSession();
+
+            _gameApp = GameApplication.CreateContext(new GameWrapper());
+            RegisterGameAppEvents();
+
+            _gameApp.Run();
+        }
+
+        //public void UnloadCurrentScene()
+        //{
+        //    _currentScene?.Dispose();
+
+        //    if (_currentScene == null) return;
+        //    _currentScene.Dispose();
+        //    _currentScene = null;
+
+        //    CurrentSceneChanged?.Invoke(null);
+        //}
 
         /// <summary>
         /// Call before unloading scene, _currentScene is now still the old scene
         /// </summary>
-        private void OnSceneUnloading()
-        {
-            SelectedEntity = null;
+        //private void OnSceneUnloading()
+        //{
+        //    throw new NotImplementedException();
 
-            if(_currentScene != null) 
-                EditorContext.UserResource.TrySave(_currentScene);
+        //    SelectedEntity = null;
 
-            // Clear entity controls which belong to unloading scene
-            foreach(var entity in _fromEntityToControl.Keys)
-            {
-                RemoveEntity(entity);
-            }
-        }
+        //    if(_currentScene != null) 
+        //        EditorContext.UserResource.TrySave(_currentScene);
 
-        private void OnSceneLoaded()
-        {
-            LogManager.SetMsg(_currentScene == null ? "<Empty>" : _currentScene.ToString(), "Scene");
+        //    // Clear entity controls which belong to unloading scene
+        //    foreach(var entity in _fromEntityToControl.Keys)
+        //    {
+        //        RemoveEntity(entity);
+        //    }
+        //}
 
-            foreach (var entity in _currentScene!.Entities)
-            {
-                AddEntityControl(entity);
-            }
-        }
+        //private void OnSceneLoaded()
+        //{
+        //    //LogManager.SetMsg(_currentScene == null ? "<Empty>" : _currentScene.ToString(), "Scene");
 
-        private void Scene_EntityAdded(TransformEntity e)
+        //    //foreach (var entity in _currentScene!.Entities)
+        //    //{
+        //    //    AddEntityControl(entity);
+        //    //}
+        //}
+
+        private void World_EntityAdded(TransformEntity e)
         {
             AddEntityControl(e);
         }
 
-        private void Scene_EntityRemoved(TransformEntity e)
+        private void World_EntityRemoved(TransformEntity e)
         {
             RemoveEntityControl(e);
         }
@@ -197,7 +233,21 @@ namespace CruZ.Editor.Controls
             eControl.AttachEntity = null;
             eControl.CanInteract = false;
             _entityControlPool.Push(eControl);
-        } 
+        }
+
+        private void InitUIControls()
+        {
+            // orders of ui gettin added is effect which is drawing first
+            _editorUIBranch = UIManager.Root.AddBranch("Editor");
+
+            _boardGrid = new BoardGrid();
+            _editorUIBranch.AddChild(_boardGrid);
+
+            _infoWindow = new LoggingWindow();
+            _editorUIBranch.AddChild(_infoWindow);
+
+            _entityControlPool = [];
+        }
 
         /// <summary>
         /// Should be called from winform thread
@@ -231,8 +281,9 @@ namespace CruZ.Editor.Controls
 
         public void RemoveEntity(TransformEntity e)
         {
-            _currentScene.RemoveAndDisposeEntity(e);
-            e.Dispose();
+            throw new NotImplementedException();
+            //_currentScene.RemoveAndDisposeEntity(e);
+            //e.Dispose();
         }
 
         private void OnApplicationBeforeClosing()
@@ -248,23 +299,8 @@ namespace CruZ.Editor.Controls
             _appInitalized_Reset.Set();
         }
 
-        private void InitUIControls()
-        {
-            // orders of ui gettin added is effect which is drawing first
-            _editorUIBranch = UIManager.Root.AddBranch("Editor");
-
-            _boardGrid = new BoardGrid();
-            _editorUIBranch.AddChild(_boardGrid);
-
-            _infoWindow = new LoggingWindow();
-            _editorUIBranch.AddChild(_infoWindow);
-
-            _entityControlPool = [];
-        }
-
         private void Game_Exiting()
         {
-            UnloadCurrentScene();
             _editorForm.SafeInvoke(CleanAppSession);
         }
 
@@ -360,37 +396,6 @@ namespace CruZ.Editor.Controls
 
             idx = (idx + 1) % eControl.Count();
             SelectedEntity = eControl[idx].AttachEntity;
-        }
-
-        private void WaitGameInitialized()
-        {
-            if (_gameAppThread != null && _gameAppThread.IsAlive) return;
-
-            _appInitalized_Reset.Reset();
-
-            _gameAppThread = new Thread(StartNewAppSession);
-            _gameAppThread.Name = "Editor Session";
-            _gameAppThread.Start();
-
-            _appInitalized_Reset.WaitOne(); // wait until game initialize
-        }
-
-        private void StartNewAppSession()
-        {
-            CleanAppSession();
-
-            _gameApp = GameApplication.CreateContext(new GameWrapper());
-            RegisterGameAppEvents();
-
-            _gameApp.Run();
-        }
-
-        private void RegisterGameAppEvents()
-        {
-            GameApplication.Initialized += Game_Intialized;
-            GameApplication.Exiting += Game_Exiting;
-            _gameApp.Window.AllowUserResizing = true;
-            //_gameApp.BeforeDraw += GameApp_EarlyDraw;
         }
 
         #region Private_Variables

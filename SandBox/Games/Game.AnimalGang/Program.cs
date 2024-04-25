@@ -1,8 +1,5 @@
-﻿using AnimalGang;
-
-using CruZ.GameEngine;
-using CruZ.GameEngine;
-using CruZ.GameEngine.GameSystem;
+﻿using CruZ.GameEngine;
+using System;
 
 namespace Game.AnimalGang
 {
@@ -18,9 +15,10 @@ namespace Game.AnimalGang
 
         private static void GameApplication_Initialized()
         {
-            GameContext.GameResourceDir = "D:\\monogame-projects\\CruZ_GameEngine\\SandBox\\Games\\Game.AnimalGang\\Resource\\";
-            Camera.Main.Zoom = 0.25f;
-            Scenes.FlameScene().SetActive(true);
+            throw new NotImplementedException();
+            //GameContext.GameResourceDir = "D:\\monogame-projects\\CruZ_GameEngine\\SandBox\\Games\\Game.AnimalGang\\Resource\\";
+            //Camera.Main.Zoom = 0.25f;
+            //Scenes.FlameScene().SetActive(true);
         }
     }
 }

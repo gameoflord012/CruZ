@@ -1,5 +1,4 @@
 ﻿using CruZ.GameEngine;
-using CruZ.GameEngine;
 using CruZ.GameEngine.GameSystem.Render;
 using CruZ.GameEngine.GameSystem.Render.Filters;
 using CruZ.GameEngine.Utility;

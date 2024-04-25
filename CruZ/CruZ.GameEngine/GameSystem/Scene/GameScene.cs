@@ -1,7 +1,4 @@
-﻿using CruZ.GameEngine;
-using CruZ.GameEngine.Serialization;
-using CruZ.GameEngine.GameSystem;
-using CruZ.GameEngine.Resource;
+﻿using CruZ.GameEngine.Resource;
 
 using System;
 using System.Collections.Generic;
@@ -15,7 +12,18 @@ namespace CruZ.GameEngine.GameSystem.Scene
         public event Action<TransformEntity>? EntityAdded;
         public event Action<TransformEntity>? EntityRemoved;
 
-        public string Name = ""; // temporary use name as runtime resource path
+        public string Name 
+        {
+            get => _name;
+            set
+            {
+                if(_name == value) return;
+                SceneRoot.Name = value;
+                _name = value;
+            }
+        }
+
+        string _name = "Noname Scene";
 
         [JsonIgnore]
         public IImmutableList<TransformEntity> Entities { get => _entities.ToImmutableList(); }
@@ -24,6 +32,8 @@ namespace CruZ.GameEngine.GameSystem.Scene
         public GameScene()
         {
             GameApplication.Exiting += Game_Exiting;
+            SceneRoot = ECSManager.CreateTransformEntity();
+            SceneRoot.IsActive = false;
         }
 
         private void AddEntity(TransformEntity e)
@@ -31,14 +41,13 @@ namespace CruZ.GameEngine.GameSystem.Scene
             if (_entities.Contains(e)) return;
             _entities.Add(e);
 
-            e.IsActive = _isActive;
+            e.IsActive = true;
             e.RemovedFromWorld += Entity_RemovedFromWorld;
 
             EntityAdded?.Invoke(e);
         }
 
-
-        public void RemoveAndDisposeEntity(TransformEntity e)
+        private void Entity_RemovedFromWorld(TransformEntity e)
         {
             if (!_entities.Contains(e))
                 throw new ArgumentException($"Entity \"{e}\" not in scene {this}");
@@ -52,28 +61,12 @@ namespace CruZ.GameEngine.GameSystem.Scene
             EntityRemoved?.Invoke(e);
         }
 
-        private void Entity_RemovedFromWorld(TransformEntity removedEntity)
-        {
-            RemoveAndDisposeEntity(removedEntity);
-        }
-
-        public void SetActive(bool isActive)
-        {
-            if (_isActive == isActive) return;
-            _isActive = isActive;
-
-            foreach (var e in _entities)
-            {
-                e.IsActive = _isActive;
-            }
-        }
-
-        public TransformEntity CreateEntity(string? name = null, TransformEntity? parent = null)
+        public TransformEntity CreateEntity(string? name = null)
         {
             var e = ECSManager.CreateTransformEntity();
 
             if (!string.IsNullOrEmpty(name)) e.Name = name;
-            e.Parent = parent;
+            e.Parent = SceneRoot;
 
             AddEntity(e);
 
@@ -95,7 +88,7 @@ namespace CruZ.GameEngine.GameSystem.Scene
             }
         }
 
-        bool _isActive = false;
+        TransformEntity SceneRoot;
 
         List<TransformEntity> _entities = [];
         [JsonInclude]

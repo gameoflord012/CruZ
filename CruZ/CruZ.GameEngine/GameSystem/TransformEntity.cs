@@ -173,9 +173,9 @@ namespace CruZ.GameEngine.GameSystem
 
             RemoveFromWorld();
 
-            foreach (var e in GetAllComponents())
+            foreach (var component in GetAllComponents())
             {
-                e.Dispose();
+                component.Dispose();
             }
         }
 

@@ -70,7 +70,6 @@ namespace CruZ.GameEngine.GameSystem
 
         private void ProcessEntitiesChanges()
         {
-            Trace.Assert(_entitiesToAdd.Intersect(_entitiesToRemove).Count() == 0);
             //
             // update entities
             //
