@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
@@ -11,6 +12,9 @@ namespace CruZ.GameEngine.GameSystem
 {
     internal class World : IDisposable
     {
+        public event Action<TransformEntity>? EntityAdded;
+        public event Action<TransformEntity>? EntityRemoved;
+
         public World() { }
 
         public World AddSystem(EntitySystem system)
@@ -67,8 +71,26 @@ namespace CruZ.GameEngine.GameSystem
         private void ProcessEntitiesChanges()
         {
             Trace.Assert(_entitiesToAdd.Intersect(_entitiesToRemove).Count() == 0);
+            //
+            // update entities
+            //
             _entities.ExceptWith(_entitiesToRemove);
             _entities.UnionWith(_entitiesToAdd);
+            //
+            // fire events
+            //
+            foreach (var remove in _entitiesToRemove)
+            {
+                EntityRemoved?.Invoke(remove);
+            }
+
+            foreach (var add in _entitiesToAdd)
+            {
+                EntityAdded?.Invoke(add);
+            }
+            //
+            // clean up
+            //
             _entitiesToRemove.Clear();
             _entitiesToAdd.Clear();
         }
@@ -79,7 +101,7 @@ namespace CruZ.GameEngine.GameSystem
             foreach (var e in Entities) e.Dispose();
         }
 
-        public TransformEntity[] Entities { get => _entities.ToArray(); }
+        public IImmutableList<TransformEntity> Entities { get => _entities.ToImmutableList(); }
 
         List<EntitySystem> _systems = [];
         HashSet<TransformEntity> _entitiesToRemove = [];

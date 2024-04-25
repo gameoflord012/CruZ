@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
 
 using CruZ.GameEngine.GameSystem.Animation;
 using CruZ.GameEngine.GameSystem.Render;
@@ -12,6 +13,8 @@ namespace CruZ.GameEngine.GameSystem
 {
     internal class ECSManager : IDisposable
     {
+        internal static event Action<ECSManager>? InstanceChanged;
+
         private ECSManager()
         {
             _world = new World();
@@ -21,6 +24,8 @@ namespace CruZ.GameEngine.GameSystem
                 AddSystem(new ScriptSystem()).
                 AddSystem(UISystem.CreateContext());
         }
+
+        internal World World { get => _world; set => _world = value; }
 
         internal void Initialize()
         {
@@ -43,7 +48,10 @@ namespace CruZ.GameEngine.GameSystem
         {
             if (_instance != null && !_instance._isDisposed)
                 throw new InvalidOperationException("Require dispose");
-            return _instance = new ECSManager();
+
+            _instance = new ECSManager();
+            InstanceChanged?.Invoke(_instance);
+            return _instance;
         }
 
         private static ECSManager? _instance;

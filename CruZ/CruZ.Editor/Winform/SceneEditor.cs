@@ -27,6 +27,8 @@ namespace CruZ.Editor
             addEntity_RootChild_ToolStripMenuItem.Click += AddEntity_ToolStripMenuItem_Click;
             editEntity_ToolStripMenuItem.Click += EditEntity_ToolStripMenuItem_Clicked;
             removeEntity_ToolStripMenuItem.Click += RemoveEntity_ToolStripMenuItem_Click;
+
+            ECSManager.InstanceChanged += ECSManager_InstanceChanged;
         }
 
         private void SceneTree_BeforeSelect(object? sender, TreeViewCancelEventArgs e)
@@ -49,16 +51,6 @@ namespace CruZ.Editor
             var e = (TransformEntity)args.Node.Tag;
             e.Name = args.Label;
             InvalidateService.Invalidate(InvalidatedEvents.EntityNameChanged);
-        }
-
-        private void EditorApp_SelectedEntityChanged(TransformEntity? e)
-        {
-            UpdateSceneTree(e);
-        }
-
-        private void EditorApp_CurrentSceneChanged(GameScene? scene)
-        {
-            UpdateSceneTree(scene);
         }
 
         private void EditEntity_ToolStripMenuItem_Clicked(object? sender, EventArgs args)
@@ -85,72 +77,81 @@ namespace CruZ.Editor
             return (TransformEntity)scene_TreeView.SelectedNode.Tag;
         }
 
-        private void UpdateSceneTree(TransformEntity? selectedEntity)
+        private void ECSManager_InstanceChanged(ECSManager ecs)
+        {
+            InitSceneTree(ecs.World);
+        }
+
+        private void EditorApp_SelectedEntityChanged(TransformEntity? e)
+        {
+            UpdateSceneTree(e);
+        }
+
+        private void UpdateSceneTree(TransformEntity? selectEntity)
         {
             scene_TreeView.SafeInvoke(delegate
             {
-                scene_TreeView.SelectedNode = selectedEntity == null ? null : _entityToNode[selectedEntity];
+                scene_TreeView.SelectedNode = selectEntity == null ? null : _entityToNode[selectEntity];
             });
         }
 
-        private void UpdateSceneTree(GameScene? currentScene)
+        private void InitSceneTree(World world)
         {
             scene_TreeView.SafeInvoke(delegate
             {
-                if (scene_TreeView.Tag == currentScene) return;
-
+                
+                if (scene_TreeView.Tag == world) return;
                 //
-                // scene_treeview tag is current game scene
-                // so we can unregisted old scene events
+                // scene_treeview tag is current game scene so we can unregisted old scene events
                 //
                 if (scene_TreeView.Tag != null)
                 {
-                    var oldScene = (GameScene)scene_TreeView.Tag;
-                    oldScene.EntityAdded -= Scene_EntityAdded;
-                    oldScene.EntityRemoved -= Scene_EntityRemoved;
+                    var oldWorld = (World)scene_TreeView.Tag;
+                    oldWorld.EntityAdded -= Scene_EntityAdded;
+                    oldWorld.EntityRemoved -= Scene_EntityRemoved;
                 }
-
                 //
                 // Clean previous tree data
                 //
-                scene_TreeView.Tag = currentScene;
+                scene_TreeView.Tag = world;
                 scene_TreeView.Nodes.Clear();
                 _entityToNode.Clear();
                 _sceneTreeRoot = null;
-
-                if (currentScene == null) return;
-
-                currentScene.EntityAdded += Scene_EntityAdded;
-                currentScene.EntityRemoved += Scene_EntityRemoved;
-
+                //
+                // init data with new World
+                //
+                world.EntityAdded += Scene_EntityAdded;
+                world.EntityRemoved += Scene_EntityRemoved;
                 //
                 // init tree root
                 //
-                _sceneTreeRoot = scene_TreeView.Nodes.Add(currentScene.ToString());
+                _sceneTreeRoot = scene_TreeView.Nodes.Add("ABOVE EVERYTHINGS");
                 _sceneTreeRoot.ContextMenuStrip = sceneRoot_ContextMenuStrip;
-
                 //
                 // update new added entity, make sure parent alway get added first
                 //
-                var sortedEntities = TransformEntityHelper.SortByDepth(currentScene.Entities);
+                var sortedEntities = TransformEntityHelper.SortByDepth(world.Entities);
                 foreach (var e in sortedEntities)
                 {
-                    AddSceneNode(e);
+                    AddTreeNode(e);
                 }
             });
         }
 
         void Scene_EntityAdded(TransformEntity entity)
         {
-            this.SafeInvoke(() => AddSceneNode(entity));
+            this.SafeInvoke(() => AddTreeNode(entity));
         }
 
         void Scene_EntityRemoved(TransformEntity entity)
         {
-            RemoveSceneNode(entity);
+            RemoveTreeNode(entity);
         }
 
-        private void AddSceneNode(TransformEntity e)
+        /// <summary>
+        /// Add node to scene tree
+        /// </summary>
+        private void AddTreeNode(TransformEntity e)
         {
             if (_entityToNode.ContainsKey(e)) return;
 
@@ -177,7 +178,7 @@ namespace CruZ.Editor
             _entityToNode[e] = entityNode;
         }
 
-        private void RemoveSceneNode(TransformEntity e)
+        private void RemoveTreeNode(TransformEntity e)
         {
             this.SafeInvoke(() =>
             {
@@ -200,16 +201,13 @@ namespace CruZ.Editor
                 if (_editor != null)
                 {
                     _editor.SelectingEntityChanged -= EditorApp_SelectedEntityChanged;
-                    _editor.CurrentSceneChanged -= EditorApp_CurrentSceneChanged;
                 }
 
                 _editor = value;
 
                 _editor.SelectingEntityChanged += EditorApp_SelectedEntityChanged;
-                _editor.CurrentSceneChanged += EditorApp_CurrentSceneChanged;
 
                 UpdateSceneTree(_editor.SelectedEntity);
-                UpdateSceneTree(_editor.CurrentGameScene);
             }
         }
         GameEditor? _editor;
