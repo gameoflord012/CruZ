@@ -27,7 +27,7 @@ namespace CruZ.Editor
 
         private void SelectScene_SelectedIndexChanged(object? sender, EventArgs e)
         {
-            ReturnSceneName = (string)selectScene_ComboBox.SelectedItem;
+            ReturnSceneName = (string)selectScene_ComboBox.SelectedItem!;
         }
     }
 }

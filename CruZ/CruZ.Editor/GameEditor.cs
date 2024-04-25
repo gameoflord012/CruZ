@@ -15,7 +15,6 @@ using CruZ.Editor.Winform.Utility;
 
 using Keys = Microsoft.Xna.Framework.Input.Keys;
 using CruZ.GameEngine.GameSystem.UI;
-using CruZ.GameEngine;
 using CruZ.GameEngine.GameSystem;
 using CruZ.GameEngine.Resource;
 using CruZ.GameEngine.GameSystem.Scene;
@@ -33,8 +32,6 @@ namespace CruZ.Editor.Controls
         public event Action<GameScene?>? CurrentSceneChanged;
 
         public event Action<TransformEntity?>? SelectingEntityChanged;
-
-        public GameScene? CurrentGameScene => _currentScene;
 
         public GameEditor(EditorForm form)
         {
@@ -58,10 +55,27 @@ namespace CruZ.Editor.Controls
             _cacheService.ReadCache(this, "LoadedScene");
         }
 
-        Stack<EntityControl> _entityControlPool = [];
-        Dictionary<TransformEntity, EntityControl> _fromEntityToControl = [];
-        BoardGrid _boardGrid = null!;
-        LoggingWindow _infoWindow = null!;
+        public GameScene? CurrentGameScene => _currentScene;
+
+        public TransformEntity? SelectedEntity
+        {
+            get => _currentSelectEntity;
+            set
+            {
+                if (_currentSelectEntity == value) return;
+
+                if (_currentSelectEntity != null)
+                    _fromEntityToControl[_currentSelectEntity].CanInteract = false;
+
+                _currentSelectEntity = value;
+
+                if (_currentSelectEntity != null)
+                    _fromEntityToControl[_currentSelectEntity].CanInteract = true;
+
+                LogManager.SetMsg(_currentSelectEntity != null ? _currentSelectEntity.ToString() : "");
+                SelectingEntityChanged?.Invoke(value);
+            }
+        }
 
         public void LoadSceneFromFile(string file)
         {
@@ -185,26 +199,6 @@ namespace CruZ.Editor.Controls
             _entityControlPool.Push(eControl);
         } 
 
-        public TransformEntity? SelectedEntity
-        {
-            get => _currentSelectEntity;
-            set
-            {
-                if (_currentSelectEntity == value) return;
-
-                if(_currentSelectEntity != null)
-                    _fromEntityToControl[_currentSelectEntity].CanInteract = false;
-
-                _currentSelectEntity = value;
-
-                if (_currentSelectEntity != null)
-                    _fromEntityToControl[_currentSelectEntity].CanInteract = true;
-
-                LogManager.SetMsg(_currentSelectEntity != null ? _currentSelectEntity.ToString() : "");
-                SelectingEntityChanged?.Invoke(value);
-            }
-        }
-
         /// <summary>
         /// Should be called from winform thread
         /// </summary>
@@ -226,14 +220,14 @@ namespace CruZ.Editor.Controls
             _gameAppThread = null;
         }
 
-        public TransformEntity CreateNewEntity(TransformEntity? parent = null)
-        {
-            if (_currentScene == null)
-                throw new InvalidOperationException("Can't create new entity when Scene is not loaded");
+        //public TransformEntity CreateNewEntity(TransformEntity? parent = null)
+        //{
+        //    if (_currentScene == null)
+        //        throw new InvalidOperationException("Can't create new entity when Scene is not loaded");
 
-            var newEntity = _currentScene.CreateEntity(null, parent);
-            return newEntity;
-        }
+        //    var newEntity = _currentScene.CreateEntity(null, parent);
+        //    return newEntity;
+        //}
 
         public void RemoveEntity(TransformEntity e)
         {
@@ -400,7 +394,13 @@ namespace CruZ.Editor.Controls
         }
 
         #region Private_Variables
-        UIControl _editorUIBranch;
+        Stack<EntityControl> _entityControlPool = [];
+        Dictionary<TransformEntity, EntityControl> _fromEntityToControl = [];
+
+        BoardGrid _boardGrid = null!;
+        LoggingWindow _infoWindow = null!;
+
+        UIControl _editorUIBranch = null!;
 
         bool _isMouseDraggingCamera;
         Vector2 _cameraStartDragCoord;

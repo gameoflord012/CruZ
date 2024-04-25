@@ -43,7 +43,7 @@ namespace CruZ.Editor
             inspectorTab = new TabPage();
             entityInspector = new Inspector();
             sceneTab = new TabPage();
-            sceneEditor = new SceneEditor();
+            sceneEditor = new WorldViewer();
             splitContainer1 = new SplitContainer();
             tabControlTop = new TabControl();
             tabControlBottom = new TabControl();
@@ -69,7 +69,7 @@ namespace CruZ.Editor
             // 
             scene_Menu.DropDownItems.AddRange(new ToolStripItem[] { openScene_MenuButton, saveScene_MenuButton, saveAsScene_MenuButton, loadScene_MenuButton });
             scene_Menu.Name = "scene_Menu";
-            scene_Menu.Size = new Size(105, 22);
+            scene_Menu.Size = new Size(180, 22);
             scene_Menu.Text = "Scene";
             // 
             // openScene_MenuButton
@@ -229,6 +229,6 @@ namespace CruZ.Editor
         private TabControl tabControlTop;
         private TabControl tabControlBottom;
         private Inspector entityInspector;
-        private SceneEditor sceneEditor;
+        private WorldViewer sceneEditor;
     }
 }
