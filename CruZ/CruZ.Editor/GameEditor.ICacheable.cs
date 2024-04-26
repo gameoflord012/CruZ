@@ -60,10 +60,7 @@ namespace CruZ.Editor.Controls
                 }
                 else
                 {
-                    if(((IResource)CurrentGameScene).Info == null)
-                        binWriter.Write(CurrentGameScene.Name); // temporary use name as runtime resource path
-                    else
-                        binWriter.Write(((IResource)CurrentGameScene).Info.ResourceName);
+                    binWriter.Write(CurrentGameScene.Name);
                 }
             }
                 

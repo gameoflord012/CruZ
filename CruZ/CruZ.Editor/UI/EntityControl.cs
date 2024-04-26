@@ -47,6 +47,8 @@ namespace CruZ.Editor.UI
                     var iHasBoundBox = ExtractIHasBoundBox(_attachedEntity);
                     UpdateIHasBoundBox(iHasBoundBox);
                 }
+
+                IsActive = _attachedEntity != null;
             }
         }
 

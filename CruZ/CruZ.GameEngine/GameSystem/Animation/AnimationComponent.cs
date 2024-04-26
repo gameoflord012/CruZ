@@ -16,7 +16,7 @@ using System.Text.Json.Serialization;
 
 namespace CruZ.GameEngine.GameSystem.Animation
 {
-    public class AnimationComponent : Component, IJsonOnDeserialized
+    public class AnimationComponent : Component
     {
         /// <summary>
         /// If true, the rendering sprite will only 1 unit in world coordinate
@@ -26,11 +26,12 @@ namespace CruZ.GameEngine.GameSystem.Animation
         public AnimationComponent()
         {
             _resource = GameContext.GameResource;
+            _file = null!;
         }
 
         public void LoadAnimationFile(string asepriteFile)
         {
-            LoadAsepriteFile(_resource.Load<AsepriteFile>(asepriteFile, out _asepriteResourceInfo));
+            LoadAsepriteFile(_resource.Load<AsepriteFile>(asepriteFile));
         }
 
         private void LoadAsepriteFile(AsepriteFile file)
@@ -52,10 +53,10 @@ namespace CruZ.GameEngine.GameSystem.Animation
             }
         }
 
-        void IJsonOnDeserialized.OnDeserialized()
-        {
-            LoadAsepriteFile(_resource.Load<AsepriteFile>(_asepriteResourceInfo));
-        }
+        //void IJsonOnDeserialized.OnDeserialized()
+        //{
+        //    LoadAsepriteFile(_resource.Load<AsepriteFile>(_asepriteResourceInfo));
+        //}
 
         public void PlayAnimation(string animationTag, int loopCount = 0)
         {
@@ -134,13 +135,5 @@ namespace CruZ.GameEngine.GameSystem.Animation
         ResourceManager _resource;
         Dictionary<string, AnimatedSprite> _animations = [];
         AsepriteFile _file;
-
-        /// <summary>
-        /// store list of loaded animation
-        /// Key: resource path of animation
-        /// Value: animation key
-        /// </summary>
-        [JsonInclude]
-        ResourceInfo _asepriteResourceInfo;
     }
 }

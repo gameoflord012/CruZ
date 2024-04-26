@@ -133,7 +133,6 @@ namespace NinjaAdventure
 
         bool _inputFireSuriken;
         bool _isAttackAnimationPlaying;
-
         float _speed = 4;
 
         AnimationComponent _animationComponent;

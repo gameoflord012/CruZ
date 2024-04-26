@@ -214,11 +214,13 @@ namespace CruZ.Editor.Controls
             if (_entityControlPool.Count == 0)
             {
                 var newControl = new EntityControl();
+                newControl.IsActive = false;
                 _editorUIBranch.AddChild(newControl);
                 _entityControlPool.Push(newControl);
             }
 
             var entityControl = _entityControlPool.Pop();
+            entityControl.IsActive = true;
             entityControl.AttachEntity = e;
             _fromEntityToControl[e] = entityControl;
         }
@@ -232,6 +234,7 @@ namespace CruZ.Editor.Controls
 
             eControl.AttachEntity = null;
             eControl.CanInteract = false;
+            eControl.IsActive = false;
             _entityControlPool.Push(eControl);
         }
 

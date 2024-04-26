@@ -13,7 +13,7 @@ using Microsoft.Xna.Framework;
 namespace CruZ.GameEngine.GameSystem
 {
     [JsonConverter(typeof(TransformEntityJsonConverter))]
-    public class TransformEntity : IDisposable
+    public sealed class TransformEntity : IDisposable
     {
         public event Action<TransformEntity>? RemovedFromWorld;
         public event Action<ComponentCollection>? ComponentsChanged;

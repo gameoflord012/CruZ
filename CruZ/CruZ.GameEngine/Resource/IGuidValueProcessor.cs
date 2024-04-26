@@ -1,7 +1,7 @@
-﻿namespace CruZ.GameEngine.Resource
-{
-    interface IGuidValueProcessor<T>
-    {
-        T GetProcessedGuidValue(T value);
-    }
-}
+﻿//namespace CruZ.GameEngine.Resource
+//{
+//    interface IGuidValueProcessor<T>
+//    {
+//        T GetProcessedGuidValue(T value);
+//    }
+//}

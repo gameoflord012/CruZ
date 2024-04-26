@@ -5,12 +5,18 @@ namespace CruZ.GameEngine.Utility
 {
     class PathHelper
     {
-        public static bool IsSubPath(string basepath, string subpath)
+        public static bool IsSubpath(string basepath, string subpath)
         {
             if (!Path.IsPathRooted(basepath) || !Path.IsPathRooted(subpath)) throw new ArgumentException("Path must be rooted");
-            var rel = Path.GetRelativePath(basepath, subpath);
-            rel.Replace("//", "\\");
-            return !rel.StartsWith("..\\") && rel != ".";
+            var relativePath = Path.GetRelativePath(basepath, subpath);
+            return IsRelativeASubpath(relativePath);
+        }
+
+        public static bool IsRelativeASubpath(string relativePath)
+        {
+            if(Path.IsPathRooted(relativePath)) throw new ArgumentException(relativePath);
+            relativePath = relativePath.Replace("/", "\\");
+            return !relativePath.StartsWith("..\\") && relativePath != ".";
         }
 
         public static ReadOnlySpan<char> RemoveExtension(ReadOnlySpan<char> path)

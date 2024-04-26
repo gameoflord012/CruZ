@@ -7,7 +7,7 @@ using System.Text.Json.Serialization;
 
 namespace CruZ.GameEngine.GameSystem.Scene
 {
-    public class GameScene : IResource, IDisposable, IJsonOnSerializing, IJsonOnDeserialized
+    public class GameScene : IDisposable
     {
         public event Action<TransformEntity>? EntityAdded;
         public event Action<TransformEntity>? EntityRemoved;
@@ -27,7 +27,7 @@ namespace CruZ.GameEngine.GameSystem.Scene
 
         [JsonIgnore]
         public IImmutableList<TransformEntity> Entities { get => _entities.ToImmutableList(); }
-        ResourceInfo? IResource.Info { get; set; }
+        //ResourceInfo? IResource.Info { get; set; }
 
         public GameScene()
         {
@@ -73,26 +73,9 @@ namespace CruZ.GameEngine.GameSystem.Scene
             return e;
         }
 
-        public void OnSerializing()
-        {
-            // sorted entities so that the parent get serialize first then its children
-            _entitiesToSerialize.Clear();
-            _entitiesToSerialize = TransformEntityHelper.SortByDepth(Entities);
-        }
-
-        public void OnDeserialized()
-        {
-            foreach (var entity in _entitiesToSerialize)
-            {
-                AddEntity(entity);
-            }
-        }
-
         TransformEntity SceneRoot;
 
         List<TransformEntity> _entities = [];
-        [JsonInclude]
-        List<TransformEntity> _entitiesToSerialize = [];
 
         private void Game_Exiting()
         {
@@ -101,7 +84,7 @@ namespace CruZ.GameEngine.GameSystem.Scene
 
         public void Dispose()
         {
-            foreach (var e in _entities)
+            foreach (var e in _entities.ToImmutableList())
             {
                 e.Dispose();
             }
@@ -109,7 +92,7 @@ namespace CruZ.GameEngine.GameSystem.Scene
 
         public override string ToString()
         {
-            return string.IsNullOrEmpty(Name) ? ((IResource)this).Info.ResourceName : Name;
+            return Name;
         }
     }
 }

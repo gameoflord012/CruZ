@@ -81,6 +81,8 @@ namespace CruZ.Editor
 
         private void SaveAsScene_Clicked(object sender, EventArgs e)
         {
+            throw new NotImplementedException();
+
             if (_gameEditor.CurrentGameScene == null)
             {
                 DialogHelper.ShowInfoDialog("Nothing to save.");
@@ -90,9 +92,9 @@ namespace CruZ.Editor
             var savePath = DialogHelper.GetSaveScenePath();
             if (string.IsNullOrEmpty(savePath)) return;
 
-            EditorContext.UserResource.Create(
-                savePath,
-                _gameEditor.CurrentGameScene);
+            //EditorContext.UserResource.Create(
+            //    savePath,
+            //    _gameEditor.CurrentGameScene);
         }
 
         private void LoadScene_Clicked(object sender, EventArgs e)

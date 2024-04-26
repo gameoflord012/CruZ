@@ -19,7 +19,7 @@ namespace CruZ.Editor.UI
 
             _fontScale = 0.7f;
             _resource = GameContext.GameResource;
-            _font = _resource.Load<BitmapFont>(".resourceref\\Internal\\Fonts\\Fixedsys.fnt");
+            _font = _resource.Load<BitmapFont>(".internal\\Fonts\\Fixedsys.fnt");
             _lineSpacing = _font.LineHeight * _fontScale;
         }
 

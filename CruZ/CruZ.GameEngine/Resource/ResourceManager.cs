@@ -24,10 +24,8 @@ namespace CruZ.GameEngine.Resource
     /// <summary>
     /// For external content pipeline to work, the dll must be presented in domain base dir
     /// </summary>
-    public class ResourceManager : IGuidValueProcessor<string>
+    public class ResourceManager
     {
-        private const string REF_DIR_NAME = ".resourceref";
-
         public string ResourceRoot
         {
             get => _resourceRoot;
@@ -45,14 +43,12 @@ namespace CruZ.GameEngine.Resource
             Directory.CreateDirectory(Path.GetDirectoryName(ResourceRoot) ?? throw new ArgumentException("resourceRoot"));
             Directory.CreateDirectory(Path.GetDirectoryName(ContentOutputDir) ?? throw new ArgumentException("resourceRoot"));
 
-            _serializer.Converters.Add(new TextureAtlasJsonConverter(this));
+            //_serializer.Converters.Add(new TextureAtlasJsonConverter(this));
             _serializer.Converters.Add(new TransformEntityJsonConverter());
             _serializer.Converters.Add(new ComponentJsonConverter());
             _serializer.Converters.Add(new Vector4JsonConverter());
             _serializer.Converters.Add(new Vector2JsonConverter());
             _serializer.Options.MakeReadOnly();
-
-            _guidManager = new(this);
 
             _pipelineManager = new(ResourceRoot, ContentOutputDir, ContentOutputDir);
             _pipelineManager.Platform = TargetPlatform.Windows;
@@ -70,37 +66,43 @@ namespace CruZ.GameEngine.Resource
 
         private void InitResourceDir()
         {
-            foreach (var filePath in DirectoryHelper.EnumerateFiles(ResourceRoot, [REF_DIR_NAME, ".content"]))
-            {
-                var extension = Path.GetExtension(filePath);
+            //foreach (var filePath in DirectoryHelper.EnumerateFiles(ResourceRoot, [REF_DIR_NAME, ".content"]))
+            //{
+            //    var extension = Path.GetExtension(filePath);
 
-                switch (extension)
-                {
-                    // remove excess .import files
-                    case ".import":
-                        var resourceFile = filePath.Substring(0, filePath.LastIndexOf(extension));
-                        if (!File.Exists(resourceFile)) File.Delete(filePath);
-                        break;
+            //    switch (extension)
+            //    {
+            //        // remove excess .import files
+            //        case ".import":
+            //            var resourceFile = filePath.Substring(0, filePath.LastIndexOf(extension));
+            //            if (!File.Exists(resourceFile)) File.Delete(filePath);
+            //            break;
 
-                    default:
-                        // initialize resource if filePath is a resource
-                        if (ResourceSupportedExtensions.Contains(Path.GetExtension(filePath).ToLower()))
-                        {
-                            ImportResourcePath(filePath);
-                        }
-                        break;
-                }
-            }
+            //        default:
+            //            // initialize resource if filePath is a resource
+            //            if (ResourceSupportedExtensions.Contains(Path.GetExtension(filePath).ToLower()))
+            //            {
+            //                ImportResourcePath(filePath);
+            //            }
+            //            break;
+            //    }
+            //}
 
             // enumerates .xnb and .mgcontent files
+            // TEST:
             foreach (var filePath in Directory.EnumerateFiles(ContentOutputDir, "*.*", SearchOption.AllDirectories).
                 Where(e =>
                     Path.GetFileName(e) != ".mgcontent" &&
                     (e.EndsWith(".xnb") || e.EndsWith(".mgcontent"))))
             {
                 // delete if file name is not guid or resource guid doesn't exists
-                if (!Guid.TryParse(Path.GetFileNameWithoutExtension(filePath), out Guid guid) || !_guidManager.IsConsumed(guid))
+                var relative = Path.GetRelativePath(ContentOutputDir, filePath);
+                var resourceFile = Path.Combine(ResourceRoot, Path.ChangeExtension(filePath, null));
+                
+                if(!File.Exists(resourceFile))
+                {
                     File.Delete(filePath);
+                }
             }
         }
 
@@ -129,121 +131,110 @@ namespace CruZ.GameEngine.Resource
             },
         ];
 
-        public void Create(string resourcePath, object resObj)
-        {
-            resourcePath = GetFormattedResourcePath(resourcePath);
-            _serializer.SerializeToFile(resObj, Path.Combine(ResourceRoot, resourcePath));
-            InitResourceInstance(resObj, resourcePath, true);
-        }
+        //public void Create(string resourcePath, object resObj)
+        //{
+        //    resourcePath = GetFormattedResourcePath(resourcePath);
+        //    _serializer.SerializeToFile(resObj, Path.Combine(ResourceRoot, resourcePath));
+        //    InitResourceInstance(resObj, resourcePath, true);
+        //}
 
-        public bool TrySave(IResource resource)
-        {
-            if (resource.Info == null) return false;
-            Create(resource.Info.ResourceName, resource);
-            return true;
-        }
+        //public bool TrySave(IResource resource)
+        //{
+        //    if (resource.Info == null) return false;
+        //    Create(resource.Info.ResourceName, resource);
+        //    return true;
+        //}
 
         public T Load<T>(string resourcePath)
         {
-            return (T)Load(resourcePath, typeof(T), out _);
+            return (T)Load(resourcePath, typeof(T));
         }
 
-        public T Load<T>(string resourcePath, out ResourceInfo info)
-        {
-            return (T)Load(resourcePath, typeof(T), out info);
-        }
-
-        public T Load<T>(Guid guid)
-        {
-            return (T)Load(_guidManager.GetValue(guid), typeof(T), out _);
-        }
-
-        public T Load<T>(ResourceInfo resourceInfo)
-        {
-            return GetManagerFromReferencePath(resourceInfo.ReferencePath).Load<T>(resourceInfo.Guid);
-        }
+        //public T Load<T>(ResourceInfo resourceInfo)
+        //{
+        //    return GetManagerFromReferencePath(resourceInfo.ReferencePath).Load<T>(resourceInfo.Guid);
+        //}
 
         /// <summary>
         /// Get <see cref="ResourceInfo"/> with given imported resource path
         /// </summary>
-        public ResourceInfo RetriveResourceInfo(string resourcePath)
-        {
-            resourcePath = GetFormattedResourcePath(resourcePath);
-            var relative = Path.GetRelativePath(ResourceRoot, resourcePath).Replace("/", "\\").AsSpan();
-            StringBuilder sb = new();
+        //public ResourceInfo RetriveResourceInfo(string resourcePath)
+        //{
+        //    resourcePath = GetFormattedResourcePath(resourcePath);
+        //    var relative = Path.GetRelativePath(ResourceRoot, resourcePath).Replace("/", "\\").AsSpan();
+        //    StringBuilder sb = new();
 
-            const string REF_DIR = $"{REF_DIR_NAME}\\";
-            while (relative.StartsWith(REF_DIR))
-            {
-                relative = relative.Slice(REF_DIR.Length);
-                sb.Append(REF_DIR);
+        //    const string REF_DIR = $"{REF_DIR_NAME}\\";
+        //    while (relative.StartsWith(REF_DIR))
+        //    {
+        //        relative = relative.Slice(REF_DIR.Length);
+        //        sb.Append(REF_DIR);
 
-                int slashIndex = relative.IndexOf("\\");
+        //        int slashIndex = relative.IndexOf("\\");
 
-                sb.Append(relative.Slice(0, slashIndex + 1));
-                relative = relative.Slice(0, slashIndex + 1);
-            }
+        //        sb.Append(relative.Slice(0, slashIndex + 1));
+        //        relative = relative.Slice(0, slashIndex + 1);
+        //    }
 
-            try
-            {
-                var refPath = sb.ToString();
-                ResourceManager manager = GetManagerFromReferencePath(refPath);
+        //    try
+        //    {
+        //        var refPath = sb.ToString();
+        //        ResourceManager manager = GetManagerFromReferencePath(refPath);
 
-                return ResourceInfo.Create(manager._guidManager.GetGuid(resourcePath), resourcePath, refPath);
+        //        return ResourceInfo.Create(manager._guidManager.GetGuid(resourcePath), resourcePath, refPath);
 
-            }
-            catch (InvalidGuidException)
-            {
-                throw new ArgumentException($"Resource \"{resourcePath}\" maybe unimported");
-            }
-            catch (InvalidGuidValueException)
-            {
-                throw new ArgumentException($"Resource \"{resourcePath}\" maybe unimported");
-            }
-        }
+        //    }
+        //    catch (InvalidGuidException)
+        //    {
+        //        throw new ArgumentException($"Resource \"{resourcePath}\" maybe unimported");
+        //    }
+        //    catch (InvalidGuidValueException)
+        //    {
+        //        throw new ArgumentException($"Resource \"{resourcePath}\" maybe unimported");
+        //    }
+        //}
 
-        private ResourceManager GetManagerFromReferencePath(string referencePath)
-        {
-            return
-                string.IsNullOrEmpty(referencePath) ? this :
-                From(Path.Combine(ResourceRoot, referencePath));
-        }
+        //private ResourceManager GetManagerFromReferencePath(string referencePath)
+        //{
+        //    return
+        //        string.IsNullOrEmpty(referencePath) ? this :
+        //        From(Path.Combine(ResourceRoot, referencePath));
+        //}
 
-        string IGuidValueProcessor<string>.GetProcessedGuidValue(string value)
-        {
-            return GetFormattedResourcePath(value).ToLower();
-        }
+        //string IGuidValueProcessor<string>.GetProcessedGuidValue(string value)
+        //{
+        //    return GetFormattedResourcePath(value).ToLower();
+        //}
 
         /// <summary>
         /// Load resource with relative or full path, the resource fileName should within the .resourceInstance folder
         /// </summary>
         /// <returns></returns>
-        private object Load(string resourcePath, Type ty, out ResourceInfo resourceInfo)
+        private object Load(string resourcePath, Type ty)
         {
             resourcePath = GetFormattedResourcePath(resourcePath);
 
-            resourceInfo = RetriveResourceInfo(resourcePath);
-            var refPath = resourceInfo.ReferencePath;
+            //ResourceManager manager = GetManagerFromReferencePath(refPath);
 
-            ResourceManager manager = GetManagerFromReferencePath(refPath);
-
-            object? resInstance;
+            object? returnResource;
 
             if (ContentSupportedTypes.Contains(ty))
             {
-                resInstance = manager.LoadContentNonGeneric(resourcePath, ty);
+                returnResource = LoadContentNonGeneric(resourcePath, ty);
             }
             else
             {
-                resInstance = manager.LoadResource(resourcePath, ty);
+                returnResource = LoadResource(resourcePath, ty);
             }
 
-            InitResourceInstance(resInstance, resourceInfo);
-            return resInstance;
+            //InitResourceInstance(returnResource, resourceInfo);
+            return returnResource;
         }
 
         private object LoadResource(string resourcePath, Type ty)
         {
+            throw new NotImplementedException();
+
             resourcePath = GetFormattedResourcePath(resourcePath);
             var fullResourcePath = Path.Combine(ResourceRoot, resourcePath);
 
@@ -284,34 +275,26 @@ namespace CruZ.GameEngine.Resource
 
         private string ResolveAssetName(string assetName, Type assetType, ContentManager content)
         {
-            assetName = GetFormattedResourcePath(assetName);
+            var resourcePath = GetFormattedResourcePath(assetName);
 
-            if (string.IsNullOrEmpty(Path.GetExtension(assetName)))
-            {
-                // find extension if assetName is not provided
+            BuildContent(assetType, resourcePath);
 
-                assetName = Directory.EnumerateFiles(
-                    Path.GetDirectoryName(assetName)!, Path.GetFileName(assetName) + ".*", SearchOption.TopDirectoryOnly)
-                    .FirstOrDefault(string.Empty);
-                
-                if(string.IsNullOrEmpty(assetName))
-                    throw new ArgumentException($"Can't resolve '{assetName}'");
-            }
-
-            var resolved = _guidManager.GetGuid(assetName).ToString();
-            BuildContent(assetType, assetName, resolved); // to make sure it is built to the .xnb
-
-            return Path.Combine(content.RootDirectory, resolved);
+            return GetContentPathFromResourcePath(resourcePath);
         }
 
-        private void BuildContent(Type ty, string resourcePath, string contentFileName)
+        private void BuildContent(Type ty, string resourcePath)
         {
-            if (!string.IsNullOrEmpty(Path.GetDirectoryName(contentFileName)))
-                throw new ArgumentException("contentFileName not a file name");
-
             resourcePath = GetFormattedResourcePath(resourcePath);
-            _pipelineManager.BuildContent(resourcePath, Path.Combine(ContentOutputDir, contentFileName), processorParameters: GetProcessorParam(ty));
+            var contentPath = GetContentPathFromResourcePath(resourcePath) + ".xnb";
+            _pipelineManager.BuildContent(resourcePath, contentPath, processorParameters: GetProcessorParam(ty));
             _pipelineManager.ContentStats.Write(ContentOutputDir);
+        }
+
+        private string GetContentPathFromResourcePath(string resourcePath)
+        {
+            resourcePath = GetFormattedResourcePath(resourcePath);
+            var relative = Path.GetRelativePath(ResourceRoot, resourcePath);
+            return Path.Combine(ContentOutputDir, relative);
         }
 
         private object LoadContentNonGeneric(string resourcePath, Type ty)
@@ -329,17 +312,18 @@ namespace CruZ.GameEngine.Resource
             }
         }
 
-        private void InitResourceInstance(object resourceInstance, string resourcePath, bool autoImportResourcePath = false)
-        {
-            if (autoImportResourcePath) ImportResourcePath(resourcePath);
-            InitResourceInstance(resourceInstance, RetriveResourceInfo(resourcePath));
-        }
+        //private void InitResourceInstance(object resourceInstance, string resourcePath, bool autoImportResourcePath = false)
+        //{
+        //    if (autoImportResourcePath) ImportResourcePath(resourcePath);
+        //    InitResourceInstance(resourceInstance, RetriveResourceInfo(resourcePath));
+        //}
 
-        private void InitResourceInstance(object resourceInstance, ResourceInfo resourceInfo)
-        {
-            if (resourceInstance is IResource resource)
-                resource.Info = resourceInfo;
-        }
+        //private void InitResourceInstance(object resourceInstance, ResourceInfo resourceInfo)
+        //{
+        //    if (resourceInstance is IResource resource)
+        //        resource.Info = resourceInfo;
+        //}
+
         /// <summary>
         /// 
         /// </summary>
@@ -348,7 +332,7 @@ namespace CruZ.GameEngine.Resource
         private string GetFormattedResourcePath(string resourcePath)
         {
             resourcePath = Path.Combine(ResourceRoot, resourcePath);
-            if (!PathHelper.IsSubPath(ResourceRoot, resourcePath))
+            if (!PathHelper.IsSubpath(ResourceRoot, resourcePath))
                 throw new ArgumentException($"Resource Path \"{resourcePath}\" must be a subpath of resource root \"{ResourceRoot}\"");
             return Path.GetFullPath(resourcePath);
         }
@@ -357,29 +341,29 @@ namespace CruZ.GameEngine.Resource
         /// Read Guid or auto-generated new Guid and .import files
         /// </summary>
         /// <param name="resourcePath"></param>
-        private Guid ImportResourcePath(string resourcePath)
-        {
-            resourcePath = GetFormattedResourcePath(resourcePath);
-            Guid guid;
+        //private Guid ImportResourcePath(string resourcePath)
+        //{
+        //    resourcePath = GetFormattedResourcePath(resourcePath);
+        //    Guid guid;
 
-            if (TryReadGuidFromImportFile(resourcePath, out guid)) // if .import exists
-            {
+        //    if (TryReadGuidFromImportFile(resourcePath, out guid)) // if .import exists
+        //    {
 
-            }
-            else // if don't
-            {
-                // Write new guid to .import
-                guid = _guidManager.GenerateUniqueGuid();
-                using (var writer = new StreamWriter(File.Create(resourcePath + ".import")))
-                {
-                    writer.WriteLine(guid);
-                    writer.Flush();
-                }
-            }
+        //    }
+        //    else // if don't
+        //    {
+        //        // Write new guid to .import
+        //        guid = _guidManager.GenerateUniqueGuid();
+        //        using (var writer = new StreamWriter(File.Create(resourcePath + ".import")))
+        //        {
+        //            writer.WriteLine(guid);
+        //            writer.Flush();
+        //        }
+        //    }
 
-            _guidManager.ConsumeGuid(guid, resourcePath);
-            return guid;
-        }
+        //    _guidManager.ConsumeGuid(guid, resourcePath);
+        //    return guid;
+        //}
 
         //public ResourceManager CreateResourceReference(string referencePath)
         //{
@@ -390,14 +374,13 @@ namespace CruZ.GameEngine.Resource
         //    return From(referenceDir.FullName);
         //}
 
-        public void UpdateReferenceData(ResourceManager resourceRef, string referenceId)
+        public void CopyResourceData(ResourceManager resourceRef, string relativeDestination)
         {
-            if (referenceId.Contains(REF_DIR_NAME))
-                throw new ArgumentException($"referenceId should not contain special name '{REF_DIR_NAME}'");
+            if(!PathHelper.IsRelativeASubpath(relativeDestination)) throw new ArgumentException(relativeDestination);
 
             PathHelper.UpdateFolder(
                 resourceRef.ResourceRoot,
-                Path.Combine(ResourceRoot, REF_DIR_NAME, referenceId),
+                Path.Combine(ResourceRoot, relativeDestination),
                 "*", true, true);
         }
 
@@ -427,7 +410,6 @@ namespace CruZ.GameEngine.Resource
         string _resourceRoot = "res";
 
         Serializer _serializer;
-        GuidManager<string> _guidManager;
         PipelineManager _pipelineManager;
 
         public static ResourceManager From(string resourceDir)

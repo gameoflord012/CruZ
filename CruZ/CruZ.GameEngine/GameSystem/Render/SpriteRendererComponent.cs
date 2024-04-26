@@ -30,12 +30,12 @@ namespace CruZ.GameEngine.GameSystem.ECS
         public Texture2D? Texture { get => _texture; set => _texture = value; }
         public Vector2 NormalizedOrigin { get; set; } = new(0.5f, 0.5f);
 
-        [Editor(typeof(FileUITypeEditor), typeof(UITypeEditor))]
-        public string TexturePath
-        {
-            get => _spriteResInfo != null ? _spriteResInfo.ResourceName : "";
-            set => LoadTexture(value);
-        }
+        //[Editor(typeof(FileUITypeEditor), typeof(UITypeEditor))]
+        //public string TexturePath
+        //{
+        //    get => _spriteResInfo != null ? _spriteResInfo.ResourceName : "";
+        //    set => LoadTexture(value);
+        //}
         #endregion
 
         public SpriteRendererComponent()
@@ -89,19 +89,7 @@ namespace CruZ.GameEngine.GameSystem.ECS
 
         public void LoadTexture(string texturePath)
         {
-            if (!string.IsNullOrEmpty(texturePath))
-            {
-                _spriteResInfo = _resource.RetriveResourceInfo(texturePath);
-
-                try
-                {
-                    Texture = _resource.Load<Texture2D>(_spriteResInfo);
-                }
-                catch (Exception e)
-                {
-                    throw new ArgumentException($"Failed to load texture with path \"{texturePath}\"", e);
-                }
-            }
+            Texture = _resource.Load<Texture2D>(texturePath);
         }
 
         public int CompareLayer(SpriteRendererComponent other)
@@ -162,14 +150,9 @@ namespace CruZ.GameEngine.GameSystem.ECS
             return SortByY ? AttachedEntity.Transform.Position.Y / 2 : LayerDepth;
         }
 
-        public override string ToString()
-        {
-            return _spriteResInfo != null ? _spriteResInfo.ResourceName : "<None>";
-        }
-
         Texture2D? _texture;
-        [JsonInclude]
-        ResourceInfo? _spriteResInfo;
+        //[JsonInclude]
+        //ResourceInfo? _spriteResInfo;
         ResourceManager _resource;
         UIBoundingBox _boundingBox = new();
     }

@@ -1,8 +1,4 @@
-﻿using CruZ.GameEngine;
-using CruZ.GameEngine.GameSystem.Render;
-using CruZ.GameEngine;
-
-using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework.Graphics;
 
 namespace CruZ.GameEngine.Utility
 {
@@ -14,7 +10,7 @@ namespace CruZ.GameEngine.Utility
             {
                 if (_normalSpriteRenderer == null || _normalSpriteRenderer.IsDisposed)
                 {
-                    _normalSpriteRenderer = GameContext.GameResource.Load<Effect>(".resourceref\\Internal\\normal-sprite.fx");
+                    _normalSpriteRenderer = GameContext.GameResource.Load<Effect>(".internal\\normal-sprite.fx");
                     GameApplication.Disposables.Add(_normalSpriteRenderer);
                 }
                 return _normalSpriteRenderer;
@@ -27,7 +23,7 @@ namespace CruZ.GameEngine.Utility
             {
                 if (_texutreLight == null || _texutreLight.IsDisposed)
                 {
-                    _texutreLight = GameContext.GameResource.Load<Effect>(".resourceref\\Internal\\texture-light.fx");
+                    _texutreLight = GameContext.GameResource.Load<Effect>(".internal\\texture-light.fx");
                     GameApplication.Disposables.Add(_texutreLight);
                 }
                 return _texutreLight;
@@ -40,7 +36,7 @@ namespace CruZ.GameEngine.Utility
             {
                 if (_bloom == null || _bloom.IsDisposed)
                 {
-                    _bloom = GameContext.GameResource.Load<Effect>(".resourceref\\Internal\\bloom.fx");
+                    _bloom = GameContext.GameResource.Load<Effect>(".internal\\bloom.fx");
                     GameApplication.Disposables.Add(_bloom);
                 }
                 return _bloom;
@@ -53,7 +49,7 @@ namespace CruZ.GameEngine.Utility
             {
                 if (_postprocessing == null || _postprocessing.IsDisposed)
                 {
-                    _postprocessing = GameContext.GameResource.Load<Effect>(".resourceref\\Internal\\postprocessing.fx");
+                    _postprocessing = GameContext.GameResource.Load<Effect>(".internal\\postprocessing.fx");
                     GameApplication.Disposables.Add(_postprocessing);
                 }
                 return _postprocessing;

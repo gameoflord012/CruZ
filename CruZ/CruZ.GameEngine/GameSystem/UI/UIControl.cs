@@ -5,7 +5,9 @@ using Microsoft.Xna.Framework;
 
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.ComponentModel;
+using System.Linq;
 
 using RectangleF = System.Drawing.RectangleF;
 
@@ -33,6 +35,8 @@ namespace CruZ.GameEngine.GameSystem.UI
         public int Height { get => _size.Y.RoundToInt(); set => _size.Y = value; }
 
         public Color BackgroundColor = DEFAULT_BACKGROUND_COLOR;
+        
+        public bool IsActive = true;
 
         public void AddChild(UIControl child)
         {
@@ -74,7 +78,7 @@ namespace CruZ.GameEngine.GameSystem.UI
             return contains.ToArray();
         }
 
-        public UIControl[] GetTree()
+        public IImmutableList<UIControl> GetTree(bool getActiveNodeOnly = true)
         {
             List<UIControl> list = [];
             list.Add(this);
@@ -87,7 +91,7 @@ namespace CruZ.GameEngine.GameSystem.UI
                 }
             }
 
-            return list.ToArray();
+            return list.Where(e => e.IsActive).ToImmutableList();
         }
 
         internal void InternalUpdate(UIInfo args)

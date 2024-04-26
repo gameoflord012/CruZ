@@ -70,28 +70,27 @@ namespace CruZ.GameEngine.GameSystem
 
         private void ProcessEntitiesChanges()
         {
+            var removingEntities = _entitiesToRemove.ToImmutableList();
+            var addingEntities = _entitiesToAdd.ToImmutableList();
             //
             // update entities
             //
-            _entities.ExceptWith(_entitiesToRemove);
-            _entities.UnionWith(_entitiesToAdd);
+            _entities.ExceptWith(removingEntities);
+            _entities.UnionWith(addingEntities);
             //
             // fire events
             //
-            foreach (var remove in _entitiesToRemove)
+            foreach (var toRemove in removingEntities)
             {
-                EntityRemoved?.Invoke(remove);
+                _entitiesToRemove.Remove(toRemove);
+                EntityRemoved?.Invoke(toRemove);
             }
 
-            foreach (var add in _entitiesToAdd)
+            foreach (var toAdd in addingEntities)
             {
-                EntityAdded?.Invoke(add);
+                _entitiesToAdd.Remove(toAdd);
+                EntityAdded?.Invoke(toAdd);
             }
-            //
-            // clean up
-            //
-            _entitiesToRemove.Clear();
-            _entitiesToAdd.Clear();
         }
 
         public void Dispose()
@@ -102,9 +101,10 @@ namespace CruZ.GameEngine.GameSystem
 
         public IImmutableList<TransformEntity> Entities { get => _entities.ToImmutableList(); }
 
-        List<EntitySystem> _systems = [];
         HashSet<TransformEntity> _entitiesToRemove = [];
         HashSet<TransformEntity> _entitiesToAdd = [];
         HashSet<TransformEntity> _entities = [];
+
+        List<EntitySystem> _systems = [];
     }
 }
