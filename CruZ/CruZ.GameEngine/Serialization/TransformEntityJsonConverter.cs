@@ -11,7 +11,7 @@ namespace CruZ.GameEngine.Serialization
     {
         public override TransformEntity? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
-            TransformEntity entity = ECSManager.CreateTransformEntity();
+            TransformEntity entity = ECSManager.CreateEntity();
             var resolver = options.ReferenceHandler!.CreateResolver();
 
             using (JsonDocument document = JsonDocument.ParseValue(ref reader))

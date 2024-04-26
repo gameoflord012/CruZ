@@ -27,6 +27,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\CruZ.GameEngine\CruZ.GameEngine.WindowsDX.csproj" />
+		<ProjectReference Include="..\CruZ.GameEngine\CruZ.GameEngine.WindowsDX.csproj"/>
+		<ProjectReference Include="..\..\ThirdParty\MonoGameExtended\src\cs\MonoGame.Extended\MonoGame.Extended.csproj" />
 	</ItemGroup>
 </Project>

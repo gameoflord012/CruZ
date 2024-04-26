@@ -19,9 +19,9 @@ namespace CruZ.GameEngine.GameSystem
         {
             _world = new World();
             _world.
+                AddSystem(new ScriptSystem()).
                 AddSystem(new RenderSystem()).
                 AddSystem(new AnimationSystem()).
-                AddSystem(new ScriptSystem()).
                 AddSystem(UISystem.CreateContext());
         }
 
@@ -61,7 +61,7 @@ namespace CruZ.GameEngine.GameSystem
         /// Not good idea to call this without proper memory manage
         /// </summary>
         /// <returns></returns>
-        internal static TransformEntity CreateTransformEntity()
+        internal static TransformEntity CreateEntity()
         {
             return new TransformEntity(_instance._world);
         }

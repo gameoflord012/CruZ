@@ -18,9 +18,8 @@ namespace NinjaAdventure
             _gameScene = scene;
             Entity = scene.CreateEntity("Ninja");
 
-            _animationComponent = new AnimationComponent();
+            _animationComponent = new AnimationComponent(spriteRenderer);
             {
-                _animationComponent.Renderer = spriteRenderer;
                 _animationComponent.FitToWorldUnit = true;
                 _animationComponent.LoadAnimationFile("art\\NinjaAnim.aseprite");
             }

@@ -8,11 +8,8 @@ using Microsoft.Xna.Framework;
 
 using MonoGame.Aseprite;
 
-using SharpDX.MediaFoundation;
-
 using System;
 using System.Collections.Generic;
-using System.Text.Json.Serialization;
 
 namespace CruZ.GameEngine.GameSystem.Animation
 {
@@ -23,10 +20,13 @@ namespace CruZ.GameEngine.GameSystem.Animation
         /// </summary>
         public bool FitToWorldUnit { get; set; }
 
-        public AnimationComponent()
+        public AnimationComponent(SpriteRendererComponent spriteRenderer)
         {
             _resource = GameContext.GameResource;
             _file = null!;
+
+            _renderer = spriteRenderer;
+            _renderer.DrawRequestsFetching += SpriteRenderer_FetchingDrawRequests;
         }
 
         public void LoadAnimationFile(string asepriteFile)
@@ -92,7 +92,7 @@ namespace CruZ.GameEngine.GameSystem.Animation
             defaultArgs.Apply(_currentAnimation);
             defaultArgs.Apply(AttachedEntity);
 
-            if(FitToWorldUnit)
+            if (FitToWorldUnit)
             {
                 defaultArgs.Scale =
                 new Vector2(
@@ -107,30 +107,14 @@ namespace CruZ.GameEngine.GameSystem.Animation
             args.DrawRequests.Add(defaultArgs);
         }
 
-        public SpriteRendererComponent Renderer
-        {
-            get => _renderer ?? throw new NullReferenceException();
-            set
-            {
-                if (_renderer != null)
-                    _renderer.DrawRequestsFetching -= SpriteRenderer_FetchingDrawRequests;
-
-                _renderer = value;
-
-                if (_renderer != null)
-                    _renderer.DrawRequestsFetching += SpriteRenderer_FetchingDrawRequests;
-            }
-        }
-
         public AnimatedSprite? CurrentAnimation
         {
-            get => _currentAnimation; 
+            get => _currentAnimation;
             private set => _currentAnimation = value;
         }
 
         AnimatedSprite? _currentAnimation;
-        
-        SpriteRendererComponent? _renderer;
+        SpriteRendererComponent _renderer;
 
         ResourceManager _resource;
         Dictionary<string, AnimatedSprite> _animations = [];

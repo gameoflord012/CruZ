@@ -32,7 +32,7 @@ namespace CruZ.GameEngine.GameSystem.Scene
         public GameScene()
         {
             GameApplication.Exiting += Game_Exiting;
-            SceneRoot = ECSManager.CreateTransformEntity();
+            SceneRoot = ECSManager.CreateEntity();
             SceneRoot.IsActive = false;
         }
 
@@ -63,7 +63,7 @@ namespace CruZ.GameEngine.GameSystem.Scene
 
         public TransformEntity CreateEntity(string? name = null)
         {
-            var e = ECSManager.CreateTransformEntity();
+            var e = ECSManager.CreateEntity();
 
             if (!string.IsNullOrEmpty(name)) e.Name = name;
             e.Parent = SceneRoot;

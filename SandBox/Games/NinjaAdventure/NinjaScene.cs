@@ -20,7 +20,12 @@ namespace NinjaAdventure
                 }
                 entityRoot.AddComponent(_spriteRenderer);
 
-                new NinjaCharacter(scene, _spriteRenderer).Entity.Parent = entityRoot;
+                var ninja = new NinjaCharacter(scene, _spriteRenderer);
+                ninja.Entity.Parent = entityRoot;
+
+                var larva = new LarvaMonster(scene, _spriteRenderer);
+                larva.Entity.Parent = entityRoot;
+                larva.Follow = ninja.Entity.Transform;
             }
             return scene;
         }

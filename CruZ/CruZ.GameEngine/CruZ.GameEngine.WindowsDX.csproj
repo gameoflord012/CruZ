@@ -6,17 +6,14 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\..\ThirdParty\monogame-aseprite\source\MonoGame.Aseprite.Content.Pipeline\MonoGame.Aseprite.Content.Pipeline.csproj" />
 		<ProjectReference Include="..\..\ThirdParty\monogame-aseprite\source\MonoGame.Aseprite\MonoGame.Aseprite.csproj" />
+		<ProjectReference Include="..\..\ThirdParty\monogame-aseprite\source\MonoGame.Aseprite.Content.Pipeline\MonoGame.Aseprite.Content.Pipeline.csproj" />
+		
 		<ProjectReference Include="..\..\ThirdParty\MonoGameExtended\src\cs\MonoGame.Extended.Content.Pipeline\MonoGame.Extended.Content.Pipeline.csproj" />
 		<ProjectReference Include="..\..\ThirdParty\MonoGameExtended\src\cs\MonoGame.Extended\MonoGame.Extended.csproj" />
+		
 		<ProjectReference Include="..\..\ThirdParty\MonoGameModified\MonoGame.Framework.Content.Pipeline\MonoGame.Framework.Content.Pipeline.csproj" />
 		<ProjectReference Include="..\..\ThirdParty\MonoGameModified\MonoGame.Framework\MonoGame.Framework.WindowsDX.csproj" />
-
-		<!--this mother fucker be remove soon-->
-		<PackageReference Include="Newtonsoft.Json" Version="13.0.1">
-			<PrivateAssets>all</PrivateAssets>
-		</PackageReference>
 	</ItemGroup>
 
 	<ItemGroup>
