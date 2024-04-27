@@ -49,15 +49,12 @@ namespace CruZ.GameEngine.Utility
             return noiseData;
         }
 
-        public static float GetRotation(Vector2 v1, Vector2 v2)
+        public static float GetAngleBetween(Vector2 v1, Vector2 v2)
         {
-            v1.Normalize();
-            v2.Normalize();
+            float sin = v1.X * v2.Y - v2.X * v1.Y;
+            float cos = v1.X * v2.X + v1.Y * v2.Y;
 
-            var angle = MathF.Acos(Vector2.Dot(v1, v2));
-            float cross = Cross(v1, v2);
-
-            return cross < 0 ? angle : cross > 0 ? -angle : 0;
+            return -MathF.Atan2(sin, cos);
         }
 
         public static float Cross(Vector2 v1, Vector2 v2)

@@ -30,7 +30,7 @@ namespace CruZ.GameEngine.GameSystem.Render
             fx.Parameters["min_alpha"].SetValue(0.05f);
 
             DrawArgs drawArgs = new();
-            drawArgs.Apply(AttachedEntity);
+            drawArgs.Apply(AttachedEntity.Transform);
             drawArgs.Apply(_lightMap);
 
             e.SpriteBatch.Begin(effect: fx);

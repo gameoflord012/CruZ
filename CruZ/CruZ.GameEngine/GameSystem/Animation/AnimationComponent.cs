@@ -53,11 +53,6 @@ namespace CruZ.GameEngine.GameSystem.Animation
             }
         }
 
-        //void IJsonOnDeserialized.OnDeserialized()
-        //{
-        //    LoadAsepriteFile(_resource.Load<AsepriteFile>(_asepriteResourceInfo));
-        //}
-
         public void PlayAnimation(string animationTag, int loopCount = 0)
         {
             animationTag = animationTag.ToLower();
@@ -85,12 +80,26 @@ namespace CruZ.GameEngine.GameSystem.Animation
             _currentAnimation?.Update(gameTime);
         }
 
+        protected override void OnAttached(TransformEntity entity)
+        {
+            if (_transform == null)
+                _transform = entity.Transform;
+        }
+
+        public Transform Transform
+        {
+            get => _transform ?? throw new NullReferenceException();
+            set => _transform = value;
+        }
+
+        Transform? _transform;
+
         private void SpriteRenderer_FetchingDrawRequests(FetchingDrawRequestsEventArgs args)
         {
             if (_currentAnimation == null) return;
             var defaultArgs = args.DefaultDrawArgs;
             defaultArgs.Apply(_currentAnimation);
-            defaultArgs.Apply(AttachedEntity);
+            defaultArgs.Apply(Transform);
 
             if (FitToWorldUnit)
             {

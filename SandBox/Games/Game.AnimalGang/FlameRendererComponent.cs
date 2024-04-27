@@ -29,14 +29,12 @@ namespace Game.AnimalGang.DesktopGL
             UpdateRenderTargetsResolution();
             _gd.SetRenderTarget(_rt);
             _gd.Clear(Color.Transparent);
-
             //
             // setup draw args
             //
             DrawArgs drawArgs = new();
-            drawArgs.Apply(AttachedEntity);
+            drawArgs.Apply(AttachedEntity.Transform);
             drawArgs.Apply(_tex);
-
             //
             // render original texture to _rt
             //

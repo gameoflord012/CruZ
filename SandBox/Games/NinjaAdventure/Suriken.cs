@@ -46,7 +46,7 @@ namespace NinjaAdventure
         private void Renderer_DrawRequestsFetching(FetchingDrawRequestsEventArgs args)
         {
             var drawArgs = args.DefaultDrawArgs;
-            drawArgs.Apply(Entity);
+            drawArgs.Apply(Entity.Transform);
             drawArgs.Apply(_surikenTex);
             drawArgs.Scale = new Vector2(1f / _surikenTex.Width, 1f / _surikenTex.Height);
 

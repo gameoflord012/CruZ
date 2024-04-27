@@ -19,8 +19,8 @@ namespace NinjaAdventure
             _animation = new AnimationComponent(spriteRenderer);
             {
                 _animation.FitToWorldUnit = true;
+                _animation.Transform = new();
                 _animation.LoadAnimationFile("art\\Larva\\Larva.aseprite");
-                _animation.PlayAnimation("walk-front");
             }
             Entity.AddComponent(_animation);
 
@@ -38,7 +38,7 @@ namespace NinjaAdventure
                 Vector2.Zero;
 
             var facingDir =  
-                Vector2.Rotate(Vector2.UnitY, Entity.Transform.Rotation);
+                Vector2.Rotate(-Vector2.UnitY, Entity.Transform.Rotation);
 
             if(followDir.Length() > 0.01) followDir.Normalize();
             facingDir.Normalize();
@@ -46,7 +46,13 @@ namespace NinjaAdventure
             var rotationDir = FunMath.CrossSign(facingDir, followDir);
 
             Entity.Transform.Rotation += rotationDir * _rotationSpeed * gameTime.GetElapsedSeconds();
-            Entity.Transform.Position += facingDir * _speed * gameTime.GetElapsedSeconds(); 
+            Entity.Transform.Position += facingDir * _speed * gameTime.GetElapsedSeconds();
+            //
+            // animation    
+            //
+            string facingString = AnimationHelper.GetFacingDirectionString(facingDir);
+            _animation.PlayAnimation($"walk-{facingString}");
+            _animation.Transform.Position = Entity.Transform.Position;
         }
 
         public TransformEntity Entity { get; private set; }

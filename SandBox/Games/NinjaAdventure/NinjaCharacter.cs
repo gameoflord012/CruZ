@@ -60,7 +60,7 @@ namespace NinjaAdventure
             //
             // animations
             //
-            string facingString = GetFacingDirectionString();
+            string facingString = AnimationHelper.GetFacingDirectionString(_inputMovement);
             
             if(_inputFireSuriken)
             {
@@ -78,25 +78,6 @@ namespace NinjaAdventure
             if (_inputFireSuriken) _inputFireSuriken = false;
         }
 
-        private string GetFacingDirectionString()
-        {
-            if (Vector2.Dot(_inputMovement, Vector2.UnitX) == 1) // facing right
-            {
-                return "right";
-            }
-
-            if (Vector2.Dot(_inputMovement, Vector2.UnitX) == -1) // facing left
-            {
-                return "left";
-            }
-
-            if (Vector2.Dot(_inputMovement, Vector2.UnitY) == -1) // facing back
-            {
-                return "back";
-            }
-
-            return "front";
-        }
 
         private void Input_KeyStateChanged(IInputInfo inputInfo)
         {
@@ -111,11 +92,11 @@ namespace NinjaAdventure
             {
                 _inputMovement += new Vector2(1, 0);
             }
-            if (inputInfo.IsKeyHeldDown(Keys.S))
+            if (inputInfo.IsKeyHeldDown(Keys.W))
             {
                 _inputMovement += new Vector2(0, 1);
             }
-            if (inputInfo.IsKeyHeldDown(Keys.W))
+            if (inputInfo.IsKeyHeldDown(Keys.S))
             {
                 _inputMovement += new Vector2(0, -1);
             }

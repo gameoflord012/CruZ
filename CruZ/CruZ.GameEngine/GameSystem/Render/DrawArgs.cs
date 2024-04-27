@@ -21,11 +21,11 @@ namespace CruZ.GameEngine.GameSystem.Render
         public SpriteEffects SpriteEffect = SpriteEffects.None;
         public bool Skip = false;
 
-        public void Apply(TransformEntity entity)
+        public void Apply(Transform transform)
         {
-            Position = entity.Transform.Position;
-            Scale = entity.Transform.Scale;
-            Rotation = entity.Transform.Rotation;
+            Position = transform.Position;
+            Scale = transform.Scale;
+            Rotation = transform.Rotation;
         }
 
         public void Apply(Texture2D tex)

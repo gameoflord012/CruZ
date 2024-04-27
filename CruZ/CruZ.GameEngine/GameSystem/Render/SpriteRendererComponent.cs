@@ -137,7 +137,7 @@ namespace CruZ.GameEngine.GameSystem.ECS
             DrawArgs defaultArgs = new();
 
             if (Texture != null) defaultArgs.Apply(Texture);
-            defaultArgs.Apply(AttachedEntity);
+            defaultArgs.Apply(AttachedEntity.Transform);
 
             defaultArgs.LayerDepth = CalculateLayerDepth();
             defaultArgs.NormalizedOrigin = NormalizedOrigin;
