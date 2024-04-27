@@ -44,7 +44,7 @@ namespace Game.AnimalGang.DesktopGL
             fx.Parameters["view_projection"].SetValue(e.ViewProjectionMatrix);
             fx.Parameters["hdrColor"].SetValue(Vector4.One);
             e.SpriteBatch.Begin(SpriteSortMode.Immediate, effect: fx);
-            e.SpriteBatch.Draw(drawArgs);
+            e.SpriteBatch.DrawWorld(drawArgs);
             e.SpriteBatch.End();
 
             if(RenderMode == RenderModes.TextureOnly) goto FINISHED;

@@ -1,18 +1,11 @@
 ﻿using System;
 
-using CruZ.GameEngine;
 using CruZ.GameEngine.Utility;
 
 using Microsoft.Xna.Framework;
 
 namespace CruZ.GameEngine.GameSystem
 {
-    public enum ProjectionOffset
-    {
-        Center, // When projection top left at -width / 2, -height / 2
-        Topleft // When projection top left at 0, 0
-    }
-
     public class Camera
     {
         private static Camera? _mainCamera;
@@ -44,7 +37,7 @@ namespace CruZ.GameEngine.GameSystem
 
             var ndc = new Vector2(
                 p.X / ViewPortWidth * 2f - 1f,
-                -(p.Y / ViewPortHeight * 2f - 1f));
+                -p.Y / ViewPortHeight * 2f - 1f);
 
             var inv = Matrix.Invert(ViewProjectionMatrix());
             var world = Vector4.Transform(ndc, inv);
@@ -70,13 +63,13 @@ namespace CruZ.GameEngine.GameSystem
         }
 
         /// <summary>
-        /// A ratio use to convert from world magnitude to world magnitude if multiply with it
+        /// A ratio use to convert from world magnitude to screen magnitude if multiply with it
         /// </summary>
         public Vector2 ScreenToWorldRatio()
         {
             return new(
                 ViewPortWidth * Zoom / VirtualWidth,
-                ViewPortHeight * Zoom / VirtualHeight
+                -ViewPortHeight * Zoom / VirtualHeight // because descartes is -y of screen coordinate
             );
         }
 
@@ -100,7 +93,7 @@ namespace CruZ.GameEngine.GameSystem
             mat *= Matrix.CreateTranslation(-CameraOffset.X, -CameraOffset.Y, 0);
             mat *= Matrix.CreateScale(Zoom);
             return mat;
-        }
+        }   
 
         /// <summary>
         /// Create orthographic projection with given rect <br/>
@@ -111,7 +104,7 @@ namespace CruZ.GameEngine.GameSystem
         {
             return Matrix.CreateOrthographicOffCenter(
                 -VirtualWidth / 2, VirtualWidth / 2,
-                VirtualHeight / 2, -VirtualHeight / 2,
+                -VirtualHeight / 2, VirtualHeight / 2,
                 -GameConstants.MAX_WORLD_DISTANCE, GameConstants.MAX_WORLD_DISTANCE);
         }
 

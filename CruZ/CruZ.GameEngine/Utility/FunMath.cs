@@ -55,9 +55,19 @@ namespace CruZ.GameEngine.Utility
             v2.Normalize();
 
             var angle = MathF.Acos(Vector2.Dot(v1, v2));
-            var cross = v1.X * v2.Y - v1.Y * v2.X;
+            float cross = Cross(v1, v2);
 
             return cross < 0 ? angle : cross > 0 ? -angle : 0;
+        }
+
+        public static float Cross(Vector2 v1, Vector2 v2)
+        {
+            return v1.X * v2.Y - v1.Y * v2.X;
+        }
+
+        public static int CrossSign(Vector2 v1, Vector2 v2)
+        {
+            return MathF.Sign(v1.X * v2.Y - v1.Y * v2.X);
         }
     }
 }

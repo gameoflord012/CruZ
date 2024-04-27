@@ -12,6 +12,7 @@ using RectangleF = System.Drawing.RectangleF;
 using CruZ.GameEngine.GameSystem.UI;
 using CruZ.GameEngine.GameSystem;
 using CruZ.GameEngine.Utility;
+using CruZ.GameEngine;
 
 namespace CruZ.Editor.UI
 {
@@ -44,8 +45,8 @@ namespace CruZ.Editor.UI
                     _attachedEntity.RemovedFromWorld += Entity_OnRemoveFromWorld;
                     _attachedEntity.ComponentsChanged += Entity_ComponentChanged;
 
-                    var iHasBoundBox = ExtractIHasBoundBox(_attachedEntity);
-                    UpdateIHasBoundBox(iHasBoundBox);
+                    var rectUIProvider = ExtractRectUIProvider(_attachedEntity);
+                    SetUIRectUIProvider(rectUIProvider);
                 }
 
                 IsActive = _attachedEntity != null;
@@ -70,19 +71,23 @@ namespace CruZ.Editor.UI
         private void Entity_ComponentChanged(ComponentCollection comps)
         {
             if (_attachedEntity != null)
-                UpdateIHasBoundBox(ExtractIHasBoundBox(_attachedEntity));
+                SetUIRectUIProvider(ExtractRectUIProvider(_attachedEntity));
         }
 
-        private IHasBoundBox? ExtractIHasBoundBox(TransformEntity entity)
+        private IRectUIProvider? ExtractRectUIProvider(TransformEntity entity)
         {
-            return entity.GetAllComponents().FirstOrDefault(e => e is IHasBoundBox) as IHasBoundBox;
+            return entity.GetAllComponents().FirstOrDefault(e => e is IRectUIProvider) as IRectUIProvider;
         }
 
-        private void UpdateIHasBoundBox(IHasBoundBox? iHasBoundBox)
+        private void SetUIRectUIProvider(IRectUIProvider? rectUIProvider)
         {
-            if (_iHasBoundBox != null) _iHasBoundBox.BoundingBoxChanged -= Entity_BoundingBoxChanged;
-            _iHasBoundBox = iHasBoundBox;
-            if (_iHasBoundBox != null) _iHasBoundBox.BoundingBoxChanged += Entity_BoundingBoxChanged;
+            if (_currentRectUIProvider != null) 
+                _currentRectUIProvider.UIRectChanged -= RectUIProvider_ValueChanged;
+
+            _currentRectUIProvider = rectUIProvider;
+
+            if (_currentRectUIProvider != null)
+                _currentRectUIProvider.UIRectChanged += RectUIProvider_ValueChanged;
         }
 
         protected override void OnDraw(UIInfo args)
@@ -104,7 +109,7 @@ namespace CruZ.Editor.UI
         {
             if (_attachedEntity == null) return;
 
-            if (_bounds.IsEmpty)
+            if (_worldBound == null)
             {
                 Width = MIN_BOUND_SIZE;
                 Height = MIN_BOUND_SIZE;
@@ -120,9 +125,9 @@ namespace CruZ.Editor.UI
             }
         }
 
-        private void Entity_BoundingBoxChanged(UIBoundingBox bBox)
+        private void RectUIProvider_ValueChanged(RectUIInfo rectInfo)
         {
-            CalcControlBounds(bBox);
+            SetRectInfo(rectInfo);
         }
 
         private void Entity_OnRemoveFromWorld(TransformEntity e)
@@ -130,18 +135,17 @@ namespace CruZ.Editor.UI
             if (Parent != null) Parent.RemoveChild(this);
         }
 
-        private void CalcControlBounds(UIBoundingBox bBox)
+        private void SetRectInfo(RectUIInfo uiRect)
         {
-            if (bBox.IsEmpty()) return;
+            _worldBound = uiRect.WorldBound;
+            _points = uiRect.WorldOrigins;
 
-            _bounds = bBox.WorldBounds;
-            _points = bBox.WorldOrigins;
+            if (uiRect.WorldBound == null) return;
 
-            Location = Camera.Main.CoordinateToPoint(new Vector2(_bounds.X, _bounds.Y));
-            var LocationBR = Camera.Main.CoordinateToPoint(new Vector2(_bounds.X + _bounds.Width, _bounds.Y + _bounds.Height));
-
-            Width = LocationBR.X - Location.X;
-            Height = LocationBR.Y - Location.Y;
+            var worldBound = _worldBound!.Value;
+            Location = Camera.Main.CoordinateToPoint(new Vector2(worldBound.X, worldBound.Y));
+            Width = (worldBound.W * Camera.Main.ScreenToWorldRatio().X).RoundToInt();
+            Height = (worldBound.H * Camera.Main.ScreenToWorldRatio().Y).RoundToInt();
         }
 
         private void SetCenter(Point p)
@@ -151,8 +155,8 @@ namespace CruZ.Editor.UI
                 p.Y - Height / 2);
         }
 
-        IHasBoundBox? _iHasBoundBox;
-        RectangleF _bounds; //World bounds
+        IRectUIProvider? _currentRectUIProvider;
+        WorldRectangle? _worldBound; //World bounds
         List<Vector2> _points = [];
 
         protected override object? OnStartDragging(UIInfo args)

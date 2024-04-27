@@ -20,15 +20,17 @@ namespace CruZ.GameEngine.GameSystem.Render
 
         public bool IsDrawRequestOutOfScreen(DrawArgs args)
         {
-            RectangleF bounds = args.GetWorldBounds();
+            WorldRectangle worldBounds = args.GetWorldBounds();
             
-            var TL = new Vector4(bounds.Left, bounds.Top, 0, 1);
-            var BR = new Vector4(bounds.Right, bounds.Bottom, 0, 1);
+            var min = new Vector4(worldBounds.X, worldBounds.Y, 0, 1);
+            var max = new Vector4(worldBounds.Right, worldBounds.Top, 0, 1);
 
-            TL = Vector4.Transform(TL, ViewProjectionMat);
-            BR = Vector4.Transform(BR, ViewProjectionMat);
+            var matrix = Camera.Main.ViewProjectionMatrix();
 
-            return TL.X > 1 || BR.X < -1 || TL.Y < -1 || BR.Y > 1;
+            var minNDC = Vector4.Transform(min, matrix);
+            var maxNDC = Vector4.Transform(max, matrix);
+
+            return maxNDC.X < -1 || maxNDC.Y < -1 || minNDC.X > 1 || minNDC.Y > 1;
         }
 
         public DrawArgs DefaultDrawArgs { get; }

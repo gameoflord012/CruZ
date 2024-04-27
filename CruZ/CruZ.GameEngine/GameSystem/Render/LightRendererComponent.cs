@@ -8,9 +8,9 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace CruZ.GameEngine.GameSystem.Render
 {
-    public class LightRendererComponent : RendererComponent, IHasBoundBox
+    public class LightRendererComponent : RendererComponent, IRectUIProvider
     {
-        public event Action<UIBoundingBox> BoundingBoxChanged;
+        public event Action<RectUIInfo> UIRectChanged;
 
         public LightRendererComponent()
         {
@@ -34,10 +34,10 @@ namespace CruZ.GameEngine.GameSystem.Render
             drawArgs.Apply(_lightMap);
 
             e.SpriteBatch.Begin(effect: fx);
-            e.SpriteBatch.Draw(drawArgs);
+            e.SpriteBatch.DrawWorld(drawArgs);
             e.SpriteBatch.End();
 
-            BoundingBoxChanged?.Invoke(new UIBoundingBox(
+            UIRectChanged?.Invoke(new RectUIInfo(
                 drawArgs.GetWorldBounds(), [drawArgs.GetWorldOrigin()]));
         }
 

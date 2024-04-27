@@ -16,11 +16,11 @@ namespace CruZ.GameEngine.GameSystem.ECS
     /// <summary>
     /// Game component loaded from specify resource
     /// </summary>
-    public partial class SpriteRendererComponent : RendererComponent, IHasBoundBox
+    public partial class SpriteRendererComponent : RendererComponent, IRectUIProvider
     {
         public event Action? DrawBegin;
         public event Action? DrawEnd;
-        public event Action<UIBoundingBox>? BoundingBoxChanged;
+        public event Action<RectUIInfo>? UIRectChanged;
 
         #region Properties
         public bool SortByY { get; set; } = false;
@@ -48,43 +48,46 @@ namespace CruZ.GameEngine.GameSystem.ECS
         {
             DrawBegin += () =>
             {
-                _boundingBox.WorldOrigins.Clear();
-                _boundingBox.WorldBounds = default;
+                _worldBound = new();
             };
 
-            DrawRequestsFetched += (fetchedDrawRequests) =>            
+            DrawRequestsFetched += (fetchedDrawRequests) =>
             {
                 foreach (var request in fetchedDrawRequests)
                 {
                     // add origin
 
-                    if( // ignore if it is an invalid request
+                    if ( // ignore if it is an invalid request
                         request.Texture == null ||
-                        request.GetWorldBounds().Width == 0 && request.GetWorldBounds().Height == 0)
+                        request.GetWorldBounds().W == 0 && request.GetWorldBounds().H == 0)
                         continue;
 
-                    _boundingBox.WorldOrigins.Add(request.GetWorldOrigin());
+                    _worldBound.WorldOrigins.Add(request.GetWorldOrigin());
 
-                    if (_boundingBox.WorldBounds.IsEmpty)
+                    if (_worldBound.WorldBound == null)
                     {
-                        _boundingBox.WorldBounds = request.GetWorldBounds(); // Assign if worldbounds is uninitialized
+                        _worldBound.WorldBound = request.GetWorldBounds(); // Assign if worldbounds is uninitialized
                     }
                     else
                     {
                         var bounds = request.GetWorldBounds();
 
                         //
-                        // we expand the bounding box accroding to requests
+                        // we expand the world bound to cover the request's world bound
                         //
-                        _boundingBox.WorldBounds.X = MathF.Min(_boundingBox.WorldBounds.X, bounds.X);
-                        _boundingBox.WorldBounds.Y = MathF.Min(_boundingBox.WorldBounds.Y, bounds.Y);
-                        _boundingBox.WorldBounds.Width = _boundingBox.WorldBounds.Right < bounds.Right ? bounds.Right - _boundingBox.WorldBounds.X : _boundingBox.WorldBounds.Width;
-                        _boundingBox.WorldBounds.Height = _boundingBox.WorldBounds.Bottom < bounds.Bottom ? bounds.Bottom - _boundingBox.WorldBounds.Y : _boundingBox.WorldBounds.Height;
+                        WorldRectangle updatingBound = _worldBound.WorldBound.Value;
+                        {
+                            updatingBound.X = MathF.Min(updatingBound.X, bounds.X);
+                            updatingBound.Y = MathF.Min(updatingBound.Y, bounds.Y);
+                            updatingBound.Top = MathF.Max(updatingBound.Top, bounds.Top);
+                            updatingBound.Right = MathF.Max(updatingBound.Right, bounds.Right);
+                        }
+                        _worldBound.WorldBound = updatingBound;
                     }
                 }
             };
 
-            DrawEnd += () => BoundingBoxChanged?.Invoke(_boundingBox);
+            DrawEnd += () => UIRectChanged?.Invoke(_worldBound);
         }
 
         public void LoadTexture(string texturePath)
@@ -116,7 +119,7 @@ namespace CruZ.GameEngine.GameSystem.ECS
 
             foreach (var request in drawRequest)
             {
-                e.SpriteBatch.Draw(request);
+                e.SpriteBatch.DrawWorld(request);
             }
 
             e.SpriteBatch.End();
@@ -132,7 +135,7 @@ namespace CruZ.GameEngine.GameSystem.ECS
         private void FetchDrawRequests(List<DrawArgs> drawRequests, Matrix viewProjectionMat)
         {
             DrawArgs defaultArgs = new();
-            
+
             if (Texture != null) defaultArgs.Apply(Texture);
             defaultArgs.Apply(AttachedEntity);
 
@@ -140,7 +143,7 @@ namespace CruZ.GameEngine.GameSystem.ECS
             defaultArgs.NormalizedOrigin = NormalizedOrigin;
             defaultArgs.Color = Color.White;
             defaultArgs.SpriteEffect = FlipHorizontally ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
-            
+
             DrawRequestsFetching?.Invoke(new FetchingDrawRequestsEventArgs(defaultArgs, drawRequests, viewProjectionMat));
             DrawRequestsFetched?.Invoke(drawRequests.ToImmutableList());
         }
@@ -154,6 +157,6 @@ namespace CruZ.GameEngine.GameSystem.ECS
         //[JsonInclude]
         //ResourceInfo? _spriteResInfo;
         ResourceManager _resource;
-        UIBoundingBox _boundingBox = new();
+        RectUIInfo _worldBound;
     }
 }

@@ -6,36 +6,32 @@ using Microsoft.Xna.Framework;
 
 namespace CruZ.GameEngine.GameSystem.UI
 {
-    public struct UIBoundingBox
+    public struct RectUIInfo
     {
-        public UIBoundingBox() { }
+        public RectUIInfo() { }
 
-        public UIBoundingBox(RectangleF rect, Vector2[] origins)
+        public RectUIInfo(WorldRectangle worldRect, Vector2[] origins)
         {
             WorldOrigins.AddRange(origins);
-            WorldBounds = rect;
+            WorldBound = worldRect;
         }
 
         /// <summary>
-        /// WorldBounds to be drawn in world coord
+        /// RectUIInfo to be drawn in world coord
         /// </summary>
-        public RectangleF WorldBounds;
+        public WorldRectangle? WorldBound;
+
         /// <summary>
         /// WorldOrigins to be drawn in world coord
         /// </summary>
         public List<Vector2> WorldOrigins = [];
-
-        public static UIBoundingBox Default => new UIBoundingBox();
-
-        public bool IsEmpty()
-        {
-            return WorldBounds.IsEmpty;
-        }
     }
 
-
-    public interface IHasBoundBox
+    /// <summary>
+    /// The draw back of this is the RectUIInfo only know when action is invoking, if not, we not know the current value
+    /// </summary>
+    public interface IRectUIProvider
     {
-        event Action<UIBoundingBox> BoundingBoxChanged;
+        event Action<RectUIInfo> UIRectChanged;
     }
 }

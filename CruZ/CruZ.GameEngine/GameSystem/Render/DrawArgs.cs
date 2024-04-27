@@ -44,25 +44,29 @@ namespace CruZ.GameEngine.GameSystem.Render
             LayerDepth = sprite.LayerDepth;
         }
 
-        public RectangleF GetWorldBounds() // in World Coordinate
+        public WorldRectangle GetWorldBounds() // in World Coordinate
         {
-            RectangleF rect = new();
+            WorldRectangle rect = new();
 
-            rect.Width = SourceRectangle.Width * Scale.X;
-            rect.Height = SourceRectangle.Height * Scale.Y;
-            rect.Location = new(
-                Position.X - rect.Width * NormalizedOrigin.X,
-                Position.Y - rect.Height * NormalizedOrigin.Y);
+            rect.W = SourceRectangle.Width * Scale.X;
+            rect.H = SourceRectangle.Height * Scale.Y;
+            
+            Vector2 origin = new(
+                rect.W * NormalizedOrigin.X,
+                rect.H * NormalizedOrigin.Y);
 
+            rect.X = Position.X - origin.X;
+            rect.Y = Position.Y + origin.Y - rect.H;
+            
             return rect;
         }
 
         public Vector2 GetWorldOrigin()
         {
-            var worldBounds = GetWorldBounds();
+            var worldRect = GetWorldBounds();
             return new(
-                worldBounds.X + worldBounds.Width * NormalizedOrigin.X,
-                worldBounds.Y + worldBounds.Height * NormalizedOrigin.Y
+                worldRect.X + worldRect.W * NormalizedOrigin.X,
+                worldRect.Y + worldRect.H * (1 - NormalizedOrigin.Y)
             );
         }
     }

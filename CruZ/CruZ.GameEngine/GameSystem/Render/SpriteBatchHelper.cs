@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,15 +16,15 @@ namespace CruZ.GameEngine.GameSystem.Render
     /// </summary>
     public static class SpriteBatchHelper
     {
-        public static void Draw(this SpriteBatch spriteBatch, DrawArgs args)
+        public static void DrawWorld(this SpriteBatch spriteBatch, DrawArgs args)
         {
             if(args.Skip || args.Texture == null) return;
-            
-            spriteBatch.Draw(
-                args.Texture, 
-                args.Position, 
-                args.SourceRectangle, 
-                args.Color, 
+
+            spriteBatch.DrawWorld(
+                args.Texture,
+                args.Position,
+                args.SourceRectangle,
+                args.Color,
                 args.Rotation,
                 new Vector2(args.NormalizedOrigin.X * args.SourceRectangle.Width, args.NormalizedOrigin.Y * args.SourceRectangle.Height),
                 args.Scale,

@@ -33,14 +33,20 @@ namespace NinjaAdventure
 
         private void ScriptComponent_Updating(GameTime gameTime)
         {
-            Vector2 moveDir = Follow != null ? 
+            Vector2 followDir = Follow != null ? 
                 Follow.Position - Entity.Transform.Position : 
                 Vector2.Zero;
 
-            if(moveDir.Length() > 0.01) moveDir.Normalize();
+            var facingDir =  
+                Vector2.Rotate(Vector2.UnitY, Entity.Transform.Rotation);
 
-            Entity.Transform.Position += moveDir * _speed * gameTime.GetElapsedSeconds();
-            Entity.Transform.Rotation = FunMath.GetRotation(-Vector2.UnitY, new Vector2(moveDir.X, -moveDir.Y));
+            if(followDir.Length() > 0.01) followDir.Normalize();
+            facingDir.Normalize();
+
+            var rotationDir = FunMath.CrossSign(facingDir, followDir);
+
+            Entity.Transform.Rotation += rotationDir * _rotationSpeed * gameTime.GetElapsedSeconds();
+            Entity.Transform.Position += facingDir * _speed * gameTime.GetElapsedSeconds(); 
         }
 
         public TransformEntity Entity { get; private set; }
@@ -49,5 +55,6 @@ namespace NinjaAdventure
         public Transform? Follow { get; set; }
 
         float _speed = 1;
+        float _rotationSpeed = 3.14f;
     }
 }
