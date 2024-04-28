@@ -1,6 +1,7 @@
 ﻿using CruZ.GameEngine;
 using CruZ.GameEngine.GameSystem;
 using Genbox.VelcroPhysics.Dynamics;
+using Genbox.VelcroPhysics.Factories;
 using Genbox.VelcroPhysics.MonoGame.DebugView;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -18,8 +19,12 @@ namespace CruZ.Experiment
             IsMouseVisible = true;
             Window.AllowUserResizing = true;
             Content.RootDirectory = ".\\Content";
-            _world = new(Vector2.One);
+
+            _world = new(-Vector2.UnitY * 10);
             _debugView = new(_world);
+
+            _rectangle = BodyFactory.CreateRectangle(_world, 100f, 100f, 1f);
+            _rectangle.BodyType = BodyType.Dynamic;
         }
 
         protected override void LoadContent()
@@ -39,6 +44,8 @@ namespace CruZ.Experiment
 
         protected override void OnUpdate(GameTime gameTime)
         {
+            _world.Step(gameTime.GetElapsedSeconds());
+
             Vector2 dir = new(0, 0);
 
             if (Keyboard.GetState().IsKeyDown(Keys.A))
@@ -91,6 +98,10 @@ namespace CruZ.Experiment
                 SpriteEffects.None,
                 0);
             _spriteBatch.End();
+
+            _debugView.RenderDebugData(
+                _camera.ViewMatrix(), 
+                _camera.ProjectionMatrix());
         }
 
         Texture2D _texture;
@@ -100,6 +111,8 @@ namespace CruZ.Experiment
 
         DebugView _debugView;
         World _world;
+
+        Body _rectangle;
 
         Vector2 _position;
         float _rotation;
