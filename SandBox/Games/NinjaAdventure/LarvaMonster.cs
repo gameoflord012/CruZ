@@ -50,8 +50,9 @@ namespace NinjaAdventure
             //
             // animation    
             //
-            string facingString = AnimationHelper.GetFacingDirectionString(facingDir);
-            _animation.PlayAnimation($"walk-{facingString}");
+            _facingString ??= "front";
+            _facingString = AnimationHelper.GetFacingDirectionString(facingDir, _facingString);
+            _animation.PlayAnimation($"walk-{_facingString}");
             _animation.Transform.Position = Entity.Transform.Position;
         }
 
@@ -62,5 +63,6 @@ namespace NinjaAdventure
 
         float _speed = 1;
         float _rotationSpeed = 3.14f;
+        private string? _facingString;
     }
 }

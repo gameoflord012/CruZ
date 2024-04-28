@@ -60,7 +60,7 @@ namespace NinjaAdventure
             //
             // animations
             //
-            string facingString = AnimationHelper.GetFacingDirectionString(_inputMovement);
+            var facingString = AnimationHelper.GetFacingDirectionString(_inputMovement);
             
             if(_inputFireSuriken)
             {
