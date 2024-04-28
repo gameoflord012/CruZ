@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PipelineBuildEvent xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <SourceFile>D:/monogame-projects/CruZ_GameEngine/SandBox/Games/NinjaAdventure/Resource/art/NinjaAnim.aseprite</SourceFile>
+  <SourceTime>2024-04-24T21:40:30.1859727+07:00</SourceTime>
+  <DestFile>D:/monogame-projects/CruZ_GameEngine/SandBox/Games/NinjaAdventure/Resource//.content/art/NinjaAnim.aseprite.xnb</DestFile>
+  <DestTime>2024-04-28T22:11:15.3971271+07:00</DestTime>
+  <Importer>AsepriteFileContentImporter</Importer>
+  <ImporterTime>2024-04-28T22:10:53.8408828+07:00</ImporterTime>
+  <Processor>AsepriteFileContentProcessor</Processor>
+  <ProcessorTime>2024-04-28T22:10:53.8408828+07:00</ProcessorTime>
+  <Dependencies />
+  <BuildAsset />
+  <BuildOutput />
+</PipelineBuildEvent>

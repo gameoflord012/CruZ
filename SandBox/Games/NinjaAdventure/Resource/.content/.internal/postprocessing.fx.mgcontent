@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PipelineBuildEvent xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <SourceFile>D:/monogame-projects/CruZ_GameEngine/SandBox/Games/NinjaAdventure/Resource/.internal/postprocessing.fx</SourceFile>
+  <SourceTime>2024-04-08T16:55:45.0949959+07:00</SourceTime>
+  <DestFile>D:/monogame-projects/CruZ_GameEngine/SandBox/Games/NinjaAdventure/Resource//.content/.internal/postprocessing.fx.xnb</DestFile>
+  <DestTime>2024-04-28T22:11:14.6952145+07:00</DestTime>
+  <Importer>EffectImporter</Importer>
+  <ImporterTime>2024-04-28T22:10:53.3985509+07:00</ImporterTime>
+  <Processor>EffectProcessor</Processor>
+  <ProcessorTime>2024-04-28T22:10:53.3985509+07:00</ProcessorTime>
+  <Dependencies />
+  <BuildAsset />
+  <BuildOutput />
+</PipelineBuildEvent>

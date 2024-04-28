@@ -3,14 +3,6 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/main/VisualStudio.gitignore
 
-# MGCB
-*.mgstats
-*.xnb
-*.mgcontent
-
-# Temp files
-*.temp
-
 # User-specific files
 *.rsuser
 *.suo

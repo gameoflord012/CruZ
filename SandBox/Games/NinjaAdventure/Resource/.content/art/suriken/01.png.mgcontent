@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PipelineBuildEvent xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <SourceFile>D:/monogame-projects/CruZ_GameEngine/SandBox/Games/NinjaAdventure/Resource/art/suriken/01.png</SourceFile>
+  <SourceTime>2023-04-26T10:39:22.5608337+07:00</SourceTime>
+  <DestFile>D:/monogame-projects/CruZ_GameEngine/SandBox/Games/NinjaAdventure/Resource//.content/art/suriken/01.png.xnb</DestFile>
+  <DestTime>2024-04-28T22:11:17.1213836+07:00</DestTime>
+  <Importer>TextureImporter</Importer>
+  <ImporterTime>2024-04-28T22:10:53.3985509+07:00</ImporterTime>
+  <Processor>TextureProcessor</Processor>
+  <ProcessorTime>2024-04-28T22:10:53.3985509+07:00</ProcessorTime>
+  <Dependencies />
+  <BuildAsset />
+  <BuildOutput />
+</PipelineBuildEvent>
