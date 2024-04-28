@@ -1,12 +1,20 @@
 [submodule "ThirdParty/MonoGameModified"]
 	path = ThirdParty/MonoGameModified
 	url = https://github.com/gameoflord012/MonoGameModified.git
+	branch = swordmaster
+	update = rebase
 [submodule "ThirdParty/monogame-aseprite"]
 	path = ThirdParty/monogame-aseprite
 	url = https://github.com/gameoflord012/monogame-aseprite.git
+	branch = swordmaster
+	update = rebase
 [submodule "ThirdParty/MonoGameExtended"]
 	path = ThirdParty/MonoGameExtended
 	url = https://github.com/gameoflord012/MonoGame.Extended.git
+	branch = swordmaster
+	update = rebase
 [submodule "ThirdParty/VelcroPhysics"]
 	path = ThirdParty/VelcroPhysics
 	url = https://github.com/gameoflord012/VelcroPhysics.git
+	branch = swordmaster
+	update = rebase
