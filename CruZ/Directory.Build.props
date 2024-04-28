@@ -1,8 +1,6 @@
 <Project>
   <PropertyGroup>
-    <CruZPlatform>$(MSBuildProjectName)</CruZPlatform>
-    <BaseIntermediateOutputPath>..\Build\obj\$(CruZPlatform)</BaseIntermediateOutputPath>
-    <BaseOutputPath>..\Build\bin\$(CruZPlatform)</BaseOutputPath>
+    <BaseOutputPath>..\..\Artifacts\$(MSBuildProjectName)</BaseOutputPath>
   </PropertyGroup>
 </Project>
 

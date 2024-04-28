@@ -11,11 +11,13 @@ namespace CruZ.Editor
         [STAThread]
         public static void Main(string[] args)
         {
+            var domainDir = AppDomain.CurrentDomain.BaseDirectory;
+
             Parser.Default.ParseArguments<Options>(args)
             .WithParsed(o =>
             {
-                EditorContext.GameProjectDir = o.ProjectRoot;
-                EditorContext.GameAssembly = Assembly.LoadFile(o.GameAssembly);
+                EditorContext.GameProjectDir = Path.Combine(domainDir, o.ProjectRoot);
+                EditorContext.GameAssembly = Assembly.LoadFile(Path.Combine(domainDir, o.GameAssembly));
             }).WithNotParsed(errors =>
             {
                 string errorMsg = "";
@@ -35,7 +37,7 @@ namespace CruZ.Editor
                 throw new ArgumentException(errorMsg);
             });
 
-            EditorContext.EditorResourceDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resource\\");
+            EditorContext.EditorResourceDir = Path.Combine(domainDir, "Resource\\");
             EditorForm.Run();
         }
 

@@ -38,12 +38,12 @@ namespace NinjaAdventure
                 Vector2.Zero;
 
             var facingDir =  
-                Vector2.Rotate(-Vector2.UnitY, Entity.Transform.Rotation);
+                Vector2.Rotate(Vector2.UnitY, Entity.Transform.Rotation);
 
             if(followDir.Length() > 0.01) followDir.Normalize();
             facingDir.Normalize();
 
-            var rotationDir = FunMath.CrossSign(facingDir, followDir);
+            var rotationDir = MathF.Sign(FunMath.GetAngleBetween(facingDir, followDir));
 
             Entity.Transform.Rotation += rotationDir * _rotationSpeed * gameTime.GetElapsedSeconds();
             Entity.Transform.Position += facingDir * _speed * gameTime.GetElapsedSeconds();

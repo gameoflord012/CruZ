@@ -54,17 +54,7 @@ namespace CruZ.GameEngine.Utility
             float sin = v1.X * v2.Y - v2.X * v1.Y;
             float cos = v1.X * v2.X + v1.Y * v2.Y;
 
-            return -MathF.Atan2(sin, cos);
-        }
-
-        public static float Cross(Vector2 v1, Vector2 v2)
-        {
-            return v1.X * v2.Y - v1.Y * v2.X;
-        }
-
-        public static int CrossSign(Vector2 v1, Vector2 v2)
-        {
-            return MathF.Sign(v1.X * v2.Y - v1.Y * v2.X);
+            return MathF.Atan2(sin, cos);
         }
     }
 }
