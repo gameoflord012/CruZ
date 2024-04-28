@@ -7,6 +7,3 @@
 [submodule "ThirdParty/MonoGameExtended"]
 	path = ThirdParty/MonoGameExtended
 	url = https://github.com/gameoflord012/MonoGame.Extended.git
-[submodule "ThirdParty/Aether.Physic2D"]
-	path = ThirdParty/Aether.Physic2D
-	url = https://github.com/gameoflord012/Aether.Physics2D.git
