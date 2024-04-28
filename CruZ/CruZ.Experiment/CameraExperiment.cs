@@ -18,7 +18,7 @@ namespace CruZ.Experiment
         {
             IsMouseVisible = true;
             Window.AllowUserResizing = true;
-            Content.RootDirectory = ".\\Content\\bin";
+            Content.RootDirectory = ".\\Content";
         }
 
         protected override void LoadContent()

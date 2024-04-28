@@ -14,6 +14,7 @@
 		
 		<ProjectReference Include="..\..\ThirdParty\MonoGameModified\MonoGame.Framework.Content.Pipeline\MonoGame.Framework.Content.Pipeline.csproj" />
 		<ProjectReference Include="..\..\ThirdParty\MonoGameModified\MonoGame.Framework\MonoGame.Framework.WindowsDX.csproj" />
+		<ProjectReference Include="..\..\ThirdParty\VelcroPhysics\src\VelcroPhysics\VelcroPhysics.MonoGame.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

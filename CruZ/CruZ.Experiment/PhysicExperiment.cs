@@ -17,7 +17,7 @@ namespace CruZ.Experiment
         {
             IsMouseVisible = true;
             Window.AllowUserResizing = true;
-            Content.RootDirectory = ".\\Content\\bin";
+            Content.RootDirectory = ".\\Content";
             _world = new(Vector2.One);
             _debugView = new(_world);
         }
@@ -28,6 +28,7 @@ namespace CruZ.Experiment
 
             _texture = Content.Load<Texture2D>("homelander");
             _normalFx = Content.Load<Effect>("shaders\\normal-shader");
+            _debugView.LoadContent(GraphicsDevice, Content);
         }
 
         protected override void OnInitialize()

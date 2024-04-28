@@ -53,8 +53,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Pipeline", "Pipeline", "{83
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VelcroPhysics.MonoGame", "ThirdParty\VelcroPhysics\src\VelcroPhysics\VelcroPhysics.MonoGame.csproj", "{04907A69-69C7-45DE-99D5-A91B9F10A63F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VelcroPhysics.MonoGame.DebugView", "ThirdParty\VelcroPhysics\src\VelcroPhysics.MonoGame.DebugView\VelcroPhysics.MonoGame.DebugView.csproj", "{6216042A-E38A-4D5B-B9DA-2DBDACCCDF19}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -617,42 +615,6 @@ Global
 		{04907A69-69C7-45DE-99D5-A91B9F10A63F}.WindowsRelease|x64.Build.0 = WindowsRelease|Any CPU
 		{04907A69-69C7-45DE-99D5-A91B9F10A63F}.WindowsRelease|x86.ActiveCfg = WindowsRelease|Any CPU
 		{04907A69-69C7-45DE-99D5-A91B9F10A63F}.WindowsRelease|x86.Build.0 = WindowsRelease|Any CPU
-		{6216042A-E38A-4D5B-B9DA-2DBDACCCDF19}.Debug|Any CPU.ActiveCfg = WindowsDebug|Any CPU
-		{6216042A-E38A-4D5B-B9DA-2DBDACCCDF19}.Debug|Any CPU.Build.0 = WindowsDebug|Any CPU
-		{6216042A-E38A-4D5B-B9DA-2DBDACCCDF19}.Debug|x64.ActiveCfg = WindowsDebug|Any CPU
-		{6216042A-E38A-4D5B-B9DA-2DBDACCCDF19}.Debug|x64.Build.0 = WindowsDebug|Any CPU
-		{6216042A-E38A-4D5B-B9DA-2DBDACCCDF19}.Debug|x86.ActiveCfg = WindowsDebug|Any CPU
-		{6216042A-E38A-4D5B-B9DA-2DBDACCCDF19}.Debug|x86.Build.0 = WindowsDebug|Any CPU
-		{6216042A-E38A-4D5B-B9DA-2DBDACCCDF19}.LinuxDebug|Any CPU.ActiveCfg = LinuxDebug|Any CPU
-		{6216042A-E38A-4D5B-B9DA-2DBDACCCDF19}.LinuxDebug|Any CPU.Build.0 = LinuxDebug|Any CPU
-		{6216042A-E38A-4D5B-B9DA-2DBDACCCDF19}.LinuxDebug|x64.ActiveCfg = LinuxDebug|Any CPU
-		{6216042A-E38A-4D5B-B9DA-2DBDACCCDF19}.LinuxDebug|x64.Build.0 = LinuxDebug|Any CPU
-		{6216042A-E38A-4D5B-B9DA-2DBDACCCDF19}.LinuxDebug|x86.ActiveCfg = LinuxDebug|Any CPU
-		{6216042A-E38A-4D5B-B9DA-2DBDACCCDF19}.LinuxDebug|x86.Build.0 = LinuxDebug|Any CPU
-		{6216042A-E38A-4D5B-B9DA-2DBDACCCDF19}.LinuxRelease|Any CPU.ActiveCfg = LinuxRelease|Any CPU
-		{6216042A-E38A-4D5B-B9DA-2DBDACCCDF19}.LinuxRelease|Any CPU.Build.0 = LinuxRelease|Any CPU
-		{6216042A-E38A-4D5B-B9DA-2DBDACCCDF19}.LinuxRelease|x64.ActiveCfg = LinuxRelease|Any CPU
-		{6216042A-E38A-4D5B-B9DA-2DBDACCCDF19}.LinuxRelease|x64.Build.0 = LinuxRelease|Any CPU
-		{6216042A-E38A-4D5B-B9DA-2DBDACCCDF19}.LinuxRelease|x86.ActiveCfg = LinuxRelease|Any CPU
-		{6216042A-E38A-4D5B-B9DA-2DBDACCCDF19}.LinuxRelease|x86.Build.0 = LinuxRelease|Any CPU
-		{6216042A-E38A-4D5B-B9DA-2DBDACCCDF19}.Release|Any CPU.ActiveCfg = WindowsRelease|Any CPU
-		{6216042A-E38A-4D5B-B9DA-2DBDACCCDF19}.Release|Any CPU.Build.0 = WindowsRelease|Any CPU
-		{6216042A-E38A-4D5B-B9DA-2DBDACCCDF19}.Release|x64.ActiveCfg = WindowsRelease|Any CPU
-		{6216042A-E38A-4D5B-B9DA-2DBDACCCDF19}.Release|x64.Build.0 = WindowsRelease|Any CPU
-		{6216042A-E38A-4D5B-B9DA-2DBDACCCDF19}.Release|x86.ActiveCfg = WindowsRelease|Any CPU
-		{6216042A-E38A-4D5B-B9DA-2DBDACCCDF19}.Release|x86.Build.0 = WindowsRelease|Any CPU
-		{6216042A-E38A-4D5B-B9DA-2DBDACCCDF19}.WindowsDebug|Any CPU.ActiveCfg = WindowsDebug|Any CPU
-		{6216042A-E38A-4D5B-B9DA-2DBDACCCDF19}.WindowsDebug|Any CPU.Build.0 = WindowsDebug|Any CPU
-		{6216042A-E38A-4D5B-B9DA-2DBDACCCDF19}.WindowsDebug|x64.ActiveCfg = WindowsDebug|Any CPU
-		{6216042A-E38A-4D5B-B9DA-2DBDACCCDF19}.WindowsDebug|x64.Build.0 = WindowsDebug|Any CPU
-		{6216042A-E38A-4D5B-B9DA-2DBDACCCDF19}.WindowsDebug|x86.ActiveCfg = WindowsDebug|Any CPU
-		{6216042A-E38A-4D5B-B9DA-2DBDACCCDF19}.WindowsDebug|x86.Build.0 = WindowsDebug|Any CPU
-		{6216042A-E38A-4D5B-B9DA-2DBDACCCDF19}.WindowsRelease|Any CPU.ActiveCfg = WindowsRelease|Any CPU
-		{6216042A-E38A-4D5B-B9DA-2DBDACCCDF19}.WindowsRelease|Any CPU.Build.0 = WindowsRelease|Any CPU
-		{6216042A-E38A-4D5B-B9DA-2DBDACCCDF19}.WindowsRelease|x64.ActiveCfg = WindowsRelease|Any CPU
-		{6216042A-E38A-4D5B-B9DA-2DBDACCCDF19}.WindowsRelease|x64.Build.0 = WindowsRelease|Any CPU
-		{6216042A-E38A-4D5B-B9DA-2DBDACCCDF19}.WindowsRelease|x86.ActiveCfg = WindowsRelease|Any CPU
-		{6216042A-E38A-4D5B-B9DA-2DBDACCCDF19}.WindowsRelease|x86.Build.0 = WindowsRelease|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -676,7 +638,6 @@ Global
 		{42BFC943-F1AB-433B-BD7E-9E5FE81F4693} = {F67C7BE7-F474-4B9B-A17F-1AAAF5D564F4}
 		{832E06A2-13DE-4CDB-8337-B82483B168FF} = {F67C7BE7-F474-4B9B-A17F-1AAAF5D564F4}
 		{04907A69-69C7-45DE-99D5-A91B9F10A63F} = {F67C7BE7-F474-4B9B-A17F-1AAAF5D564F4}
-		{6216042A-E38A-4D5B-B9DA-2DBDACCCDF19} = {F67C7BE7-F474-4B9B-A17F-1AAAF5D564F4}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7F9F8BC8-0847-4E84-9AA8-0677A7EED2BA}
