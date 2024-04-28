@@ -7,3 +7,6 @@
 [submodule "ThirdParty/MonoGameExtended"]
 	path = ThirdParty/MonoGameExtended
 	url = https://github.com/gameoflord012/MonoGame.Extended.git
+[submodule "ThirdParty/VelcroPhysics"]
+	path = ThirdParty/VelcroPhysics
+	url = https://github.com/gameoflord012/VelcroPhysics.git
