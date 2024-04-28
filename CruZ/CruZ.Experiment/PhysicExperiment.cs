@@ -1,6 +1,7 @@
 ﻿using CruZ.GameEngine;
 using CruZ.GameEngine.GameSystem;
-
+using Genbox.VelcroPhysics.Dynamics;
+using Genbox.VelcroPhysics.MonoGame.DebugView;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -17,6 +18,8 @@ namespace CruZ.Experiment
             IsMouseVisible = true;
             Window.AllowUserResizing = true;
             Content.RootDirectory = ".\\Content\\bin";
+            _world = new(Vector2.One);
+            _debugView = new(_world);
         }
 
         protected override void LoadContent()
@@ -93,6 +96,9 @@ namespace CruZ.Experiment
         SpriteBatch _spriteBatch;
         Effect _normalFx;
         Camera _camera;
+
+        DebugView _debugView;
+        World _world;
 
         Vector2 _position;
         float _rotation;
