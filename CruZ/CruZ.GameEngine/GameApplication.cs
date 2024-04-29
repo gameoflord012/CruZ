@@ -170,7 +170,7 @@ namespace CruZ.GameEngine
             return _instance = new GameApplication(core);
         }
 
-        public static ContentManager GetContent()
+        public static ContentManager GetContentManager()
         {
             return _instance.Content;
         }

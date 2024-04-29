@@ -18,6 +18,7 @@ namespace CruZ.GameEngine
                 if (_gameResourceDir == value) return;
                 _gameResourceDir = value;
                 _gameResource = ResourceManager.From(_gameResourceDir);
+                _internalResource = ResourceManager.From(Path.Combine(_gameResourceDir, ".internal"));
                 InitializeInternalResource();
             }
         }
@@ -25,7 +26,11 @@ namespace CruZ.GameEngine
         public static ResourceManager GameResource
         {
             get => CheckNull(_gameResource);
-            private set => _gameResource = value;
+        }
+
+        public static ResourceManager InternalResource
+        {
+            get => CheckNull(_internalResource);
         }
 
         public static Func<AssemblyName, Assembly?> AssemblyResolver
@@ -47,6 +52,8 @@ namespace CruZ.GameEngine
         }
 
         static string? _gameResourceDir;
+
         static ResourceManager? _gameResource;
+        static ResourceManager? _internalResource;
     }
 }

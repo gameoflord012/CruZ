@@ -54,7 +54,7 @@ namespace CruZ.GameEngine.Resource
             _pipelineManager.Platform = TargetPlatform.Windows;
             AddPipelineAssemblies();
 
-            InitResourceDir();
+            PrepareResourceDir();
         }
 
         private void AddPipelineAssemblies()
@@ -64,32 +64,10 @@ namespace CruZ.GameEngine.Resource
             _pipelineManager.AddAssembly(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "MonoGame.Extended.dll"));
         }
 
-        private void InitResourceDir()
+        private void PrepareResourceDir()
         {
-            //foreach (var filePath in DirectoryHelper.EnumerateFiles(ResourceRoot, [REF_DIR_NAME, ".content"]))
-            //{
-            //    var extension = Path.GetExtension(filePath);
+            if(!Path.Exists(ContentOutputDir)) return;
 
-            //    switch (extension)
-            //    {
-            //        // remove excess .import files
-            //        case ".import":
-            //            var resourceFile = filePath.Substring(0, filePath.LastIndexOf(extension));
-            //            if (!File.Exists(resourceFile)) File.Delete(filePath);
-            //            break;
-
-            //        default:
-            //            // initialize resource if filePath is a resource
-            //            if (ResourceSupportedExtensions.Contains(Path.GetExtension(filePath).ToLower()))
-            //            {
-            //                ImportResourcePath(filePath);
-            //            }
-            //            break;
-            //    }
-            //}
-
-            // enumerates .xnb and .mgcontent files
-            // TEST:
             foreach (var filePath in Directory.EnumerateFiles(ContentOutputDir, "*.*", SearchOption.AllDirectories).
                 Where(e =>
                     Path.GetFileName(e) != ".mgcontent" &&
@@ -131,80 +109,24 @@ namespace CruZ.GameEngine.Resource
             },
         ];
 
-        //public void Create(string resourcePath, object resObj)
-        //{
-        //    resourcePath = GetFormattedResourcePath(resourcePath);
-        //    _serializer.SerializeToFile(resObj, Path.Combine(ResourceRoot, resourcePath));
-        //    InitResourceInstance(resObj, resourcePath, true);
-        //}
-
-        //public bool TrySave(IResource resource)
-        //{
-        //    if (resource.Info == null) return false;
-        //    Create(resource.Info.ResourceName, resource);
-        //    return true;
-        //}
-
         public T Load<T>(string resourcePath)
         {
             return (T)Load(resourcePath, typeof(T));
         }
 
-        //public T Load<T>(ResourceInfo resourceInfo)
-        //{
-        //    return GetManagerFromReferencePath(resourceInfo.ReferencePath).Load<T>(resourceInfo.Guid);
-        //}
+        public T LoadContent<T>(string contentName)
+        {
+            var content = GameApplication.GetContentManager();
+            content.AssetNameResolver = null;
+            content.RootDirectory = ContentDir;
 
-        /// <summary>
-        /// Get <see cref="ResourceInfo"/> with given imported resource path
-        /// </summary>
-        //public ResourceInfo RetriveResourceInfo(string resourcePath)
-        //{
-        //    resourcePath = GetFormattedResourcePath(resourcePath);
-        //    var relative = Path.GetRelativePath(ResourceRoot, resourcePath).Replace("/", "\\").AsSpan();
-        //    StringBuilder sb = new();
+            T loaded = content.Load<T>(contentName);
 
-        //    const string REF_DIR = $"{REF_DIR_NAME}\\";
-        //    while (relative.StartsWith(REF_DIR))
-        //    {
-        //        relative = relative.Slice(REF_DIR.Length);
-        //        sb.Append(REF_DIR);
+            content.AssetNameResolver = default;
+            content.RootDirectory = default;
 
-        //        int slashIndex = relative.IndexOf("\\");
-
-        //        sb.Append(relative.Slice(0, slashIndex + 1));
-        //        relative = relative.Slice(0, slashIndex + 1);
-        //    }
-
-        //    try
-        //    {
-        //        var refPath = sb.ToString();
-        //        ResourceManager manager = GetManagerFromReferencePath(refPath);
-
-        //        return ResourceInfo.Create(manager._guidManager.GetGuid(resourcePath), resourcePath, refPath);
-
-        //    }
-        //    catch (InvalidGuidException)
-        //    {
-        //        throw new ArgumentException($"Resource \"{resourcePath}\" maybe unimported");
-        //    }
-        //    catch (InvalidGuidValueException)
-        //    {
-        //        throw new ArgumentException($"Resource \"{resourcePath}\" maybe unimported");
-        //    }
-        //}
-
-        //private ResourceManager GetManagerFromReferencePath(string referencePath)
-        //{
-        //    return
-        //        string.IsNullOrEmpty(referencePath) ? this :
-        //        From(Path.Combine(ResourceRoot, referencePath));
-        //}
-
-        //string IGuidValueProcessor<string>.GetProcessedGuidValue(string value)
-        //{
-        //    return GetFormattedResourcePath(value).ToLower();
-        //}
+            return loaded;
+        }
 
         /// <summary>
         /// Load resource with relative or full path, the resource fileName should within the .resourceInstance folder
@@ -255,10 +177,10 @@ namespace CruZ.GameEngine.Resource
             return resObj;
         }
 
-        private T LoadContent<T>(string resourcePath)
+        private T LoadBuiltContent<T>(string resourcePath)
         {
             resourcePath = GetFormattedResourcePath(resourcePath);
-            var content = GameApplication.GetContent();
+            var content = GameApplication.GetContentManager();
 
             // Setup content context
             content.RootDirectory = ContentOutputDir;
@@ -267,8 +189,8 @@ namespace CruZ.GameEngine.Resource
             var loaded = content.Load<T>(resourcePath);
             
             // Return content context to default
-            content.AssetNameResolver = null;
-            content.RootDirectory = ".";
+            content.AssetNameResolver = default;
+            content.RootDirectory = default;
             
             return loaded;
         }
@@ -302,7 +224,7 @@ namespace CruZ.GameEngine.Resource
             try
             {
                 return typeof(ResourceManager).
-                    GetMethod(nameof(LoadContent), BindingFlags.NonPublic | BindingFlags.Instance)!.
+                    GetMethod(nameof(LoadBuiltContent), BindingFlags.NonPublic | BindingFlags.Instance)!.
                     MakeGenericMethod(ty).
                     Invoke(this, [resourcePath])!;
             }
@@ -311,18 +233,6 @@ namespace CruZ.GameEngine.Resource
                 throw new ContentLoadException($"Cannot load content {resourcePath}", e);
             }
         }
-
-        //private void InitResourceInstance(object resourceInstance, string resourcePath, bool autoImportResourcePath = false)
-        //{
-        //    if (autoImportResourcePath) ImportResourcePath(resourcePath);
-        //    InitResourceInstance(resourceInstance, RetriveResourceInfo(resourcePath));
-        //}
-
-        //private void InitResourceInstance(object resourceInstance, ResourceInfo resourceInfo)
-        //{
-        //    if (resourceInstance is IResource resource)
-        //        resource.Info = resourceInfo;
-        //}
 
         /// <summary>
         /// 
@@ -336,43 +246,6 @@ namespace CruZ.GameEngine.Resource
                 throw new ArgumentException($"Resource Path \"{resourcePath}\" must be a subpath of resource root \"{ResourceRoot}\"");
             return Path.GetFullPath(resourcePath);
         }
-
-        /// <summary>
-        /// Read Guid or auto-generated new Guid and .import files
-        /// </summary>
-        /// <param name="resourcePath"></param>
-        //private Guid ImportResourcePath(string resourcePath)
-        //{
-        //    resourcePath = GetFormattedResourcePath(resourcePath);
-        //    Guid guid;
-
-        //    if (TryReadGuidFromImportFile(resourcePath, out guid)) // if .import exists
-        //    {
-
-        //    }
-        //    else // if don't
-        //    {
-        //        // Write new guid to .import
-        //        guid = _guidManager.GenerateUniqueGuid();
-        //        using (var writer = new StreamWriter(File.Create(resourcePath + ".import")))
-        //        {
-        //            writer.WriteLine(guid);
-        //            writer.Flush();
-        //        }
-        //    }
-
-        //    _guidManager.ConsumeGuid(guid, resourcePath);
-        //    return guid;
-        //}
-
-        //public ResourceManager CreateResourceReference(string referencePath)
-        //{
-        //    DirectoryInfo referenceDir = GetReferenceDir();
-        //    referenceDir.MoveTo(referencePath);
-        //    if (referenceDir.Exists) throw new InvalidOperationException("Reference already exists");
-        //    referenceDir.Create();
-        //    return From(referenceDir.FullName);
-        //}
 
         public void CopyResourceData(ResourceManager resourceRef, string relativeDestination)
         {
@@ -393,21 +266,10 @@ namespace CruZ.GameEngine.Resource
 
         Dictionary<Type, OpaqueDataDictionary> _processorParams = [];
 
-        /// <summary>
-        /// Get .import file from normal file
-        /// </summary>
-        /// <param name="resourcePath"></param>
-        /// <returns></returns>
-        private static bool TryReadGuidFromImportFile(string filePath, out Guid guid)
-        {
-            var dotImport = filePath + ".import";
-            guid = default;
-            if (!File.Exists(dotImport)) return false;
-            return Guid.TryParse(File.ReadLines(dotImport).First(), out guid);
-        }
+        public string ContentDir => $"{_resourceRoot}\\Content";
+        public string ContentOutputDir => $"{ContentDir}\\.build";
 
-        string ContentOutputDir => $"{_resourceRoot}\\.content\\";
-        string _resourceRoot = "res";
+        string _resourceRoot = "";
 
         Serializer _serializer;
         PipelineManager _pipelineManager;

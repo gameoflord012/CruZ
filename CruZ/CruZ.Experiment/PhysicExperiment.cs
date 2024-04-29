@@ -23,7 +23,6 @@ namespace CruZ.Experiment
         {
             IsMouseVisible = true;
             Window.AllowUserResizing = true;
-            Content.RootDirectory = ".\\Content";
 
             _world = new(-Vector2.UnitY * 10);
             _debugView = new(_world);
@@ -43,14 +42,13 @@ namespace CruZ.Experiment
             Console.WriteLine($"{fixtureA} collide with {fixtureB}!");
         }
 
-
         protected override void LoadContent()
         {
             base.LoadContent();
 
             _texture = Content.Load<Texture2D>("homelander");
             _normalFx = Content.Load<Effect>("shaders\\normal-shader");
-            _debugView.LoadContent(GraphicsDevice, Content);
+            _debugView.LoadContent(GraphicsDevice, Content, "Content");
         }
 
         protected override void OnInitialize()
