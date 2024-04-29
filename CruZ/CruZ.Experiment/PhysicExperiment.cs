@@ -1,5 +1,10 @@
-﻿using CruZ.GameEngine;
+﻿using System;
+using System.Diagnostics;
+
+using CruZ.GameEngine;
 using CruZ.GameEngine.GameSystem;
+
+using Genbox.VelcroPhysics.Collision.ContactSystem;
 using Genbox.VelcroPhysics.Dynamics;
 using Genbox.VelcroPhysics.Factories;
 using Genbox.VelcroPhysics.MonoGame.DebugView;
@@ -23,9 +28,21 @@ namespace CruZ.Experiment
             _world = new(-Vector2.UnitY * 10);
             _debugView = new(_world);
 
-            _rectangle = BodyFactory.CreateRectangle(_world, 100f, 100f, 1f);
-            _rectangle.BodyType = BodyType.Dynamic;
+            _floor = BodyFactory.CreateRectangle(_world, 400, 100f, 1f, new Vector2(0, -200));
+            _floor.BodyType = BodyType.Static;
+
+            _agent = BodyFactory.CreateRectangle(_world, 100, 100f, 1f, new Vector2(0, 0));
+            _agent.BodyType = BodyType.Dynamic;
+            _agent.IsSensor = true;
+
+            _agent.OnCollision = OnCollisionHandler;
         }
+
+        public void OnCollisionHandler(Fixture fixtureA, Fixture fixtureB, Contact contact)
+        {
+            Console.WriteLine($"{fixtureA} collide with {fixtureB}!");
+        }
+
 
         protected override void LoadContent()
         {
@@ -112,7 +129,7 @@ namespace CruZ.Experiment
         DebugView _debugView;
         World _world;
 
-        Body _rectangle;
+        Body _floor, _agent;
 
         Vector2 _position;
         float _rotation;

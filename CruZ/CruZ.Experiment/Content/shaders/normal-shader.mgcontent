@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PipelineBuildEvent xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <SourceFile>D:/monogame-projects/CruZ_GameEngine/CruZ/CruZ.Experiment/Content/shaders/normal-shader.fx</SourceFile>
+  <SourceTime>2024-03-24T14:09:04.0869629+07:00</SourceTime>
+  <DestFile>D:/monogame-projects/CruZ_GameEngine/CruZ/CruZ.Experiment/Content/shaders/normal-shader.xnb</DestFile>
+  <DestTime>2024-04-29T09:50:02.1934992+07:00</DestTime>
+  <Importer>EffectImporter</Importer>
+  <ImporterTime>2022-07-26T18:44:56+07:00</ImporterTime>
+  <Processor>EffectProcessor</Processor>
+  <ProcessorTime>2022-07-26T18:44:56+07:00</ProcessorTime>
+  <Parameters>
+    <Key>DebugMode</Key>
+    <Value>Auto</Value>
+  </Parameters>
+  <Dependencies />
+  <BuildAsset />
+  <BuildOutput />
+</PipelineBuildEvent>

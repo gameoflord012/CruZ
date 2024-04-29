@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<SourceFileCollection xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Profile>Reach</Profile>
+  <Platform>Windows</Platform>
+  <Config />
+  <SourceFiles>
+    <File>D:/monogame-projects/CruZ_GameEngine/CruZ/CruZ.Experiment/Content/homelander.jpg</File>
+    <File>D:/monogame-projects/CruZ_GameEngine/CruZ/CruZ.Experiment/Content/sample.png</File>
+    <File>D:/monogame-projects/CruZ_GameEngine/CruZ/CruZ.Experiment/Content/shaders/bloom-shader.fx</File>
+    <File>D:/monogame-projects/CruZ_GameEngine/CruZ/CruZ.Experiment/Content/shaders/BloomFilter/Bloom.fx</File>
+    <File>D:/monogame-projects/CruZ_GameEngine/CruZ/CruZ.Experiment/Content/shaders/light-shader.fx</File>
+    <File>D:/monogame-projects/CruZ_GameEngine/CruZ/CruZ.Experiment/Content/shaders/normal-shader.fx</File>
+  </SourceFiles>
+  <DestFiles>
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+  </DestFiles>
+</SourceFileCollection>
