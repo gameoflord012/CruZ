@@ -47,7 +47,7 @@ namespace CruZ.GameEngine
         private static void InitializeInternalResource()
         {
             _gameResource!.CopyResourceData(
-                ResourceManager.From(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resource\\Internal\\")),
+                ResourceManager.From(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resource\\Internal")),
                 ".internal");
         }
 

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.IO;
 
+using CruZ.GameEngine.Resource;
+
 namespace CruZ.GameEngine.Utility
 {
     class PathHelper
@@ -12,11 +14,10 @@ namespace CruZ.GameEngine.Utility
             return IsRelativeASubpath(relativePath);
         }
 
-        public static bool IsRelativeASubpath(string relativePath)
+        public static bool IsRelativeASubpath(ReadOnlySpan<char> relativePath)
         {
-            if(Path.IsPathRooted(relativePath)) throw new ArgumentException(relativePath);
-            relativePath = relativePath.Replace("/", "\\");
-            return !relativePath.StartsWith("..\\") && relativePath != ".";
+            if (Path.IsPathRooted(relativePath)) throw new ArgumentException("relativePath");
+            return !relativePath.StartsWith("..") && relativePath != ".";
         }
 
         public static ReadOnlySpan<char> RemoveExtension(ReadOnlySpan<char> path)
@@ -24,60 +25,39 @@ namespace CruZ.GameEngine.Utility
             return path.Slice(0, path.LastIndexOf("."));
         }
 
-        // TEST: 
-        //public static string Normalized(string path)
-        //{
-        //    string normalized;
-
-        //    if(Path.IsPathRooted(path))
-        //    {
-        //        normalized = Path.GetFullPath(path, "D");
-        //        normalized = normalized.Remove(0, 3); // remove D:\
-        //    }
-        //    else
-        //    {
-        //        normalized = Path.GetFullPath(path);
-        //    }
-
-        //    normalized = normalized.TrimEnd('\\');
-        //    return normalized;
-        //}
-
-        public static void UpdateFolder(string sourceFolder, string destinationFolder, string pattern = "*", bool createFolders = false, bool recursively = false)
+        public static void UpdateFolder(string sourceFolder, string destinationFolder, string[]? excludePatterns = null)
         {
             try
             {
-                if (!sourceFolder.EndsWith(@"\")) { sourceFolder += @"\"; }
-                if (!destinationFolder.EndsWith(@"\")) { destinationFolder += @"\"; }
                 sourceFolder = Path.GetFullPath(sourceFolder);
                 destinationFolder = Path.GetFullPath(destinationFolder);
 
-                SearchOption so = recursively ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly;
+                if(!sourceFolder.EndsWith('\\')) sourceFolder += "\\";
+                if(!destinationFolder.EndsWith('\\')) destinationFolder += "\\";
 
-                foreach (string file in Directory.GetFiles(sourceFolder, pattern, so))
+                foreach (string srcFile in DirectoryHelper.EnumerateFiles(sourceFolder, excludePatterns))
                 {
-                    FileInfo srcFile = new FileInfo(file);
+                    var destFile = Path.Combine(destinationFolder, srcFile.StripPrefix(sourceFolder));
+                    var destDir = Path.GetDirectoryName(destFile) ?? throw new NullReferenceException();
 
-                    // Create a destination that matches the source structure
-                    FileInfo destFile = new FileInfo(destinationFolder + srcFile.FullName.StripPrefix(sourceFolder));
-
-                    if (!Directory.Exists(destFile.DirectoryName) && createFolders)
+                    if (!Directory.Exists(destDir))
                     {
-                        Directory.CreateDirectory(destFile.DirectoryName);
+                        Directory.CreateDirectory(destDir);
                     }
 
-                    if (!destFile.Exists || srcFile.LastWriteTime > destFile.LastWriteTime)
+                    if (!File.Exists(destFile) || File.GetLastWriteTime(srcFile) > File.GetLastWriteTime(destFile))
                     {
-                        File.Copy(srcFile.FullName, destFile.FullName, true);
+                        File.Copy(srcFile, destFile, true);
                     }
                 }
 
-                foreach (string file in Directory.GetFiles(destinationFolder, pattern, so))
+                foreach (string desFile in DirectoryHelper.EnumerateFiles(destinationFolder, excludePatterns))
                 {
-                    FileInfo dstFile = new FileInfo(file);
-                    FileInfo srcFile = new FileInfo(sourceFolder + dstFile.FullName.StripPrefix(destinationFolder));
-
-                    if (!srcFile.Exists) dstFile.Delete();
+                    var sourceFile = Path.Combine(sourceFolder, desFile.StripPrefix(destinationFolder));
+                    if (!File.Exists(sourceFile))
+                    {
+                        File.Delete(desFile);
+                    }
                 }
             }
             catch

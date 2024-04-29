@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Text;
 
 using CruZ.GameEngine;
+using CruZ.GameEngine.Resource;
 
 using Genbox.VelcroPhysics.Collision.Broadphase;
 using Genbox.VelcroPhysics.Collision.ContactSystem;
@@ -871,17 +872,8 @@ namespace Genbox.VelcroPhysics.MonoGame.DebugView
             _device = device;
             _batch = new SpriteBatch(_device);
             _primitiveBatch = new PrimitiveBatch(_device, 1000);
-
-            content.AssetNameResolver = default;
-            content.RootDirectory = contentRoot;
-
-            _font = content.Load<SpriteFont>("Font");
-
-            content.AssetNameResolver = default;
-            content.RootDirectory = default;
-
+            _font = content.LoadFromRoot<SpriteFont>("Font", contentRoot);
             _stringData = new List<StringData>();
-
             _localProjection = Matrix.CreateOrthographicOffCenter(0f, _device.Viewport.Width, _device.Viewport.Height, 0f, 0f, 1f);
             _localView = Matrix.Identity;
         }

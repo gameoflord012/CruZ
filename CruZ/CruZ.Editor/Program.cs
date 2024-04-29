@@ -37,7 +37,7 @@ namespace CruZ.Editor
                 throw new ArgumentException(errorMsg);
             });
 
-            EditorContext.EditorResourceDir = Path.Combine(domainDir, "Resource\\");
+            EditorContext.EditorResourceDir = Path.Combine(domainDir, "Resource");
             EditorForm.Run();
         }
 

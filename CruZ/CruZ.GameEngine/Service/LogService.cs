@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Text;
 
@@ -9,13 +10,15 @@ namespace CruZ.GameEngine.Utility
     {
         public static string LogRoot = ".";
 
-        public static void SetMsg(string theMsg, string msgKey = DefaultString, bool updateLogFile = false)
+        public static void SetMsg(string theMsg, string msgKey = DefaultString, bool flushToDebug = false, bool updateLogFile = false)
         {
-            Main._msgs[msgKey] = theMsg;
+            _msgs[msgKey] = theMsg;
 
             if (updateLogFile)
                 FileHelper.WriteToFile(Path.Combine(LogRoot, msgKey + ".log"),
                     theMsg, false);
+
+            if(flushToDebug) Debug.WriteLine(theMsg, msgKey);
         }
 
         public static void AppendMsg(string theMsg, string msgKey = DefaultString, bool updateLogFile = false)
@@ -37,8 +40,8 @@ namespace CruZ.GameEngine.Utility
 
         public static string GetMsg(string key = DefaultString)
         {
-            if (!Main._msgs.ContainsKey(key)) return "";
-            return Main._msgs[key];
+            if (!_msgs.ContainsKey(key)) return "";
+            return _msgs[key];
         }
 
         public static string GetMsgFormmated(string key = DefaultString)
@@ -46,21 +49,7 @@ namespace CruZ.GameEngine.Utility
             return $"{key} : {GetMsg(key)}";
         }
 
-        //public static void FlushToDebug()
-        //{
-        //    Debug.WriteLine("===========================CRUZ_LOGGING===========================");
-        //    foreach (var msg in Main._msgs)
-        //    {
-        //        Debug.WriteLine(msg);
-        //    }
-        //    Debug.WriteLine("===========================END_LOG============================");
-        //}
-
-        #region Privates
-        Dictionary<string, string> _msgs = new();
-        static LogManager _main;
-        static LogManager Main { get => _main ??= new LogManager(); }
-        #endregion
+        static Dictionary<string, string> _msgs = new();
 
         const string DefaultString = "Default";
     }
