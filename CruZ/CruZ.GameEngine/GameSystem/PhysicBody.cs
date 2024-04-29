@@ -2,14 +2,14 @@
 
 //using Box2D.NetStandard.Dynamics.Bodies;
 //using Box2D.NetStandard.Dynamics.Fixtures;
-//using Box2D.NetStandard.Dynamics.World;
+//using Box2D.NetStandard.Dynamics.ECSWorld;
 //using CruZ.GameSystem;
 
 //namespace CruZ.ECSManager
 //{
 //    class PhysicBody
 //    {
-//        public void CreateContext(World world)
+//        public void CreateContext(ECSWorld world)
 //        {
 //            _body = world.CreateBody(new BodyDef());
 //            _fixture = _body.CreateFixture(new FixtureDef());

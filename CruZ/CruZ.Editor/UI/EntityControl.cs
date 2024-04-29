@@ -156,7 +156,7 @@ namespace CruZ.Editor.UI
         }
 
         IRectUIProvider? _currentRectUIProvider;
-        WorldRectangle? _worldBound; //World bounds
+        WorldRectangle? _worldBound; //ECSWorld bounds
         List<Vector2> _points = [];
 
         protected override object? OnStartDragging(UIInfo args)

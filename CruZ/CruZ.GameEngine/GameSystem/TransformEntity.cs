@@ -18,7 +18,7 @@ namespace CruZ.GameEngine.GameSystem
         public event Action<TransformEntity>? RemovedFromWorld;
         public event Action<ComponentCollection>? ComponentsChanged;
 
-        internal TransformEntity(World world)
+        internal TransformEntity(ECSWorld world)
         {
             _world = world;
             Id = _entityCounter++;
@@ -163,7 +163,7 @@ namespace CruZ.GameEngine.GameSystem
 
         Dictionary<Type, Component> _components = [];
         Transform _transform = new();
-        World _world;
+        ECSWorld _world;
 
         static int _entityCounter = 0;
         public void Dispose()

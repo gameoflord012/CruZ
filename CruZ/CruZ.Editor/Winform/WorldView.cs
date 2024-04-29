@@ -92,7 +92,7 @@ namespace CruZ.Editor
             });
         }
 
-        private void InitTree(World? oldWorld, World world)
+        private void InitTree(ECSWorld? oldWorld, ECSWorld world)
         {
             world_TreeView.SafeInvoke(delegate
             {
@@ -113,7 +113,7 @@ namespace CruZ.Editor
                 world_TreeView.Nodes.Clear();
                 _entityToNode.Clear();
                 //
-                // init data with new World
+                // init data with new ECSWorld
                 //
                 world.EntityAdded += OnEntityAdded;
                 world.EntityRemoved += OnEntityRemoved;

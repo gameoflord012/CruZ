@@ -10,14 +10,14 @@ using Microsoft.Xna.Framework;
 
 namespace CruZ.GameEngine.GameSystem
 {
-    internal class World : IDisposable
+    internal class ECSWorld : IDisposable
     {
         public event Action<TransformEntity>? EntityAdded;
         public event Action<TransformEntity>? EntityRemoved;
 
-        public World() { }
+        public ECSWorld() { }
 
-        public World AddSystem(EntitySystem system)
+        public ECSWorld AddSystem(EntitySystem system)
         {
             _systems.Add(system);
             return this;

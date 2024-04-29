@@ -17,7 +17,7 @@ namespace CruZ.GameEngine.GameSystem
 
         private ECSManager()
         {
-            _world = new World();
+            _world = new ECSWorld();
             _world.
                 AddSystem(new ScriptSystem()).
                 AddSystem(new RenderSystem()).
@@ -25,7 +25,7 @@ namespace CruZ.GameEngine.GameSystem
                 AddSystem(UISystem.CreateContext());
         }
 
-        internal World World { get => _world; set => _world = value; }
+        internal ECSWorld World { get => _world; set => _world = value; }
 
         internal void Initialize()
         {
@@ -42,7 +42,7 @@ namespace CruZ.GameEngine.GameSystem
             _world.SystemsDraw(gameTime);
         }
 
-        World _world;
+        ECSWorld _world;
 
         internal static ECSManager CreateContext()
         {
