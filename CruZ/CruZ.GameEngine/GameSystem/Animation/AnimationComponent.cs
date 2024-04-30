@@ -55,14 +55,34 @@ namespace CruZ.GameEngine.GameSystem.Animation
 
         public void PlayAnimation(string animationTag, int loopCount = 0)
         {
-            animationTag = animationTag.ToLower();
-
-            if (_currentAnimation != null && animationTag == _currentAnimation.Name)
+            if (_currentAnimation != null && string.Compare(animationTag, _currentAnimation.Name, true) == 0)
                 return;
 
-            _currentAnimation?.Stop();
+            if(IsAnimationPlaying(animationTag)) _currentAnimation!.Stop();
             _currentAnimation = GetAnimation(animationTag);
             _currentAnimation.Play(loopCount);
+        }
+
+        public bool IsAnimationPlaying(string? animationTag = null)
+        {
+            if(_currentAnimation == null) return false;
+
+            animationTag ??= _currentAnimation.Name;
+
+            return 
+                string.Compare(_currentAnimation.Name, animationTag, true) == 0 &&
+                _currentAnimation.IsAnimating;
+        }
+
+        public string CurrentAnimationName()
+        {
+            if(_currentAnimation == null) throw new InvalidOperationException();
+            return _currentAnimation.Name;
+        }
+
+        public void StopCurrent()
+        {
+            _currentAnimation?.Stop();
         }
 
         private AnimatedSprite GetAnimation(string tag)

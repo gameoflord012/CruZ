@@ -1,4 +1,6 @@
-﻿using CruZ.GameEngine;
+﻿using System.Diagnostics;
+
+using CruZ.GameEngine;
 using CruZ.GameEngine.GameSystem;
 using CruZ.GameEngine.GameSystem.Animation;
 using CruZ.GameEngine.GameSystem.ECS;
@@ -47,10 +49,15 @@ namespace NinjaAdventure
                 useless.Dispose();
             }
             uselessSurikens.Clear();
+
+            var isAttackAnimationPlaying =
+                _animationComponent.IsAnimationPlaying() &&
+                _animationComponent.CurrentAnimationName().StartsWith("attack");
+
             //
             // movement update
             //
-            if(!_isAttackAnimationPlaying) // don't move when attacking
+            if (!isAttackAnimationPlaying) // don't move when attacking
                 Entity.Transform.Position += _inputMovement * gameTime.GetElapsedSeconds() * _speed;
 
             //
@@ -66,19 +73,21 @@ namespace NinjaAdventure
             // animations
             //
             var facingString = AnimationHelper.GetFacingDirectionString(_inputMovement);
-            
-            if(_inputFireSuriken)
+
+
+            if (_inputFireSuriken)
             {
                 _animationComponent.PlayAnimation($"attack-{facingString}", 1);
-                _isAttackAnimationPlaying = true;
-                _animationComponent.CurrentAnimation!.OnAnimationEnd = 
-                    (animation) => _isAttackAnimationPlaying = false;
+                isAttackAnimationPlaying = true;
             }
             
-            if(!_isAttackAnimationPlaying) // we don't want moving animation playing when player attacking
+            if(!isAttackAnimationPlaying) // we don't want moving animation playing when player attacking
             {
+                _animationComponent.StopCurrent();
                 _animationComponent.PlayAnimation($"walk-{facingString}");
             }
+
+            Debug.WriteLine($"isAttackAnimationPlaying {isAttackAnimationPlaying}");
 
             if (_inputFireSuriken) _inputFireSuriken = false;
         }
@@ -117,7 +126,6 @@ namespace NinjaAdventure
         Vector2 _inputMovement;
 
         bool _inputFireSuriken;
-        bool _isAttackAnimationPlaying;
         float _speed = 4;
 
         AnimationComponent _animationComponent;
