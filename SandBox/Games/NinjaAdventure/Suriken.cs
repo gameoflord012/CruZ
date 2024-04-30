@@ -79,6 +79,7 @@ namespace NinjaAdventure
         }
         private void Physic_OnCollision(Fixture fixtureA, Fixture fixtureB, Contact contact)
         {
+            if(fixtureB.Body.UserData is Suriken) return;
             MakeUseless();
         }
 
