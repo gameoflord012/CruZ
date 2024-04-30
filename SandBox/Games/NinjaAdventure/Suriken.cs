@@ -104,6 +104,7 @@ namespace NinjaAdventure
         public void Dispose()
         {
             _surikenRenderer.DrawRequestsFetching -= Renderer_DrawRequestsFetching;
+            BecomeUseless = default;
             Entity.Dispose();
         }
     }

@@ -83,7 +83,6 @@ namespace NinjaAdventure
             
             if(!isAttackAnimationPlaying) // we don't want moving animation playing when player attacking
             {
-                _animationComponent.StopCurrent();
                 _animationComponent.PlayAnimation($"walk-{facingString}");
             }
 
