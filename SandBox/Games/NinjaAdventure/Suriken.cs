@@ -36,8 +36,10 @@ namespace NinjaAdventure
             var physic = new PhysicBodyComponent();
             {
                 FixtureFactory.AttachCircle(0.5f, 1, physic.Body);
-                physic.Body.IsSensor = true;
+                physic.BodyType = BodyType.Dynamic;
+                physic.IsSensor = true;
                 physic.Postion = origin;
+                // velocity
                 if(direction.SqrMagnitude() != 0) direction.Normalize();
                 physic.LinearVelocity = direction * _moveSpeed;
                 physic.AngularVelocity = _rotationSpeed;

@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using Genbox.VelcroPhysics.Collision.ContactSystem;
+using Genbox.VelcroPhysics.Collision.Handlers;
 using Genbox.VelcroPhysics.Dynamics;
 using Genbox.VelcroPhysics.Factories;
 
@@ -13,10 +15,18 @@ namespace CruZ.GameEngine.GameSystem.Physic
 {
     public class PhysicBodyComponent : Component
     {
+        public event OnCollisionHandler? OnCollision;
+
         public PhysicBodyComponent()
         {
             _body = BodyFactory.CreateBody(PhysicManager.World);
             _body.BodyType = BodyType.Dynamic;
+            _body.OnCollision = OnCollisionHanlder;
+        }
+
+        void OnCollisionHanlder(Fixture fixtureA, Fixture fixtureB, Contact contact)
+        {
+            OnCollision?.Invoke(fixtureA, fixtureB, contact);
         }
 
         internal void Update(GameTime gameTime)
@@ -37,40 +47,67 @@ namespace CruZ.GameEngine.GameSystem.Physic
 
             _transform ??= entity.Transform;
             SyncTransform();
-
         }
 
-        public Body Body { get => _body; }
+        public BodyType BodyType
+        {
+            get => _body.BodyType;
+            set => _body.BodyType = value;
+        }
+
+        public bool IsSensor
+        {
+            set => _body.IsSensor = value;
+        }
 
         public Vector2 LinearVelocity
         {
-            get => Body.LinearVelocity;
+            get => _body.LinearVelocity;
             set
             {
-                Body.LinearVelocity = value;
+                _body.LinearVelocity = value;
                 SyncTransform();
             }
         }
 
         public float AngularVelocity
         {
-            get => Body.AngularVelocity;
+            get => _body.AngularVelocity;
             set
             {
-                Body.AngularVelocity = value;
+                _body.AngularVelocity = value;
+                SyncTransform();
+            }
+        }
+        public float Rotation
+        {
+            get => _body.Rotation;
+            set
+            {
+                _body.Rotation = value;
+                SyncTransform();
+            }
+        }
+
+        public Vector2 Position
+        {
+            get => _body.Position;
+            set
+            {
+                _body.Position = value;
                 SyncTransform();
             }
         }
 
         public Vector2 Postion
         {
-            get => Body.Position;
-            set => Body.Position = value;
+            get => _body.Position;
+            set => _body.Position = value;
         }
 
         Body _body;
 
-        Transform Transform
+        public Transform Transform
         {
             get => _transform ?? throw new System.NullReferenceException();
             set => _transform = value;

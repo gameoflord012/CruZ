@@ -7,6 +7,7 @@ using CruZ.GameEngine.GameSystem.Scene;
 using CruZ.GameEngine.GameSystem.Script;
 using CruZ.GameEngine.Utility;
 
+using Genbox.VelcroPhysics.Dynamics;
 using Genbox.VelcroPhysics.Factories;
 
 using Microsoft.Xna.Framework;
@@ -33,12 +34,13 @@ namespace NinjaAdventure
             }
             Entity.AddComponent(scriptComponent);
 
-            var physic = new PhysicBodyComponent();
+            _physic = new PhysicBodyComponent();
             {
-                FixtureFactory.AttachCircle(0.5f, 1, physic.Body);
-                physic.Body.IsSensor = true;
+                FixtureFactory.AttachCircle(0.5f, 1, _physic.Body);
+                _physic.Body.BodyType = BodyType.Kinematic;
+                _physic.Body.IsSensor = true;
             }
-            Entity.AddComponent(physic);
+            Entity.AddComponent(_physic);
         }
 
         private void ScriptComponent_Updating(GameTime gameTime)
@@ -55,8 +57,8 @@ namespace NinjaAdventure
 
             var rotationDir = MathF.Sign(FunMath.GetAngleBetween(facingDir, followDir));
 
-            Entity.Transform.Rotation += rotationDir * _rotationSpeed * gameTime.GetElapsedSeconds();
-            Entity.Transform.Position += facingDir * _speed * gameTime.GetElapsedSeconds();
+            _physic.Rotation += rotationDir * _rotationSpeed * gameTime.GetElapsedSeconds();
+            _physic.Position += facingDir * _speed * gameTime.GetElapsedSeconds();
             //
             // animation    
             //
@@ -75,5 +77,7 @@ namespace NinjaAdventure
         float _speed = 1;
         float _rotationSpeed = 3.14f;
         private string? _facingString;
+
+        PhysicBodyComponent _physic;
     }
 }
