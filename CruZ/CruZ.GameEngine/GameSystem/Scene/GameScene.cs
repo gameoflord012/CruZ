@@ -42,7 +42,7 @@ namespace CruZ.GameEngine.GameSystem.Scene
             _entities.Add(e);
 
             e.IsActive = true;
-            e.RemovedFromWorld += Entity_RemovedFromWorld;
+            e.BecameDrity += Entity_RemovedFromWorld;
 
             EntityAdded?.Invoke(e);
         }
@@ -55,7 +55,7 @@ namespace CruZ.GameEngine.GameSystem.Scene
             _entities.Remove(e);
 
             e.IsActive = false;
-            e.RemovedFromWorld -= Entity_RemovedFromWorld;
+            e.BecameDrity -= Entity_RemovedFromWorld;
             e.Dispose();
 
             EntityRemoved?.Invoke(e);

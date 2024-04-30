@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,7 +9,7 @@ namespace CruZ.GameEngine.GameSystem
 {
     internal class EntityCollection
     {
-        public EntityCollection(List<TransformEntity> transformEntities)
+        public EntityCollection(IImmutableList<TransformEntity> transformEntities)
         {
             _entities = transformEntities;
         }
@@ -40,7 +41,7 @@ namespace CruZ.GameEngine.GameSystem
             return result;
         }
 
-        List<TransformEntity> _entities;
+        IImmutableList<TransformEntity> _entities;
     }
 
     enum GetComponentMode

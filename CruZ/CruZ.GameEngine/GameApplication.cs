@@ -7,6 +7,8 @@ using System.Collections.Generic;
 using CruZ.GameEngine.GameSystem;
 using CruZ.GameEngine.Input;
 using CruZ.GameEngine.Utility;
+using System.Threading;
+using Microsoft.Win32.SafeHandles;
 
 namespace CruZ.GameEngine
 {
@@ -75,13 +77,32 @@ namespace CruZ.GameEngine
 
         private void ProcessMarshalRequests()
         {
-            foreach (var invoke in _marshalRequests)
+            foreach (var request in _marshalRequests)
             {
-                invoke.Invoke();
+                request.Action.Invoke();
+                request.ResetEvent.Set();
             }
 
             _marshalRequests.Clear();
         }
+
+        public void MarshalInvoke(Action action)
+        {
+            ManualResetEvent resetEvent;
+
+            lock (this)
+            {
+                resetEvent = new ManualResetEvent(false);
+                _marshalRequests.Add(new MarshalRequest(action, resetEvent));
+            }
+
+            resetEvent.WaitOne();
+        }
+
+        record MarshalRequest(Action Action, ManualResetEvent ResetEvent);
+
+        List<MarshalRequest> _marshalRequests = [];
+
 
         private void CalculateFps(GameTime gameTime)
         {
@@ -137,8 +158,6 @@ namespace CruZ.GameEngine
         int _fpsResult = 0;
         int _frameCount = 0;
         float _fpsTimer = 0;
-
-        List<Action> _marshalRequests = [];
         #endregion
     }
 
@@ -180,14 +199,6 @@ namespace CruZ.GameEngine
         public static ContentManager GetContentManager()
         {
             return _instance.Content;
-        }
-
-        public static void MarshalInvoke(Action action)
-        {
-            lock (_instance)
-            {
-                _instance._marshalRequests.Add(action);
-            }
         }
 
         public static List<IDisposable> Disposables = [];

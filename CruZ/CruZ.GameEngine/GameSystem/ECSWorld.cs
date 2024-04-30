@@ -25,14 +25,8 @@ namespace CruZ.GameEngine.GameSystem
 
         internal void AddEntity(TransformEntity e)
         {
-            _entitiesToRemove.Remove(e);
-            _entitiesToAdd.Add(e);
-        }
-
-        internal void RemoveEntity(TransformEntity e)
-        {
-            _entitiesToAdd.Remove(e);
-            _entitiesToRemove.Add(e);
+            _entities.Add(e);
+            EntityAdded?.Invoke(e);
         }
 
         public void Initialize()
@@ -45,7 +39,7 @@ namespace CruZ.GameEngine.GameSystem
 
         public void SystemsUpdate(GameTime gameTime)
         {
-            ProcessEntitiesChanges();
+            ProcessDirtyEntities();
 
             foreach (var system in _systems)
             {
@@ -55,7 +49,7 @@ namespace CruZ.GameEngine.GameSystem
 
         public void SystemsDraw(GameTime gameTime)
         {
-            ProcessEntitiesChanges();
+            ProcessDirtyEntities();
 
             foreach (var system in _systems)
             {
@@ -63,46 +57,38 @@ namespace CruZ.GameEngine.GameSystem
             }
         }
 
-        private List<TransformEntity> GetActiveEntities()
+        private IImmutableList<TransformEntity> GetActiveEntities()
         {
-            return _entities.Where(e => e.IsActive).ToList();
+            return _entities.Where(e => e.IsActive).ToImmutableList();
         }
 
-        private void ProcessEntitiesChanges()
+        private void ProcessDirtyEntities()
         {
-            var removingEntities = _entitiesToRemove.ToImmutableList();
-            var addingEntities = _entitiesToAdd.ToImmutableList();
-            //
-            // update entities
-            //
+            var removingEntities = _entities.Where(e => e.IsDirty);
             _entities.ExceptWith(removingEntities);
-            _entities.UnionWith(addingEntities);
             //
             // fire events
             //
-            foreach (var toRemove in removingEntities)
+            foreach (var entity in removingEntities)
             {
-                _entitiesToRemove.Remove(toRemove);
-                EntityRemoved?.Invoke(toRemove);
-            }
-
-            foreach (var toAdd in addingEntities)
-            {
-                _entitiesToAdd.Remove(toAdd);
-                EntityAdded?.Invoke(toAdd);
+                EntityRemoved?.Invoke(entity);
+                entity.Dispose();
             }
         }
 
         public void Dispose()
         {
             _systems.ForEach(e => e.Dispose());
-            foreach (var e in Entities) e.Dispose();
+            
+            foreach (var e in Entities)
+            {
+                _entities.Remove(e);
+                e.Dispose();
+            }
         }
 
         public IImmutableList<TransformEntity> Entities { get => _entities.ToImmutableList(); }
 
-        HashSet<TransformEntity> _entitiesToRemove = [];
-        HashSet<TransformEntity> _entitiesToAdd = [];
         HashSet<TransformEntity> _entities = [];
 
         List<EntitySystem> _systems = [];

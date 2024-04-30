@@ -117,7 +117,7 @@ namespace CruZ.Editor.Controls
 
             try
             {
-                LoadScene(SceneManager.GetRuntimeScene(sceneName));
+                _gameApp!.MarshalInvoke(() => SceneManager.GetRuntimeScene(sceneName));
             }
             catch (RuntimeSceneLoadException e)
             {

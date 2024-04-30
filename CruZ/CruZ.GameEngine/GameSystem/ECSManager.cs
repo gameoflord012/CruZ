@@ -64,7 +64,9 @@ namespace CruZ.GameEngine.GameSystem
         /// <returns></returns>
         internal static TransformEntity CreateEntity()
         {
-            return new TransformEntity(_instance._world);
+            var entity = new TransformEntity();
+            _instance!.World.AddEntity(entity);
+            return entity;
         }
 
         public void Dispose()

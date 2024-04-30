@@ -9,6 +9,7 @@ using CruZ.GameEngine.Utility;
 
 using Genbox.VelcroPhysics.Dynamics;
 using Genbox.VelcroPhysics.Factories;
+using Genbox.VelcroPhysics.Collision.ContactSystem;
 
 using Microsoft.Xna.Framework;
 
@@ -37,8 +38,8 @@ namespace NinjaAdventure
             _physic = new PhysicBodyComponent();
             {
                 FixtureFactory.AttachCircle(0.5f, 1, _physic.Body);
-                _physic.Body.BodyType = BodyType.Kinematic;
-                _physic.Body.IsSensor = true;
+                _physic.BodyType = BodyType.Kinematic;
+                _physic.IsSensor = true;
             }
             Entity.AddComponent(_physic);
         }

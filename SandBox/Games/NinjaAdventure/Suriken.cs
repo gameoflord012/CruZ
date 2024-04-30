@@ -9,6 +9,7 @@ using CruZ.GameEngine.GameSystem.Scene;
 using CruZ.GameEngine.GameSystem.Script;
 using CruZ.GameEngine.Utility;
 
+using Genbox.VelcroPhysics.Collision.ContactSystem;
 using Genbox.VelcroPhysics.Dynamics;
 using Genbox.VelcroPhysics.Factories;
 
@@ -33,18 +34,21 @@ namespace NinjaAdventure
             }
             Entity.AddComponent(script);
 
-            var physic = new PhysicBodyComponent();
+            _physic = new PhysicBodyComponent();
             {
-                FixtureFactory.AttachCircle(0.5f, 1, physic.Body);
-                physic.BodyType = BodyType.Dynamic;
-                physic.IsSensor = true;
-                physic.Postion = origin;
+                FixtureFactory.AttachCircle(0.5f, 1, _physic.Body);
+                _physic.BodyType = BodyType.Dynamic;
+                _physic.IsSensor = true;
+                _physic.Postion = origin;
                 // velocity
                 if(direction.SqrMagnitude() != 0) direction.Normalize();
-                physic.LinearVelocity = direction * _moveSpeed;
-                physic.AngularVelocity = _rotationSpeed;
+                _physic.LinearVelocity = direction * _moveSpeed;
+                _physic.AngularVelocity = _rotationSpeed;
+                _physic.UserData = this;
+                // event
+                _physic.OnCollision += Physic_OnCollision;
             }
-            Entity.AddComponent(physic);
+            Entity.AddComponent(_physic);
 
             _surikenTex = GameContext.GameResource.Load<Texture2D>("art\\suriken\\01.png");
         }
@@ -73,9 +77,15 @@ namespace NinjaAdventure
                 MakeUseless();
             }
         }
+        private void Physic_OnCollision(Fixture fixtureA, Fixture fixtureB, Contact contact)
+        {
+            MakeUseless();
+        }
 
         private void MakeUseless()
         {
+            _physic.Awake = false;
+            _physic.OnCollision -= Physic_OnCollision;
             BecomeUseless?.Invoke();
         }
 
@@ -87,6 +97,7 @@ namespace NinjaAdventure
         float _moveSpeed = 12f;
         float _rotationSpeed = 20f;
         float _disappearTime = 5f; // seconds
+        private PhysicBodyComponent _physic;
 
         public event Action? BecomeUseless;
 

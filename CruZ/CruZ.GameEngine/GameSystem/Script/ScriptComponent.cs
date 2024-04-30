@@ -23,5 +23,13 @@ namespace CruZ.GameEngine.GameSystem.Script
 
         protected virtual void OnUpdate(GameTime gameTime) { }
         protected virtual void OnDraw(GameTime gameTime) { }
+
+        public override void Dispose()
+        {
+            base.Dispose();
+
+            Drawing = default;
+            Updating = default;
+        }
     }
 }

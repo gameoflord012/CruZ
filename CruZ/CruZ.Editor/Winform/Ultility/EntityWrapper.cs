@@ -2,6 +2,8 @@
 
 namespace CruZ.Editor.Winform.Ultility
 {
+    using System.Collections.Immutable;
+
     using CruZ.GameEngine.GameSystem;
 
     internal class EntityWrapper
@@ -26,16 +28,16 @@ namespace CruZ.Editor.Winform.Ultility
     [TypeConverter(typeof(ComponentsWrapperTypeConverter))]
     public class ComponentsWrapper
     {
-        public ComponentsWrapper(Component[] comps)
+        public ComponentsWrapper(IImmutableList<Component> comps)
         {
             Components = comps;
         }
 
-        public Component[] Components { get; set; }
+        public IImmutableList<Component> Components { get; set; }
 
         public override string ToString()
         {
-            return $"{Components.Length} Components";
+            return $"{Components.Count} Components";
         }
     }
 }

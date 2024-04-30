@@ -60,6 +60,18 @@ namespace CruZ.GameEngine.GameSystem.Physic
             set => _body.IsSensor = value;
         }
 
+        public bool Awake
+        {
+            get => _body.Awake;
+            set => _body.Awake = value;
+        }
+
+        public object UserData
+        {
+            get => _body.UserData;
+            set => _body.UserData = value;
+        }
+
         public Vector2 LinearVelocity
         {
             get => _body.LinearVelocity;
@@ -112,13 +124,13 @@ namespace CruZ.GameEngine.GameSystem.Physic
             get => _transform ?? throw new System.NullReferenceException();
             set => _transform = value;
         }
+        public Body Body { get => _body; }
 
         Transform? _transform;
 
         public override void Dispose()
         {
             base.Dispose();
-
             _body.RemoveFromWorld();
         }
     }

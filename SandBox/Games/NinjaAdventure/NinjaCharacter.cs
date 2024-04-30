@@ -42,6 +42,11 @@ namespace NinjaAdventure
 
         private void Script_Updating(GameTime gameTime)
         {
+            foreach (var useless in uselessSurikens)
+            {
+                useless.Dispose();
+            }
+            uselessSurikens.Clear();
             //
             // movement update
             //
@@ -54,7 +59,7 @@ namespace NinjaAdventure
             if (_inputFireSuriken)
             {
                 var suriken = new Suriken(_gameScene, _surikenRenderer, Entity.Position, _inputMovement);
-                suriken.BecomeUseless += suriken.Dispose;
+                suriken.BecomeUseless += () => uselessSurikens.Add(suriken);
             }
 
             //
@@ -107,7 +112,7 @@ namespace NinjaAdventure
             }
         }
 
-        List<Suriken> surikens = [];
+        List<Suriken> uselessSurikens = [];
 
         Vector2 _inputMovement;
 

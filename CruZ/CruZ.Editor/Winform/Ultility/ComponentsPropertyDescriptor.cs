@@ -3,12 +3,14 @@ using System.ComponentModel;
 
 namespace CruZ.Editor.Winform.Ultility
 {
+    using System.Collections.Immutable;
+
     using CruZ.GameEngine.GameSystem;
 
     public class ComponentPropertyDescriptor : PropertyDescriptor
     {
         public ComponentPropertyDescriptor(
-            Component[] components,
+            IImmutableList<Component> components,
             int index, string name, Attribute[]? attrs) : base(name, attrs)
         {
             _index = index;
@@ -35,6 +37,6 @@ namespace CruZ.Editor.Winform.Ultility
         public override void SetValue(object? component, object? value) { }
 
         int _index;
-        Component[] _components;
+        IImmutableList<Component> _components;
     }
 }

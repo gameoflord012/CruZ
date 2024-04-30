@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,7 +14,7 @@ namespace CruZ.GameEngine.GameSystem
         public readonly EntityCollection ActiveEntities;
         public readonly GameTime GameTime;
 
-        public EntitySystemEventArgs(List<TransformEntity> activeEntities, GameTime gameTime)
+        public EntitySystemEventArgs(IImmutableList<TransformEntity> activeEntities, GameTime gameTime)
         {
             ActiveEntities = new EntityCollection(activeEntities);
             GameTime = gameTime;
