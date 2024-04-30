@@ -138,7 +138,7 @@ namespace CruZ.GameEngine
         int _frameCount = 0;
         float _fpsTimer = 0;
 
-        List<Action> _marshalRequests = []; 
+        List<Action> _marshalRequests = [];
         #endregion
     }
 
@@ -153,6 +153,13 @@ namespace CruZ.GameEngine
 
         public static GraphicsDevice GetGraphicsDevice() => _instance.GraphicsDevice;
 
+        internal static AutoResizeRenderTarget CreateRenderTarget()
+        {
+            var rt = new AutoResizeRenderTarget(_instance.GraphicsDevice, _instance.Window);
+            Disposables.Add(rt);
+            return rt;
+        }
+
         /// <summary>
         /// Whether the Game Window is active
         /// </summary>
@@ -164,7 +171,7 @@ namespace CruZ.GameEngine
 
         public static GameApplication CreateContext(GameWrapper core)
         {
-            if(_instance != null && !_instance._isDispose) 
+            if (_instance != null && !_instance._isDispose)
                 throw new InvalidOperationException("Dispose needed before creating new context");
 
             return _instance = new GameApplication(core);

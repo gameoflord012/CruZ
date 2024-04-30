@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Reflection.Metadata;
 
 using CruZ.GameEngine;
 using CruZ.GameEngine.GameSystem;
@@ -46,6 +47,7 @@ namespace CruZ.Experiment
         {
             base.LoadContent();
 
+            Content.RootDirectory = "Content";
             _texture = Content.Load<Texture2D>("homelander");
             _normalFx = Content.Load<Effect>("shaders\\normal-shader");
             _debugView.LoadContent(GraphicsDevice, Content, "Content");

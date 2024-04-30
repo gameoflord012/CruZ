@@ -19,7 +19,6 @@ namespace CruZ.GameEngine
             _gdManager = new GraphicsDeviceManager(this);
             _gdManager.GraphicsProfile = GraphicsProfile.HiDef;
             IsMouseVisible = true;
-            Window.ClientSizeChanged += OnClientSizeChanged;
         }
 
         protected sealed override void Initialize()
@@ -42,16 +41,8 @@ namespace CruZ.GameEngine
         {
             base.Draw(gameTime);
 
-            GraphicsDevice.SetRenderTarget(null);
             OnDraw(gameTime);
             AfterDraw?.Invoke(gameTime);
-            GraphicsDevice.SetRenderTarget(null);
-        }
-
-        private void OnClientSizeChanged(object? sender, EventArgs e)
-        {
-            GraphicsDevice.PresentationParameters.RenderTargetUsage =
-                RenderTargetUsage.PreserveContents; // update render target usage after rt back buffer changing
         }
 
         protected virtual void OnInitialize() { }

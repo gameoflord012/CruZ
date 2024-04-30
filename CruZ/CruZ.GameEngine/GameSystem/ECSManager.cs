@@ -19,10 +19,11 @@ namespace CruZ.GameEngine.GameSystem
             _world = new ECSWorld();
             _world.
                 AddSystem(new ScriptSystem()).
-                AddSystem(new PhysicSystem()).
-                AddSystem(new RenderSystem()).
+                AddSystem(PhysicSystem.CreateContext()).
                 AddSystem(new AnimationSystem()).
-                AddSystem(UISystem.CreateContext());
+                AddSystem(new RenderSystem()).
+                AddSystem(UISystem.CreateContext()).
+                AddSystem(RenderTargetSystem.CreateContext());
         }
 
         internal ECSWorld World { get => _world; set => _world = value; }

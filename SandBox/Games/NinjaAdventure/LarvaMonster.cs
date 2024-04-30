@@ -2,9 +2,12 @@
 using CruZ.GameEngine.GameSystem;
 using CruZ.GameEngine.GameSystem.Animation;
 using CruZ.GameEngine.GameSystem.ECS;
+using CruZ.GameEngine.GameSystem.Physic;
 using CruZ.GameEngine.GameSystem.Scene;
 using CruZ.GameEngine.GameSystem.Script;
 using CruZ.GameEngine.Utility;
+
+using Genbox.VelcroPhysics.Factories;
 
 using Microsoft.Xna.Framework;
 
@@ -29,6 +32,13 @@ namespace NinjaAdventure
                 scriptComponent.Updating += ScriptComponent_Updating;
             }
             Entity.AddComponent(scriptComponent);
+
+            var physic = new PhysicBodyComponent();
+            {
+                FixtureFactory.AttachCircle(0.5f, 1, physic.Body);
+                physic.Body.IsSensor = true;
+            }
+            Entity.AddComponent(physic);
         }
 
         private void ScriptComponent_Updating(GameTime gameTime)
@@ -59,6 +69,7 @@ namespace NinjaAdventure
         public TransformEntity Entity { get; private set; }
        
         AnimationComponent _animation;
+
         public Transform? Follow { get; set; }
 
         float _speed = 1;

@@ -22,7 +22,8 @@ namespace CruZ.GameEngine.GameSystem.UI
         {
             GameApplication.WindowResized += Window_Resized;
             ResizeRootBounds(GameApplication.GetGraphicsDevice().Viewport);
-            _spriteBatch = new SpriteBatch(GameApplication.GetGraphicsDevice());
+            _gd = GameApplication.GetGraphicsDevice();
+            _spriteBatch = new SpriteBatch(_gd);
         }
 
         private void ResizeRootBounds(Viewport vp)
@@ -58,12 +59,17 @@ namespace CruZ.GameEngine.GameSystem.UI
             UpdateUIComponents(args.ActiveEntities.GetAllComponents<UIComponent>());
             var uiInfo = CreateUIInfo(args.GameTime);
 
+            _gd.SetRenderTarget(RenderTargetSystem.UIRT);
+            _gd.Clear(Color.Transparent);
+
             _spriteBatch.Begin();
             foreach (var control in _root.Control.GetTree())
             {
                 control.InternalDraw(uiInfo);
             }
             _spriteBatch.End();
+
+            _gd.SetRenderTarget(null);
         }
 
         private void UpdateUIComponents(List<UIComponent> newComponents)
@@ -97,6 +103,8 @@ namespace CruZ.GameEngine.GameSystem.UI
 
             return info;
         }
+
+        GraphicsDevice _gd;
 
         UIRoot _root;
         SpriteBatch _spriteBatch = null!;

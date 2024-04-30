@@ -87,7 +87,6 @@ namespace CruZ.GameEngine.Resource
 
         public T Load<T>(string resourcePath)
         {
-            BuildContent(resourcePath);
             var content = GameApplication.GetContentManager();
             return content.LoadFromRoot<T>(resourcePath, ContentOutputDir, ContentResolver);
         }
