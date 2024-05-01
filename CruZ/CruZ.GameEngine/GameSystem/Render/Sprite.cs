@@ -183,5 +183,5 @@
 //    /// </summary>
 //    /// <param name="spriteBatch">The <see cref="SpriteBatch"/> to use for rendering this<see cref="Sprite"/>.</param>
 //    /// <param name="position">The x- and y-coordinate location to render this <see cref="Sprite"/> at.</param>
-//    public void Draw(SpriteBatch spriteBatch, Vector2 position) => spriteBatch.Draw(this, position);
+//    public void DoRequest(SpriteBatch spriteBatch, Vector2 position) => spriteBatch.DoRequest(this, position);
 //}

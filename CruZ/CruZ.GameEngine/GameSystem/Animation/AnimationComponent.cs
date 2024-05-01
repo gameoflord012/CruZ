@@ -114,26 +114,27 @@ namespace CruZ.GameEngine.GameSystem.Animation
 
         Transform? _transform;
 
-        private void SpriteRenderer_FetchingDrawRequests(FetchingDrawRequestsEventArgs args)
+        private void SpriteRenderer_FetchingDrawRequests(List<DrawRequestBase> drawRequests)
         {
             if (_currentAnimation == null) return;
-            var defaultArgs = args.DefaultDrawArgs;
-            defaultArgs.Apply(_currentAnimation);
-            defaultArgs.Apply(Transform);
+
+            SpriteDrawArgs spriteArgs = new();
+            spriteArgs.Apply(_currentAnimation);
+            spriteArgs.Apply(Transform);
 
             if (FitToWorldUnit)
             {
-                defaultArgs.Scale =
+                spriteArgs.Scale =
                 new Vector2(
                     1f / (_currentAnimation.TextureRegion.Bounds.Width),
                     1f / _currentAnimation.TextureRegion.Bounds.Height);
             }
             else
             {
-                defaultArgs.Scale = Vector2.One;
+                spriteArgs.Scale = Vector2.One;
             }
 
-            args.DrawRequests.Add(defaultArgs);
+            drawRequests.Add(new SpriteDrawRequest(spriteArgs));
         }
 
         public AnimatedSprite? CurrentAnimation

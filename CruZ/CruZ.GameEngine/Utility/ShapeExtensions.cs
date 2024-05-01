@@ -228,7 +228,7 @@ namespace CruZ.GameEngine.Utility
         }
 
         /// <summary>
-        /// Draw a circle from a <see cref="CircleF" /> shape
+        /// DoRequest a circle from a <see cref="CircleF" /> shape
         /// </summary>
         /// <param name="spriteBatch">The destination drawing surface</param>
         /// <param name="circle">The circle shape to draw</param>
@@ -242,7 +242,7 @@ namespace CruZ.GameEngine.Utility
         //}
 
         /// <summary>
-        /// Draw a circle
+        /// DoRequest a circle
         /// </summary>
         /// <param name="spriteBatch">The destination drawing surface</param>
         /// <param name="center">The center of the circle</param>
@@ -257,7 +257,7 @@ namespace CruZ.GameEngine.Utility
         }
 
         /// <summary>
-        /// Draw a circle
+        /// DoRequest a circle
         /// </summary>
         /// <param name="spriteBatch">The destination drawing surface</param>
         /// <param name="x">The center X of the circle</param>
@@ -273,7 +273,7 @@ namespace CruZ.GameEngine.Utility
         }
 
         /// <summary>
-        /// Draw an ellipse.
+        /// DoRequest an ellipse.
         /// </summary>
         /// <param name="spriteBatch">The destination drawing surface</param>
         /// <param name="center">Center of the ellipse</param>

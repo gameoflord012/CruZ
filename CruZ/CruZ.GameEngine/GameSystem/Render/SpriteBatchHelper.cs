@@ -16,7 +16,7 @@ namespace CruZ.GameEngine.GameSystem.Render
     /// </summary>
     public static class SpriteBatchHelper
     {
-        public static void DrawWorld(this SpriteBatch spriteBatch, DrawArgs args)
+        public static void DrawWorld(this SpriteBatch spriteBatch, SpriteDrawArgs args)
         {
             if(args.Skip || args.Texture == null) return;
 

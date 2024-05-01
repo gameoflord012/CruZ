@@ -59,17 +59,16 @@ namespace NinjaAdventure
             if(_disappearTime < 0) MakeUseless();
         }
 
-        private void Renderer_DrawRequestsFetching(FetchingDrawRequestsEventArgs args)
+        private void Renderer_DrawRequestsFetching(List<DrawRequestBase> drawRequests)
         {
-            var drawArgs = args.DefaultDrawArgs;
-
+            SpriteDrawArgs drawArgs = new();
             drawArgs.Apply(Entity.Transform);
             drawArgs.Apply(_surikenTex);
             drawArgs.Scale = new Vector2(1f / _surikenTex.Width, 1f / _surikenTex.Height);
 
-            if (!args.IsDrawRequestOutOfScreen(drawArgs))
+            if (!drawArgs.IsOutOfScreen(Camera.Main.ProjectionMatrix()))
             {
-                args.DrawRequests.Add(drawArgs);
+                drawRequests.Add(new SpriteDrawRequest(drawArgs));
             }
             else
             {

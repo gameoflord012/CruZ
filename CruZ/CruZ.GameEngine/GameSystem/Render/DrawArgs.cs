@@ -6,19 +6,25 @@ using MonoGame.Aseprite;
 
 namespace CruZ.GameEngine.GameSystem.Render
 {
-    public struct DrawArgs
+    public struct SpriteDrawArgs
     {
-        public DrawArgs() { }
+        public SpriteDrawArgs()
+        {
+            SpriteEffect = SpriteEffects.None;
+            LayerDepth = 0;
+            Color = Color.White;
+            NormalizedOrigin = new Vector2(0.5f, 0.5f);
+        }
 
-        public Texture2D? Texture = null;
+        public Texture2D? Texture;
         public Rectangle SourceRectangle;
         public Vector2 NormalizedOrigin;
         public Vector2 Position;
         public Vector2 Scale;
         public float Rotation;
-        public Color Color = Color.White;
-        public float LayerDepth = 0;
-        public SpriteEffects SpriteEffect = SpriteEffects.None;
+        public Color Color;
+        public float LayerDepth;
+        public SpriteEffects SpriteEffect;
         public bool Skip = false;
 
         public void Apply(Transform transform)
@@ -50,14 +56,14 @@ namespace CruZ.GameEngine.GameSystem.Render
 
             rect.W = SourceRectangle.Width * Scale.X;
             rect.H = SourceRectangle.Height * Scale.Y;
-            
+
             Vector2 origin = new(
                 rect.W * NormalizedOrigin.X,
                 rect.H * NormalizedOrigin.Y);
 
             rect.X = Position.X - origin.X;
             rect.Y = Position.Y + origin.Y - rect.H;
-            
+
             return rect;
         }
 
@@ -68,6 +74,21 @@ namespace CruZ.GameEngine.GameSystem.Render
                 worldRect.X + worldRect.W * NormalizedOrigin.X,
                 worldRect.Y + worldRect.H * (1 - NormalizedOrigin.Y)
             );
+        }
+
+        public bool IsOutOfScreen(Matrix viewProjectionMat)
+        {
+            WorldRectangle worldBounds = GetWorldBounds();
+
+            var min = new Vector4(worldBounds.X, worldBounds.Y, 0, 1);
+            var max = new Vector4(worldBounds.Right, worldBounds.Top, 0, 1);
+
+            var matrix = viewProjectionMat;
+
+            var minNDC = Vector4.Transform(min, matrix);
+            var maxNDC = Vector4.Transform(max, matrix);
+
+            return maxNDC.X < -1 || maxNDC.Y < -1 || minNDC.X > 1 || minNDC.Y > 1;
         }
     }
 }

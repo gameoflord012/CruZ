@@ -128,7 +128,7 @@ namespace Genbox.VelcroPhysics.MonoGame.DebugView
             if (!_hasBegun)
                 throw new InvalidOperationException("Begin must be called before End can be called.");
 
-            // Draw whatever the user wanted us to draw
+            // DoRequest whatever the user wanted us to draw
             FlushTriangles();
             FlushLines();
 

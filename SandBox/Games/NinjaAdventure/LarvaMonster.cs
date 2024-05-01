@@ -13,6 +13,9 @@ using Genbox.VelcroPhysics.Collision.ContactSystem;
 
 using Microsoft.Xna.Framework;
 using System.Diagnostics;
+using CruZ.GameEngine.GameSystem.Render;
+using MonoGame.Extended.BitmapFonts;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace NinjaAdventure
 {
@@ -21,6 +24,7 @@ namespace NinjaAdventure
         public LarvaMonster(GameScene scene, SpriteRendererComponent spriteRenderer)
         {
             Entity = scene.CreateEntity();
+            _font = GameContext.GameResource.Load<BitmapFont>(".internal\\Fonts\\Fixedsys.fnt");
 
             _animation = new AnimationComponent(spriteRenderer);
             {
@@ -134,6 +138,8 @@ namespace NinjaAdventure
 
         private string? _facingString;
         private Vector2 _facingDir;
+
+        BitmapFont _font;
 
         public void Dispose()
         {

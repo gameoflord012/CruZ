@@ -32,7 +32,7 @@ namespace Game.AnimalGang.DesktopGL
             //
             // setup draw args
             //
-            DrawArgs drawArgs = new();
+            SpriteDrawArgs drawArgs = new();
             drawArgs.Apply(AttachedEntity.Transform);
             drawArgs.Apply(_tex);
             //

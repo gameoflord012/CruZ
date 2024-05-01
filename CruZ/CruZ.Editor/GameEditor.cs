@@ -41,7 +41,6 @@ namespace CruZ.Editor.Controls
             InputManager.MouseMoved += Input_MouseMove;
             InputManager.MouseStateChanged += Input_MouseStateChanged;
             InputManager.KeyStateChanged += Input_KeyStateChanged;
-            UIManager.MouseClick += UI_MouseClick;
 
             ECSManager.InstanceChanged += ECSManager_InstanceChanged;
         }
@@ -348,56 +347,56 @@ namespace CruZ.Editor.Controls
             }
         }
 
-        private void UI_MouseClick(UIInfo info)
-        {
-            FindEntityToSelect(info);
-        }
+        //private void UI_MouseClick(UIInfo info)
+        //{
+        //    FindEntityToSelect(info);
+        //}
 
-        private void FindEntityToSelect(UIInfo info)
-        {
-            var contains =
-                _editorUIBranch.GetRaycastControls(info.MousePos().X, info.MousePos().Y);
+        //private void FindEntityToSelect(UIInfo info)
+        //{
+        //    var contains =
+        //        _editorUIBranch.GetRaycastControls(info.MousePos().X, info.MousePos().Y);
 
-            var eControl = contains
-                .Where(e => e is EntityControl).Cast<EntityControl>()
-                .Where(e => _fromEntityToControl.ContainsValue(e))
-                .ToList();
+        //    var eControl = contains
+        //        .Where(e => e is EntityControl).Cast<EntityControl>()
+        //        .Where(e => _fromEntityToControl.ContainsValue(e))
+        //        .ToList();
 
-            eControl.Sort((e1, e2) =>
-            {
-                e1.AttachEntity!.TryGetComponent(out SpriteRendererComponent? sp1);
-                e2.AttachEntity!.TryGetComponent(out SpriteRendererComponent? sp2);
+        //    eControl.Sort((e1, e2) =>
+        //    {
+        //        e1.AttachEntity!.TryGetComponent(out SpriteRendererComponent? sp1);
+        //        e2.AttachEntity!.TryGetComponent(out SpriteRendererComponent? sp2);
 
-                if (sp1 == sp2) return 0;
-                if (sp1 == null) return -1;
-                if (sp2 == null) return 1;
+        //        if (sp1 == sp2) return 0;
+        //        if (sp1 == null) return -1;
+        //        if (sp2 == null) return 1;
 
-                return sp1.CompareLayer(sp2);
-            });
+        //        return sp1.CompareLayer(sp2);
+        //    });
 
-            if (eControl.Count() == 0)
-            {
-                SelectedEntity = null;
-                return;
-            }
+        //    if (eControl.Count() == 0)
+        //    {
+        //        SelectedEntity = null;
+        //        return;
+        //    }
 
-            int idx = 0;
+        //    int idx = 0;
 
-            if (_currentSelectEntity != null)
-            {
-                for (int i = 0; i < eControl.Count(); i++)
-                {
-                    if (eControl[i] == _fromEntityToControl[_currentSelectEntity])
-                    {
-                        idx = i;
-                        break;
-                    }
-                }
-            }
+        //    if (_currentSelectEntity != null)
+        //    {
+        //        for (int i = 0; i < eControl.Count(); i++)
+        //        {
+        //            if (eControl[i] == _fromEntityToControl[_currentSelectEntity])
+        //            {
+        //                idx = i;
+        //                break;
+        //            }
+        //        }
+        //    }
 
-            idx = (idx + 1) % eControl.Count();
-            SelectedEntity = eControl[idx].AttachEntity;
-        }
+        //    idx = (idx + 1) % eControl.Count();
+        //    SelectedEntity = eControl[idx].AttachEntity;
+        //}
 
         public GameScene? LoadedGameScene { get; private set; }
 

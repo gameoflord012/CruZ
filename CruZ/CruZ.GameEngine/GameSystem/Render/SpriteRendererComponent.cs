@@ -10,6 +10,7 @@ using CruZ.GameEngine.GameSystem.Render;
 using CruZ.GameEngine.Utility;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Linq;
 
 namespace CruZ.GameEngine.GameSystem.ECS
 {
@@ -21,22 +22,6 @@ namespace CruZ.GameEngine.GameSystem.ECS
         public event Action? DrawBegin;
         public event Action? DrawEnd;
         public event Action<RectUIInfo>? UIRectChanged;
-
-        #region Properties
-        public bool SortByY { get; set; } = false;
-        public bool FlipHorizontally { get; set; }
-
-        [JsonIgnore, Browsable(false)]
-        public Texture2D? Texture { get => _texture; set => _texture = value; }
-        public Vector2 NormalizedOrigin { get; set; } = new(0.5f, 0.5f);
-
-        //[Editor(typeof(FileUITypeEditor), typeof(UITypeEditor))]
-        //public string TexturePath
-        //{
-        //    get => _spriteResInfo != null ? _spriteResInfo.ResourceName : "";
-        //    set => LoadTexture(value);
-        //}
-        #endregion
 
         public SpriteRendererComponent()
         {
@@ -53,7 +38,9 @@ namespace CruZ.GameEngine.GameSystem.ECS
 
             DrawRequestsFetched += (fetchedDrawRequests) =>
             {
-                foreach (var request in fetchedDrawRequests)
+                foreach (var request in fetchedDrawRequests
+                    .Where(e => e is SpriteDrawRequest)
+                    .Select(e => ((SpriteDrawRequest)e).SpriteDrawArgs))
                 {
                     // add origin
 
@@ -90,17 +77,17 @@ namespace CruZ.GameEngine.GameSystem.ECS
             DrawEnd += () => UIRectChanged?.Invoke(_worldBound);
         }
 
-        public void LoadTexture(string texturePath)
-        {
-            Texture = _resource.Load<Texture2D>(texturePath);
-        }
+        //public void LoadTexture(string texturePath)
+        //{
+        //    Texture = _resource.Load<Texture2D>(texturePath);
+        //}
 
-        public int CompareLayer(SpriteRendererComponent other)
-        {
-            return SortingLayer == other.SortingLayer ?
-                CalculateLayerDepth().CompareTo(other.CalculateLayerDepth()) :
-                SortingLayer.CompareTo(other.SortingLayer);
-        }
+        //public int CompareLayer(SpriteRendererComponent other)
+        //{
+        //    return SortingLayer == other.SortingLayer ?
+        //        CalculateLayerDepth().CompareTo(other.CalculateLayerDepth()) :
+        //        SortingLayer.CompareTo(other.SortingLayer);
+        //}
 
         public override void Render(RenderSystemEventArgs e)
         {
@@ -114,49 +101,30 @@ namespace CruZ.GameEngine.GameSystem.ECS
                 sortMode: SpriteSortMode.FrontToBack,
                 samplerState: SamplerState.PointClamp);
 
-            List<DrawArgs> drawRequest = [];
-            FetchDrawRequests(drawRequest, e.ViewProjectionMatrix);
+            List<DrawRequestBase> drawRequest = [];
+            FetchDrawRequests(drawRequest);
 
             foreach (var request in drawRequest)
             {
-                e.SpriteBatch.DrawWorld(request);
+                request.DoRequest(e.SpriteBatch);
             }
 
             e.SpriteBatch.End();
             DrawEnd?.Invoke();
         }
 
-        /// <summary>
-        /// default draw request and list of draw request
-        /// </summary>
-        public event Action<FetchingDrawRequestsEventArgs>? DrawRequestsFetching;
-        public event Action<IImmutableList<DrawArgs>>? DrawRequestsFetched;
+        public event Action<List<DrawRequestBase>>? DrawRequestsFetching;
+        public event Action<IImmutableList<DrawRequestBase>>? DrawRequestsFetched;
 
-        private void FetchDrawRequests(List<DrawArgs> drawRequests, Matrix viewProjectionMat)
+        private void FetchDrawRequests(List<DrawRequestBase> drawRequests)
         {
-            DrawArgs defaultArgs = new();
-
-            if (Texture != null) defaultArgs.Apply(Texture);
-            defaultArgs.Apply(AttachedEntity.Transform);
-
-            defaultArgs.LayerDepth = CalculateLayerDepth();
-            defaultArgs.NormalizedOrigin = NormalizedOrigin;
-            defaultArgs.Color = Color.White;
-            defaultArgs.SpriteEffect = FlipHorizontally ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
-
-            DrawRequestsFetching?.Invoke(new FetchingDrawRequestsEventArgs(defaultArgs, drawRequests, viewProjectionMat));
+            DrawRequestsFetching?.Invoke(drawRequests);
             DrawRequestsFetched?.Invoke(drawRequests.ToImmutableList());
         }
 
-        private float CalculateLayerDepth()
-        {
-            return SortByY ? AttachedEntity.Transform.Position.Y / 2 : LayerDepth;
-        }
-
         Texture2D? _texture;
-        //[JsonInclude]
-        //ResourceInfo? _spriteResInfo;
         ResourceManager _resource;
+
         RectUIInfo _worldBound;
     }
 }

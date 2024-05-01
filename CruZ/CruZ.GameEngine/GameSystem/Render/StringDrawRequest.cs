@@ -1,17 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace CruZ.GameEngine.GameSystem.Render
 {
-    public abstract class DrawRequestBase
+    internal class StringDrawRequest : DrawRequestBase
     {
-        public abstract void DoRequest(SpriteBatch spriteBatch);
+        public override void DoRequest(SpriteBatch spriteBatch)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
