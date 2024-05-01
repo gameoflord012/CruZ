@@ -44,6 +44,8 @@ namespace NinjaAdventure
 
         private void Script_Updating(GameTime gameTime)
         {
+            var facingString = AnimationHelper.GetFacingDirectionString(_inputMovement);
+
             foreach (var useless in uselessSurikens)
             {
                 useless.Dispose();
@@ -64,24 +66,18 @@ namespace NinjaAdventure
             //
             // spawning suriken
             //
-            if (_inputFireSuriken)
+
+            if (_inputFireSuriken && _timeBetweenAttacks < _attackTimer)
             {
+                _attackTimer = 0;
+
                 var suriken = new Suriken(_gameScene, _surikenRenderer, Entity.Position, _inputMovement);
                 suriken.BecomeUseless += () => uselessSurikens.Add(suriken);
-            }
 
-            //
-            // animations
-            //
-            var facingString = AnimationHelper.GetFacingDirectionString(_inputMovement);
-
-
-            if (_inputFireSuriken)
-            {
                 _animationComponent.PlayAnimation($"attack-{facingString}", 1);
                 isAttackAnimationPlaying = true;
             }
-            
+
             if(!isAttackAnimationPlaying) // we don't want moving animation playing when player attacking
             {
                 _animationComponent.PlayAnimation($"walk-{facingString}");
@@ -90,8 +86,8 @@ namespace NinjaAdventure
             Debug.WriteLine($"isAttackAnimationPlaying {isAttackAnimationPlaying}");
 
             if (_inputFireSuriken) _inputFireSuriken = false;
+            _attackTimer += gameTime.GetElapsedSeconds();
         }
-
 
         private void Input_KeyStateChanged(IInputInfo inputInfo)
         {
@@ -127,6 +123,9 @@ namespace NinjaAdventure
 
         bool _inputFireSuriken;
         float _speed = 4;
+
+        float _attackTimer = 0f;
+        float _timeBetweenAttacks = 0.4f;
 
         AnimationComponent _animationComponent;
         ScriptComponent _scriptComponent;

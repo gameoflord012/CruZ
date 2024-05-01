@@ -24,8 +24,13 @@ namespace NinjaAdventure
         public LarvaMonster(GameScene scene, SpriteRendererComponent spriteRenderer)
         {
             Entity = scene.CreateEntity();
+
+            _spriteRenderer = spriteRenderer;
+
             _font = GameContext.GameResource.Load<BitmapFont>(".internal\\Fonts\\Fixedsys.fnt");
-            spriteRenderer.DrawRequestsFetching += SpriteRenderer_DrawRequestsFetching;
+            _font.LetterSpacing = -11;
+
+            _spriteRenderer.DrawRequestsFetching += SpriteRenderer_DrawRequestsFetching;
 
             _animation = new AnimationComponent(spriteRenderer);
             {
@@ -53,7 +58,7 @@ namespace NinjaAdventure
 
         private void SpriteRenderer_DrawRequestsFetching(List<DrawRequestBase> drawRequests)
         {
-            _font.LetterSpacing = -11;
+            
             string text = new string('/', _health) + new string('-', MAX_HEALTH - _health);
             var textRect = _font.GetStringRectangle(text);
             var scale = new Vector2(2f / textRect.Width, 2f / textRect.Width);
@@ -77,6 +82,8 @@ namespace NinjaAdventure
             }
 
             UpdateAnimation();
+
+            if(_isUseless) BecomeUseless?.Invoke(this);
         }
 
         private void UpdateStun(GameTime gameTime)
@@ -107,8 +114,22 @@ namespace NinjaAdventure
                 _stunData.Timer = 0;
                 _stunData.Speed = 10f;
                 _health -= _health > 5 ? 5 : _health;
+
+                if(_health == 0)
+                {
+                    MarkUseless();
+                }
             }
         }
+
+        public event Action<LarvaMonster>? BecomeUseless;
+
+        private void MarkUseless()
+        {
+            _isUseless = true;
+        }
+
+        bool _isUseless = false;
 
         private void UpdateChasingTarget(GameTime gameTime)
         {
@@ -141,11 +162,11 @@ namespace NinjaAdventure
         public Transform? Follow { get; set; }
 
         AnimationComponent _animation;
+        SpriteRendererComponent _spriteRenderer;
 
         PhysicBodyComponent _physic;
 
         const float STUN_DURATION = 0.6f;
-
         record struct StunData(bool IsStunned, float Timer, float Speed, Vector2 HitPosition);
         StunData _stunData;
 
@@ -161,6 +182,8 @@ namespace NinjaAdventure
         {
             Entity.Dispose();
             _physic.OnCollision -= Physic_OnCollision;
+            _spriteRenderer.DrawRequestsFetching -= SpriteRenderer_DrawRequestsFetching;
+            BecomeUseless = default;
         }
     }
 }

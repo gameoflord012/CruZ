@@ -149,5 +149,12 @@ namespace CruZ.GameEngine.GameSystem.Animation
         ResourceManager _resource;
         Dictionary<string, AnimatedSprite> _animations = [];
         AsepriteFile _file;
+
+        public override void Dispose()
+        {
+            base.Dispose();
+
+            _renderer.DrawRequestsFetching -= SpriteRenderer_FetchingDrawRequests;
+        }
     }
 }

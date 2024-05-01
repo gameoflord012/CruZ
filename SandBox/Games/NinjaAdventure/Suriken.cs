@@ -95,7 +95,7 @@ namespace NinjaAdventure
 
         float _moveSpeed = 12f;
         float _rotationSpeed = 20f;
-        float _disappearTime = 5f; // seconds
+        float _disappearTime = 3.5f; // seconds
         private PhysicBodyComponent _physic;
 
         public event Action? BecomeUseless;

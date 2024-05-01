@@ -23,13 +23,21 @@ namespace NinjaAdventure
                 var ninja = new NinjaCharacter(scene, _spriteRenderer);
                 ninja.Entity.Parent = entityRoot;
 
-                var larva = new LarvaMonster(scene, _spriteRenderer);
-                larva.Entity.Parent = entityRoot;
-                larva.Follow = ninja.Entity.Transform;
+                _larva = new LarvaMonster(scene, _spriteRenderer);
+                _larva.Entity.Parent = entityRoot;
+                _larva.Follow = ninja.Entity.Transform;
+                _larva.BecomeUseless += Larva_BecomeUseless;
             }
             return scene;
         }
 
+        private void Larva_BecomeUseless(LarvaMonster useless)
+        {
+            useless.Dispose();
+            _larva = null;
+        }
+
         SpriteRendererComponent _spriteRenderer;
+        private LarvaMonster? _larva;
     }
 }
