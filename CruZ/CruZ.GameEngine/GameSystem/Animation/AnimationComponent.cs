@@ -153,7 +153,6 @@ namespace CruZ.GameEngine.GameSystem.Animation
         public override void Dispose()
         {
             base.Dispose();
-
             _renderer.DrawRequestsFetching -= SpriteRenderer_FetchingDrawRequests;
         }
     }
