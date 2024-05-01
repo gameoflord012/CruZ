@@ -57,12 +57,14 @@ namespace CruZ.Editor
         #region Clicked Event Handlers
         private void OpenScene_Clicked(object sender, EventArgs e)
         {
-            var files = DialogHelper.SelectSceneFile(false);
-            if (files.Count() == 0) return;
+            throw new NotImplementedException();
+            
+            //var files = DialogHelper.SelectSceneFile(false);
+            //if (files.Count() == 0) return;
 
-            string sceneFile = files[0];
+            //string sceneFile = files[0];
 
-            _gameEditor.LoadSceneFromFile(sceneFile);
+            //_gameEditor.LoadSceneFromFile(sceneFile);
         }
 
         private void SaveScene_Clicked(object sender, EventArgs args)
@@ -83,14 +85,14 @@ namespace CruZ.Editor
         {
             throw new NotImplementedException();
 
-            if (_gameEditor.CurrentGameScene == null)
-            {
-                DialogHelper.ShowInfoDialog("Nothing to save.");
-                return;
-            }
+            //if (_gameEditor.CurrentGameScene == null)
+            //{
+            //    DialogHelper.ShowInfoDialog("Nothing to save.");
+            //    return;
+            //}
 
-            var savePath = DialogHelper.GetSaveScenePath();
-            if (string.IsNullOrEmpty(savePath)) return;
+            //var savePath = DialogHelper.GetSaveScenePath();
+            //if (string.IsNullOrEmpty(savePath)) return;
 
             //EditorContext.UserResource.Create(
             //    savePath,

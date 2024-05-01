@@ -44,17 +44,12 @@ namespace CruZ.Editor.Service
             using BinaryWriter binWriter = new(mem);
 
             if (!cacheControl.WriteCache(binWriter, key)) return;
-            using FileStream file = GetCacheFile(cachePath);
+
+            var cacheDir = Path.GetDirectoryName(cachePath)!;
+            if (!Directory.Exists(cacheDir)) Directory.CreateDirectory(cacheDir);
 
             binWriter.Flush();
-            mem.WriteTo(file);
-        }
-
-        private FileStream GetCacheFile(string cachePath)
-        {
-            var cacheDir = Path.GetDirectoryName(cachePath);
-            if (!Directory.Exists(cacheDir)) Directory.CreateDirectory(cacheDir);
-            return File.OpenWrite(cachePath);
+            File.WriteAllBytes(cachePath, mem.GetBuffer());
         }
 
         public string GetCachePath(ICacheable cachedControl, string key)
@@ -63,7 +58,5 @@ namespace CruZ.Editor.Service
                 CacheRoot,
                 cachedControl.UniquedCachedDir, key) + ".cache";
         }
-
-        HashSet<ICacheable> _cacheControls = [];
     }
 }

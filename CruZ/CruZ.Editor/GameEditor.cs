@@ -29,14 +29,12 @@ namespace CruZ.Editor.Controls
     /// </summary>
     public partial class GameEditor
     {
-        public event Action<GameScene?>? CurrentSceneChanged;
-
         public event Action<TransformEntity?>? SelectingEntityChanged;
 
         public GameEditor(EditorForm form)
         {
             _editorForm = form;
-            _cacheService = new CacheService(Path.Combine(EditorContext.UserProfileDir, "caches\\"));
+            _cacheService = new CacheService(Path.Combine(EditorContext.UserProfileDir, "caches"));
             _userResource = EditorContext.UserResource;
 
             InputManager.MouseScrolled += Input_MouseScroll;
@@ -77,8 +75,6 @@ namespace CruZ.Editor.Controls
             _cacheService.ReadCache(this, "LoadedScene");
         }
 
-        public GameScene? CurrentGameScene => _currentScene;
-
         public TransformEntity? SelectedEntity
         {
             get => _currentSelectEntity;
@@ -99,25 +95,28 @@ namespace CruZ.Editor.Controls
             }
         }
 
-        public void LoadSceneFromFile(string file)
-        {
-            throw new NotImplementedException();
+        //public void LoadSceneFromFile(string file)
+        //{
+        //    throw new NotImplementedException();
 
-            WaitGameInitialized();
+        //    WaitGameInitialized();
 
-            var scene = _userResource.Load<GameScene>(file);
-            scene.Name = Path.GetRelativePath(_userResource.ResourceRoot, file);
+        //    var scene = _userResource.Load<GameScene>(file);
+        //    scene.Name = Path.GetRelativePath(_userResource.ResourceRoot, file);
 
-            LoadScene(scene);
-        }
+        //    LoadScene(scene);
+        //}
 
         public void LoadRuntimeScene(string sceneName)
         {
+            if(LoadedGameScene != null) throw new InvalidOperationException("Can load only one scene");
+
             WaitGameInitialized();
 
             try
             {
-                _gameApp!.MarshalInvoke(() => SceneManager.GetRuntimeScene(sceneName));
+                _gameApp!.MarshalInvoke(() => LoadedGameScene = SceneManager.GetRuntimeScene(sceneName));
+
             }
             catch (RuntimeSceneLoadException e)
             {
@@ -126,13 +125,12 @@ namespace CruZ.Editor.Controls
             }
         }
 
-        private void LoadScene(GameScene scene)
-        {
-            if (scene == _currentScene) return;
+        //private void LoadScene(GameScene scene)
+        //{
+        //    if (scene == _currentScene) return;
 
-            _currentScene = scene;
-            CurrentSceneChanged?.Invoke(_currentScene);
-        }
+        //    _currentScene = scene;
+        //}
         
         private void WaitGameInitialized()
         {
@@ -401,7 +399,8 @@ namespace CruZ.Editor.Controls
             SelectedEntity = eControl[idx].AttachEntity;
         }
 
-        #region Private_Variables
+        public GameScene? LoadedGameScene { get; private set; }
+
         Stack<EntityControl> _entityControlPool = [];
         Dictionary<TransformEntity, EntityControl> _fromEntityToControl = [];
 
@@ -414,7 +413,6 @@ namespace CruZ.Editor.Controls
         Vector2 _cameraStartDragCoord;
         Point _mouseStartDragPoint;
 
-        GameScene? _currentScene;
         TransformEntity? _currentSelectEntity;
         GameApplication? _gameApp;
 
@@ -425,6 +423,5 @@ namespace CruZ.Editor.Controls
 
         CacheService _cacheService;
         ResourceManager _userResource;
-        #endregion
     }
 }

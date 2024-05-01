@@ -23,7 +23,7 @@ namespace CruZ.Editor.Controls
                     {
                         if (Path.GetExtension(lastSceneFile) == ".scene")
                         {
-                            LoadSceneFromFile(lastSceneFile);
+                            throw new NotImplementedException();
                         }
                         else
                         {
@@ -54,13 +54,13 @@ namespace CruZ.Editor.Controls
         {
             if(key == "LoadedScene")
             {
-                if (CurrentGameScene == null)
+                if (LoadedGameScene == null)
                 {
                     binWriter.Write("");
                 }
                 else
                 {
-                    binWriter.Write(CurrentGameScene.Name);
+                    binWriter.Write(LoadedGameScene.Name);
                 }
             }
                 

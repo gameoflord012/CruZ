@@ -31,10 +31,6 @@ namespace CruZ.Editor
         }
 
         #region Event_Handlers
-        private void Editor_CurrentSceneChanged(GameScene? scene)
-        {
-            UpdateEntityComboBox(scene);
-        }
 
         private void Editor_SelectingEntityChanged(TransformEntity? e)
         {
@@ -60,20 +56,6 @@ namespace CruZ.Editor
         #endregion
 
         #region Privates
-        private void UpdateEntityComboBox(GameScene? scene)
-        {
-            entities_ComboBox.SafeInvoke(delegate
-            {
-                entities_ComboBox.Items.Clear();
-
-                if (scene == null) return;
-
-                foreach (var e in scene.Entities)
-                {
-                    entities_ComboBox.Items.Add(e);
-                }
-            });
-        }
  
         private void UpdatePropertyGrid(TransformEntity? e)
         {
@@ -119,13 +101,11 @@ namespace CruZ.Editor
                 if(_editor != null)
                 {
                     _editor.SelectingEntityChanged -= Editor_SelectingEntityChanged;
-                    _editor.CurrentSceneChanged -= Editor_CurrentSceneChanged;
                 }
                 
                 _editor = value;
 
                 _editor.SelectingEntityChanged += Editor_SelectingEntityChanged;
-                _editor.CurrentSceneChanged += Editor_CurrentSceneChanged;
             }
         }
 
