@@ -48,24 +48,9 @@ namespace NinjaAdventure
 
         private void ScriptComponent_Updating(GameTime gameTime)
         {
-            if (_isStunned)
+            if (_stunData.IsStunned)
             {
-                var stunDirection = _physic.Position - _hitPosition;
-                Debug.Assert(stunDirection.SqrMagnitude() > 0.01f);
-                stunDirection.Normalize();
-
-                _physic.LinearVelocity = stunDirection * _stunSpeed;
-                _stunSpeed *= 0.85f;
-                if(_stunSpeed < 0.5) _stunSpeed = 0.5f;
-
-                _stunTimer += gameTime.GetElapsedSeconds();
-
-                const float STUN_DURATION = 0.6f;
-                if(_stunTimer >= STUN_DURATION)
-                {
-                    _isStunned = false;
-                    _physic.LinearVelocity = Vector2.Zero;
-                }
+                UpdateStun(gameTime);
             }
             else
             {
@@ -75,14 +60,33 @@ namespace NinjaAdventure
             UpdateAnimation();
         }
 
+        private void UpdateStun(GameTime gameTime)
+        {
+            var stunDirection = _physic.Position - _stunData.HitPosition;
+            Debug.Assert(stunDirection.SqrMagnitude() > 0.01f);
+            stunDirection.Normalize();
+
+            _physic.LinearVelocity = stunDirection * _stunData.Speed;
+            _stunData.Speed *= 0.85f;
+            if (_stunData.Speed < 0.5) _stunData.Speed = 0.5f;
+
+            _stunData.Timer += gameTime.GetElapsedSeconds();
+
+            if (_stunData.Timer >= STUN_DURATION)
+            {
+                _stunData.IsStunned = false;
+                _physic.LinearVelocity = Vector2.Zero;
+            }
+        }
+
         private void Physic_OnCollision(Fixture fixtureA, Fixture fixtureB, Contact contact)
         {
             if (fixtureB.Body.UserData is Suriken)
             {
-                _hitPosition = fixtureB.Body.Position;
-                _isStunned = true;
-                _stunTimer = 0;
-                _stunSpeed = 10f;
+                _stunData.HitPosition = fixtureB.Body.Position;
+                _stunData.IsStunned = true;
+                _stunData.Timer = 0;
+                _stunData.Speed = 10f;
             }
         }
 
@@ -120,10 +124,10 @@ namespace NinjaAdventure
 
         PhysicBodyComponent _physic;
 
-        bool _isStunned;
-        float _stunTimer;
-        float _stunSpeed;
-        Vector2 _hitPosition;
+        const float STUN_DURATION = 0.6f;
+
+        record struct StunData(bool IsStunned, float Timer, float Speed, Vector2 HitPosition);
+        StunData _stunData;
 
         float _speed = 1;
         float _rotationSpeed = 3.14f;
