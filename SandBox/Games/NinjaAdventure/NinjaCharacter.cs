@@ -48,6 +48,7 @@ namespace NinjaAdventure
             {
                 useless.Dispose();
             }
+
             uselessSurikens.Clear();
 
             var isAttackAnimationPlaying =

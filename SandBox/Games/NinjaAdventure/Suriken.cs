@@ -86,7 +86,6 @@ namespace NinjaAdventure
         private void MakeUseless()
         {
             _physic.Awake = false;
-            _physic.OnCollision -= Physic_OnCollision;
             BecomeUseless?.Invoke();
         }
 
@@ -105,6 +104,7 @@ namespace NinjaAdventure
         public void Dispose()
         {
             _surikenRenderer.DrawRequestsFetching -= Renderer_DrawRequestsFetching;
+            _physic.OnCollision -= Physic_OnCollision;
             BecomeUseless = default;
             Entity.Dispose();
         }
