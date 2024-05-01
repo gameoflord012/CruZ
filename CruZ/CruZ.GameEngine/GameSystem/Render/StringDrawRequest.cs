@@ -1,18 +1,38 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+
+using MonoGame.Extended.BitmapFonts;
 
 namespace CruZ.GameEngine.GameSystem.Render
 {
-    internal class StringDrawRequest : DrawRequestBase
+    public class StringDrawRequest : DrawRequestBase
     {
+        private BitmapFont _font;
+        private string _text;
+        private Vector2 _position;
+
+        public StringDrawRequest(BitmapFont font, string text, Vector2 position)
+        {
+            _font = font;
+            _text = text;
+            _position = position;
+        }
+
         public override void DoRequest(SpriteBatch spriteBatch)
         {
-            throw new NotImplementedException();
+            Vector2 origin = _font.MeasureString(_text) / 2f;
+
+            spriteBatch.DrawStringWorld(
+                _font, 
+                _text, 
+                _position, 
+                Color.White, 
+                rotation: 0, 
+                origin: origin, 
+                scale: Vector2.One, 
+                SpriteEffects.None, 
+                layerDepth: 0, 
+                clippingRectangle: null);
         }
     }
 }

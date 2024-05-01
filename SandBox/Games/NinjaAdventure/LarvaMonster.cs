@@ -25,6 +25,7 @@ namespace NinjaAdventure
         {
             Entity = scene.CreateEntity();
             _font = GameContext.GameResource.Load<BitmapFont>(".internal\\Fonts\\Fixedsys.fnt");
+            spriteRenderer.DrawRequestsFetching += SpriteRenderer_DrawRequestsFetching;
 
             _animation = new AnimationComponent(spriteRenderer);
             {
@@ -48,6 +49,12 @@ namespace NinjaAdventure
                 _physic.OnCollision += Physic_OnCollision;
             }
             Entity.AddComponent(_physic);
+        }
+
+        private void SpriteRenderer_DrawRequestsFetching(List<DrawRequestBase> drawRequests)
+        {
+            var stringDrawRequest = new StringDrawRequest(_font, "hello little shit", Entity.Position);
+            drawRequests.Add(stringDrawRequest);
         }
 
         private void ScriptComponent_Updating(GameTime gameTime)
