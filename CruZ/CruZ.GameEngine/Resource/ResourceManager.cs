@@ -77,18 +77,10 @@ namespace CruZ.GameEngine.Resource
             }
         }
 
-        private static readonly string[] ContentSupportedExtensions =
-        [
-            ".jpg", ".png", // texture file
-            ".fx",
-            ".aseprite",
-            ".fnt"
-        ];
-
-        public T Load<T>(string resourcePath)
+        public T Load<T>(string resourcePath, bool useLoadNew = true)
         {
             var content = GameApplication.GetContentManager();
-            return content.LoadFromRoot<T>(resourcePath, ContentOutputDir, ContentResolver);
+            return content.LoadFromRoot<T>(resourcePath, ContentOutputDir, ContentResolver, useLoadNew);
         }
 
         private string ContentResolver(string assetName, Type assetType)

@@ -53,9 +53,17 @@ namespace NinjaAdventure
 
         private void SpriteRenderer_DrawRequestsFetching(List<DrawRequestBase> drawRequests)
         {
-            var stringDrawRequest = new StringDrawRequest(_font, "hello little shit", Entity.Position);
+            _font.LetterSpacing = -11;
+            string text = new string('/', _health) + new string('-', MAX_HEALTH - _health);
+            var textRect = _font.GetStringRectangle(text);
+            var scale = new Vector2(2f / textRect.Width, 2f / textRect.Width);
+
+            var stringDrawRequest = new StringDrawRequest(_font, text, Entity.Position + Vector2.UnitY * 0.7f, scale);
             drawRequests.Add(stringDrawRequest);
         }
+
+        const int MAX_HEALTH = 30;
+        int _health = MAX_HEALTH;
 
         private void ScriptComponent_Updating(GameTime gameTime)
         {
@@ -98,6 +106,7 @@ namespace NinjaAdventure
                 _stunData.IsStunned = true;
                 _stunData.Timer = 0;
                 _stunData.Speed = 10f;
+                _health -= _health > 5 ? 5 : _health;
             }
         }
 

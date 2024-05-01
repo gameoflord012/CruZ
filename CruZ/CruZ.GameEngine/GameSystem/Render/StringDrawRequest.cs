@@ -7,12 +7,14 @@ namespace CruZ.GameEngine.GameSystem.Render
 {
     public class StringDrawRequest : DrawRequestBase
     {
+        private Vector2 _scale;
         private BitmapFont _font;
         private string _text;
         private Vector2 _position;
 
-        public StringDrawRequest(BitmapFont font, string text, Vector2 position)
+        public StringDrawRequest(BitmapFont font, string text, Vector2 position, Vector2 scale)
         {
+            _scale = scale;
             _font = font;
             _text = text;
             _position = position;
@@ -29,9 +31,9 @@ namespace CruZ.GameEngine.GameSystem.Render
                 Color.White, 
                 rotation: 0, 
                 origin: origin, 
-                scale: Vector2.One, 
+                scale: _scale, 
                 SpriteEffects.None, 
-                layerDepth: 0, 
+                layerDepth: 10, 
                 clippingRectangle: null);
         }
     }
