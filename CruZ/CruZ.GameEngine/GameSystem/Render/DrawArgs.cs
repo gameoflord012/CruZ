@@ -25,7 +25,6 @@ namespace CruZ.GameEngine.GameSystem.Render
         public Color Color;
         public float LayerDepth;
         public SpriteEffects SpriteEffect;
-        public bool Skip = false;
 
         public void Apply(Transform transform)
         {

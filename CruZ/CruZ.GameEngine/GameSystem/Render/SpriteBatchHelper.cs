@@ -18,7 +18,7 @@ namespace CruZ.GameEngine.GameSystem.Render
     {
         public static void DrawWorld(this SpriteBatch spriteBatch, SpriteDrawArgs args)
         {
-            if(args.Skip || args.Texture == null) return;
+            if(args.Texture == null) return;
 
             spriteBatch.DrawWorld(
                 args.Texture,
