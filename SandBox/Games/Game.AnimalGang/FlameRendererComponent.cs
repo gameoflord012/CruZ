@@ -12,7 +12,7 @@ namespace Game.AnimalGang.DesktopGL
     {
         public FlameRendererComponent()
         {
-            _tex = GameContext.GameResource.Load<Texture2D>("imgs\\GAP\\Flame01.png");
+            _tex = GameApplication.GameResource.Load<Texture2D>("imgs\\GAP\\Flame01.png");
             _gd = GameApplication.GetGraphicsDevice();
             _bloom = new BloomFilter();
             _quadRenderer = new QuadRenderer(_gd);

@@ -14,7 +14,7 @@ namespace CruZ.GameEngine.GameSystem.Render
 
         public LightRendererComponent()
         {
-            _lightMap = GameContext.GameResource.Load<Texture2D>("imgs\\dangcongsang.png");
+            _lightMap = GameApplication.GameResource.Load<Texture2D>("imgs\\dangcongsang.png");
             _noiseW = _noiseH = 2000;
             _perlinNoise = FunMath.GenPerlinNoise(_noiseW, _noiseH);
         }

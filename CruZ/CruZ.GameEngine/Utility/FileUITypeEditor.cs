@@ -18,7 +18,7 @@ namespace CruZ.GameEngine.Utility
         {
             OpenFileDialog openFileDialog = new()
             {
-                InitialDirectory = GameContext.GameResourceDir,
+                InitialDirectory = GameApplication.GameResourceDir,
                 RestoreDirectory = true,
                 Title = "Select File",
                 Filter = "All Files|*.*",

@@ -22,7 +22,7 @@ namespace CruZ.GameEngine.GameSystem.Animation
 
         public AnimationComponent(SpriteRendererComponent spriteRenderer)
         {
-            _resource = GameContext.GameResource;
+            _resource = GameApplication.GameResource;
             _file = null!;
 
             _renderer = spriteRenderer;

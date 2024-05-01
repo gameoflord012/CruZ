@@ -50,7 +50,7 @@ namespace NinjaAdventure
             }
             Entity.AddComponent(_physic);
 
-            _surikenTex = GameContext.GameResource.Load<Texture2D>("art\\suriken\\01.png");
+            _surikenTex = GameApplication.GameResource.Load<Texture2D>("art\\suriken\\01.png");
         }
 
         private void Script_Updating(GameTime gameTime)

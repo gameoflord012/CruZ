@@ -5,6 +5,7 @@
   <Config />
   <SourceFiles>
     <File>D:/monogame-projects/CruZ_GameEngine/CruZ/CruZ.Experiment/Content/homelander.jpg</File>
+    <File>D:/monogame-projects/CruZ_GameEngine/CruZ/CruZ.Experiment/Content/larva-hit.mp3</File>
     <File>D:/monogame-projects/CruZ_GameEngine/CruZ/CruZ.Experiment/Content/sample.png</File>
     <File>D:/monogame-projects/CruZ_GameEngine/CruZ/CruZ.Experiment/Content/shaders/bloom-shader.fx</File>
     <File>D:/monogame-projects/CruZ_GameEngine/CruZ/CruZ.Experiment/Content/shaders/BloomFilter/Bloom.fx</File>
@@ -12,6 +13,7 @@
     <File>D:/monogame-projects/CruZ_GameEngine/CruZ/CruZ.Experiment/Content/shaders/normal-shader.fx</File>
   </SourceFiles>
   <DestFiles>
+    <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File xsi:nil="true" />

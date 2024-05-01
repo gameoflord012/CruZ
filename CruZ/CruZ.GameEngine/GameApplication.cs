@@ -9,12 +9,16 @@ using CruZ.GameEngine.Input;
 using CruZ.GameEngine.Utility;
 using System.Threading;
 using Microsoft.Win32.SafeHandles;
+using System.Linq;
+using System.Reflection;
+using CruZ.GameEngine.Resource;
+using System.IO;
 
 namespace CruZ.GameEngine
 {
     public partial class GameApplication : IDisposable
     {
-        private GameApplication(GameWrapper core)
+        private GameApplication(GameWrapper core, string gameResourceDir)
         {
             _core = core;
             _core.AfterInitialize += Wrapper_Initialized;
@@ -25,6 +29,18 @@ namespace CruZ.GameEngine
 
             _ecs = ECSManager.CreateContext();
             _inputController = InputManager.CreateContext();
+
+            _gameResourceDir = gameResourceDir;
+            _gameResource = ResourceManager.From(_gameResourceDir);
+            _internalResource = ResourceManager.From(Path.Combine(_gameResourceDir, ".internal"));
+
+            InitializeInternalResource();
+        }
+        private void InitializeInternalResource()
+        {
+            _gameResource!.CopyResourceData(
+                ResourceManager.From(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resource\\Internal")),
+                ".internal");
         }
 
         public void Run()
@@ -158,6 +174,10 @@ namespace CruZ.GameEngine
         int _fpsResult = 0;
         int _frameCount = 0;
         float _fpsTimer = 0;
+
+        string? _gameResourceDir;
+        ResourceManager? _gameResource;
+        ResourceManager? _internalResource;
         #endregion
     }
 
@@ -188,12 +208,12 @@ namespace CruZ.GameEngine
             return _instance._core.IsActive;
         }
 
-        public static GameApplication CreateContext(GameWrapper core)
+        public static GameApplication CreateContext(GameWrapper core, string gameResourceDir)
         {
             if (_instance != null && !_instance._isDispose)
                 throw new InvalidOperationException("Dispose needed before creating new context");
 
-            return _instance = new GameApplication(core);
+            return _instance = new GameApplication(core, gameResourceDir);
         }
 
         public static ContentManager GetContentManager()
@@ -201,7 +221,33 @@ namespace CruZ.GameEngine
             return _instance.Content;
         }
 
+        public static string GameResourceDir
+        {
+            get => CheckNull(_instance!._gameResourceDir);
+        }
+        
+        public static ResourceManager GameResource
+        {
+            get => CheckNull(_instance!._gameResource);
+        }
+
+        public static ResourceManager InternalResource
+        {
+            get => CheckNull(_instance!._internalResource);
+        }
+
+        public static Func<AssemblyName, Assembly?> AssemblyResolver
+        {
+            get => (resolvingAss) => AppDomain.CurrentDomain.GetAssemblies()
+                    .First(domainAss => domainAss.FullName == resolvingAss.FullName);
+        }
+
         public static List<IDisposable> Disposables = [];
         private static GameApplication? _instance;
+
+        private static T CheckNull<T>(T? value)
+        {
+            return value ?? throw new InvalidOperationException("Set value first");
+        }
     }
 }

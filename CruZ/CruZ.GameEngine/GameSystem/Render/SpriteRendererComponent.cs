@@ -25,7 +25,7 @@ namespace CruZ.GameEngine.GameSystem.ECS
 
         public SpriteRendererComponent()
         {
-            _resource = GameContext.GameResource;
+            _resource = GameApplication.GameResource;
             InitBoundingBoxEventHandlers();
         }
 

@@ -35,7 +35,6 @@ namespace CruZ.Editor.Controls
         {
             _editorForm = form;
             _cacheService = new CacheService(Path.Combine(EditorContext.UserProfileDir, "caches"));
-            _userResource = EditorContext.UserResource;
 
             InputManager.MouseScrolled += Input_MouseScroll;
             InputManager.MouseMoved += Input_MouseMove;
@@ -148,7 +147,10 @@ namespace CruZ.Editor.Controls
         {
             CleanAppSession();
 
-            _gameApp = GameApplication.CreateContext(new GameWrapper());
+            _gameApp = GameApplication.CreateContext(
+                new GameWrapper(), 
+                EditorContext.UserResourceDir);
+
             RegisterGameAppEvents();
 
             _gameApp.Run();
@@ -421,6 +423,5 @@ namespace CruZ.Editor.Controls
         EditorForm _editorForm;
 
         CacheService _cacheService;
-        ResourceManager _userResource;
     }
 }

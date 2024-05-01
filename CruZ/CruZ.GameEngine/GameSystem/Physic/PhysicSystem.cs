@@ -21,7 +21,7 @@ namespace CruZ.GameEngine.GameSystem.Physic
             _debugView.LoadContent(
                 _gd,
                 GameApplication.GetContentManager(),
-                GameContext.InternalResource.ContentDir);
+                GameApplication.InternalResource.ContentDir);
         }
 
         protected override void OnUpdate(EntitySystemEventArgs args)

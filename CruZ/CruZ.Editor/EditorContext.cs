@@ -25,11 +25,10 @@ namespace CruZ.Editor
             {
                 if (_userProjectDir == value) return;
                 _userProjectDir = value;
-                GameContext.GameResourceDir = UserResourceDir;
             }
         }
 
-        public static string UserResourceDir { get => Path.Combine(GameProjectDir, "Resource\\"); }
+        public static string UserResourceDir { get => Path.Combine(GameProjectDir, "Resource"); }
 
         public static string UserProfileDir { get => Path.Combine(GameProjectDir, EditorConstants.USER_PROFILE_DIR_NAME); }
 
@@ -51,11 +50,6 @@ namespace CruZ.Editor
                 _editorResourceDir = value;
                 EditorResource = ResourceManager.From(_editorResourceDir);
             }
-        }
-
-        public static ResourceManager UserResource
-        {
-            get => GameContext.GameResource;
         }
 
         public static ResourceManager EditorResource

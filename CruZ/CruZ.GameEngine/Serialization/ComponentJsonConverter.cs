@@ -21,7 +21,7 @@ namespace CruZ.GameEngine.Serialization
 
         private static Type GetTypeFromString(string componentTypeInString)
         {
-            return Type.GetType(componentTypeInString, GameContext.AssemblyResolver, null) ??
+            return Type.GetType(componentTypeInString, GameApplication.AssemblyResolver, null) ??
                                 throw new JsonException($"Can't load {componentTypeInString} in current Domain");
         }
 
