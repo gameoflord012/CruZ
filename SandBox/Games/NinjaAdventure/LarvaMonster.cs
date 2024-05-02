@@ -15,6 +15,7 @@ using Microsoft.Xna.Framework;
 using System.Diagnostics;
 using CruZ.GameEngine.GameSystem.Render;
 using MonoGame.Extended.BitmapFonts;
+using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Audio;
 
 namespace NinjaAdventure
@@ -23,15 +24,11 @@ namespace NinjaAdventure
     {
         public LarvaMonster(GameScene scene, SpriteRendererComponent spriteRenderer)
         {
-            Entity = scene.CreateEntity();
-
             _spriteRenderer = spriteRenderer;
-
-            _font = GameApplication.InternalResource.Load<BitmapFont>("Fonts\\Fixedsys.fnt");
+            
             _stunSoundFx = GameApplication.Resource.Load<SoundEffect>("sound\\larva-hit.mp3");
-            _font.LetterSpacing = -11;
 
-            _spriteRenderer.DrawRequestsFetching += SpriteRenderer_DrawRequestsFetching;
+            Entity = scene.CreateEntity();
 
             _animation = new AnimationComponent(spriteRenderer);
             {
@@ -50,26 +47,19 @@ namespace NinjaAdventure
             _physic = new PhysicBodyComponent();
             {
                 FixtureFactory.AttachCircle(0.5f, 1, _physic.Body);
+                _physic.Body.UserData = this;
                 _physic.BodyType = BodyType.Kinematic;
                 _physic.IsSensor = true;
                 _physic.OnCollision += Physic_OnCollision;
             }
             Entity.AddComponent(_physic);
+
+            _health = new HealthComponent(30, spriteRenderer);
+            {
+
+            }
+            Entity.AddComponent(_health);
         }
-
-        private void SpriteRenderer_DrawRequestsFetching(List<DrawRequestBase> drawRequests)
-        {
-            
-            string text = new string('/', _health) + new string('-', MAX_HEALTH - _health);
-            var textRect = _font.GetStringRectangle(text);
-            var scale = new Vector2(2f / textRect.Width, 2f / textRect.Width);
-
-            var stringDrawRequest = new StringDrawRequest(_font, text, Entity.Position + Vector2.UnitY * 0.7f, scale);
-            drawRequests.Add(stringDrawRequest);
-        }
-
-        const int MAX_HEALTH = 30;
-        int _health = MAX_HEALTH;
 
         private void ScriptComponent_Updating(GameTime gameTime)
         {
@@ -90,8 +80,11 @@ namespace NinjaAdventure
         private void UpdateStun(GameTime gameTime)
         {
             var stunDirection = _physic.Position - _stunData.HitPosition;
-            Debug.Assert(stunDirection.SqrMagnitude() > 0.01f);
-            stunDirection.Normalize();
+
+            if(stunDirection.SqrMagnitude() > 0.01f)
+                stunDirection.Normalize();
+            else
+                stunDirection = Vector2.UnitX;
 
             _physic.LinearVelocity = stunDirection * _stunData.Speed;
             _stunData.Speed *= 0.85f;
@@ -110,32 +103,24 @@ namespace NinjaAdventure
         {
             if (fixtureB.Body.UserData is Suriken)
             {
-                OnStartToStun(fixtureB);
+                OnGetHit(fixtureB);
             }
         }
 
-        private void OnStartToStun(Fixture attackerFixture)
+        private void OnGetHit(Fixture attackerFixture)
         {
             _stunData.HitPosition = attackerFixture.Body.Position;
             _stunData.IsStunned = true;
             _stunData.Timer = 0;
             _stunData.Speed = 10f;
-            _health -= _health > 5 ? 5 : _health;
 
-            if (_health == 0)
-            {
-                MarkUseless();
-            }
+            _health.Current -= 5;
+            if(_health.Current == 0) _isUseless = true;
 
             _stunSoundFx.Play();
         }
 
         public event Action<LarvaMonster>? BecomeUseless;
-
-        private void MarkUseless()
-        {
-            _isUseless = true;
-        }
 
         bool _isUseless = false;
 
@@ -171,8 +156,8 @@ namespace NinjaAdventure
 
         AnimationComponent _animation;
         SpriteRendererComponent _spriteRenderer;
-
         PhysicBodyComponent _physic;
+        HealthComponent _health;
 
         const float STUN_DURATION = 0.6f;
         record struct StunData(bool IsStunned, float Timer, float Speed, Vector2 HitPosition);
@@ -185,13 +170,10 @@ namespace NinjaAdventure
         private string? _facingString;
         private Vector2 _facingDir;
 
-        BitmapFont _font;
-
         public void Dispose()
         {
             Entity.Dispose();
             _physic.OnCollision -= Physic_OnCollision;
-            _spriteRenderer.DrawRequestsFetching -= SpriteRenderer_DrawRequestsFetching;
             BecomeUseless = default;
         }
     }

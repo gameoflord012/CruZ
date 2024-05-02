@@ -1,24 +1,30 @@
-﻿using System.Diagnostics;
-
-using CruZ.GameEngine;
+﻿using CruZ.GameEngine;
 using CruZ.GameEngine.GameSystem;
 using CruZ.GameEngine.GameSystem.Animation;
 using CruZ.GameEngine.GameSystem.ECS;
+using CruZ.GameEngine.GameSystem.Physic;
 using CruZ.GameEngine.GameSystem.Scene;
 using CruZ.GameEngine.GameSystem.Script;
 using CruZ.GameEngine.Input;
 
+using Genbox.VelcroPhysics.Collision.ContactSystem;
+using Genbox.VelcroPhysics.Dynamics;
+using Genbox.VelcroPhysics.Factories;
+
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Input;
 
 namespace NinjaAdventure
 {
-    internal class NinjaCharacter
+    internal class NinjaCharacter : IDisposable
     {
         public NinjaCharacter(GameScene scene, SpriteRendererComponent spriteRenderer)
         {
             _gameScene = scene;
             Entity = scene.CreateEntity("Ninja");
+
+            _surikenThrowSoundFx = GameApplication.Resource.Load<SoundEffect>("sound\\throw-suriken.mp3");
 
             _animationComponent = new AnimationComponent(spriteRenderer);
             {
@@ -39,7 +45,21 @@ namespace NinjaAdventure
             }
             Entity.AddComponent(_surikenRenderer);
 
+            _physic = new PhysicBodyComponent();
+            {
+                FixtureFactory.AttachCircle(0.5f, 1, _physic.Body);
+                _physic.BodyType = BodyType.Kinematic;
+                _physic.IsSensor = true;
+                _physic.OnCollision += Physic_OnCollision;
+            }
+            Entity.AddComponent(_physic);
+
             InputManager.KeyStateChanged += Input_KeyStateChanged;
+        }
+
+        private void Physic_OnCollision(Fixture fixtureA, Fixture fixtureB, Contact contact)
+        {
+            if(fixtureB.Body.UserData is LarvaMonster) return;
         }
 
         private void Script_Updating(GameTime gameTime)
@@ -57,34 +77,35 @@ namespace NinjaAdventure
                 _animationComponent.IsAnimationPlaying() &&
                 _animationComponent.CurrentAnimationName().StartsWith("attack");
 
-            //
             // movement update
-            //
             if (!isAttackAnimationPlaying) // don't move when attacking
-                Entity.Transform.Position += _inputMovement * gameTime.GetElapsedSeconds() * _speed;
+                _physic.Position += _inputMovement * gameTime.GetElapsedSeconds() * _speed;
 
-            //
-            // spawning suriken
-            //
-
+            // check can firing new suriken
             if (_inputFireSuriken && _timeBetweenAttacks < _attackTimer)
             {
-                _attackTimer = 0;
-
-                var suriken = new Suriken(_gameScene, _surikenRenderer, Entity.Position, _inputMovement);
-                suriken.BecomeUseless += () => uselessSurikens.Add(suriken);
+                OnStartFireSuriken();
 
                 _animationComponent.PlayAnimation($"attack-{facingString}", 1);
                 isAttackAnimationPlaying = true;
             }
 
-            if(!isAttackAnimationPlaying) // we don't want moving animation playing when player attacking
+            if (!isAttackAnimationPlaying) // we don't want moving animation playing when player attacking
             {
                 _animationComponent.PlayAnimation($"walk-{facingString}");
             }
 
             if (_inputFireSuriken) _inputFireSuriken = false;
             _attackTimer += gameTime.GetElapsedSeconds();
+        }
+
+        private void OnStartFireSuriken()
+        {
+            _surikenThrowSoundFx.Play();
+            _attackTimer = 0;
+
+            var suriken = new Suriken(_gameScene, _surikenRenderer, Entity.Position, _inputMovement);
+            suriken.BecomeUseless += () => uselessSurikens.Add(suriken);
         }
 
         private void Input_KeyStateChanged(IInputInfo inputInfo)
@@ -115,22 +136,36 @@ namespace NinjaAdventure
             }
         }
 
-        List<Suriken> uselessSurikens = [];
+        PhysicBodyComponent _physic;
 
         Vector2 _inputMovement;
-
-        bool _inputFireSuriken;
         float _speed = 4;
 
+        bool _inputFireSuriken;
         float _attackTimer = 0f;
         float _timeBetweenAttacks = 0.4f;
+        SoundEffect _surikenThrowSoundFx;
+        SpriteRendererComponent _surikenRenderer;
+        List<Suriken> uselessSurikens = [];
 
         AnimationComponent _animationComponent;
+
         ScriptComponent _scriptComponent;
-        SpriteRendererComponent _surikenRenderer;
 
         GameScene _gameScene;
 
         public TransformEntity Entity;
+
+        public void Dispose()
+        {
+            _physic.OnCollision -= Physic_OnCollision;
+            InputManager.KeyStateChanged -= Input_KeyStateChanged;
+            _scriptComponent.Updating -= Script_Updating;
+
+            foreach (var uselessSuriken in uselessSurikens)
+            {
+                uselessSuriken.Dispose();
+            }
+        }
     }
 }
