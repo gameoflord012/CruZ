@@ -9,7 +9,7 @@ using Microsoft.Xna.Framework.Content;
 
 namespace CruZ.GameEngine.Resource
 {
-    internal static class ContentManagerHelper
+    public static class ContentManagerHelper
     {
         public static T LoadFromRoot<T>(this ContentManager contentManager, string resourceName, string contentRoot, Func<string, Type, string>? resolver = null, bool useLoadNew = true)
         {

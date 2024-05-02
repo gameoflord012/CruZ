@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework.Content.Pipeline;
+﻿using Microsoft.Xna.Framework.Audio;
+using Microsoft.Xna.Framework.Content.Pipeline;
 
 using MonoGame.Framework.Content.Pipeline.Builder;
 
@@ -85,17 +86,32 @@ namespace CruZ.GameEngine.Resource
 
         private string ContentResolver(string assetName, Type assetType)
         {
-            BuildContent(assetName);
-            return assetName;
+            return BuildContent(assetName, assetType);
         }
         
-        private void BuildContent(string resourcePath)
+        private string BuildContent(string resourcePath, Type assetType)
         {
             resourcePath = GetFormattedResourcePath(resourcePath);
             var relative = Path.GetRelativePath(ResourceRoot, resourcePath);
-            var contentPath = Path.Combine(ContentOutputDir, relative) + ".xnb";
-            _pipelineManager.BuildContent(resourcePath, contentPath);
+            var contentPath = Path.Combine(ContentOutputDir, relative);
+
+            var processor = GetProcessor(assetType);
+            if(!string.IsNullOrEmpty(processor)) contentPath += "-" + processor;
+
+            _pipelineManager.BuildContent(resourcePath, contentPath + ".xnb", null, processor);
             _pipelineManager.ContentStats.Write(ContentOutputDir);
+
+            return contentPath;
+        }
+
+        private string? GetProcessor(Type assetType)
+        {
+            if(assetType == typeof(SoundEffect))
+            {
+                return "SoundEffectProcessor";
+            }
+
+            return default;
         }
 
         /// <summary>

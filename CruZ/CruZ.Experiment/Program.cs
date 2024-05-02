@@ -1,8 +1,8 @@
 ﻿
-using CruZ.Experiment.Filter;
-using CruZ.GameEngine;
+using System;
+using System.IO;
 
-using Microsoft.Xna.Framework;
+using CruZ.GameEngine;
 
 namespace CruZ.Experiment;
 
@@ -11,7 +11,8 @@ internal class Program
     static void Main(string[] args)
     {
         GameWrapper game = new SoundExperiment();
-        GameApplication gameApp = GameApplication.CreateContext(game);
+        GameApplication gameApp = GameApplication.CreateContext(
+            game, Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resource"));
         gameApp.Run();
     }
 }

@@ -8,7 +8,6 @@ using CruZ.GameEngine.GameSystem;
 using CruZ.GameEngine.Input;
 using CruZ.GameEngine.Utility;
 using System.Threading;
-using Microsoft.Win32.SafeHandles;
 using System.Linq;
 using System.Reflection;
 using CruZ.GameEngine.Resource;

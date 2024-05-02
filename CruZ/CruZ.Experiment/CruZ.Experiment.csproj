@@ -7,7 +7,7 @@
 	</PropertyGroup>
 	
 	<ItemGroup>
-		<Content Include="Content\**">
+		<Content Include="Resource\**">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</Content>
 	</ItemGroup>

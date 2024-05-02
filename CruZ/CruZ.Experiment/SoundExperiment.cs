@@ -11,14 +11,13 @@ namespace CruZ.Experiment
         {
             IsMouseVisible = true;
             Window.AllowUserResizing = true;
-            Content.RootDirectory = ".\\Content";
         }
 
         protected override void LoadContent()
         {
             base.LoadContent();
 
-            _soundEffect = Content.Load<SoundEffect>("larva-hit");
+            _soundEffect = GameApplication.GameResource.Load<SoundEffect>("larva-hit.mp3");
         }
 
         protected override void OnUpdate(GameTime gameTime)

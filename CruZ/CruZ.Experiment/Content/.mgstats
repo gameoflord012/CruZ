@@ -1,8 +1,0 @@
-Source File,Dest File,Processor Type,Content Type,Source File Size,Dest File Size,Build Seconds
-"D:/monogame-projects/CruZ_GameEngine/CruZ/CruZ.Experiment/Content/homelander.jpg","D:/monogame-projects/CruZ_GameEngine/CruZ/CruZ.Experiment/Content/homelander.xnb","TextureProcessor","Texture2DContent",7179,201685,0.2510941
-"D:/monogame-projects/CruZ_GameEngine/CruZ/CruZ.Experiment/Content/larva-hit.mp3","D:/monogame-projects/CruZ_GameEngine/CruZ/CruZ.Experiment/Content/larva-hit.xnb","SoundEffectProcessor","SoundEffectContent",7920,60197,0.2304098
-"D:/monogame-projects/CruZ_GameEngine/CruZ/CruZ.Experiment/Content/sample.png","D:/monogame-projects/CruZ_GameEngine/CruZ/CruZ.Experiment/Content/sample.xnb","TextureProcessor","Texture2DContent",215181,4096085,0.1364859
-"D:/monogame-projects/CruZ_GameEngine/CruZ/CruZ.Experiment/Content/shaders/bloom-shader.fx","D:/monogame-projects/CruZ_GameEngine/CruZ/CruZ.Experiment/Content/shaders/bloom-shader.xnb","EffectProcessor","CompiledEffectContent",3632,3781,0.4371489
-"D:/monogame-projects/CruZ_GameEngine/CruZ/CruZ.Experiment/Content/shaders/BloomFilter/Bloom.fx","D:/monogame-projects/CruZ_GameEngine/CruZ/CruZ.Experiment/Content/shaders/BloomFilter/Bloom.xnb","EffectProcessor","CompiledEffectContent",8484,6758,0.6028775
-"D:/monogame-projects/CruZ_GameEngine/CruZ/CruZ.Experiment/Content/shaders/light-shader.fx","D:/monogame-projects/CruZ_GameEngine/CruZ/CruZ.Experiment/Content/shaders/light-shader.xnb","EffectProcessor","CompiledEffectContent",1554,1682,0.638729
-"D:/monogame-projects/CruZ_GameEngine/CruZ/CruZ.Experiment/Content/shaders/normal-shader.fx","D:/monogame-projects/CruZ_GameEngine/CruZ/CruZ.Experiment/Content/shaders/normal-shader.xnb","EffectProcessor","CompiledEffectContent",999,1246,0.4970012
