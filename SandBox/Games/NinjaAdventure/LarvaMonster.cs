@@ -15,7 +15,7 @@ using Microsoft.Xna.Framework;
 using System.Diagnostics;
 using CruZ.GameEngine.GameSystem.Render;
 using MonoGame.Extended.BitmapFonts;
-using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Audio;
 
 namespace NinjaAdventure
 {
@@ -27,7 +27,8 @@ namespace NinjaAdventure
 
             _spriteRenderer = spriteRenderer;
 
-            _font = GameApplication.Resource.Load<BitmapFont>(".internal\\Fonts\\Fixedsys.fnt");
+            _font = GameApplication.InternalResource.Load<BitmapFont>("Fonts\\Fixedsys.fnt");
+            _stunSoundFx = GameApplication.Resource.Load<SoundEffect>("sound\\larva-hit.mp3");
             _font.LetterSpacing = -11;
 
             _spriteRenderer.DrawRequestsFetching += SpriteRenderer_DrawRequestsFetching;
@@ -109,17 +110,24 @@ namespace NinjaAdventure
         {
             if (fixtureB.Body.UserData is Suriken)
             {
-                _stunData.HitPosition = fixtureB.Body.Position;
-                _stunData.IsStunned = true;
-                _stunData.Timer = 0;
-                _stunData.Speed = 10f;
-                _health -= _health > 5 ? 5 : _health;
-
-                if(_health == 0)
-                {
-                    MarkUseless();
-                }
+                OnStartToStun(fixtureB);
             }
+        }
+
+        private void OnStartToStun(Fixture attackerFixture)
+        {
+            _stunData.HitPosition = attackerFixture.Body.Position;
+            _stunData.IsStunned = true;
+            _stunData.Timer = 0;
+            _stunData.Speed = 10f;
+            _health -= _health > 5 ? 5 : _health;
+
+            if (_health == 0)
+            {
+                MarkUseless();
+            }
+
+            _stunSoundFx.Play();
         }
 
         public event Action<LarvaMonster>? BecomeUseless;
@@ -169,6 +177,7 @@ namespace NinjaAdventure
         const float STUN_DURATION = 0.6f;
         record struct StunData(bool IsStunned, float Timer, float Speed, Vector2 HitPosition);
         StunData _stunData;
+        SoundEffect _stunSoundFx;
 
         float _speed = 1;
         float _rotationSpeed = 3.14f;

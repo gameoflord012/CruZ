@@ -83,8 +83,6 @@ namespace NinjaAdventure
                 _animationComponent.PlayAnimation($"walk-{facingString}");
             }
 
-            Debug.WriteLine($"isAttackAnimationPlaying {isAttackAnimationPlaying}");
-
             if (_inputFireSuriken) _inputFireSuriken = false;
             _attackTimer += gameTime.GetElapsedSeconds();
         }

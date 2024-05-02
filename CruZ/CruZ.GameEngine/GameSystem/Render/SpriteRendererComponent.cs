@@ -74,18 +74,6 @@ namespace CruZ.GameEngine.GameSystem.ECS
             DrawEnd += () => UIRectChanged?.Invoke(_worldBound);
         }
 
-        //public void LoadTexture(string texturePath)
-        //{
-        //    Texture = _resource.Load<Texture2D>(texturePath);
-        //}
-
-        //public int CompareLayer(SpriteRendererComponent other)
-        //{
-        //    return SortingLayer == other.SortingLayer ?
-        //        CalculateLayerDepth().CompareTo(other.CalculateLayerDepth()) :
-        //        SortingLayer.CompareTo(other.SortingLayer);
-        //}
-
         public override void Render(RenderSystemEventArgs e)
         {
             var fx = EffectManager.NormalSpriteRenderer;
