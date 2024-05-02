@@ -1,9 +1,6 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
 using System;
-using System.ComponentModel;
 using Microsoft.Xna.Framework;
-using System.Drawing.Design;
-using System.Text.Json.Serialization;
 using CruZ.GameEngine.Resource;
 using CruZ.GameEngine.GameSystem.UI;
 using CruZ.GameEngine.GameSystem.Render;
@@ -25,7 +22,7 @@ namespace CruZ.GameEngine.GameSystem.ECS
 
         public SpriteRendererComponent()
         {
-            _resource = GameApplication.GameResource;
+            _resource = GameApplication.Resource;
             InitBoundingBoxEventHandlers();
         }
 

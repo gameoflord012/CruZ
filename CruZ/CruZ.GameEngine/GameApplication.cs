@@ -52,7 +52,6 @@ namespace CruZ.GameEngine
             _core.Exit();
         }
 
-        #region event handlers
         private void Wrapper_WindowResized(object? sender, EventArgs e)
         {
             WindowResized?.Invoke(_core.GraphicsDevice.Viewport);
@@ -88,7 +87,6 @@ namespace CruZ.GameEngine
         {
             Exiting?.Invoke();
         }
-        #endregion
 
         private void ProcessMarshalRequests()
         {
@@ -167,7 +165,7 @@ namespace CruZ.GameEngine
         ECSManager _ecs;
         IInputController _inputController;
         GameWrapper _core;
-        SpriteBatch _spriteBatch;
+        SpriteBatch _spriteBatch = null!;
 
         bool _isDispose = false;
         int _fpsResult = 0;
@@ -225,7 +223,7 @@ namespace CruZ.GameEngine
             get => CheckNull(_instance!._gameResourceDir);
         }
         
-        public static ResourceManager GameResource
+        public static ResourceManager Resource
         {
             get => CheckNull(_instance!._gameResource);
         }

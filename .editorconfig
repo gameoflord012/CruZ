@@ -1,4 +1,0 @@
-﻿[*.cs]
-
-# CS0067: The event 'GameScene.OnEntityRemoved' is never used
-dotnet_diagnostic.CS0067.severity = silent

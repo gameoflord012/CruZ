@@ -27,7 +27,7 @@ namespace NinjaAdventure
 
             _spriteRenderer = spriteRenderer;
 
-            _font = GameApplication.GameResource.Load<BitmapFont>(".internal\\Fonts\\Fixedsys.fnt");
+            _font = GameApplication.Resource.Load<BitmapFont>(".internal\\Fonts\\Fixedsys.fnt");
             _font.LetterSpacing = -11;
 
             _spriteRenderer.DrawRequestsFetching += SpriteRenderer_DrawRequestsFetching;

@@ -17,7 +17,7 @@ namespace CruZ.Experiment
         {
             base.LoadContent();
 
-            _soundEffect = GameApplication.GameResource.Load<SoundEffect>("larva-hit.mp3");
+            _soundEffect = GameApplication.Resource.Load<SoundEffect>("larva-hit.mp3");
         }
 
         protected override void OnUpdate(GameTime gameTime)

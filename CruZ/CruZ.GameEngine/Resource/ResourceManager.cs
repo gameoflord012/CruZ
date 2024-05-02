@@ -114,11 +114,6 @@ namespace CruZ.GameEngine.Resource
             return default;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="resourcePath">a subpath or full subpath of this resource dir</param>
-        /// <returns>formatted</returns>
         private string GetFormattedResourcePath(string resourcePath)
         {
             resourcePath = Path.Combine(ResourceRoot, resourcePath);
