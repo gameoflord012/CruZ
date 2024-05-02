@@ -48,7 +48,7 @@ namespace NinjaAdventure
             {
                 FixtureFactory.AttachCircle(0.5f, 1, _physic.Body);
                 _physic.Body.UserData = this;
-                _physic.BodyType = BodyType.Kinematic;
+                _physic.BodyType = BodyType.Dynamic;
                 _physic.IsSensor = true;
                 _physic.OnCollision += Physic_OnCollision;
             }

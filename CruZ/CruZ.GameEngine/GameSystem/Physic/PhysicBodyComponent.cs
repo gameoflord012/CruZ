@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Genbox.VelcroPhysics.Collision.ContactSystem;
 using Genbox.VelcroPhysics.Collision.Handlers;
 using Genbox.VelcroPhysics.Dynamics;
+using Genbox.VelcroPhysics.Extensions.Controllers.ControllerBase;
 using Genbox.VelcroPhysics.Factories;
 
 using Microsoft.Xna.Framework;
@@ -22,6 +23,7 @@ namespace CruZ.GameEngine.GameSystem.Physic
             _body = BodyFactory.CreateBody(PhysicManager.World);
             _body.BodyType = BodyType.Dynamic;
             _body.OnCollision = OnCollisionHanlder;
+            _body.SleepingAllowed = false;
         }
 
         void OnCollisionHanlder(Fixture fixtureA, Fixture fixtureB, Contact contact)
