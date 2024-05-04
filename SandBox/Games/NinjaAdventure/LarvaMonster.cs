@@ -90,7 +90,7 @@ namespace NinjaAdventure
             _stunData.Speed *= 0.85f;
             if (_stunData.Speed < 0.5) _stunData.Speed = 0.5f;
 
-            _stunData.Timer += gameTime.GetElapsedSeconds();
+            _stunData.Timer += gameTime.DeltaTime();
 
             if (_stunData.Timer >= STUN_DURATION)
             {
@@ -138,15 +138,15 @@ namespace NinjaAdventure
 
             var rotationDir = MathF.Sign(FunMath.GetAngleBetween(_facingDir, followDir));
 
-            _physic.Rotation += rotationDir * _rotationSpeed * gameTime.GetElapsedSeconds();
-            _physic.Position += _facingDir * _speed * gameTime.GetElapsedSeconds();
+            _physic.Rotation += rotationDir * _rotationSpeed * gameTime.DeltaTime();
+            _physic.Position += _facingDir * _speed * gameTime.DeltaTime();
         }
 
         private void UpdateAnimation()
         {
             _facingString ??= "front";
             _facingString = AnimationHelper.GetFacingDirectionString(_facingDir, _facingString);
-            _animation.PlayAnimation($"walk-{_facingString}");
+            _animation.Play($"walk-{_facingString}");
             _animation.Transform.Position = Entity.Transform.Position;
         }
 

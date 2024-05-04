@@ -119,7 +119,7 @@ namespace CruZ.GameEngine
 
         private void CalculateFps(GameTime gameTime)
         {
-            _fpsTimer += gameTime.GetElapsedSeconds();
+            _fpsTimer += gameTime.DeltaTime();
             _frameCount++;
 
             int seconds = 0;

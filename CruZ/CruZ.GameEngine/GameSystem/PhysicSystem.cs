@@ -29,7 +29,7 @@
 
 //        public override void OnUpdated(GameTime gameTime)
 //        {
-//            _physicWorld.Step((float)gameTime.ElapsedGameTime.TotalSeconds, 6, 2);
+//            _physicWorld.Step((float)gameTime.ElapsedGameTime.TotalGameTime, 6, 2);
 //        }
 
 //        Box2D.NetStandard.Dynamics.ECSWorld.ECSWorld _physicWorld;

@@ -55,7 +55,7 @@ namespace NinjaAdventure
 
         private void Script_Updating(GameTime gameTime)
         {
-            _disappearTime -= gameTime.GetElapsedSeconds();
+            _disappearTime -= gameTime.DeltaTime();
             if(_disappearTime < 0) MakeUseless();
         }
 

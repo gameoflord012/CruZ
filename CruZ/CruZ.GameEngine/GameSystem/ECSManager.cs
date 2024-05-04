@@ -4,6 +4,7 @@ using CruZ.GameEngine.GameSystem.Animation;
 using CruZ.GameEngine.GameSystem.Physic;
 using CruZ.GameEngine.GameSystem.Render;
 using CruZ.GameEngine.GameSystem.Script;
+using CruZ.GameEngine.GameSystem.StateMachine;
 using CruZ.GameEngine.GameSystem.UI;
 
 using Microsoft.Xna.Framework;
@@ -19,6 +20,7 @@ namespace CruZ.GameEngine.GameSystem
             _world = new ECSWorld();
             _world.
                 AddSystem(new ScriptSystem()).
+                AddSystem(new StateMachineSystem()).
                 AddSystem(PhysicSystem.CreateContext()).
                 AddSystem(new AnimationSystem()).
                 AddSystem(new RenderSystem()).

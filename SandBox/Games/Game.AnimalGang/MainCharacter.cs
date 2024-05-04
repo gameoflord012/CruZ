@@ -39,7 +39,7 @@ namespace AnimalGang
 
             //if (_attackTimer < _attackDuration)
             //{
-            //    _attackTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
+            //    _attackTimer += (float)gameTime.ElapsedGameTime.TotalGameTime;
             //    return;
             //} 
             #endregion

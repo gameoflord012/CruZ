@@ -32,7 +32,7 @@ namespace CruZ.GameEngine.Input
                 _isActive = true;
                 _preMouseState = Mouse.GetState();
                 _preKeyboard = Keyboard.GetState();
-                _timeSceneLastDownClick = gameTime.TotalSeconds();
+                _timeSceneLastDownClick = gameTime.TotalGameTime();
             }
 
             _info.PreMouse = _preMouseState;
@@ -53,10 +53,10 @@ namespace CruZ.GameEngine.Input
             _info.IsMouseStateChange = DoesMouseStateChange();
 
             if (_info.IsMouseJustDown(MouseKey.Left))
-                _timeSceneLastDownClick = gameTime.TotalSeconds();
+                _timeSceneLastDownClick = gameTime.TotalGameTime();
 
             _info.IsMouseClick =
-                gameTime.TotalSeconds() - _timeSceneLastDownClick < MOUSE_CLICK_DURATION &&
+                gameTime.TotalGameTime() - _timeSceneLastDownClick < MOUSE_CLICK_DURATION &&
                 _info.IsMouseJustUp(MouseKey.Left);
             #endregion
 

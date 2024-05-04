@@ -13,7 +13,7 @@
 
 //        public void DoUpdate(GameTime gameTime)
 //        {
-//            _currentTime = gameTime.GetElapsedSeconds();
+//            _currentTime = gameTime.DeltaTime();
 //        }
 
 //        public TextureRegion2D GetCurrentFrame()

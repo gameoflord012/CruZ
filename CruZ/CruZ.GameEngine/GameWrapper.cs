@@ -10,7 +10,7 @@ namespace CruZ.GameEngine
     /// </summary>
     public partial class GameWrapper : Game
     {
-        public event Action AfterInitialize;
+        public event Action? AfterInitialize;
         public event Action<GameTime>? BeforeUpdate;
         public event Action<GameTime>? AfterDraw;
 

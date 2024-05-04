@@ -1,4 +1,6 @@
-﻿using Genbox.VelcroPhysics.Dynamics;
+﻿using CruZ.GameEngine.Utility;
+
+using Genbox.VelcroPhysics.Dynamics;
 using Genbox.VelcroPhysics.MonoGame.DebugView;
 
 using Microsoft.Xna.Framework;
@@ -26,7 +28,7 @@ namespace CruZ.GameEngine.GameSystem.Physic
 
         protected override void OnUpdate(EntitySystemEventArgs args)
         {
-            _physicWorld.Step(args.GameTime.GetElapsedSeconds());
+            _physicWorld.Step(args.GameTime.DeltaTime());
 
             foreach (var physic in args.ActiveEntities.GetAllComponents<PhysicBodyComponent>())
             {

@@ -152,7 +152,7 @@
 
 //            var anim = new AnimationComponent();
 //            anim.LoadAnimationFile("art\\Sprite-0001.aseprite");
-//            anim.PlayAnimation("idle");
+//            anim.Play("idle");
 
 //            var player = scene.CreateEntity();
 //            player.Name = "Player";

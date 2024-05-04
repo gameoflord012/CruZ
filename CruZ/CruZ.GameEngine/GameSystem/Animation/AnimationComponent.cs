@@ -53,26 +53,34 @@ namespace CruZ.GameEngine.GameSystem.Animation
             }
         }
 
-        public void PlayAnimation(string animationTag, int loopCount = 0)
+        public void Play(string animationTag, int loopCount = 0, 
+            Action<AnimatedSprite>? animationEndCallback = default)
         {
-            if (_currentAnimation != null && string.Compare(animationTag, _currentAnimation.Name, true) == 0)
-                return;
+            _animationEndCallback = animationEndCallback;
 
-            if(IsAnimationPlaying(animationTag)) _currentAnimation!.Stop();
+            // ignore if current animation is next animation with animationTag
+            if (_currentAnimation != null && string.Compare(animationTag, _currentAnimation.Name, true) == 0)
+                return; 
+
+            if(_currentAnimation != null && _currentAnimation.IsAnimating)
+            {
+                _currentAnimation.Stop(); // we will stop if animation still in play
+            }
+
             _currentAnimation = GetAnimation(animationTag);
+            _currentAnimation.OnAnimationEnd = OnAnimationEndHandler;
+
             _currentAnimation.Play(loopCount);
         }
 
-        public bool IsAnimationPlaying(string? animationTag = null)
+        private void OnAnimationEndHandler(AnimatedSprite animatedSprite)
         {
-            if(_currentAnimation == null) return false;
-
-            animationTag ??= _currentAnimation.Name;
-
-            return 
-                string.Compare(_currentAnimation.Name, animationTag, true) == 0 &&
-                _currentAnimation.IsAnimating;
+            _animationEndCallback?.Invoke(animatedSprite);
+            _animationEndCallback = null;
+            animatedSprite.OnAnimationEnd = null;
         }
+
+        private Action<AnimatedSprite>? _animationEndCallback;
 
         public string CurrentAnimationName()
         {
@@ -80,7 +88,7 @@ namespace CruZ.GameEngine.GameSystem.Animation
             return _currentAnimation.Name;
         }
 
-        public void StopCurrent()
+        public void Stop()
         {
             _currentAnimation?.Stop();
         }
@@ -135,12 +143,6 @@ namespace CruZ.GameEngine.GameSystem.Animation
             }
 
             drawRequests.Add(new SpriteDrawRequest(spriteArgs));
-        }
-
-        public AnimatedSprite? CurrentAnimation
-        {
-            get => _currentAnimation;
-            private set => _currentAnimation = value;
         }
 
         AnimatedSprite? _currentAnimation;
