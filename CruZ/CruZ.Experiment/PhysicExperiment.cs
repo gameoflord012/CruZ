@@ -59,7 +59,7 @@ namespace CruZ.Experiment
             _camera = new(Window);
         }
 
-        protected override void OnUpdate(GameTime gameTime)
+        protected override void OnUpdated(GameTime gameTime)
         {
             _world.Step(gameTime.GetElapsedSeconds());
 
@@ -95,7 +95,7 @@ namespace CruZ.Experiment
             _position += dir * (float)gameTime.ElapsedGameTime.TotalSeconds * 100;
         }
 
-        protected override void OnDraw(GameTime gameTime)
+        protected override void OnDrawing(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.Pink);
             var proj = _camera.ProjectionMatrix();

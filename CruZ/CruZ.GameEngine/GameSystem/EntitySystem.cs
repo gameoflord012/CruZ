@@ -6,12 +6,12 @@ namespace CruZ.GameEngine.GameSystem
     {
         public virtual void OnInitialize() { }
 
-        public void Update(EntitySystemEventArgs args)
+        internal void DoUpdate(EntitySystemEventArgs args)
         {
             OnUpdate(args);
         }
 
-        public void Draw(EntitySystemEventArgs args)
+        internal void DoDraw(EntitySystemEventArgs args)
         {
             OnDraw(args);
         }

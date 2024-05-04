@@ -35,9 +35,9 @@ namespace CruZ.Experiment
             _normalFx = Content.Load<Effect>("shaders\\normal-shader");
         }
 
-        protected override void OnDraw(GameTime gameTime)
+        protected override void OnDrawing(GameTime gameTime)
         {
-            base.OnDraw(gameTime);  
+            base.OnDrawing(gameTime);  
 
             _normalFx.Parameters["view_projection"].SetValue(_camera.ViewMatrix() * _camera.ProjectionMatrix());
 

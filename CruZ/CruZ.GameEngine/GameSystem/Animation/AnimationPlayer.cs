@@ -28,9 +28,9 @@
 //            }
 //        }
 
-//        internal void Update(GameTime gameTime)
+//        internal void DoUpdate(GameTime gameTime)
 //        {
-//            //_animatedSprite.Update(gameTime);
+//            //_animatedSprite.DoUpdate(gameTime);
 //        }
 
 //        internal void DoRequest(DefaultDrawArgs e)

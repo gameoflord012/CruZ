@@ -39,7 +39,7 @@ namespace CruZ.GameEngine.GameSystem.Render
             SourceRectangle = tex.Bounds;
         }
 
-        internal void Apply(Sprite sprite)
+        public void Apply(Sprite sprite)
         {
             Texture = sprite.TextureRegion.Texture;
             SourceRectangle = sprite.TextureRegion.Bounds;

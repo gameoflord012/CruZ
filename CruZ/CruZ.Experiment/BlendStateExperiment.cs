@@ -31,9 +31,9 @@ namespace CruZ.Experiment
             _tex = Content.Load<Texture2D>("homelander");
         }
 
-        protected override void OnDraw(GameTime gameTime)
+        protected override void OnDrawing(GameTime gameTime)
         {
-            base.OnDraw(gameTime);  
+            base.OnDrawing(gameTime);  
 
             _sp.Begin(blendState: BlendState.Additive);
             _sp.Draw(_tex, Vector2.Zero, Color.White);

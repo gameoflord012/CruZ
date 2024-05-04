@@ -37,9 +37,9 @@
 //            _tex = Content.Load<Texture2D>("homelander");
 //        }
 
-//        protected override void OnDraw(GameTime gameTime)
+//        protected override void OnDrawing(GameTime gameTime)
 //        {
-//            base.OnDraw(gameTime); 
+//            base.OnDrawing(gameTime); 
           
 //            var filtered = _filter.DoRequest(_tex, _tex.Width, _tex.Height);
 

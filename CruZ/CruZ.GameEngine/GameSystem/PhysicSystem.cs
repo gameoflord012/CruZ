@@ -27,7 +27,7 @@
 //            }
 //        }
 
-//        public override void OnUpdate(GameTime gameTime)
+//        public override void OnUpdated(GameTime gameTime)
 //        {
 //            _physicWorld.Step((float)gameTime.ElapsedGameTime.TotalSeconds, 6, 2);
 //        }

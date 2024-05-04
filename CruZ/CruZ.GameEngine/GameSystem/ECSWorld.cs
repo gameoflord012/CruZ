@@ -43,7 +43,7 @@ namespace CruZ.GameEngine.GameSystem
 
             foreach (var system in _systems)
             {
-                system.Update(new EntitySystemEventArgs(GetActiveEntities(), gameTime));
+                system.DoUpdate(new EntitySystemEventArgs(GetActiveEntities(), gameTime));
             }
         }
 
@@ -53,7 +53,7 @@ namespace CruZ.GameEngine.GameSystem
 
             foreach (var system in _systems)
             {
-                system.Draw(new EntitySystemEventArgs(GetActiveEntities(), gameTime));
+                system.DoDraw(new EntitySystemEventArgs(GetActiveEntities(), gameTime));
             }
         }
 

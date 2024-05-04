@@ -1,4 +1,6 @@
-﻿using CruZ.GameEngine;
+﻿using System.Diagnostics;
+
+using CruZ.GameEngine;
 using CruZ.GameEngine.GameSystem;
 using CruZ.GameEngine.GameSystem.Animation;
 using CruZ.GameEngine.GameSystem.ECS;
@@ -51,53 +53,85 @@ namespace NinjaAdventure
                 _physic.BodyType = BodyType.Dynamic;
                 _physic.IsSensor = true;
                 _physic.OnCollision += Physic_OnCollision;
+                _physic.OnSeperation += Physic_OnSeperation; ;
             }
             Entity.AddComponent(_physic);
+
+            _health = new HealthComponent(30, spriteRenderer);
+            {
+
+            }
+            Entity.AddComponent(_health);
 
             InputManager.KeyStateChanged += Input_KeyStateChanged;
         }
 
+        private void Physic_OnSeperation(Fixture fixtureA, Fixture fixtureB, Contact contact)
+        {
+            if(IsMonster(fixtureB))
+            {
+                _monsterCount--;
+            }
+        }
+
         private void Physic_OnCollision(Fixture fixtureA, Fixture fixtureB, Contact contact)
         {
-            if(fixtureB.Body.UserData is LarvaMonster)
-                return;
+            if (IsMonster(fixtureB))
+            {
+                _monsterCount++;
+            }
+        }
+
+        private static bool IsMonster(Fixture fixtureB)
+        {
+            return fixtureB.Body.UserData is LarvaMonster;
         }
 
         private void Script_Updating(GameTime gameTime)
         {
-            var facingString = AnimationHelper.GetFacingDirectionString(_inputMovement);
+            ClearUselessSuriken();
 
+            UpdateMonsterAttacks();
+
+            _isAttackAnimationPlaying =
+                _animationComponent.IsAnimationPlaying() &&
+                _animationComponent.CurrentAnimationName().StartsWith("attack");
+
+            // movement update
+            if (!_isAttackAnimationPlaying) // don't move when attacking
+                _physic.Position += _ninjaInput.Movement * gameTime.GetElapsedSeconds() * _speed;
+
+            // check can firing new suriken
+            if (_ninjaInput.FireSuriken && _timeBetweenAttacks < _attackTimer)
+            {
+                OnStartFireSuriken();
+            }
+
+            if (!_isAttackAnimationPlaying) // we don't want moving animation playing when player attacking
+            {
+                _animationComponent.PlayAnimation($"walk-{CurrentFacingDir()}");
+            }
+
+            _attackTimer += gameTime.GetElapsedSeconds();
+        }
+
+        private void UpdateMonsterAttacks()
+        {
+        }
+
+        private string CurrentFacingDir()
+        {
+            return AnimationHelper.GetFacingDirectionString(_ninjaInput.Movement);
+        }
+
+        private void ClearUselessSuriken()
+        {
             foreach (var useless in uselessSurikens)
             {
                 useless.Dispose();
             }
 
             uselessSurikens.Clear();
-
-            var isAttackAnimationPlaying =
-                _animationComponent.IsAnimationPlaying() &&
-                _animationComponent.CurrentAnimationName().StartsWith("attack");
-
-            // movement update
-            if (!isAttackAnimationPlaying) // don't move when attacking
-                _physic.Position += _inputMovement * gameTime.GetElapsedSeconds() * _speed;
-
-            // check can firing new suriken
-            if (_inputFireSuriken && _timeBetweenAttacks < _attackTimer)
-            {
-                OnStartFireSuriken();
-
-                _animationComponent.PlayAnimation($"attack-{facingString}", 1);
-                isAttackAnimationPlaying = true;
-            }
-
-            if (!isAttackAnimationPlaying) // we don't want moving animation playing when player attacking
-            {
-                _animationComponent.PlayAnimation($"walk-{facingString}");
-            }
-
-            if (_inputFireSuriken) _inputFireSuriken = false;
-            _attackTimer += gameTime.GetElapsedSeconds();
         }
 
         private void OnStartFireSuriken()
@@ -105,53 +139,61 @@ namespace NinjaAdventure
             _surikenThrowSoundFx.Play();
             _attackTimer = 0;
 
-            var suriken = new Suriken(_gameScene, _surikenRenderer, Entity.Position, _inputMovement);
+            var suriken = new Suriken(_gameScene, _surikenRenderer, Entity.Position, _ninjaInput.Movement);
             suriken.BecomeUseless += () => uselessSurikens.Add(suriken);
+
+            _animationComponent.PlayAnimation($"attack-{CurrentFacingDir()}", 1);
+            _isAttackAnimationPlaying = true;
         }
 
         private void Input_KeyStateChanged(IInputInfo inputInfo)
         {
-            _inputMovement = Vector2.Zero;
-            _inputFireSuriken = false;
+            _ninjaInput.Movement = Vector2.Zero;
+            _ninjaInput.FireSuriken = false;
 
             if (inputInfo.IsKeyHeldDown(Keys.A))
             {
-                _inputMovement += new Vector2(-1, 0);
+                _ninjaInput.Movement += new Vector2(-1, 0);
             }
             if (inputInfo.IsKeyHeldDown(Keys.D))
             {
-                _inputMovement += new Vector2(1, 0);
+                _ninjaInput.Movement += new Vector2(1, 0);
             }
             if (inputInfo.IsKeyHeldDown(Keys.W))
             {
-                _inputMovement += new Vector2(0, 1);
+                _ninjaInput.Movement += new Vector2(0, 1);
             }
             if (inputInfo.IsKeyHeldDown(Keys.S))
             {
-                _inputMovement += new Vector2(0, -1);
+                _ninjaInput.Movement += new Vector2(0, -1);
             }
 
             if (inputInfo.IsKeyJustDown(Keys.Space))
             {
-                _inputFireSuriken = true;
+                _ninjaInput.FireSuriken = true;
             }
         }
 
         PhysicBodyComponent _physic;
+        ScriptComponent _scriptComponent;
+        HealthComponent _health;
+        
+        AnimationComponent _animationComponent;
+        bool _isAttackAnimationPlaying;
 
-        Vector2 _inputMovement;
+        int _monsterCount = 0;
+
+        record struct Input(Vector2 Movement, bool FireSuriken);
+        Input _ninjaInput;
+
         float _speed = 4;
 
-        bool _inputFireSuriken;
         float _attackTimer = 0f;
         float _timeBetweenAttacks = 0.4f;
+
         SoundEffect _surikenThrowSoundFx;
         SpriteRendererComponent _surikenRenderer;
         List<Suriken> uselessSurikens = [];
-
-        AnimationComponent _animationComponent;
-
-        ScriptComponent _scriptComponent;
 
         GameScene _gameScene;
 

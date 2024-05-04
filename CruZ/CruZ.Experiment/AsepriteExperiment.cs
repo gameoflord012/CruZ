@@ -1,12 +1,13 @@
-﻿using System.IO;
+﻿using System.Diagnostics;
 
 using AsepriteDotNet.Aseprite;
-using AsepriteDotNet.IO;
 
 using CruZ.GameEngine;
+using CruZ.GameEngine.GameSystem.Render;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 
 using MonoGame.Aseprite;
 
@@ -14,11 +15,6 @@ namespace CruZ.Experiment
 {
     internal class AsepriteExperiment : GameWrapper
     {
-        public AsepriteExperiment()
-        {
-            Content.RootDirectory = ".\\Content\\bin";
-        }
-
         protected override void OnInitialize()
         {
             base.OnInitialize();
@@ -30,30 +26,43 @@ namespace CruZ.Experiment
         {
             base.LoadContent();
 
-            AsepriteFile aseFile;
-            using (Stream stream = TitleContainer.OpenStream("Content\\ninja.aseprite"))
-            {
-                aseFile = AsepriteFileLoader.FromStream("ninja", stream, preMultiplyAlpha: true);
-            }
+            var aseFile = GameApplication.Resource.Load<AsepriteFile>("NinjaAnim.aseprite");
 
             _spriteSheet = aseFile.CreateSpriteSheet(GraphicsDevice);
-            _idle = _spriteSheet.CreateAnimatedSprite("idle");
-            _idle.Play();
+            _idle = _spriteSheet.CreateAnimatedSprite("walk-front");
         }
 
-        protected override void OnUpdate(GameTime gameTime)
+        protected override void Update(GameTime gameTime)
         {
-            base.OnUpdate(gameTime);
-
             _idle.Update(gameTime);
+
+            _lastState = _currentState;
+            _currentState = Keyboard.GetState();
+
+            if (_currentState.IsKeyDown(Keys.Space) && _lastState.IsKeyUp(Keys.Space))
+            {
+                _idle.Stop();
+                _idle.Play(1);
+                _isPlaying = true;
+            }
+
+            _idle.OnAnimationEnd = AnimationEndHandler;
+
+            Debug.WriteLine($"_isPlaying {_isPlaying}");
         }
 
-        protected override void OnDraw(GameTime gameTime)
+        private void AnimationEndHandler(AnimatedSprite sprite)
         {
-            base.OnDraw(gameTime);  
+            _isPlaying = false;
+        }
 
+        protected override void Draw(GameTime gameTime)
+        {
             _sp.Begin(samplerState: SamplerState.PointClamp);
-            _sp.Draw(_idle, Vector2.Zero);
+            SpriteDrawArgs sprite = new();
+            sprite.Apply(_idle);
+            sprite.Scale = Vector2.One * 10;
+            _sp.Draw(sprite);
             _sp.End();
 
         }
@@ -61,6 +70,11 @@ namespace CruZ.Experiment
         SpriteBatch _sp;
         SpriteSheet _spriteSheet;
 
+        KeyboardState _lastState;
+        KeyboardState _currentState;
+
         AnimatedSprite _idle;
+
+        bool _isPlaying = false;
     }
 }

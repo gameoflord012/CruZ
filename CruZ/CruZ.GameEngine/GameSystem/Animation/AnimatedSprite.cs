@@ -11,7 +11,7 @@
 //            _frameDuration = frameDuration;
 //        }
 
-//        public void Update(GameTime gameTime)
+//        public void DoUpdate(GameTime gameTime)
 //        {
 //            _currentTime = gameTime.GetElapsedSeconds();
 //        }

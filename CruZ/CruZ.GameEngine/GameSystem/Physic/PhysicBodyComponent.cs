@@ -17,13 +17,20 @@ namespace CruZ.GameEngine.GameSystem.Physic
     public class PhysicBodyComponent : Component
     {
         public event OnCollisionHandler? OnCollision;
+        public event OnCollisionHandler? OnSeperation;
 
         public PhysicBodyComponent()
         {
             _body = BodyFactory.CreateBody(PhysicManager.World);
             _body.BodyType = BodyType.Dynamic;
             _body.OnCollision = OnCollisionHanlder;
+            _body.OnSeparation += OnSeperationHanlder;
             _body.SleepingAllowed = false;
+        }
+
+        private void OnSeperationHanlder(Fixture fixtureA, Fixture fixtureB, Contact contact)
+        {
+            OnSeperation?.Invoke(fixtureA, fixtureB, contact);
         }
 
         void OnCollisionHanlder(Fixture fixtureA, Fixture fixtureB, Contact contact)

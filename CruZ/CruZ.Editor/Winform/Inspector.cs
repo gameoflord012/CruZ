@@ -64,10 +64,10 @@ namespace CruZ.Editor
                 entities_ComboBox.SelectedItem = e;
             });
 
-            GameApplication.AfterDrawn -= GameApp_Drawing;
+            GameApplication.AfterDraw -= GameApp_Drawing;
 
             if (e != null)
-                GameApplication.AfterDrawn += GameApp_Drawing;
+                GameApplication.AfterDraw += GameApp_Drawing;
 
             PropertyGridInvoke(delegate
             {

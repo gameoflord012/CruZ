@@ -30,6 +30,22 @@ namespace CruZ.GameEngine.GameSystem.Render
                 args.LayerDepth);
         }
 
+        public static void Draw(this SpriteBatch spriteBatch, SpriteDrawArgs args)
+        {
+            if (args.Texture == null) return;
+
+            spriteBatch.Draw(
+                args.Texture,
+                args.Position,
+                args.SourceRectangle,
+                args.Color,
+                args.Rotation,
+                new Vector2(args.NormalizedOrigin.X * args.SourceRectangle.Width, args.NormalizedOrigin.Y * args.SourceRectangle.Height),
+                args.Scale,
+                args.SpriteEffect,
+                args.LayerDepth);
+        }
+
         public static void DrawWorld(this SpriteBatch spriteBatch, TextureRegion2D textureRegion, Vector2 position, Color color,
             float rotation, Vector2 origin, Vector2 scale, SpriteEffects effects, float layerDepth, Rectangle? clippingRectangle = null)
         {

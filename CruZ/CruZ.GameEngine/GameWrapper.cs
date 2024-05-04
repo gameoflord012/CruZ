@@ -29,27 +29,27 @@ namespace CruZ.GameEngine
             AfterInitialize?.Invoke();
         }
 
-        protected sealed override void Update(GameTime gameTime)
+        protected override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
 
             BeforeUpdate?.Invoke(gameTime);
-            OnUpdate(gameTime);
+            OnUpdated(gameTime);
         }
 
-        protected sealed override void Draw(GameTime gameTime)
+        protected override void Draw(GameTime gameTime)
         {
             base.Draw(gameTime);
 
-            OnDraw(gameTime);
+            OnDrawing(gameTime);
             AfterDraw?.Invoke(gameTime);
         }
 
         protected virtual void OnInitialize() { }
 
-        protected virtual void OnUpdate(GameTime gameTime) { }
+        protected virtual void OnUpdated(GameTime gameTime) { }
 
-        protected virtual void OnDraw(GameTime gameTime) { }
+        protected virtual void OnDrawing(GameTime gameTime) { }
 
         private GraphicsDeviceManager _gdManager;
     }
