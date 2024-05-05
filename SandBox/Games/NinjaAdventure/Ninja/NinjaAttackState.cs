@@ -22,10 +22,7 @@ namespace NinjaAdventure
         protected override void OnStateEnter()
         {
             _animationComponent = GetData<AnimationComponent>("AnimationComponent");
-            _gameScene = GetData<GameScene>("GameScene");
-
             _ninjaCharacter = GetData<NinjaCharacter>("NinjaCharacter");
-            base.OnStateEnter();
             var facingDir = GetData<string>("FacingDirectionString");
 
             _surikenThrowSoundFx.Play();
@@ -46,21 +43,8 @@ namespace NinjaAdventure
             _animationComponent.Stop();
         }
 
-        //private void OnStartFireSuriken()
-        //{
-        //    _surikenThrowSoundFx.Play();
-        //    _attackTimer = 0;
-
-        //    var suriken = new Suriken(_gameScene, _surikenRenderer, Entity.Position, _ninjaInput.Movement);
-        //    suriken.BecomeUseless += () => uselessSurikens.Add(suriken);
-
-        //    _isAttackAnimationPlaying = true;
-        //}
-
         NinjaCharacter _ninjaCharacter;
-        GameScene _gameScene;
         SoundEffect _surikenThrowSoundFx;
-        SpriteRendererComponent _surikenRenderer;
         AnimationComponent _animationComponent;
     }
 }

@@ -14,6 +14,8 @@ using Genbox.VelcroPhysics.Factories;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 
+using NinjaAdventure.Ninja;
+
 namespace NinjaAdventure
 {
     internal class NinjaCharacter : IDisposable
@@ -57,11 +59,15 @@ namespace NinjaAdventure
             {
                 _machine.SetData("PhysicComponent", _physic);
                 _machine.SetData("AnimationComponent", _animationComponent);
+                _machine.SetData("HealthComponent", _health);
                 _machine.SetData("SpriteRenderer", spriteRenderer);
                 _machine.SetData("GameScene", _gameScene);
                 _machine.SetData("NinjaCharacter", this);
+                MonsterCount = 0;
                 _machine.Add(new NinjaAttackState());
                 _machine.Add(new NinjaMovingState());
+                _machine.Add(new NinjaGetHitState());
+                _machine.Add(new NinjaDieState());
             }
             Entity.AddComponent(_machine);
 
@@ -78,7 +84,7 @@ namespace NinjaAdventure
         {
             if(IsMonster(fixtureB))
             {
-                _monsterCount--;
+                MonsterCount--;
             }
         }
 
@@ -86,7 +92,7 @@ namespace NinjaAdventure
         {
             if (IsMonster(fixtureB))
             {
-                _monsterCount++;
+                MonsterCount++;
             }
         }
 
@@ -99,25 +105,7 @@ namespace NinjaAdventure
         {
             ClearUselessSuriken();
 
-            //_isAttackAnimationPlaying =
-            //    _animationComponent.IsAnimationPlaying() &&
-            //    _animationComponent.CurrentAnimationName().StartsWith("attack");
-
-            // movement update
-            //if (!_isAttackAnimationPlaying) MovingLogic(); // don't move when attacking
-
-            //// check can firing new suriken
-            
-            //if (!_isAttackAnimationPlaying) // we don't want moving animation playing when player attacking
-            //{
-            //}
-
         }
-
-        //private string CurrentFacingDir()
-        //{
-        //    return AnimationHelper.GetFacingDirectionString(_ninjaInput.Movement);
-        //}
 
         private void ClearUselessSuriken()
         {
@@ -136,10 +124,19 @@ namespace NinjaAdventure
         SpriteRendererComponent _spriteRenderer;
 
         AnimationComponent _animationComponent;
-        bool _isAttackAnimationPlaying;
+        List<Suriken> uselessSurikens = [];
+
+        int MonsterCount
+        {
+            get => _monsterCount;
+            set
+            {
+                _monsterCount = value;
+                _machine.SetData("MonsterCount", _monsterCount);
+            }
+        }
 
         int _monsterCount = 0;
-        List<Suriken> uselessSurikens = [];
 
         GameScene _gameScene;
 

@@ -11,13 +11,15 @@ namespace NinjaAdventure
 {
     internal class NinjaMovingState : StateBase
     {
-        protected override void OnStateEnter()
+        public NinjaMovingState()
         {
             InputManager.KeyStateChanged += Input_KeyStateChanged;
+        }
+
+        protected override void OnStateEnter()
+        {
             _physic = GetData<PhysicBodyComponent>("PhysicComponent");
             _animationComponent = GetData<AnimationComponent>("AnimationComponent");
-            _ninjaInput.Movement = Vector2.Zero;
-            _ninjaInput.FireSuriken = false;
         }
 
         protected override void OnUpdate(GameTime gameTime)
@@ -38,11 +40,11 @@ namespace NinjaAdventure
             SetData("FacingDirectionString", facingDir);
             SetData("MovingDirection", _ninjaInput.Movement);
         }
+
         protected override void OnStateExit()
         {
             base.OnStateExit();
             _animationComponent.Stop();
-            InputManager.KeyStateChanged -= Input_KeyStateChanged;
         }
 
         private void Input_KeyStateChanged(IInputInfo inputInfo)

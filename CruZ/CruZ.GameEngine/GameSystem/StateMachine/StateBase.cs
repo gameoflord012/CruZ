@@ -61,6 +61,16 @@ namespace CruZ.GameEngine.GameSystem.StateMachine
 
         }
 
+        internal void DoTransitionChecking()
+        {
+            OnTransitionChecking();
+        }
+
+        protected virtual void OnTransitionChecking()
+        {
+
+        }
+
         protected T GetData<T>(string dataKey)
         {
             return Machine.GetData<T>(dataKey);
