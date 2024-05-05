@@ -1,5 +1,4 @@
-﻿using CruZ.GameEngine;
-using CruZ.GameEngine.GameSystem;
+﻿using CruZ.GameEngine.GameSystem;
 using CruZ.GameEngine.GameSystem.Animation;
 using CruZ.GameEngine.GameSystem.ECS;
 using CruZ.GameEngine.GameSystem.Physic;
@@ -12,7 +11,6 @@ using Genbox.VelcroPhysics.Dynamics;
 using Genbox.VelcroPhysics.Factories;
 
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Audio;
 
 using NinjaAdventure.Ninja;
 
@@ -45,7 +43,7 @@ namespace NinjaAdventure
                 _physic.BodyType = BodyType.Dynamic;
                 _physic.IsSensor = true;
                 _physic.OnCollision += Physic_OnCollision;
-                _physic.OnSeperation += Physic_OnSeperation; ;
+                _physic.OnSeperation += Physic_OnSeperation;
             }
             Entity.AddComponent(_physic);
 
@@ -57,13 +55,14 @@ namespace NinjaAdventure
 
             _machine = new StateMachineComponent();
             {
-                _machine.SetData("PhysicComponent", _physic);
-                _machine.SetData("AnimationComponent", _animationComponent);
-                _machine.SetData("HealthComponent", _health);
-                _machine.SetData("SpriteRenderer", spriteRenderer);
-                _machine.SetData("GameScene", _gameScene);
-                _machine.SetData("NinjaCharacter", this);
-                MonsterCount = 0;
+                _stateData = new NinjaStateData();
+                _stateData.Physic = _physic;
+                _stateData.Animation = _animationComponent;
+                _stateData.Health = _health;
+                _stateData.SpriteRenderer = _spriteRenderer;
+                _stateData.NinjaCharacter = this;
+                
+                _machine.InjectedStateData = _stateData;
                 _machine.Add(new NinjaAttackState());
                 _machine.Add(new NinjaMovingState());
                 _machine.Add(new NinjaGetHitState());
@@ -84,7 +83,7 @@ namespace NinjaAdventure
         {
             if(IsMonster(fixtureB))
             {
-                MonsterCount--;
+                _stateData.MonsterCount--;
             }
         }
 
@@ -92,7 +91,8 @@ namespace NinjaAdventure
         {
             if (IsMonster(fixtureB))
             {
-                MonsterCount++;
+                _stateData.MonsterCount++;
+                _stateData.HitMonsterPosition = fixtureB.Body.Position;
             }
         }
 
@@ -126,21 +126,10 @@ namespace NinjaAdventure
         AnimationComponent _animationComponent;
         List<Suriken> uselessSurikens = [];
 
-        int MonsterCount
-        {
-            get => _monsterCount;
-            set
-            {
-                _monsterCount = value;
-                _machine.SetData("MonsterCount", _monsterCount);
-            }
-        }
-
-        int _monsterCount = 0;
-
         GameScene _gameScene;
 
         public TransformEntity Entity;
+        private NinjaStateData _stateData;
 
         public void Dispose()
         {

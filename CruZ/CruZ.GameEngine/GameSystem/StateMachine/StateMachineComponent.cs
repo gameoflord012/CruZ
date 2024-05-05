@@ -10,6 +10,11 @@ namespace CruZ.GameEngine.GameSystem.StateMachine
 {
     public class StateMachineComponent : Component
     {
+        public StateMachineComponent()
+        {
+            InjectedStateData = new();
+        }
+
         public void Add(StateBase state)
         {
             _states[state.GetType()] = state;
@@ -27,21 +32,9 @@ namespace CruZ.GameEngine.GameSystem.StateMachine
             {
                 
                 var nextState = GetState(ty);
-                if(_currentState == nextState) return;
+                if(_currentState == nextState || !nextState.GetCanTransitionTo()) return;
                 _nextState = nextState;
             }
-        }
-
-        public T GetData<T>(string dataKey)
-        {
-            if(!_data.TryGetValue(dataKey, out object? value))
-                throw new ArgumentException("dataKey");
-            return (T)value;
-        }
-
-        public void SetData(string dataKey, object data)
-        {
-            _data[dataKey] = data;
         }
 
         private StateBase GetState(Type ty)
@@ -53,7 +46,7 @@ namespace CruZ.GameEngine.GameSystem.StateMachine
 
         internal void DoUpdate(GameTime gameTime)
         {
-            SetData("TotalGameTime", gameTime.TotalGameTime());
+            InjectedStateData.TotalGameTime = gameTime.TotalGameTime();
 
             CheckTransition();
             _currentState?.DoUpdate(gameTime);
@@ -61,7 +54,7 @@ namespace CruZ.GameEngine.GameSystem.StateMachine
 
         internal void DoDraw(GameTime gameTime)
         {
-            SetData("TotalGameTime", gameTime.TotalGameTime());
+            InjectedStateData.TotalGameTime = gameTime.TotalGameTime();
 
             CheckTransition();
             _currentState?.DoDraw(gameTime);
@@ -86,7 +79,7 @@ namespace CruZ.GameEngine.GameSystem.StateMachine
         StateBase? _currentState;
         StateBase? _nextState;
 
-        Dictionary<string, object> _data = [];
+        public StateData InjectedStateData { get; set; }
 
         public override void Dispose()
         {

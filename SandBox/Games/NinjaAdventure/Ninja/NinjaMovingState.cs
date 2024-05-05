@@ -2,49 +2,47 @@
 using CruZ.GameEngine.GameSystem.Physic;
 using CruZ.GameEngine.GameSystem.StateMachine;
 using CruZ.GameEngine.Input;
-using CruZ.GameEngine.Utility;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 
+using NinjaAdventure.Ninja;
+
 namespace NinjaAdventure
 {
-    internal class NinjaMovingState : StateBase
-    {
-        public NinjaMovingState()
+    internal class NinjaMovingState : StateBase<NinjaStateData>
+    { 
+        protected override void OnAdded()
         {
+            base.OnAdded();
             InputManager.KeyStateChanged += Input_KeyStateChanged;
         }
 
         protected override void OnStateEnter()
         {
-            _physic = GetData<PhysicBodyComponent>("PhysicComponent");
-            _animationComponent = GetData<AnimationComponent>("AnimationComponent");
+            _physic = StateData.Physic;
+            _animationComponent = StateData.Animation;
         }
 
         protected override void OnUpdate(GameTime gameTime)
         {
             base.OnUpdate(gameTime);
-            _physic.Position += _ninjaInput.Movement * gameTime.DeltaTime() * _speed;
+            _physic.LinearVelocity = _ninjaInput.Movement * _speed;
 
-            float lastAttackTime = GetData<float>("LastAttackTime");
-
-            if (_ninjaInput.FireSuriken && _timeBetweenAttacks < gameTime.TotalGameTime() - lastAttackTime)
+            if (_ninjaInput.FireSuriken)
             {
                 Machine.SetNextState(typeof(NinjaAttackState));
             }
-
-            var facingDir = AnimationHelper.GetFacingDirectionString(_ninjaInput.Movement);
-            _animationComponent.Play($"walk-{facingDir}");
-
-            SetData("FacingDirectionString", facingDir);
-            SetData("MovingDirection", _ninjaInput.Movement);
+ 
+            StateData.LastInputMovement = _ninjaInput.Movement;
+            _animationComponent.Play($"walk-{StateData.GetFacingString()}");
         }
 
         protected override void OnStateExit()
         {
             base.OnStateExit();
             _animationComponent.Stop();
+            _physic.LinearVelocity = Vector2.Zero;
         }
 
         private void Input_KeyStateChanged(IInputInfo inputInfo)
@@ -79,10 +77,8 @@ namespace NinjaAdventure
         record struct Input(Vector2 Movement, bool FireSuriken);
         Input _ninjaInput;
 
-        float _timeBetweenAttacks = 0.4f;
-
-        PhysicBodyComponent _physic;
-        AnimationComponent _animationComponent;
+        private PhysicBodyComponent _physic;
+        private AnimationComponent _animationComponent;
 
         public override void Dispose()
         {

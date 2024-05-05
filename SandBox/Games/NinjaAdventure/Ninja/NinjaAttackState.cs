@@ -1,35 +1,42 @@
-﻿using CruZ.GameEngine;
+﻿using System.Diagnostics;
+
+using CruZ.GameEngine;
 using CruZ.GameEngine.GameSystem.Animation;
-using CruZ.GameEngine.GameSystem.ECS;
-using CruZ.GameEngine.GameSystem.Scene;
 using CruZ.GameEngine.GameSystem.StateMachine;
+using CruZ.GameEngine.Utility;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 
 using MonoGame.Aseprite;
 
+using NinjaAdventure.Ninja;
+
 namespace NinjaAdventure
 {
-    internal class NinjaAttackState : StateBase
+    internal class NinjaAttackState : StateBase<NinjaStateData>
     {
         protected override void OnAdded()
         {
             _surikenThrowSoundFx = GameApplication.Resource.Load<SoundEffect>("sound\\throw-suriken.mp3");
-            SetData("LastAttackTime", float.NegativeInfinity);
+            _animationComponent = StateData.Animation;
+            _ninjaCharacter = StateData.NinjaCharacter;
+
+            _attackTimer.Start();
+        }
+
+        protected override bool CanTransitionTo()
+        {
+            return _attackTimer.GetElapsed() > TimeBetweenAttacks;
         }
 
         protected override void OnStateEnter()
         {
-            _animationComponent = GetData<AnimationComponent>("AnimationComponent");
-            _ninjaCharacter = GetData<NinjaCharacter>("NinjaCharacter");
-            var facingDir = GetData<string>("FacingDirectionString");
+            _attackTimer.Restart();
 
             _surikenThrowSoundFx.Play();
-            _animationComponent.Play($"attack-{facingDir}", 1, OnAnimationEnd);
-            _ninjaCharacter.SpawnSuriken(GetData<Vector2>("MovingDirection"));
-            
-            SetData("LastAttackTime", GetData<float>("TotalGameTime"));
+            _animationComponent.Play($"attack-{StateData.GetFacingString()}", 1, OnAnimationEnd);
+            _ninjaCharacter.SpawnSuriken(StateData.LastInputMovement);            
         }
 
         private void OnAnimationEnd(AnimatedSprite sprite)
@@ -46,5 +53,8 @@ namespace NinjaAdventure
         NinjaCharacter _ninjaCharacter;
         SoundEffect _surikenThrowSoundFx;
         AnimationComponent _animationComponent;
+
+        float TimeBetweenAttacks = 0.4f;
+        Stopwatch _attackTimer = new();
     }
 }

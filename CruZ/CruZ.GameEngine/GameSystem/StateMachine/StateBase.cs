@@ -10,6 +10,8 @@ namespace CruZ.GameEngine.GameSystem.StateMachine
 {
     public class StateBase : IDisposable
     {
+        public StateData Data => Machine.InjectedStateData;
+
         internal void DoAdded(StateMachineComponent machine)
         {
             Machine = machine;
@@ -41,6 +43,11 @@ namespace CruZ.GameEngine.GameSystem.StateMachine
             OnStateExit();
         }
 
+        internal bool GetCanTransitionTo()
+        {
+            return CanTransitionTo();
+        }
+
         protected virtual void OnUpdate(GameTime gameTime)
         {
         
@@ -61,6 +68,11 @@ namespace CruZ.GameEngine.GameSystem.StateMachine
 
         }
 
+        protected virtual bool CanTransitionTo()
+        {
+            return true;
+        }
+
         internal void DoTransitionChecking()
         {
             OnTransitionChecking();
@@ -71,21 +83,16 @@ namespace CruZ.GameEngine.GameSystem.StateMachine
 
         }
 
-        protected T GetData<T>(string dataKey)
-        {
-            return Machine.GetData<T>(dataKey);
-        }
-
-        protected void SetData(string dataKey, object data)
-        {
-            Machine.SetData(dataKey, data);
-        }
-
         public virtual void Dispose()
         {
             
         }
 
-        public StateMachineComponent Machine { get; private set; }
+        public StateMachineComponent Machine { get; private set; } = null!;
+    }
+
+    public class StateBase<T> : StateBase where T : StateData
+    {
+        public new T StateData => base.Data as T ?? throw new InvalidOperationException();
     }
 }

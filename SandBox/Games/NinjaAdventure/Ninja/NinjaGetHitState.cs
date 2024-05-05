@@ -1,11 +1,14 @@
-﻿using CruZ.GameEngine;
-using CruZ.GameEngine.GameSystem.StateMachine;
+﻿using System.Diagnostics;
 
-using Microsoft.Xna.Framework.Audio;
+using CruZ.GameEngine.GameSystem.Physic;
+using CruZ.GameEngine.GameSystem.StateMachine;
+using CruZ.GameEngine.Utility;
+
+using Microsoft.Xna.Framework;
 
 namespace NinjaAdventure.Ninja
 {
-    internal class NinjaGetHitState : BasicState
+    internal class NinjaGetHitState : BasicState<NinjaStateData>
     {
         protected override void OnTransitionChecking()
         {
@@ -13,8 +16,8 @@ namespace NinjaAdventure.Ninja
 
             if(Machine.CurrentState == typeof(NinjaDieState)) return;
 
-            var monsterCount = GetData<int>("MonsterCount");
-            if (monsterCount > 0 && GetData<float>("TotalGameTime") - _lastHitTime > _timeBetweenHit)
+            var monsterCount = StateData.MonsterCount;
+            if (monsterCount > 0 && _hitTimer.GetElapsed() > TimeBeetweenHit)
             {
                 Machine.SetNextState(typeof(NinjaGetHitState));
             }
@@ -23,7 +26,11 @@ namespace NinjaAdventure.Ninja
         protected override void OnAdded()
         {
             base.OnAdded();
-            _health = GetData<HealthComponent>("HealthComponent");
+            _health = StateData.Health;
+            _physic = StateData.Physic;
+
+            _hitTimer.Start();
+            _stunTimer.Start();
         }
 
         protected override string? GetStateEnterSoundResource()
@@ -36,17 +43,46 @@ namespace NinjaAdventure.Ninja
             base.OnStateEnter();
 
             _health.Current -= 5;
-            _lastHitTime = GetData<float>("TotalGameTime");
-
-            if(_health.Current > 0)
-                Machine.SetNextState(typeof(NinjaMovingState));
-            else
-                Machine.SetNextState(typeof(NinjaDieState));
+            _stunSpeed = StunForce;
         }
 
-        float _timeBetweenHit = 1f;
-        float _lastHitTime = float.NegativeInfinity;
+        protected override void OnUpdate(GameTime gameTime)
+        {
+            base.OnUpdate(gameTime);
 
-        HealthComponent _health;   
+            if (_health.Current == 0)
+                Machine.SetNextState(typeof(NinjaDieState));
+            else 
+            if (_stunTimer.GetElapsed() > StunTime)
+            {
+                Machine.SetNextState(typeof(NinjaMovingState));
+            }
+
+            var stunDirection = _physic.Position - StateData.HitMonsterPosition;
+            if(stunDirection.SqrMagnitude() > 0.1) stunDirection.Normalize();
+
+            _physic.LinearVelocity = stunDirection * _stunSpeed;
+            _stunSpeed *= 0.85f;
+            if (_stunSpeed < 0.5) _stunSpeed = 0.5f;
+        }
+
+        protected override void OnStateExit()
+        {
+            base.OnStateExit();
+            _hitTimer.Restart();
+            _stunTimer.Restart();
+        }
+
+        const float TimeBeetweenHit = 1f;
+        Stopwatch _hitTimer = new(); 
+
+        const float StunTime = 0.5f;
+        Stopwatch _stunTimer = new();
+
+        const float StunForce = 5f;
+        float _stunSpeed;
+
+        HealthComponent _health;
+        PhysicBodyComponent _physic;
     }
 }

@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using CruZ.GameEngine.GameSystem.StateMachine;
 
-using Microsoft.Xna.Framework.Audio;
-
-namespace CruZ.GameEngine.GameSystem.StateMachine
+namespace NinjaAdventure.Ninja
 {
-    internal class NinjaDieState : BasicState
+    internal class NinjaDieState : BasicState<NinjaStateData>
     {
         protected override string? GetStateEnterSoundResource()
         {

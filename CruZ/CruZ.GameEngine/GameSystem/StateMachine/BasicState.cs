@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using Microsoft.Xna.Framework.Audio;
+﻿using Microsoft.Xna.Framework.Audio;
 
 namespace CruZ.GameEngine.GameSystem.StateMachine
 {
-    public class BasicState : StateBase
+    public class BasicState<T> : StateBase<T> where T : StateData
     {
         protected virtual string? GetStateEnterSoundResource()
         {
