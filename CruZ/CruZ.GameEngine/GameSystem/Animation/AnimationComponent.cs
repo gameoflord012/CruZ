@@ -10,6 +10,7 @@ using MonoGame.Aseprite;
 
 using System;
 using System.Collections.Generic;
+using System.Text;
 
 namespace CruZ.GameEngine.GameSystem.Animation
 {
@@ -20,6 +21,10 @@ namespace CruZ.GameEngine.GameSystem.Animation
         /// </summary>
         public bool FitToWorldUnit { get; set; }
 
+        public Vector2 Scale = Vector2.One;
+
+        public Vector2 Offset = Vector2.Zero;
+
         public AnimationComponent(SpriteRendererComponent spriteRenderer)
         {
             _resource = GameApplication.Resource;
@@ -29,15 +34,14 @@ namespace CruZ.GameEngine.GameSystem.Animation
             _renderer.DrawRequestsFetching += SpriteRenderer_FetchingDrawRequests;
         }
 
-        public void LoadAnimationFile(string asepriteFile)
+        public void LoadAnimationFile(string asepriteFile, string? prefix = default)
         {
-            LoadAsepriteFile(_resource.Load<AsepriteFile>(asepriteFile));
+            LoadAsepriteFile(_resource.Load<AsepriteFile>(asepriteFile), prefix);
         }
 
-        private void LoadAsepriteFile(AsepriteFile file)
+        private void LoadAsepriteFile(AsepriteFile file, string? prefix)
         {
             _file = file;
-            _animations.Clear();
 
             var spriteSheet = _file.CreateSpriteSheet(GameApplication.GetGraphicsDevice());
 
@@ -49,20 +53,29 @@ namespace CruZ.GameEngine.GameSystem.Animation
                 animation.OriginX = animation.TextureRegion.Bounds.Width / 2f;
                 animation.OriginY = animation.TextureRegion.Bounds.Height / 2f;
 
-                _animations.Add(tag.Name.ToLower(), animation);
+                StringBuilder sb = new();
+                if (!string.IsNullOrEmpty(prefix))
+                {
+                    sb.Append(prefix);
+                    sb.Append('-');
+                }
+                sb.Append(tag.Name);
+
+                if (!_animations.TryAdd(sb.ToString().ToLower(), animation))
+                    throw new InvalidOperationException("duplicate animation key");
             }
         }
 
-        public void Play(string animationTag, int loopCount = 0, 
+        public void Play(string animationTag, int loopCount = 0,
             Action<AnimatedSprite>? animationEndCallback = default)
         {
             _animationEndCallback = animationEndCallback;
 
             // ignore if current animation is next animation with animationTag
             if (_currentAnimation != null && string.Compare(animationTag, _currentAnimation.Name, true) == 0)
-                return; 
+                return;
 
-            if(_currentAnimation != null && _currentAnimation.IsAnimating)
+            if (_currentAnimation != null && _currentAnimation.IsAnimating)
             {
                 _currentAnimation.Stop(); // we will stop if animation still in play
             }
@@ -84,7 +97,7 @@ namespace CruZ.GameEngine.GameSystem.Animation
 
         public string CurrentAnimationName()
         {
-            if(_currentAnimation == null) throw new InvalidOperationException();
+            if (_currentAnimation == null) throw new InvalidOperationException();
             return _currentAnimation.Name;
         }
 
@@ -108,39 +121,19 @@ namespace CruZ.GameEngine.GameSystem.Animation
             _currentAnimation?.Update(gameTime);
         }
 
-        protected override void OnAttached(TransformEntity entity)
-        {
-            if (_transform == null)
-                _transform = entity.Transform;
-        }
-
-        public Transform Transform
-        {
-            get => _transform ?? throw new NullReferenceException();
-            set => _transform = value;
-        }
-
-        Transform? _transform;
-
         private void SpriteRenderer_FetchingDrawRequests(List<DrawRequestBase> drawRequests)
         {
             if (_currentAnimation == null) return;
 
             SpriteDrawArgs spriteArgs = new();
             spriteArgs.Apply(_currentAnimation);
-            spriteArgs.Apply(Transform);
 
-            if (FitToWorldUnit)
-            {
-                spriteArgs.Scale =
-                new Vector2(
-                    1f / (_currentAnimation.TextureRegion.Bounds.Width),
-                    1f / _currentAnimation.TextureRegion.Bounds.Height);
-            }
-            else
-            {
-                spriteArgs.Scale = Vector2.One;
-            }
+            spriteArgs.Scale = Scale * (FitToWorldUnit ?
+                 new Vector2(
+                     1f / (_currentAnimation.TextureRegion.Bounds.Width),
+                     1f / _currentAnimation.TextureRegion.Bounds.Width) : Vector2.One);
+
+            spriteArgs.Position = AttachedEntity.Position + Offset;
 
             drawRequests.Add(new SpriteDrawRequest(spriteArgs));
         }

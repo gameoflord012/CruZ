@@ -36,7 +36,7 @@ namespace NinjaAdventure
 
             _physic = new PhysicBodyComponent();
             {
-                FixtureFactory.AttachCircle(0.5f, 1, _physic.Body);
+                FixtureFactory.AttachCircle(SurikenSize / 2f, 1, _physic.Body);
                 _physic.BodyType = BodyType.Dynamic;
                 _physic.IsSensor = true;
                 _physic.Postion = origin;
@@ -64,7 +64,7 @@ namespace NinjaAdventure
             SpriteDrawArgs drawArgs = new();
             drawArgs.Apply(Entity.Transform);
             drawArgs.Apply(_surikenTex);
-            drawArgs.Scale = new Vector2(1f / _surikenTex.Width, 1f / _surikenTex.Height);
+            drawArgs.Scale = new Vector2(SurikenSize / _surikenTex.Width , SurikenSize / _surikenTex.Height);
 
             if (!drawArgs.IsOutOfScreen(Camera.Main.ProjectionMatrix()))
             {
@@ -99,6 +99,8 @@ namespace NinjaAdventure
         private PhysicBodyComponent _physic;
 
         public event Action? BecomeUseless;
+
+        const float SurikenSize = 0.6f;
 
         public void Dispose()
         {

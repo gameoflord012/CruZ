@@ -33,8 +33,8 @@ namespace NinjaAdventure
             _animation = new AnimationComponent(spriteRenderer);
             {
                 _animation.FitToWorldUnit = true;
-                _animation.Transform = new();
-                _animation.LoadAnimationFile("art\\Larva\\Larva.aseprite");
+                _animation.Scale = new Vector2(0.7f, 0.7f);
+                _animation.LoadAnimationFile("anim\\Larva\\Larva.aseprite");
             }
             Entity.AddComponent(_animation);
 
@@ -46,7 +46,7 @@ namespace NinjaAdventure
 
             _physic = new PhysicBodyComponent();
             {
-                FixtureFactory.AttachCircle(0.5f, 1, _physic.Body);
+                FixtureFactory.AttachCircle(0.3f, 1, _physic.Body);
                 _physic.Body.UserData = this;
                 _physic.BodyType = BodyType.Dynamic;
                 _physic.IsSensor = true;
@@ -147,7 +147,6 @@ namespace NinjaAdventure
             _facingString ??= "front";
             _facingString = AnimationHelper.GetFacingDirectionString(_facingDir, _facingString);
             _animation.Play($"walk-{_facingString}");
-            _animation.Transform.Position = Entity.Transform.Position;
         }
 
         public TransformEntity Entity { get; private set; }

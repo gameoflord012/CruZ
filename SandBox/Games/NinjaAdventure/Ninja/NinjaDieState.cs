@@ -1,4 +1,9 @@
-﻿using CruZ.GameEngine.GameSystem.StateMachine;
+﻿using CruZ.GameEngine.GameSystem.Animation;
+using CruZ.GameEngine.GameSystem.StateMachine;
+
+using Microsoft.Xna.Framework;
+
+using MonoGame.Aseprite;
 
 namespace NinjaAdventure.Ninja
 {
@@ -8,5 +13,31 @@ namespace NinjaAdventure.Ninja
         {
             return "sound\\ninja-die.ogg";
         }
+
+        protected override void OnAdded()
+        {
+            base.OnAdded();
+            _animation = StateData.Animation;
+            _animation.LoadAnimationFile("anim\\Ninja\\smoke-effect.aseprite", "smoke");
+        }
+
+        protected override void OnStateEnter()
+        {
+            base.OnStateEnter();
+            
+            _animation.Scale = Vector2.One * 3;
+            _animation.Offset = new Vector2(-0.3f, 0.25f);
+
+            _animation.Play("smoke-sweep", 1);
+        }
+
+        protected override void OnStateExit()
+        {
+            base.OnStateExit();
+            _animation.Scale = Vector2.One;
+            _animation.Offset = Vector2.Zero;
+        }
+
+        AnimationComponent _animation;
     }
 }

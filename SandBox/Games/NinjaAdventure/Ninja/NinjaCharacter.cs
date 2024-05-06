@@ -27,7 +27,7 @@ namespace NinjaAdventure
             _animationComponent = new AnimationComponent(spriteRenderer);
             {
                 _animationComponent.FitToWorldUnit = true;
-                _animationComponent.LoadAnimationFile("art\\NinjaAnim.aseprite");
+                _animationComponent.LoadAnimationFile("anim\\Ninja\\NinjaAnim.aseprite");
             }
             Entity.AddComponent(_animationComponent);
 
@@ -39,7 +39,7 @@ namespace NinjaAdventure
 
             _physic = new PhysicBodyComponent();
             {
-                FixtureFactory.AttachCircle(0.5f, 1, _physic.Body);
+                FixtureFactory.AttachCircle(0.4f, 1, _physic.Body);
                 _physic.BodyType = BodyType.Dynamic;
                 _physic.IsSensor = true;
                 _physic.OnCollision += Physic_OnCollision;
@@ -92,7 +92,7 @@ namespace NinjaAdventure
             if (IsMonster(fixtureB))
             {
                 _stateData.MonsterCount++;
-                _stateData.HitMonsterPosition = fixtureB.Body.Position;
+                _stateData.LastMonsterBody = fixtureB.Body;
             }
         }
 

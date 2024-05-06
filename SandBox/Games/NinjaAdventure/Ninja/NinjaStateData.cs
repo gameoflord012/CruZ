@@ -3,6 +3,8 @@ using CruZ.GameEngine.GameSystem.ECS;
 using CruZ.GameEngine.GameSystem.Physic;
 using CruZ.GameEngine.GameSystem.StateMachine;
 
+using Genbox.VelcroPhysics.Dynamics;
+
 using Microsoft.Xna.Framework;
 
 namespace NinjaAdventure.Ninja
@@ -16,7 +18,7 @@ namespace NinjaAdventure.Ninja
         public HealthComponent Health;
 
         public int MonsterCount;
-        public Vector2 HitMonsterPosition;
+        public Body LastMonsterBody;
         public Vector2 LastInputMovement;
 
         public string GetFacingString()

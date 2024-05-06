@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Diagnostics;
 
 using CruZ.GameEngine.Utility;
 
@@ -68,9 +69,13 @@ namespace CruZ.GameEngine.GameSystem.StateMachine
             }
 
             if(_nextState == _currentState) return;
+
             _currentState?.DoStateExit();
+            Debug.WriteLine((_currentState == null ? "<None>" : $"<{_currentState.GetType().Name}>") + " EXIT");
             _currentState = _nextState;
             _currentState?.DoStateEnter();
+            Debug.WriteLine((_currentState == null ? "<None>" : $"<{_currentState.GetType().Name}>") + " ENTER");
+
         }
 
         public Type? CurrentState => _currentState?.GetType();

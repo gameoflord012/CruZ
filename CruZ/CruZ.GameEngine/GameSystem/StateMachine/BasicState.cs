@@ -14,6 +14,7 @@ namespace CruZ.GameEngine.GameSystem.StateMachine
             base.OnAdded();
 
             var resource = GetStateEnterSoundResource();
+
             if (!string.IsNullOrEmpty(resource))
                 _stateBeginSound = GameApplication.Resource.Load<SoundEffect>(resource);
         }

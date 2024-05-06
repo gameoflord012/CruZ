@@ -93,18 +93,6 @@ namespace CruZ.Editor.Controls
             }
         }
 
-        //public void LoadSceneFromFile(string file)
-        //{
-        //    throw new NotImplementedException();
-
-        //    WaitGameInitialized();
-
-        //    var scene = _userResource.Load<GameScene>(file);
-        //    scene.Name = Path.GetRelativePath(_userResource.ResourceRoot, file);
-
-        //    LoadScene(scene);
-        //}
-
         public void LoadRuntimeScene(string sceneName)
         {
             if(LoadedGameScene != null) throw new InvalidOperationException("Can load only one scene");
@@ -122,13 +110,6 @@ namespace CruZ.Editor.Controls
                 throw;
             }
         }
-
-        //private void LoadScene(GameScene scene)
-        //{
-        //    if (scene == _currentScene) return;
-
-        //    _currentScene = scene;
-        //}
         
         private void WaitGameInitialized()
         {
@@ -155,46 +136,6 @@ namespace CruZ.Editor.Controls
 
             _gameApp.Run();
         }
-
-        //public void UnloadCurrentScene()
-        //{
-        //    _currentScene?.Dispose();
-
-        //    if (_currentScene == null) return;
-        //    _currentScene.Dispose();
-        //    _currentScene = null;
-
-        //    CurrentSceneChanged?.Invoke(null);
-        //}
-
-        /// <summary>
-        /// Call before unloading scene, _currentScene is now still the old scene
-        /// </summary>
-        //private void OnSceneUnloading()
-        //{
-        //    throw new NotImplementedException();
-
-        //    SelectedEntity = null;
-
-        //    if(_currentScene != null) 
-        //        EditorContext.UserResource.TrySave(_currentScene);
-
-        //    // Clear entity controls which belong to unloading scene
-        //    foreach(var entity in _fromEntityToControl.Keys)
-        //    {
-        //        RemoveEntity(entity);
-        //    }
-        //}
-
-        //private void OnSceneLoaded()
-        //{
-        //    //LogManager.SetMsg(_currentScene == null ? "<Empty>" : _currentScene.ToString(), "Scene");
-
-        //    //foreach (var entity in _currentScene!.Entities)
-        //    //{
-        //    //    AddEntityControl(entity);
-        //    //}
-        //}
 
         private void World_EntityAdded(TransformEntity e)
         {
@@ -272,22 +213,6 @@ namespace CruZ.Editor.Controls
             _gameAppThread = null;
         }
 
-        //public TransformEntity CreateNewEntity(TransformEntity? parent = null)
-        //{
-        //    if (_currentScene == null)
-        //        throw new InvalidOperationException("Can't create new entity when Scene is not loaded");
-
-        //    var newEntity = _currentScene.CreateEntity(null, parent);
-        //    return newEntity;
-        //}
-
-        public void RemoveEntity(TransformEntity e)
-        {
-            throw new NotImplementedException();
-            //_currentScene.RemoveAndDisposeEntity(e);
-            //e.Dispose();
-        }
-
         private void OnApplicationBeforeClosing()
         {
             _cacheService.WriteCache(this, "LoadedScene");
@@ -348,57 +273,6 @@ namespace CruZ.Editor.Controls
                 Debug.WriteLine("Undo");
             }
         }
-
-        //private void UI_MouseClick(UIInfo info)
-        //{
-        //    FindEntityToSelect(info);
-        //}
-
-        //private void FindEntityToSelect(UIInfo info)
-        //{
-        //    var contains =
-        //        _editorUIBranch.GetRaycastControls(info.MousePos().X, info.MousePos().Y);
-
-        //    var eControl = contains
-        //        .Where(e => e is EntityControl).Cast<EntityControl>()
-        //        .Where(e => _fromEntityToControl.ContainsValue(e))
-        //        .ToList();
-
-        //    eControl.Sort((e1, e2) =>
-        //    {
-        //        e1.AttachEntity!.TryGetComponent(out SpriteRendererComponent? sp1);
-        //        e2.AttachEntity!.TryGetComponent(out SpriteRendererComponent? sp2);
-
-        //        if (sp1 == sp2) return 0;
-        //        if (sp1 == null) return -1;
-        //        if (sp2 == null) return 1;
-
-        //        return sp1.CompareLayer(sp2);
-        //    });
-
-        //    if (eControl.Count() == 0)
-        //    {
-        //        SelectedEntity = null;
-        //        return;
-        //    }
-
-        //    int idx = 0;
-
-        //    if (_currentSelectEntity != null)
-        //    {
-        //        for (int i = 0; i < eControl.Count(); i++)
-        //        {
-        //            if (eControl[i] == _fromEntityToControl[_currentSelectEntity])
-        //            {
-        //                idx = i;
-        //                break;
-        //            }
-        //        }
-        //    }
-
-        //    idx = (idx + 1) % eControl.Count();
-        //    SelectedEntity = eControl[idx].AttachEntity;
-        //}
 
         public GameScene? LoadedGameScene { get; private set; }
 

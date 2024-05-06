@@ -14,6 +14,7 @@ namespace CruZ.GameEngine.GameSystem.Render
             LayerDepth = 0;
             Color = Color.White;
             NormalizedOrigin = new Vector2(0.5f, 0.5f);
+            Scale = Vector2.One;
         }
 
         public Texture2D? Texture;

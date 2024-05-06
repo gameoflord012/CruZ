@@ -30,7 +30,6 @@ namespace NinjaAdventure.Ninja
             _physic = StateData.Physic;
 
             _hitTimer.Start();
-            _stunTimer.Start();
         }
 
         protected override string? GetStateEnterSoundResource()
@@ -42,8 +41,9 @@ namespace NinjaAdventure.Ninja
         {
             base.OnStateEnter();
 
-            _health.Current -= 5;
+            _stunTimer.Start();
             _stunSpeed = StunForce;
+            _health.Current -= 5;
         }
 
         protected override void OnUpdate(GameTime gameTime)
@@ -58,7 +58,7 @@ namespace NinjaAdventure.Ninja
                 Machine.SetNextState(typeof(NinjaMovingState));
             }
 
-            var stunDirection = _physic.Position - StateData.HitMonsterPosition;
+            var stunDirection = _physic.Position - StateData.LastMonsterBody.Position;
             if(stunDirection.SqrMagnitude() > 0.1) stunDirection.Normalize();
 
             _physic.LinearVelocity = stunDirection * _stunSpeed;
@@ -69,17 +69,20 @@ namespace NinjaAdventure.Ninja
         protected override void OnStateExit()
         {
             base.OnStateExit();
+
             _hitTimer.Restart();
-            _stunTimer.Restart();
+            _stunTimer.Reset();
+            
+            _physic.LinearVelocity = Vector2.Zero;
         }
 
         const float TimeBeetweenHit = 1f;
         Stopwatch _hitTimer = new(); 
 
-        const float StunTime = 0.5f;
+        const float StunTime = 0.25f;
         Stopwatch _stunTimer = new();
 
-        const float StunForce = 5f;
+        const float StunForce = 10f;
         float _stunSpeed;
 
         HealthComponent _health;
