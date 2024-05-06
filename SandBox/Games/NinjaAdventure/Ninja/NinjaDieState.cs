@@ -25,8 +25,9 @@ namespace NinjaAdventure.Ninja
         {
             base.OnStateEnter();
             
+            StateData.Health.ShouldDisplay = false;
             _animation.Scale = Vector2.One * 3;
-            _animation.Offset = new Vector2(-0.3f, 0.25f);
+            _animation.Offset = new Vector2(-0.3f, 0.4f);
 
             _animation.Play("smoke-sweep", 1);
         }

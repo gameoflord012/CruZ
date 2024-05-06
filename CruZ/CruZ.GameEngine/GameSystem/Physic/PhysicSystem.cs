@@ -38,13 +38,17 @@ namespace CruZ.GameEngine.GameSystem.Physic
 
         protected override void OnDraw(EntitySystemEventArgs args)
         {
+
             _gd.SetRenderTarget(RenderTargetSystem.PhysicRT);
             _gd.Clear(Color.Transparent);
 
-            _debugView.RenderDebugData(
+            if (ShowDebug)
+            {
+                _debugView.RenderDebugData(
                 Camera.Main.ProjectionMatrix(),
                 Camera.Main.ViewMatrix());
-
+            }
+            
             _gd.SetRenderTarget(null);
         }
 
@@ -57,6 +61,8 @@ namespace CruZ.GameEngine.GameSystem.Physic
         GraphicsDevice _gd;
 
         internal bool IsDisposed { get; private set; }
+
+        public bool ShowDebug = true;
 
         DebugView _debugView;
         public World World { get => _physicWorld; }

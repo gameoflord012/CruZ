@@ -20,6 +20,7 @@ using CruZ.GameEngine.Resource;
 using CruZ.GameEngine.GameSystem.Scene;
 using CruZ.GameEngine.Input;
 using CruZ.GameEngine.Utility;
+using CruZ.GameEngine.GameSystem.Physic;
 
 
 namespace CruZ.Editor.Controls
@@ -267,10 +268,9 @@ namespace CruZ.Editor.Controls
 
         private void Input_KeyStateChanged(IInputInfo info)
         {
-            if (info.Keyboard.IsKeyDown(Keys.LeftControl) &&
-                info.IsKeyJustDown(Keys.Z))
+            if (info.IsKeyJustDown(Keys.OemTilde))
             {
-                Debug.WriteLine("Undo");
+                PhysicSystem.Instance.ShowDebug = !PhysicSystem.Instance.ShowDebug;
             }
         }
 

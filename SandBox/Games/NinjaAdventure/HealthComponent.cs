@@ -29,6 +29,7 @@ namespace NinjaAdventure
 
         private void SpriteRenderer_DrawRequestsFetching(List<DrawRequestBase> drawRequests)
         {
+            if(!ShouldDisplay) return;
 
             string text = new string('/', Current) + new string('-', MaxHealth - Current);
             var textRect = _font.GetStringRectangle(text);
@@ -43,6 +44,8 @@ namespace NinjaAdventure
             base.Dispose();
             _healthRenderer.DrawRequestsFetching -= SpriteRenderer_DrawRequestsFetching;
         }
+
+        public bool ShouldDisplay = true;
 
         SpriteRendererComponent _healthRenderer;
         BitmapFont _font;
