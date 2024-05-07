@@ -12,9 +12,9 @@ namespace NinjaAdventure
 {
     internal class NinjaMovingState : StateBase<NinjaStateData>
     { 
-        protected override void OnAdded()
+        protected override void OnStateMachineAttached()
         {
-            base.OnAdded();
+            base.OnStateMachineAttached();
             InputManager.KeyStateChanged += Input_KeyStateChanged;
         }
 

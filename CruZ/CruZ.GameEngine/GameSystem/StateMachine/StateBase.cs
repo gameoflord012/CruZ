@@ -12,13 +12,13 @@ namespace CruZ.GameEngine.GameSystem.StateMachine
     {
         public StateData Data => Machine.InjectedStateData;
 
-        internal void DoAdded(StateMachineComponent machine)
+        internal void AttachStateMachine(StateMachineComponent machine)
         {
             Machine = machine;
-            OnAdded();
+            OnStateMachineAttached();
         }
 
-        protected virtual void OnAdded()
+        protected virtual void OnStateMachineAttached()
         {
 
         }

@@ -17,9 +17,9 @@ namespace NinjaAdventure.Ninja
             return StateData.MonsterCount > 0 && _hitTimer.GetElapsed() > TimeBeetweenHit;
         }
 
-        protected override void OnAdded()
+        protected override void OnStateMachineAttached()
         {
-            base.OnAdded();
+            base.OnStateMachineAttached();
             _health = StateData.Health;
             _physic = StateData.Physic;
 

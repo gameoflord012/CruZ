@@ -3,17 +3,16 @@ using CruZ.GameEngine.GameSystem.StateMachine;
 
 using Microsoft.Xna.Framework;
 
-using MonoGame.Aseprite;
-
 namespace NinjaAdventure.Ninja
 {
     internal class NinjaDieState : BasicState<NinjaStateData>
     {
         protected override string? StateEnterSoundResource => "sound\\ninja-die.ogg";
 
-        protected override void OnAdded()
+        protected override void OnStateMachineAttached()
         {
-            base.OnAdded();
+            base.OnStateMachineAttached();
+
             _animation = StateData.Animation;
             _animation.LoadAnimationFile("anim\\Ninja\\smoke-effect.aseprite", "smoke");
         }

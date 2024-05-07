@@ -44,7 +44,8 @@ namespace CruZ.GameEngine.GameSystem
         public virtual void Dispose() { }
 
         [JsonIgnore]
-        protected TransformEntity AttachedEntity { get => _attachedEntity ?? throw new InvalidOperationException(); }
+        public  TransformEntity AttachedEntity { get => _attachedEntity ?? throw new InvalidOperationException(); }
+        
         private TransformEntity? _attachedEntity;
     }
 }

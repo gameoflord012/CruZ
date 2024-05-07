@@ -64,7 +64,7 @@ namespace CruZ.GameEngine.GameSystem
 
         private void ProcessDirtyEntities()
         {
-            var removingEntities = _entities.Where(e => e.IsDirty);
+            var removingEntities = _entities.Where(e => e.ShouldRemove);
             _entities.ExceptWith(removingEntities);
             //
             // fire events

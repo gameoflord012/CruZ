@@ -20,13 +20,18 @@ namespace NinjaAdventure
 {
     internal class NinjaCharacter : IDisposable
     {
-        public NinjaCharacter(GameScene scene, SpriteRendererComponent spriteRenderer)
+        public NinjaCharacter(GameScene scene)
         {
-            _spriteRenderer = spriteRenderer;
             _gameScene = scene;
             Entity = scene.CreateEntity("Ninja");
 
-            _animationComponent = new AnimationComponent(spriteRenderer);
+            _spriteRenderer = new SpriteRendererComponent();
+            {
+
+            }
+            Entity.AddComponent(_spriteRenderer);
+
+            _animationComponent = new AnimationComponent(_spriteRenderer);
             {
                 _animationComponent.FitToWorldUnit = true;
                 _animationComponent.LoadAnimationFile("anim\\Ninja\\NinjaAnim.aseprite");
@@ -49,7 +54,7 @@ namespace NinjaAdventure
             }
             Entity.AddComponent(_physic);
 
-            _health = new HealthComponent(30, spriteRenderer);
+            _health = new HealthComponent(30, _spriteRenderer);
             {
 
             }

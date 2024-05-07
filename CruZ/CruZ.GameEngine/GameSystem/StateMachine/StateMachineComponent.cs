@@ -19,7 +19,7 @@ namespace CruZ.GameEngine.GameSystem.StateMachine
         public void Add(StateBase state)
         {
             _states[state.GetType()] = state;
-            state.DoAdded(this);
+            state.AttachStateMachine(this);
         }
 
         public void SetNextState(Type? ty, bool checking)

@@ -23,7 +23,11 @@ namespace NinjaAdventure
         {
             base.OnStateUpdate(gameTime);
 
-            if(_fadeCountdown < 0) return;
+            if(_fadeCountdown < 0)
+            {
+                StateData.Larva.ReturnToPool();
+                return;
+            }
 
             _fadeCountdown -= gameTime.DeltaTime();
             StateData.Animation.Color = new Color(1, 1, 1, _fadeCountdown / FadeDuration);

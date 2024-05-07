@@ -26,9 +26,9 @@
 //            return IsGettingHit && _hitTimer.GetElapsed() > TimeBeetweenHit;
 //        }
 
-//        protected override void OnAdded()
+//        protected override void OnStateMachineAttached()
 //        {
-//            base.OnAdded();
+//            base.OnStateMachineAttached();
 
 //            _hitTimer.Start();
 //        }

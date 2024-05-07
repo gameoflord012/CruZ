@@ -6,9 +6,9 @@ namespace CruZ.GameEngine.GameSystem.StateMachine
     {
         protected virtual string? StateEnterSoundResource { get; } = default;
 
-        protected override void OnAdded()
+        protected override void OnStateMachineAttached()
         {
-            base.OnAdded();
+            base.OnStateMachineAttached();
 
             var resource = StateEnterSoundResource;
 

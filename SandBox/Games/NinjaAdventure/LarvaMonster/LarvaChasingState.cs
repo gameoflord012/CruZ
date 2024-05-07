@@ -9,32 +9,34 @@ namespace NinjaAdventure
 {
     internal class LarvaChasingState : StateBase<LarvaStateData>
     {
-        protected override void OnAdded()
+        protected override void OnStateMachineAttached()
         {
-            base.OnAdded();
+            base.OnStateMachineAttached();
             _physic = StateData.Physic;
             _animation = StateData.Animation;
         }
 
-        protected override void OnStateEnter()
-        {
-            base.OnStateEnter();
-        }
-
         protected override void OnStateUpdate(GameTime gameTime)
         {
-            Vector2 followDir = StateData.Follow != null ?
-                StateData.Follow.Position - _physic.Position : Vector2.Zero;
+            // stay if follow target unavai
+            if(StateData.Follow == null)
+            {
+                _physic.AngularVelocity = 0;
+                _physic.LinearVelocity = Vector2.Zero;
+            }
+            else
+            {
+                _facingDir = Vector2.Rotate(Vector2.UnitY, _physic.Transform.Rotation);
+                _facingDir.Normalize();
 
-            _facingDir = Vector2.Rotate(Vector2.UnitY, _physic.Transform.Rotation);
+                Vector2 followDir = StateData.Follow.Position - _physic.Position;
+                if (followDir.Length() > 0.01) followDir.Normalize();
 
-            if (followDir.Length() > 0.01) followDir.Normalize();
-            _facingDir.Normalize();
+                var rotationDir = MathF.Sign(FunMath.GetAngleBetween(_facingDir, followDir));
 
-            var rotationDir = MathF.Sign(FunMath.GetAngleBetween(_facingDir, followDir));
-
-            _physic.AngularVelocity = rotationDir * _rotationSpeed;
-            _physic.LinearVelocity = _facingDir * _speed;
+                _physic.AngularVelocity = rotationDir * _rotationSpeed;
+                _physic.LinearVelocity = _facingDir * _speed;
+            }
 
             UpdateAnimation();
         }

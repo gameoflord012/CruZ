@@ -13,8 +13,7 @@ namespace NinjaAdventure
     {
         public HealthComponent(int maxHealth, SpriteRendererComponent healthRenderer)
         {
-            _font = GameApplication.InternalResource.Load<BitmapFont>("Fonts\\Fixedsys.fnt");
-            _font.LetterSpacing = -11;
+            _font = GameApplication.InternalResource.Load<BitmapFont>("Fonts\\Fixedsys.fnt", false);
 
             MaxHealth = maxHealth;
             _health = MaxHealth;
@@ -30,6 +29,8 @@ namespace NinjaAdventure
         private void SpriteRenderer_DrawRequestsFetching(List<DrawRequestBase> drawRequests)
         {
             if(!ShouldDisplay) return;
+
+            _font.LetterSpacing = -11;
 
             string text = new string('/', Current) + new string('-', MaxHealth - Current);
             var textRect = _font.GetStringRectangle(text);

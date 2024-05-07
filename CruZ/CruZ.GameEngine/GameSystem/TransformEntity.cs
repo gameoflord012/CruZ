@@ -12,15 +12,14 @@ using Microsoft.Xna.Framework;
 
 namespace CruZ.GameEngine.GameSystem
 {
-    [JsonConverter(typeof(TransformEntityJsonConverter))]
     public sealed class TransformEntity : IDisposable
     {
-        public event Action<TransformEntity>? BecameDrity;
+        public event Action<TransformEntity>? RemovedFromWorld;
         public event Action<ComponentCollection>? ComponentsChanged;
 
         internal TransformEntity()
         {
-            Id = _entityCounter++;
+            Id = s_entityCounter++;
             Name = $"New Entity({Id})";
         }
 
@@ -81,23 +80,18 @@ namespace CruZ.GameEngine.GameSystem
             return comps.ToImmutableList();
         }
 
-        public override string ToString()
-        {
-            return Name;
-        }
-
-        public void SetDirty()
+        public void RemoveFromWorld()
         {
             IsActive = false;
-            IsDirty = true;
-            BecameDrity?.Invoke(this);
+            ShouldRemove = true;
+            RemovedFromWorld?.Invoke(this);
         }
 
         [ReadOnly(true)]
         public string Name
         {
-            get => _name;
-            set => _name = value;
+            get;
+            set;
         }
 
         public int Id
@@ -106,13 +100,19 @@ namespace CruZ.GameEngine.GameSystem
             private set;
         }
 
-        internal bool IsDirty { get; private set; }
+        internal bool ShouldRemove
+        {
+            get;
+            private set;
+        }
 
         public bool IsActive
         {
             get => _isActive;
             set => _isActive = value;
         }
+
+        bool _isActive = false;
 
         public TransformEntity? Parent
         {
@@ -122,16 +122,18 @@ namespace CruZ.GameEngine.GameSystem
                 if (_parent == value) return;
 
                 if (_parent != null)
-                    _parent.BecameDrity -= Parent_BecameDrity;
+                    _parent.RemovedFromWorld -= Parent_RemovedFromWorld;
 
                 _parent = value;
 
                 if (_parent != null)
-                    _parent.BecameDrity += Parent_BecameDrity;
+                    _parent.RemovedFromWorld += Parent_RemovedFromWorld;
             }
         }
 
-        private void Parent_BecameDrity(TransformEntity parent)
+        TransformEntity? _parent;
+
+        private void Parent_RemovedFromWorld(TransformEntity parent)
         {
             Parent = null;
         }
@@ -142,6 +144,8 @@ namespace CruZ.GameEngine.GameSystem
             set => _transform = value;
         }
 
+        Transform _transform = new();
+        
         public Vector2 Position
         {
             get => Transform.Position;
@@ -154,25 +158,23 @@ namespace CruZ.GameEngine.GameSystem
             set => Transform.Scale = value;
         }
 
-        string _name = "";
-        bool _isActive = false;
-        TransformEntity? _parent;
-
         internal IImmutableList<Component> Components { get => _components.Values.ToImmutableList(); }
 
         Dictionary<Type, Component> _components = [];
-        Transform _transform = new();
 
-        static int _entityCounter = 0;
+        public override string ToString()
+        {
+            return Name;
+        }
 
         public void Dispose()
         {
             if (_isDisposed) return;
             _isDisposed = true;
 
-            IsDirty = true;
+            ShouldRemove = true;
 
-            BecameDrity = default;
+            RemovedFromWorld = default;
             ComponentsChanged = default;
 
             foreach (var component in GetAllComponents())
@@ -182,5 +184,7 @@ namespace CruZ.GameEngine.GameSystem
         }
 
         bool _isDisposed = false;
+
+        static int s_entityCounter = 0;
     }
 }

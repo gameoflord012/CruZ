@@ -16,7 +16,7 @@ namespace NinjaAdventure
 {
     internal class NinjaAttackState : StateBase<NinjaStateData>
     {
-        protected override void OnAdded()
+        protected override void OnStateMachineAttached()
         {
             _surikenThrowSoundFx = GameApplication.Resource.Load<SoundEffect>("sound\\throw-suriken.mp3");
             _animationComponent = StateData.Animation;
