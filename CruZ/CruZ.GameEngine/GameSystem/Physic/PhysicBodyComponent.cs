@@ -38,23 +38,16 @@ namespace CruZ.GameEngine.GameSystem.Physic
             OnCollision?.Invoke(fixtureA, fixtureB, contact);
         }
 
-        internal void Update(GameTime gameTime)
-        {
-            SyncTransform();
-        }
-
-        private void SyncTransform()
-        {
-            if(_transform == null) return;
-            _transform.Position = _body.Position;
-            _transform.Rotation = _body.Rotation;
-        }
-
         protected override void OnAttached(TransformEntity entity)
         {
             base.OnAttached(entity);
 
             _transform ??= entity.Transform;
+            SyncTransform();
+        }
+
+        internal void Update(GameTime gameTime)
+        {
             SyncTransform();
         }
 
@@ -67,12 +60,6 @@ namespace CruZ.GameEngine.GameSystem.Physic
         public bool IsSensor
         {
             set => _body.IsSensor = value;
-        }
-
-        public bool Awake
-        {
-            get => _body.Awake;
-            set => _body.Awake = value;
         }
 
         public object UserData
@@ -100,6 +87,7 @@ namespace CruZ.GameEngine.GameSystem.Physic
                 SyncTransform();
             }
         }
+
         public float Rotation
         {
             get => _body.Rotation;
@@ -120,12 +108,14 @@ namespace CruZ.GameEngine.GameSystem.Physic
             }
         }
 
-        public Vector2 Postion
+        private void SyncTransform()
         {
-            get => _body.Position;
-            set => _body.Position = value;
+            if (_transform == null) return;
+            _transform.Position = _body.Position;
+            _transform.Rotation = _body.Rotation;
         }
 
+        public Body Body { get => _body; }
         Body _body;
 
         public Transform Transform
@@ -133,13 +123,10 @@ namespace CruZ.GameEngine.GameSystem.Physic
             get => _transform ?? throw new System.NullReferenceException();
             set => _transform = value;
         }
-        public Body Body { get => _body; }
-
         Transform? _transform;
 
         public override void Dispose()
         {
-            base.Dispose();
             _body.RemoveFromWorld();
         }
     }

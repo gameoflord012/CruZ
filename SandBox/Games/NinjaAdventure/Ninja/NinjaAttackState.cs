@@ -30,6 +30,11 @@ namespace NinjaAdventure
             return _attackTimer.GetElapsed() > TimeBetweenAttacks;
         }
 
+        protected override void OnTransitionChecking()
+        {
+            Check(typeof(NinjaHitState));
+        }
+
         protected override void OnStateEnter()
         {
             _attackTimer.Restart();
@@ -41,7 +46,7 @@ namespace NinjaAdventure
 
         private void OnAnimationEnd(AnimatedSprite sprite)
         {
-            Machine.SetNextState(typeof(NinjaMovingState));
+            Check(typeof(NinjaMovingState));
         }
 
         protected override void OnStateExit()

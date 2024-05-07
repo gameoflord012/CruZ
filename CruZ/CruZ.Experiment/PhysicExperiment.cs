@@ -4,11 +4,16 @@ using System.Reflection.Metadata;
 
 using CruZ.GameEngine;
 using CruZ.GameEngine.GameSystem;
+using CruZ.GameEngine.Utility;
 
+using Genbox.VelcroPhysics;
 using Genbox.VelcroPhysics.Collision.ContactSystem;
+using Genbox.VelcroPhysics.Collision.Handlers;
 using Genbox.VelcroPhysics.Dynamics;
+using Genbox.VelcroPhysics.Extensions.DebugView;
 using Genbox.VelcroPhysics.Factories;
 using Genbox.VelcroPhysics.MonoGame.DebugView;
+
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -36,32 +41,42 @@ namespace CruZ.Experiment
             _agent.IsSensor = true;
 
             _agent.OnCollision = OnCollisionHandler;
+            _agent.OnSeparation = OnSeparationHandler;
         }
 
         public void OnCollisionHandler(Fixture fixtureA, Fixture fixtureB, Contact contact)
         {
             Console.WriteLine($"{fixtureA} collide with {fixtureB}!");
+            _isCollision = true;
+        }
+
+        bool _isCollision;
+
+        public void OnSeparationHandler(Fixture fixtureA, Fixture fixtureB, Contact contact)
+        {
+            Console.WriteLine($"{fixtureA} seperate with {fixtureB}!");
         }
 
         protected override void LoadContent()
         {
             base.LoadContent();
 
-            Content.RootDirectory = "Content";
-            _texture = Content.Load<Texture2D>("homelander");
-            _normalFx = Content.Load<Effect>("shaders\\normal-shader");
-            _debugView.LoadContent(GraphicsDevice, Content, "Content");
+            _debugView.LoadContent(GraphicsDevice, Content, "Resource\\Content");
         }
 
         protected override void OnInitialize()
         {
-            _spriteBatch = new(GraphicsDevice);
             _camera = new(Window);
         }
 
         protected override void OnUpdated(GameTime gameTime)
         {
-            _world.Step(gameTime.GetElapsedSeconds());
+            if (_isCollision)
+            {
+                _floor.Awake = false;
+            }
+
+            _world.Step(gameTime.DeltaTime());
 
             Vector2 dir = new(0, 0);
 
@@ -82,14 +97,14 @@ namespace CruZ.Experiment
                 dir = new(0, -1);
             }
 
-            if(Keyboard.GetState().IsKeyDown(Keys.Q))
+            if (Keyboard.GetState().IsKeyDown(Keys.Q))
             {
-                _rotation -= gameTime.GetElapsedSeconds() * 3.14f;
+                _rotation -= gameTime.DeltaTime() * 3.14f;
             }
 
             if (Keyboard.GetState().IsKeyDown(Keys.E))
             {
-                _rotation += gameTime.GetElapsedSeconds() * 3.14f;
+                _rotation += gameTime.DeltaTime() * 3.14f;
             }
 
             _position += dir * (float)gameTime.ElapsedGameTime.TotalSeconds * 100;
@@ -97,39 +112,23 @@ namespace CruZ.Experiment
 
         protected override void OnDrawing(GameTime gameTime)
         {
+            GraphicsDevice.SetRenderTarget(null);
             GraphicsDevice.Clear(Color.Pink);
-            var proj = _camera.ProjectionMatrix();
-            var view = _camera.ViewMatrix();
 
-            _normalFx.Parameters["view_projection"].SetValue(view * proj);
-
-            _spriteBatch.Begin(effect: _normalFx);
-            _spriteBatch.DrawWorld(
-                _texture, 
-                _position,
-                new Rectangle(_texture.Width / 2, _texture.Height / 2, _texture.Width / 2, _texture.Height / 2),
-                Color.White,
-                _rotation,
-                new(0, 0),
-                Vector2.One,
-                SpriteEffects.None,
-                0);
-            _spriteBatch.End();
+            _debugView.Flags |= DebugViewFlags.AABB;
 
             _debugView.RenderDebugData(
-                _camera.ViewMatrix(), 
+                _camera.ViewMatrix(),
                 _camera.ProjectionMatrix());
         }
 
-        Texture2D _texture;
-        SpriteBatch _spriteBatch;
-        Effect _normalFx;
         Camera _camera;
 
         DebugView _debugView;
         World _world;
 
-        Body _floor, _agent;
+        Body? _floor;
+        Body _agent;
 
         Vector2 _position;
         float _rotation;

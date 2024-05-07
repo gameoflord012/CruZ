@@ -48,7 +48,7 @@ namespace CruZ.GameEngine.GameSystem.Physic
                 Camera.Main.ProjectionMatrix(),
                 Camera.Main.ViewMatrix());
             }
-            
+
             _gd.SetRenderTarget(null);
         }
 
@@ -66,7 +66,7 @@ namespace CruZ.GameEngine.GameSystem.Physic
 
         DebugView _debugView;
         public World World { get => _physicWorld; }
-        
+
         World _physicWorld;
 
         private static PhysicSystem? s_instance;

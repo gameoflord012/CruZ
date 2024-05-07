@@ -22,20 +22,21 @@ namespace CruZ.GameEngine.GameSystem.StateMachine
             state.DoAdded(this);
         }
 
-        public void SetNextState(Type? ty)
+        public void SetNextState(Type? ty, bool checking)
         {
             if(ty == null)
             {
-                _currentState?.DoStateExit();
-                _currentState = null;
+                _nextState = null;
             }
             else
             {
                 
                 var nextState = GetState(ty);
-                if(_currentState == nextState || !nextState.GetCanTransitionTo()) return;
+                if(checking && (_currentState == nextState || !nextState.GetCanTransitionTo())) return;
                 _nextState = nextState;
             }
+
+            stateUpdateRequired = true;
         }
 
         private StateBase GetState(Type ty)
@@ -63,26 +64,27 @@ namespace CruZ.GameEngine.GameSystem.StateMachine
 
         private void CheckTransition()
         {
-            foreach (var state in _states.Values.ToImmutableArray())
+            _currentState?.DoTransitionChecking();
+
+            if (stateUpdateRequired)
             {
-                state.DoTransitionChecking();
+                _currentState?.DoStateExit();
+                //Debug.WriteLine((_currentState == null ? "<None>" : $"<{_currentState.GetType().Name}>") + " EXIT");
+                _currentState = _nextState;
+                _currentState?.DoStateEnter();
+                //Debug.WriteLine((_currentState == null ? "<None>" : $"<{_currentState.GetType().Name}>") + " ENTER");
             }
-
-            if(_nextState == _currentState) return;
-
-            _currentState?.DoStateExit();
-            Debug.WriteLine((_currentState == null ? "<None>" : $"<{_currentState.GetType().Name}>") + " EXIT");
-            _currentState = _nextState;
-            _currentState?.DoStateEnter();
-            Debug.WriteLine((_currentState == null ? "<None>" : $"<{_currentState.GetType().Name}>") + " ENTER");
-
+            stateUpdateRequired = false;
         }
 
         public Type? CurrentState => _currentState?.GetType();
 
         Dictionary<Type, StateBase> _states = [];
+
         StateBase? _currentState;
         StateBase? _nextState;
+
+        bool stateUpdateRequired = false;
 
         public StateData InjectedStateData { get; set; }
 

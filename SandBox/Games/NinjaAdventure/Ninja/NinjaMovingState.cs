@@ -24,14 +24,14 @@ namespace NinjaAdventure
             _animationComponent = StateData.Animation;
         }
 
-        protected override void OnUpdate(GameTime gameTime)
+        protected override void OnStateUpdate(GameTime gameTime)
         {
-            base.OnUpdate(gameTime);
+            base.OnStateUpdate(gameTime);
             _physic.LinearVelocity = _ninjaInput.Movement * _speed;
 
             if (_ninjaInput.FireSuriken)
             {
-                Machine.SetNextState(typeof(NinjaAttackState));
+                Check(typeof(NinjaAttackState));
             }
  
             StateData.LastInputMovement = _ninjaInput.Movement;
@@ -43,6 +43,12 @@ namespace NinjaAdventure
             base.OnStateExit();
             _animationComponent.Stop();
             _physic.LinearVelocity = Vector2.Zero;
+        }
+
+        protected override void OnTransitionChecking()
+        {
+            base.OnTransitionChecking();
+            Check(typeof(NinjaHitState));
         }
 
         private void Input_KeyStateChanged(IInputInfo inputInfo)

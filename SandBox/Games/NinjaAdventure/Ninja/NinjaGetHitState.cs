@@ -8,19 +8,11 @@ using Microsoft.Xna.Framework;
 
 namespace NinjaAdventure.Ninja
 {
-    internal class NinjaGetHitState : BasicState<NinjaStateData>
+    internal class NinjaHitState : BasicState<NinjaStateData>
     {
-        protected override void OnTransitionChecking()
+        protected override bool CanTransitionTo()
         {
-            base.OnTransitionChecking();
-
-            if(Machine.CurrentState == typeof(NinjaDieState)) return;
-
-            var monsterCount = StateData.MonsterCount;
-            if (monsterCount > 0 && _hitTimer.GetElapsed() > TimeBeetweenHit)
-            {
-                Machine.SetNextState(typeof(NinjaGetHitState));
-            }
+            return StateData.MonsterCount > 0 && _hitTimer.GetElapsed() > TimeBeetweenHit;
         }
 
         protected override void OnAdded()
@@ -32,10 +24,7 @@ namespace NinjaAdventure.Ninja
             _hitTimer.Start();
         }
 
-        protected override string? GetStateEnterSoundResource()
-        {
-            return "sound\\ninja-hurt.ogg";
-        }
+        protected override string? StateEnterSoundResource => "sound\\ninja-hurt.ogg";
 
         protected override void OnStateEnter()
         {
@@ -46,20 +35,22 @@ namespace NinjaAdventure.Ninja
             _health.Current -= 5;
         }
 
-        protected override void OnUpdate(GameTime gameTime)
+        protected override void OnStateUpdate(GameTime gameTime)
         {
-            base.OnUpdate(gameTime);
+            base.OnStateUpdate(gameTime);
 
             if (_health.Current == 0)
-                Machine.SetNextState(typeof(NinjaDieState));
-            else 
+            {
+                Check(typeof(NinjaDieState));
+            }
+            else
             if (_stunTimer.GetElapsed() > StunTime)
             {
-                Machine.SetNextState(typeof(NinjaMovingState));
+                Check(typeof(NinjaMovingState));
             }
 
             var stunDirection = _physic.Position - StateData.LastMonsterBody.Position;
-            if(stunDirection.SqrMagnitude() > 0.1) stunDirection.Normalize();
+            if (stunDirection.SqrMagnitude() > 0.1) stunDirection.Normalize();
 
             _physic.LinearVelocity = stunDirection * _stunSpeed;
             _stunSpeed *= 0.85f;
@@ -72,12 +63,12 @@ namespace NinjaAdventure.Ninja
 
             _hitTimer.Restart();
             _stunTimer.Reset();
-            
+
             _physic.LinearVelocity = Vector2.Zero;
         }
 
         const float TimeBeetweenHit = 1f;
-        Stopwatch _hitTimer = new(); 
+        Stopwatch _hitTimer = new();
 
         const float StunTime = 0.25f;
         Stopwatch _stunTimer = new();

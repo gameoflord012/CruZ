@@ -71,13 +71,14 @@ namespace CruZ.GameEngine.GameSystem.Animation
         {
             _animationEndCallback = animationEndCallback;
 
-            // ignore if current animation is next animation with animationTag
-            if (_currentAnimation != null && string.Compare(animationTag, _currentAnimation.Name, true) == 0)
-                return;
-
             if (_currentAnimation != null && _currentAnimation.IsAnimating)
             {
-                _currentAnimation.Stop(); // we will stop if animation still in play
+                // return if animations are same
+                if (animationTag == _currentAnimation.Name)
+                    return;
+
+                // we will stop if animation still in play
+                _currentAnimation.Stop(); 
             }
 
             _currentAnimation = GetAnimation(animationTag);

@@ -105,7 +105,7 @@ namespace CruZ.GameEngine.GameSystem
             return Matrix.CreateOrthographicOffCenter(
                 -VirtualWidth / 2, VirtualWidth / 2,
                 -VirtualHeight / 2, VirtualHeight / 2,
-                -GameConstants.MAX_WORLD_DISTANCE, GameConstants.MAX_WORLD_DISTANCE);
+                -GameConstants.MaxWorldDistance.Z, GameConstants.MaxWorldDistance.Z);
         }
 
         public float ViewPortWidth

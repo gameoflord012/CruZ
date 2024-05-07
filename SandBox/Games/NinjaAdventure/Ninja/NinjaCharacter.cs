@@ -1,4 +1,6 @@
-﻿using CruZ.GameEngine.GameSystem;
+﻿using System.Collections.Immutable;
+
+using CruZ.GameEngine.GameSystem;
 using CruZ.GameEngine.GameSystem.Animation;
 using CruZ.GameEngine.GameSystem.ECS;
 using CruZ.GameEngine.GameSystem.Physic;
@@ -61,27 +63,27 @@ namespace NinjaAdventure
                 _stateData.Health = _health;
                 _stateData.SpriteRenderer = _spriteRenderer;
                 _stateData.NinjaCharacter = this;
-                
+
                 _machine.InjectedStateData = _stateData;
                 _machine.Add(new NinjaAttackState());
                 _machine.Add(new NinjaMovingState());
-                _machine.Add(new NinjaGetHitState());
+                _machine.Add(new NinjaHitState());
                 _machine.Add(new NinjaDieState());
             }
             Entity.AddComponent(_machine);
 
-            _machine.SetNextState(typeof(NinjaMovingState));
+            _machine.SetNextState(typeof(NinjaMovingState), false);
         }
 
         internal void SpawnSuriken(Vector2 direction)
         {
             var suriken = new Suriken(_gameScene, _spriteRenderer, Entity.Position, direction);
-            suriken.BecomeUseless += () => uselessSurikens.Add(suriken);
+            surikens.Add(suriken);
         }
 
         private void Physic_OnSeperation(Fixture fixtureA, Fixture fixtureB, Contact contact)
         {
-            if(IsMonster(fixtureB))
+            if (IsMonster(fixtureB))
             {
                 _stateData.MonsterCount--;
             }
@@ -103,18 +105,19 @@ namespace NinjaAdventure
 
         private void Script_Updating(GameTime gameTime)
         {
-            ClearUselessSuriken();
-
+            ProcessUselessSuriken();
         }
 
-        private void ClearUselessSuriken()
+        private void ProcessUselessSuriken()
         {
-            foreach (var useless in uselessSurikens)
+            foreach (var suriken in surikens.ToImmutableArray())
             {
-                useless.Dispose();
+                if (suriken.IsUseless)
+                {
+                    suriken.Dispose();
+                    surikens.Remove(suriken);
+                }
             }
-
-            uselessSurikens.Clear();
         }
 
         PhysicBodyComponent _physic;
@@ -124,7 +127,7 @@ namespace NinjaAdventure
         SpriteRendererComponent _spriteRenderer;
 
         AnimationComponent _animationComponent;
-        List<Suriken> uselessSurikens = [];
+        List<Suriken> surikens = [];
 
         GameScene _gameScene;
 
@@ -136,7 +139,7 @@ namespace NinjaAdventure
             _physic.OnCollision -= Physic_OnCollision;
             _scriptComponent.Updating -= Script_Updating;
 
-            foreach (var uselessSuriken in uselessSurikens)
+            foreach (var uselessSuriken in surikens)
             {
                 uselessSuriken.Dispose();
             }

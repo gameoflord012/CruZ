@@ -25,7 +25,7 @@ namespace CruZ.GameEngine.GameSystem.StateMachine
 
         internal void DoUpdate(GameTime time)
         {
-            OnUpdate(time);
+            OnStateUpdate(time);
         }
 
         internal void DoDraw(GameTime time)
@@ -48,7 +48,7 @@ namespace CruZ.GameEngine.GameSystem.StateMachine
             return CanTransitionTo();
         }
 
-        protected virtual void OnUpdate(GameTime gameTime)
+        protected virtual void OnStateUpdate(GameTime gameTime)
         {
         
         }
@@ -81,6 +81,11 @@ namespace CruZ.GameEngine.GameSystem.StateMachine
         protected virtual void OnTransitionChecking()
         {
 
+        }
+
+        protected void Check(Type ty)
+        {
+            Machine.SetNextState(ty, true);
         }
 
         public virtual void Dispose()

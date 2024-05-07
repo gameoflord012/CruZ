@@ -2,6 +2,7 @@
 
 using CruZ.GameEngine;
 using CruZ.GameEngine.GameSystem;
+using CruZ.GameEngine.Utility;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -58,12 +59,12 @@ namespace CruZ.Experiment
 
             if(Keyboard.GetState().IsKeyDown(Keys.Q))
             {
-                _rotation -= gameTime.GetElapsedSeconds() * 3.14f;
+                _rotation -= gameTime.DeltaTime() * 3.14f;
             }
 
             if (Keyboard.GetState().IsKeyDown(Keys.E))
             {
-                _rotation += gameTime.GetElapsedSeconds() * 3.14f;
+                _rotation += gameTime.DeltaTime() * 3.14f;
             }
 
             _position += dir * (float)gameTime.ElapsedGameTime.TotalSeconds * 100;

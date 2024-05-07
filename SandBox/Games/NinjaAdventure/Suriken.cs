@@ -39,7 +39,7 @@ namespace NinjaAdventure
                 FixtureFactory.AttachCircle(SurikenSize / 2f, 1, _physic.Body);
                 _physic.BodyType = BodyType.Dynamic;
                 _physic.IsSensor = true;
-                _physic.Postion = origin;
+                _physic.Position = origin;
                 // velocity
                 if(direction.SqrMagnitude() != 0) direction.Normalize();
                 _physic.LinearVelocity = direction * _moveSpeed;
@@ -72,21 +72,27 @@ namespace NinjaAdventure
             }
             else
             {
-                //Debugger.Break();
                 MakeUseless();
             }
         }
+       
         private void Physic_OnCollision(Fixture fixtureA, Fixture fixtureB, Contact contact)
         {
             if(fixtureB.Body.UserData is LarvaMonster)
                 MakeUseless();
         }
 
+        //public event Action<Suriken>? BecomeUseless;
+
         private void MakeUseless()
         {
-            _physic.Awake = false;
-            BecomeUseless?.Invoke();
+            if(IsUseless) return;
+
+            IsUseless = true;
+            //BecomeUseless?.Invoke(this);
         }
+
+        public bool IsUseless { get; private set; }
 
         public TransformEntity Entity;
 
@@ -98,15 +104,12 @@ namespace NinjaAdventure
         float _disappearTime = 3.5f; // seconds
         private PhysicBodyComponent _physic;
 
-        public event Action? BecomeUseless;
-
         const float SurikenSize = 0.6f;
 
         public void Dispose()
         {
             _surikenRenderer.DrawRequestsFetching -= Renderer_DrawRequestsFetching;
             _physic.OnCollision -= Physic_OnCollision;
-            BecomeUseless = default;
             Entity.Dispose();
         }
     }
