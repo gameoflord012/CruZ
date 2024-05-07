@@ -16,15 +16,20 @@ namespace CruZ.GameEngine.GameSystem
             _physicRT = GameApplication.CreateRenderTarget();
             _gd = GameApplication.GetGraphicsDevice();
             _sb = new SpriteBatch(_gd);
+
+            _blendState = new();
+            _blendState.ColorSourceBlend = Blend.SourceAlpha;
+            _blendState.AlphaSourceBlend = Blend.SourceAlpha;
+            _blendState.ColorDestinationBlend = Blend.InverseSourceAlpha;
+            _blendState.AlphaDestinationBlend = Blend.InverseSourceAlpha;
         }
 
         protected override void OnDraw(EntitySystemEventArgs args)
         {
             _gd.SetRenderTarget(null);
-            _gd.Clear(Color.Red);
-            _gd.BlendState = BlendState.AlphaBlend;
+            _gd.Clear(GameConstants.GameBackgroundColor);
 
-            _sb.Begin();
+            _sb.Begin(blendState : _blendState);
             _sb.Draw(_rendererRT.Value, Vector2.Zero, Color.White);
             _sb.Draw(_physicRT.Value, Vector2.Zero, Color.White);
             _sb.Draw(_uiRT.Value, Vector2.Zero, Color.White);
@@ -41,6 +46,8 @@ namespace CruZ.GameEngine.GameSystem
             _sb.Dispose();
             _isDisposed = true;
         }
+
+        BlendState _blendState;
 
         bool _isDisposed = false;
 

@@ -78,7 +78,6 @@ namespace CruZ.GameEngine.GameSystem.ECS
         {
             var fx = EffectManager.NormalSpriteRenderer;
             fx.Parameters["view_projection"].SetValue(e.ViewProjectionMatrix);
-            fx.Parameters["hdrColor"].SetValue(new Vector4(1, 1, 1, 1));
 
             DrawBegin?.Invoke();
             e.SpriteBatch.Begin(

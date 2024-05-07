@@ -25,6 +25,8 @@ namespace CruZ.GameEngine.GameSystem.Animation
 
         public Vector2 Offset = Vector2.Zero;
 
+        public Color Color = Color.White;
+
         public AnimationComponent(SpriteRendererComponent spriteRenderer)
         {
             _resource = GameApplication.Resource;
@@ -127,14 +129,17 @@ namespace CruZ.GameEngine.GameSystem.Animation
             if (_currentAnimation == null) return;
 
             SpriteDrawArgs spriteArgs = new();
-            spriteArgs.Apply(_currentAnimation);
+            {
+                spriteArgs.Apply(_currentAnimation);
 
-            spriteArgs.Scale = Scale * (FitToWorldUnit ?
-                 new Vector2(
-                     1f / (_currentAnimation.TextureRegion.Bounds.Width),
-                     1f / _currentAnimation.TextureRegion.Bounds.Width) : Vector2.One);
+                spriteArgs.Scale = Scale * (FitToWorldUnit ?
+                     new Vector2(
+                         1f / (_currentAnimation.TextureRegion.Bounds.Width),
+                         1f / _currentAnimation.TextureRegion.Bounds.Width) : Vector2.One);
 
-            spriteArgs.Position = AttachedEntity.Position + Offset;
+                spriteArgs.Position = AttachedEntity.Position + Offset;
+                spriteArgs.Color = Color;
+            }
 
             drawRequests.Add(new SpriteDrawRequest(spriteArgs));
         }

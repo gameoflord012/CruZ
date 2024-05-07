@@ -75,7 +75,7 @@ namespace CruZ.GameEngine
         private void Wrapper_Initialized()
         {
             _spriteBatch = new(GraphicsDevice);
-            _core.GraphicsDevice.PresentationParameters.RenderTargetUsage = RenderTargetUsage.PreserveContents;
+
             Camera.Main = new Camera(Window);
             Camera.Main.PreserveScreenRatio = true;
 

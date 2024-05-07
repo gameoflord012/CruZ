@@ -7,7 +7,6 @@
 #endif
 
 float4x4 view_projection;
-float4 hdrColor;
 
 Texture2D ScreenTexture : register(t0);
 SamplerState Sampler : register(s0);
@@ -15,10 +14,12 @@ SamplerState Sampler : register(s0);
 struct VertexInput {
     float4 Position : POSITION0;
     float4 TexCoord : TEXCOORD0;
+    float4 Color : COLOR0;
 };
 struct PixelInput {
     float4 Position : SV_Position0;
     float4 TexCoord : TEXCOORD0;
+    float4 Color : COLOR0;
 };
 
 PixelInput SpriteVertexShader(VertexInput v) {
@@ -26,12 +27,14 @@ PixelInput SpriteVertexShader(VertexInput v) {
 
     output.Position = mul(v.Position, view_projection);
     output.TexCoord = v.TexCoord;
+    output.Color = v.Color;
+
     return output;
 }
 
 float4 SpritePixelShader(PixelInput p) : SV_TARGET {
     float4 diffuse = ScreenTexture.Sample(Sampler, p.TexCoord.xy);
-    diffuse *= hdrColor;
+    diffuse *= p.Color;
     return diffuse;
 }
 

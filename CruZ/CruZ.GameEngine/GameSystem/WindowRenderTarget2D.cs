@@ -15,13 +15,14 @@ namespace CruZ.GameEngine.GameSystem
         {
             _gd = gd;
             _window = window;
-            _window.ClientSizeChanged += (sender, e) => UpdateResolution();
+            _window.ClientSizeChanged += Window_ClientSizeChanged;
 
             UpdateResolution();
         }
 
         private void Window_ClientSizeChanged(object? sender, EventArgs e)
         {
+            UpdateResolution();
         }
 
         private void UpdateResolution()
@@ -32,6 +33,7 @@ namespace CruZ.GameEngine.GameSystem
 
         public void Dispose()
         {
+            _window.ClientSizeChanged -= Window_ClientSizeChanged;
             _value?.Dispose();
         }
 

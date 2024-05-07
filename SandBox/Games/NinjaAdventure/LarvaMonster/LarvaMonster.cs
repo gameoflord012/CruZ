@@ -87,15 +87,9 @@ namespace NinjaAdventure
             {
                 _stateData.HitBodies.Add(fixtureB.Body);
                 _surikenToBody[suriken] = fixtureB.Body;
-                //suriken.BecomeUseless += Suriken_BecomeUseless;
             }
         }
 
-        //private void Suriken_BecomeUseless(Suriken suriken)
-        //{
-        //    _stateData.HitBodies.Remove(_surikenToBody[suriken]);
-        //    _surikenToBody.Remove(suriken);
-        //}
 
         Dictionary<Suriken, Body> _surikenToBody = [];
 
@@ -114,15 +108,13 @@ namespace NinjaAdventure
         PhysicBodyComponent _physic;
         HealthComponent _health;
         
-        private StateMachineComponent _machine;
-        private LarvaStateData _stateData;
+        StateMachineComponent _machine;
+        LarvaStateData _stateData;
 
         public void Dispose()
         {
             Entity.Dispose();
-
             _physic.OnCollision -= Physic_OnCollision;
-
             BecomeUseless = default;
         }
     }

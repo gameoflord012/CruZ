@@ -12,8 +12,9 @@ namespace NinjaAdventure
 {
     internal class LarvaHitState : BasicState<LarvaStateData>
     {
-        protected float StunForce = 10f;
-        protected float StunTime = 1f;
+        const float StunSpeedMultiplier = 0.9f;
+        const float StunForce = 7f;
+        const float StunTime = 0.35f;
 
         protected override string? StateEnterSoundResource => "sound\\larva-hit.mp3";
 
@@ -65,7 +66,7 @@ namespace NinjaAdventure
             if (stunDirection.SqrMagnitude() > 0.1) stunDirection.Normalize();
 
             _physic.LinearVelocity = stunDirection * _stunSpeed;
-            _stunSpeed *= 0.85f;
+            _stunSpeed *= StunSpeedMultiplier;
             if (_stunSpeed < 0.5) _stunSpeed = 0.5f;
         }
 

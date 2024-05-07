@@ -10,6 +10,8 @@ namespace NinjaAdventure.Ninja
 {
     internal class NinjaHitState : BasicState<NinjaStateData>
     {
+        protected override string? StateEnterSoundResource => "sound\\ninja-hurt.ogg";
+
         protected override bool CanTransitionTo()
         {
             return StateData.MonsterCount > 0 && _hitTimer.GetElapsed() > TimeBeetweenHit;
@@ -23,8 +25,6 @@ namespace NinjaAdventure.Ninja
 
             _hitTimer.Start();
         }
-
-        protected override string? StateEnterSoundResource => "sound\\ninja-hurt.ogg";
 
         protected override void OnStateEnter()
         {

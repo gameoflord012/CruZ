@@ -26,7 +26,7 @@ namespace CruZ.GameEngine.GameSystem.Render
             var rendererRT = RenderTargetSystem.RendererRT;
 
             _gd.SetRenderTarget(rendererRT);
-            _gd.Clear(GameConstants.GameBackgroundColor);
+            _gd.Clear(Color.Transparent);
 
             var eventArgs = new RenderSystemEventArgs(
                 args.GameTime,
