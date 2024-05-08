@@ -18,11 +18,14 @@ namespace CruZ.GameEngine.GameSystem.ECS
     {
         public event Action? DrawBegin;
         public event Action? DrawEnd;
+
         public event Action<UIRect>? UIRectChanged;
+
+        public event Action<List<DrawRequestBase>>? DrawRequestsFetching;
+        public event Action<IImmutableList<DrawRequestBase>>? DrawRequestsFetched;
 
         public SpriteRendererComponent()
         {
-            _resource = GameApplication.Resource;
             InitBoundingBoxEventHandlers();
         }
 
@@ -95,17 +98,11 @@ namespace CruZ.GameEngine.GameSystem.ECS
             DrawEnd?.Invoke();
         }
 
-        public event Action<List<DrawRequestBase>>? DrawRequestsFetching;
-        public event Action<IImmutableList<DrawRequestBase>>? DrawRequestsFetched;
-
         private void FetchDrawRequests(List<DrawRequestBase> drawRequests)
         {
             DrawRequestsFetching?.Invoke(drawRequests);
             DrawRequestsFetched?.Invoke(drawRequests.ToImmutableList());
         }
-
-        Texture2D? _texture;
-        ResourceManager _resource;
 
         UIRect uiRect;
     }
