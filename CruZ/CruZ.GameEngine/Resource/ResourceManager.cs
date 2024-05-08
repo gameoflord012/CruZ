@@ -5,6 +5,7 @@ using MonoGame.Framework.Content.Pipeline.Builder;
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 
@@ -31,6 +32,7 @@ namespace CruZ.GameEngine.Resource
         private ResourceManager(string resourceRoot)
         {
             ResourceRoot = resourceRoot;
+            _userCache = [];
 
             Directory.CreateDirectory(Path.GetDirectoryName(ResourceRoot) ?? throw new ArgumentException("resourceRoot"));
             Directory.CreateDirectory(Path.GetDirectoryName(ContentOutputDir) ?? throw new ArgumentException("resourceRoot"));
@@ -41,6 +43,26 @@ namespace CruZ.GameEngine.Resource
             AddPipelineAssemblies();
 
             PrepareResourceDir();
+        }
+
+        public bool TryGetCache<T>(object key, [MaybeNullWhen(false)] out T cache)
+        {
+            if(!_userCache.TryGetValue(key, out object? value))
+            {
+                cache = default;
+                return false;
+            }
+
+            cache = (T)value;
+            return true;
+        }
+
+        public void Cache(object key, object value)
+        {
+            if(!_userCache.TryAdd(key, value))
+            {
+                throw new ArgumentException("Duplicate key");
+            }
         }
 
         private void AddPipelineAssemblies()
@@ -78,10 +100,10 @@ namespace CruZ.GameEngine.Resource
             }
         }
 
-        public T Load<T>(string resourcePath, bool useLoadNew = true)
+        public T Load<T>(string resourcePath, bool shouldCache = false)
         {
             var content = GameApplication.GetContentManager();
-            return content.LoadFromRoot<T>(resourcePath, ContentOutputDir, ContentResolver, useLoadNew);
+            return content.LoadFromRoot<T>(resourcePath, ContentOutputDir, ContentResolver, shouldCache);
         }
 
         private string ContentResolver(string assetName, Type assetType)
@@ -121,7 +143,7 @@ namespace CruZ.GameEngine.Resource
             return Path.GetFullPath(resourcePath);
         }
 
-        public void CopyResourceData(ResourceManager resourceRef, string relativeDestination)
+        internal void CopyResourceFolder(ResourceManager resourceRef, string relativeDestination)
         {
             if (!PathHelper.IsRelativeASubpath(relativeDestination)) throw new ArgumentException(relativeDestination);
 
@@ -134,7 +156,10 @@ namespace CruZ.GameEngine.Resource
         PipelineManager _pipelineManager;
 
         public string ContentDir => $"{_resourceRoot}\\Content";
+
         public string ContentOutputDir => $"{ContentDir}\\.build";
+
+        Dictionary<object, object> _userCache;
 
         public static ResourceManager From(string resourceDir)
         {

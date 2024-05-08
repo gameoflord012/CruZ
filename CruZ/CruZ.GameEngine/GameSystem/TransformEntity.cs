@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text.Json.Serialization;
@@ -28,10 +29,16 @@ namespace CruZ.GameEngine.GameSystem
             return (T)GetComponent(typeof(T));
         }
 
-        public void TryGetComponent<T>(out T? com) where T : Component
+        public bool TryGetComponent<T>([MaybeNullWhen(false)] out T component) where T : Component
         {
-            if (HasComponent(typeof(T))) com = GetComponent<T>();
-            else com = null;
+            if(_components.TryGetValue(typeof(T), out var value))
+            {
+                component = (T)value;
+                return true;
+            }
+
+            component = default;
+            return false;
         }
 
         public Component GetComponent(Type ty)
@@ -44,26 +51,24 @@ namespace CruZ.GameEngine.GameSystem
 
         public void AddComponent(Component component)
         {
-            if (HasComponent(component.GetType()))
+            if (!_components.TryAdd(component.GetType(), component))
                 throw new ArgumentException($"Component of type {component.GetType()} already added");
-
-            _components[component.GetType()] = component;
 
             component.InternalOnAttached(this);
             ComponentsChanged?.Invoke(new ComponentCollection(_components));
         }
 
-        public void RemoveComponent(Type ty)
-        {
-            if (!HasComponent(ty))
-                throw new ArgumentException($"{ty} already removed");
+        //public void RemoveComponent(Type ty)
+        //{
+        //    if (!HasComponent(ty))
+        //        throw new ArgumentException($"{ty} already removed");
 
-            var comp = GetComponent(ty);
-            _components.Remove(ty);
+        //    var comp = GetComponent(ty);
+        //    _components.Remove(ty);
 
-            comp.InternalOnDetached(this);
-            ComponentsChanged?.Invoke(new ComponentCollection(_components));
-        }
+        //    comp.InternalOnDetached(this);
+        //    ComponentsChanged?.Invoke(new ComponentCollection(_components));
+        //}
 
         public bool HasComponent(Type ty)
         {
@@ -145,7 +150,7 @@ namespace CruZ.GameEngine.GameSystem
         }
 
         Transform _transform = new();
-        
+
         public Vector2 Position
         {
             get => Transform.Position;

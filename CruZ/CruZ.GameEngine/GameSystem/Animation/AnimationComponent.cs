@@ -37,9 +37,15 @@ namespace CruZ.GameEngine.GameSystem.Animation
 
         public void LoadAnimationFile(string resourcePath, string? prefix = default)
         {
-            var file = _resource.Load<AsepriteFile>(resourcePath, false);
-            var spriteSheet = file.CreateSpriteSheet(GameApplication.GetGraphicsDevice());
-            LoadSpriteSheet(spriteSheet, prefix);
+            if (!_resource.TryGetCache(resourcePath, out SpriteSheet? spriteSheet))
+            {
+                var file = _resource.Load<AsepriteFile>(resourcePath, true);
+                spriteSheet = file.CreateSpriteSheet(GameApplication.GetGraphicsDevice());
+
+                _resource.Cache(resourcePath, spriteSheet);
+            }
+
+            LoadSpriteSheet(spriteSheet!, prefix);
         }
 
         private void LoadSpriteSheet(SpriteSheet spriteSheet, string? prefix)

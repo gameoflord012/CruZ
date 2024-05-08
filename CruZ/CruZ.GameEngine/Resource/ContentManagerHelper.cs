@@ -11,15 +11,15 @@ namespace CruZ.GameEngine.Resource
 {
     public static class ContentManagerHelper
     {
-        public static T LoadFromRoot<T>(this ContentManager contentManager, string resourceName, string contentRoot, Func<string, Type, string>? resolver = null, bool useLoadNew = true)
+        public static T LoadFromRoot<T>(this ContentManager contentManager, string resourceName, string contentRoot, Func<string, Type, string>? resolver = null, bool shouldCache = true)
         {
             if (Path.IsPathRooted(resourceName)) throw new ArgumentException(resourceName);
             contentManager.RootDirectory = contentRoot;
             contentManager.AssetNameResolver = resolver;
 
             T loaded;
-            if (useLoadNew) loaded = contentManager.LoadNew<T>(resourceName);
-            else loaded = contentManager.Load<T>(resourceName);
+            if (shouldCache) loaded = contentManager.Load<T>(resourceName);
+            else loaded = contentManager.LoadNew<T>(resourceName);
 
             contentManager.RootDirectory = default;
             contentManager.AssetNameResolver = default;

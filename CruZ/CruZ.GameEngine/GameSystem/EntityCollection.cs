@@ -20,19 +20,21 @@ namespace CruZ.GameEngine.GameSystem
 
             if (mode == GetComponentMode.ExactType)
             {
-                foreach (var e in _entities)
+                foreach (var entity in _entities)
                 {
-                    e.TryGetComponent(out T? com);
-                    if (com != null) result.Add(com);
+                    if(entity.TryGetComponent<T>(out var com))
+                    {
+                        result.Add(com);
+                    }
                 }
             }
             else
             {
-                foreach (var e in _entities)
+                foreach (var entity in _entities)
                 {
-                    foreach (var com in e.GetAllComponents())
+                    foreach (var com in entity.GetAllComponents())
                     {
-                        if (com is T) result.Add((T)com);
+                        if (com is T t) result.Add(t);
                     }
                 }
             }

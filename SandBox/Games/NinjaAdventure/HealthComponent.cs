@@ -13,7 +13,7 @@ namespace NinjaAdventure
     {
         public HealthComponent(int maxHealth, SpriteRendererComponent healthRenderer)
         {
-            _font = GameApplication.InternalResource.Load<BitmapFont>("Fonts\\Fixedsys.fnt", false);
+            _font = GameApplication.InternalResource.Load<BitmapFont>("Fonts\\Fixedsys.fnt", true);
 
             MaxHealth = maxHealth;
             _health = MaxHealth;

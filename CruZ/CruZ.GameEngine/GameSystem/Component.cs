@@ -24,12 +24,12 @@ namespace CruZ.GameEngine.GameSystem
             e.ComponentsChanged += Entity_ComponentChanged;
         }
 
-        internal void InternalOnDetached(TransformEntity e)
-        {
-            _attachedEntity = null;
-            OnDetached(e);
-            e.ComponentsChanged -= Entity_ComponentChanged;
-        }
+        //internal void InternalOnDetached(TransformEntity e)
+        //{
+        //    _attachedEntity = null;
+        //    OnDetached(e);
+        //    e.ComponentsChanged -= Entity_ComponentChanged;
+        //}
 
         private void Entity_ComponentChanged(ComponentCollection comps)
         {
@@ -41,11 +41,13 @@ namespace CruZ.GameEngine.GameSystem
             return GetType().Name;
         }
 
-        public virtual void Dispose() { }
+        public virtual void Dispose()
+        {
+        }
 
         [JsonIgnore]
-        public  TransformEntity AttachedEntity { get => _attachedEntity ?? throw new InvalidOperationException(); }
-        
+        public TransformEntity AttachedEntity { get => _attachedEntity ?? throw new InvalidOperationException(); }
+
         private TransformEntity? _attachedEntity;
     }
 }
