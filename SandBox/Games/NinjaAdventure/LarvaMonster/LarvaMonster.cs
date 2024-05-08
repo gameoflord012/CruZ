@@ -10,6 +10,8 @@ using Genbox.VelcroPhysics.Collision.ContactSystem;
 
 using Microsoft.Xna.Framework;
 using CruZ.GameEngine.GameSystem.StateMachine;
+using System;
+using System.Collections.Generic;
 
 namespace NinjaAdventure
 {

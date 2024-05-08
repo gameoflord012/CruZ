@@ -1,4 +1,6 @@
-﻿using CruZ.GameEngine.GameSystem;
+﻿using System.Collections.Generic;
+
+using CruZ.GameEngine.GameSystem;
 using CruZ.GameEngine.GameSystem.Animation;
 using CruZ.GameEngine.GameSystem.Physic;
 using CruZ.GameEngine.GameSystem.StateMachine;

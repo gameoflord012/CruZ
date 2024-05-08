@@ -10,7 +10,7 @@ namespace CruZ.GameEngine.GameSystem.StateMachine
 {
     public class StateBase : IDisposable
     {
-        public StateData Data => Machine.InjectedStateData;
+        public StateData StateData => Machine.InjectedStateData;
 
         internal void AttachStateMachine(StateMachineComponent machine)
         {
@@ -98,6 +98,6 @@ namespace CruZ.GameEngine.GameSystem.StateMachine
 
     public class StateBase<T> : StateBase where T : StateData
     {
-        public new T StateData => base.Data as T ?? throw new InvalidOperationException();
+        public new T StateData => base.StateData as T ?? throw new InvalidOperationException();
     }
 }

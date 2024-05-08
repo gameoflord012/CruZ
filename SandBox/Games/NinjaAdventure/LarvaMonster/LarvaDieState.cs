@@ -9,7 +9,7 @@ namespace NinjaAdventure
     {
         const float FadeDuration = 1f;
 
-        protected override string? StateEnterSoundResource => "sound\\larva-die.ogg";
+        protected override string StateEnterSoundResource => "sound\\larva-die.ogg";
 
         protected override void OnStateEnter()
         {

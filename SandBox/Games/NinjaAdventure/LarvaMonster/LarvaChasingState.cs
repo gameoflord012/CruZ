@@ -1,4 +1,6 @@
-﻿using CruZ.GameEngine.GameSystem.Animation;
+﻿using System;
+
+using CruZ.GameEngine.GameSystem.Animation;
 using CruZ.GameEngine.GameSystem.Physic;
 using CruZ.GameEngine.GameSystem.StateMachine;
 using CruZ.GameEngine.Utility;
@@ -63,7 +65,7 @@ namespace NinjaAdventure
             _animation.Play($"walk-{_facingString}");
         }
 
-        private string? _facingString;
+        private string _facingString;
         private Vector2 _facingDir;
 
         PhysicBodyComponent _physic;

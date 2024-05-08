@@ -1,17 +1,17 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<TargetFramework>net8.0-windows</TargetFramework>
-		<Nullable>enable</Nullable>
 		<RootNamespace>CruZ.GameEngine</RootNamespace>
+		<Nullable>enable</Nullable>
 	</PropertyGroup>
 
 	<ItemGroup>
 		<ProjectReference Include="..\..\ThirdParty\monogame-aseprite\source\MonoGame.Aseprite\MonoGame.Aseprite.csproj" />
 		<ProjectReference Include="..\..\ThirdParty\monogame-aseprite\source\MonoGame.Aseprite.Content.Pipeline\MonoGame.Aseprite.Content.Pipeline.csproj" />
-		
+
 		<ProjectReference Include="..\..\ThirdParty\MonoGameExtended\src\cs\MonoGame.Extended.Content.Pipeline\MonoGame.Extended.Content.Pipeline.csproj" />
 		<ProjectReference Include="..\..\ThirdParty\MonoGameExtended\src\cs\MonoGame.Extended\MonoGame.Extended.csproj" />
-		
+
 		<ProjectReference Include="..\..\ThirdParty\MonoGameModified\MonoGame.Framework.Content.Pipeline\MonoGame.Framework.Content.Pipeline.csproj" />
 		<ProjectReference Include="..\..\ThirdParty\MonoGameModified\MonoGame.Framework\MonoGame.Framework.WindowsDX.csproj" />
 		<ProjectReference Include="..\..\ThirdParty\VelcroPhysics\src\VelcroPhysics\VelcroPhysics.MonoGame.csproj" />

@@ -93,7 +93,7 @@ namespace CruZ.GameEngine.GameSystem
             mat *= Matrix.CreateTranslation(-CameraOffset.X, -CameraOffset.Y, 0);
             mat *= Matrix.CreateScale(Zoom);
             return mat;
-        }   
+        }
 
         /// <summary>
         /// Create orthographic projection with given rect <br/>

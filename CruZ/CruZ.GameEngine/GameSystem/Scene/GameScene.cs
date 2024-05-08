@@ -61,12 +61,12 @@ namespace CruZ.GameEngine.GameSystem.Scene
             EntityRemoved?.Invoke(e);
         }
 
-        public TransformEntity CreateEntity(string? name = null)
+        public TransformEntity CreateEntity(string? name = null, TransformEntity? parent = null)
         {
             var e = ECSManager.CreateEntity();
 
             if (!string.IsNullOrEmpty(name)) e.Name = name;
-            e.Parent = SceneRoot;
+            e.Parent = parent ?? SceneRoot;
 
             AddEntity(e);
 

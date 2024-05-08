@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Collections.Generic;
 
 using CruZ.GameEngine;
 using CruZ.GameEngine.GameSystem;
@@ -18,45 +19,45 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace NinjaAdventure
 {
-    internal class Suriken : IDisposable
+    internal class Suriken : IDisposable, IPoolObject
     {
-        public Suriken(GameScene gameScene, SpriteRendererComponent surikenRenderer, Vector2 origin, Vector2 direction)
+        const float SurikenSize = 0.6f;
+        const float MoveSpeed = 12;
+        const float RotationSpeed = 20f;
+        const float DisappearTime = 3.5f;
+
+        public Suriken(GameScene gameScene, SpriteRendererComponent surikenRenderer, TransformEntity parent)
         {
             _surikenRenderer = surikenRenderer;
-            _surikenRenderer.DrawRequestsFetching += Renderer_DrawRequestsFetching;
 
             Entity = gameScene.CreateEntity();
             Entity.Name = $"Suriken {Entity.Id}";
+            Entity.Parent = parent;
 
-            var script = new ScriptComponent();
+            _script = new ScriptComponent();
             {
-                script.Updating += Script_Updating;
+
             }
-            Entity.AddComponent(script);
+            Entity.AddComponent(_script);
 
             _physic = new PhysicBodyComponent();
             {
                 FixtureFactory.AttachCircle(SurikenSize / 2f, 1, _physic.Body);
                 _physic.BodyType = BodyType.Dynamic;
                 _physic.IsSensor = true;
-                _physic.Position = origin;
-                // velocity
-                if(direction.SqrMagnitude() != 0) direction.Normalize();
-                _physic.LinearVelocity = direction * _moveSpeed;
-                _physic.AngularVelocity = _rotationSpeed;
                 _physic.UserData = this;
-                // event
-                _physic.OnCollision += Physic_OnCollision;
             }
             Entity.AddComponent(_physic);
 
-            _surikenTex = GameApplication.Resource.Load<Texture2D>("art\\suriken\\01.png");
+            _surikenTex = GameApplication.Resource.Load<Texture2D>("art\\suriken\\01.png", true);
         }
 
         private void Script_Updating(GameTime gameTime)
         {
-            _disappearTime -= gameTime.DeltaTime();
-            if(_disappearTime < 0) MakeUseless();
+            if(_disappearTimer < 0) return;
+
+            _disappearTimer -= gameTime.DeltaTime();
+            if (_disappearTimer < 0) ReturnToPool();
         }
 
         private void Renderer_DrawRequestsFetching(List<DrawRequestBase> drawRequests)
@@ -64,7 +65,7 @@ namespace NinjaAdventure
             SpriteDrawArgs drawArgs = new();
             drawArgs.Apply(Entity.Transform);
             drawArgs.Apply(_surikenTex);
-            drawArgs.Scale = new Vector2(SurikenSize / _surikenTex.Width , SurikenSize / _surikenTex.Height);
+            drawArgs.Scale = new Vector2(SurikenSize / _surikenTex.Width, SurikenSize / _surikenTex.Height);
 
             if (!drawArgs.IsOutOfScreen(Camera.Main.ProjectionMatrix()))
             {
@@ -72,42 +73,68 @@ namespace NinjaAdventure
             }
             else
             {
-                MakeUseless();
+                ReturnToPool();
             }
         }
-       
+
         private void Physic_OnCollision(Fixture fixtureA, Fixture fixtureB, Contact contact)
         {
-            if(fixtureB.Body.UserData is LarvaMonster)
-                MakeUseless();
+            if (fixtureB.Body.UserData is LarvaMonster) ReturnToPool();
         }
 
-        //public event Action<Suriken>? BecomeUseless;
-
-        private void MakeUseless()
+        public void Reset(Vector2 origin, Vector2 direction)
         {
-            if(IsUseless) return;
+            _disappearTimer = DisappearTime;
 
-            IsUseless = true;
-            //BecomeUseless?.Invoke(this);
+            // Physic
+            _physic.Position = origin;
+            if (direction.SqrMagnitude() != 0) direction.Normalize();
+            _physic.LinearVelocity = direction * MoveSpeed;
+            _physic.AngularVelocity = RotationSpeed;
+            _physic.Body.Awake = true;
+
+            // events
+            _physic.OnCollision += Physic_OnCollision;
+            _script.Updating += Script_Updating;
+            _surikenRenderer.DrawRequestsFetching += Renderer_DrawRequestsFetching;
+            
         }
 
-        public bool IsUseless { get; private set; }
+        Pool IPoolObject.Pool
+        {
+            get;
+            set;
+        }
+
+        void IPoolObject.OnReturnToPool()
+        {
+            _physic.Position = Vector2.Zero;
+            _physic.LinearVelocity = Vector2.Zero;
+            _physic.AngularVelocity = 0;
+            _physic.Body.Awake = false;
+
+            _physic.OnCollision -= Physic_OnCollision;
+            _script.Updating -= Script_Updating;
+            _surikenRenderer.DrawRequestsFetching -= Renderer_DrawRequestsFetching;
+        }
+
+        private void ReturnToPool()
+        {
+            ((IPoolObject)this).Pool.ReturnPoolObject(this);
+        }
 
         public TransformEntity Entity;
-
+        
         Texture2D _surikenTex;
         SpriteRendererComponent _surikenRenderer;
+        PhysicBodyComponent _physic;
+        ScriptComponent _script;
 
-        float _moveSpeed = 12f;
-        float _rotationSpeed = 20f;
-        float _disappearTime = 3.5f; // seconds
-        private PhysicBodyComponent _physic;
-
-        const float SurikenSize = 0.6f;
+        float _disappearTimer;
 
         public void Dispose()
         {
+            ReturnToPool();
             _surikenRenderer.DrawRequestsFetching -= Renderer_DrawRequestsFetching;
             _physic.OnCollision -= Physic_OnCollision;
             Entity.Dispose();

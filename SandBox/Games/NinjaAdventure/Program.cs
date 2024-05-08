@@ -1,4 +1,6 @@
-﻿namespace NinjaAdventure
+﻿using System;
+
+namespace NinjaAdventure
 {
     internal class Program
     {

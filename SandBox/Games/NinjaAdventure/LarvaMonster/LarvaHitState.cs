@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Linq;
 
 using CruZ.GameEngine.GameSystem.Physic;
 using CruZ.GameEngine.GameSystem.StateMachine;
@@ -16,7 +17,7 @@ namespace NinjaAdventure
         const float StunForce = 7f;
         const float StunTime = 0.35f;
 
-        protected override string? StateEnterSoundResource => "sound\\larva-hit.mp3";
+        protected override string StateEnterSoundResource => "sound\\larva-hit.mp3";
 
         protected override bool CanTransitionTo()
         {

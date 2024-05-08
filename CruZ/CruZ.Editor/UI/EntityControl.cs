@@ -60,9 +60,9 @@ namespace CruZ.Editor.UI
             get => _canInteract;
             set
             {
-                if(_canInteract == value) return;
-                Draggable = false;
-                _canInteract = value;
+                //if(_canInteract == value) return;
+                //Draggable = false;
+                //_canInteract = value;
             }
         }
 

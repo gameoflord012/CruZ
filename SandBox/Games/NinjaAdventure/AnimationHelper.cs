@@ -1,4 +1,6 @@
-﻿using CruZ.GameEngine.Utility;
+﻿using System;
+
+using CruZ.GameEngine.Utility;
 using Microsoft.Xna.Framework;
 
 namespace NinjaAdventure
