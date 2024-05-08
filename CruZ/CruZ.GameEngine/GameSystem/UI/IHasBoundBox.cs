@@ -6,18 +6,18 @@ using Microsoft.Xna.Framework;
 
 namespace CruZ.GameEngine.GameSystem.UI
 {
-    public struct RectUIInfo
+    public struct UIRect
     {
-        public RectUIInfo() { }
+        public UIRect() { }
 
-        public RectUIInfo(WorldRectangle worldRect, Vector2[] origins)
+        public UIRect(WorldRectangle worldRect, Vector2[] origins)
         {
             WorldOrigins.AddRange(origins);
             WorldBound = worldRect;
         }
 
         /// <summary>
-        /// RectUIInfo to be drawn in world coord
+        /// UIRect to be drawn in world coord
         /// </summary>
         public WorldRectangle? WorldBound;
 
@@ -28,10 +28,10 @@ namespace CruZ.GameEngine.GameSystem.UI
     }
 
     /// <summary>
-    /// The draw back of this is the RectUIInfo only know when action is invoking, if not, we not know the current value
+    /// The draw back of this is the UIRect only know when action is invoking, if not, we not know the current value
     /// </summary>
-    public interface IRectUIProvider
+    public interface IUIRectProvider
     {
-        event Action<RectUIInfo> UIRectChanged;
+        event Action<UIRect> UIRectChanged;
     }
 }

@@ -5,6 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using CruZ.GameEngine.GameSystem;
+
 using Microsoft.Xna.Framework;
 
 namespace CruZ.GameEngine
@@ -27,16 +29,34 @@ namespace CruZ.GameEngine
             H = h;
         }
 
+        public RectangleF ToScreen(Camera camera)
+        {
+            var TL = camera.CoordinateToPoint(new Vector2(X, Y + H));
+            var ratio = camera.ScreenToWorldRatio();
+
+            RectangleF screenRect = new();
+
+            screenRect.X = TL.X;
+            screenRect.Y = TL.Y;
+            screenRect.Width = W * ratio.X;
+            screenRect.Height = H * -ratio.Y;
+
+            return screenRect;
+        }
+
         public float Top
         {
             get => Y + H;
-            set => H = value - Y;
         }
 
         public float Right
         {
             get => X + W;
-            set => W = value - X;
+        }
+
+        public override string ToString()
+        {
+            return $"<X: {X}, Y: {Y}, W: {W}, H: {H}>";
         }
     }
 }

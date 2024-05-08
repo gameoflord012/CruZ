@@ -16,25 +16,20 @@ namespace CruZ.GameEngine.GameSystem.UI
     [TypeConverter(typeof(ExpandableObjectConverter))]
     public class UIControl
     {
-        static readonly int BOUND_THICKNESS = 3;
+        public UIControl()
+        {
+             _childs = [];
+        }
 
-        static readonly Color DEFAULT_BACKGROUND_COLOR = Color.Red;
+        static readonly int BorderThickness = 3;
+
+        static readonly Color DefaultBackGroundColor = Color.Red;
 
         public UIControl? Parent { get => _parent; }
 
         public UIControl[] Childs => _childs.ToArray();
 
-        public Point Location
-        {
-            get => new((int)_location.X, (int)_location.Y);
-            set { _location.X = value.X; _location.Y = value.Y; }
-        }
-
-        public int Width { get => _size.X.RoundToInt(); set => _size.X = value; }
-
-        public int Height { get => _size.Y.RoundToInt(); set => _size.Y = value; }
-
-        public Color BackgroundColor = DEFAULT_BACKGROUND_COLOR;
+        public Color BackgroundColor = DefaultBackGroundColor;
         
         public bool IsActive = true;
 
@@ -44,11 +39,6 @@ namespace CruZ.GameEngine.GameSystem.UI
 
             child._parent = this;
             child.OnParentChanged(this);
-        }
-
-        public RectangleF GetRect()
-        {
-            return new RectangleF(_location.X, _location.Y, _size.X, _size.Y);
         }
 
         public void RemoveChild(UIControl child)
@@ -71,7 +61,7 @@ namespace CruZ.GameEngine.GameSystem.UI
 
             foreach (var node in GetTree())
             {
-                if (node.GetRect().Contains(pointX, pointY))
+                if (node.Rect.Contains(pointX, pointY))
                     contains.Add(node);
             }
 
@@ -127,7 +117,7 @@ namespace CruZ.GameEngine.GameSystem.UI
 
         protected bool IsMouseHover()
         {
-            return GetRect().Contains(_args.MousePos().X, _args.MousePos().Y);
+            return Rect.Contains(_args.MousePos().X, _args.MousePos().Y);
         }
 
         protected void ReleaseDrag()
@@ -145,7 +135,7 @@ namespace CruZ.GameEngine.GameSystem.UI
 
         protected virtual void OnDraw(UIInfo args)
         {
-            args.SpriteBatch.DrawRectangle(GetRect(), BackgroundColor, BOUND_THICKNESS);
+            args.SpriteBatch.DrawRectangle(Rect, BackgroundColor, BorderThickness);
         }
 
         #region Dragging
@@ -192,14 +182,34 @@ namespace CruZ.GameEngine.GameSystem.UI
         #endregion
 
         #region Private_Variables
-        List<UIControl> _childs = [];
+        public RectangleF Rect;
+
+        public float Width
+        {
+            get => Rect.Width;
+            set => Rect.Width = value;
+        }
+
+        public float Height
+        {
+            get => Rect.Height;
+            set => Rect.Height = value;
+        }
+
+        public Vector2 Location
+        {
+            get => new(Rect.X, Rect.Y);
+            set
+            {
+                Rect.X = value.X;
+                Rect.Y = value.Y;
+            }
+        }
+        
+        List<UIControl> _childs;
         UIControl? _parent;
 
-        Vector2 _location = new(0, 0);
-        Vector2 _size = new(0, 0);
-
         object? _dragObject;
-
         UIInfo _args;
         #endregion
 

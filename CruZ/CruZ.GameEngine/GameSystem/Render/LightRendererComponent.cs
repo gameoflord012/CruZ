@@ -8,9 +8,9 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace CruZ.GameEngine.GameSystem.Render
 {
-    public class LightRendererComponent : RendererComponent, IRectUIProvider
+    public class LightRendererComponent : RendererComponent, IUIRectProvider
     {
-        public event Action<RectUIInfo> UIRectChanged;
+        public event Action<UIRect> UIRectChanged;
 
         public LightRendererComponent()
         {
@@ -37,8 +37,8 @@ namespace CruZ.GameEngine.GameSystem.Render
             e.SpriteBatch.DrawWorld(drawArgs);
             e.SpriteBatch.End();
 
-            UIRectChanged?.Invoke(new RectUIInfo(
-                drawArgs.GetWorldBounds(), [drawArgs.GetWorldOrigin()]));
+            UIRectChanged?.Invoke(new UIRect(
+                drawArgs.GetWorldBound(), [drawArgs.GetWorldOrigin()]));
         }
 
         public float LightIntensity { get; set; }

@@ -74,20 +74,20 @@ namespace CruZ.Editor.UI
                 SetUIRectUIProvider(ExtractRectUIProvider(_attachedEntity));
         }
 
-        private IRectUIProvider? ExtractRectUIProvider(TransformEntity entity)
+        private IUIRectProvider? ExtractRectUIProvider(TransformEntity entity)
         {
-            return entity.GetAllComponents().FirstOrDefault(e => e is IRectUIProvider) as IRectUIProvider;
+            return entity.GetAllComponents().FirstOrDefault(e => e is IUIRectProvider) as IUIRectProvider;
         }
 
-        private void SetUIRectUIProvider(IRectUIProvider? rectUIProvider)
+        private void SetUIRectUIProvider(IUIRectProvider? rectUIProvider)
         {
             if (_currentRectUIProvider != null) 
-                _currentRectUIProvider.UIRectChanged -= RectUIProvider_ValueChanged;
+                _currentRectUIProvider.UIRectChanged -= UIRectProvider_ValueChanged;
 
             _currentRectUIProvider = rectUIProvider;
 
             if (_currentRectUIProvider != null)
-                _currentRectUIProvider.UIRectChanged += RectUIProvider_ValueChanged;
+                _currentRectUIProvider.UIRectChanged += UIRectProvider_ValueChanged;
         }
 
         protected override void OnDraw(UIInfo args)
@@ -101,7 +101,7 @@ namespace CruZ.Editor.UI
                 var screen = Camera.Main.CoordinateToPoint(origin);
 
                 args.SpriteBatch.DrawCircle(new(screen.X, screen.Y),
-                    EditorConstants.CENTER_CIRCLE_SIZE, 8, Color.Blue);
+                    EditorConstants.PointSize, 8, Color.Blue);
             }
         }
 
@@ -125,7 +125,7 @@ namespace CruZ.Editor.UI
             }
         }
 
-        private void RectUIProvider_ValueChanged(RectUIInfo rectInfo)
+        private void UIRectProvider_ValueChanged(UIRect rectInfo)
         {
             SetRectInfo(rectInfo);
         }
@@ -135,7 +135,7 @@ namespace CruZ.Editor.UI
             if (Parent != null) Parent.RemoveChild(this);
         }
 
-        private void SetRectInfo(RectUIInfo uiRect)
+        private void SetRectInfo(UIRect uiRect)
         {
             _worldBound = uiRect.WorldBound;
             _points = uiRect.WorldOrigins;
@@ -143,9 +143,7 @@ namespace CruZ.Editor.UI
             if (uiRect.WorldBound == null) return;
 
             var worldBound = _worldBound!.Value;
-            Location = Camera.Main.CoordinateToPoint(new Vector2(worldBound.X, worldBound.Y));
-            Width = (worldBound.W * Camera.Main.ScreenToWorldRatio().X).RoundToInt();
-            Height = (worldBound.H * Camera.Main.ScreenToWorldRatio().Y).RoundToInt();
+            Rect = worldBound.ToScreen(Camera.Main);
         }
 
         private void SetCenter(Point p)
@@ -155,7 +153,7 @@ namespace CruZ.Editor.UI
                 p.Y - Height / 2);
         }
 
-        IRectUIProvider? _currentRectUIProvider;
+        IUIRectProvider? _currentRectUIProvider;
         WorldRectangle? _worldBound; //ECSWorld bounds
         List<Vector2> _points = [];
 

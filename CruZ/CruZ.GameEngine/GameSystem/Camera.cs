@@ -111,13 +111,13 @@ namespace CruZ.GameEngine.GameSystem
         public float ViewPortWidth
         {
             get => _viewPortWidth;
-            set { _viewPortWidth = value; }
+            set => _viewPortWidth = value;
         }
 
         public float ViewPortHeight
         {
             get => _viewPortHeight;
-            set { _viewPortHeight = value; }
+            set => _viewPortHeight = value;
         }
 
         private void Window_ClientSizeChanged(object? sender, EventArgs e)
@@ -140,8 +140,7 @@ namespace CruZ.GameEngine.GameSystem
             set
             {
                 _cameraOffset = value;
-                var cameraWorldCoord = PointToCoordinate(new Point((int)_viewPortWidth / 2, (int)ViewPortHeight / 2));
-                LogManager.SetMsg($"<{cameraWorldCoord.X} {cameraWorldCoord.Y}>", "CameraWorldCoord");
+                LogManager.SetMsg($"<{_cameraOffset.X} {_cameraOffset.Y}>", "CameraWorldCoord");
             }
         }
 

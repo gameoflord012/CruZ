@@ -14,11 +14,11 @@ namespace CruZ.GameEngine.GameSystem.ECS
     /// <summary>
     /// Game component loaded from specify resource
     /// </summary>
-    public partial class SpriteRendererComponent : RendererComponent, IRectUIProvider
+    public partial class SpriteRendererComponent : RendererComponent, IUIRectProvider
     {
         public event Action? DrawBegin;
         public event Action? DrawEnd;
-        public event Action<RectUIInfo>? UIRectChanged;
+        public event Action<UIRect>? UIRectChanged;
 
         public SpriteRendererComponent()
         {
@@ -30,7 +30,7 @@ namespace CruZ.GameEngine.GameSystem.ECS
         {
             DrawBegin += () =>
             {
-                _worldBound = new();
+                uiRect = new();
             };
 
             DrawRequestsFetched += (fetchedDrawRequests) =>
@@ -39,39 +39,37 @@ namespace CruZ.GameEngine.GameSystem.ECS
                     .Where(e => e is SpriteDrawRequest)
                     .Select(e => ((SpriteDrawRequest)e).SpriteDrawArgs))
                 {
-                    // add origin
-
                     if ( // ignore if it is an invalid request
                         request.Texture == null ||
-                        request.GetWorldBounds().W == 0 && request.GetWorldBounds().H == 0)
+                        request.GetWorldBound().W == 0 && request.GetWorldBound().H == 0)
                         continue;
 
-                    _worldBound.WorldOrigins.Add(request.GetWorldOrigin());
+                    uiRect.WorldOrigins.Add(request.GetWorldOrigin());
 
-                    if (_worldBound.WorldBound == null)
+                    if (!uiRect.WorldBound.HasValue)
                     {
-                        _worldBound.WorldBound = request.GetWorldBounds(); // Assign if worldbounds is uninitialized
+                        uiRect.WorldBound = request.GetWorldBound(); // Assign if worldbounds is uninitialized
                     }
                     else
                     {
-                        var bounds = request.GetWorldBounds();
+                        var joinBound = request.GetWorldBound();
+                        var currentBound = uiRect.WorldBound.Value;
 
-                        //
-                        // we expand the world bound to cover the request's world bound
-                        //
-                        WorldRectangle updatingBound = _worldBound.WorldBound.Value;
+                        // we expand the world joinBound to cover the request draws joinBound
+                        WorldRectangle newBound = uiRect.WorldBound.Value;
                         {
-                            updatingBound.X = MathF.Min(updatingBound.X, bounds.X);
-                            updatingBound.Y = MathF.Min(updatingBound.Y, bounds.Y);
-                            updatingBound.Top = MathF.Max(updatingBound.Top, bounds.Top);
-                            updatingBound.Right = MathF.Max(updatingBound.Right, bounds.Right);
+                            newBound.X = MathF.Min(currentBound.X, joinBound.X);
+                            newBound.Y = MathF.Min(currentBound.Y, joinBound.Y);
+                            newBound.W = MathF.Max(currentBound.Right, joinBound.Right) - newBound.X;
+                            newBound.H = MathF.Max(currentBound.Top, joinBound.Top) - newBound.Y;
                         }
-                        _worldBound.WorldBound = updatingBound;
+
+                        uiRect.WorldBound = newBound;
                     }
                 }
             };
 
-            DrawEnd += () => UIRectChanged?.Invoke(_worldBound);
+            DrawEnd += () => UIRectChanged?.Invoke(uiRect);
         }
 
         public override void Render(RenderSystemEventArgs e)
@@ -109,6 +107,6 @@ namespace CruZ.GameEngine.GameSystem.ECS
         Texture2D? _texture;
         ResourceManager _resource;
 
-        RectUIInfo _worldBound;
+        UIRect uiRect;
     }
 }

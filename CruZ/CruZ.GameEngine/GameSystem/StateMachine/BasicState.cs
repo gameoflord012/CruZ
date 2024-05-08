@@ -13,7 +13,7 @@ namespace CruZ.GameEngine.GameSystem.StateMachine
             var resource = StateEnterSoundResource;
 
             if (!string.IsNullOrEmpty(resource))
-                _stateBeginSound = GameApplication.Resource.Load<SoundEffect>(resource);
+                _stateBeginSound = GameApplication.Resource.Load<SoundEffect>(resource, true);
         }
 
         protected override void OnStateEnter()

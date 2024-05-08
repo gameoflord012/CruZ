@@ -16,6 +16,8 @@ namespace NinjaAdventure
 
         public MonsterSpawner(GameScene gameScene) : base(gameScene)
         {
+            Entity.Name = "MonsterSpawner";
+
             _gameScene = gameScene;
             _monsterPool = [];
             _spawnTimer = new();

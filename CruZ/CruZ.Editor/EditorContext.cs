@@ -30,7 +30,7 @@ namespace CruZ.Editor
 
         public static string UserResourceDir { get => Path.Combine(GameProjectDir, "Resource"); }
 
-        public static string UserProfileDir { get => Path.Combine(GameProjectDir, EditorConstants.USER_PROFILE_DIR_NAME); }
+        public static string UserProfileDir { get => Path.Combine(GameProjectDir, EditorConstants.ProfileDirectoryName); }
 
         public static Assembly GameAssembly { get => _gameAssembly ?? throw new InvalidOperationException("Invalid Context"); set => _gameAssembly = value; }
 

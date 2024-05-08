@@ -43,8 +43,8 @@ public class BoardGrid : UIControl
             boardWorldSize *= 2;
 
         var boardColor = boardWorldSize == 1 ?
-            EditorConstants.UNIT_BOARD_COLOR :
-            EditorConstants.BOARD_COLOR;
+            EditorConstants.BoardUnitColor :
+            EditorConstants.BoardNormalColor;
 
         DrawBoard(boardWorldSize, boardColor);
 

@@ -50,7 +50,7 @@ namespace CruZ.GameEngine.GameSystem.Render
             LayerDepth = sprite.LayerDepth;
         }
 
-        public WorldRectangle GetWorldBounds() // in ECSWorld Coordinate
+        public WorldRectangle GetWorldBound() // in ECSWorld Coordinate
         {
             WorldRectangle rect = new();
 
@@ -69,7 +69,7 @@ namespace CruZ.GameEngine.GameSystem.Render
 
         public Vector2 GetWorldOrigin()
         {
-            var worldRect = GetWorldBounds();
+            var worldRect = GetWorldBound();
             return new(
                 worldRect.X + worldRect.W * NormalizedOrigin.X,
                 worldRect.Y + worldRect.H * (1 - NormalizedOrigin.Y)
@@ -78,7 +78,7 @@ namespace CruZ.GameEngine.GameSystem.Render
 
         public bool IsOutOfScreen(Matrix viewProjectionMat)
         {
-            WorldRectangle worldBounds = GetWorldBounds();
+            WorldRectangle worldBounds = GetWorldBound();
 
             var min = new Vector4(worldBounds.X, worldBounds.Y, 0, 1);
             var max = new Vector4(worldBounds.Right, worldBounds.Top, 0, 1);

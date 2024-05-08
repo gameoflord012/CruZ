@@ -28,9 +28,7 @@ namespace CruZ.GameEngine.GameSystem.UI
 
         private void ResizeRootBounds(Viewport vp)
         {
-            _root.Control.Location = new(0, 0);
-            _root.Control.Width = vp.Width;
-            _root.Control.Height = vp.Height;
+            _root.Control.Rect =  new(0, 0, vp.Width, vp.Height);
         }
 
         private void Window_Resized(Viewport viewport)
