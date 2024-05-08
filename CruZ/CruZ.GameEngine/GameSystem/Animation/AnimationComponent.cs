@@ -1,4 +1,5 @@
 ﻿using AsepriteDotNet.Aseprite;
+using AsepriteDotNet.Aseprite.Types;
 
 using CruZ.GameEngine.GameSystem.ECS;
 using CruZ.GameEngine.GameSystem.Render;
@@ -30,26 +31,22 @@ namespace CruZ.GameEngine.GameSystem.Animation
         public AnimationComponent(SpriteRendererComponent spriteRenderer)
         {
             _resource = GameApplication.Resource;
-            _file = null!;
-
             _renderer = spriteRenderer;
             _renderer.DrawRequestsFetching += SpriteRenderer_FetchingDrawRequests;
         }
 
-        public void LoadAnimationFile(string asepriteFile, string? prefix = default)
+        public void LoadAnimationFile(string resourcePath, string? prefix = default)
         {
-            LoadAsepriteFile(_resource.Load<AsepriteFile>(asepriteFile), prefix);
+            var file = _resource.Load<AsepriteFile>(resourcePath, false);
+            var spriteSheet = file.CreateSpriteSheet(GameApplication.GetGraphicsDevice());
+            LoadSpriteSheet(spriteSheet, prefix);
         }
 
-        private void LoadAsepriteFile(AsepriteFile file, string? prefix)
+        private void LoadSpriteSheet(SpriteSheet spriteSheet, string? prefix)
         {
-            _file = file;
-
-            var spriteSheet = _file.CreateSpriteSheet(GameApplication.GetGraphicsDevice());
-
-            foreach (var tag in file.Tags)
+            foreach (var tag in spriteSheet.GetAnimationTagNames())
             {
-                var animation = spriteSheet.CreateAnimatedSprite(tag.Name);
+                var animation = spriteSheet.CreateAnimatedSprite(tag);
 
                 // Setting
                 animation.OriginX = animation.TextureRegion.Bounds.Width / 2f;
@@ -61,7 +58,7 @@ namespace CruZ.GameEngine.GameSystem.Animation
                     sb.Append(prefix);
                     sb.Append('-');
                 }
-                sb.Append(tag.Name);
+                sb.Append(tag);
 
                 if (!_animations.TryAdd(sb.ToString().ToLower(), animation))
                     throw new InvalidOperationException("duplicate animation key");
@@ -149,7 +146,6 @@ namespace CruZ.GameEngine.GameSystem.Animation
 
         ResourceManager _resource;
         Dictionary<string, AnimatedSprite> _animations = [];
-        AsepriteFile _file;
 
         public override void Dispose()
         {
