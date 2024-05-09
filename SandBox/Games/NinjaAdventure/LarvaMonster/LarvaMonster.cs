@@ -1,19 +1,20 @@
-﻿using CruZ.GameEngine.GameSystem;
+﻿using System;
+using System.Collections.Generic;
+
+using CruZ.GameEngine.GameSystem;
 using CruZ.GameEngine.GameSystem.Animation;
 using CruZ.GameEngine.GameSystem.ECS;
 using CruZ.GameEngine.GameSystem.Physic;
 using CruZ.GameEngine.GameSystem.Scene;
+using CruZ.GameEngine.GameSystem.StateMachine;
 
+using Genbox.VelcroPhysics.Collision.ContactSystem;
 using Genbox.VelcroPhysics.Dynamics;
 using Genbox.VelcroPhysics.Factories;
-using Genbox.VelcroPhysics.Collision.ContactSystem;
 
 using Microsoft.Xna.Framework;
-using CruZ.GameEngine.GameSystem.StateMachine;
-using System;
-using System.Collections.Generic;
 
-namespace NinjaAdventure
+namespace NinjaAdventure.LarvaMonster
 {
     internal class LarvaMonster : IDisposable
     {
@@ -21,8 +22,9 @@ namespace NinjaAdventure
 
         public LarvaMonster(GameScene scene, SpriteRendererComponent spriteRenderer)
         {
-            _spriteRenderer = spriteRenderer;
             Entity = scene.CreateEntity();
+
+            _spriteRenderer = spriteRenderer;
             _surikenToBody = [];
 
             InitializeComponents();
@@ -81,7 +83,7 @@ namespace NinjaAdventure
 
         private void Physic_OnCollision(Fixture fixtureA, Fixture fixtureB, Contact contact)
         {
-            if (fixtureB.Body.UserData is Suriken suriken)
+            if(fixtureB.Body.UserData is Suriken suriken)
             {
                 _stateData.HitBodies.Add(fixtureB.Body);
                 _surikenToBody[suriken] = fixtureB.Body;
@@ -102,17 +104,14 @@ namespace NinjaAdventure
             private set;
         }
 
-        Dictionary<Suriken, Body> _surikenToBody;
-
-        AnimationComponent _animation;
-        SpriteRendererComponent _spriteRenderer;
-        PhysicBodyComponent _physic;
-        HealthComponent _health;
-
-        StateMachineComponent _machine;
-        LarvaStateData _stateData;
-
-        bool _onPool;
+        private readonly Dictionary<Suriken, Body> _surikenToBody;
+        private AnimationComponent _animation;
+        private readonly SpriteRendererComponent _spriteRenderer;
+        private PhysicBodyComponent _physic;
+        private HealthComponent _health;
+        private StateMachineComponent _machine;
+        private LarvaStateData _stateData;
+        private bool _onPool;
 
         public void Dispose()
         {

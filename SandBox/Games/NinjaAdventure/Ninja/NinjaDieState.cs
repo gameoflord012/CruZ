@@ -7,7 +7,7 @@ namespace NinjaAdventure.Ninja
 {
     internal class NinjaDieState : BasicState<NinjaStateData>
     {
-        protected override string? StateEnterSoundResource => "sound\\ninja-die.ogg";
+        protected override string StateEnterSoundResource => "sound\\ninja-die.ogg";
 
         protected override void OnStateMachineAttached()
         {

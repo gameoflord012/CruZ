@@ -10,7 +10,7 @@ namespace NinjaAdventure.Ninja
 {
     internal class NinjaHitState : BasicState<NinjaStateData>
     {
-        protected override string? StateEnterSoundResource => "sound\\ninja-hurt.ogg";
+        protected override string StateEnterSoundResource => "sound\\ninja-hurt.ogg";
 
         protected override bool CanTransitionTo()
         {

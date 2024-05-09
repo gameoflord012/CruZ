@@ -29,7 +29,7 @@ namespace NinjaAdventure
 
             InitializeComponents();
 
-            _surikenPool = new(() => new Suriken(_gameScene, _spriteRenderer, Entity));
+            _surikenPool = new(() => new Suriken(_gameScene, _spriteRenderer!, Entity));
         }
 
         private void InitializeComponents()
