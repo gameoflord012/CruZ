@@ -75,7 +75,7 @@ namespace NinjaAdventure
             _monsterPool.Push(monster);
         }
 
-        Stack<LarvaMonster> _monsterPool;
+        Pool<LarvaMonster> _monsterPool;
         SpriteRendererComponent _monsterRenderer;
 
         Random _random;

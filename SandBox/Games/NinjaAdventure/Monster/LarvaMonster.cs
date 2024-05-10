@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 
 using CruZ.GameEngine.GameSystem;
 using CruZ.GameEngine.GameSystem.Animation;
@@ -14,12 +15,10 @@ using Genbox.VelcroPhysics.Factories;
 
 using Microsoft.Xna.Framework;
 
-namespace NinjaAdventure.LarvaMonster
+namespace NinjaAdventure
 {
-    internal class LarvaMonster : IDisposable
+    internal class LarvaMonster : IDisposable, IPoolObject
     {
-        public event Action<LarvaMonster>? PoolReturn;
-
         public LarvaMonster(GameScene scene, SpriteRendererComponent spriteRenderer)
         {
             Entity = scene.CreateEntity();
