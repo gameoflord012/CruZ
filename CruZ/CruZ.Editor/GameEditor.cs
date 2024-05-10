@@ -1,26 +1,24 @@
-﻿using CruZ.Editor.Service;
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Threading;
-using CruZ.Editor.UI;
-using CruZ.Editor.Scene;
-using Microsoft.Xna.Framework;
-using CruZ.GameEngine.GameSystem.ECS;
-using CruZ.GameEngine;
-using CruZ.Editor.Winform.Utility;
 
-using Keys = Microsoft.Xna.Framework.Input.Keys;
-using CruZ.GameEngine.GameSystem.UI;
+using CruZ.Editor.Scene;
+using CruZ.Editor.Service;
+using CruZ.Editor.UI;
+using CruZ.Editor.Winform.Utility;
+using CruZ.GameEngine;
 using CruZ.GameEngine.GameSystem;
-using CruZ.GameEngine.Resource;
+using CruZ.GameEngine.GameSystem.Physic;
 using CruZ.GameEngine.GameSystem.Scene;
+using CruZ.GameEngine.GameSystem.UI;
 using CruZ.GameEngine.Input;
 using CruZ.GameEngine.Utility;
-using CruZ.GameEngine.GameSystem.Physic;
+
+using Microsoft.Xna.Framework;
+
+using Keys = Microsoft.Xna.Framework.Input.Keys;
 
 
 namespace CruZ.Editor.Controls
@@ -34,35 +32,25 @@ namespace CruZ.Editor.Controls
 
         public GameEditor(EditorForm form)
         {
+            _entityControlPool = [];
+            _fromEntityToControl = [];
+            _gameInitalizeWaitHandle = new(false);
             _editorForm = form;
             _cacheService = new CacheService(Path.Combine(EditorContext.UserProfileDir, "caches"));
 
-            InputManager.MouseScrolled += Input_MouseScroll;
-            InputManager.MouseMoved += Input_MouseMove;
-            InputManager.MouseStateChanged += Input_MouseStateChanged;
-            InputManager.KeyStateChanged += Input_KeyStateChanged;
+            GameInput.MouseScrolled += Input_MouseScroll;
+            GameInput.MouseMoved += Input_MouseMove;
+            GameInput.MouseStateChanged += Input_MouseStateChanged;
+            GameInput.KeyStateChanged += Input_KeyStateChanged;
 
             ECSManager.InstanceChanged += ECSManager_InstanceChanged;
         }
-
         private void RegisterGameAppEvents()
         {
             GameApplication.Initialized += Game_Intialized;
             GameApplication.Exiting += Game_Exiting;
             _gameApp!.Window.AllowUserResizing = true;
             //_gameApp.BeforeDraw += GameApp_EarlyDraw;
-        }
-
-        private void ECSManager_InstanceChanged(ECSManager? oldECS, ECSManager newECS)
-        {
-            if(oldECS != null)
-            {
-                oldECS.World.EntityAdded -= World_EntityAdded;
-                oldECS.World.EntityRemoved -= World_EntityRemoved;
-            }
-
-            newECS.World.EntityAdded += World_EntityAdded;
-            newECS.World.EntityRemoved += World_EntityRemoved;
         }
 
         /// <summary>
@@ -72,26 +60,6 @@ namespace CruZ.Editor.Controls
         public void LoadLastSessionCaches()
         {
             _cacheService.ReadCache(this, "LoadedScene");
-        }
-
-        public TransformEntity? SelectedEntity
-        {
-            get => _currentSelectEntity;
-            set
-            {
-                if (_currentSelectEntity == value) return;
-
-                if (_currentSelectEntity != null)
-                    _fromEntityToControl[_currentSelectEntity].CanInteract = false;
-
-                _currentSelectEntity = value;
-
-                if (_currentSelectEntity != null)
-                    _fromEntityToControl[_currentSelectEntity].CanInteract = true;
-
-                LogManager.SetMsg(_currentSelectEntity != null ? _currentSelectEntity.ToString() : "");
-                SelectingEntityChanged?.Invoke(value);
-            }
         }
 
         public void LoadRuntimeScene(string sceneName)
@@ -105,24 +73,24 @@ namespace CruZ.Editor.Controls
                 _gameApp!.MarshalInvoke(() => LoadedGameScene = SceneManager.GetRuntimeScene(sceneName));
 
             }
-            catch (RuntimeSceneLoadException e)
+            catch(RuntimeSceneLoadException e)
             {
                 DialogHelper.ShowExceptionDialog(e);
                 throw;
             }
         }
-        
+
         private void WaitGameInitialized()
         {
-            if (_gameAppThread != null && _gameAppThread.IsAlive) return;
+            if(_gameAppThread != null && _gameAppThread.IsAlive) return;
 
-            _appInitalized_Reset.Reset();
+            _gameInitalizeWaitHandle.Reset();
 
             _gameAppThread = new Thread(StartNewAppSession);
             _gameAppThread.Name = "Editor Session";
             _gameAppThread.Start();
 
-            _appInitalized_Reset.WaitOne(); // wait until game initialize
+            _gameInitalizeWaitHandle.WaitOne(); // wait until game initialize
         }
 
         private void StartNewAppSession()
@@ -130,7 +98,7 @@ namespace CruZ.Editor.Controls
             CleanAppSession();
 
             _gameApp = GameApplication.CreateContext(
-                new GameWrapper(), 
+                new GameWrapper(),
                 EditorContext.UserResourceDir);
 
             RegisterGameAppEvents();
@@ -138,21 +106,11 @@ namespace CruZ.Editor.Controls
             _gameApp.Run();
         }
 
-        private void World_EntityAdded(TransformEntity e)
-        {
-            AddEntityControl(e);
-        }
-
-        private void World_EntityRemoved(TransformEntity e)
-        {
-            RemoveEntityControl(e);
-        }
-
         private void AddEntityControl(TransformEntity e)
         {
-            if (_fromEntityToControl.ContainsKey(e)) return;
+            if(_fromEntityToControl.ContainsKey(e)) return;
 
-            if (_entityControlPool.Count == 0)
+            if(_entityControlPool.Count == 0)
             {
                 var newControl = new EntityControl();
                 newControl.IsActive = false;
@@ -168,21 +126,42 @@ namespace CruZ.Editor.Controls
 
         private void RemoveEntityControl(TransformEntity e)
         {
-            if (!_fromEntityToControl.ContainsKey(e)) return;
+            if(!_fromEntityToControl.ContainsKey(e)) return;
 
             var eControl = _fromEntityToControl[e];
             _fromEntityToControl.Remove(e);
 
             eControl.AttachEntity = null;
-            eControl.CanInteract = false;
+            eControl.Active = false;
             eControl.IsActive = false;
             _entityControlPool.Push(eControl);
+        }
+
+        /// <summary>
+        /// Should be called from winform thread
+        /// </summary>
+        /// <exception cref="Exception"></exception>
+        public void CleanAppSession()
+        {
+            if(_gameApp == null) return;
+            Trace.Assert(_gameAppThread != null);
+
+            OnApplicationBeforeClosing();
+
+            _gameApp.Exit();
+
+            if(!_gameAppThread.Join(5000))
+                throw new Exception("Can't exit editor app");
+
+            _gameApp?.Dispose();
+            _gameApp = null;
+            _gameAppThread = null;
         }
 
         private void InitUIControls()
         {
             // orders of ui gettin added is effect which is drawing first
-            _editorUIBranch = UIManager.Root.AddBranch("Editor");
+            _editorUIBranch = UISystem.Root.AddBranch("Editor");
 
             _boardGrid = new BoardGrid();
             _editorUIBranch.AddChild(_boardGrid);
@@ -193,40 +172,42 @@ namespace CruZ.Editor.Controls
             _entityControlPool = [];
         }
 
-        /// <summary>
-        /// Should be called from winform thread
-        /// </summary>
-        /// <exception cref="Exception"></exception>
-        public void CleanAppSession()
-        {
-            if (_gameApp == null) return;
-            Trace.Assert(_gameAppThread != null);
-
-            OnApplicationBeforeClosing();
-
-            _gameApp.Exit();
-
-            if (!_gameAppThread.Join(5000))
-                throw new Exception("Can't exit editor app");
-
-            _gameApp?.Dispose();
-            _gameApp = null;
-            _gameAppThread = null;
-        }
-
         private void OnApplicationBeforeClosing()
         {
             _cacheService.WriteCache(this, "LoadedScene");
             _cacheService.WriteCache(this, "Camera");
         }
+        private void OnDebugModeChanged(bool shouldDisplayDebug)
+        {
+            if(shouldDisplayDebug)
+            {
+                PhysicSystem.Instance.ShowDebug = true;
+            }
+            else
+            {
+                PhysicSystem.Instance.ShowDebug = false;
+            }
+        }
+
+        private void ECSManager_InstanceChanged(ECSManager? oldECS, ECSManager newECS)
+        {
+            if(oldECS != null)
+            {
+                oldECS.World.EntityAdded -= World_EntityAdded;
+                oldECS.World.EntityRemoved -= World_EntityRemoved;
+            }
+
+            newECS.World.EntityAdded += World_EntityAdded;
+            newECS.World.EntityRemoved += World_EntityRemoved;
+        }
 
         private void Game_Intialized()
         {
             _cacheService.ReadCache(this, "Camera");
+            _debugMode = true;
             InitUIControls();
-            _appInitalized_Reset.Set();
+            _gameInitalizeWaitHandle.Set();
         }
-
         private void Game_Exiting()
         {
             _editorForm.SafeInvoke(CleanAppSession);
@@ -236,10 +217,9 @@ namespace CruZ.Editor.Controls
         {
             Camera.Main.Zoom = Camera.Main.Zoom + info.SrollDelta * 0.001f * Camera.Main.Zoom;
         }
-
         private void Input_MouseMove(IInputInfo info)
         {
-            if (_isMouseDraggingCamera)
+            if(_isMouseDraggingCamera)
             {
                 var mousePoint = info.CurMouse.Position;
                 var delt = new Vector2(
@@ -249,10 +229,9 @@ namespace CruZ.Editor.Controls
                 Camera.Main.CameraOffset = _cameraStartDragCoord + delt;
             }
         }
-
         private void Input_MouseStateChanged(IInputInfo info)
         {
-            if (info.IsMouseJustDown(MouseKey.Middle)
+            if(info.IsMouseJustDown(MouseKey.Middle)
                 && !_isMouseDraggingCamera)
             {
                 _isMouseDraggingCamera = true;
@@ -260,42 +239,89 @@ namespace CruZ.Editor.Controls
                 _cameraStartDragCoord = Camera.Main.CameraOffset;
             }
 
-            if (info.IsMouseJustUp(MouseKey.Middle))
+            if(info.IsMouseJustUp(MouseKey.Middle))
             {
                 _isMouseDraggingCamera = false;
             }
         }
-
         private void Input_KeyStateChanged(IInputInfo info)
         {
-            if (info.IsKeyJustDown(Keys.OemTilde))
+            if(info.IsKeyJustDown(Keys.OemTilde))
             {
-                PhysicSystem.Instance.ShowDebug = !PhysicSystem.Instance.ShowDebug;
+                _debugMode = !_debugMode;
+                OnDebugModeChanged(_debugMode);
+            }
+
+            if(info.IsKeyHeldDown(Keys.LeftControl) && info.IsKeyJustDown(Keys.P))
+            {
+                _pause = !_pause;
+                OnPauseValueChanged(_pause);
             }
         }
 
-        public GameScene? LoadedGameScene { get; private set; }
+        private void OnPauseValueChanged(bool pause)
+        {
+            Trace.Assert(_gameApp != null);
 
-        Stack<EntityControl> _entityControlPool = [];
-        Dictionary<TransformEntity, EntityControl> _fromEntityToControl = [];
+            if(pause)
+            {
+                _gameApp.Pause = true;
+            }
+            else
+            {
+                _gameApp.Pause = false;
+            }
+        }
 
-        BoardGrid _boardGrid = null!;
-        LoggingWindow _infoWindow = null!;
+        private void World_EntityAdded(TransformEntity e)
+        {
+            AddEntityControl(e);
+        }
+        private void World_EntityRemoved(TransformEntity e)
+        {
+            RemoveEntityControl(e);
+        }
 
-        UIControl _editorUIBranch = null!;
+        public GameScene? LoadedGameScene
+        {
+            get;
+            private set;
+        }
+        public TransformEntity? SelectedEntity
+        {
+            get => _currentSelectEntity;
+            set
+            {
+                if(_currentSelectEntity == value) return;
 
-        bool _isMouseDraggingCamera;
-        Vector2 _cameraStartDragCoord;
-        Point _mouseStartDragPoint;
+                if(_currentSelectEntity != null)
+                    _fromEntityToControl[_currentSelectEntity].Active = false;
 
-        TransformEntity? _currentSelectEntity;
-        GameApplication? _gameApp;
+                _currentSelectEntity = value;
 
-        Thread? _gameAppThread;
-        ManualResetEvent _appInitalized_Reset = new(false); // wait handler for game initialize event
+                if(_currentSelectEntity != null)
+                    _fromEntityToControl[_currentSelectEntity].Active = true;
 
-        EditorForm _editorForm;
+                LogManager.SetMsg(_currentSelectEntity != null ? _currentSelectEntity.ToString() : "");
+                SelectingEntityChanged?.Invoke(value);
+            }
+        }
 
-        CacheService _cacheService;
+        private Stack<EntityControl> _entityControlPool;
+        private Dictionary<TransformEntity, EntityControl> _fromEntityToControl;
+        private BoardGrid _boardGrid;
+        private LoggingWindow _infoWindow;
+        private UIControl _editorUIBranch;
+        private bool _isMouseDraggingCamera;
+        private Vector2 _cameraStartDragCoord;
+        private Point _mouseStartDragPoint;
+        private TransformEntity? _currentSelectEntity;
+        private GameApplication? _gameApp;
+        private Thread? _gameAppThread;
+        private ManualResetEvent _gameInitalizeWaitHandle; // wait handler for game initialize event
+        private EditorForm _editorForm;
+        private CacheService _cacheService;
+        private bool _debugMode;
+        private bool _pause;
     }
 }

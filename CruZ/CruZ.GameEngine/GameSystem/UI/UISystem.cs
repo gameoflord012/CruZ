@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
-using CruZ.GameEngine;
 using CruZ.GameEngine.Input;
 
 using Microsoft.Xna.Framework;
@@ -28,7 +26,7 @@ namespace CruZ.GameEngine.GameSystem.UI
 
         private void ResizeRootBounds(Viewport vp)
         {
-            _root.Control.Rect =  new(0, 0, vp.Width, vp.Height);
+            _root.Control.Rect = new(0, 0, vp.Width, vp.Height);
         }
 
         private void Window_Resized(Viewport viewport)
@@ -36,34 +34,29 @@ namespace CruZ.GameEngine.GameSystem.UI
             ResizeRootBounds(viewport);
         }
 
-        protected override void OnUpdate(EntitySystemEventArgs args)
+        protected override void OnUpdate(SystemEventArgs args)
         {
             UpdateUIComponents(args.ActiveEntities.GetAllComponents<UIComponent>());
-            var info = CreateUIInfo(args.GameTime);
+            var info = new UpdateUIEventArgs(args.GameTime, GameInput.GetLastInfo());
 
-            if (info.InputInfo.MouseClick && !UIControl.Dragging())
-            {
-                MouseClick?.Invoke(info);
-            }
-
-            foreach (var control in _root.Control.GetTree())
+            foreach(var control in _root.Control.GetTree())
             {
                 control.InternalUpdate(info);
             }
         }
 
-        protected override void OnDraw(EntitySystemEventArgs args)
+        protected override void OnDraw(SystemEventArgs args)
         {
             UpdateUIComponents(args.ActiveEntities.GetAllComponents<UIComponent>());
-            var uiInfo = CreateUIInfo(args.GameTime);
+            var drawUIArgs = new DrawUIEventArgs(args.GameTime, _spriteBatch);
 
             _gd.SetRenderTarget(RenderTargetSystem.UIRT);
             _gd.Clear(Color.Transparent);
 
             _spriteBatch.Begin();
-            foreach (var control in _root.Control.GetTree())
+            foreach(var control in _root.Control.GetTree())
             {
-                control.InternalDraw(uiInfo);
+                control.InternalDraw(drawUIArgs);
             }
             _spriteBatch.End();
 
@@ -73,7 +66,7 @@ namespace CruZ.GameEngine.GameSystem.UI
         private void UpdateUIComponents(List<UIComponent> newComponents)
         {
             // unroot previous UIComponents
-            foreach (var component in _rootedUIComponents)
+            foreach(var component in _rootedUIComponents)
             {
                 _root.Control.RemoveChild(component.EntryControl);
             }
@@ -81,7 +74,7 @@ namespace CruZ.GameEngine.GameSystem.UI
             _rootedUIComponents.Clear();
 
             // root new UIComponents
-            foreach (var uiComponent in newComponents)
+            foreach(var uiComponent in newComponents)
             {
                 _root.Control.AddChild(uiComponent.EntryControl);
                 _rootedUIComponents.Add(uiComponent);
@@ -89,24 +82,11 @@ namespace CruZ.GameEngine.GameSystem.UI
         }
 
         // components that attached to main branch
-        List<UIComponent> _rootedUIComponents = [];
-
-        private UIInfo CreateUIInfo(GameTime gameTime)
-        {
-            UIInfo info = new();
-
-            info.SpriteBatch = _spriteBatch;
-            info.GameTime = gameTime;
-            info.InputInfo = InputManager.Info;
-
-            return info;
-        }
-
-        GraphicsDevice _gd;
-
-        UIRoot _root;
-        SpriteBatch _spriteBatch = null!;
-        bool _isDisposed = false;
+        private List<UIComponent> _rootedUIComponents = [];
+        private GraphicsDevice _gd;
+        private UIRoot _root;
+        private SpriteBatch _spriteBatch;
+        private bool _isDisposed;
 
         public override void Dispose()
         {
@@ -115,16 +95,19 @@ namespace CruZ.GameEngine.GameSystem.UI
             _spriteBatch?.Dispose();
         }
 
-        public static event Action<UIInfo>? MouseClick;
-
         internal static UISystem CreateContext()
         {
-            if (_instance != null && !_instance._isDisposed)
+            if(_instance != null && !_instance._isDisposed)
                 throw new InvalidOperationException("Require dispose");
             return _instance = new();
         }
+        internal static UISystem Instance
+        { get => _instance ?? throw new NullReferenceException(); }
 
         private static UISystem? _instance;
-        public static UIRoot Root => _instance._root;
+
+        public static UIRoot Root
+            => Instance._root;
+
     }
 }

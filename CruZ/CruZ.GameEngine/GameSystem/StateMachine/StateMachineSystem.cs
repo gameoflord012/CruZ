@@ -1,33 +1,38 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using CruZ.GameEngine.GameSystem.Input;
 
 namespace CruZ.GameEngine.GameSystem.StateMachine
 {
     internal class StateMachineSystem : EntitySystem
     {
-        protected override void OnUpdate(EntitySystemEventArgs args)
+        protected override void OnAttached()
+        {
+            base.OnAttached();
+
+            _inputSystem = AttachedWorld.GetSystem<InputSystem>();
+        }
+
+        protected override void OnUpdate(SystemEventArgs args)
         {
             base.OnUpdate(args);
 
-            foreach (var machine in 
+            foreach(var machine in
                 args.ActiveEntities.GetAllComponents<StateMachineComponent>())
             {
-                machine.DoUpdate(args.GameTime);
+                machine.Update(new(args.GameTime, _inputSystem.InputInfo));
             }
         }
 
-        protected override void OnDraw(EntitySystemEventArgs args)
+        protected override void OnDraw(SystemEventArgs args)
         {
             base.OnDraw(args);
 
-            foreach (var machine in
+            foreach(var machine in
                 args.ActiveEntities.GetAllComponents<StateMachineComponent>())
             {
-                machine.DoDraw(args.GameTime);
+                machine.Draw(args.GameTime);
             }
         }
+
+        private InputSystem _inputSystem;
     }
 }

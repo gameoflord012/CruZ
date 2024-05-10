@@ -29,7 +29,7 @@ namespace CruZ.GameEngine
             AfterInitialize?.Invoke();
         }
 
-        protected override void Update(GameTime gameTime)
+        protected sealed override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
 
@@ -37,7 +37,7 @@ namespace CruZ.GameEngine
             OnUpdated(gameTime);
         }
 
-        protected override void Draw(GameTime gameTime)
+        protected sealed override void Draw(GameTime gameTime)
         {
             base.Draw(gameTime);
 

@@ -5,17 +5,18 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace CruZ.GameEngine.GameSystem.UI
 {
-    public struct UIInfo
+    public class DrawUIEventArgs
     {
-        public GameTime GameTime;
-        public IInputInfo InputInfo;
-        public SpriteBatch SpriteBatch;
-
-        public Point MousePos()
+        public DrawUIEventArgs(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            return new(
-                InputInfo.CurMouse.Position.X,
-                InputInfo.CurMouse.Position.Y);
+            GameTime = gameTime;
+            SpriteBatch = spriteBatch;
         }
+
+        public GameTime GameTime
+        { get; private set; }
+        
+        public SpriteBatch SpriteBatch
+        { get; private set; }
     }
 }

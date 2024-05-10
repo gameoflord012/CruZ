@@ -1,77 +1,25 @@
-﻿using CruZ.Editor.Service;
-
-using System;
-using System.Collections.Generic;
-
+﻿using System.Collections.Generic;
 using System.Linq;
+
+using CruZ.GameEngine;
+using CruZ.GameEngine.GameSystem;
+using CruZ.GameEngine.GameSystem.UI;
+using CruZ.GameEngine.Input;
+using CruZ.GameEngine.Utility;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 
-using RectangleF = System.Drawing.RectangleF;
-using CruZ.GameEngine.GameSystem.UI;
-using CruZ.GameEngine.GameSystem;
-using CruZ.GameEngine.Utility;
-using CruZ.GameEngine;
-
 namespace CruZ.Editor.UI
 {
-    public class EntityControl : UIControl, ICanUndo
+    public class EntityControl : UIControl
     {
-        static readonly int MIN_BOUND_SIZE = 25;
+        private readonly int MinBoundSize = 25;
+        private readonly Color DraggingBackgroundColor = Color.Green;
 
         public EntityControl()
         {
             _initialBackgroundCol = BackgroundColor;
-        }
-
-        public TransformEntity? AttachEntity
-        {
-            get => _attachedEntity;
-            set
-            {
-                if (_attachedEntity == value) return;
-
-                if (_attachedEntity != null)
-                {
-                    _attachedEntity.RemovedFromWorld -= Entity_OnRemoveFromWorld;
-                    _attachedEntity.ComponentsChanged -= Entity_ComponentChanged;
-                }
-
-                _attachedEntity = value;
-
-                if (_attachedEntity != null)
-                {
-                    _attachedEntity.RemovedFromWorld += Entity_OnRemoveFromWorld;
-                    _attachedEntity.ComponentsChanged += Entity_ComponentChanged;
-
-                    var rectUIProvider = ExtractRectUIProvider(_attachedEntity);
-                    SetUIRectUIProvider(rectUIProvider);
-                }
-
-                IsActive = _attachedEntity != null;
-            }
-        }
-
-        TransformEntity? _attachedEntity;
-
-        public bool CanInteract
-        {
-            get => _canInteract;
-            set
-            {
-                //if(_canInteract == value) return;
-                //Draggable = false;
-                //_canInteract = value;
-            }
-        }
-
-        bool _canInteract = false;
-
-        private void Entity_ComponentChanged(ComponentCollection comps)
-        {
-            if (_attachedEntity != null)
-                SetUIRectUIProvider(ExtractRectUIProvider(_attachedEntity));
         }
 
         private IUIRectProvider? ExtractRectUIProvider(TransformEntity entity)
@@ -81,58 +29,13 @@ namespace CruZ.Editor.UI
 
         private void SetUIRectUIProvider(IUIRectProvider? rectUIProvider)
         {
-            if (_currentRectUIProvider != null) 
+            if(_currentRectUIProvider != null)
                 _currentRectUIProvider.UIRectChanged -= UIRectProvider_ValueChanged;
 
             _currentRectUIProvider = rectUIProvider;
 
-            if (_currentRectUIProvider != null)
+            if(_currentRectUIProvider != null)
                 _currentRectUIProvider.UIRectChanged += UIRectProvider_ValueChanged;
-        }
-
-        protected override void OnDraw(UIInfo args)
-        {
-            if (_attachedEntity == null || !_canInteract) return;
-
-            base.OnDraw(args);
-
-            foreach (var origin in _points)
-            {
-                var screen = Camera.Main.CoordinateToPoint(origin);
-
-                args.SpriteBatch.DrawCircle(new(screen.X, screen.Y),
-                    EditorConstants.PointSize, 8, Color.Blue);
-            }
-        }
-
-        protected override void OnUpdate(UIInfo args)
-        {
-            if (_attachedEntity == null) return;
-
-            if (_worldBound == null)
-            {
-                Width = MIN_BOUND_SIZE;
-                Height = MIN_BOUND_SIZE;
-                var center = Camera.Main.CoordinateToPoint(_attachedEntity.Transform.Position);
-                SetCenter(center);
-            }
-
-            if (!_canInteract) return;
-
-            if (args.InputInfo.IsKeyJustDown(Keys.W))
-            {
-                Draggable = !Draggable;
-            }
-        }
-
-        private void UIRectProvider_ValueChanged(UIRect rectInfo)
-        {
-            SetRectInfo(rectInfo);
-        }
-
-        private void Entity_OnRemoveFromWorld(TransformEntity e)
-        {
-            if (Parent != null) Parent.RemoveChild(this);
         }
 
         private void SetRectInfo(UIRect uiRect)
@@ -140,7 +43,7 @@ namespace CruZ.Editor.UI
             _worldBound = uiRect.WorldBound;
             _points = uiRect.WorldOrigins;
 
-            if (uiRect.WorldBound == null) return;
+            if(uiRect.WorldBound == null) return;
 
             var worldBound = _worldBound!.Value;
             Rect = worldBound.ToScreen(Camera.Main);
@@ -153,65 +56,132 @@ namespace CruZ.Editor.UI
                 p.Y - Height / 2);
         }
 
-        IUIRectProvider? _currentRectUIProvider;
-        WorldRectangle? _worldBound; //ECSWorld bounds
-        List<Vector2> _points = [];
-
-        protected override object? OnStartDragging(UIInfo args)
+        protected override object? OnStartDragging(IInputInfo input)
         {
-            if (_attachedEntity == null || !_canInteract) return null;
+            if(_attachedEntity == null || !_canInteract) return null;
 
-            if (Draggable)
+            if(Draggable)
             {
                 var ePoint = Camera.Main.CoordinateToPoint(_attachedEntity.Transform.Position);
                 _dragCenterOffset = new(
-                    args.MousePos().X - ePoint.X,
-                    args.MousePos().Y - ePoint.Y);
+                    input.MousePos().X - ePoint.X,
+                    input.MousePos().Y - ePoint.Y);
                 return this;
             }
             return Draggable ? this : null;
         }
 
-        protected override void OnUpdateDragging(UIInfo info)
+        protected override void OnUpdateDragging(UpdateUIEventArgs info)
         {
             var ePoint = new Point(
-                info.MousePos().X - _dragCenterOffset.X,
-                info.MousePos().Y - _dragCenterOffset.Y);
+                info.InputInfo.MousePos().X - _dragCenterOffset.X,
+                info.InputInfo.MousePos().Y - _dragCenterOffset.Y);
 
             _attachedEntity!.Transform.Position = Camera.Main.PointToCoordinate(ePoint);
         }
 
-        bool Draggable
+        protected override void OnDraw(DrawUIEventArgs args)
+        {
+            if(_attachedEntity == null || !_canInteract) return;
+
+            base.OnDraw(args);
+
+            foreach(var origin in _points)
+            {
+                var screen = Camera.Main.CoordinateToPoint(origin);
+
+                args.SpriteBatch.DrawCircle(new(screen.X, screen.Y),
+                    EditorConstants.PointSize, 8, Color.Blue);
+            }
+        }
+
+        protected override void OnUpdate(UpdateUIEventArgs args)
+        {
+            if(_attachedEntity == null) return;
+
+            if(_worldBound == null)
+            {
+                Width = MinBoundSize;
+                Height = MinBoundSize;
+                var center = Camera.Main.CoordinateToPoint(_attachedEntity.Transform.Position);
+                SetCenter(center);
+            }
+
+            if(!_canInteract) return;
+
+            if(args.InputInfo.IsKeyJustDown(Keys.W))
+            {
+                Draggable = !Draggable;
+            }
+        }
+
+        private void UIRectProvider_ValueChanged(UIRect rectInfo)
+        {
+            SetRectInfo(rectInfo);
+        }
+
+        private void Entity_OnRemoveFromWorld(TransformEntity e)
+        {
+            Parent?.RemoveChild(this);
+        }
+
+        private void Entity_ComponentChanged(ComponentCollection comps)
+        {
+            if(_attachedEntity != null)
+                SetUIRectUIProvider(ExtractRectUIProvider(_attachedEntity));
+        }
+
+        private bool Draggable
         {
             get => _draggable;
             set
             {
-                if (_draggable == value) return;
+                if(_draggable == value) return;
 
                 _draggable = value;
-                BackgroundColor = _draggable ? _draggableBackgroundCol : _initialBackgroundCol;
+                BackgroundColor = _draggable ? DraggingBackgroundColor : _initialBackgroundCol;
             }
         }
-
-        Point _dragCenterOffset;
-        bool _draggable;
-
-        public object CaptureState()
+        public TransformEntity? AttachEntity
         {
-            throw new NotImplementedException();
+            get => _attachedEntity;
+            set
+            {
+                if(_attachedEntity == value) return;
+
+                if(_attachedEntity != null)
+                {
+                    _attachedEntity.RemovedFromWorld -= Entity_OnRemoveFromWorld;
+                    _attachedEntity.ComponentsChanged -= Entity_ComponentChanged;
+                }
+
+                _attachedEntity = value;
+
+                if(_attachedEntity != null)
+                {
+                    _attachedEntity.RemovedFromWorld += Entity_OnRemoveFromWorld;
+                    _attachedEntity.ComponentsChanged += Entity_ComponentChanged;
+
+                    var rectUIProvider = ExtractRectUIProvider(_attachedEntity);
+                    SetUIRectUIProvider(rectUIProvider);
+                }
+
+                IsActive = _attachedEntity != null;
+            }
+        }
+        public bool Active
+        {
+            get;
+            set;
         }
 
-        public void RestoreState(object state)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool StatesIdentical(object stateA, object stateB)
-        {
-            throw new NotImplementedException();
-        }
-
-        Color _initialBackgroundCol;
-        Color _draggableBackgroundCol = Color.Green;
+        private Color _initialBackgroundCol;
+        private bool _canInteract;
+        private TransformEntity? _attachedEntity;
+        private IUIRectProvider? _currentRectUIProvider;
+        private WorldRectangle? _worldBound;
+        private List<Vector2> _points = [];
+        private Point _dragCenterOffset;
+        private bool _draggable;
     }
 }

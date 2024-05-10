@@ -21,7 +21,7 @@ namespace CruZ.GameEngine.GameSystem
             Entity.AddComponent(_script);
         }
 
-        protected virtual void OnUpdating(GameTime time)
+        protected virtual void OnUpdating(ScriptUpdateArgs args)
         {
 
         }

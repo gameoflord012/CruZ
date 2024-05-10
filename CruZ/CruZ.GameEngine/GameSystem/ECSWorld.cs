@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 using Microsoft.Xna.Framework;
 
@@ -17,9 +14,23 @@ namespace CruZ.GameEngine.GameSystem
 
         public ECSWorld() { }
 
+        public T GetSystem<T>() where T : EntitySystem
+        {
+            foreach(var system in _systems)
+            {
+                if(system is T)
+                {
+                    return (T)system;
+                }
+            }
+
+            throw new InvalidOperationException();
+        }
+
         public ECSWorld AddSystem(EntitySystem system)
         {
             _systems.Add(system);
+            system.AddedInternal(this);
             return this;
         }
 
@@ -29,31 +40,31 @@ namespace CruZ.GameEngine.GameSystem
             EntityAdded?.Invoke(e);
         }
 
-        public void Initialize()
+        internal void Initialize()
         {
-            foreach (var system in _systems)
+            foreach(var system in _systems)
             {
                 system.OnInitialize();
             }
         }
 
-        public void SystemsUpdate(GameTime gameTime)
+        internal void UpdateSystems(GameTime gameTime)
         {
             ProcessDirtyEntities();
 
-            foreach (var system in _systems)
+            foreach(var system in _systems)
             {
-                system.DoUpdate(new EntitySystemEventArgs(GetActiveEntities(), gameTime));
+                system.InternalUpdate(new SystemEventArgs(GetActiveEntities(), gameTime));
             }
         }
 
-        public void SystemsDraw(GameTime gameTime)
+        internal void DrawSystems(GameTime gameTime)
         {
             ProcessDirtyEntities();
 
-            foreach (var system in _systems)
+            foreach(var system in _systems)
             {
-                system.DoDraw(new EntitySystemEventArgs(GetActiveEntities(), gameTime));
+                system.InternalDraw(new SystemEventArgs(GetActiveEntities(), gameTime));
             }
         }
 
@@ -69,7 +80,7 @@ namespace CruZ.GameEngine.GameSystem
             //
             // fire events
             //
-            foreach (var entity in removingEntities)
+            foreach(var entity in removingEntities)
             {
                 EntityRemoved?.Invoke(entity);
                 entity.Dispose();
@@ -79,8 +90,8 @@ namespace CruZ.GameEngine.GameSystem
         public void Dispose()
         {
             _systems.ForEach(e => e.Dispose());
-            
-            foreach (var e in Entities)
+
+            foreach(var e in Entities)
             {
                 _entities.Remove(e);
                 e.Dispose();
@@ -88,9 +99,7 @@ namespace CruZ.GameEngine.GameSystem
         }
 
         public IImmutableList<TransformEntity> Entities { get => _entities.ToImmutableList(); }
-
-        HashSet<TransformEntity> _entities = [];
-
-        List<EntitySystem> _systems = [];
+        private HashSet<TransformEntity> _entities = [];
+        private List<EntitySystem> _systems = [];
     }
 }

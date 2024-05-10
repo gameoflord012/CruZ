@@ -1,4 +1,6 @@
-﻿using System;
+﻿#pragma warning disable SYSLIB0051 // Type or member is obsolete
+
+using System;
 
 namespace CruZ.GameEngine;
 

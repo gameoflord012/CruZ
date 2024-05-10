@@ -9,12 +9,12 @@ using Microsoft.Xna.Framework;
 
 namespace CruZ.GameEngine.GameSystem
 {
-    internal class EntitySystemEventArgs : EventArgs
+    internal class SystemEventArgs : EventArgs
     {
         public readonly EntityCollection ActiveEntities;
         public readonly GameTime GameTime;
 
-        public EntitySystemEventArgs(IImmutableList<TransformEntity> activeEntities, GameTime gameTime)
+        public SystemEventArgs(IImmutableList<TransformEntity> activeEntities, GameTime gameTime)
         {
             ActiveEntities = new EntityCollection(activeEntities);
             GameTime = gameTime;

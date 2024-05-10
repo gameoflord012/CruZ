@@ -1,6 +1,7 @@
 ﻿using System;
 
 using CruZ.GameEngine.GameSystem.Animation;
+using CruZ.GameEngine.GameSystem.Input;
 using CruZ.GameEngine.GameSystem.Physic;
 using CruZ.GameEngine.GameSystem.Render;
 using CruZ.GameEngine.GameSystem.Script;
@@ -19,6 +20,7 @@ namespace CruZ.GameEngine.GameSystem
         {
             _world = new ECSWorld();
             _world.
+                AddSystem(new InputSystem()).
                 AddSystem(new ScriptSystem()).
                 AddSystem(new StateMachineSystem()).
                 AddSystem(PhysicSystem.CreateContext()).
@@ -37,12 +39,12 @@ namespace CruZ.GameEngine.GameSystem
 
         internal void Update(GameTime gameTime)
         {
-            _world.SystemsUpdate(gameTime);
+            _world.UpdateSystems(gameTime);
         }
 
         internal void Draw(GameTime gameTime)
         {
-            _world.SystemsDraw(gameTime);
+            _world.DrawSystems(gameTime);
         }
 
         ECSWorld _world;

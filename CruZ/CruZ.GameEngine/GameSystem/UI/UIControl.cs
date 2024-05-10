@@ -1,13 +1,13 @@
-﻿using CruZ.GameEngine.Input;
-using CruZ.GameEngine.Utility;
-
-using Microsoft.Xna.Framework;
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.ComponentModel;
 using System.Linq;
+
+using CruZ.GameEngine.Input;
+using CruZ.GameEngine.Utility;
+
+using Microsoft.Xna.Framework;
 
 using RectangleF = System.Drawing.RectangleF;
 
@@ -16,22 +16,15 @@ namespace CruZ.GameEngine.GameSystem.UI
     [TypeConverter(typeof(ExpandableObjectConverter))]
     public class UIControl
     {
+        private const int BorderThickness = 3;
+        private static readonly Color DefaultBackGroundColor = Color.Red;
+
         public UIControl()
         {
-             _childs = [];
+            _childs = [];
+            IsActive = true;
+            BackgroundColor = DefaultBackGroundColor;
         }
-
-        static readonly int BorderThickness = 3;
-
-        static readonly Color DefaultBackGroundColor = Color.Red;
-
-        public UIControl? Parent { get => _parent; }
-
-        public UIControl[] Childs => _childs.ToArray();
-
-        public Color BackgroundColor = DefaultBackGroundColor;
-        
-        public bool IsActive = true;
 
         public void AddChild(UIControl child)
         {
@@ -43,7 +36,7 @@ namespace CruZ.GameEngine.GameSystem.UI
 
         public void RemoveChild(UIControl child)
         {
-            if (!_childs.Remove(child))
+            if(!_childs.Remove(child))
             {
                 throw new ArgumentException($"Fail to remove {child} ui control from {this}");
             }
@@ -59,49 +52,49 @@ namespace CruZ.GameEngine.GameSystem.UI
         {
             List<UIControl> contains = [];
 
-            foreach (var node in GetTree())
+            foreach(var node in GetTree())
             {
-                if (node.Rect.Contains(pointX, pointY))
+                if(node.Rect.Contains(pointX, pointY))
                     contains.Add(node);
             }
 
             return contains.ToArray();
         }
 
-        public IImmutableList<UIControl> GetTree(bool getActiveNodeOnly = true)
+        public IEnumerable<UIControl> GetTree()
         {
             List<UIControl> list = [];
             list.Add(this);
 
-            for (int i = 0; i < list.Count; i++)
+            for(int i = 0; i < list.Count; i++)
             {
-                foreach (var child in list[i].Childs)
+                foreach(var child in list[i].Childs)
                 {
                     list.Add(child);
                 }
             }
 
-            return list.Where(e => e.IsActive).ToImmutableList();
+            return list.Where(e => e.IsActive);
         }
 
-        internal void InternalUpdate(UIInfo args)
+        internal void InternalUpdate(UpdateUIEventArgs args)
         {
-            _args = args;
+            _inputInfo = args.InputInfo;
 
             // dragging
-            ProcessDragging(args);
+            UpdateDragging(args);
 
             // update mouse events
-            if (IsMouseHover())
+            if(IsMouseHovered())
             {
-                if (args.InputInfo.MouseClick && !Dragging())
+                if(args.InputInfo.MouseClick && !Dragging())
                 {
-                    OnMouseClick(args);
+                    OnMouseClick(_inputInfo);
                 }
 
-                if (args.InputInfo.MouseStateChanges)
+                if(args.InputInfo.MouseStateChanges)
                 {
-                    OnMouseStateChange(args);
+                    OnMouseStateChange(_inputInfo);
                 }
             }
 
@@ -109,79 +102,81 @@ namespace CruZ.GameEngine.GameSystem.UI
             OnUpdate(args);
         }
 
-        internal void InternalDraw(UIInfo args)
+        internal void InternalDraw(DrawUIEventArgs args)
         {
-            _args = args;
             OnDraw(args);
         }
 
-        protected bool IsMouseHover()
+        protected bool IsMouseHovered()
         {
-            return Rect.Contains(_args.MousePos().X, _args.MousePos().Y);
+            return Rect.Contains(_inputInfo.MousePos().X, _inputInfo.MousePos().Y);
         }
 
-        protected void ReleaseDrag()
-        {
-            _globalDragObject = null;
-        }
+        protected virtual void OnMouseClick(IInputInfo inputInfo)
+        { }
 
-        protected virtual void OnMouseClick(UIInfo args) { }
+        protected virtual void OnMouseStateChange(IInputInfo inputInfo)
+        { }
 
-        protected virtual void OnMouseStateChange(UIInfo args) { }
+        protected virtual void OnParentChanged(UIControl? parent)
+        { }
 
-        protected virtual void OnParentChanged(UIControl? parent) { }
+        protected virtual void OnUpdate(UpdateUIEventArgs args)
+        { }
 
-        protected virtual void OnUpdate(UIInfo args) { }
-
-        protected virtual void OnDraw(UIInfo args)
+        protected virtual void OnDraw(DrawUIEventArgs args)
         {
             args.SpriteBatch.DrawRectangle(Rect, BackgroundColor, BorderThickness);
         }
 
         #region Dragging
-        protected virtual object? OnStartDragging(UIInfo args) => null;
+        protected virtual object? OnStartDragging(IInputInfo inputInfo)
+            => null;
 
-        protected virtual void OnUpdateDragging(UIInfo args) { }
+        protected virtual void OnUpdateDragging(UpdateUIEventArgs args)
+        { }
 
-        protected virtual bool OnReleaseDragging() => true;
+        protected virtual bool OnReleaseDragging()
+            => true;
 
-        private void ProcessDragging(UIInfo args)
+        private void UpdateDragging(UpdateUIEventArgs args)
         {
-            if (!Dragging() &&
-                IsMouseHover() &&
-                args.InputInfo.IsMouseHeldDown(MouseKey.Left) &&
-                args.InputInfo.MouseMoving)
+            if(!Dragging() &&
+                IsMouseHovered() &&
+                _inputInfo.IsMouseHeldDown(MouseKey.Left) &&
+                _inputInfo.MouseMoving)
             {
-                _dragObject = OnStartDragging(args);
-                _globalDragObject = _dragObject;
+                _dragObject = OnStartDragging(_inputInfo);
+                s_dragObject = _dragObject;
             }
 
 
-            if (Dragging() && _globalDragObject == _dragObject)
+            if(Dragging() && s_dragObject == _dragObject)
             {
                 OnUpdateDragging(args);
 
-                if (args.InputInfo.IsMouseHeldUp(MouseKey.Left))
+                if(_inputInfo.IsMouseHeldUp(MouseKey.Left))
                 {
-                    if (OnReleaseDragging())
+                    if(OnReleaseDragging())
                     {
                         _dragObject = null;
-                        _globalDragObject = null;
+                        s_dragObject = null;
                     }
                 }
             }
         }
 
-        public void Dispose()
-        {
-            if (Parent != null)
-            {
-                Parent.RemoveChild(this);
-            }
-        }
         #endregion
+        public bool IsActive;
 
-        #region Private_Variables
+        public UIControl? Parent
+        { get => _parent; }
+
+        public UIControl[] Childs
+            => _childs.ToArray();
+
+        public Color BackgroundColor;
+
         public RectangleF Rect;
 
         public float Width
@@ -205,15 +200,19 @@ namespace CruZ.GameEngine.GameSystem.UI
                 Rect.Y = value.Y;
             }
         }
-        
-        List<UIControl> _childs;
-        UIControl? _parent;
 
-        object? _dragObject;
-        UIInfo _args;
-        #endregion
+        private List<UIControl> _childs;
+        private UIControl? _parent;
+        private object? _dragObject;
+        private IInputInfo _inputInfo;
 
-        private static object? _globalDragObject = null;
-        public static bool Dragging() { return _globalDragObject != null; }
+        public void Dispose()
+        {
+            Parent?.RemoveChild(this);
+        }
+
+        private static object? s_dragObject;
+        public static bool Dragging()
+        { return s_dragObject != null; }
     }
 }

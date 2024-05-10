@@ -23,7 +23,7 @@ namespace CruZ.Editor.UI
             _lineSpacing = _font.LineHeight * _fontScale;
         }
 
-        protected override void OnDraw(UIInfo info)
+        protected override void OnDraw(DrawUIEventArgs info)
         {
             _sb = info.SpriteBatch;
             _curRow = -1;

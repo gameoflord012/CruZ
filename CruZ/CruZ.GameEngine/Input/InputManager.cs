@@ -1,6 +1,5 @@
 ﻿using System;
 
-using CruZ.GameEngine;
 using CruZ.GameEngine.Utility;
 
 using Microsoft.Xna.Framework;
@@ -8,26 +7,33 @@ using Microsoft.Xna.Framework.Input;
 
 namespace CruZ.GameEngine.Input
 {
-    interface IInputController
+    /// <summary>
+    /// Frame base input
+    /// </summary>
+    internal class GameInput
     {
-        void Update(GameTime gameTime);
-    }
+        internal static event Action<IInputInfo>? MouseScrolled;
+        internal static event Action<IInputInfo>? MouseMoved;
+        internal static event Action<IInputInfo>? MouseStateChanged;
+        internal static event Action<IInputInfo>? KeyStateChanged;
 
-    public class InputManager : IInputController
-    {
-        private InputManager() { }
+        private const float MouseClickDuration = 0.4f;
 
-        void IInputController.Update(GameTime gameTime)
+        private GameInput()
+        {
+        }
+
+        public void Update(GameTime gameTime)
         {
             _info = new();
 
             #region Update Input State
-            if (!GameApplication.IsActive())
+            if(!GameApplication.IsActive())
             {
                 _isActive = false;
                 return;
             }
-            else if (!_isActive) // One tick before reactive
+            else if(!_isActive) // One tick before reactive
             {
                 _isActive = true;
                 _preMouseState = Mouse.GetState();
@@ -50,21 +56,20 @@ namespace CruZ.GameEngine.Input
             _info.ScrollDelta = ScrollDelta();
             _info.IsMouseScrolling = ScrollDelta() != 0;
             _info.IsMouseMoving = DoesMouseMove();
-            _info.IsMouseStateChange = DoesMouseStateChange();
+            _info.IsMouseStateChange = DoesMouseButtonChange();
 
-            if (_info.IsMouseJustDown(MouseKey.Left))
+            if(_info.IsMouseJustDown(MouseKey.Left))
+            {
                 _timeSceneLastDownClick = gameTime.TotalGameTime();
+            }
 
             _info.IsMouseClick =
-                gameTime.TotalGameTime() - _timeSceneLastDownClick < MOUSE_CLICK_DURATION &&
+                gameTime.TotalGameTime() - _timeSceneLastDownClick < MouseClickDuration &&
                 _info.IsMouseJustUp(MouseKey.Left);
             #endregion
 
             InvokeEvents();
 
-            //
-            // update log
-            //
             LogManager.SetMsg(_info.CurMouse.Position.ToString(), "CursorCoord");
         }
 
@@ -81,20 +86,22 @@ namespace CruZ.GameEngine.Input
 
         private void InvokeEvents()
         {
-            if (_info.IsMouseMoving) MouseMoved?.Invoke(_info);
-            if (_info.IsMouseScrolling) MouseScrolled?.Invoke(_info);
-            if (_info.IsMouseStateChange) MouseStateChanged?.Invoke(_info);
+            if(_info.IsMouseMoving) MouseMoved?.Invoke(_info);
+            if(_info.IsMouseScrolling) MouseScrolled?.Invoke(_info);
+            if(_info.IsMouseStateChange) MouseStateChanged?.Invoke(_info);
 
-            if (_info.PreKeyboard.GetHashCode() != _info.CurKeyboard.GetHashCode())
+            if(_info.PreKeyboard.GetHashCode() != _info.CurKeyboard.GetHashCode())
+            {
                 KeyStateChanged?.Invoke(_info);
+            }
         }
 
-        private bool DoesMouseStateChange()
+        private bool DoesMouseButtonChange()
         {
             return
-                GetMouseState(_info.CurMouse, MouseKey.Left) != GetMouseState(_info.PreMouse, MouseKey.Left) ||
-                GetMouseState(_info.CurMouse, MouseKey.Middle) != GetMouseState(_info.PreMouse, MouseKey.Middle) ||
-                GetMouseState(_info.CurMouse, MouseKey.Right) != GetMouseState(_info.PreMouse, MouseKey.Right);
+                _info.CurMouse.ButtonState(MouseKey.Left) != _info.PreMouse.ButtonState(MouseKey.Left) ||
+                _info.CurMouse.ButtonState(MouseKey.Middle) != _info.PreMouse.ButtonState(MouseKey.Middle) ||
+                _info.CurMouse.ButtonState(MouseKey.Right) != _info.PreMouse.ButtonState(MouseKey.Right);
         }
 
         private bool DoesMouseMove()
@@ -102,136 +109,24 @@ namespace CruZ.GameEngine.Input
             return MouseMoveDelta() != new Point(0, 0);
         }
 
-        internal static ButtonState GetMouseState(MouseState state, MouseKey key)
+        private InputInfo _info;
+        private bool _isActive;
+        private KeyboardState _preKeyboard;
+        private MouseState _preMouseState;
+        private float _timeSceneLastDownClick;
+
+        internal static GameInput CreateContext()
         {
-            switch (key)
-            {
-                case MouseKey.Left:
-                    return state.LeftButton;
-                case MouseKey.Middle:
-                    return state.MiddleButton;
-                case MouseKey.Right:
-                    return state.RightButton;
-                default:
-                    throw new Exception();
-            }
-        }
-
-        InputInfo _info;
-        bool _isActive;
-
-        KeyboardState _preKeyboard;
-        MouseState _preMouseState;
-
-        float _timeSceneLastDownClick;
-        const float MOUSE_CLICK_DURATION = 0.4f;
-
-        public static event Action<IInputInfo>? MouseScrolled;
-        public static event Action<IInputInfo>? MouseMoved;
-        public static event Action<IInputInfo>? MouseStateChanged;
-        public static event Action<IInputInfo>? KeyStateChanged;
-
-        public static IInputInfo Info => _instance._info;
-
-        static InputManager? _instance;
-
-        internal static IInputController CreateContext()
-        {
+            if(_instance != null) throw new InvalidOperationException();
             return _instance = new();
         }
-    }
 
-    public enum MouseKey
-    {
-        Left,
-        Middle,
-        Right
-    }
-
-    struct InputInfo : IInputInfo
-    {
-        internal MouseState CurMouse;
-        internal MouseState PreMouse;
-
-        internal KeyboardState PreKeyboard;
-        internal KeyboardState CurKeyboard;
-
-        internal int ScrollDelta;
-        internal bool IsMouseMoving;
-        internal bool IsMouseClick;
-        internal bool IsMouseScrolling;
-        internal bool IsMouseStateChange;
-
-        bool IInputInfo.MouseClick => IsMouseClick;
-        int IInputInfo.SrollDelta => ScrollDelta;
-        bool IInputInfo.MouseMoving => IsMouseMoving;
-
-        public bool MouseStateChanges => IsMouseStateChange;
-
-        KeyboardState IInputInfo.Keyboard => CurKeyboard;
-        KeyboardState IInputInfo.PreKeyboard => PreKeyboard;
-        MouseState IInputInfo.CurMouse => CurMouse;
-        MouseState IInputInfo.PreMouse => PreMouse;
-
-        public bool IsMouseJustDown(MouseKey key)
+        public static IInputInfo GetLastInfo()
         {
-            return
-                InputManager.GetMouseState(CurMouse, key) == ButtonState.Pressed &&
-                InputManager.GetMouseState(PreMouse, key) == ButtonState.Released;
+            if(_instance == null) throw new InvalidOperationException();
+            return _instance._info;
         }
 
-        public bool IsMouseJustUp(MouseKey key)
-        {
-            return
-                InputManager.GetMouseState(PreMouse, key) == ButtonState.Pressed &&
-                InputManager.GetMouseState(CurMouse, key) == ButtonState.Released;
-        }
-
-        public bool IsMouseHeldDown(MouseKey key)
-        {
-            return
-                InputManager.GetMouseState(CurMouse, key) == ButtonState.Pressed;
-        }
-
-        public bool IsMouseHeldUp(MouseKey key)
-        {
-            return
-                InputManager.GetMouseState(CurMouse, key) == ButtonState.Released;
-        }
-    }
-
-    public interface IInputInfo
-    {
-        int SrollDelta { get; }
-
-        MouseState CurMouse { get; }
-        MouseState PreMouse { get; }
-
-        KeyboardState PreKeyboard { get; }
-        KeyboardState Keyboard { get; }
-
-        bool MouseStateChanges { get; }
-        bool MouseClick { get; }
-        bool MouseMoving { get; }
-
-        bool IsMouseHeldDown(MouseKey key);
-        bool IsMouseHeldUp(MouseKey key);
-        bool IsMouseJustDown(MouseKey key);
-        bool IsMouseJustUp(MouseKey key);
-
-        bool IsKeyJustDown(Keys key)
-        {
-            return PreKeyboard.IsKeyUp(key) && Keyboard.IsKeyDown(key);
-        }
-
-        bool IsKeyHeldDown(Keys key)
-        {
-            return Keyboard.IsKeyDown(key);
-        }
-
-        Point MousePos()
-        {
-            return new(CurMouse.X, CurMouse.Y);
-        }
+        private static GameInput? _instance;
     }
 }

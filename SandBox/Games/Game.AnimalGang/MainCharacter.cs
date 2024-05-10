@@ -31,7 +31,7 @@ namespace AnimalGang
         protected override void OnUpdate(GameTime gameTime)
         {
             #region AttackLogics
-            //if (InputManager.Info.Keyboard.IsKeyDown(Keys.Space))
+            //if (GameInput.Info.Keyboard.IsKeyDown(Keys.Space))
             //{
             //    _attackTimer = 0;
             //    _animation.SelectTag("player-sword-attack").Play("attack");

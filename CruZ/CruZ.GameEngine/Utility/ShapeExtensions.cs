@@ -13,7 +13,7 @@ namespace CruZ.GameEngine.Utility
     /// </summary>
     public static class ShapeExtensions
     {
-        private static Texture2D _whitePixelTexture;
+        private static Texture2D? _whitePixelTexture;
 
         private static Texture2D GetTexture(SpriteBatch spriteBatch)
         {

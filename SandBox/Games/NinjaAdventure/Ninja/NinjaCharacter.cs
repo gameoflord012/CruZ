@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Collections.Immutable;
-using System.Diagnostics.CodeAnalysis;
 
 using CruZ.GameEngine.GameSystem;
 using CruZ.GameEngine.GameSystem.Animation;
 using CruZ.GameEngine.GameSystem.ECS;
 using CruZ.GameEngine.GameSystem.Physic;
 using CruZ.GameEngine.GameSystem.Scene;
-using CruZ.GameEngine.GameSystem.Script;
 using CruZ.GameEngine.GameSystem.StateMachine;
 
 using Genbox.VelcroPhysics.Collision.ContactSystem;
@@ -91,7 +88,7 @@ namespace NinjaAdventure
 
         private void Physic_OnSeperation(Fixture fixtureA, Fixture fixtureB, Contact contact)
         {
-            if (IsMonster(fixtureB))
+            if(IsMonster(fixtureB))
             {
                 _stateData.MonsterCount--;
             }
@@ -99,7 +96,7 @@ namespace NinjaAdventure
 
         private void Physic_OnCollision(Fixture fixtureA, Fixture fixtureB, Contact contact)
         {
-            if (IsMonster(fixtureB))
+            if(IsMonster(fixtureB))
             {
                 _stateData.MonsterCount++;
                 _stateData.LastMonsterBody = fixtureB.Body;
@@ -111,17 +108,19 @@ namespace NinjaAdventure
             return fixtureB.Body.UserData is LarvaMonster;
         }
 
-        PhysicBodyComponent _physic;
-        HealthComponent _health;
-        StateMachineComponent _machine;
-        SpriteRendererComponent _spriteRenderer;
+        public TransformEntity Entity
+        {
+            get;
+            private set;
+        }
 
-        AnimationComponent _animationComponent;
-        Pool<Suriken> _surikenPool;
-
-        GameScene _gameScene;
-
-        public TransformEntity Entity;
+        private PhysicBodyComponent _physic;
+        private HealthComponent _health;
+        private StateMachineComponent _machine;
+        private SpriteRendererComponent _spriteRenderer;
+        private AnimationComponent _animationComponent;
+        private Pool<Suriken> _surikenPool;
+        private GameScene _gameScene;
         private NinjaStateData _stateData;
 
         public void Dispose()

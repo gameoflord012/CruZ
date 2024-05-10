@@ -24,7 +24,7 @@ namespace CruZ.GameEngine.GameSystem
             _blendState.AlphaDestinationBlend = Blend.InverseSourceAlpha;
         }
 
-        protected override void OnDraw(EntitySystemEventArgs args)
+        protected override void OnDraw(SystemEventArgs args)
         {
             _gd.SetRenderTarget(null);
             _gd.Clear(GameConstants.GameBackgroundColor);

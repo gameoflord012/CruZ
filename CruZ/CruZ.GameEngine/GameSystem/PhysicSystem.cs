@@ -1,4 +1,4 @@
-﻿//using Box2D.NetStandard.Dynamics.ECSWorld;
+﻿//using Box2D.NetStandard.Dynamics.AttachedWorld;
 //using CruZ.ECSManager;
 //using Microsoft.Xna.Framework;
 //using MonoGame.Extended.Entities;
@@ -32,7 +32,7 @@
 //            _physicWorld.Step((float)gameTime.ElapsedGameTime.TotalGameTime, 6, 2);
 //        }
 
-//        Box2D.NetStandard.Dynamics.ECSWorld.ECSWorld _physicWorld;
+//        Box2D.NetStandard.Dynamics.AttachedWorld.AttachedWorld _physicWorld;
 //        ComponentMapper<PhysicBody> _physicBodyMapper;
 //    }
 //}

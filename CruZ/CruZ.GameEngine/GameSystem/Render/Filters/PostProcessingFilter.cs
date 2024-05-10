@@ -1,4 +1,6 @@
-﻿using CruZ.GameEngine;
+﻿using System.Diagnostics.CodeAnalysis;
+
+using CruZ.GameEngine;
 using CruZ.GameEngine.Utility;
 
 using Microsoft.Xna.Framework.Graphics;
@@ -29,7 +31,7 @@ namespace CruZ.GameEngine.GameSystem.Render.Filters
             _gd.BlendState = BlendState.Opaque;
             _quadRenderer.RenderFullScreen();
 
-            return _rt;
+            return _rt!;
         }
 
         private void PrepareRenderTarget(Texture2D tex)
@@ -45,7 +47,7 @@ namespace CruZ.GameEngine.GameSystem.Render.Filters
         }
 
         QuadRenderer _quadRenderer;
-        RenderTarget2D? _rt;
+        RenderTarget2D _rt;
         GraphicsDevice _gd;
         Effect _fx;
 

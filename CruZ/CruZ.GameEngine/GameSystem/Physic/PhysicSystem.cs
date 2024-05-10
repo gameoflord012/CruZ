@@ -26,23 +26,23 @@ namespace CruZ.GameEngine.GameSystem.Physic
                 GameApplication.InternalResource.ContentDir);
         }
 
-        protected override void OnUpdate(EntitySystemEventArgs args)
+        protected override void OnUpdate(SystemEventArgs args)
         {
             _physicWorld.Step(args.GameTime.DeltaTime());
 
-            foreach (var physic in args.ActiveEntities.GetAllComponents<PhysicBodyComponent>())
+            foreach(var physic in args.ActiveEntities.GetAllComponents<PhysicBodyComponent>())
             {
                 physic.Update(args.GameTime);
             }
         }
 
-        protected override void OnDraw(EntitySystemEventArgs args)
+        protected override void OnDraw(SystemEventArgs args)
         {
 
             _gd.SetRenderTarget(RenderTargetSystem.PhysicRT);
             _gd.Clear(Color.Transparent);
 
-            if (ShowDebug)
+            if(ShowDebug)
             {
                 _debugView.RenderDebugData(
                 Camera.Main.ProjectionMatrix(),
@@ -58,16 +58,16 @@ namespace CruZ.GameEngine.GameSystem.Physic
             IsDisposed = true;
         }
 
-        GraphicsDevice _gd;
+        private GraphicsDevice _gd;
 
         internal bool IsDisposed { get; private set; }
 
         public bool ShowDebug = true;
+        private DebugView _debugView;
+        public World World
+        { get => _physicWorld; }
 
-        DebugView _debugView;
-        public World World { get => _physicWorld; }
-
-        World _physicWorld;
+        private World _physicWorld;
 
         private static PhysicSystem? s_instance;
 
@@ -78,7 +78,7 @@ namespace CruZ.GameEngine.GameSystem.Physic
 
         internal static PhysicSystem CreateContext()
         {
-            if (s_instance != null && !s_instance.IsDisposed) throw new System.InvalidOperationException();
+            if(s_instance != null && !s_instance.IsDisposed) throw new System.InvalidOperationException();
             return s_instance = new PhysicSystem();
         }
     }

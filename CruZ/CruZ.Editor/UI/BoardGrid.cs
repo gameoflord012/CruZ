@@ -15,7 +15,7 @@ using CruZ.GameEngine.Utility;
 
 public class BoardGrid : UIControl
 {
-    protected override void OnDraw(UIInfo args)
+    protected override void OnDraw(DrawUIEventArgs args)
     {
         var sp = args.SpriteBatch;
         var vp_Width = GameApplication.GetGraphicsDevice().Viewport.Width;

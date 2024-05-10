@@ -4,6 +4,8 @@ using System.Diagnostics;
 using CruZ.GameEngine.GameSystem;
 using CruZ.GameEngine.GameSystem.ECS;
 using CruZ.GameEngine.GameSystem.Scene;
+using CruZ.GameEngine.GameSystem.Script;
+using CruZ.GameEngine.GameSystem.UI;
 using CruZ.GameEngine.Utility;
 
 using Microsoft.Xna.Framework;
@@ -12,7 +14,7 @@ namespace NinjaAdventure
 {
     internal class MonsterSpawner : ScriptingEntity
     {
-        private const int MaxCount = 1;
+        private const int MaxPoolCount = 5;
         private const float SpawnRadius = 5;
         private const float SpawnDuration = 1f;
 
@@ -40,10 +42,10 @@ namespace NinjaAdventure
             Entity.AddComponent(_monsterRenderer);
         }
 
-        protected override void OnUpdating(GameTime time)
+        protected override void OnUpdating(ScriptUpdateArgs args)
         {
             if(_spawnTimer.GetElapsed() > SpawnDuration &&
-                (_monsterPool.PopCount < MaxCount))
+                (_monsterPool.PopCount < MaxPoolCount))
             {
                 _spawnTimer.Restart();
 

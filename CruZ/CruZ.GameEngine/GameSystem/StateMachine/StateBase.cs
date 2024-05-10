@@ -23,22 +23,25 @@ namespace CruZ.GameEngine.GameSystem.StateMachine
 
         }
 
-        internal void DoUpdate(GameTime time)
+        internal void InternalUpdate(StateUpdateArgs args)
         {
-            OnStateUpdate(time);
+#pragma warning disable CS0612 // Type or member is obsolete
+            OnStateUpdate(args.GameTime); // legacy purpose, should only call the last one
+#pragma warning restore CS0612 // Type or member is obsolete
+            OnStateUpdate(args);
         }
 
-        internal void DoDraw(GameTime time)
+        internal void InternalDraw(GameTime time)
         {
             OnDraw(time);
         }
 
-        internal void DoStateEnter()
+        internal void InternalStateEnter()
         {
             OnStateEnter();
         }
 
-        internal void DoStateExit()
+        internal void InternalStateExit()
         {
             OnStateExit();
         }
@@ -48,9 +51,15 @@ namespace CruZ.GameEngine.GameSystem.StateMachine
             return CanTransitionTo();
         }
 
+        [Obsolete]
         protected virtual void OnStateUpdate(GameTime gameTime)
         {
         
+        }
+
+        protected virtual void OnStateUpdate(StateUpdateArgs args)
+        {
+
         }
 
         protected virtual void OnDraw(GameTime gameTime)
@@ -73,7 +82,7 @@ namespace CruZ.GameEngine.GameSystem.StateMachine
             return true;
         }
 
-        internal void DoTransitionChecking()
+        internal void InternalTransitionChecking()
         {
             OnTransitionChecking();
         }

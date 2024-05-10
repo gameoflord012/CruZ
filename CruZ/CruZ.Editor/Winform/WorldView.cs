@@ -113,7 +113,7 @@ namespace CruZ.Editor
                 world_TreeView.Nodes.Clear();
                 _entityToNode.Clear();
                 //
-                // init data with new ECSWorld
+                // init data with new AttachedWorld
                 //
                 world.EntityAdded += OnEntityAdded;
                 world.EntityRemoved += OnEntityRemoved;

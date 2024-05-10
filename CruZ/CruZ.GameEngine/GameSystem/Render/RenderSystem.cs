@@ -15,7 +15,7 @@ namespace CruZ.GameEngine.GameSystem.Render
             _postprocessing = new PostProcessingFilter();
         }
 
-        protected override void OnDraw(EntitySystemEventArgs args)
+        protected override void OnDraw(SystemEventArgs args)
         {
             var rendererComponents = args.
                 ActiveEntities.GetAllComponents<RendererComponent>(GetComponentMode.Inherit);

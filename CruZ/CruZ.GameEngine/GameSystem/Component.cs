@@ -8,7 +8,6 @@ namespace CruZ.GameEngine.GameSystem
     /// <summary>
     /// Base class for Components, every component should have non-parameter constructor
     /// </summary>
-    [JsonConverter(typeof(ComponentJsonConverter))]
     public abstract class Component : IDisposable
     {
         protected virtual void OnAttached(TransformEntity entity) { }

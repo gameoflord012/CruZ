@@ -34,9 +34,9 @@ namespace CruZ.GameEngine.GameSystem.Animation
             _renderer.DrawRequestsFetching += SpriteRenderer_FetchingDrawRequests;
         }
 
-        public void LoadAnimationFile(string resourcePath, string prefix = default)
+        public void LoadAnimationFile(string resourcePath, string? prefix = default)
         {
-            if (!_resource.TryGetCache(resourcePath, out SpriteSheet spriteSheet))
+            if (!_resource.TryGetCache(resourcePath, out SpriteSheet? spriteSheet))
             {
                 var file = _resource.Load<AsepriteFile>(resourcePath, true);
                 spriteSheet = file.CreateSpriteSheet(GameApplication.GetGraphicsDevice());
@@ -44,10 +44,10 @@ namespace CruZ.GameEngine.GameSystem.Animation
                 _resource.Cache(resourcePath, spriteSheet);
             }
 
-            LoadSpriteSheet(spriteSheet, prefix);
+            LoadSpriteSheet(spriteSheet!, prefix);
         }
 
-        private void LoadSpriteSheet(SpriteSheet spriteSheet, string prefix)
+        private void LoadSpriteSheet(SpriteSheet spriteSheet, string? prefix)
         {
             foreach (var tag in spriteSheet.GetAnimationTagNames())
             {
@@ -71,7 +71,7 @@ namespace CruZ.GameEngine.GameSystem.Animation
         }
 
         public void Play(string animationTag, int loopCount = 0,
-            Action<AnimatedSprite> animationEndCallback = default)
+            Action<AnimatedSprite>? animationEndCallback = default)
         {
             _animationEndCallback = animationEndCallback;
 
@@ -98,7 +98,7 @@ namespace CruZ.GameEngine.GameSystem.Animation
             animatedSprite.OnAnimationEnd = null;
         }
 
-        private Action<AnimatedSprite> _animationEndCallback;
+        private Action<AnimatedSprite>? _animationEndCallback;
 
         public string CurrentAnimationName()
         {

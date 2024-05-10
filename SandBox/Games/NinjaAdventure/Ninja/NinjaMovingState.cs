@@ -11,11 +11,11 @@ using NinjaAdventure.Ninja;
 namespace NinjaAdventure
 {
     internal class NinjaMovingState : StateBase<NinjaStateData>
-    { 
+    {
         protected override void OnStateMachineAttached()
         {
             base.OnStateMachineAttached();
-            InputManager.KeyStateChanged += Input_KeyStateChanged;
+            UISystem.Instance.KeyStateChanged += Input_KeyStateChanged;
         }
 
         protected override void OnStateEnter()
@@ -89,7 +89,6 @@ namespace NinjaAdventure
         public override void Dispose()
         {
             base.Dispose();
-
             InputManager.KeyStateChanged -= Input_KeyStateChanged;
         }
     }

@@ -9,7 +9,7 @@ namespace CruZ.GameEngine.GameSystem.UI
             BackgroundColor = Color.Yellow;
         }
 
-        protected override void OnDraw(UIInfo args)
+        protected override void OnDraw(DrawUIEventArgs args)
         {
             base.OnDraw(args);
         }

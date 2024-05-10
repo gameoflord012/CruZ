@@ -50,7 +50,7 @@ namespace CruZ.GameEngine.GameSystem.Render
             LayerDepth = sprite.LayerDepth;
         }
 
-        public WorldRectangle GetWorldBound() // in ECSWorld Coordinate
+        public WorldRectangle GetWorldBound() // in AttachedWorld Coordinate
         {
             WorldRectangle rect = new();
 

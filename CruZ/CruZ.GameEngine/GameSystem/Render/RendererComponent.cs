@@ -18,6 +18,8 @@ namespace CruZ.GameEngine.GameSystem.Render
 
         public int CompareTo(RendererComponent? other)
         {
+            if (other == null) return 1;
+
             var sortingLayerCompare = SortingLayer.CompareTo(other.SortingLayer);
             return sortingLayerCompare == 0 ? LayerDepth.CompareTo(other.LayerDepth) : sortingLayerCompare;
         }

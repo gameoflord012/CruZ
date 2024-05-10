@@ -4,27 +4,43 @@ namespace CruZ.GameEngine.GameSystem
 {
     internal class EntitySystem : IDisposable
     {
-        public virtual void OnInitialize() { }
+        public virtual void OnInitialize()
+        {
+        }
 
-        internal void DoUpdate(EntitySystemEventArgs args)
+        internal void InternalUpdate(SystemEventArgs args)
         {
             OnUpdate(args);
         }
 
-        internal void DoDraw(EntitySystemEventArgs args)
+        internal void InternalDraw(SystemEventArgs args)
         {
             OnDraw(args);
         }
 
-        protected virtual void OnUpdate(EntitySystemEventArgs args)
+        internal void AddedInternal(ECSWorld world)
+        {
+            AttachedWorld = world;
+            OnAttached();
+        }
+
+        protected virtual void OnAttached()
         {
 
         }
 
-        protected virtual void OnDraw(EntitySystemEventArgs args)
+        protected virtual void OnUpdate(SystemEventArgs args)
         {
 
         }
+
+        protected virtual void OnDraw(SystemEventArgs args)
+        {
+
+        }
+
+        protected ECSWorld AttachedWorld
+        { get; private set; }
 
         public virtual void Dispose() { }
     }

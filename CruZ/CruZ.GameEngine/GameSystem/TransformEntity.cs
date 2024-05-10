@@ -58,18 +58,6 @@ namespace CruZ.GameEngine.GameSystem
             ComponentsChanged?.Invoke(new ComponentCollection(_components));
         }
 
-        //public void RemoveComponent(Type ty)
-        //{
-        //    if (!HasComponent(ty))
-        //        throw new ArgumentException($"{ty} already removed");
-
-        //    var comp = GetComponent(ty);
-        //    _components.Remove(ty);
-
-        //    comp.InternalOnDetached(this);
-        //    ComponentsChanged?.Invoke(new ComponentCollection(_components));
-        //}
-
         public bool HasComponent(Type ty)
         {
             return _components.ContainsKey(ty);

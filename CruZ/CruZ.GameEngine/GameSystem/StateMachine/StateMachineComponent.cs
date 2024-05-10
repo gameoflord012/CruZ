@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
-using System.Diagnostics;
 
 using CruZ.GameEngine.Utility;
 
@@ -30,7 +28,7 @@ namespace CruZ.GameEngine.GameSystem.StateMachine
             }
             else
             {
-                
+
                 var nextState = GetState(ty);
                 if(checking && (_currentState == nextState || !nextState.GetCanTransitionTo())) return;
                 _nextState = nextState;
@@ -46,53 +44,52 @@ namespace CruZ.GameEngine.GameSystem.StateMachine
             return state;
         }
 
-        internal void DoUpdate(GameTime gameTime)
+        internal void Update(StateUpdateArgs args)
         {
-            InjectedStateData.TotalGameTime = gameTime.TotalGameTime();
+            InjectedStateData.TotalGameTime = args.GameTime.TotalGameTime();
 
             CheckTransition();
-            _currentState?.DoUpdate(gameTime);
+            _currentState?.InternalUpdate(args);
         }
 
-        internal void DoDraw(GameTime gameTime)
+        internal void Draw(GameTime gameTime)
         {
             InjectedStateData.TotalGameTime = gameTime.TotalGameTime();
 
             CheckTransition();
-            _currentState?.DoDraw(gameTime);
+            _currentState?.InternalDraw(gameTime);
         }
 
         private void CheckTransition()
         {
-            _currentState?.DoTransitionChecking();
+            _currentState?.InternalTransitionChecking();
 
-            if (stateUpdateRequired)
+            if(stateUpdateRequired)
             {
-                _currentState?.DoStateExit();
+                _currentState?.InternalStateExit();
                 //Debug.WriteLine((_currentState == null ? "<None>" : $"<{_currentState.GetType().Name}>") + " EXIT");
                 _currentState = _nextState;
-                _currentState?.DoStateEnter();
+                _currentState?.InternalStateEnter();
                 //Debug.WriteLine((_currentState == null ? "<None>" : $"<{_currentState.GetType().Name}>") + " ENTER");
             }
             stateUpdateRequired = false;
         }
 
-        public Type? CurrentState => _currentState?.GetType();
+        public Type? CurrentState
+            => _currentState?.GetType();
+        public StateData InjectedStateData
+        { get; set; }
 
-        Dictionary<Type, StateBase> _states = [];
-
-        StateBase? _currentState;
-        StateBase? _nextState;
-
-        bool stateUpdateRequired = false;
-
-        public StateData InjectedStateData { get; set; }
+        private Dictionary<Type, StateBase> _states = [];
+        private StateBase? _currentState;
+        private StateBase? _nextState;
+        private bool stateUpdateRequired = false;
 
         public override void Dispose()
         {
             base.Dispose();
 
-            foreach (var state in _states.Values)
+            foreach(var state in _states.Values)
             {
                 state.Dispose();
             }

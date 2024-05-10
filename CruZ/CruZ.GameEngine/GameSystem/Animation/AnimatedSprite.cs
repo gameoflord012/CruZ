@@ -11,7 +11,7 @@
 //            _frameDuration = frameDuration;
 //        }
 
-//        public void DoUpdate(GameTime gameTime)
+//        public void InternalUpdate(GameTime gameTime)
 //        {
 //            _currentTime = gameTime.DeltaTime();
 //        }

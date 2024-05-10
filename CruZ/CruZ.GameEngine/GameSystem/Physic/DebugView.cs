@@ -1,3 +1,5 @@
+# nullable disable
+
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -304,7 +306,6 @@ namespace Genbox.VelcroPhysics.MonoGame.DebugView
                     MinimumValue = 0;
                 }
 
-                // start at the last value (newest value added) and go back until no values are left
                 LinkedListNode<float> current = _graphValues.Last;
                 LinkedListNode<float> previous = _graphValues.Last.Previous;
 
