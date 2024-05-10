@@ -68,7 +68,7 @@ namespace NinjaAdventure
             drawArgs.Apply(_surikenTex);
             drawArgs.Scale = new Vector2(SurikenSize / _surikenTex.Width, SurikenSize / _surikenTex.Height);
 
-            if(!drawArgs.IsOutOfScreen(Camera.Main.ProjectionMatrix()))
+            if(!drawArgs.IsOutOfScreen(Camera.Current.ProjectionMatrix()))
             {
                 drawRequests.Add(new SpriteDrawRequest(drawArgs));
             }

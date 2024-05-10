@@ -31,7 +31,7 @@ namespace CruZ.GameEngine.GameSystem.Render
             var eventArgs = new RenderSystemEventArgs(
                 args.GameTime,
                 _spriteBatch,
-                Camera.Main.ViewProjectionMatrix(),
+                Camera.Current.ViewProjectionMatrix(),
                 rendererRT);
 
             foreach (var renderer in rendererComponents)

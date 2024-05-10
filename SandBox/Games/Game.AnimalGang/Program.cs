@@ -17,7 +17,7 @@ namespace Game.AnimalGang
         {
             throw new NotImplementedException();
             //GameContext.GameResourceDir = "D:\\monogame-projects\\CruZ_GameEngine\\SandBox\\Games\\Game.AnimalGang\\Resource\\";
-            //Camera.Main.Zoom = 0.25f;
+            //Camera.Current.Zoom = 0.25f;
             //Scenes.FlameScene().SetActive(true);
         }
     }

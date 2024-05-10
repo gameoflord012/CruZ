@@ -45,7 +45,7 @@ namespace CruZ.GameEngine.GameSystem
 
         ScriptComponent _script;
 
-        public void Dispose()
+        public virtual void Dispose()
         {
             _script.Drawing -= OnDrawing;
             _script.Updating -= OnUpdating;

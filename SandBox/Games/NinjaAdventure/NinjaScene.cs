@@ -15,6 +15,7 @@ namespace NinjaAdventure
                 var ninja = new NinjaCharacter(scene);
                 var monsterSpawner = new MonsterSpawner(scene, ninja.Entity.Transform);
             }
+
             return scene;
         }
 

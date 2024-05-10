@@ -108,8 +108,9 @@ namespace CruZ.GameEngine
         {
             _spriteBatch = new(GraphicsDevice);
 
-            Camera.Main = new Camera(Window);
-            Camera.Main.PreserveScreenRatio = true;
+            _mainCamera = new Camera(Window);
+            Camera.Current = _mainCamera;
+            Camera.Current.PreserveScreenRatio = true;
 
             _ecs.Initialize();
             Initialized?.Invoke();
@@ -172,6 +173,7 @@ namespace CruZ.GameEngine
         private ResourceManager? _internalResource;
         private List<MarshalRequest> _marshalRequests;
         private bool _isDisposed;
+        private Camera _mainCamera;
 
         public void Dispose()
         {
@@ -252,6 +254,11 @@ namespace CruZ.GameEngine
         public static ResourceManager InternalResource
         {
             get => CheckNull(Instance._internalResource);
+        }
+
+        public static Camera MainCamera
+        {
+            get => Instance._mainCamera;
         }
 
         public static Func<AssemblyName, Assembly?> AssemblyResolver

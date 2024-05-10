@@ -1,6 +1,4 @@
-﻿using CruZ.GameEngine.Resource;
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Text.Json.Serialization;
@@ -12,7 +10,7 @@ namespace CruZ.GameEngine.GameSystem.Scene
         public event Action<TransformEntity>? EntityAdded;
         public event Action<TransformEntity>? EntityRemoved;
 
-        public string Name 
+        public string Name
         {
             get => _name;
             set
@@ -23,11 +21,10 @@ namespace CruZ.GameEngine.GameSystem.Scene
             }
         }
 
-        string _name = "Noname Scene";
+        private string _name = "Noname Scene";
 
         [JsonIgnore]
         public IImmutableList<TransformEntity> Entities { get => _entities.ToImmutableList(); }
-        //ResourceInfo? IResource.Info { get; set; }
 
         public GameScene()
         {
@@ -38,7 +35,7 @@ namespace CruZ.GameEngine.GameSystem.Scene
 
         private void AddEntity(TransformEntity e)
         {
-            if (_entities.Contains(e)) return;
+            if(_entities.Contains(e)) return;
             _entities.Add(e);
 
             e.IsActive = true;
@@ -49,7 +46,7 @@ namespace CruZ.GameEngine.GameSystem.Scene
 
         private void Entity_RemovedFromWorld(TransformEntity e)
         {
-            if (!_entities.Contains(e))
+            if(!_entities.Contains(e))
                 throw new ArgumentException($"Entity \"{e}\" not in scene {this}");
 
             _entities.Remove(e);
@@ -65,7 +62,7 @@ namespace CruZ.GameEngine.GameSystem.Scene
         {
             var e = ECSManager.CreateEntity();
 
-            if (!string.IsNullOrEmpty(name)) e.Name = name;
+            if(!string.IsNullOrEmpty(name)) e.Name = name;
             e.Parent = parent ?? SceneRoot;
 
             AddEntity(e);
@@ -73,9 +70,8 @@ namespace CruZ.GameEngine.GameSystem.Scene
             return e;
         }
 
-        TransformEntity SceneRoot;
-
-        List<TransformEntity> _entities = [];
+        private TransformEntity SceneRoot;
+        private List<TransformEntity> _entities = [];
 
         private void Game_Exiting()
         {
@@ -84,7 +80,7 @@ namespace CruZ.GameEngine.GameSystem.Scene
 
         public void Dispose()
         {
-            foreach (var e in _entities.ToImmutableList())
+            foreach(var e in _entities.ToImmutableList())
             {
                 e.Dispose();
             }

@@ -45,8 +45,8 @@ namespace CruZ.GameEngine.GameSystem.Physic
             if(ShowDebug)
             {
                 _debugView.RenderDebugData(
-                Camera.Main.ProjectionMatrix(),
-                Camera.Main.ViewMatrix());
+                Camera.Current.ProjectionMatrix(),
+                Camera.Current.ViewMatrix());
             }
 
             _gd.SetRenderTarget(null);

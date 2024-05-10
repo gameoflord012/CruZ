@@ -8,17 +8,26 @@ namespace CruZ.GameEngine.GameSystem
 {
     public class Camera
     {
-        private static Camera? _mainCamera;
-        public static Camera Main
+        private static Camera? s_current;
+
+        /// <summary>
+        /// Current displaying camera, maybe override by editor. Consider using GameApplication.MainCamera instead
+        /// </summary>
+        public static Camera Current
         {
-            get => _mainCamera ?? throw new InvalidOperationException("Main camera is not assigned");
-            set => _mainCamera = value;
+            get => s_current ?? throw new InvalidOperationException("Main camera is not assigned");
+            internal set
+            {
+                s_current = value;
+                s_current.UpdateLog();
+            }
         }
 
         public Camera(GameWindow window)
         {
             ViewPortWidth = window.ClientBounds.Width;
             ViewPortHeight = window.ClientBounds.Height;
+            Zoom = 1;
             _virtualWidth = ViewPortWidth;
             _virtualHeight = ViewPortHeight;
             _window = window;
@@ -140,12 +149,27 @@ namespace CruZ.GameEngine.GameSystem
             set
             {
                 _cameraOffset = value;
-                LogManager.SetMsg($"<{_cameraOffset.X} {_cameraOffset.Y}>", "CameraWorldCoord");
+                UpdateLog();
             }
         }
 
-        public Vector2 _cameraOffset;
-        public float Zoom = 1;
+        public float Zoom
+        {
+            get => _zoom;
+            set
+            {
+                _zoom = value;
+                UpdateLog();
+            }
+        }
+
+        private void UpdateLog()
+        {
+            if(s_current == this)
+            {
+                LogManager.SetMsg($"<{_cameraOffset.X} {_cameraOffset.Y}> | Zoom: {_zoom}", "CameraWorldCoord");
+            }
+        }
 
         /// <summary>
         /// If true, the virtual height will be calculated relative to virtual width and the screen ratio <br/>
@@ -174,12 +198,12 @@ namespace CruZ.GameEngine.GameSystem
             set => _virtualHeight = value;
         }
 
-        float _viewPortWidth;
-        float _viewPortHeight;
-
-        float _virtualWidth = 19;
-        float _virtualHeight = 10;
-
-        GameWindow _window;
+        private Vector2 _cameraOffset;
+        private float _viewPortWidth;
+        private float _viewPortHeight;
+        private float _virtualWidth = 19;
+        private float _virtualHeight = 10;
+        private float _zoom;
+        private GameWindow _window;
     }
 }

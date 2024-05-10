@@ -15,8 +15,15 @@ using CruZ.GameEngine.Utility;
 
 public class BoardGrid : UIControl
 {
+    public BoardGrid()
+    {
+        ShoudDisplay = true;
+    }
+
     protected override void OnDraw(DrawUIEventArgs args)
     {
+        if(!ShoudDisplay) return;
+
         var sp = args.SpriteBatch;
         var vp_Width = GameApplication.GetGraphicsDevice().Viewport.Width;
         var vp_Height = GameApplication.GetGraphicsDevice().Viewport.Height;
@@ -30,16 +37,22 @@ public class BoardGrid : UIControl
         sp.DrawLine(center.X - 10, center.Y, center.X + 10, center.Y, Color.Black);
     }
 
+    public bool ShoudDisplay
+    {
+        get;
+        set;
+    }
+
     private void DrawAxis(SpriteBatch spriteBatch)
     {
         const int MAX_LINE_IN_SCREEN = 25;
 
-        float minBoardScreenSize = Camera.Main.ViewPortWidth / MAX_LINE_IN_SCREEN;
+        float minBoardScreenSize = Camera.Current.ViewPortWidth / MAX_LINE_IN_SCREEN;
         //
         // x2 if board size is smaller than minBoardScreenSize
         //
         int boardWorldSize = 1;
-        while (boardWorldSize * Camera.Main.ScreenToWorldRatio().X < minBoardScreenSize)
+        while (boardWorldSize * Camera.Current.ScreenToWorldRatio().X < minBoardScreenSize)
             boardWorldSize *= 2;
 
         var boardColor = boardWorldSize == 1 ?
@@ -50,10 +63,10 @@ public class BoardGrid : UIControl
 
         void DrawBoard(int boardSize, Color boardColor)
         {
-            var center = Camera.Main.CameraOffset;
+            var center = Camera.Current.CameraOffset;
 
-            var x_distance = Camera.Main.ViewPortWidth / Camera.Main.ScreenToWorldRatio().X;
-            var y_distance = Camera.Main.ViewPortHeight / -Camera.Main.ScreenToWorldRatio().Y;
+            var x_distance = Camera.Current.ViewPortWidth / Camera.Current.ScreenToWorldRatio().X;
+            var y_distance = Camera.Current.ViewPortHeight / -Camera.Current.ScreenToWorldRatio().Y;
 
             var min_x = center.X - x_distance;
             var max_x = center.X + x_distance;
@@ -63,16 +76,16 @@ public class BoardGrid : UIControl
 
             for (float x = (int)min_x / boardSize * boardSize; x < max_x; x += boardSize)
             {
-                var p1 = Camera.Main.CoordinateToPoint(new Vector2(x, min_y));
-                var p2 = Camera.Main.CoordinateToPoint(new Vector2(x, max_y));
+                var p1 = Camera.Current.CoordinateToPoint(new Vector2(x, min_y));
+                var p2 = Camera.Current.CoordinateToPoint(new Vector2(x, max_y));
 
                 spriteBatch.DrawLine(p1.X, p1.Y, p2.X, p2.Y, boardColor);
             }
 
             for (float y = (int)min_y / boardSize * boardSize; y < max_y; y += boardSize)
             {
-                var p1 = Camera.Main.CoordinateToPoint(new(min_x, y));
-                var p2 = Camera.Main.CoordinateToPoint(new(max_x, y));
+                var p1 = Camera.Current.CoordinateToPoint(new(min_x, y));
+                var p2 = Camera.Current.CoordinateToPoint(new(max_x, y));
 
                 spriteBatch.DrawLine(p1.X, p1.Y, p2.X, p2.Y, boardColor);
             }

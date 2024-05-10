@@ -7,7 +7,6 @@ namespace CruZ.GameEngine.GameSystem.Input
         protected override void OnUpdate(SystemEventArgs args)
         {
             base.OnUpdate(args);
-
             _inputInfo = GameInput.GetLastInfo();
         }
 

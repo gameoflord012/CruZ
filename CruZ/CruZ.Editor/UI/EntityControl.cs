@@ -46,7 +46,7 @@ namespace CruZ.Editor.UI
             if(uiRect.WorldBound == null) return;
 
             var worldBound = _worldBound!.Value;
-            Rect = worldBound.ToScreen(Camera.Main);
+            Rect = worldBound.ToScreen(Camera.Current);
         }
 
         private void SetCenter(Point p)
@@ -62,7 +62,7 @@ namespace CruZ.Editor.UI
 
             if(Draggable)
             {
-                var ePoint = Camera.Main.CoordinateToPoint(_attachedEntity.Transform.Position);
+                var ePoint = Camera.Current.CoordinateToPoint(_attachedEntity.Transform.Position);
                 _dragCenterOffset = new(
                     input.MousePos().X - ePoint.X,
                     input.MousePos().Y - ePoint.Y);
@@ -77,7 +77,7 @@ namespace CruZ.Editor.UI
                 info.InputInfo.MousePos().X - _dragCenterOffset.X,
                 info.InputInfo.MousePos().Y - _dragCenterOffset.Y);
 
-            _attachedEntity!.Transform.Position = Camera.Main.PointToCoordinate(ePoint);
+            _attachedEntity!.Transform.Position = Camera.Current.PointToCoordinate(ePoint);
         }
 
         protected override void OnDraw(DrawUIEventArgs args)
@@ -88,7 +88,7 @@ namespace CruZ.Editor.UI
 
             foreach(var origin in _points)
             {
-                var screen = Camera.Main.CoordinateToPoint(origin);
+                var screen = Camera.Current.CoordinateToPoint(origin);
 
                 args.SpriteBatch.DrawCircle(new(screen.X, screen.Y),
                     EditorConstants.PointSize, 8, Color.Blue);
@@ -103,7 +103,7 @@ namespace CruZ.Editor.UI
             {
                 Width = MinBoundSize;
                 Height = MinBoundSize;
-                var center = Camera.Main.CoordinateToPoint(_attachedEntity.Transform.Position);
+                var center = Camera.Current.CoordinateToPoint(_attachedEntity.Transform.Position);
                 SetCenter(center);
             }
 

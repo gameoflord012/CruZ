@@ -1,10 +1,12 @@
 ﻿using System;
 
+using CruZ.GameEngine;
 using CruZ.GameEngine.GameSystem;
 using CruZ.GameEngine.GameSystem.Animation;
 using CruZ.GameEngine.GameSystem.ECS;
 using CruZ.GameEngine.GameSystem.Physic;
 using CruZ.GameEngine.GameSystem.Scene;
+using CruZ.GameEngine.GameSystem.Script;
 using CruZ.GameEngine.GameSystem.StateMachine;
 
 using Genbox.VelcroPhysics.Collision.ContactSystem;
@@ -17,12 +19,13 @@ using NinjaAdventure.Ninja;
 
 namespace NinjaAdventure
 {
-    internal class NinjaCharacter : IDisposable
+    internal class NinjaCharacter : ScriptingEntity, IDisposable
     {
-        public NinjaCharacter(GameScene scene)
+        public NinjaCharacter(GameScene scene) : base(scene)
         {
             _gameScene = scene;
-            Entity = scene.CreateEntity("Ninja");
+            _camera = GameApplication.MainCamera;
+            Entity.Name = "Ninja";
 
             InitializeComponents();
 
@@ -80,10 +83,18 @@ namespace NinjaAdventure
             _machine.SetNextState(typeof(NinjaMovingState), false);
         }
 
-        internal void SpawnSuriken(Vector2 direction)
+        public void SpawnSuriken(Vector2 direction)
         {
             var suriken = _surikenPool.Pop();
             suriken.Reset(Entity.Position, direction);
+        }
+
+        protected override void OnUpdating(ScriptUpdateArgs args)
+        {
+            base.OnUpdating(args);
+
+            _camera.Zoom = 60f;
+            _camera.CameraOffset = _physic.Position;
         }
 
         private void Physic_OnSeperation(Fixture fixtureA, Fixture fixtureB, Contact contact)
@@ -108,12 +119,6 @@ namespace NinjaAdventure
             return fixtureB.Body.UserData is LarvaMonster;
         }
 
-        public TransformEntity Entity
-        {
-            get;
-            private set;
-        }
-
         private PhysicBodyComponent _physic;
         private HealthComponent _health;
         private StateMachineComponent _machine;
@@ -122,9 +127,12 @@ namespace NinjaAdventure
         private Pool<Suriken> _surikenPool;
         private GameScene _gameScene;
         private NinjaStateData _stateData;
+        private Camera _camera;
 
-        public void Dispose()
+        public override void Dispose()
         {
+            base.Dispose();
+
             _physic.OnCollision -= Physic_OnCollision;
         }
     }

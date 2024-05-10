@@ -156,6 +156,7 @@ namespace CruZ.Editor.Controls
             _gameApp?.Dispose();
             _gameApp = null;
             _gameAppThread = null;
+            _editorCamera = null;
         }
 
         private void InitUIControls()
@@ -177,15 +178,34 @@ namespace CruZ.Editor.Controls
             _cacheService.WriteCache(this, "LoadedScene");
             _cacheService.WriteCache(this, "Camera");
         }
+
         private void OnDebugModeChanged(bool shouldDisplayDebug)
         {
             if(shouldDisplayDebug)
             {
                 PhysicSystem.Instance.ShowDebug = true;
+                Camera.Current = EditorCamera;
+                _boardGrid.ShoudDisplay = true;
             }
             else
             {
                 PhysicSystem.Instance.ShowDebug = false;
+                Camera.Current = GameApplication.MainCamera;
+                _boardGrid.ShoudDisplay = false;
+            }
+        }
+
+        private void OnPauseValueChanged(bool pause)
+        {
+            Trace.Assert(_gameApp != null);
+
+            if(pause)
+            {
+                _gameApp.Pause = true;
+            }
+            else
+            {
+                _gameApp.Pause = false;
             }
         }
 
@@ -203,9 +223,11 @@ namespace CruZ.Editor.Controls
 
         private void Game_Intialized()
         {
+            _editorCamera = new Camera(_gameApp!.Window);
             _cacheService.ReadCache(this, "Camera");
-            _debugMode = true;
             InitUIControls();
+            _debugMode = true;
+            OnDebugModeChanged(_debugMode);
             _gameInitalizeWaitHandle.Set();
         }
         private void Game_Exiting()
@@ -215,7 +237,7 @@ namespace CruZ.Editor.Controls
 
         private void Input_MouseScroll(IInputInfo info)
         {
-            Camera.Main.Zoom = Camera.Main.Zoom + info.SrollDelta * 0.001f * Camera.Main.Zoom;
+            EditorCamera.Zoom = EditorCamera.Zoom + info.SrollDelta * 0.001f * EditorCamera.Zoom;
         }
         private void Input_MouseMove(IInputInfo info)
         {
@@ -223,10 +245,10 @@ namespace CruZ.Editor.Controls
             {
                 var mousePoint = info.CurMouse.Position;
                 var delt = new Vector2(
-                    (_mouseStartDragPoint.X - mousePoint.X) / Camera.Main.ScreenToWorldRatio().X,
-                    (_mouseStartDragPoint.Y - mousePoint.Y) / Camera.Main.ScreenToWorldRatio().Y
+                    (_mouseStartDragPoint.X - mousePoint.X) / EditorCamera.ScreenToWorldRatio().X,
+                    (_mouseStartDragPoint.Y - mousePoint.Y) / EditorCamera.ScreenToWorldRatio().Y
                 );
-                Camera.Main.CameraOffset = _cameraStartDragCoord + delt;
+                EditorCamera.CameraOffset = _cameraStartDragCoord + delt;
             }
         }
         private void Input_MouseStateChanged(IInputInfo info)
@@ -236,7 +258,7 @@ namespace CruZ.Editor.Controls
             {
                 _isMouseDraggingCamera = true;
                 _mouseStartDragPoint = info.CurMouse.Position;
-                _cameraStartDragCoord = Camera.Main.CameraOffset;
+                _cameraStartDragCoord = EditorCamera.CameraOffset;
             }
 
             if(info.IsMouseJustUp(MouseKey.Middle))
@@ -258,21 +280,6 @@ namespace CruZ.Editor.Controls
                 OnPauseValueChanged(_pause);
             }
         }
-
-        private void OnPauseValueChanged(bool pause)
-        {
-            Trace.Assert(_gameApp != null);
-
-            if(pause)
-            {
-                _gameApp.Pause = true;
-            }
-            else
-            {
-                _gameApp.Pause = false;
-            }
-        }
-
         private void World_EntityAdded(TransformEntity e)
         {
             AddEntityControl(e);
@@ -307,14 +314,22 @@ namespace CruZ.Editor.Controls
             }
         }
 
-        private Stack<EntityControl> _entityControlPool;
+        private Camera EditorCamera
+        {
+            get
+            {
+                return _editorCamera ?? throw new InvalidOperationException("Camera unvailable, game maybe unitialized");
+            }
+        }
+
         private Dictionary<TransformEntity, EntityControl> _fromEntityToControl;
+        private Stack<EntityControl> _entityControlPool;
         private BoardGrid _boardGrid;
         private LoggingWindow _infoWindow;
         private UIControl _editorUIBranch;
-        private bool _isMouseDraggingCamera;
         private Vector2 _cameraStartDragCoord;
         private Point _mouseStartDragPoint;
+        private bool _isMouseDraggingCamera;
         private TransformEntity? _currentSelectEntity;
         private GameApplication? _gameApp;
         private Thread? _gameAppThread;
@@ -323,5 +338,6 @@ namespace CruZ.Editor.Controls
         private CacheService _cacheService;
         private bool _debugMode;
         private bool _pause;
+        private Camera? _editorCamera;
     }
 }

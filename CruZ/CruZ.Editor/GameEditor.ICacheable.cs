@@ -43,8 +43,8 @@ namespace CruZ.Editor.Controls
                 var py = binReader.ReadSingle();
                 var z = binReader.ReadSingle();
 
-                Camera.Main.CameraOffset = new(px, py);
-                Camera.Main.Zoom = z;
+                EditorCamera.CameraOffset = new(px, py);
+                EditorCamera.Zoom = z;
             }
 
             return true;
@@ -66,9 +66,9 @@ namespace CruZ.Editor.Controls
                 
             if(key == "Camera")
             {
-                binWriter.Write(Camera.Main.CameraOffset.X);
-                binWriter.Write(Camera.Main.CameraOffset.Y);
-                binWriter.Write(Camera.Main.Zoom);
+                binWriter.Write(EditorCamera.CameraOffset.X);
+                binWriter.Write(EditorCamera.CameraOffset.Y);
+                binWriter.Write(EditorCamera.Zoom);
             }
 
             return true;
