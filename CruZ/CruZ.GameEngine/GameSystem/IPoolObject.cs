@@ -4,6 +4,6 @@
     {
         Pool Pool { get; set; }
 
-        public void OnReturnToPool();
+        public void OnDisabled();
     }
 }

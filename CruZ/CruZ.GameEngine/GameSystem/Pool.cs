@@ -1,45 +1,68 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CruZ.GameEngine.GameSystem
 {
     public abstract class Pool
     {
         public abstract void ReturnPoolObject(IPoolObject obj);
+
+        public abstract bool Contains(IPoolObject obj);
     }
 
-    public class Pool<T> : Pool
+    public class Pool<T> : Pool, IDisposable where T : IPoolObject
     {
-        Func<IPoolObject> _creationFunc;
+        private readonly Func<T> _creationFunc;
 
-        public Pool(Func<IPoolObject> creationFunc, int capacity = 100)
+        public Pool(Func<T> creationFunc, int capacity = 100)
         {
-            _pool = new Stack<T>(capacity);
+            _pool = new(capacity);
             _creationFunc = creationFunc;
         }
 
-        public override void ReturnPoolObject(IPoolObject obj)
+        public override void ReturnPoolObject(IPoolObject poolObject)
         {
-            _pool.Push((T)obj);
-            obj.Pool = this;
-            obj.OnReturnToPool();
+            if(Contains(poolObject)) return;
+
+            poolObject.OnDisabled();
+
+            PopCount--;
+            _pool.Push(poolObject);
         }
 
         public T Pop()
         {
-            if (_pool.Count == 0)
-            {
-                IPoolObject obj = _creationFunc.Invoke();
-                ReturnPoolObject(obj);
-            }
+            IPoolObject pop = _pool.Count > 0 ? _pool.Pop() : Create();
+            PopCount++;
 
-            return _pool.Pop();
+            return (T)pop;
         }
 
-        Stack<T> _pool;
+        public override bool Contains(IPoolObject obj)
+        {
+            return _pool.Contains(obj);
+        }
+
+        private T Create()
+        {
+            T value = _creationFunc.Invoke();
+            value.Pool = this;
+            value.OnDisabled();
+
+            return value;
+        }
+
+        public int PopCount
+        {
+            get;
+            private set;
+        }
+
+        private Stack<IPoolObject> _pool;
+
+        public void Dispose()
+        {
+            _pool.Clear();
+        }
     }
 }
