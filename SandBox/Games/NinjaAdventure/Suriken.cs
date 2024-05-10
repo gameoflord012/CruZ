@@ -53,11 +53,11 @@ namespace NinjaAdventure
             _surikenTex = GameApplication.Resource.Load<Texture2D>("art\\suriken\\01.png", true);
         }
 
-        private void Script_Updating(GameTime gameTime)
+        private void Script_Updating(ScriptUpdateArgs args)
         {
             if(_disappearTimer < 0) return;
 
-            _disappearTimer -= gameTime.DeltaTime();
+            _disappearTimer -= args.GameTime.DeltaTime();
             if(_disappearTimer < 0 || _hit) ReturnToPool();
         }
 

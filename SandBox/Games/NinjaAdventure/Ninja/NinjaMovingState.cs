@@ -15,7 +15,6 @@ namespace NinjaAdventure
         protected override void OnStateMachineAttached()
         {
             base.OnStateMachineAttached();
-            UISystem.Instance.KeyStateChanged += Input_KeyStateChanged;
         }
 
         protected override void OnStateEnter()
@@ -24,16 +23,19 @@ namespace NinjaAdventure
             _animationComponent = StateData.Animation;
         }
 
-        protected override void OnStateUpdate(GameTime gameTime)
+        protected override void OnStateUpdate(StateUpdateArgs args)
         {
-            base.OnStateUpdate(gameTime);
+            base.OnStateUpdate(args);
+
+            InputUpdate(args.InputInfo);
+
             _physic.LinearVelocity = _ninjaInput.Movement * _speed;
 
-            if (_ninjaInput.FireSuriken)
+            if(_ninjaInput.FireSuriken)
             {
                 Check(typeof(NinjaAttackState));
             }
- 
+
             StateData.LastInputMovement = _ninjaInput.Movement;
             _animationComponent.Play($"walk-{StateData.GetFacingString()}");
         }
@@ -51,7 +53,7 @@ namespace NinjaAdventure
             Check(typeof(NinjaHitState));
         }
 
-        private void Input_KeyStateChanged(IInputInfo inputInfo)
+        private void InputUpdate(IInputInfo inputInfo)
         {
             _ninjaInput.Movement = Vector2.Zero;
             _ninjaInput.FireSuriken = false;
@@ -85,11 +87,5 @@ namespace NinjaAdventure
 
         private PhysicBodyComponent _physic;
         private AnimationComponent _animationComponent;
-
-        public override void Dispose()
-        {
-            base.Dispose();
-            InputManager.KeyStateChanged -= Input_KeyStateChanged;
-        }
     }
 }
