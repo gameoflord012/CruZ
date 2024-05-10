@@ -21,15 +21,14 @@ namespace NinjaAdventure
 
         protected override bool CanTransitionTo()
         {
-            return StateData.HitBodies.Count > 0;
+            return StateData.HitOrigins.Count > 0;
         }
         protected override void OnStateEnter()
         {
             base.OnStateEnter();
 
             _physic = StateData.Physic;
-            _hitBody = StateData.HitBodies.Last();
-            StateData.HitBodies.Remove(_hitBody);
+            _hitOrigin = StateData.HitOrigins.Pop();
 
             _stunTimer.Start();
             _stunSpeed = StunForce;
@@ -42,7 +41,7 @@ namespace NinjaAdventure
             base.OnTransitionChecking();
 
             // if Larva get hit in the middle, reset the state 
-            if (StateData.HitBodies.Count > 0)
+            if (StateData.HitOrigins.Count > 0)
             {
                 Machine.SetNextState(typeof(LarvaHitState), false);
             }
@@ -63,7 +62,7 @@ namespace NinjaAdventure
         {
             base.OnStateUpdate(gameTime);
 
-            var stunDirection = _physic.Position - _hitBody.Position;
+            var stunDirection = _physic.Position - _hitOrigin;
             if (stunDirection.SqrMagnitude() > 0.1) stunDirection.Normalize();
 
             _physic.LinearVelocity = stunDirection * _stunSpeed;
@@ -78,7 +77,7 @@ namespace NinjaAdventure
         }
 
         PhysicBodyComponent _physic;
-        Body _hitBody;
+        Vector2 _hitOrigin;
 
         Stopwatch _stunTimer = new();
         float _stunSpeed;

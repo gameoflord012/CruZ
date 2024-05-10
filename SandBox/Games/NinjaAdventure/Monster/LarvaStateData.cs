@@ -7,6 +7,8 @@ using CruZ.GameEngine.GameSystem.StateMachine;
 
 using Genbox.VelcroPhysics.Dynamics;
 
+using Microsoft.Xna.Framework;
+
 namespace NinjaAdventure
 {
     internal class LarvaStateData : StateData
@@ -18,13 +20,13 @@ namespace NinjaAdventure
             LarvaMonster larva)
         {
             (Physic, Health, Animation, Larva) = (physic, health, animation, larva);
-            HitBodies = [];
+            HitOrigins = [];
         }
 
         public void Reset(Transform? follow)
         {
             Health.Current = 30;
-            HitBodies.Clear();
+            HitOrigins.Clear();
             Follow = follow;
         }
 
@@ -49,7 +51,7 @@ namespace NinjaAdventure
             private set;
         }
 
-        public List<Body> HitBodies;
+        public Stack<Vector2> HitOrigins;
 
         public Transform? Follow;
     }

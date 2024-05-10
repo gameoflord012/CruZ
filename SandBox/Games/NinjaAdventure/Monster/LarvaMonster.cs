@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 
 using CruZ.GameEngine.GameSystem;
 using CruZ.GameEngine.GameSystem.Animation;
@@ -19,6 +18,8 @@ namespace NinjaAdventure
 {
     internal class LarvaMonster : IDisposable, IPoolObject
     {
+        private const int InitialHealth = 30;
+
         public LarvaMonster(GameScene scene, SpriteRendererComponent spriteRenderer)
         {
             Entity = scene.CreateEntity();
@@ -45,7 +46,6 @@ namespace NinjaAdventure
                 _physic.UserData = this;
                 _physic.BodyType = BodyType.Dynamic;
                 _physic.IsSensor = true;
-                _physic.OnCollision += Physic_OnCollision;
             }
             Entity.AddComponent(_physic);
 
@@ -68,7 +68,8 @@ namespace NinjaAdventure
 
         public void Reset(Vector2 position, Transform? follow)
         {
-            _onPool = false;
+            _health.Current = InitialHealth;
+            _health.ShouldDisplay = true;
 
             // reset state data
             _stateData.Reset(follow);
@@ -78,29 +79,43 @@ namespace NinjaAdventure
             _physic.Position = position;
             _physic.LinearVelocity = Vector2.Zero;
             _physic.Rotation = 0;
+            _physic.Body.Awake = true;
+
+            // event
+            _physic.OnCollision += Physic_OnCollision;
         }
 
         private void Physic_OnCollision(Fixture fixtureA, Fixture fixtureB, Contact contact)
         {
             if(fixtureB.Body.UserData is Suriken suriken)
             {
-                _stateData.HitBodies.Add(fixtureB.Body);
-                _surikenToBody[suriken] = fixtureB.Body;
+                if(fixtureB.Body.Awake)
+                {
+                    _stateData.HitOrigins.Push(fixtureB.Body.Position);
+                    _surikenToBody[suriken] = fixtureB.Body;
+                }
+                else
+                {
+                    contact.Enabled = false;
+                }
             }
         }
 
         public void ReturnToPool()
         {
-            if(_onPool) return;
-            _onPool = true;
-
-            PoolReturn?.Invoke(this);
+            ((IPoolObject)this).Pool.ReturnPoolObject(this);
         }
 
         public TransformEntity Entity
         {
             get;
             private set;
+        }
+
+        Pool IPoolObject.Pool
+        {
+            get;
+            set;
         }
 
         private readonly Dictionary<Suriken, Body> _surikenToBody;
@@ -110,13 +125,19 @@ namespace NinjaAdventure
         private HealthComponent _health;
         private StateMachineComponent _machine;
         private LarvaStateData _stateData;
-        private bool _onPool;
 
         public void Dispose()
         {
             Entity.Dispose();
             _physic.OnCollision -= Physic_OnCollision;
-            PoolReturn = default;
+        }
+
+        void IPoolObject.OnDisabled()
+        {
+            _physic.OnCollision -= Physic_OnCollision;
+            _physic.Body.Awake = false;
+
+            _health.ShouldDisplay = false;
         }
     }
 }

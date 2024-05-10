@@ -13,7 +13,7 @@ namespace NinjaAdventure
             var scene = new GameScene();
             {
                 var ninja = new NinjaCharacter(scene);
-                //var monsterSpawner = new MonsterSpawner(scene);
+                var monsterSpawner = new MonsterSpawner(scene, ninja.Entity.Transform);
             }
             return scene;
         }

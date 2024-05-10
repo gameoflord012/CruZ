@@ -11,6 +11,7 @@ using CruZ.GameEngine.GameSystem.Script;
 using CruZ.GameEngine.Utility;
 
 using Genbox.VelcroPhysics.Collision.ContactSystem;
+using Genbox.VelcroPhysics.Collision.Narrowphase;
 using Genbox.VelcroPhysics.Dynamics;
 using Genbox.VelcroPhysics.Factories;
 
@@ -57,7 +58,7 @@ namespace NinjaAdventure
             if(_disappearTimer < 0) return;
 
             _disappearTimer -= gameTime.DeltaTime();
-            if(_disappearTimer < 0) ReturnToPool();
+            if(_disappearTimer < 0 || _hit) ReturnToPool();
         }
 
         private void Renderer_DrawRequestsFetching(List<DrawRequestBase> drawRequests)
@@ -79,7 +80,17 @@ namespace NinjaAdventure
 
         private void Physic_OnCollision(Fixture fixtureA, Fixture fixtureB, Contact contact)
         {
-            if(fixtureB.Body.UserData is LarvaMonster) ReturnToPool();
+            if(fixtureB.Body.UserData is LarvaMonster)
+            {
+                if(!fixtureB.Body.Awake)
+                {
+                    contact.Enabled = false;
+                }
+                else
+                {
+                    _hit = true;
+                }
+            }
         }
 
         public void Reset(Vector2 origin, Vector2 direction)
@@ -98,15 +109,15 @@ namespace NinjaAdventure
             _script.Updating += Script_Updating;
             _surikenRenderer.DrawRequestsFetching += Renderer_DrawRequestsFetching;
 
+            _hit = false;
         }
 
-        Pool IPoolObject.Pool
+        private void ReturnToPool()
         {
-            get;
-            set;
+            ((IPoolObject)this).Pool.ReturnPoolObject(this);
         }
 
-        void IPoolObject.OnReturnToPool()
+        void IPoolObject.OnDisabled()
         {
             _physic.Position = Vector2.Zero;
             _physic.LinearVelocity = Vector2.Zero;
@@ -118,9 +129,10 @@ namespace NinjaAdventure
             _surikenRenderer.DrawRequestsFetching -= Renderer_DrawRequestsFetching;
         }
 
-        private void ReturnToPool()
+        Pool IPoolObject.Pool
         {
-            ((IPoolObject)this).Pool.ReturnPoolObject(this);
+            get;
+            set;
         }
 
         public TransformEntity Entity;
@@ -130,6 +142,7 @@ namespace NinjaAdventure
         private readonly PhysicBodyComponent _physic;
         private readonly ScriptComponent _script;
         private float _disappearTimer;
+        private bool _hit;
 
         public void Dispose()
         {

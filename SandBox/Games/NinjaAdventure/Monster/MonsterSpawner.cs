@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 
 using CruZ.GameEngine.GameSystem;
@@ -13,17 +12,19 @@ namespace NinjaAdventure
 {
     internal class MonsterSpawner : ScriptingEntity
     {
-        public float SpawnRadius = 5;
-        public float SpawnDuration = 1f;
+        private const int MaxCount = 1;
+        private const float SpawnRadius = 5;
+        private const float SpawnDuration = 1f;
 
-        public MonsterSpawner(GameScene gameScene) : base(gameScene)
+        public MonsterSpawner(GameScene gameScene, Transform follow) : base(gameScene)
         {
             Entity.Name = "MonsterSpawner";
 
             _gameScene = gameScene;
-            _monsterPool = [];
+            _monsterPool = new(() => new LarvaMonster(gameScene, _monsterRenderer!));
             _spawnTimer = new();
             _random = new();
+            _follow = follow;
 
             InitializeComponents();
 
@@ -41,45 +42,28 @@ namespace NinjaAdventure
 
         protected override void OnUpdating(GameTime time)
         {
-            if(_spawnTimer.GetElapsed() > SpawnDuration)
+            if(_spawnTimer.GetElapsed() > SpawnDuration &&
+                (_monsterPool.PopCount < MaxCount))
             {
                 _spawnTimer.Restart();
 
-                // spawn logic
+                // circle distribution
                 var r = SpawnRadius * float.Sqrt(_random.NextSingle());
                 var theta = _random.NextSingle() * 2f * MathF.PI;
 
                 var spawnX = Entity.Position.X + r * MathF.Cos(theta);
                 var spawnY = Entity.Position.Y + r * MathF.Sin(theta);
 
-                var monster = PopMonsterFromPool();
-                monster.Reset(new Vector2(spawnX, spawnY), null);
+                var monster = _monsterPool.Pop();
+                monster.Reset(new Vector2(spawnX, spawnY), _follow);
             }
         }
 
-        private LarvaMonster PopMonsterFromPool()
-        {
-            if (_monsterPool.Count == 0)
-            {
-                var larva = new LarvaMonster(_gameScene, _monsterRenderer);
-                larva.PoolReturn += Larva_PoolReturn;
-                _monsterPool.Push(larva);
-            }
-
-            return _monsterPool.Pop();
-        }
-
-        private void Larva_PoolReturn(LarvaMonster monster)
-        {
-            monster.PoolReturn -= Larva_PoolReturn;
-            _monsterPool.Push(monster);
-        }
-
-        Pool<LarvaMonster> _monsterPool;
-        SpriteRendererComponent _monsterRenderer;
-
-        Random _random;
-        Stopwatch _spawnTimer;
-        GameScene _gameScene;
+        private Pool<LarvaMonster> _monsterPool;
+        private SpriteRendererComponent _monsterRenderer;
+        private Random _random;
+        private Stopwatch _spawnTimer;
+        private GameScene _gameScene;
+        private Transform _follow;
     }
 }

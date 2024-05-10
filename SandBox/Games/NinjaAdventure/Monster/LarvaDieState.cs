@@ -7,7 +7,7 @@ namespace NinjaAdventure
 {
     internal class LarvaDieState : BasicState<LarvaStateData>
     {
-        const float FadeDuration = 1f;
+        private const float FadeDuration = 1f;
 
         protected override string StateEnterSoundResource => "sound\\larva-die.ogg";
 
@@ -16,6 +16,7 @@ namespace NinjaAdventure
             base.OnStateEnter();
 
             _fadeCountdown = FadeDuration;
+            StateData.Physic.Body.Awake = false;
             StateData.Health.ShouldDisplay = false;
         }
 
@@ -30,9 +31,16 @@ namespace NinjaAdventure
             }
 
             _fadeCountdown -= gameTime.DeltaTime();
-            StateData.Animation.Color = new Color(1, 1, 1, _fadeCountdown / FadeDuration);
+            StateData.Animation.Color = new Color(1.0f, 1.0f, 1.0f, _fadeCountdown / FadeDuration);
         }
 
-        float _fadeCountdown;
+        protected override void OnStateExit()
+        {
+            base.OnStateExit();
+
+            StateData.Animation.Color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
+        }
+
+        private float _fadeCountdown;
     }
 }
