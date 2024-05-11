@@ -16,7 +16,7 @@ namespace CruZ.GameEngine.GameSystem.UI
     [TypeConverter(typeof(ExpandableObjectConverter))]
     public class UIControl
     {
-        private const int BorderThickness = 3;
+        private const int BorderThickness = 1;
         private static readonly Color DefaultBackGroundColor = Color.Red;
 
         public UIControl()
@@ -167,7 +167,12 @@ namespace CruZ.GameEngine.GameSystem.UI
         }
 
         #endregion
-        public bool IsActive;
+
+        public bool IsActive
+        {
+            get;
+            set;
+        }
 
         public UIControl? Parent
         { get => _parent; }

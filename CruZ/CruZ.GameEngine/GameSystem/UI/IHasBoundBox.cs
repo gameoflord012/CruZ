@@ -32,6 +32,6 @@ namespace CruZ.GameEngine.GameSystem.UI
     /// </summary>
     public interface IUIRectProvider
     {
-        event Action<UIRect> UIRectChanged;
+        UIRect UIRect { get; }
     }
 }

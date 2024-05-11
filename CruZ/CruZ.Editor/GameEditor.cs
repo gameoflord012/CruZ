@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading;
 
 using CruZ.Editor.Scene;
@@ -32,8 +34,7 @@ namespace CruZ.Editor.Controls
 
         public GameEditor(EditorForm form)
         {
-            _entityControlPool = [];
-            _fromEntityToControl = [];
+            _fromEntityToControl = new(new WeakReferenceComparer());
             _gameInitalizeWaitHandle = new(false);
             _editorForm = form;
             _cacheService = new CacheService(Path.Combine(EditorContext.UserProfileDir, "caches"));
@@ -45,6 +46,7 @@ namespace CruZ.Editor.Controls
 
             ECSManager.InstanceChanged += ECSManager_InstanceChanged;
         }
+
         private void RegisterGameAppEvents()
         {
             GameApplication.Initialized += Game_Intialized;
@@ -108,34 +110,25 @@ namespace CruZ.Editor.Controls
 
         private void AddEntityControl(TransformEntity e)
         {
-            if(_fromEntityToControl.ContainsKey(e)) return;
+            if(_fromEntityToControl.ContainsKey(new WeakReference(e))) return;
 
-            if(_entityControlPool.Count == 0)
-            {
-                var newControl = new EntityControl();
-                newControl.IsActive = false;
-                _editorUIBranch.AddChild(newControl);
-                _entityControlPool.Push(newControl);
-            }
-
-            var entityControl = _entityControlPool.Pop();
-            entityControl.IsActive = true;
-            entityControl.AttachEntity = e;
-            _fromEntityToControl[e] = entityControl;
+            var eControl = _entityControlPool.Pop();
+            eControl.Reset(e);
+            _fromEntityToControl[new WeakReference(e)] = eControl;
         }
 
-        private void RemoveEntityControl(TransformEntity e)
-        {
-            if(!_fromEntityToControl.ContainsKey(e)) return;
+        //private void RemoveEntityControl(TransformEntity e)
+        //{
+        //    if(!_fromEntityToControl.ContainsKey(new WeakReference(e))) return;
 
-            var eControl = _fromEntityToControl[e];
-            _fromEntityToControl.Remove(e);
+        //    var eControl = _fromEntityToControl[e];
+        //    _fromEntityToControl.Remove(e);
 
-            eControl.AttachEntity = null;
-            eControl.Active = false;
-            eControl.IsActive = false;
-            _entityControlPool.Push(eControl);
-        }
+        //    eControl.AttachedEntity = null;
+        //    eControl.IsActive = false;
+        //    eControl.IsActive = false;
+        //    _entityControlPool.Push(eControl);
+        //}
 
         /// <summary>
         /// Should be called from winform thread
@@ -170,7 +163,13 @@ namespace CruZ.Editor.Controls
             _infoWindow = new LoggingWindow();
             _editorUIBranch.AddChild(_infoWindow);
 
-            _entityControlPool = [];
+            _entityControlPool = new(() =>
+                {
+                    var eControl = new EntityControl();
+                    eControl.IsActive = false;
+                    _editorUIBranch.AddChild(eControl);
+                    return eControl;
+                });
         }
 
         private void OnApplicationBeforeClosing()
@@ -214,11 +213,9 @@ namespace CruZ.Editor.Controls
             if(oldECS != null)
             {
                 oldECS.World.EntityAdded -= World_EntityAdded;
-                oldECS.World.EntityRemoved -= World_EntityRemoved;
             }
 
             newECS.World.EntityAdded += World_EntityAdded;
-            newECS.World.EntityRemoved += World_EntityRemoved;
         }
 
         private void Game_Intialized()
@@ -230,6 +227,7 @@ namespace CruZ.Editor.Controls
             OnDebugModeChanged(_debugMode);
             _gameInitalizeWaitHandle.Set();
         }
+
         private void Game_Exiting()
         {
             _editorForm.SafeInvoke(CleanAppSession);
@@ -239,6 +237,7 @@ namespace CruZ.Editor.Controls
         {
             EditorCamera.Zoom = EditorCamera.Zoom + info.SrollDelta * 0.001f * EditorCamera.Zoom;
         }
+
         private void Input_MouseMove(IInputInfo info)
         {
             if(_isMouseDraggingCamera)
@@ -251,6 +250,7 @@ namespace CruZ.Editor.Controls
                 EditorCamera.CameraOffset = _cameraStartDragCoord + delt;
             }
         }
+
         private void Input_MouseStateChanged(IInputInfo info)
         {
             if(info.IsMouseJustDown(MouseKey.Middle)
@@ -266,6 +266,7 @@ namespace CruZ.Editor.Controls
                 _isMouseDraggingCamera = false;
             }
         }
+
         private void Input_KeyStateChanged(IInputInfo info)
         {
             if(info.IsKeyJustDown(Keys.OemTilde))
@@ -280,13 +281,10 @@ namespace CruZ.Editor.Controls
                 OnPauseValueChanged(_pause);
             }
         }
+
         private void World_EntityAdded(TransformEntity e)
         {
             AddEntityControl(e);
-        }
-        private void World_EntityRemoved(TransformEntity e)
-        {
-            RemoveEntityControl(e);
         }
 
         public GameScene? LoadedGameScene
@@ -294,6 +292,7 @@ namespace CruZ.Editor.Controls
             get;
             private set;
         }
+
         public TransformEntity? SelectedEntity
         {
             get => _currentSelectEntity;
@@ -302,12 +301,16 @@ namespace CruZ.Editor.Controls
                 if(_currentSelectEntity == value) return;
 
                 if(_currentSelectEntity != null)
-                    _fromEntityToControl[_currentSelectEntity].Active = false;
+                {
+                    _fromEntityToControl[new WeakReference(_currentSelectEntity)].IsActive = false;
+                }
 
                 _currentSelectEntity = value;
 
                 if(_currentSelectEntity != null)
-                    _fromEntityToControl[_currentSelectEntity].Active = true;
+                {
+                    _fromEntityToControl[new WeakReference(_currentSelectEntity)].IsActive = true;
+                }
 
                 LogManager.SetMsg(_currentSelectEntity != null ? _currentSelectEntity.ToString() : "");
                 SelectingEntityChanged?.Invoke(value);
@@ -322,8 +325,8 @@ namespace CruZ.Editor.Controls
             }
         }
 
-        private Dictionary<TransformEntity, EntityControl> _fromEntityToControl;
-        private Stack<EntityControl> _entityControlPool;
+        private Dictionary<WeakReference, EntityControl> _fromEntityToControl;
+        private Pool<EntityControl> _entityControlPool;
         private BoardGrid _boardGrid;
         private LoggingWindow _infoWindow;
         private UIControl _editorUIBranch;

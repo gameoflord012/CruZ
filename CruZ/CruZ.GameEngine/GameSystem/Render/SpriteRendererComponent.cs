@@ -18,7 +18,6 @@ namespace CruZ.GameEngine.GameSystem.ECS
     {
         public event Action? DrawBegin;
         public event Action? DrawEnd;
-        public event Action<UIRect>? UIRectChanged;
         public event Action<List<DrawRequestBase>>? DrawRequestsFetching;
         public event Action<IImmutableList<DrawRequestBase>>? DrawRequestsFetched;
 
@@ -69,8 +68,6 @@ namespace CruZ.GameEngine.GameSystem.ECS
                     }
                 }
             };
-
-            DrawEnd += () => UIRectChanged?.Invoke(_uiRect);
         }
 
         public override sealed void Render(RenderSystemEventArgs e)
@@ -108,6 +105,11 @@ namespace CruZ.GameEngine.GameSystem.ECS
         {
             DrawRequestsFetching?.Invoke(drawRequests);
             DrawRequestsFetched?.Invoke(drawRequests.ToImmutableList());
+        }
+
+        UIRect IUIRectProvider.UIRect
+        {
+            get => _uiRect;
         }
 
         private UIRect _uiRect;
