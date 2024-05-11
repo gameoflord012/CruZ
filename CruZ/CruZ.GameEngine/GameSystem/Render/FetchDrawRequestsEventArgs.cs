@@ -12,6 +12,6 @@ namespace CruZ.GameEngine.GameSystem.Render
 {
     public abstract class DrawRequestBase
     {
-        public abstract void DoRequest(SpriteBatch spriteBatch);
+        public abstract void DrawRequest(SpriteBatch spriteBatch);
     }
 }

@@ -41,11 +41,11 @@
 //        {
 //            base.OnDrawing(gameTime); 
           
-//            var filtered = _filter.DoRequest(_tex, _tex.Width, _tex.Height);
+//            var filtered = _filter.DrawRequest(_tex, _tex.Width, _tex.Height);
 
 //            GraphicsDevice.SetRenderTarget(null);
 //            _sp.Begin(transformMatrix: Matrix.CreateScale(0.5f));
-//            _sp.DoRequest(filtered, Vector2.Zero, Color.White);
+//            _sp.DrawRequest(filtered, Vector2.Zero, Color.White);
 //            _sp.End();
 
 //        }

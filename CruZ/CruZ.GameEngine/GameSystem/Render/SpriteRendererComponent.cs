@@ -1,13 +1,13 @@
-﻿using Microsoft.Xna.Framework.Graphics;
-using System;
-using Microsoft.Xna.Framework;
-using CruZ.GameEngine.Resource;
-using CruZ.GameEngine.GameSystem.UI;
-using CruZ.GameEngine.GameSystem.Render;
-using CruZ.GameEngine.Utility;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
+
+using CruZ.GameEngine.GameSystem.Render;
+using CruZ.GameEngine.GameSystem.UI;
+using CruZ.GameEngine.Utility;
+
+using Microsoft.Xna.Framework.Graphics;
 
 namespace CruZ.GameEngine.GameSystem.ECS
 {
@@ -18,9 +18,7 @@ namespace CruZ.GameEngine.GameSystem.ECS
     {
         public event Action? DrawBegin;
         public event Action? DrawEnd;
-
         public event Action<UIRect>? UIRectChanged;
-
         public event Action<List<DrawRequestBase>>? DrawRequestsFetching;
         public event Action<IImmutableList<DrawRequestBase>>? DrawRequestsFetched;
 
@@ -33,33 +31,33 @@ namespace CruZ.GameEngine.GameSystem.ECS
         {
             DrawBegin += () =>
             {
-                uiRect = new();
+                _uiRect = new();
             };
 
             DrawRequestsFetched += (fetchedDrawRequests) =>
             {
-                foreach (var request in fetchedDrawRequests
+                foreach(var request in fetchedDrawRequests
                     .Where(e => e is SpriteDrawRequest)
                     .Select(e => ((SpriteDrawRequest)e).SpriteDrawArgs))
                 {
-                    if ( // ignore if it is an invalid request
+                    if( // ignore if it is an invalid request
                         request.Texture == null ||
                         request.GetWorldBound().W == 0 && request.GetWorldBound().H == 0)
                         continue;
 
-                    uiRect.WorldOrigins.Add(request.GetWorldOrigin());
+                    _uiRect.WorldOrigins.Add(request.GetWorldOrigin());
 
-                    if (!uiRect.WorldBound.HasValue)
+                    if(!_uiRect.WorldBound.HasValue)
                     {
-                        uiRect.WorldBound = request.GetWorldBound(); // Assign if worldbounds is uninitialized
+                        _uiRect.WorldBound = request.GetWorldBound(); // Assign if worldbounds is uninitialized
                     }
                     else
                     {
                         var joinBound = request.GetWorldBound();
-                        var currentBound = uiRect.WorldBound.Value;
+                        var currentBound = _uiRect.WorldBound.Value;
 
                         // we expand the world joinBound to cover the request draws joinBound
-                        WorldRectangle newBound = uiRect.WorldBound.Value;
+                        WorldRectangle newBound = _uiRect.WorldBound.Value;
                         {
                             newBound.X = MathF.Min(currentBound.X, joinBound.X);
                             newBound.Y = MathF.Min(currentBound.Y, joinBound.Y);
@@ -67,35 +65,43 @@ namespace CruZ.GameEngine.GameSystem.ECS
                             newBound.H = MathF.Max(currentBound.Top, joinBound.Top) - newBound.Y;
                         }
 
-                        uiRect.WorldBound = newBound;
+                        _uiRect.WorldBound = newBound;
                     }
                 }
             };
 
-            DrawEnd += () => UIRectChanged?.Invoke(uiRect);
+            DrawEnd += () => UIRectChanged?.Invoke(_uiRect);
         }
 
         public override void Render(RenderSystemEventArgs e)
         {
-            var fx = EffectManager.NormalSpriteRenderer;
-            fx.Parameters["view_projection"].SetValue(e.ViewProjectionMatrix);
-
             DrawBegin?.Invoke();
-            e.SpriteBatch.Begin(
-                effect: fx,
-                sortMode: SpriteSortMode.FrontToBack,
-                samplerState: SamplerState.PointClamp);
+            {
+                e.SpriteBatch.Begin(effect: GetSetupEffect(e), sortMode: SpriteSortMode.FrontToBack, samplerState: SamplerState.PointClamp);
+                {
+                    DrawRequests(e.SpriteBatch);
+                }
+                e.SpriteBatch.End();
+            }
+            DrawEnd?.Invoke();
+        }
 
+        private void DrawRequests(SpriteBatch spriteBatch)
+        {
             List<DrawRequestBase> drawRequest = [];
             FetchDrawRequests(drawRequest);
 
-            foreach (var request in drawRequest)
+            foreach(var request in drawRequest)
             {
-                request.DoRequest(e.SpriteBatch);
+                request.DrawRequest(spriteBatch);
             }
+        }
 
-            e.SpriteBatch.End();
-            DrawEnd?.Invoke();
+        protected virtual Effect GetSetupEffect(RenderSystemEventArgs args)
+        {
+            var fx = EffectManager.NormalSpriteRenderer;
+            fx.Parameters["view_projection"].SetValue(args.ViewProjectionMatrix);
+            return fx;
         }
 
         private void FetchDrawRequests(List<DrawRequestBase> drawRequests)
@@ -104,6 +110,6 @@ namespace CruZ.GameEngine.GameSystem.ECS
             DrawRequestsFetched?.Invoke(drawRequests.ToImmutableList());
         }
 
-        UIRect uiRect;
+        private UIRect _uiRect;
     }
 }

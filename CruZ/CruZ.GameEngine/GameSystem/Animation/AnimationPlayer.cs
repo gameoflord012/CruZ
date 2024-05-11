@@ -33,7 +33,7 @@
 //            //_animatedSprite.InternalUpdate(gameTime);
 //        }
 
-//        internal void DoRequest(DefaultDrawArgs e)
+//        internal void DrawRequests(DefaultDrawArgs e)
 //        {
 //            //e.Texture = _animatedSprite.TextureRegion.Texture;
 //            //e.SourceRectangle = _animatedSprite.TextureRegion.Bounds;

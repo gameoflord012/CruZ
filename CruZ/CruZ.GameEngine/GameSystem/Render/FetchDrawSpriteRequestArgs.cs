@@ -16,7 +16,7 @@ namespace CruZ.GameEngine.GameSystem.Render
             _spriteDrawArgs = spriteDrawArgs;
         }
 
-        public override void DoRequest(SpriteBatch spriteBatch)
+        public override void DrawRequest(SpriteBatch spriteBatch)
         {
             spriteBatch.DrawWorld(_spriteDrawArgs);
         }

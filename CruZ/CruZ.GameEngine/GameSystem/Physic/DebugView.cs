@@ -330,7 +330,7 @@ namespace Genbox.VelcroPhysics.MonoGame.DebugView
             DrawString(PerformancePanelBounds.Right + 10, PerformancePanelBounds.Center.Y - 7, $"Avg: {_avg} ms");
             DrawString(PerformancePanelBounds.Right + 10, PerformancePanelBounds.Bottom - 15, $"Min: {_min} ms");
 
-            //DoRequest background.
+            //DrawRequests background.
             _background[0] = new Vector2(PerformancePanelBounds.X, PerformancePanelBounds.Y);
             _background[1] = new Vector2(PerformancePanelBounds.X, PerformancePanelBounds.Y + PerformancePanelBounds.Height);
             _background[2] = new Vector2(PerformancePanelBounds.X + PerformancePanelBounds.Width, PerformancePanelBounds.Y + PerformancePanelBounds.Height);
@@ -743,7 +743,7 @@ namespace Genbox.VelcroPhysics.MonoGame.DebugView
 
         public void DrawArrow(Vector2 start, Vector2 end, float length, float width, bool drawStartIndicator, Color color)
         {
-            // DoRequest connection segment between start- and end-point
+            // DrawRequests connection segment between start- and end-point
             DrawSegment(start, end, color);
 
             // Precalculate halfwidth
@@ -774,7 +774,7 @@ namespace Genbox.VelcroPhysics.MonoGame.DebugView
             // Translate end shape
             Vector2.Transform(verts, ref endMatrix, verts);
 
-            // DoRequest arrow end shape
+            // DrawRequests arrow end shape
             DrawSolidPolygon(verts, 3, color, false);
 
             if (drawStartIndicator)
@@ -795,7 +795,7 @@ namespace Genbox.VelcroPhysics.MonoGame.DebugView
                 // Translate start shape
                 Vector2.Transform(baseVerts, ref startMatrix, baseVerts);
 
-                // DoRequest start shape
+                // DrawRequests start shape
                 DrawSolidPolygon(baseVerts, 4, color, false);
             }
         }

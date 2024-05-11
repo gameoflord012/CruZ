@@ -20,7 +20,7 @@ namespace CruZ.GameEngine.GameSystem.Render
             _position = position;
         }
 
-        public override void DoRequest(SpriteBatch spriteBatch)
+        public override void DrawRequest(SpriteBatch spriteBatch)
         {
             Vector2 origin = _font.MeasureString(_text) / 2f;
 
