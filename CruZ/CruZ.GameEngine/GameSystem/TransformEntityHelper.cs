@@ -12,7 +12,7 @@ namespace CruZ.GameEngine.GameSystem
         /// <summary>
         /// parent index alway smaller than its children
         /// </summary>
-        public static List<TransformEntity> SortByDepth(IImmutableList<TransformEntity> entities)
+        public static List<TransformEntity> SortByDepth(IReadOnlyCollection<TransformEntity> entities)
         {
             List<TransformEntity> sorted = [];
             HashSet<TransformEntity> visited = [];

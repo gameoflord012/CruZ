@@ -29,16 +29,18 @@ namespace CruZ.GameEngine.GameSystem
             _gd.SetRenderTarget(null);
             _gd.Clear(GameConstants.GameBackgroundColor);
 
-            _sb.Begin(blendState : _blendState);
+            _sb.Begin(blendState: _blendState);
             _sb.Draw(_rendererRT.Value, Vector2.Zero, Color.White);
             _sb.Draw(_physicRT.Value, Vector2.Zero, Color.White);
             _sb.Draw(_uiRT.Value, Vector2.Zero, Color.White);
             _sb.End();
         }
 
-        AutoResizeRenderTarget _rendererRT, _uiRT, _physicRT; 
-        SpriteBatch _sb;
-        GraphicsDevice _gd;
+        private AutoResizeRenderTarget _rendererRT, _uiRT, _physicRT;
+        private SpriteBatch _sb;
+        private GraphicsDevice _gd;
+        private BlendState _blendState;
+        private bool _isDisposed;
 
         public override void Dispose()
         {
@@ -47,17 +49,13 @@ namespace CruZ.GameEngine.GameSystem
             _isDisposed = true;
         }
 
-        BlendState _blendState;
-
-        bool _isDisposed = false;
-
         internal static RenderTargetSystem CreateContext()
         {
             if(_instance != null && !_instance._isDisposed) throw new InvalidOperationException();
             return _instance = new RenderTargetSystem();
         }
 
-        static RenderTargetSystem _instance;
+        private static RenderTargetSystem _instance;
 
         public static RenderTargetSystem Instance { get => _instance ?? throw new NullReferenceException(); }
         public static RenderTarget2D RendererRT { get => _instance._rendererRT.Value; }

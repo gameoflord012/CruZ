@@ -1,36 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Text.Json.Serialization;
 
 namespace CruZ.GameEngine.GameSystem.Scene
 {
-    public class GameScene : IDisposable
+    public class GameScene
     {
         public event Action<TransformEntity>? EntityAdded;
         public event Action<TransformEntity>? EntityRemoved;
 
-        public string Name
-        {
-            get => _name;
-            set
-            {
-                if(_name == value) return;
-                SceneRoot.Name = value;
-                _name = value;
-            }
-        }
-
-        private string _name = "Noname Scene";
-
-        [JsonIgnore]
-        public IImmutableList<TransformEntity> Entities { get => _entities.ToImmutableList(); }
-
         public GameScene()
         {
-            GameApplication.Exiting += Game_Exiting;
             SceneRoot = ECSManager.CreateEntity();
             SceneRoot.IsActive = false;
+            Name = "New Scene";
+            _entities = [];
         }
 
         private void AddEntity(TransformEntity e)
@@ -39,23 +23,9 @@ namespace CruZ.GameEngine.GameSystem.Scene
             _entities.Add(e);
 
             e.IsActive = true;
-            e.RemovedFromWorld += Entity_RemovedFromWorld;
+            e.Destroying += Entity_Destroying;
 
             EntityAdded?.Invoke(e);
-        }
-
-        private void Entity_RemovedFromWorld(TransformEntity e)
-        {
-            if(!_entities.Contains(e))
-                throw new ArgumentException($"Entity \"{e}\" not in scene {this}");
-
-            _entities.Remove(e);
-
-            e.IsActive = false;
-            e.RemovedFromWorld -= Entity_RemovedFromWorld;
-            e.Dispose();
-
-            EntityRemoved?.Invoke(e);
         }
 
         public TransformEntity CreateEntity(string? name = null, TransformEntity? parent = null)
@@ -70,21 +40,48 @@ namespace CruZ.GameEngine.GameSystem.Scene
             return e;
         }
 
-        private TransformEntity SceneRoot;
-        private List<TransformEntity> _entities = [];
-
-        private void Game_Exiting()
+        public void Destroy()
         {
-            Dispose();
-        }
-
-        public void Dispose()
-        {
-            foreach(var e in _entities.ToImmutableList())
+            foreach(var entity in _entities.ToImmutableArray())
             {
-                e.Dispose();
+                entity.Destroy();
             }
         }
+
+        private void Entity_Destroying(TransformEntity e)
+        {
+            RemoveEntity(e);
+        }
+
+        private void RemoveEntity(TransformEntity e)
+        {
+            if(!_entities.Contains(e))
+            {
+                throw new ArgumentException($"Entity \"{e}\" not in scene {this}");
+            }
+
+            _entities.Remove(e);
+
+            e.IsActive = false;
+            e.Destroying -= Entity_Destroying;
+
+            EntityRemoved?.Invoke(e);
+        }
+
+        public string Name
+        {
+            get => _name;
+            set
+            {
+                if(_name == value) return;
+                SceneRoot.Name = value;
+                _name = value;
+            }
+        }
+
+        private TransformEntity SceneRoot;
+        private List<TransformEntity> _entities;
+        private string _name;
 
         public override string ToString()
         {

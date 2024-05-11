@@ -21,6 +21,7 @@ namespace CruZ.GameEngine
         private GameApplication(GameWrapper core, string gameResourceDir)
         {
             _marshalRequests = [];
+            _disposables = [];
 
             _wrapper = core;
             _wrapper.AfterInitialize += Wrapper_Initialized;
@@ -162,6 +163,7 @@ namespace CruZ.GameEngine
             set;
         }
 
+        private List<IDisposable> _disposables;
         private ECSManager _ecs;
         private GameInput _input;
         private GameWrapper _wrapper;
@@ -183,8 +185,8 @@ namespace CruZ.GameEngine
                 _wrapper.Dispose();
                 _spriteBatch.Dispose();
                 _ecs.Dispose();
-                Disposables.ForEach(e => e.Dispose());
-                Disposables.Clear();
+                _disposables.ForEach(e => e.Dispose());
+                _disposables.Clear();
 
                 WindowResized = null;
                 Initialized = null;
@@ -217,7 +219,7 @@ namespace CruZ.GameEngine
         internal static AutoResizeRenderTarget CreateRenderTarget()
         {
             var rt = new AutoResizeRenderTarget(Instance.GraphicsDevice, Instance.Window);
-            Disposables.Add(rt);
+            Instance._disposables.Add(rt);
             return rt;
         }
 
@@ -266,8 +268,6 @@ namespace CruZ.GameEngine
             get => (resolvingAss) => AppDomain.CurrentDomain.GetAssemblies()
                     .First(domainAss => domainAss.FullName == resolvingAss.FullName);
         }
-
-        public static List<IDisposable> Disposables = [];
 
         private static GameApplication? _instance;
 

@@ -14,7 +14,7 @@ namespace CruZ.GameEngine.GameSystem
         public readonly EntityCollection ActiveEntities;
         public readonly GameTime GameTime;
 
-        public SystemEventArgs(IImmutableList<TransformEntity> activeEntities, GameTime gameTime)
+        public SystemEventArgs(IEnumerable<TransformEntity> activeEntities, GameTime gameTime)
         {
             ActiveEntities = new EntityCollection(activeEntities);
             GameTime = gameTime;

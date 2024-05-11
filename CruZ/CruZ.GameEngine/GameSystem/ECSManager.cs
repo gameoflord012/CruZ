@@ -30,8 +30,6 @@ namespace CruZ.GameEngine.GameSystem
                 AddSystem(RenderTargetSystem.CreateContext());
         }
 
-        internal ECSWorld World { get => _world; set => _world = value; }
-
         internal void Initialize()
         {
             _world.Initialize();
@@ -47,11 +45,17 @@ namespace CruZ.GameEngine.GameSystem
             _world.DrawSystems(gameTime);
         }
 
-        ECSWorld _world;
+        internal ECSWorld World
+        {
+            get => _world;
+            set => _world = value;
+        }
+
+        private ECSWorld _world;
 
         internal static ECSManager CreateContext()
         {
-            if (_instance != null && !_instance._isDisposed)
+            if(_instance != null && !_instance._isDisposed)
                 throw new InvalidOperationException("Require dispose");
 
             var newInstance = new ECSManager();
@@ -75,7 +79,7 @@ namespace CruZ.GameEngine.GameSystem
 
         public void Dispose()
         {
-            if (!_isDisposed)
+            if(!_isDisposed)
             {
                 _isDisposed = true;
                 _world.Dispose();
@@ -83,6 +87,6 @@ namespace CruZ.GameEngine.GameSystem
 
         }
 
-        bool _isDisposed = false;
+        private bool _isDisposed = false;
     }
 }

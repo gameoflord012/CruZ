@@ -73,11 +73,11 @@ namespace CruZ.GameEngine.GameSystem.ECS
             DrawEnd += () => UIRectChanged?.Invoke(_uiRect);
         }
 
-        public override void Render(RenderSystemEventArgs e)
+        public override sealed void Render(RenderSystemEventArgs e)
         {
             DrawBegin?.Invoke();
             {
-                e.SpriteBatch.Begin(effect: GetSetupEffect(e), sortMode: SpriteSortMode.FrontToBack, samplerState: SamplerState.PointClamp);
+                e.SpriteBatch.Begin(effect: SetupEffect(e), sortMode: SpriteSortMode.FrontToBack, samplerState: SamplerState.PointClamp);
                 {
                     DrawRequests(e.SpriteBatch);
                 }
@@ -97,7 +97,7 @@ namespace CruZ.GameEngine.GameSystem.ECS
             }
         }
 
-        protected virtual Effect GetSetupEffect(RenderSystemEventArgs args)
+        protected virtual Effect SetupEffect(RenderSystemEventArgs args)
         {
             var fx = EffectManager.NormalSpriteRenderer;
             fx.Parameters["view_projection"].SetValue(args.ViewProjectionMatrix);

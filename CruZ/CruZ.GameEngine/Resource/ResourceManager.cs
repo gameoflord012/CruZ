@@ -100,6 +100,9 @@ namespace CruZ.GameEngine.Resource
             }
         }
 
+        /// <summary>
+        /// Load resource and automatically disposed after game session
+        /// </summary>
         public T Load<T>(string resourcePath, bool shouldCache = false)
         {
             var content = GameApplication.GetContentManager();

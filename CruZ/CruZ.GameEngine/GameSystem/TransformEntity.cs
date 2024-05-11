@@ -3,11 +3,6 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text.Json.Serialization;
-
-using CruZ.GameEngine.Serialization;
 
 using Microsoft.Xna.Framework;
 
@@ -15,13 +10,15 @@ namespace CruZ.GameEngine.GameSystem
 {
     public sealed class TransformEntity : IDisposable
     {
-        public event Action<TransformEntity>? RemovedFromWorld;
+        public event Action<TransformEntity>? Destroying;
         public event Action<ComponentCollection>? ComponentsChanged;
 
         internal TransformEntity()
         {
             Id = s_entityCounter++;
             Name = $"New Entity({Id})";
+            _transform = new();
+            _components = new();
         }
 
         public T GetComponent<T>() where T : Component
@@ -43,7 +40,7 @@ namespace CruZ.GameEngine.GameSystem
 
         public Component GetComponent(Type ty)
         {
-            if (!HasComponent(ty))
+            if(!HasComponent(ty))
                 throw new ArgumentException($"Don't have component of type {ty}");
 
             return _components[ty];
@@ -51,7 +48,7 @@ namespace CruZ.GameEngine.GameSystem
 
         public void AddComponent(Component component)
         {
-            if (!_components.TryAdd(component.GetType(), component))
+            if(!_components.TryAdd(component.GetType(), component))
                 throw new ArgumentException($"Component of type {component.GetType()} already added");
 
             component.InternalOnAttached(this);
@@ -67,17 +64,22 @@ namespace CruZ.GameEngine.GameSystem
         {
             List<Component> comps = [];
 
-            foreach (var comp in _components.Values)
+            foreach(var comp in _components.Values)
                 comps.Add(comp);
 
             return comps.ToImmutableList();
         }
 
-        public void RemoveFromWorld()
+        public void Destroy()
         {
             IsActive = false;
-            ShouldRemove = true;
-            RemovedFromWorld?.Invoke(this);
+            ShouldDestroy = true;
+            Destroying?.Invoke(this);
+        }
+
+        private void Parent_Destroying(TransformEntity parent)
+        {
+            Parent = null;
         }
 
         [ReadOnly(true)]
@@ -93,7 +95,7 @@ namespace CruZ.GameEngine.GameSystem
             private set;
         }
 
-        internal bool ShouldRemove
+        internal bool ShouldDestroy
         {
             get;
             private set;
@@ -105,39 +107,27 @@ namespace CruZ.GameEngine.GameSystem
             set => _isActive = value;
         }
 
-        bool _isActive = false;
-
         public TransformEntity? Parent
         {
             get => _parent;
             set
             {
-                if (_parent == value) return;
+                if(_parent == value) return;
 
-                if (_parent != null)
-                    _parent.RemovedFromWorld -= Parent_RemovedFromWorld;
+                if(_parent != null)
+                    _parent.Destroying -= Parent_Destroying;
 
                 _parent = value;
 
-                if (_parent != null)
-                    _parent.RemovedFromWorld += Parent_RemovedFromWorld;
+                if(_parent != null)
+                    _parent.Destroying += Parent_Destroying;
             }
-        }
-
-        TransformEntity? _parent;
-
-        private void Parent_RemovedFromWorld(TransformEntity parent)
-        {
-            Parent = null;
         }
 
         public Transform Transform
         {
             get => _transform;
-            set => _transform = value;
         }
-
-        Transform _transform = new();
 
         public Vector2 Position
         {
@@ -151,33 +141,37 @@ namespace CruZ.GameEngine.GameSystem
             set => Transform.Scale = value;
         }
 
-        internal IImmutableList<Component> Components { get => _components.Values.ToImmutableList(); }
+        internal IReadOnlyCollection<Component> Components
+        {
+            get => _components.Values;
+        }
 
-        Dictionary<Type, Component> _components = [];
+        private TransformEntity? _parent;
+        private Dictionary<Type, Component> _components;
+        private Transform _transform;
+        private bool _isDisposed;
+        private bool _isActive;
+
+        public void Dispose()
+        {
+            if(_isDisposed) return;
+
+            Destroying = default;
+            ComponentsChanged = default;
+
+            foreach(var component in GetAllComponents())
+            {
+                component.Dispose();
+            }
+
+            _isDisposed = true;
+        }
 
         public override string ToString()
         {
             return Name;
         }
 
-        public void Dispose()
-        {
-            if (_isDisposed) return;
-            _isDisposed = true;
-
-            ShouldRemove = true;
-
-            RemovedFromWorld = default;
-            ComponentsChanged = default;
-
-            foreach (var component in GetAllComponents())
-            {
-                component.Dispose();
-            }
-        }
-
-        bool _isDisposed = false;
-
-        static int s_entityCounter = 0;
+        private static int s_entityCounter = 0;
     }
 }

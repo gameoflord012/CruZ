@@ -43,14 +43,14 @@
 //            _stunTimer.Start();
 //            _stunSpeed = StunForce;
 
-//            Health.Current -= 5;
+//            HealthBar.Current -= 5;
 //        }
 
 //        protected override void OnStateUpdate(GameTime gameTime)
 //        {
 //            base.OnStateUpdate(gameTime);
 
-//            if (Health.Current == 0)
+//            if (HealthBar.Current == 0)
 //            {
 //                OnHitDie();
 //                return;

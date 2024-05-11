@@ -15,6 +15,8 @@ namespace NinjaAdventure
     {
         public HealthComponent(int maxHealth, SpriteRendererComponent healthRenderer)
         {
+            ShouldDisplay = true;
+
             _font = GameApplication.InternalResource.Load<BitmapFont>("Fonts\\Fixedsys.fnt", true);
 
             MaxHealth = maxHealth;
@@ -23,10 +25,6 @@ namespace NinjaAdventure
 
             _healthRenderer.DrawRequestsFetching += SpriteRenderer_DrawRequestsFetching;
         }
-
-        public int MaxHealth;
-        public int Current { get => _health; set => _health = value < 0 ? 0 : value; }
-        private int _health;
 
         private void SpriteRenderer_DrawRequestsFetching(List<DrawRequestBase> drawRequests)
         {
@@ -42,15 +40,28 @@ namespace NinjaAdventure
             drawRequests.Add(stringDrawRequest);
         }
 
+        public int MaxHealth
+        {
+            get;
+            set;
+        }
+
+        public int Current
+        { get => _health; set => _health = value < 0 ? 0 : value; }
+
+        public bool ShouldDisplay
+        {
+            get; set;
+        }
+
+        private SpriteRendererComponent _healthRenderer;
+        private BitmapFont _font;
+        private int _health;
+
         public override void Dispose()
         {
             base.Dispose();
             _healthRenderer.DrawRequestsFetching -= SpriteRenderer_DrawRequestsFetching;
         }
-
-        public bool ShouldDisplay = true;
-
-        SpriteRendererComponent _healthRenderer;
-        BitmapFont _font;
     }
 }

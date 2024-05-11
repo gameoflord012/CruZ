@@ -34,6 +34,12 @@ namespace NinjaAdventure
 
         private void InitializeComponents()
         {
+            _healthBar = new HealthBar(_gameScene);
+            {
+
+            }
+            _healthBar.ParentEntity = Entity;
+
             _spriteRenderer = new SpriteRendererComponent();
             {
 
@@ -93,6 +99,8 @@ namespace NinjaAdventure
         {
             base.OnUpdating(args);
 
+            _healthBar.Entity.Position = Entity.Position;
+
             _camera.Zoom = 60f;
             _camera.CameraOffset = _physic.Position;
         }
@@ -128,6 +136,7 @@ namespace NinjaAdventure
         private GameScene _gameScene;
         private NinjaStateData _stateData;
         private Camera _camera;
+        private HealthBar _healthBar;
 
         public override void Dispose()
         {

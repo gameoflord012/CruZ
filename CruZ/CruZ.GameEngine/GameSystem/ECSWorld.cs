@@ -12,7 +12,8 @@ namespace CruZ.GameEngine.GameSystem
         public event Action<TransformEntity>? EntityAdded;
         public event Action<TransformEntity>? EntityRemoved;
 
-        public ECSWorld() { }
+        public ECSWorld()
+        { }
 
         public T GetSystem<T>() where T : EntitySystem
         {
@@ -50,7 +51,7 @@ namespace CruZ.GameEngine.GameSystem
 
         internal void UpdateSystems(GameTime gameTime)
         {
-            ProcessDirtyEntities();
+            ProcessDestroyingEntity();
 
             foreach(var system in _systems)
             {
@@ -60,7 +61,7 @@ namespace CruZ.GameEngine.GameSystem
 
         internal void DrawSystems(GameTime gameTime)
         {
-            ProcessDirtyEntities();
+            ProcessDestroyingEntity();
 
             foreach(var system in _systems)
             {
@@ -68,18 +69,16 @@ namespace CruZ.GameEngine.GameSystem
             }
         }
 
-        private IImmutableList<TransformEntity> GetActiveEntities()
+        private IEnumerable<TransformEntity> GetActiveEntities()
         {
-            return _entities.Where(e => e.IsActive).ToImmutableList();
+            return _entities.Where(e => e.IsActive);
         }
 
-        private void ProcessDirtyEntities()
+        private void ProcessDestroyingEntity()
         {
-            var removingEntities = _entities.Where(e => e.ShouldRemove);
+            var removingEntities = _entities.Where(e => e.ShouldDestroy);
             _entities.ExceptWith(removingEntities);
-            //
-            // fire events
-            //
+            
             foreach(var entity in removingEntities)
             {
                 EntityRemoved?.Invoke(entity);
@@ -87,19 +86,25 @@ namespace CruZ.GameEngine.GameSystem
             }
         }
 
+        public IReadOnlyCollection<TransformEntity> Entities
+        {
+            get => _entities;
+        }
+
+        private HashSet<TransformEntity> _entities = [];
+        private List<EntitySystem> _systems = [];
+
         public void Dispose()
         {
-            _systems.ForEach(e => e.Dispose());
+            foreach(var system in _systems)
+            {
+                system.Dispose();
+            }
 
             foreach(var e in Entities)
             {
-                _entities.Remove(e);
                 e.Dispose();
             }
         }
-
-        public IImmutableList<TransformEntity> Entities { get => _entities.ToImmutableList(); }
-        private HashSet<TransformEntity> _entities = [];
-        private List<EntitySystem> _systems = [];
     }
 }

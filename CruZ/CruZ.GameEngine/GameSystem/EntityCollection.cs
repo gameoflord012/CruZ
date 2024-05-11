@@ -9,7 +9,7 @@ namespace CruZ.GameEngine.GameSystem
 {
     internal class EntityCollection
     {
-        public EntityCollection(IImmutableList<TransformEntity> transformEntities)
+        public EntityCollection(IEnumerable<TransformEntity> transformEntities)
         {
             _entities = transformEntities;
         }
@@ -43,7 +43,7 @@ namespace CruZ.GameEngine.GameSystem
             return result;
         }
 
-        IImmutableList<TransformEntity> _entities;
+        IEnumerable<TransformEntity> _entities;
     }
 
     enum GetComponentMode
