@@ -151,7 +151,7 @@ namespace CruZ.Editor.UI
 
                 if(_attachedEntity != null)
                 {
-                    _attachedEntity.RemovedFromWorld -= Entity_OnRemoveFromWorld;
+                    _attachedEntity.Destroying -= Entity_OnRemoveFromWorld;
                     _attachedEntity.ComponentsChanged -= Entity_ComponentChanged;
                 }
 
@@ -159,7 +159,7 @@ namespace CruZ.Editor.UI
 
                 if(_attachedEntity != null)
                 {
-                    _attachedEntity.RemovedFromWorld += Entity_OnRemoveFromWorld;
+                    _attachedEntity.Destroying += Entity_OnRemoveFromWorld;
                     _attachedEntity.ComponentsChanged += Entity_ComponentChanged;
 
                     var rectUIProvider = ExtractRectUIProvider(_attachedEntity);
