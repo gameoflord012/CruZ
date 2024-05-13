@@ -8,7 +8,7 @@ namespace NinjaAdventure
     public class NinjaScene
     {
         [SceneFactoryMethod]
-        GameScene DemoNinjaScene()
+        public static GameScene DemoNinjaScene()
         {
             var scene = new GameScene();
             {

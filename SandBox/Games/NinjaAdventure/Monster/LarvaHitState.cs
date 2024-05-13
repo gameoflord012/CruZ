@@ -58,10 +58,8 @@ namespace NinjaAdventure
             }
         }
 
-        protected override void OnStateUpdate(GameTime gameTime)
+        protected override void OnStateUpdate(StateUpdateArgs args)
         {
-            base.OnStateUpdate(gameTime);
-
             var stunDirection = _physic.Position - _hitOrigin;
             if (stunDirection.SqrMagnitude() > 0.1) stunDirection.Normalize();
 
