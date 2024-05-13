@@ -21,9 +21,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CruZ.Editor", "CruZ\CruZ.Ed
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Sandbox", "Sandbox", "{E7FCC9F8-FD83-4A1C-8405-604EBB242AFA}"
-	ProjectSection(SolutionItems) = preProject
-		ThirdParty\VelcroPhysics\src\VelcroPhysics\VelcroPhysics.MonoGame.csproj = ThirdParty\VelcroPhysics\src\VelcroPhysics\VelcroPhysics.MonoGame.csproj
-	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CruZ.Experiment", "CruZ\CruZ.Experiment\CruZ.Experiment.csproj", "{1FD1AD15-5CDF-4C99-B969-AE7E3596EA0C}"
 EndProject
@@ -52,6 +49,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Pipeline", "Pipeline", "{832E06A2-13DE-4CDB-8337-B82483B168FF}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VelcroPhysics.MonoGame", "ThirdParty\VelcroPhysics\src\VelcroPhysics\VelcroPhysics.MonoGame.csproj", "{04907A69-69C7-45DE-99D5-A91B9F10A63F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NinjaAdventure.Server", "SandBox\Games\NinjaAdventure\NinjaAdventure.Server.csproj", "{625BCD60-C68C-4896-8ED2-385AF63DB021}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -615,6 +614,42 @@ Global
 		{04907A69-69C7-45DE-99D5-A91B9F10A63F}.WindowsRelease|x64.Build.0 = WindowsRelease|Any CPU
 		{04907A69-69C7-45DE-99D5-A91B9F10A63F}.WindowsRelease|x86.ActiveCfg = WindowsRelease|Any CPU
 		{04907A69-69C7-45DE-99D5-A91B9F10A63F}.WindowsRelease|x86.Build.0 = WindowsRelease|Any CPU
+		{625BCD60-C68C-4896-8ED2-385AF63DB021}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{625BCD60-C68C-4896-8ED2-385AF63DB021}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{625BCD60-C68C-4896-8ED2-385AF63DB021}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{625BCD60-C68C-4896-8ED2-385AF63DB021}.Debug|x64.Build.0 = Debug|Any CPU
+		{625BCD60-C68C-4896-8ED2-385AF63DB021}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{625BCD60-C68C-4896-8ED2-385AF63DB021}.Debug|x86.Build.0 = Debug|Any CPU
+		{625BCD60-C68C-4896-8ED2-385AF63DB021}.LinuxDebug|Any CPU.ActiveCfg = Debug|Any CPU
+		{625BCD60-C68C-4896-8ED2-385AF63DB021}.LinuxDebug|Any CPU.Build.0 = Debug|Any CPU
+		{625BCD60-C68C-4896-8ED2-385AF63DB021}.LinuxDebug|x64.ActiveCfg = Debug|Any CPU
+		{625BCD60-C68C-4896-8ED2-385AF63DB021}.LinuxDebug|x64.Build.0 = Debug|Any CPU
+		{625BCD60-C68C-4896-8ED2-385AF63DB021}.LinuxDebug|x86.ActiveCfg = Debug|Any CPU
+		{625BCD60-C68C-4896-8ED2-385AF63DB021}.LinuxDebug|x86.Build.0 = Debug|Any CPU
+		{625BCD60-C68C-4896-8ED2-385AF63DB021}.LinuxRelease|Any CPU.ActiveCfg = Release|Any CPU
+		{625BCD60-C68C-4896-8ED2-385AF63DB021}.LinuxRelease|Any CPU.Build.0 = Release|Any CPU
+		{625BCD60-C68C-4896-8ED2-385AF63DB021}.LinuxRelease|x64.ActiveCfg = Release|Any CPU
+		{625BCD60-C68C-4896-8ED2-385AF63DB021}.LinuxRelease|x64.Build.0 = Release|Any CPU
+		{625BCD60-C68C-4896-8ED2-385AF63DB021}.LinuxRelease|x86.ActiveCfg = Release|Any CPU
+		{625BCD60-C68C-4896-8ED2-385AF63DB021}.LinuxRelease|x86.Build.0 = Release|Any CPU
+		{625BCD60-C68C-4896-8ED2-385AF63DB021}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{625BCD60-C68C-4896-8ED2-385AF63DB021}.Release|Any CPU.Build.0 = Release|Any CPU
+		{625BCD60-C68C-4896-8ED2-385AF63DB021}.Release|x64.ActiveCfg = Release|Any CPU
+		{625BCD60-C68C-4896-8ED2-385AF63DB021}.Release|x64.Build.0 = Release|Any CPU
+		{625BCD60-C68C-4896-8ED2-385AF63DB021}.Release|x86.ActiveCfg = Release|Any CPU
+		{625BCD60-C68C-4896-8ED2-385AF63DB021}.Release|x86.Build.0 = Release|Any CPU
+		{625BCD60-C68C-4896-8ED2-385AF63DB021}.WindowsDebug|Any CPU.ActiveCfg = Debug|Any CPU
+		{625BCD60-C68C-4896-8ED2-385AF63DB021}.WindowsDebug|Any CPU.Build.0 = Debug|Any CPU
+		{625BCD60-C68C-4896-8ED2-385AF63DB021}.WindowsDebug|x64.ActiveCfg = Debug|Any CPU
+		{625BCD60-C68C-4896-8ED2-385AF63DB021}.WindowsDebug|x64.Build.0 = Debug|Any CPU
+		{625BCD60-C68C-4896-8ED2-385AF63DB021}.WindowsDebug|x86.ActiveCfg = Debug|Any CPU
+		{625BCD60-C68C-4896-8ED2-385AF63DB021}.WindowsDebug|x86.Build.0 = Debug|Any CPU
+		{625BCD60-C68C-4896-8ED2-385AF63DB021}.WindowsRelease|Any CPU.ActiveCfg = Release|Any CPU
+		{625BCD60-C68C-4896-8ED2-385AF63DB021}.WindowsRelease|Any CPU.Build.0 = Release|Any CPU
+		{625BCD60-C68C-4896-8ED2-385AF63DB021}.WindowsRelease|x64.ActiveCfg = Release|Any CPU
+		{625BCD60-C68C-4896-8ED2-385AF63DB021}.WindowsRelease|x64.Build.0 = Release|Any CPU
+		{625BCD60-C68C-4896-8ED2-385AF63DB021}.WindowsRelease|x86.ActiveCfg = Release|Any CPU
+		{625BCD60-C68C-4896-8ED2-385AF63DB021}.WindowsRelease|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -638,6 +673,7 @@ Global
 		{42BFC943-F1AB-433B-BD7E-9E5FE81F4693} = {F67C7BE7-F474-4B9B-A17F-1AAAF5D564F4}
 		{832E06A2-13DE-4CDB-8337-B82483B168FF} = {F67C7BE7-F474-4B9B-A17F-1AAAF5D564F4}
 		{04907A69-69C7-45DE-99D5-A91B9F10A63F} = {F67C7BE7-F474-4B9B-A17F-1AAAF5D564F4}
+		{625BCD60-C68C-4896-8ED2-385AF63DB021} = {E7FCC9F8-FD83-4A1C-8405-604EBB242AFA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7F9F8BC8-0847-4E84-9AA8-0677A7EED2BA}

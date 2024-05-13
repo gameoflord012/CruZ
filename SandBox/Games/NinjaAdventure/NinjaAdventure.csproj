@@ -4,7 +4,13 @@
 		<TargetFramework>net8.0-windows</TargetFramework>
 		<Nullable>enable</Nullable>
 	</PropertyGroup>
-	
+
+	<ItemGroup>
+		<Compile Remove="obj\**\*" />
+		<Compile Remove="Server\**" />
+		<None Remove="Server\**" />
+	</ItemGroup>
+
 	<ItemGroup>
 		<ProjectReference Include="..\..\..\CruZ\CruZ.GameEngine\CruZ.GameEngine.WindowsDX.csproj" />
 	</ItemGroup>
