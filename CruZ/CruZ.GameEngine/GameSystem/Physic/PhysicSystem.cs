@@ -14,6 +14,7 @@ namespace CruZ.GameEngine.GameSystem.Physic
         {
             _physicWorld = new(Vector2.Zero);
             _debugView = new(_physicWorld);
+            ShowDebug = true;
         }
 
         public override void OnInitialize()
@@ -44,30 +45,37 @@ namespace CruZ.GameEngine.GameSystem.Physic
 
             if(ShowDebug)
             {
+#if CRUZ_EDITOR
                 _debugView.RenderDebugData(
                 Camera.Current.ProjectionMatrix(),
                 Camera.Current.ViewMatrix());
+#endif
             }
 
             _gd.SetRenderTarget(null);
         }
 
-        public override void Dispose()
+        public bool ShowDebug
         {
-            base.Dispose();
-            IsDisposed = true;
+            get;
+            set;
+        }
+
+        public World World
+        {
+            get => _physicWorld;
         }
 
         private GraphicsDevice _gd;
-
-        internal bool IsDisposed { get; private set; }
-
-        public bool ShowDebug = true;
         private DebugView _debugView;
-        public World World
-        { get => _physicWorld; }
-
         private World _physicWorld;
+        private bool _isDisposed;
+
+        public override void Dispose()
+        {
+            base.Dispose();
+            _isDisposed = true;
+        }
 
         private static PhysicSystem? s_instance;
 
@@ -78,7 +86,7 @@ namespace CruZ.GameEngine.GameSystem.Physic
 
         internal static PhysicSystem CreateContext()
         {
-            if(s_instance != null && !s_instance.IsDisposed) throw new System.InvalidOperationException();
+            if(s_instance != null && !s_instance._isDisposed) throw new System.InvalidOperationException();
             return s_instance = new PhysicSystem();
         }
     }
