@@ -3,14 +3,11 @@
 	<PropertyGroup>
 		<OutputType>WinExe</OutputType>
 		<TargetFramework>net8.0-windows</TargetFramework>
-
 		<Nullable>enable</Nullable>
 		
 		<UseWindowsForms>true</UseWindowsForms>
 		<ApplicationHighDpiMode>SystemAware</ApplicationHighDpiMode>
 		<ForceDesignerDpiUnaware>true</ForceDesignerDpiUnaware>
-
-		<DefineConstants>$(DefineConstants);CRUZ_EDITOR</DefineConstants>
 	</PropertyGroup>
 
 	<PropertyGroup>
@@ -28,7 +25,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\CruZ.GameEngine\CruZ.GameEngine.WindowsDX.csproj"/>
+		<ProjectReference Include="..\CruZ.GameEngine\CruZ.GameEngine.Editor.csproj"/>
 		<ProjectReference Include="..\..\ThirdParty\MonoGameExtended\src\cs\MonoGame.Extended\MonoGame.Extended.csproj" />
 	</ItemGroup>
 </Project>

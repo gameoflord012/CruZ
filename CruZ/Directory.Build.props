@@ -1,6 +1,6 @@
 <Project>
-  <PropertyGroup>
-    <BaseOutputPath>..\..\Artifacts\$(MSBuildProjectName)</BaseOutputPath>
-  </PropertyGroup>
+  
+	<Import Project="..\CruZ.props" />
+  
 </Project>
 
