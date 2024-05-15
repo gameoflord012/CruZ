@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 
 using CruZ.GameEngine.GameSystem;
@@ -18,7 +19,7 @@ namespace NinjaAdventure
         private const float SpawnRadius = 5;
         private const float SpawnDuration = 1f;
 
-        public MonsterSpawner(GameScene gameScene, Transform follow) : base(gameScene)
+        public MonsterSpawner(GameScene gameScene, Transform? follow) : base(gameScene)
         {
             Entity.Name = "MonsterSpawner";
 
@@ -61,11 +62,16 @@ namespace NinjaAdventure
             }
         }
 
+        public IReadOnlyCollection<LarvaMonster> AliveMonsters
+        {
+            get => _monsterPool.Pops;
+        }
+
         private Pool<LarvaMonster> _monsterPool;
         private SpriteRendererComponent _monsterRenderer;
         private Random _random;
         private Stopwatch _spawnTimer;
         private GameScene _gameScene;
-        private Transform _follow;
+        private Transform? _follow;
     }
 }

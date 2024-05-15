@@ -17,6 +17,7 @@ namespace CruZ.GameEngine.GameSystem
         public Pool(Func<T> creationFunc, int capacity = 100)
         {
             _pool = new(capacity);
+            _pops = new();
             _creationFunc = creationFunc;
         }
 
@@ -26,14 +27,14 @@ namespace CruZ.GameEngine.GameSystem
 
             poolObject.OnDisabled();
 
-            PopCount--;
+            _pops.Remove((T)poolObject);
             _pool.Push(poolObject);
         }
 
         public T Pop()
         {
             IPoolObject pop = _pool.Count > 0 ? _pool.Pop() : Create();
-            PopCount++;
+            _pops.Add((T)pop);
 
             return (T)pop;
         }
@@ -54,11 +55,16 @@ namespace CruZ.GameEngine.GameSystem
 
         public int PopCount
         {
-            get;
-            private set;
+            get => _pops.Count;
+        }
+
+        public IReadOnlyCollection<T> Pops
+        {
+            get => _pops;
         }
 
         private Stack<IPoolObject> _pool;
+        private HashSet<T> _pops;
 
         public void Dispose()
         {

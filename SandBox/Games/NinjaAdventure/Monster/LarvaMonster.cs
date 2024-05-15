@@ -112,6 +112,11 @@ namespace NinjaAdventure
             private set;
         }
 
+        public Vector2 Postition
+        {
+            get => Entity.Position;
+        }
+
         Pool IPoolObject.Pool
         {
             get;

@@ -1,0 +1,10 @@
+<Project>
+
+	<Import Project="..\Directory.Build.props" />
+
+	<PropertyGroup>
+		<RootNamespace>NinjaAdventure</RootNamespace>
+	</PropertyGroup>
+
+</Project>
+

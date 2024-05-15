@@ -1,6 +1,9 @@
-﻿using CruZ.GameEngine.GameSystem;
+﻿using CruZ.GameEngine;
+using CruZ.GameEngine.GameSystem;
 using CruZ.GameEngine.GameSystem.ECS;
 using CruZ.GameEngine.GameSystem.Scene;
+
+using NinjaAdventure.Server;
 
 namespace NinjaAdventure
 {
@@ -8,15 +11,9 @@ namespace NinjaAdventure
     public class NinjaScene
     {
         [SceneFactoryMethod]
-        public static GameScene DemoNinjaScene()
+        public static GameScene DemoMonsterSpawner()
         {
-            var scene = new GameScene();
-            {
-                var ninja = new NinjaCharacter(scene);
-                var monsterSpawner = new MonsterSpawner(scene, ninja.Entity.Transform);
-            }
-
-            return scene;
+            return new MonsterSpawnerScene();
         }
 
         SpriteRendererComponent _spriteRenderer;
