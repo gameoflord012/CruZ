@@ -78,8 +78,7 @@ namespace NinjaAdventure
 
             // reset physic
             _physic.Position = position;
-            _physic.LinearVelocity = Vector2.Zero;
-            _physic.Rotation = 0;
+            _physic.Body.ResetDynamics();
             _physic.Body.Awake = true;
 
             // event
@@ -105,6 +104,15 @@ namespace NinjaAdventure
         public void ReturnToPool()
         {
             ((IPoolObject)this).Pool.ReturnPoolObject(this);
+        }
+
+        void IPoolObject.OnDisabled()
+        {
+            _physic.OnCollision -= Physic_OnCollision;
+            _physic.Body.Awake = false;
+            _physic.Body.ResetDynamics();
+            _health.ShouldDisplay = false;
+            _machine.SetNextState(null, false);
         }
 
         public TransformEntity Entity
@@ -144,14 +152,6 @@ namespace NinjaAdventure
         {
             Entity.Dispose();
             _physic.OnCollision -= Physic_OnCollision;
-        }
-
-        void IPoolObject.OnDisabled()
-        {
-            _physic.OnCollision -= Physic_OnCollision;
-            _physic.Body.Awake = false;
-            _health.ShouldDisplay = false;
-            _machine.SetNextState(null, false);
         }
     }
 }

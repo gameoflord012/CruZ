@@ -1,13 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using Genbox.VelcroPhysics.Collision.ContactSystem;
+﻿using Genbox.VelcroPhysics.Collision.ContactSystem;
 using Genbox.VelcroPhysics.Collision.Handlers;
 using Genbox.VelcroPhysics.Dynamics;
-using Genbox.VelcroPhysics.Extensions.Controllers.ControllerBase;
 using Genbox.VelcroPhysics.Factories;
 
 using Microsoft.Xna.Framework;
@@ -33,7 +26,7 @@ namespace CruZ.GameEngine.GameSystem.Physic
             OnSeperation?.Invoke(fixtureA, fixtureB, contact);
         }
 
-        void OnCollisionHanlder(Fixture fixtureA, Fixture fixtureB, Contact contact)
+        private void OnCollisionHanlder(Fixture fixtureA, Fixture fixtureB, Contact contact)
         {
             OnCollision?.Invoke(fixtureA, fixtureB, contact);
         }
@@ -49,6 +42,13 @@ namespace CruZ.GameEngine.GameSystem.Physic
         internal void Update(GameTime gameTime)
         {
             SyncTransform();
+        }
+
+        private void SyncTransform()
+        {
+            if(_transform == null) return;
+            _transform.Position = _body.Position;
+            _transform.Rotation = _body.Rotation;
         }
 
         public BodyType BodyType
@@ -108,22 +108,16 @@ namespace CruZ.GameEngine.GameSystem.Physic
             }
         }
 
-        private void SyncTransform()
-        {
-            if (_transform == null) return;
-            _transform.Position = _body.Position;
-            _transform.Rotation = _body.Rotation;
-        }
-
         public Body Body { get => _body; }
-        Body _body;
 
         public Transform Transform
         {
             get => _transform ?? throw new System.NullReferenceException();
             set => _transform = value;
         }
-        Transform? _transform;
+
+        private Transform? _transform;
+        private Body _body;
 
         public override void Dispose()
         {

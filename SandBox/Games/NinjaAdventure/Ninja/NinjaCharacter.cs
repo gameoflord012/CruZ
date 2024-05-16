@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 using CruZ.GameEngine;
 using CruZ.GameEngine.GameSystem;
@@ -10,7 +12,9 @@ using CruZ.GameEngine.GameSystem.Script;
 using CruZ.GameEngine.GameSystem.StateMachine;
 
 using Genbox.VelcroPhysics.Collision.ContactSystem;
+using Genbox.VelcroPhysics.Collision.Narrowphase;
 using Genbox.VelcroPhysics.Dynamics;
+using Genbox.VelcroPhysics.Extensions.PhysicsLogics.PhysicsLogicBase;
 using Genbox.VelcroPhysics.Factories;
 
 using Microsoft.Xna.Framework;
@@ -23,13 +27,14 @@ namespace NinjaAdventure
     {
         public NinjaCharacter(GameScene scene) : base(scene)
         {
-            _gameScene = scene;
-            _camera = GameApplication.MainCamera;
             Entity.Name = "Ninja";
 
-            InitializeComponents();
-
+            _collidedMonsterBodies = [];
+            _gameScene = scene;
+            _camera = GameApplication.MainCamera;
             _surikenPool = new(() => new Suriken(_gameScene, _spriteRenderer!, Entity));
+
+            InitializeComponents();
         }
 
         private void InitializeComponents()
@@ -76,7 +81,7 @@ namespace NinjaAdventure
                 _stateData.Animation = _animationComponent;
                 _stateData.Health = _health;
                 _stateData.SpriteRenderer = _spriteRenderer;
-                _stateData.NinjaCharacter = this;
+                _stateData.Character = this;
 
                 _machine.InjectedStateData = _stateData;
                 _machine.Add(new NinjaAttackState());
@@ -95,6 +100,12 @@ namespace NinjaAdventure
             suriken.Reset(Entity.Position, direction);
         }
 
+        public IReadOnlyCollection<Body> GetCollidedMonsterBodies()
+        {
+            _collidedMonsterBodies.RemoveAll(e => !e.Awake);
+            return _collidedMonsterBodies;
+        }
+
         protected override void OnUpdating(ScriptUpdateArgs args)
         {
             base.OnUpdating(args);
@@ -105,20 +116,19 @@ namespace NinjaAdventure
             _camera.CameraOffset = _physic.Position;
         }
 
-        private void Physic_OnSeperation(Fixture fixtureA, Fixture fixtureB, Contact contact)
-        {
-            if(IsMonster(fixtureB))
-            {
-                _stateData.MonsterCount--;
-            }
-        }
-
         private void Physic_OnCollision(Fixture fixtureA, Fixture fixtureB, Contact contact)
         {
             if(IsMonster(fixtureB))
             {
-                _stateData.MonsterCount++;
-                _stateData.LastMonsterBody = fixtureB.Body;
+                _collidedMonsterBodies.Add(fixtureB.Body);
+            }
+        }
+
+        private void Physic_OnSeperation(Fixture fixtureA, Fixture fixtureB, Contact contact)
+        {
+            if(IsMonster(fixtureB))
+            {
+                _collidedMonsterBodies.Remove(fixtureB.Body);
             }
         }
 
@@ -137,6 +147,7 @@ namespace NinjaAdventure
         private NinjaStateData _stateData;
         private Camera _camera;
         private HealthBar _healthBar;
+        private List<Body> _collidedMonsterBodies;
 
         public override void Dispose()
         {

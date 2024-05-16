@@ -20,7 +20,7 @@ namespace NinjaAdventure
         {
             _surikenThrowSoundFx = GameApplication.Resource.Load<SoundEffect>("sound\\throw-suriken.mp3");
             _animationComponent = StateData.Animation;
-            _ninjaCharacter = StateData.NinjaCharacter;
+            _ninjaCharacter = StateData.Character;
 
             _attackTimer.Start();
         }
