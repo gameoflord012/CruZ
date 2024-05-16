@@ -95,6 +95,7 @@ namespace CruZ.GameEngine.GameSystem.Animation
         {
             _animationEndCallback?.Invoke(animatedSprite);
             _animationEndCallback = null;
+            _currentAnimation = null;
             animatedSprite.OnAnimationEnd = null;
         }
 
@@ -109,6 +110,7 @@ namespace CruZ.GameEngine.GameSystem.Animation
         public void Stop()
         {
             _currentAnimation?.Stop();
+            _currentAnimation = null;
         }
 
         private AnimatedSprite GetAnimation(string tag)
@@ -146,7 +148,7 @@ namespace CruZ.GameEngine.GameSystem.Animation
             drawRequests.Add(new SpriteDrawRequest(spriteArgs));
         }
 
-        AnimatedSprite _currentAnimation;
+        AnimatedSprite? _currentAnimation;
         SpriteRendererComponent _renderer;
 
         ResourceManager _resource;

@@ -10,6 +10,10 @@
 		<Compile Remove="obj\**\*" />
 		<Compile Remove="Server\**" />
 		<None Remove="Server\**" />
+
+		<Content Include="Resource\**">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
 	</ItemGroup>
 
 	<ItemGroup>

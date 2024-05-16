@@ -6,6 +6,8 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 
+using NinjaAdventure.Packet;
+
 namespace NinjaAdventure.Server
 {
     internal class RequestProcessor
@@ -31,7 +33,7 @@ namespace NinjaAdventure.Server
 
         private byte[] GetGameStatePacket()
         {
-            var gameState = new GameState(_gameScene.MonsterPositions);
+            var gameState = new GameState(_gameScene.MonsterDatas);
 
             using(var stream = new MemoryStream())
             {

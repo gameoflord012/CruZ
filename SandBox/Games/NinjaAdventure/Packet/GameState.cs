@@ -4,18 +4,18 @@ using System.Runtime.Serialization;
 
 using Microsoft.Xna.Framework;
 
-namespace NinjaAdventure.Server
+namespace NinjaAdventure.Packet
 {
     [DataContract]
     internal class GameState
     {
-        public GameState(IEnumerable<Vector2> monsterPosition)
+        public GameState(IEnumerable<MonsterData> monsterDatas)
         {
-            MonsterPositions = monsterPosition;
+            this.MonsterDatas = monsterDatas;
         }
 
         [DataMember]
-        public IEnumerable<Vector2> MonsterPositions
+        public IEnumerable<MonsterData> MonsterDatas
         {
             get;
             private set;

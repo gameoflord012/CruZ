@@ -46,7 +46,7 @@ public class Program
             while(true)
             {
                 byte[] bytes = _listener.Receive(ref groupEP);
-                Console.WriteLine($"Received request from {groupEP} :");
+                Console.WriteLine($"Received request from {groupEP}");
 
                 if(_requestProcessor.ProcessRequest(bytes, out byte[] output))
                 {

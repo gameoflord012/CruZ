@@ -11,13 +11,18 @@ namespace CruZ.GameEngine.GameSystem.Scene
 
         public GameScene()
         {
+            if(Environment.CurrentManagedThreadId != GameApplication.ThreadId)
+            {
+                throw new InvalidOperationException("Different thread");
+            }
+
             SceneRoot = ECSManager.CreateEntity();
             SceneRoot.IsActive = false;
             Name = "New Scene";
             _entities = [];
         }
 
-        private void AddEntity(TransformEntity e)
+        public void AddEntity(TransformEntity e)
         {
             if(_entities.Contains(e)) return;
             _entities.Add(e);

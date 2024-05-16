@@ -23,6 +23,7 @@ namespace NinjaAdventure
         public LarvaMonster(GameScene scene, SpriteRendererComponent spriteRenderer)
         {
             Entity = scene.CreateEntity();
+            Id = s_monsterId++;
 
             _spriteRenderer = spriteRenderer;
             _surikenToBody = [];
@@ -115,6 +116,7 @@ namespace NinjaAdventure
         public Vector2 Postition
         {
             get => Entity.Position;
+            set => Entity.Position = value;
         }
 
         Pool IPoolObject.Pool
@@ -123,9 +125,16 @@ namespace NinjaAdventure
             set;
         }
 
-        private readonly Dictionary<Suriken, Body> _surikenToBody;
+        public int Id
+        {
+            get;
+            private set;
+        }
+
+        private static int s_monsterId;
+        private Dictionary<Suriken, Body> _surikenToBody;
         private AnimationComponent _animation;
-        private readonly SpriteRendererComponent _spriteRenderer;
+        private SpriteRendererComponent _spriteRenderer;
         private PhysicBodyComponent _physic;
         private HealthComponent _health;
         private StateMachineComponent _machine;
@@ -141,8 +150,8 @@ namespace NinjaAdventure
         {
             _physic.OnCollision -= Physic_OnCollision;
             _physic.Body.Awake = false;
-
             _health.ShouldDisplay = false;
+            _machine.SetNextState(null, false);
         }
     }
 }

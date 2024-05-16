@@ -4,7 +4,7 @@ using System.Linq;
 using CruZ.GameEngine;
 using CruZ.GameEngine.GameSystem.Scene;
 
-using Microsoft.Xna.Framework;
+using NinjaAdventure.Packet;
 
 namespace NinjaAdventure
 {
@@ -16,9 +16,9 @@ namespace NinjaAdventure
             _monsterSpawner = new MonsterSpawner(this, null);
         }
 
-        public IEnumerable<Vector2> MonsterPositions
+        public IEnumerable<MonsterData> MonsterDatas
         {
-            get => _monsterSpawner.AliveMonsters.Select(e => e.Postition);
+            get => _monsterSpawner.AliveMonsters.Select(e => new MonsterData(e.Postition, e.Id));
         }
 
         private MonsterSpawner _monsterSpawner;

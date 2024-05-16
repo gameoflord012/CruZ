@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Threading;
 
 using CruZ.GameEngine.GameSystem;
+using CruZ.GameEngine.GameSystem.Scene;
 using CruZ.GameEngine.Input;
 using CruZ.GameEngine.Resource;
 using CruZ.GameEngine.Utility;
@@ -20,6 +21,7 @@ namespace CruZ.GameEngine
     {
         private GameApplication(GameWrapper core, string gameResourceDir)
         {
+            _threadId = Environment.CurrentManagedThreadId;
             _marshalRequests = [];
             _disposables = [];
 
@@ -176,6 +178,7 @@ namespace CruZ.GameEngine
         private List<MarshalRequest> _marshalRequests;
         private bool _isDisposed;
         private Camera _mainCamera;
+        private int _threadId;
 
         public void Dispose()
         {
@@ -261,6 +264,11 @@ namespace CruZ.GameEngine
         public static Camera MainCamera
         {
             get => Instance._mainCamera;
+        }
+
+        public static int ThreadId
+        {
+            get => Instance._threadId;
         }
 
         public static Func<AssemblyName, Assembly?> AssemblyResolver
