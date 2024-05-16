@@ -21,6 +21,17 @@ namespace NinjaAdventure
             get => _monsterSpawner.AliveMonsters.Select(e => new MonsterData(e.Postition, e.Id));
         }
 
+        public float SpawnDuration
+        {
+            get => _monsterSpawner.SpawnDuration;
+            set => _monsterSpawner.SpawnDuration = value;
+        }
+
+        public MonsterSpawner MonsterSpawner
+        {
+            get => _monsterSpawner;
+        }
+
         private MonsterSpawner _monsterSpawner;
     }
 }

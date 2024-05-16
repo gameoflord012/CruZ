@@ -70,19 +70,6 @@ namespace CruZ.GameEngine
             _marshalRequests.Clear();
         }
 
-        public void MarshalInvoke(Action action)
-        {
-            ManualResetEvent resetEvent;
-
-            lock(this)
-            {
-                resetEvent = new ManualResetEvent(false);
-                _marshalRequests.Add(new MarshalRequest(action, resetEvent));
-            }
-
-            resetEvent.WaitOne();
-        }
-
         private void Wrapper_WindowResized(object? sender, EventArgs e)
         {
             WindowResized?.Invoke(_wrapper.GraphicsDevice.Viewport);
@@ -143,6 +130,19 @@ namespace CruZ.GameEngine
 
                 LogManager.SetMsg($"Fps: {FpsResult}", "Fps");
             }
+        }
+
+        private void GenerateMarshalRequest(Action action)
+        {
+            ManualResetEvent resetEvent;
+
+            lock(this)
+            {
+                resetEvent = new ManualResetEvent(false);
+                _marshalRequests.Add(new MarshalRequest(action, resetEvent));
+            }
+
+            resetEvent.WaitOne();
         }
 
         public ContentManager Content
@@ -217,6 +217,11 @@ namespace CruZ.GameEngine
         public static GraphicsDevice GetGraphicsDevice()
         {
             return Instance.GraphicsDevice;
+        }
+
+        public static void MarshalInvoke(Action action)
+        {
+            Instance.GenerateMarshalRequest(action);
         }
 
         internal static AutoResizeRenderTarget CreateRenderTarget()
