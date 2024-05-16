@@ -25,7 +25,7 @@ namespace NinjaAdventure
             _attackTimer.Start();
         }
 
-        protected override bool CanTransitionTo()
+        protected override bool CanTransitionHere()
         {
             return _attackTimer.GetElapsed() > TimeBetweenAttacks;
         }

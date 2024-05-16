@@ -21,7 +21,7 @@
 
 //        protected abstract Body? HitBodies { get; }
 
-//        protected override bool CanTransitionTo()
+//        protected override bool CanTransitionHere()
 //        {
 //            return IsGettingHit && _hitTimer.GetElapsed() > TimeBeetweenHit;
 //        }

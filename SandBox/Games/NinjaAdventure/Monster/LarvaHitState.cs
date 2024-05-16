@@ -19,7 +19,7 @@ namespace NinjaAdventure
 
         protected override string StateEnterSoundResource => "sound\\larva-hit.mp3";
 
-        protected override bool CanTransitionTo()
+        protected override bool CanTransitionHere()
         {
             return StateData.HitOrigins.Count > 0;
         }

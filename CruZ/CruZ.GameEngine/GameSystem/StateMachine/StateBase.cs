@@ -48,7 +48,7 @@ namespace CruZ.GameEngine.GameSystem.StateMachine
 
         internal bool GetCanTransitionTo()
         {
-            return CanTransitionTo();
+            return CanTransitionHere();
         }
 
         [Obsolete]
@@ -77,7 +77,7 @@ namespace CruZ.GameEngine.GameSystem.StateMachine
 
         }
 
-        protected virtual bool CanTransitionTo()
+        protected virtual bool CanTransitionHere()
         {
             return true;
         }

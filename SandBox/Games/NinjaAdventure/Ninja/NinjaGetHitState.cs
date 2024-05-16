@@ -12,7 +12,7 @@ namespace NinjaAdventure.Ninja
     {
         protected override string StateEnterSoundResource => "sound\\ninja-hurt.ogg";
 
-        protected override bool CanTransitionTo()
+        protected override bool CanTransitionHere()
         {
             return StateData.MonsterCount > 0 && _hitTimer.GetElapsed() > TimeBeetweenHit;
         }

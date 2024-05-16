@@ -58,7 +58,7 @@ namespace NinjaAdventure.Client
                         _monsterSpawner.DespawnMonster(_monsterIdMapper[key]);
                         _monsterIdMapper.Remove(key);
 
-                        Console.WriteLine("Despawned");
+                        //Console.WriteLine("Despawned");
                     }
                 }
             });
