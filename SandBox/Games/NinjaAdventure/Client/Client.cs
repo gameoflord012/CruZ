@@ -1,51 +1,42 @@
 ﻿using System;
-using System.IO;
 using System.Net;
 using System.Net.Sockets;
-using System.Threading.Tasks;
-
-using CruZ.GameEngine;
-
 namespace NinjaAdventure.Client;
 
-internal class Program
+internal class Client
 {
-    private static readonly IPAddress BroadCastAddress = IPAddress.Parse("192.168.1.255");
-    private static int Port = 11000;
+    public const int Port = 11000;
+    public static readonly IPAddress BroadCastAddress = IPAddress.Parse("192.168.1.255");
+    public static readonly IPEndPoint BroadCastEP = new(BroadCastAddress, Port);
 
-    private static void Main(string[] args)
+    public Client()
     {
-        GameWrapper game = new();
-        GameApplication.CreateContext(game, Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resource"));
-
-        GameApplication.Initialized += GameApplication_Initialized;
-        game.Run();
-        GameApplication.Initialized -= GameApplication_Initialized;
+        _udp = new();
     }
 
-    private static void GameApplication_Initialized()
+    private UdpClient _udp;
+
+    public static void CreateContext()
     {
-        _monsterSpawnerScene = new MonsterSpawnerScene();
-        _monsterSpawnerScene.SpawnDuration = -1;
-        GameApplication.MainCamera.Zoom = 60f;
-        _gameStateCommunicator = new(_monsterSpawnerScene);
-
-        UdpClient udpClient = new();
-        IPEndPoint broadCastEP = new(BroadCastAddress, Port);
-        IPEndPoint serverEP = new(IPAddress.Any, Port);
-
-        Task.Factory.StartNew(() =>
-        {
-            while(true)
-            {
-                udpClient.Send(_gameStateCommunicator.GetRequest(), broadCastEP);
-                var bytes = udpClient.Receive(ref serverEP);
-
-                _gameStateCommunicator.ProcessResponse(bytes);
-            }
-        });
+        if(_instance != null) throw new InvalidOperationException("Already created");
+        _instance = new();
     }
 
-    private static MonsterSpawnerScene _monsterSpawnerScene;
-    private static GameStateCommunicator _gameStateCommunicator;
+    public static void Send(byte[] bytes)
+    {
+        Instance._udp.Send(bytes, BroadCastEP);
+    }
+
+    public static byte[] Receive()
+    {
+        IPEndPoint ep = new(IPAddress.Any, Port);
+        return Instance._udp.Receive(ref ep);
+    }
+
+    private static Client Instance
+    {
+        get => _instance ?? throw new NullReferenceException();
+    }
+
+    private static Client? _instance;
 }

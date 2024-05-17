@@ -16,8 +16,8 @@ namespace CruZ.GameEngine.GameSystem.Scene
                 throw new InvalidOperationException("Different thread");
             }
 
-            SceneRoot = ECSManager.CreateEntity();
-            SceneRoot.IsActive = false;
+            _sceneRoot = ECSManager.CreateEntity();
+            _sceneRoot.IsActive = false;
             Name = "New Scene";
             _entities = [];
         }
@@ -38,7 +38,7 @@ namespace CruZ.GameEngine.GameSystem.Scene
             var e = ECSManager.CreateEntity();
 
             if(!string.IsNullOrEmpty(name)) e.Name = name;
-            e.Parent = parent ?? SceneRoot;
+            e.Parent = parent ?? _sceneRoot;
 
             AddEntity(e);
 
@@ -79,12 +79,17 @@ namespace CruZ.GameEngine.GameSystem.Scene
             set
             {
                 if(_name == value) return;
-                SceneRoot.Name = value;
+                _sceneRoot.Name = value;
                 _name = value;
             }
         }
 
-        private TransformEntity SceneRoot;
+        public TransformEntity SceneRoot
+        {
+            get => _sceneRoot;
+        }
+
+        private TransformEntity _sceneRoot;
         private List<TransformEntity> _entities;
         private string _name;
 

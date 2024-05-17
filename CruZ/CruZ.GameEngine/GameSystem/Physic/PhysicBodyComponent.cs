@@ -1,4 +1,6 @@
-﻿using Genbox.VelcroPhysics.Collision.ContactSystem;
+﻿using System;
+
+using Genbox.VelcroPhysics.Collision.ContactSystem;
 using Genbox.VelcroPhysics.Collision.Handlers;
 using Genbox.VelcroPhysics.Dynamics;
 using Genbox.VelcroPhysics.Factories;
@@ -19,6 +21,11 @@ namespace CruZ.GameEngine.GameSystem.Physic
             _body.OnCollision = OnCollisionHanlder;
             _body.OnSeparation += OnSeperationHanlder;
             _body.SleepingAllowed = false;
+        }
+
+        public void ResetDynamics()
+        {
+            _body.ResetDynamics();
         }
 
         private void OnSeperationHanlder(Fixture fixtureA, Fixture fixtureB, Contact contact)
@@ -60,6 +67,12 @@ namespace CruZ.GameEngine.GameSystem.Physic
         public bool IsSensor
         {
             set => _body.IsSensor = value;
+        }
+
+        public bool Awake
+        {
+            get => _body.Awake;
+            set => _body.Awake = value;
         }
 
         public object UserData

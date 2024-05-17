@@ -1,29 +1,32 @@
-﻿using System.Collections;
+﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.Serialization;
+using System.Text;
+using System.Threading.Tasks;
 
 using Microsoft.Xna.Framework;
 
 namespace NinjaAdventure.Packet
 {
     [DataContract]
-    internal class GameState
+    internal class CharacterData
     {
-        public GameState(NinjaAdventureScene gameScene)
+        public CharacterData(NinjaCharacter ninjaCharacter)
         {
-            Monsters = gameScene.Monsters;
-            Characters = gameScene.Characters;
+            Position = ninjaCharacter.Position;
+            CharacterId = ninjaCharacter.Id;
         }
 
         [DataMember]
-        public IEnumerable<MonsterData> Monsters
+        public Vector2 Position
         {
             get;
             private set;
         }
 
         [DataMember]
-        public IEnumerable<CharacterData> Characters
+        public int CharacterId
         {
             get;
             private set;

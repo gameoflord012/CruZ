@@ -38,11 +38,12 @@ namespace CruZ.GameEngine.GameSystem
         }
 
         GameWindow _window;
-
         GraphicsDevice _gd;
-
         RenderTarget2D? _value;
 
-        public RenderTarget2D Value { get => _value!; }
+        public RenderTarget2D Value
+        {
+            get => _value!;
+        }
     }
 }

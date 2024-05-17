@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.IO;
-using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
 
@@ -12,20 +10,20 @@ using NinjaAdventure.Packet;
 
 namespace NinjaAdventure.Client
 {
-    internal class GameStateCommunicator
+    internal class GameStateCommunicator : Communicator
     {
-        public GameStateCommunicator(MonsterSpawnerScene monsterSpawnerScene)
+        public GameStateCommunicator(NinjaAdventureScene monsterSpawnerScene)
         {
             _monsterIdMapper = [];
             _monsterSpawner = monsterSpawnerScene.MonsterSpawner;
         }
 
-        public byte[] GetRequest()
+        public override byte[] GetRequest()
         {
             return Encoding.ASCII.GetBytes("GET_GAME_STATE");
         }
 
-        public void ProcessResponse(byte[] bytes)
+        public override void ProcessResponse(byte[] bytes)
         {
             var sGameState = TranslateServerResponse(bytes);
 
@@ -34,7 +32,7 @@ namespace NinjaAdventure.Client
                 HashSet<int> sMonsterIds = [];
 
                 // spawn new server monster 
-                foreach(var monsterData in sGameState.MonsterDatas)
+                foreach(var monsterData in sGameState.Monsters)
                 {
                     if(!_monsterIdMapper.ContainsKey(monsterData.Id))
                     {

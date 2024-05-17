@@ -17,13 +17,26 @@ namespace NinjaAdventure.Ninja
         private const float StunForce = 10f;
         private const float StunTime = 0.25f;
 
+        public NinjaHitState()
+        {
+            _hitTimer = new();
+            _stunTimer = new();
+        }
+
         protected override string StateEnterSoundResource => "sound\\ninja-hurt.ogg";
 
         protected override bool CanTransitionHere()
         {
-            return
-                GetHitMonsterBody() != null &&
-                _hitTimer.GetElapsed() > TimeBeetweenHit;
+            var hitBody = GetHitMonsterBody();
+            if(hitBody != null && _hitTimer.GetElapsed() > TimeBeetweenHit)
+            {
+                _hitOrigin = hitBody.Position;
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         protected override void OnStateMachineAttached()
@@ -58,8 +71,7 @@ namespace NinjaAdventure.Ninja
                 Check(typeof(NinjaMovingState));
             }
 
-            var monsterBody = GetHitMonsterBody() ?? throw new System.NullReferenceException();
-            var stunDirection = _physic.Position - monsterBody.Position;
+            var stunDirection = _physic.Position - _hitOrigin;
             if(stunDirection.SqrMagnitude() > 0.1) stunDirection.Normalize();
 
             _physic.LinearVelocity = stunDirection * _stunSpeed;
@@ -85,10 +97,11 @@ namespace NinjaAdventure.Ninja
             return StateData.Character.GetCollidedMonsterBodies().FirstOrDefault();
         }
 
-        private Stopwatch _hitTimer = new();
-        private Stopwatch _stunTimer = new();
+        private Stopwatch _hitTimer;
+        private Stopwatch _stunTimer;
         private float _stunSpeed;
         private HealthComponent _health;
         private PhysicBodyComponent _physic;
+        private Vector2 _hitOrigin;
     }
 }

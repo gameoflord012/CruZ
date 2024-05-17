@@ -30,8 +30,8 @@ public class Program
 
     private static void GameApplication_Initialized()
     {
-        _gameScene = new MonsterSpawnerScene();
-        _requestProcessor = new RequestProcessor(_gameScene);
+        _gameScene = new NinjaAdventureScene();
+        _requestProcessor = new RequestResponser(_gameScene);
         _listenerTask = new(StartListener);
         _listenerTask.Start();
     }
@@ -46,12 +46,10 @@ public class Program
             while(true)
             {
                 byte[] bytes = _listener.Receive(ref groupEP);
-                Console.WriteLine($"Received request from {groupEP}");
-
-                if(_requestProcessor.ProcessRequest(bytes, out byte[] output))
-                {
-                    _listener.Send(output, groupEP);
-                }
+                //Console.WriteLine($"=== Received request from {groupEP}");
+                _requestProcessor.ProcessRequest(bytes, groupEP, out byte[] output);
+                //Console.WriteLine($"... Request processed");
+                _listener.Send(output, groupEP);
             }
         }
         catch(SocketException e)
@@ -74,6 +72,6 @@ public class Program
 
     private static Task _listenerTask;
     private static UdpClient _listener;
-    private static MonsterSpawnerScene _gameScene;
-    private static RequestProcessor _requestProcessor;
+    private static NinjaAdventureScene _gameScene;
+    private static RequestResponser _requestProcessor;
 }

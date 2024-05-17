@@ -1,39 +1,58 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
+using System.Net;
 using System.Runtime.Serialization;
 using System.Text;
-using System.Threading.Tasks;
+
+using CruZ.GameEngine;
 
 using NinjaAdventure.Packet;
 
 namespace NinjaAdventure.Server
 {
-    internal class RequestProcessor
+    internal class RequestResponser
     {
-        public RequestProcessor(MonsterSpawnerScene gameScene)
+        public RequestResponser(NinjaAdventureScene gameScene)
         {
             _gameScene = gameScene;
+            _fromEPToCharacter = [];
         }
 
-        public bool ProcessRequest(byte[] bytes, out byte[] output)
+        public void ProcessRequest(byte[] bytes, IPEndPoint requestEP, out byte[] outResponse)
         {
             string request = Encoding.ASCII.GetString(bytes);
 
-            if(request.StartsWith("GET_GAME_STATE"))
-            {
-                output = GetGameStatePacket();
-                return true;
-            }
+            byte[] response = [];
 
-            output = [];
-            return false;
+            GameApplication.MarshalInvoke(() =>
+            {
+                if(request.StartsWith("GET_GAME_STATE"))
+                {
+                    response = GetGameStatePacket();
+                }
+                else
+                if(request.StartsWith("INIT_CHARACTER"))
+                {
+                    if(_fromEPToCharacter.ContainsKey(requestEP.ToString()))
+                    {
+                        // false if EP character already initialized
+                        response = Encoding.ASCII.GetBytes("FALSE");
+                    }
+                    else
+                    {
+                        _fromEPToCharacter.Add(request.ToString(), _gameScene.CreateCharacter());
+                        response = Encoding.ASCII.GetBytes("SUCCESS");
+                    }
+                }
+            });
+
+            outResponse = response;
         }
 
         private byte[] GetGameStatePacket()
         {
-            var gameState = new GameState(_gameScene.MonsterDatas);
+            var gameState = new GameState(_gameScene);
 
             using(var stream = new MemoryStream())
             {
@@ -43,6 +62,7 @@ namespace NinjaAdventure.Server
             }
         }
 
-        MonsterSpawnerScene _gameScene;
+        NinjaAdventureScene _gameScene;
+        Dictionary<string, NinjaCharacter> _fromEPToCharacter;
     }
 }

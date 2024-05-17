@@ -23,11 +23,14 @@ using NinjaAdventure.Ninja;
 
 namespace NinjaAdventure
 {
-    internal class NinjaCharacter : ScriptingEntity, IDisposable
+    internal class NinjaCharacter : ScriptingEntity, IDisposable, IPoolObject
     {
+        private const int InitialHealthPoint = 30;
+
         public NinjaCharacter(GameScene scene) : base(scene)
         {
             Entity.Name = "Ninja";
+            Id = s_characterId++;
 
             _collidedMonsterBodies = [];
             _gameScene = scene;
@@ -63,8 +66,6 @@ namespace NinjaAdventure
                 FixtureFactory.AttachCircle(0.4f, 1, _physic.Body);
                 _physic.BodyType = BodyType.Dynamic;
                 _physic.IsSensor = true;
-                _physic.OnCollision += Physic_OnCollision;
-                _physic.OnSeperation += Physic_OnSeperation;
             }
             Entity.AddComponent(_physic);
 
@@ -90,7 +91,20 @@ namespace NinjaAdventure
                 _machine.Add(new NinjaDieState());
             }
             Entity.AddComponent(_machine);
+        }
 
+        public void Reset(Vector2 position)
+        {
+            _physic.OnCollision += Physic_OnCollision;
+            _physic.OnSeperation += Physic_OnSeperation;
+            _physic.Awake = true;
+            _physic.Position = position;
+
+            _health.Current = InitialHealthPoint;
+            _health.ShouldDisplay = true;
+
+            _stateData.Reset();
+            _collidedMonsterBodies.Clear();
             _machine.SetNextState(typeof(NinjaMovingState), false);
         }
 
@@ -104,6 +118,11 @@ namespace NinjaAdventure
         {
             _collidedMonsterBodies.RemoveAll(e => !e.Awake);
             return _collidedMonsterBodies;
+        }
+
+        public void ReturnToPool()
+        {
+            ((IPoolObject)this).Pool.ReturnPoolObject(this);
         }
 
         protected override void OnUpdating(ScriptUpdateArgs args)
@@ -132,11 +151,29 @@ namespace NinjaAdventure
             }
         }
 
-        private static bool IsMonster(Fixture fixtureB)
+        private bool IsMonster(Fixture fixtureB)
         {
             return fixtureB.Body.UserData is LarvaMonster;
         }
 
+        public int Id
+        {
+            get;
+            set;
+        }
+
+        public Vector2 Position
+        {
+            get => _physic.Position;
+        }
+
+        Pool IPoolObject.Pool
+        {
+            get;
+            set;
+        }
+
+        private static int s_characterId;
         private PhysicBodyComponent _physic;
         private HealthComponent _health;
         private StateMachineComponent _machine;
@@ -154,6 +191,19 @@ namespace NinjaAdventure
             base.Dispose();
 
             _physic.OnCollision -= Physic_OnCollision;
+            _physic.OnSeperation -= Physic_OnSeperation;
+        }
+
+        void IPoolObject.OnDisabled()
+        {
+            _physic.OnCollision -= Physic_OnCollision;
+            _physic.OnSeperation -= Physic_OnSeperation;
+
+            _physic.Awake = false;
+            _health.ShouldDisplay = false;
+
+            _animationComponent.Stop();
+            _machine.SetNextState(typeof(NinjaMovingState), false);
         }
     }
 }

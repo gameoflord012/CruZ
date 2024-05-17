@@ -9,7 +9,7 @@ namespace NinjaAdventure
         [SceneFactoryMethod]
         public static GameScene DemoMonsterSpawner()
         {
-            return new MonsterSpawnerScene();
+            return new NinjaAdventureScene();
         }
 
         SpriteRendererComponent _spriteRenderer;

@@ -14,6 +14,8 @@ using CruZ.GameEngine.Utility;
 
 using Microsoft.Xna.Framework;
 
+using NinjaAdventure.Ultility;
+
 namespace NinjaAdventure
 {
     internal class MonsterSpawner : ScriptingEntity
@@ -65,13 +67,8 @@ namespace NinjaAdventure
                 _spawnTimer.Restart();
 
                 // randomly spawn in a circle 
-                var r = SpawnRadius * float.Sqrt(_random.NextSingle());
-                var theta = _random.NextSingle() * 2f * MathF.PI;
-
-                var spawnX = Entity.Position.X + r * MathF.Cos(theta);
-                var spawnY = Entity.Position.Y + r * MathF.Sin(theta);
-
-                SpawnMonster(spawnX, spawnY);
+                Vector2 spawnPosition = _random.RandomPosition(SpawnRadius, Entity.Position);
+                SpawnMonster(spawnPosition.X, spawnPosition.Y);
             }
         }
 
@@ -98,14 +95,14 @@ namespace NinjaAdventure
             }
         }
 
-        public IReadOnlyCollection<LarvaMonster> AliveMonsters
+        public IReadOnlyCollection<LarvaMonster> Alives
         {
             get => _monsterPool.Pops;
         }
 
         public bool TryGet(int monsterId, [NotNullWhen(true)] out LarvaMonster? larvaMonster)
         {
-            larvaMonster = AliveMonsters.Where(e => e.Id == monsterId).FirstOrDefault();
+            larvaMonster = Alives.Where(e => e.Id == monsterId).FirstOrDefault();
             return larvaMonster != null;
         }
 

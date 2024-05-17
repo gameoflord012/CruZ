@@ -7,10 +7,10 @@ namespace NinjaAdventure.Packet
     [DataContract]
     internal class MonsterData
     {
-        public MonsterData(Vector2 position, int id)
+        public MonsterData(LarvaMonster monster)
         {
-            Position = position;
-            Id = id;
+            Position = monster.Postition;
+            Id = monster.Id;
         }
 
         [DataMember]

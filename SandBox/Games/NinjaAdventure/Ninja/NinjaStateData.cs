@@ -17,6 +17,11 @@ namespace NinjaAdventure.Ninja
 
         public Vector2 LastInputMovement;
 
+        public void Reset()
+        {
+            LastInputMovement = Vector2.Zero;
+        }
+
         public string GetFacingString()
         {
             return AnimationHelper.GetFacingDirectionString(LastInputMovement);
