@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 using CruZ.GameEngine;
+using CruZ.GameEngine.GameSystem.Scene;
 
 namespace NinjaAdventure.Client
 {
@@ -26,7 +27,7 @@ namespace NinjaAdventure.Client
         {
             Client.CreateContext();
 
-            _scene = new NinjaAdventureScene();
+            _scene = new NinjaAdventureDecorator(GameScene.Create());
             _scene.MonsterSpawner.SpawnDuration = -1;
 
             _gameState = new(_scene);
@@ -46,7 +47,7 @@ namespace NinjaAdventure.Client
             });
         }
 
-        private static NinjaAdventureScene _scene;
+        private static NinjaAdventureDecorator _scene;
         private static GameStateCommunicator _gameState;
         private static CharacterCreationCommunicator _charCreation;
     }

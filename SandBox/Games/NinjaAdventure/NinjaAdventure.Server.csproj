@@ -10,9 +10,12 @@
 
 	<ItemGroup>
 		<Compile Remove="obj\**\*" />
-		
+
 		<Compile Remove="Client\**" />
 		<None Remove="Client\**" />
+
+		<Compile Remove="Editor\**" />
+		<None Remove="Editor\**" />
 
 		<Content Include="Resource\**" >
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

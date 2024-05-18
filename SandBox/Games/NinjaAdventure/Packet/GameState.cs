@@ -9,7 +9,7 @@ namespace NinjaAdventure.Packet
     [DataContract]
     internal class GameState
     {
-        public GameState(NinjaAdventureScene gameScene)
+        public GameState(NinjaAdventureDecorator gameScene)
         {
             Monsters = gameScene.Monsters;
             Characters = gameScene.Characters;

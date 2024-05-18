@@ -55,8 +55,8 @@ namespace CruZ.GameEngine.Input
             #region Update Input Actions
             _info.ScrollDelta = ScrollDelta();
             _info.IsMouseScrolling = ScrollDelta() != 0;
-            _info.IsMouseMoving = DoesMouseMove();
-            _info.IsMouseStateChange = DoesMouseButtonChange();
+            _info.IsMouseMoving = IsMouseMove();
+            _info.IsMouseStateChange = IsMouseButtonChange();
 
             if(_info.IsMouseJustDown(MouseKey.Left))
             {
@@ -96,7 +96,7 @@ namespace CruZ.GameEngine.Input
             }
         }
 
-        private bool DoesMouseButtonChange()
+        private bool IsMouseButtonChange()
         {
             return
                 _info.CurMouse.ButtonState(MouseKey.Left) != _info.PreMouse.ButtonState(MouseKey.Left) ||
@@ -104,7 +104,7 @@ namespace CruZ.GameEngine.Input
                 _info.CurMouse.ButtonState(MouseKey.Right) != _info.PreMouse.ButtonState(MouseKey.Right);
         }
 
-        private bool DoesMouseMove()
+        private bool IsMouseMove()
         {
             return MouseMoveDelta() != new Point(0, 0);
         }
@@ -117,7 +117,6 @@ namespace CruZ.GameEngine.Input
 
         internal static GameInput CreateContext()
         {
-            if(_instance != null) throw new InvalidOperationException();
             return _instance = new();
         }
 

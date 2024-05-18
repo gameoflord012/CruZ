@@ -114,7 +114,7 @@ namespace CruZ.Editor
             {
                 _gameEditor.LoadRuntimeScene(sceneName);
             }
-            catch (SceneAssetNotFoundException ex)
+            catch (SceneException ex)
             {
                 DialogHelper.ShowExceptionDialog(ex);
             }

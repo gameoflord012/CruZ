@@ -18,6 +18,10 @@
 		<Content Include="Resource\**">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</Content>
+
+		<Compile Update="GameEditor.*.cs">
+			<DependentUpon>GameEditor.cs</DependentUpon>
+		</Compile>
 	</ItemGroup>
 
 	<ItemGroup>
@@ -25,7 +29,11 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\CruZ.GameEngine\CruZ.GameEngine.Editor.csproj"/>
+		<ProjectReference Include="..\CruZ.GameEngine\CruZ.GameEngine.Editor.csproj" />
 		<ProjectReference Include="..\..\ThirdParty\MonoGameExtended\src\cs\MonoGame.Extended\MonoGame.Extended.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Scene\" />
 	</ItemGroup>
 </Project>

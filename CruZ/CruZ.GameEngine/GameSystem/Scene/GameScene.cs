@@ -1,25 +1,42 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Diagnostics;
 
 namespace CruZ.GameEngine.GameSystem.Scene
 {
-    public class GameScene
+    public partial class GameScene
     {
         public event Action<TransformEntity>? EntityAdded;
         public event Action<TransformEntity>? EntityRemoved;
 
-        public GameScene()
+        internal GameScene(string sceneName = "New Scene")
         {
-            if(Environment.CurrentManagedThreadId != GameApplication.ThreadId)
-            {
-                throw new InvalidOperationException("Different thread");
-            }
+            GameApplication.CheckThread();
 
             _sceneRoot = ECSManager.CreateEntity();
             _sceneRoot.IsActive = false;
-            Name = "New Scene";
             _entities = [];
+
+            Name = sceneName;
+
+            OnInitialize();
+        }
+
+        public TransformEntity CreateEntity(string? name = null, TransformEntity? parent = null)
+        {
+            var e = ECSManager.CreateEntity();
+
+            if(!string.IsNullOrEmpty(name))
+            {
+                e.Name = name;
+            }
+
+            e.Parent = parent ?? _sceneRoot;
+
+            AddEntity(e);
+
+            return e;
         }
 
         public void AddEntity(TransformEntity e)
@@ -31,31 +48,6 @@ namespace CruZ.GameEngine.GameSystem.Scene
             e.Destroying += Entity_Destroying;
 
             EntityAdded?.Invoke(e);
-        }
-
-        public TransformEntity CreateEntity(string? name = null, TransformEntity? parent = null)
-        {
-            var e = ECSManager.CreateEntity();
-
-            if(!string.IsNullOrEmpty(name)) e.Name = name;
-            e.Parent = parent ?? _sceneRoot;
-
-            AddEntity(e);
-
-            return e;
-        }
-
-        public void Destroy()
-        {
-            foreach(var entity in _entities.ToImmutableArray())
-            {
-                entity.Destroy();
-            }
-        }
-
-        private void Entity_Destroying(TransformEntity e)
-        {
-            RemoveEntity(e);
         }
 
         private void RemoveEntity(TransformEntity e)
@@ -73,29 +65,67 @@ namespace CruZ.GameEngine.GameSystem.Scene
             EntityRemoved?.Invoke(e);
         }
 
-        public string Name
+        public void Destroy()
         {
-            get => _name;
-            set
+            s_allocatedScenes.Remove(this);
+
+            foreach(var entity in _entities.ToImmutableArray())
             {
-                if(_name == value) return;
-                _sceneRoot.Name = value;
-                _name = value;
+                entity.Destroy();
             }
         }
 
-        public TransformEntity SceneRoot
+        public override string ToString()
+        {
+            return Name;
+        }
+
+        protected virtual void OnInitialize()
+        {
+
+        }
+
+        private void Entity_Destroying(TransformEntity e)
+        {
+            RemoveEntity(e);
+        }
+
+        public string Name
+        {
+            get => _sceneRoot.Name;
+            set => _sceneRoot.Name = value;
+        }
+
+        public TransformEntity RootEntity
         {
             get => _sceneRoot;
         }
 
         private TransformEntity _sceneRoot;
         private List<TransformEntity> _entities;
-        private string _name;
-
-        public override string ToString()
-        {
-            return Name;
-        }
     }
+
+    public partial class GameScene
+    {
+        static GameScene()
+        {
+            s_allocatedScenes = [];
+        }
+
+        public static GameScene Create(string? name = null)
+        {
+            GameScene scene = new();
+            scene.Name = string.IsNullOrEmpty(name) ? scene.GetType().Name : name;
+            s_allocatedScenes.Add(scene);
+            return scene;
+        }
+
+        public static int AllocatedCount
+        {
+            get => s_allocatedScenes.Count;
+        }
+
+        private static List<GameScene> s_allocatedScenes;
+    }
+
 }

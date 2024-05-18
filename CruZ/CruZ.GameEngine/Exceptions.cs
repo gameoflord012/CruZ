@@ -40,25 +40,14 @@ public class SystemUninitailizeException : Exception
       System.Runtime.Serialization.StreamingContext context) : base(info, context) { }
 }
 
-[Serializable]
-public class SceneAssetNotFoundException : Exception
-{
-    public SceneAssetNotFoundException() { }
-    public SceneAssetNotFoundException(string message) : base(message) { }
-    public SceneAssetNotFoundException(string message, Exception inner) : base(message, inner) { }
-    protected SceneAssetNotFoundException(
-      System.Runtime.Serialization.SerializationInfo info,
-      System.Runtime.Serialization.StreamingContext context) : base(info, context) { }
-}
-
 
 [Serializable]
-public class RuntimeSceneLoadException : Exception
+public class SceneException : Exception
 {
-    public RuntimeSceneLoadException() { }
-    public RuntimeSceneLoadException(string message) : base(message) { }
-    public RuntimeSceneLoadException(string message, Exception inner) : base(message, inner) { }
-    protected RuntimeSceneLoadException(
+    public SceneException() { }
+    public SceneException(string message) : base(message) { }
+    public SceneException(string message, Exception inner) : base(message, inner) { }
+    protected SceneException(
       System.Runtime.Serialization.SerializationInfo info,
       System.Runtime.Serialization.StreamingContext context) : base(info, context) { }
 }

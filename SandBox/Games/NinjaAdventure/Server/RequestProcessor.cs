@@ -13,7 +13,7 @@ namespace NinjaAdventure.Server
 {
     internal class RequestResponser
     {
-        public RequestResponser(NinjaAdventureScene gameScene)
+        public RequestResponser(NinjaAdventureDecorator gameScene)
         {
             _gameScene = gameScene;
             _fromEPToCharacter = [];
@@ -62,7 +62,7 @@ namespace NinjaAdventure.Server
             }
         }
 
-        NinjaAdventureScene _gameScene;
+        NinjaAdventureDecorator _gameScene;
         Dictionary<string, NinjaCharacter> _fromEPToCharacter;
     }
 }

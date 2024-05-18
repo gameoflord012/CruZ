@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -20,6 +21,8 @@ namespace CruZ.GameEngine
 {
     public partial class GameApplication : IDisposable
     {
+        private record MarshalRequest(Action Action, ManualResetEvent ResetEvent, bool ForwardException);
+
         private GameApplication(GameWrapper core, string gameResourceDir)
         {
             _threadId = Environment.CurrentManagedThreadId;
@@ -65,7 +68,25 @@ namespace CruZ.GameEngine
             foreach(var request in _marshalRequests.ToImmutableArray())
             {
                 _marshalRequests.Remove(request);
-                request.Action.Invoke();
+
+                try
+                {
+                    request.Action.Invoke();
+                    _marshalResult = new MarshalInvokeResult(null);
+                }
+                catch(Exception e)
+                {
+                    if(request.ForwardException)
+                    {
+                        _marshalResult = new MarshalInvokeResult(e);
+                    }
+                    else
+                    {
+                        _marshalResult = null;
+                        throw;
+                    }
+                }
+
                 request.ResetEvent.Set();
             }
         }
@@ -132,17 +153,21 @@ namespace CruZ.GameEngine
             }
         }
 
-        private void GenerateMarshalRequest(Action action)
+        private void GenerateMarshalRequest(Action action, bool forwardException, out MarshalInvokeResult invokeResult)
         {
             ManualResetEvent resetEvent;
 
             lock(this)
             {
                 resetEvent = new ManualResetEvent(false);
-                _marshalRequests.Add(new MarshalRequest(action, resetEvent));
+                _marshalRequests.Add(new MarshalRequest(action, resetEvent, forwardException));
             }
 
             resetEvent.WaitOne();
+
+            Trace.Assert(_marshalResult != null);
+            invokeResult = _marshalResult;
+            _marshalResult = null;
         }
 
         public ContentManager Content
@@ -176,6 +201,7 @@ namespace CruZ.GameEngine
         private ResourceManager? _gameResource;
         private ResourceManager? _internalResource;
         private List<MarshalRequest> _marshalRequests;
+        private MarshalInvokeResult? _marshalResult;
         private bool _isDisposed;
         private Camera _mainCamera;
         private int _threadId;
@@ -197,92 +223,5 @@ namespace CruZ.GameEngine
                 AfterDraw = null;
             }
         }
-    }
-
-    public partial class GameApplication
-    {
-        public static event Action<Viewport>? WindowResized;
-        public static event Action? Initialized;
-        public static event Action? Exiting;
-        public static event Action? AfterDraw;
-
-        public static GameApplication CreateContext(GameWrapper core, string gameResourceDir)
-        {
-            if(_instance != null && !_instance._isDisposed)
-                throw new InvalidOperationException("Dispose needed before creating new context");
-
-            return _instance = new GameApplication(core, gameResourceDir);
-        }
-
-        public static GraphicsDevice GetGraphicsDevice()
-        {
-            return Instance.GraphicsDevice;
-        }
-
-        public static void MarshalInvoke(Action action)
-        {
-            Instance.GenerateMarshalRequest(action);
-        }
-
-        internal static AutoResizeRenderTarget CreateRenderTarget()
-        {
-            var rt = new AutoResizeRenderTarget(Instance.GraphicsDevice, Instance.Window);
-            Instance._disposables.Add(rt);
-            return rt;
-        }
-
-        private static T CheckNull<T>(T? value)
-        {
-            return value ?? throw new InvalidOperationException("Set value first");
-        }
-
-        public static bool IsActive()
-        {
-            return Instance._wrapper.IsActive;
-        }
-
-        public static ContentManager GetContentManager()
-        {
-            return Instance.Content;
-        }
-
-        private static GameApplication Instance
-        {
-            get => CheckNull(_instance);
-        }
-
-        public static string GameResourceDir
-        {
-            get => CheckNull(Instance._gameResourceDir);
-        }
-
-        public static ResourceManager Resource
-        {
-            get => CheckNull(Instance._gameResource);
-        }
-
-        public static ResourceManager InternalResource
-        {
-            get => CheckNull(Instance._internalResource);
-        }
-
-        public static Camera MainCamera
-        {
-            get => Instance._mainCamera;
-        }
-
-        public static int ThreadId
-        {
-            get => Instance._threadId;
-        }
-
-        public static Func<AssemblyName, Assembly?> AssemblyResolver
-        {
-            get => (resolvingAss) => AppDomain.CurrentDomain.GetAssemblies()
-                    .First(domainAss => domainAss.FullName == resolvingAss.FullName);
-        }
-
-        private static GameApplication? _instance;
-
     }
 }

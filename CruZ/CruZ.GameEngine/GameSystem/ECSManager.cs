@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 
 using CruZ.GameEngine.GameSystem.Animation;
 using CruZ.GameEngine.GameSystem.Input;
@@ -12,10 +13,8 @@ using Microsoft.Xna.Framework;
 
 namespace CruZ.GameEngine.GameSystem
 {
-    internal class ECSManager : IDisposable
+    internal partial class ECSManager : IDisposable
     {
-        internal static event Action<ECSManager?, ECSManager>? InstanceChanged;
-
         private ECSManager()
         {
             _world = new ECSWorld();
@@ -45,26 +44,51 @@ namespace CruZ.GameEngine.GameSystem
             _world.DrawSystems(gameTime);
         }
 
+        public void Dispose()
+        {
+            if(!_isDisposed)
+            {
+                _isDisposed = true;
+                _world.Dispose();
+                SetInstance(null);
+            }
+        }
+
         internal ECSWorld World
         {
             get => _world;
             set => _world = value;
         }
 
+        private bool _isDisposed;
         private ECSWorld _world;
+    }
+
+    internal partial class ECSManager
+    {
+        internal static event Action<ECSManager?, ECSManager?>? InstanceChanged;
 
         internal static ECSManager CreateContext()
         {
-            if(_instance != null && !_instance._isDisposed)
-                throw new InvalidOperationException("Require dispose");
+            Trace.Assert(_instance == null || _instance._isDisposed);
 
-            var newInstance = new ECSManager();
-
-            InstanceChanged?.Invoke(_instance, newInstance);
-            return _instance = newInstance;
+            var instance = new ECSManager();
+            SetInstance(instance);
+            return instance;
         }
 
-        private static ECSManager? _instance;
+        private static void SetInstance(ECSManager? instance)
+        {
+            if(instance == _instance)
+            {
+                return;
+            }
+
+            var oldValue = _instance;
+            _instance = instance;
+
+            InstanceChanged?.Invoke(oldValue, _instance);
+        }
 
         /// <summary>
         /// Not good idea to call this without proper memory manage
@@ -73,20 +97,15 @@ namespace CruZ.GameEngine.GameSystem
         internal static TransformEntity CreateEntity()
         {
             var entity = new TransformEntity();
-            _instance!.World.AddEntity(entity);
+            Instance!.World.AddEntity(entity);
             return entity;
         }
 
-        public void Dispose()
+        internal static ECSManager Instance
         {
-            if(!_isDisposed)
-            {
-                _isDisposed = true;
-                _world.Dispose();
-            }
-
+            get => _instance ?? throw new NullReferenceException();
         }
 
-        private bool _isDisposed = false;
+        private static ECSManager? _instance;
     }
 }

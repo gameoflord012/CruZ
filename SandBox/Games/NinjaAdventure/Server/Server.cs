@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 using CruZ.GameEngine;
+using CruZ.GameEngine.GameSystem.Scene;
 
 using NinjaAdventure;
 using NinjaAdventure.Server;
@@ -30,7 +31,7 @@ public class Program
 
     private static void GameApplication_Initialized()
     {
-        _gameScene = new NinjaAdventureScene();
+        _gameScene = new NinjaAdventureDecorator(GameScene.Create());
         _requestProcessor = new RequestResponser(_gameScene);
         _listenerTask = new(StartListener);
         _listenerTask.Start();
@@ -72,6 +73,6 @@ public class Program
 
     private static Task _listenerTask;
     private static UdpClient _listener;
-    private static NinjaAdventureScene _gameScene;
+    private static NinjaAdventureDecorator _gameScene;
     private static RequestResponser _requestProcessor;
 }

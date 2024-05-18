@@ -66,20 +66,17 @@ namespace CruZ.Editor.Controls
 
         public void LoadRuntimeScene(string sceneName)
         {
-            if(LoadedGameScene != null) throw new InvalidOperationException("Can load only one scene");
+            if(LoadedGameScene != null)
+            {
+                LoadedGameScene.Destroy();
+                LoadedGameScene = null;
+            }
+
 
             WaitGameInitialized();
 
-            try
-            {
-                GameApplication.MarshalInvoke(() => LoadedGameScene = SceneManager.GetRuntimeScene(sceneName));
-
-            }
-            catch(RuntimeSceneLoadException e)
-            {
-                DialogHelper.ShowExceptionDialog(e);
-                throw;
-            }
+            var invokeResult = GameApplication.MarshalInvoke(() => LoadedGameScene = SceneManager.CreateDecorator(sceneName).GameScene, true);
+            invokeResult.ThrowIfNeeded();
         }
 
         private void WaitGameInitialized()
@@ -215,7 +212,10 @@ namespace CruZ.Editor.Controls
                 oldECS.World.EntityAdded -= World_EntityAdded;
             }
 
-            newECS.World.EntityAdded += World_EntityAdded;
+            if(newECS != null)
+            {
+                newECS.World.EntityAdded += World_EntityAdded;
+            }
         }
 
         private void Game_Intialized()

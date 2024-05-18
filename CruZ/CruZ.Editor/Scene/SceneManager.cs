@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -11,60 +12,49 @@ namespace CruZ.Editor.Scene
 {
     public static class SceneManager
     {
+        static SceneManager()
+        {
+            g_sceneDecorators = [];
+        }
+
         static void FindUserAssemblyScene()
         {
             Assembly userAssembly = EditorContext.GameAssembly;
             Type[] types = userAssembly.GetTypes();
 
-            var sceneClasses = types
-                .Where(type => Attribute.IsDefined(type, typeof(SceneFactoryClassAttribute)));
-
-            foreach (var clazz in sceneClasses)
+            foreach (var type in types)
             {
-                foreach (var method in clazz
-                    .GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static)
-                    .Where(mt => Attribute.IsDefined(mt, typeof(SceneFactoryMethodAttribute))))
+                if(type.GetCustomAttribute(typeof(GameSceneDecoratorAttribute)) is not GameSceneDecoratorAttribute decoratorAttr)
                 {
-                    var classAttribute = (SceneFactoryClassAttribute)clazz.GetCustomAttribute(typeof(SceneFactoryClassAttribute))!;
-                    var methodAttribute = (SceneFactoryMethodAttribute)method.GetCustomAttribute(typeof(SceneFactoryMethodAttribute))!;
-                    var sceneName = Path.Combine(classAttribute.Id, methodAttribute.Id, method.Name);
-
-                    _sceneMethods[sceneName] = method;
+                    continue;
                 }
+
+                Trace.Assert(type.IsAssignableTo(typeof(GameSceneDecorator)), "Make sure it is a decorator");
+                g_sceneDecorators[Path.Combine(decoratorAttr.Id, type.Name)] = type;
             }
         }
 
-        public static GameScene GetRuntimeScene(string sceneName)
+        public static GameSceneDecorator CreateDecorator(string sceneName)
         {
             FindUserAssemblyScene();
 
-            if (!_sceneMethods.ContainsKey(sceneName))
-                throw new SceneAssetNotFoundException($"Runtime Scene {sceneName} not available");
-
-            var method = _sceneMethods[sceneName];
-            GameScene scene;
-
-            try
+            if (g_sceneDecorators.TryGetValue(sceneName, out Type? sceneType))
             {
-                object? instance = method.IsStatic ? null : Activator.CreateInstance(method.DeclaringType!)!;
-                scene = (GameScene)method.Invoke(instance, null)!;
-                scene.Name = sceneName;
+                return (GameSceneDecorator)Activator.CreateInstance(sceneType, [GameScene.Create()])!;
             }
-            catch (Exception e)
+            else
             {
-                throw new RuntimeSceneLoadException($"Problem with loading {sceneName}", e);
+                throw new ArgumentException($"{sceneName} not available");
             }
-
-            return scene;
         }
 
-        public static string[] GetSceneNames()
+        public static IReadOnlyCollection<string> GetAvalableSceneName()
         {
             FindUserAssemblyScene();
 
-            return _sceneMethods.Keys.ToArray();
+            return g_sceneDecorators.Keys;
         }
 
-        private static Dictionary<string, MethodInfo> _sceneMethods = [];
+        private static Dictionary<string, Type> g_sceneDecorators;
     }
 }

@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
+using System.Diagnostics;
 using System.Linq;
+
+using CruZ.GameEngine.GameSystem.Scene;
 
 using Microsoft.Xna.Framework;
 
@@ -14,6 +16,14 @@ namespace CruZ.GameEngine.GameSystem
 
         public ECSWorld()
         { }
+
+        internal void Initialize()
+        {
+            foreach(var system in _systems)
+            {
+                system.OnInitialize();
+            }
+        }
 
         public T GetSystem<T>() where T : EntitySystem
         {
@@ -39,14 +49,6 @@ namespace CruZ.GameEngine.GameSystem
         {
             _entities.Add(e);
             EntityAdded?.Invoke(e);
-        }
-
-        internal void Initialize()
-        {
-            foreach(var system in _systems)
-            {
-                system.OnInitialize();
-            }
         }
 
         internal void UpdateSystems(GameTime gameTime)
@@ -78,7 +80,7 @@ namespace CruZ.GameEngine.GameSystem
         {
             var removingEntities = _entities.Where(e => e.ShouldDestroy);
             _entities.ExceptWith(removingEntities);
-            
+
             foreach(var entity in removingEntities)
             {
                 EntityRemoved?.Invoke(entity);
@@ -96,6 +98,8 @@ namespace CruZ.GameEngine.GameSystem
 
         public void Dispose()
         {
+            Trace.Assert(GameScene.AllocatedCount == 0, "need to Destroy() every scene");
+
             foreach(var system in _systems)
             {
                 system.Dispose();

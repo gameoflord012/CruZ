@@ -1,10 +1,9 @@
 ﻿namespace CruZ.GameEngine.GameSystem.Scene
 {
     [System.AttributeUsage(System.AttributeTargets.Class, Inherited = false, AllowMultiple = false)]
-    public class SceneFactoryClassAttribute
-        : System.Attribute
+    public class GameSceneDecoratorAttribute : System.Attribute
     {
-        public SceneFactoryClassAttribute(string Id = "")
+        public GameSceneDecoratorAttribute(string Id = "Scene Decorator")
         {
             this.Id = Id;
         }

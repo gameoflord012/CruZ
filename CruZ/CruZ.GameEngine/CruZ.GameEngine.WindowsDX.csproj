@@ -8,6 +8,8 @@
 
 	<ItemGroup>
 		<Compile Remove="obj\**\*" />
+		
+		<Compile Remove="Editor\**" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -26,6 +28,10 @@
 		<Content Include=".\Resource\Internal\**">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</Content>
+
+		<Compile Update="GameApplication.*.cs">
+			<DependentUpon>GameApplication.cs</DependentUpon>
+		</Compile>
 	</ItemGroup>
 	
 </Project>

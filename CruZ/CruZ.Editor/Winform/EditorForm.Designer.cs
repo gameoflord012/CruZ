@@ -43,7 +43,7 @@ namespace CruZ.Editor
             inspectorTab = new TabPage();
             entityInspector = new Inspector();
             sceneTab = new TabPage();
-            sceneEditor = new WorldViewer();
+            sceneEditor = new SceneViewer();
             splitContainer1 = new SplitContainer();
             tabControlTop = new TabControl();
             tabControlBottom = new TabControl();
@@ -229,6 +229,6 @@ namespace CruZ.Editor
         private TabControl tabControlTop;
         private TabControl tabControlBottom;
         private Inspector entityInspector;
-        private WorldViewer sceneEditor;
+        private SceneViewer sceneEditor;
     }
 }

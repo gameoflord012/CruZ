@@ -7,7 +7,7 @@
 
     "NinjaAdventure": {
       "commandName": "Project",
-      "commandLineArgs": "-r../../../../SandBox/Games/NinjaAdventure -a../../../NinjaAdventure/Debug/net8.0-windows/NinjaAdventure.dll"
+      "commandLineArgs": "-r../../../../SandBox/Games/NinjaAdventure -a../../../NinjaAdventure.Editor/Debug/net8.0-windows/NinjaAdventure.Editor.dll"
     }
   }
 }

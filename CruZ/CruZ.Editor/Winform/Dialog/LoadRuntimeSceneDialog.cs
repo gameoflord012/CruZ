@@ -19,7 +19,7 @@ namespace CruZ.Editor
             ok_Button.DialogResult = DialogResult.OK;
             ok_Button.Click += (sender, e) => Close();
 
-            foreach (var name in SceneManager.GetSceneNames())
+            foreach (var name in SceneManager.GetAvalableSceneName())
             {
                 selectScene_ComboBox.Items.Add(name);
             }

@@ -12,7 +12,7 @@ namespace NinjaAdventure.Client
 {
     internal class GameStateCommunicator : Communicator
     {
-        public GameStateCommunicator(NinjaAdventureScene monsterSpawnerScene)
+        public GameStateCommunicator(NinjaAdventureDecorator monsterSpawnerScene)
         {
             _monsterIdMapper = [];
             _monsterSpawner = monsterSpawnerScene.MonsterSpawner;

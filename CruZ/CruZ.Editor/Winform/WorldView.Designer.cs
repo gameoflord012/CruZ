@@ -2,7 +2,7 @@
 
 namespace CruZ.Editor
 {
-    partial class WorldViewer
+    partial class SceneViewer
     {
         /// <summary> 
         /// Required designer variable.
@@ -52,7 +52,7 @@ namespace CruZ.Editor
             treeView_Panel.Size = new Size(331, 196);
             treeView_Panel.TabIndex = 2;
             // 
-            // WorldViewer
+            // SceneViewer
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;

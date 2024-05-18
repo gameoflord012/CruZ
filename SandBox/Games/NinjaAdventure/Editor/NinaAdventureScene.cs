@@ -8,12 +8,12 @@ using CruZ.GameEngine.GameSystem.Scene;
 using NinjaAdventure.Packet;
 using NinjaAdventure.Ultility;
 
-namespace NinjaAdventure
+namespace NinjaAdventure.Editor
 {
     [GameSceneDecorator]
-    internal class NinjaAdventureDecorator : GameSceneDecorator
+    internal class NinjaAdventureEditorScene : GameSceneDecorator
     {
-        public NinjaAdventureDecorator(GameScene gameScene) : base(gameScene)
+        public NinjaAdventureEditorScene(GameScene gameScene) : base(gameScene)
         {
         }
 
