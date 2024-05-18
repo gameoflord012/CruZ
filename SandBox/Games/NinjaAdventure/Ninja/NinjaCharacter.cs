@@ -202,7 +202,7 @@ namespace NinjaAdventure
             _physic.Awake = false;
             _health.ShouldDisplay = false;
 
-            _animationComponent.Stop();
+            _animationComponent.PlayEmpty();
             _machine.SetNextState(typeof(NinjaMovingState), false);
         }
     }

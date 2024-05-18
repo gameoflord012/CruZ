@@ -111,7 +111,11 @@ namespace NinjaAdventure
             _physic.OnCollision -= Physic_OnCollision;
             _physic.Body.Awake = false;
             _physic.Body.ResetDynamics();
+
             _health.ShouldDisplay = false;
+
+            _animation.PlayEmpty();
+
             _machine.SetNextState(null, false);
         }
 

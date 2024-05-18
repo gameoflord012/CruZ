@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -61,13 +62,12 @@ namespace CruZ.GameEngine
 
         private void ProcessMarshalRequests()
         {
-            foreach(var request in _marshalRequests)
+            foreach(var request in _marshalRequests.ToImmutableArray())
             {
+                _marshalRequests.Remove(request);
                 request.Action.Invoke();
                 request.ResetEvent.Set();
             }
-
-            _marshalRequests.Clear();
         }
 
         private void Wrapper_WindowResized(object? sender, EventArgs e)
